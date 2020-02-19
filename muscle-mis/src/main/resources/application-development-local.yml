@@ -1,0 +1,30 @@
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    health-check-url-path: /actuator/health
+    metadata-map:
+      # needed to trigger info and endpoint update after restart
+      startup: ${random.int}
+  client:
+    registryFetchIntervalSeconds: 5
+    serviceUrl:
+      defaultZone: http://localhost:8760/eureka/
+
+spring:
+  zipkin:
+    base-url: http://localhost:9411
+  datasource:
+    name: exercise_dictionary
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://localhost:3306/exercise_dictionary?useSSL=true&useUnicode=true
+    username: root
+    password: jm@mysql
+  devtools:
+    restart:
+      enabled: true
+
+logging:
+  # Configure logging level for SFTP/JSCH
+  level:
+    com.jcraft.jsch: INFO

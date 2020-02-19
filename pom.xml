@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <!-- POM Reference https://maven.apache.org/pom.html -->
+
+    <!-- Project Basics -->
+    <groupId>com.jmsoftware</groupId>
+    <artifactId>muscle-and-fitness-server</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>Muscle and Fitness Server</name>
+    <description>Muscle and Fitness Server, Spring Cloud based.</description>
+    <packaging>pom</packaging>
+    <properties>
+        <developerName>Johnny Miller (鍾俊)</developerName>
+        <developerEmail>johnnysviva@outlook.com</developerEmail>
+        <developerUrl>https://www.linkedin.com/in/ijohnnymiller</developerUrl>
+        <java.version>11</java.version>
+        <spring-cloud.version>Hoxton.SR1</spring-cloud.version>
+        <spring-content-version>1.0.0.M5</spring-content-version>
+        <spring-boot-admin-version>2.2.2</spring-boot-admin-version>
+    </properties>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.2.4.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <modules>
+        <module>common</module>
+        <module>service-registry</module>
+        <module>spring-boot-admin</module>
+        <module>gateway</module>
+        <module>demo-one</module>
+        <module>demo-two</module>
+        <module>exercise-mis</module>
+        <module>muscle-mis</module>
+    </modules>
+    <dependencyManagement>
+        <dependencies>
+            <!-- Spring Cloud Dependencies -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- Sub Modals Management -->
+            <dependency>
+                <groupId>com.jmsoftware</groupId>
+                <artifactId>common</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jmsoftware</groupId>
+                <artifactId>service-registry</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jmsoftware</groupId>
+                <artifactId>spring-boot-admin</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jmsoftware</groupId>
+                <artifactId>gateway</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jmsoftware</groupId>
+                <artifactId>demo-one</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jmsoftware</groupId>
+                <artifactId>demo-two</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jmsoftware</groupId>
+                <artifactId>exercise-mis</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jmsoftware</groupId>
+                <artifactId>muscle-mis</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <!-- More Project Information -->
+    <url>https://github.com/johnnymillergh/muscle-and-fitness-server</url>
+    <inceptionYear>2020</inceptionYear>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+        </license>
+    </licenses>
+    <organization>
+        <name>JM Software, Inc.</name>
+        <url>https://github.com/johnnymillergh</url>
+    </organization>
+    <developers>
+        <developer>
+            <name>Johnny Miller (鍾俊)</name>
+            <email>johnnysviva@outlook.com</email>
+            <url>https://www.linkedin.com/in/ijohnnymiller</url>
+            <organization>JM Software, Inc.</organization>
+            <organizationUrl>https://github.com/johnnymillergh</organizationUrl>
+            <timezone>8</timezone>
+        </developer>
+    </developers>
+
+    <!-- VCS Settings -->
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/johnnymillergh/muscle-and-fitness-server/issues</url>
+    </issueManagement>
+
+    <!-- Build Settings -->
+    <build>
+        <!-- set the name of .jar file -->
+        <finalName>${project.artifactId}-${envAlias}-${project.version}</finalName>
+
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <!-- The Versions Plugin updates the versions of components in the POM. -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.7</version>
+                <configuration>
+                    <excludes>
+                        <exclude>org.apache.commons:commons-collections4</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <!-- Environment Settings -->
+    <profiles>
+        <!-- `development-local` is default profile to start services -->
+        <profile>
+            <id>development-local</id>
+            <properties>
+                <env>development-local</env>
+                <envAlias>dev_loc</envAlias>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+
+        <profile>
+            <id>development-docker</id>
+            <properties>
+                <env>development-docker</env>
+                <envAlias>dev_dkr</envAlias>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>test</id>
+            <properties>
+                <env>test</env>
+                <envAlias>test</envAlias>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>stage</id>
+            <properties>
+                <env>stage</env>
+                <envAlias>stage</envAlias>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>production</id>
+            <properties>
+                <env>production</env>
+                <envAlias>prod</envAlias>
+            </properties>
+        </profile>
+    </profiles>
+
+    <!-- Global Dependencies -->
+    <dependencies>
+        <!-- Spring Frameworks -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- Test -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.projectreactor</groupId>
+            <artifactId>reactor-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Tool -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>28.2-jre</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.1.1</version>
+        </dependency>
+
+        <!-- Brings the popular ruby faker gem to Java https://github.com/DiUS/java-faker -->
+        <dependency>
+            <groupId>com.github.javafaker</groupId>
+            <artifactId>javafaker</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+
+        <!-- Other -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- Swagger: JSON API documentation for spring based applications -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>2.9.2</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>guava</artifactId>
+                    <groupId>com.google.guava</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>swagger-bootstrap-ui</artifactId>
+            <version>1.9.6</version>
+        </dependency>
+    </dependencies>
+</project>

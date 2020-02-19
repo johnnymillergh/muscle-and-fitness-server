@@ -1,0 +1,64 @@
+server:
+  port: @port@
+  #  servlet:
+  #    context-path: /@project.artifactId@-@envAlias@
+  tomcat:
+    uri-encoding: @project.build.sourceEncoding@
+
+spring:
+  application:
+    name: @project.artifactId@
+  profiles:
+    active: @env@
+  mvc:
+    throw-exception-if-no-handler-found: true
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  sleuth:
+    sampler:
+      probability: 1.0
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 10000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
+
+logging:
+  config: classpath:configuration/logback/logback-@env@.xml
+  # Configure logging level of project as DEBUG to enable SQL logging and other logging.
+  level:
+    com.jmsoftware: DEBUG
+
+project:
+  property:
+    base-package: com.jmsoftware.demoone
+    context-path:
+    group-id: @project.groupId@
+    artifact-id: @project.artifactId@
+    project-artifact-id: @project.artifactId@
+    version: @project.version@
+    description: @project.description@
+    jdk-version: @java.version@
+    environment: @env@
+    environment-alias: @envAlias@
+    url: @project.url@
+    inception-year: @inceptionYear@
+    organization-name: @project.organization.name@
+    organization-url: @project.organization.url@
+    issue-management-system: @project.issueManagement.system@
+    issue-management-url: @project.issueManagement.url@
+    developer-name: @developerName@
+    developer-email: @developerEmail@
+    developer-url: @developerUrl@
