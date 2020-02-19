@@ -6,7 +6,6 @@
 
     <!-- Sub-module Basics -->
     <artifactId>common</artifactId>
-    <packaging>jar</packaging>
     <name>Common Java Class</name>
     <description>Common Java class collection for JM Software.</description>
     <properties>

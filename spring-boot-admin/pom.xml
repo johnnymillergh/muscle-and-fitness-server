@@ -5,7 +5,6 @@
 
     <!-- Sub-module Basics -->
     <artifactId>spring-boot-admin</artifactId>
-    <packaging>jar</packaging>
     <name>Spring Boot Admin</name>
     <description><![CDATA[M&F Spring Boot Admin.]]></description>
     <properties>
@@ -53,7 +52,7 @@
                 </executions>
                 <configuration>
                     <from>
-                        <image>openjdk:11.0.6-slim</image>
+                        <image>openjdk:11.0.5-slim</image>
                     </from>
                     <to>
                         <image>docker.io/ijohnnymiller/${project.artifactId}-${envAlias}</image>

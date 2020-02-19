@@ -6,7 +6,6 @@
     <!-- Sub-module Basics -->
     <artifactId>demo-two</artifactId>
     <name>Demo 2</name>
-    <packaging>jar</packaging>
     <description>Demo Project 2 for Spring Cloud microservice.</description>
     <properties>
         <java.version>11</java.version>
@@ -53,7 +52,7 @@
                 </executions>
                 <configuration>
                     <from>
-                        <image>openjdk:11.0.6-slim</image>
+                        <image>openjdk:11.0.5-slim</image>
                     </from>
                     <to>
                         <image>docker.io/ijohnnymiller/${project.artifactId}-${envAlias}</image>

@@ -127,11 +127,6 @@
         <finalName>${project.artifactId}-${envAlias}-${project.version}</finalName>
 
         <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-
             <!-- The Versions Plugin updates the versions of components in the POM. -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
