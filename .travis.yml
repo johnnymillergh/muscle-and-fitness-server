@@ -12,7 +12,7 @@ jdk: oraclejdk11
 # We customize the script for compiling Maven application. For more about customizing the build:
 # https://docs.travis-ci.com/user/customizing-the-build
 script:
-  - ./mvnw compile -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+  - compile -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 #  - mvn cobertura:cobertura
 
 # This is to enable Codecov's coverage. If the build is successful, the code is submitted for code coverage analysis.
