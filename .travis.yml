@@ -15,7 +15,7 @@ install: skip
 # The 'language: java' directive sets up sane defaults to test common java applications.
 # We customize the script for compiling Maven application. For more about customizing the build:
 # https://docs.travis-ci.com/user/customizing-the-build
-script: compile -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+script: mvn compile -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 
 # https://docs.travis-ci.com/user/notifications#default-notification-settings
 notifications:
