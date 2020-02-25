@@ -17,8 +17,9 @@
         <developerUrl>https://www.linkedin.com/in/ijohnnymiller</developerUrl>
         <java.version>11</java.version>
         <spring-cloud.version>Hoxton.SR1</spring-cloud.version>
-        <spring-content-version>1.0.0.M5</spring-content-version>
-        <spring-boot-admin-version>2.2.2</spring-boot-admin-version>
+        <spring-content.version>1.0.0.M5</spring-content.version>
+        <spring-boot-admin.version>2.2.2</spring-boot-admin.version>
+        <knife4j.version>2.0.1</knife4j.version>
     </properties>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -263,20 +264,9 @@
 
         <!-- Swagger: JSON API documentation for spring based applications -->
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>2.9.2</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>guava</artifactId>
-                    <groupId>com.google.guava</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
             <groupId>com.github.xiaoymin</groupId>
-            <artifactId>swagger-bootstrap-ui</artifactId>
-            <version>1.9.6</version>
+            <artifactId>knife4j-micro-spring-boot-starter</artifactId>
+            <version>${knife4j.version}</version>
         </dependency>
     </dependencies>
 </project>

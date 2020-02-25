@@ -46,7 +46,7 @@ public class RedirectConfiguration {
 
     @Bean
     public RouterFunction<ServerResponse> favicon() {
-        return route(GET("/webjars/bycdao-ui/images/api.ico"), request -> {
+        return route(GET("/favicon.ico"), request -> {
             log.info("Redirect to Bootstrap Swagger API documentation.");
             return ServerResponse.temporaryRedirect(URI.create("/static/icon/favicon.ico")).build();
         });
