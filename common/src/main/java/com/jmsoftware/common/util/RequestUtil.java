@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletRequest;
  * <p>
  * Request util.
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
- * @date 2019-03-02 20:00
+ * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com
+ * @date 2/27/20 9:45 AM
  **/
 public class RequestUtil {
     private static final String UNKNOWN = "unknown";
@@ -23,9 +23,9 @@ public class RequestUtil {
      * @param request HTTP request.
      * @return user's IP and port information.
      */
-    public static String getRequestIpAndPort(HttpServletRequest request) {
+    public static String getRequestIpAndPort(final HttpServletRequest request) {
         var ip = request.getHeader("X-Real-IP");
-        var port = request.getRemotePort();
+        final var port = request.getRemotePort();
         if (!StringUtils.isBlank(ip) && !"".equalsIgnoreCase(ip)) {
             return ip;
         }

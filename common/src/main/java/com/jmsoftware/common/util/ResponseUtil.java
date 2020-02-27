@@ -14,10 +14,11 @@ import java.io.IOException;
  * <p>
  * Response util
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
- * @date 2019-03-23 18:02
+ * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com
+ * @date 2/27/20 9:45 AM
  **/
 @Slf4j
+@SuppressWarnings("unused")
 public class ResponseUtil {
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -28,7 +29,7 @@ public class ResponseUtil {
      * @param httpStatus HTTP status
      * @param data       Data
      */
-    public static void renderJson(HttpServletResponse response, HttpStatus httpStatus, Object data) {
+    public static void renderJson(final HttpServletResponse response, final HttpStatus httpStatus, final Object data) {
         try {
             ResponseBodyBean<Object> responseBodyBean = ResponseBodyBean.ofStatus(httpStatus.getCode(),
                                                                                   httpStatus.getMessage(),
@@ -49,7 +50,7 @@ public class ResponseUtil {
      * @param response  Response
      * @param exception Exception
      */
-    public static void renderJson(HttpServletResponse response, BaseException exception) {
+    public static void renderJson(final HttpServletResponse response, final BaseException exception) {
         try {
             response.setHeader("Access-Control-Allow-Origin", "*");
             response.setHeader("Access-Control-Allow-Methods", "*");

@@ -4,26 +4,26 @@ import java.util.Random;
 import java.util.regex.Pattern;
 
 /**
- * <h1>CaseConverter</h1>
+ * <h1>CaseConversionUtil</h1>
  * The text conversion class helps changing the cases of an existing text. Get
  * more information and online tools for this implementation on: <a href=
  * "https://en.toolpage.org/cat/text-conversion">https://en.toolpage.org/cat/text-conversion</a>
  *
  * @author Yves Sorge <yves.sorge@toolpage.org>
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
- * @date 1/16/20 8:57 AM
+ * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com
+ * @date 2/27/20 9:45 AM
  * @see
  * <a href='https://github.com/toolpage/java-case-converter/blob/master/src/org/toolpage/util/text/CaseConverter.java'>Source</a>
  */
 @SuppressWarnings("unused")
-public class CaseConverter {
+public class CaseConversionUtil {
     /**
      * Filter non-alphabet and non-number string.
      *
      * @param value the value
      * @return filtered string.
      */
-    public static String filterNonAlphabetAndNonNumber(String value) {
+    public static String filterNonAlphabetAndNonNumber(final String value) {
         return value.replaceAll("[^0-9a-zA-Z]", "");
     }
 
@@ -34,7 +34,7 @@ public class CaseConverter {
      * @param value the value
      * @return converted string.
      */
-    public static String convertToUpperCase(String value) {
+    public static String convertToUpperCase(final String value) {
         return value.toUpperCase();
     }
 
@@ -45,7 +45,7 @@ public class CaseConverter {
      * @param value the value
      * @return converted string.
      */
-    public static String convertToLowerCase(String value) {
+    public static String convertToLowerCase(final String value) {
         return value.toLowerCase();
     }
 
@@ -55,11 +55,11 @@ public class CaseConverter {
      * @param value the value
      * @return converted string.
      */
-    public static String convertToStartCase(String value) {
+    public static String convertToStartCase(final String value) {
         StringBuilder returnValue = new StringBuilder();
-        value = value.toLowerCase();
+        var lowerCaseValue = value.toLowerCase();
         boolean makeNextUppercase = true;
-        for (char c : value.toCharArray()) {
+        for (char c : lowerCaseValue.toCharArray()) {
             if (Character.isSpaceChar(c) || Character.isWhitespace(c) || "()[]{}\\/".indexOf(c) != -1) {
                 makeNextUppercase = true;
             } else if (makeNextUppercase) {
@@ -79,8 +79,8 @@ public class CaseConverter {
      * @param value the value
      * @return converted string.
      */
-    public static String convertToAlternatingCase(String value) {
-        return CaseConverter.convertToAlternatingCase(value, true);
+    public static String convertToAlternatingCase(final String value) {
+        return CaseConversionUtil.convertToAlternatingCase(value, true);
     }
 
     /**
@@ -92,19 +92,19 @@ public class CaseConverter {
      * @param startWithCapitalLetter the start with capital letter
      * @return converted string.
      */
-    public static String convertToAlternatingCase(String value, boolean startWithCapitalLetter) {
+    public static String convertToAlternatingCase(final String value, boolean startWithCapitalLetter) {
         StringBuilder returnValue = new StringBuilder();
-        value = value.toLowerCase();
-        int i = 0;
+        var lowerCaseValue = value.toLowerCase();
+        int index = 0;
         if (!startWithCapitalLetter) {
-            i = 1;
+            index = 1;
         }
-        for (char c : value.toCharArray()) {
+        for (char c : lowerCaseValue.toCharArray()) {
             if (Character.isAlphabetic(c)) {
-                if (i % 2 == 0) {
+                if (index % 2 == 0) {
                     c = Character.toUpperCase(c);
                 }
-                i++;
+                index++;
             }
             returnValue.append(c);
         }
@@ -118,11 +118,11 @@ public class CaseConverter {
      * @param value the value
      * @return converted string.
      */
-    public static String convertToCamelCase(String value) {
+    public static String convertToCamelCase(final String value) {
         String throwAwayChars = "()[]{}=?!.:,-_+\\\"#~/";
-        value = value.replaceAll("[" + Pattern.quote(throwAwayChars) + "]", " ");
-        value = CaseConverter.convertToStartCase(value);
-        return value.replaceAll("\\s+", "");
+        var replacedValue = value.replaceAll("[" + Pattern.quote(throwAwayChars) + "]", " ");
+        replacedValue = CaseConversionUtil.convertToStartCase(replacedValue);
+        return replacedValue.replaceAll("\\s+", "");
     }
 
     /**
@@ -132,11 +132,11 @@ public class CaseConverter {
      * @param value the value
      * @return converted string.
      */
-    public static String convertToSnakeCase(String value) {
+    public static String convertToSnakeCase(final String value) {
         String throwAwayChars = "()[]{}=?!.:,-_+\\\"#~/";
-        value = value.replaceAll("[" + Pattern.quote(throwAwayChars) + "]", " ");
-        value = CaseConverter.convertToStartCase(value);
-        return value.trim().replaceAll("\\s+", "_");
+        var replacedValue = value.replaceAll("[" + Pattern.quote(throwAwayChars) + "]", " ");
+        replacedValue = CaseConversionUtil.convertToStartCase(replacedValue);
+        return replacedValue.trim().replaceAll("\\s+", "_");
     }
 
     /**
@@ -146,11 +146,11 @@ public class CaseConverter {
      * @param value the value
      * @return converted string.
      */
-    public static String convertToKebabCase(String value) {
+    public static String convertToKebabCase(final String value) {
         String throwAwayChars = "()[]{}=?!.:,-_+\\\"#~/";
-        value = value.replaceAll("[" + Pattern.quote(throwAwayChars) + "]", " ");
-        value = value.toLowerCase();
-        return value.trim().replaceAll("\\s+", "-");
+        var replacedValue = value.replaceAll("[" + Pattern.quote(throwAwayChars) + "]", " ");
+        replacedValue = replacedValue.toLowerCase();
+        return replacedValue.trim().replaceAll("\\s+", "-");
     }
 
     /**
@@ -161,14 +161,14 @@ public class CaseConverter {
      * @param value the value
      * @return converted string.
      */
-    public static String convertToStudlyCaps(String value) {
+    public static String convertToStudlyCaps(final String value) {
         StringBuilder returnValue = new StringBuilder();
-        value = value.toLowerCase();
+        var lowerCaseValue = value.toLowerCase();
         int numOfFollowingUppercase = 0;
         int numOfFollowingLowercase = 0;
         boolean doCapitalLetter;
         Random randomizer = new Random();
-        for (char c : value.toCharArray()) {
+        for (char c : lowerCaseValue.toCharArray()) {
             if (Character.isAlphabetic(c)) {
                 if (numOfFollowingUppercase < 2) {
                     if (randomizer.nextInt(100) % 2 == 0) {
@@ -208,7 +208,7 @@ public class CaseConverter {
      * @param value the value
      * @return converted string.
      */
-    public static String invertCase(String value) {
+    public static String invertCase(final String value) {
         StringBuilder returnValue = new StringBuilder();
         for (char c : value.toCharArray()) {
             if (Character.isAlphabetic(c)) {

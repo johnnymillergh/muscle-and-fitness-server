@@ -14,10 +14,11 @@ import java.util.UUID;
  * <h1>FileUtil</h1>
  * <p>Change description here</p>
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
- * @date 2019-07-04 20:12
+ * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com
+ * @date 2/27/20 9:45 AM
  **/
 @Slf4j
+@SuppressWarnings("unused")
 public class FileUtil {
     /**
      * Convert multipart file to file
@@ -26,10 +27,10 @@ public class FileUtil {
      * @return file
      * @throws IOException IO exception
      */
-    public static File convertFrom(MultipartFile multipartFile) throws IOException {
+    public static File convertFrom(final MultipartFile multipartFile) throws IOException {
         log.info("Converting multipart file, original multipart file name: {}", multipartFile.getOriginalFilename());
-        File convertFile = new File(Objects.requireNonNull(multipartFile.getOriginalFilename()));
-        FileOutputStream fos = new FileOutputStream(convertFile);
+        var convertFile = new File(Objects.requireNonNull(multipartFile.getOriginalFilename()));
+        var fos = new FileOutputStream(convertFile);
         fos.write(multipartFile.getBytes());
         fos.close();
         return convertFile;
@@ -42,9 +43,9 @@ public class FileUtil {
      * @param savePath    path for saving file
      * @return file
      */
-    public static File convertFrom(InputStream inputStream, String savePath) {
+    public static File convertFrom(final InputStream inputStream, final String savePath) {
         log.info("Converting InputStream to file, save path: {}", savePath);
-        File file = new File(savePath);
+        var file = new File(savePath);
         try (OutputStream outputStream = new FileOutputStream(file)) {
             int read;
             byte[] bytes = new byte[1024];
@@ -71,11 +72,11 @@ public class FileUtil {
      * @param sftpSubDirectory SFTP server's sub directory
      * @return full storage path (absolute path). Null if file name is empty.
      */
-    public static String generateDateFormatStoragePath(String sftpSubDirectory) {
-        Date today = new Date();
-        String year = DateUtil.format(today, "yyyy");
-        String month = DateUtil.format(today, "MM");
-        String day = DateUtil.format(today, "dd");
+    public static String generateDateFormatStoragePath(final String sftpSubDirectory) {
+        var today = new Date();
+        var year = DateUtil.format(today, "yyyy");
+        var month = DateUtil.format(today, "MM");
+        var day = DateUtil.format(today, "dd");
         return sftpSubDirectory
                 + year
                 + "/" + month
@@ -89,12 +90,12 @@ public class FileUtil {
      * @param file file
      * @return unique file name (UUID.fileExtension)
      */
-    public static String generateUniqueFileName(File file) {
-        String fileName = file.getName();
+    public static String generateUniqueFileName(final File file) {
+        var fileName = file.getName();
         if (StringUtils.isBlank(fileName)) {
             return null;
         }
-        String fileExtension = fileName.substring(fileName.lastIndexOf("."));
+        var fileExtension = fileName.substring(fileName.lastIndexOf("."));
         return UUID.randomUUID() + "." + fileExtension;
     }
 }
