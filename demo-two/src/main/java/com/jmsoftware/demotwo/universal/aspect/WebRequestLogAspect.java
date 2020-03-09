@@ -38,13 +38,17 @@ public class WebRequestLogAspect {
 
     /**
      * Define pointcut. Pointcut is a predicate or expression that matches join points. In WebRequestLogAspect, we need
-     * to cut any method annotated with `@GetMapping` or `@PostMapping` only.
+     * to cut any method annotated with `@GetMapping`, `@PostMapping`, `@PutMapping`, `@DeleteMapping`, `@PatchMapping`, `@RequestMapping`.
      * <p>
      * More detail at: <a href="https://howtodoinjava.com/spring-aop/aspectj-pointcut-expressions/">Spring aop aspectJ
      * pointcut expression examples</a>
      */
     @Pointcut("@annotation(org.springframework.web.bind.annotation.GetMapping)" +
-              "|| @annotation(org.springframework.web.bind.annotation.PostMapping)")
+              " || @annotation(org.springframework.web.bind.annotation.PostMapping)" +
+              " || @annotation(org.springframework.web.bind.annotation.PutMapping)" +
+              " || @annotation(org.springframework.web.bind.annotation.DeleteMapping)" +
+              " || @annotation(org.springframework.web.bind.annotation.PatchMapping)" +
+              " || @annotation(org.springframework.web.bind.annotation.RequestMapping)")
     public void requestLogPointcut() {
     }
 
