@@ -17,7 +17,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * <h1>RequestLogAspect</h2>
+ * <h1>RequestLogAspect</h1>
  * <p><strong>Description</strong>:</p>
  * <p>RequestLogAspect is an AOP for logging URL, HTTP method, client IP and other information when web resource was
  * accessed.</p>
