@@ -84,8 +84,11 @@ public class WebRequestLogAspect {
         Object result = proceedingJoinPoint.proceed();
         long elapsedTime = System.currentTimeMillis() - startTime;
         try {
-            log.info("Response           :{}{}", LINE_SEPARATOR,
-                     JSONUtil.formatJsonStr(mapper.writeValueAsString(result)));
+            var formattedStringifiedJson = JSONUtil.formatJsonStr(mapper.writeValueAsString(result));
+            if (formattedStringifiedJson.length() > 500) {
+                formattedStringifiedJson = formattedStringifiedJson.substring(0, 499).concat("…");
+            }
+            log.info("Response           :{}{}", LINE_SEPARATOR, formattedStringifiedJson);
         } catch (JsonProcessingException e) {
             log.info("Response (non-JSON): {}", result);
         }
