@@ -32,8 +32,6 @@
         <module>service-registry</module>
         <module>spring-boot-admin</module>
         <module>gateway</module>
-        <module>demo-one</module>
-        <module>demo-two</module>
         <module>exercise-mis</module>
         <module>muscle-mis</module>
     </modules>
@@ -67,16 +65,6 @@
             <dependency>
                 <groupId>com.jmsoftware</groupId>
                 <artifactId>gateway</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.jmsoftware</groupId>
-                <artifactId>demo-one</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.jmsoftware</groupId>
-                <artifactId>demo-two</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
             </dependency>
             <dependency>

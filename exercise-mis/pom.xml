@@ -10,7 +10,7 @@
     <description>Exercise Management Information Service.</description>
     <properties>
         <java.version>11</java.version>
-        <port>8772</port>
+        <port>8770</port>
     </properties>
     <parent>
         <groupId>com.jmsoftware</groupId>

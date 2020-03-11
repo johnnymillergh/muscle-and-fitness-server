@@ -77,7 +77,7 @@ services:
     container_name: exercise-mis-dev_dkr
     image: "ijohnnymiller/exercise-mis-dev_dkr:${TAG}"
     ports:
-      - "8772:8772"
+      - "8770:8770"
     volumes:
       - /Users/johnny/docker-file-mapping/exercise-mis:/log-dev_dkr
     networks:
@@ -88,7 +88,7 @@ services:
     container_name: muscle-mis-dev_dkr
     image: "ijohnnymiller/muscle-mis-dev_dkr:${TAG}"
     ports:
-      - "8773:8773"
+      - "8771:8771"
     volumes:
       - /Users/johnny/docker-file-mapping/muscle-mis:/log-dev_dkr
     networks:
