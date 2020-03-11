@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   mysql-server:
-    container_name: mysql-server-enc-dev_dkr
+    container_name: mysql-server-m&f-dev_dkr
     image: "mysql:latest"
     environment:
       MYSQL_ROOT_PASSWORD: "jm@mysql"
@@ -16,13 +16,13 @@ services:
         ipv4_address: 172.16.238.10
 
   atmoz-sftp-server:
-    container_name: atmoz-sftp-server-enc-dev_dkr
+    container_name: atmoz-sftp-server-m&f-dev_dkr
     image: atmoz/sftp:latest
     ports:
       - "23:22"
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/atmoz-sftp:/home/johnny/upload
+      - /Users/johnny/docker-file-mapping/atmoz-sftp-m&f:/home/johnny/upload
     command: "johnny:atmoz@sftp:::upload"
     networks:
       exrx_net_crawler_network:
@@ -31,19 +31,24 @@ services:
   service-registry:
     container_name: service-registry-dev_dkr
     image: "ijohnnymiller/service-registry-dev_dkr:${TAG}"
-    build:
-      dockerfile: Dockerfile
-      context: /Users/johnny/Projects/IdeaProjects/muscle-and-fitness-server/service-registry/target
-      args:
-        ENV: development-docker
-        ENV_ALIAS: dev_dkr
     ports:
-      - "8761:8761"
+      - "8760:8760"
     volumes:
       - /Users/johnny/docker-file-mapping/service-registry:/log-dev_dkr
     networks:
       exrx_net_crawler_network:
         ipv4_address: 172.11.239.12
+
+  spring-boot-admin:
+    container_name: spring-boot-admin-dev_dkr
+    image: "ijohnnymiller/spring-boot-admin-dev_dkr:${TAG}"
+    ports:
+      - "8761:8761"
+    volumes:
+      - /Users/johnny/docker-file-mapping/spring-boot-admin:/log-dev_dkr
+    networks:
+      exrx_net_crawler_network:
+        ipv4_address: 172.11.239.13
 
   zipkin:
     container_name: openzipkin/zipkin
@@ -64,6 +69,31 @@ services:
       - 9411:9411
       # Uncomment if you set SCRIBE_ENABLED=true
       # - 9410:9410
+    networks:
+      exrx_net_crawler_network:
+        ipv4_address: 172.11.239.14
+
+  exercise-mis:
+    container_name: exercise-mis-dev_dkr
+    image: "ijohnnymiller/exercise-mis-dev_dkr:${TAG}"
+    ports:
+      - "8772:8772"
+    volumes:
+      - /Users/johnny/docker-file-mapping/exercise-mis:/log-dev_dkr
+    networks:
+      exrx_net_crawler_network:
+        ipv4_address: 172.11.239.15
+
+  muscle-mis:
+    container_name: muscle-mis-dev_dkr
+    image: "ijohnnymiller/muscle-mis-dev_dkr:${TAG}"
+    ports:
+      - "8773:8773"
+    volumes:
+      - /Users/johnny/docker-file-mapping/muscle-mis:/log-dev_dkr
+    networks:
+      exrx_net_crawler_network:
+        ipv4_address: 172.11.239.16
 
 networks:
   exrx_net_crawler_network:
