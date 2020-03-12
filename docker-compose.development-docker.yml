@@ -34,7 +34,7 @@ services:
     ports:
       - "8760:8760"
     volumes:
-      - /Users/johnny/docker-file-mapping/service-registry:/log-dev_dkr
+      - /Users/johnny/docker-file-mapping/service-registry:/logs-dev_dkr
     networks:
       exrx_net_crawler_network:
         ipv4_address: 172.11.239.12
@@ -45,7 +45,7 @@ services:
     ports:
       - "8761:8761"
     volumes:
-      - /Users/johnny/docker-file-mapping/spring-boot-admin:/log-dev_dkr
+      - /Users/johnny/docker-file-mapping/spring-boot-admin:/logs-dev_dkr
     networks:
       exrx_net_crawler_network:
         ipv4_address: 172.11.239.13
@@ -79,7 +79,7 @@ services:
     ports:
       - "8770:8770"
     volumes:
-      - /Users/johnny/docker-file-mapping/exercise-mis:/log-dev_dkr
+      - /Users/johnny/docker-file-mapping/exercise-mis:/logs-dev_dkr
     networks:
       exrx_net_crawler_network:
         ipv4_address: 172.11.239.15
@@ -90,7 +90,7 @@ services:
     ports:
       - "8771:8771"
     volumes:
-      - /Users/johnny/docker-file-mapping/muscle-mis:/log-dev_dkr
+      - /Users/johnny/docker-file-mapping/muscle-mis:/logs-dev_dkr
     networks:
       exrx_net_crawler_network:
         ipv4_address: 172.11.239.16
