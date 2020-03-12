@@ -32,6 +32,7 @@
         <module>service-registry</module>
         <module>spring-boot-admin</module>
         <module>gateway</module>
+        <module>auth-center</module>
         <module>exercise-mis</module>
         <module>muscle-mis</module>
     </modules>
@@ -65,6 +66,11 @@
             <dependency>
                 <groupId>com.jmsoftware</groupId>
                 <artifactId>gateway</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jmsoftware</groupId>
+                <artifactId>auth-center</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
             </dependency>
             <dependency>

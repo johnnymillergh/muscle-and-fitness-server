@@ -9,11 +9,23 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - /Users/johnny/docker-file-mapping/mysql-8.0.19-1debian9:/var/lib/mysql
+      - /Users/johnny/docker-file-mapping/mysql-m&f:/var/lib/mysql
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     networks:
       exrx_net_crawler_network:
         ipv4_address: 172.16.238.10
+
+  redis-server:
+    container_name: redis-server-m&f-dev_dkr
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    restart: always
+    volumes:
+      - /Users/johnny/docker-file-mapping/redis-m&f/data:/data
+      - /Users/johnny/docker-file-mapping/redis-m&f/redis.conf:/usr/local/etc/redis/redis.conf
+    command: "redis-server /usr/local/etc/redis/redis.conf"
+    ipv4_address: 172.16.238.11
 
   atmoz-sftp-server:
     container_name: atmoz-sftp-server-m&f-dev_dkr
@@ -26,7 +38,7 @@ services:
     command: "johnny:atmoz@sftp:::upload"
     networks:
       exrx_net_crawler_network:
-        ipv4_address: 172.16.238.11
+        ipv4_address: 172.16.238.12
 
   service-registry:
     container_name: service-registry-dev_dkr
@@ -37,7 +49,7 @@ services:
       - /Users/johnny/docker-file-mapping/service-registry:/logs-dev_dkr
     networks:
       exrx_net_crawler_network:
-        ipv4_address: 172.11.239.12
+        ipv4_address: 172.11.239.13
 
   spring-boot-admin:
     container_name: spring-boot-admin-dev_dkr
@@ -48,7 +60,7 @@ services:
       - /Users/johnny/docker-file-mapping/spring-boot-admin:/logs-dev_dkr
     networks:
       exrx_net_crawler_network:
-        ipv4_address: 172.11.239.13
+        ipv4_address: 172.11.239.14
 
   zipkin:
     container_name: openzipkin/zipkin
@@ -71,29 +83,40 @@ services:
       # - 9410:9410
     networks:
       exrx_net_crawler_network:
-        ipv4_address: 172.11.239.14
+        ipv4_address: 172.11.239.15
+
+  auth-center:
+    container_name: auth-center-dev_dkr
+    image: "ijohnnymiller/auth-center-dev_dkr:${TAG}"
+    ports:
+      - "8770:8770"
+    volumes:
+      - /Users/johnny/docker-file-mapping/auth-center:/logs-dev_dkr
+    networks:
+      exrx_net_crawler_network:
+        ipv4_address: 172.11.239.16
 
   exercise-mis:
     container_name: exercise-mis-dev_dkr
     image: "ijohnnymiller/exercise-mis-dev_dkr:${TAG}"
     ports:
-      - "8770:8770"
+      - "8771:8771"
     volumes:
       - /Users/johnny/docker-file-mapping/exercise-mis:/logs-dev_dkr
     networks:
       exrx_net_crawler_network:
-        ipv4_address: 172.11.239.15
+        ipv4_address: 172.11.239.16
 
   muscle-mis:
     container_name: muscle-mis-dev_dkr
     image: "ijohnnymiller/muscle-mis-dev_dkr:${TAG}"
     ports:
-      - "8771:8771"
+      - "8772:8772"
     volumes:
       - /Users/johnny/docker-file-mapping/muscle-mis:/logs-dev_dkr
     networks:
       exrx_net_crawler_network:
-        ipv4_address: 172.11.239.16
+        ipv4_address: 172.11.239.17
 
 networks:
   exrx_net_crawler_network:

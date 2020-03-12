@@ -5,12 +5,11 @@
 
     <!-- Sub-module Basics -->
     <artifactId>exercise-mis</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
     <name>Exercise MIS</name>
     <description>Exercise Management Information Service.</description>
     <properties>
         <java.version>11</java.version>
-        <port>8770</port>
+        <port>8771</port>
     </properties>
     <parent>
         <groupId>com.jmsoftware</groupId>
