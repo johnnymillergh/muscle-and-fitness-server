@@ -7,10 +7,6 @@
     <artifactId>service-registry</artifactId>
     <name>Service Registry</name>
     <description>Service Registry center.</description>
-    <properties>
-        <java.version>11</java.version>
-        <port>8760</port>
-    </properties>
     <parent>
         <groupId>com.jmsoftware</groupId>
         <artifactId>muscle-and-fitness-server</artifactId>

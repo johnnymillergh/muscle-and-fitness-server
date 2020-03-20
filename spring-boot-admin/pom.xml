@@ -7,10 +7,6 @@
     <artifactId>spring-boot-admin</artifactId>
     <name>Spring Boot Admin</name>
     <description><![CDATA[M&F Spring Boot Admin.]]></description>
-    <properties>
-        <java.version>11</java.version>
-        <port>8761</port>
-    </properties>
     <parent>
         <groupId>com.jmsoftware</groupId>
         <artifactId>muscle-and-fitness-server</artifactId>

@@ -7,10 +7,6 @@
     <artifactId>muscle-mis</artifactId>
     <name>Muscle MIS</name>
     <description>Muscle Management Information Service.</description>
-    <properties>
-        <java.version>11</java.version>
-        <port>8772</port>
-    </properties>
     <parent>
         <groupId>com.jmsoftware</groupId>
         <artifactId>muscle-and-fitness-server</artifactId>

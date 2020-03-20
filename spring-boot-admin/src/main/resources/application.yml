@@ -1,5 +1,5 @@
 server:
-  port: @port@
+  port: @spring-boot-admin.port@
 #  servlet:
 #    context-path: /@project.artifactId@-@envAlias@
   tomcat:

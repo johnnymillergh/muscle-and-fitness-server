@@ -1,5 +1,5 @@
 server:
-  port: @port@
+  port: @muscle-mis.port@
   #  servlet:
   #    context-path: /@project.artifactId@-@envAlias@
   tomcat:
