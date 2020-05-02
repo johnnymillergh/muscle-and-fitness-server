@@ -1,5 +1,5 @@
 server:
-  port: @auth-center.port@
+  port: @api-portal.port@
   #  servlet:
   #    context-path: /@project.artifactId@-@envAlias@
   tomcat:
@@ -63,10 +63,11 @@ logging:
   # Configure logging level of project as DEBUG to enable SQL logging and other logging.
   level:
     com.jmsoftware: DEBUG
+    com.jcraft.jsch: INFO
 
 project:
   property:
-    base-package: com.jmsoftware.authcenter
+    base-package: com.jmsoftware.apiportal
     context-path:
     group-id: @project.groupId@
     artifact-id: @project.artifactId@

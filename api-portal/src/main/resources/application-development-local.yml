@@ -1,0 +1,68 @@
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    health-check-url-path: /actuator/health
+    metadata-map:
+      # needed to trigger info and endpoint update after restart
+      startup: ${random.int}
+  client:
+    registryFetchIntervalSeconds: 5
+    serviceUrl:
+      defaultZone: http://localhost:8760/eureka/
+
+spring:
+  zipkin:
+    base-url: http://localhost:9411
+  datasource:
+    name: exercise_dictionary
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://localhost:3306/exercise_dictionary?useSSL=true&useUnicode=true
+    username: root
+    password: jm@mysql
+  devtools:
+    restart:
+      enabled: true
+  redis:
+    database: 0
+    host: localhost
+    port: 6379
+    password: 123456
+    timeout: 10000ms
+    lettuce:
+      pool:
+        max-active: 20
+        max-idle: 10
+        max-wait: -1ms
+        min-idle: 0
+
+logging:
+  # Configure logging level for SFTP/JSCH
+  level:
+    com.jcraft.jsch: INFO
+
+custom:
+  configuration:
+    # Make `web-security-disabled` equal to true to disable web security. We suggest you do not turn off web security
+    # feature unless development environment.
+    web-security-disabled: false
+    # Disable web request information log
+    web-request-log-disabled: false
+    ignores-request:
+      # POST Requests need to be ignored.
+      post:
+        - "/auth/register"
+        - "/auth/login"
+        - "/auth/logout"
+      get:
+        - "/auth/check-username-uniqueness"
+        - "/auth/check-email-uniqueness"
+        - "/auth/validate-username/**"
+        - "/user/get-avatar"
+      # Request need to be ignored that matches pattern.
+      pattern:
+        - "/druid/**"
+        - "/swagger-resources/**"
+        - "/v2/api-docs/**"
+        - "/webjars/**"
+        - "/swagger-ui.html"
