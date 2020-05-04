@@ -96,7 +96,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) {
         WebSecurity and = web.ignoring().and();
-        // GET ignored list
         Optional.ofNullable(customConfiguration.getIgnoredRequest())
                 .ifPresentOrElse((ignoredRequest -> {
                     ignoredRequest.getGet().forEach(url -> and.ignoring().antMatchers(HttpMethod.GET, url));
