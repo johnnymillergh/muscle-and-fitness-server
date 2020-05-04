@@ -1,7 +1,8 @@
 package com.jmsoftware.apiportal.universal.aspect;
 
-import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 import javax.validation.*;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -96,9 +98,10 @@ public class MethodArgumentValidationAspect {
         }
 
         for (Integer index : argumentIndexes) {
-            Set<ConstraintViolation<Object>> validates = validator.validate(args[index]);
-            if (CollectionUtil.isNotEmpty(validates)) {
-                String message = String.format("Argument validation failed: %s", validates);
+            Set<ConstraintViolation<Object>> constraintViolationSet = validator.validate(args[index]);
+            if (CollUtil.isNotEmpty(constraintViolationSet)) {
+                String message = String.format("Argument validation failed: %s",
+                                               getAllErrorMessage(constraintViolationSet));
                 log.info("Method           : {}#{}",
                          proceedingJoinPoint.getSignature().getDeclaringTypeName(),
                          proceedingJoinPoint.getSignature().getName());
@@ -134,5 +137,20 @@ public class MethodArgumentValidationAspect {
         log.info("Signature        : {}", joinPoint.getSignature().toShortString());
         log.error("Exception message: {}", e.toString());
         log.error("== METHOD'S ARGUMENT VALIDATION END WITH EXCEPTION ==");
+    }
+
+    /**
+     * Gets all error message.
+     *
+     * @param constraintViolationSet the constraint violation set
+     * @return the all error message
+     */
+    private String getAllErrorMessage(Set<ConstraintViolation<Object>> constraintViolationSet) {
+        var allErrorMessageList = new LinkedList<>();
+        for (var constraintViolation : constraintViolationSet) {
+            allErrorMessageList.add(String.format("invalid field: %s, %s", constraintViolation.getPropertyPath(),
+                                                  constraintViolation.getMessage()));
+        }
+        return StrUtil.join("; ", allErrorMessageList);
     }
 }
