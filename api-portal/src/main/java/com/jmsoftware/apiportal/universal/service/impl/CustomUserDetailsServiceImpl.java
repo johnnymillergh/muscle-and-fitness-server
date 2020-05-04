@@ -1,5 +1,6 @@
 package com.jmsoftware.apiportal.universal.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import com.jmsoftware.apiportal.universal.domain.RolePO;
 import com.jmsoftware.apiportal.universal.domain.UserPO;
 import com.jmsoftware.apiportal.universal.domain.UserPrincipal;
@@ -15,7 +16,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,7 +44,7 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
                                     return new UsernameNotFoundException(errorMessage);
                                 });
         List<RolePO> rolesByUserId = roleService.getRolesByUserId(user.getId());
-        if (CollectionUtils.isEmpty(rolesByUserId)) {
+        if (CollUtil.isEmpty(rolesByUserId)) {
             throw new SecurityException(HttpStatus.ROLE_NOT_FOUND);
         }
         List<Long> roleIds = rolesByUserId.stream()

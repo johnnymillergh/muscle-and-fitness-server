@@ -1,7 +1,7 @@
 package com.jmsoftware.common.util;
 
 
-import org.apache.commons.lang3.StringUtils;
+import cn.hutool.core.util.StrUtil;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -26,11 +26,11 @@ public class RequestUtil {
     public static String getRequestIpAndPort(final HttpServletRequest request) {
         var ip = request.getHeader("X-Real-IP");
         final var port = request.getRemotePort();
-        if (!StringUtils.isBlank(ip) && !"".equalsIgnoreCase(ip)) {
+        if (!StrUtil.isBlank(ip) && !"".equalsIgnoreCase(ip)) {
             return ip;
         }
         ip = request.getHeader("X-Forwarded-For");
-        if (!StringUtils.isBlank(ip) && !UNKNOWN.equalsIgnoreCase(ip)) {
+        if (!StrUtil.isBlank(ip) && !UNKNOWN.equalsIgnoreCase(ip)) {
             // The first ip is actual ip
             int index = ip.indexOf(',');
             if (index != -1) {

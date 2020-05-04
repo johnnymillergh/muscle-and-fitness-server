@@ -1,8 +1,8 @@
 package com.jmsoftware.common.bean;
 
+import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.Min;
@@ -50,7 +50,7 @@ public class PaginationBase {
     private String orderByStatement;
 
     public String getOrderByStatement() {
-        if (!StringUtils.isBlank(orderBy)) {
+        if (!StrUtil.isBlank(orderBy)) {
             return String.format("%s %s %s", "ORDER BY", orderBy, orderRule);
         }
         return orderByStatement;

@@ -1,11 +1,11 @@
 package com.jmsoftware.apiportal.universal.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jmsoftware.apiportal.universal.domain.RolePO;
 import com.jmsoftware.apiportal.universal.mapper.RoleMapper;
 import com.jmsoftware.apiportal.universal.service.RoleService;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,7 +39,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public String handleRoleName(String roleName) {
-        String processedRoleName = StringUtils.trim(roleName).toLowerCase();
+        String processedRoleName = StrUtil.trim(roleName).toLowerCase();
         return processedRoleName.replaceAll("\\s", "_");
     }
 

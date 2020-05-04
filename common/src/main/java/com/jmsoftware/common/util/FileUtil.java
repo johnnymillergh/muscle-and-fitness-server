@@ -1,8 +1,8 @@
 package com.jmsoftware.common.util;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -92,7 +92,7 @@ public class FileUtil {
      */
     public static String generateUniqueFileName(final File file) {
         var fileName = file.getName();
-        if (StringUtils.isBlank(fileName)) {
+        if (StrUtil.isBlank(fileName)) {
             return null;
         }
         var fileExtension = fileName.substring(fileName.lastIndexOf("."));

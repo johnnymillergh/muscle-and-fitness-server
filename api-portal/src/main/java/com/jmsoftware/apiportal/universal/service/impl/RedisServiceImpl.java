@@ -1,9 +1,9 @@
 package com.jmsoftware.apiportal.universal.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.jmsoftware.apiportal.universal.service.RedisService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.connection.RedisStringCommands;
 import org.springframework.data.redis.core.RedisCallback;
@@ -90,7 +90,7 @@ public class RedisServiceImpl implements RedisService {
     @Override
     public List<Serializable> get(String key, Class<Serializable> clazz) {
         String json = get(key);
-        if (StringUtils.isNotBlank(json)) {
+        if (StrUtil.isNotBlank(json)) {
             return JSONUtil.toList(JSONUtil.parseArray(json), clazz);
         }
         return null;
