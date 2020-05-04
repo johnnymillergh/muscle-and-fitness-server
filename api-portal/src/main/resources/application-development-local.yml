@@ -48,7 +48,7 @@ custom:
     web-security-disabled: false
     # Disable web request information log
     web-request-log-disabled: false
-    ignores-request:
+    ignored-request:
       # POST Requests need to be ignored.
       post:
         - "/auth/register"
