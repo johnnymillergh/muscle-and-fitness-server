@@ -8,7 +8,6 @@ import com.jmsoftware.apiportal.universal.configuration.CustomConfiguration;
 import com.jmsoftware.apiportal.universal.service.impl.CustomUserDetailsServiceImpl;
 import com.jmsoftware.apiportal.universal.util.JwtUtil;
 import com.jmsoftware.common.constant.HttpStatus;
-import com.jmsoftware.common.exception.SecurityException;
 import com.jmsoftware.common.util.RequestUtil;
 import com.jmsoftware.common.util.ResponseUtil;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +16,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.stereotype.Component;
@@ -53,38 +53,34 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         log.info("JWT authentication is filtering [{}] client requested access. URL: {}",
                  RequestUtil.getRequestIpAndPort(request),
                  request.getServletPath());
-
-        // Check if disable Web Security.
         if (customConfiguration.getWebSecurityDisabled()) {
             filterChain.doFilter(request, response);
             return;
         }
-
         if (checkIgnores(request)) {
             filterChain.doFilter(request, response);
             return;
         }
-
         String jwt = jwtUtil.getJwtFromRequest(request);
-
-        if (StrUtil.isNotBlank(jwt)) {
-            try {
-                String username = jwtUtil.getUsernameFromJwt(jwt);
-
-                UserDetails userDetails = customUserDetailsServiceImpl.loadUserByUsername(username);
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                SecurityContextHolder.getContext()
-                        .setAuthentication(authentication);
-                filterChain.doFilter(request, response);
-            } catch (SecurityException e) {
-                ResponseUtil.renderJson(response, e);
-            }
-        } else {
+        if (StrUtil.isBlank(jwt)) {
             ResponseUtil.renderJson(response, HttpStatus.UNAUTHORIZED, null);
+            return;
         }
+        String username = jwtUtil.getUsernameFromJwt(jwt);
+        UserDetails userDetails;
+        try {
+            userDetails = customUserDetailsServiceImpl.loadUserByUsername(username);
+        } catch (UsernameNotFoundException e) {
+            log.error("Cannot find user by username: {}", username);
+            ResponseUtil.renderJson(response, HttpStatus.UNAUTHORIZED, null);
+            return;
+        }
+        UsernamePasswordAuthenticationToken authentication =
+                new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        log.info("JWT authentication passed! Authentication: {}", authentication);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        filterChain.doFilter(request, response);
     }
 
     /**
