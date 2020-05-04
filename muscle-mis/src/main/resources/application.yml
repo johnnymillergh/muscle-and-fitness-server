@@ -57,7 +57,7 @@ project:
     base-package: com.jmsoftware.musclemis
     context-path:
     group-id: @project.groupId@
-    artifact-id: @project.artifactId@
+    parent-artifact-id: @parent.artifactId@
     project-artifact-id: @project.artifactId@
     version: @project.version@
     description: @project.description@

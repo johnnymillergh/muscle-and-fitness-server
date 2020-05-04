@@ -21,7 +21,7 @@ public class ProjectProperty {
     private String basePackage;
     private String contextPath;
     private String groupId;
-    private String artifactId;
+    private String parentArtifactId;
     private String projectArtifactId;
     private String version;
     private String description;
