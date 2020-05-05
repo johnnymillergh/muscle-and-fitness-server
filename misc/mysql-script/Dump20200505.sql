@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 8.0.18, for macos10.14 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.19, for macos10.15 (x86_64)
 --
 -- Host: 127.0.0.1    Database: muscle_and_fitness
 -- ------------------------------------------------------
@@ -278,6 +278,39 @@ INSERT INTO `muscle_image` VALUES (1,1,'upload/muscle-picture/adductors/Adductor
 UNLOCK TABLES;
 
 --
+-- Table structure for table `permission`
+--
+
+DROP TABLE IF EXISTS `permission`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `permission` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'Primary key',
+  `url` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'URL. If type of record is page (1), URL stands for route; if type of record is button (2), URL stands for API',
+  `description` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Permission description',
+  `type` tinyint NOT NULL COMMENT 'Permission type. 1 - page; 2 - button',
+  `permission_expression` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Permission expression',
+  `method` enum('GET','HEAD','POST','PUT','DELETE','CONNECT','OPTIONS','TRACE','PATCH') COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'HTTP method of API',
+  `sort` int NOT NULL DEFAULT '0' COMMENT 'Sort number',
+  `parent_id` bigint DEFAULT '0' COMMENT 'Primary key of parent',
+  `deleted` tinyint NOT NULL DEFAULT '0' COMMENT 'Deleted flag',
+  `created_time` datetime NOT NULL COMMENT 'Created time',
+  `modified_time` datetime NOT NULL COMMENT 'Modified time',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `permission_expression_UNIQUE` (`permission_expression`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Permission.';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `permission`
+--
+
+LOCK TABLES `permission` WRITE;
+/*!40000 ALTER TABLE `permission` DISABLE KEYS */;
+/*!40000 ALTER TABLE `permission` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `related_muscle`
 --
 
@@ -300,6 +333,56 @@ LOCK TABLES `related_muscle` WRITE;
 /*!40000 ALTER TABLE `related_muscle` DISABLE KEYS */;
 INSERT INTO `related_muscle` VALUES (1,1,16),(2,2,3),(3,2,4),(4,3,2),(5,3,4),(6,4,3),(7,4,2),(8,10,49),(9,10,42),(10,11,48),(11,16,1),(12,16,17),(13,17,11),(14,17,46),(15,17,16),(16,18,46),(17,18,53),(18,21,45),(19,22,42),(20,22,44),(21,23,1),(22,23,18),(23,23,46),(24,23,53),(25,25,40),(26,26,40),(27,28,20),(28,29,19),(29,31,44),(30,31,22),(31,33,45),(32,34,45),(33,35,21),(34,40,47),(35,41,17),(36,42,22),(37,42,10),(38,43,18),(39,43,46),(40,43,53),(41,44,22),(42,45,32),(43,45,21),(44,45,47),(45,46,18),(46,46,53),(47,46,17),(48,47,40),(49,47,45),(50,48,11),(51,49,50),(52,49,10),(53,50,49),(54,53,18),(55,53,46);
 /*!40000 ALTER TABLE `related_muscle` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `role`
+--
+
+DROP TABLE IF EXISTS `role`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `role` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'Primary key',
+  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Role name',
+  `description` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Role description',
+  `created_time` datetime NOT NULL COMMENT 'Created time',
+  `modified_time` datetime NOT NULL COMMENT 'Modified time',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name_UNIQUE` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Role.';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `role`
+--
+
+LOCK TABLES `role` WRITE;
+/*!40000 ALTER TABLE `role` DISABLE KEYS */;
+/*!40000 ALTER TABLE `role` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `role_permission`
+--
+
+DROP TABLE IF EXISTS `role_permission`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `role_permission` (
+  `role_id` bigint NOT NULL COMMENT 'Primary key of role',
+  `permission_id` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Primary key of permission',
+  PRIMARY KEY (`role_id`,`permission_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Role-permission Relation.';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `role_permission`
+--
+
+LOCK TABLES `role_permission` WRITE;
+/*!40000 ALTER TABLE `role_permission` DISABLE KEYS */;
+/*!40000 ALTER TABLE `role_permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -328,6 +411,66 @@ LOCK TABLES `test_table` WRITE;
 INSERT INTO `test_table` VALUES (1,'Hello',12,12.2,'2020-01-10 14:23:33');
 /*!40000 ALTER TABLE `test_table` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'Primary key of user',
+  `username` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Username',
+  `email` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Email',
+  `cellphone` varchar(11) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Cellphone number',
+  `password` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Password',
+  `full_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Full name',
+  `birthday` date DEFAULT NULL COMMENT 'Birthday',
+  `gender` enum('Agender','Androgyne','Bigender','Cisgender','Cisgender Female','Cisgender Male','Female to Male','Gender Fluid','Gender Nonconforming','Gender Questioning','Gender Variant','Genderqueer','Intersex','Male to Female','Neither','Neutrois','Non-binary','Other','Pangender','Transfeminine','Transgender','Transgender Female','Transgender Male','Transgender Person','Transmasculine','Two-Spirit') COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '26 gender options',
+  `avatar` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'User avatar full path on SFTP server',
+  `status` tinyint NOT NULL DEFAULT '1' COMMENT 'Status. 1 - enabled, 2 - disabled',
+  `created_time` datetime NOT NULL COMMENT 'Created time',
+  `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email_UNIQUE` (`email`),
+  UNIQUE KEY `username_UNIQUE` (`username`),
+  UNIQUE KEY `cellphone_UNIQUE` (`cellphone`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='User.';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user`
+--
+
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES (1,'ijohnnymiller','ijohnnymiller@icloud.com','13100959832','123','Johnny Miller','1996-04-29',NULL,'',1,'2020-03-20 17:10:05',NULL);
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_role`
+--
+
+DROP TABLE IF EXISTS `user_role`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user_role` (
+  `user_id` bigint NOT NULL COMMENT 'Primary key of user',
+  `role_id` bigint NOT NULL COMMENT 'Primary key of role',
+  PRIMARY KEY (`user_id`,`role_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='User-role Relation. Roles that users have.';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_role`
+--
+
+LOCK TABLES `user_role` WRITE;
+/*!40000 ALTER TABLE `user_role` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_role` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -338,4 +481,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-12 13:57:20
+-- Dump completed on 2020-05-05 20:46:38
