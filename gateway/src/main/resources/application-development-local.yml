@@ -9,9 +9,3 @@ eureka:
     registryFetchIntervalSeconds: 5
     serviceUrl:
       defaultZone: http://localhost:8760/eureka/
-
-spring:
-  security:
-    user:
-      name: admin
-      password: admin
