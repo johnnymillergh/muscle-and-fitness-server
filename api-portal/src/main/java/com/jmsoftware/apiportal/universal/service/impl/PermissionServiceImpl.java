@@ -27,7 +27,7 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public boolean savePermission(PermissionPO po) {
-        return permissionMapper.save(po) > 0;
+        return permissionMapper.insertPermission(po) > 0;
     }
 
     @Override

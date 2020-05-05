@@ -52,9 +52,9 @@ public class PermissionPO {
     /**
      * Created time
      */
-    private Date gmtCreated;
+    private Date createdTime;
     /**
      * Modified time
      */
-    private Date gmtModified;
+    private Date modifiedTime;
 }

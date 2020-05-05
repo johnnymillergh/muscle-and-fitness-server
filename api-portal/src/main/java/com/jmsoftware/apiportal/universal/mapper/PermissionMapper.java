@@ -25,7 +25,7 @@ public interface PermissionMapper extends BaseMapper<PermissionPO> {
      * @param po persistence object
      * @return permission's ID
      */
-    Long save(PermissionPO po);
+    Long insertPermission(PermissionPO po);
 
     /**
      * Select permission list by role id
