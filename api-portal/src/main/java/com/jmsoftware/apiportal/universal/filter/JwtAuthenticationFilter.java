@@ -8,6 +8,7 @@ import com.jmsoftware.apiportal.universal.configuration.CustomConfiguration;
 import com.jmsoftware.apiportal.universal.service.impl.CustomUserDetailsServiceImpl;
 import com.jmsoftware.apiportal.universal.util.JwtUtil;
 import com.jmsoftware.common.constant.HttpStatus;
+import com.jmsoftware.common.exception.SecurityException;
 import com.jmsoftware.common.util.RequestUtil;
 import com.jmsoftware.common.util.ResponseUtil;
 import lombok.RequiredArgsConstructor;
@@ -71,10 +72,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String username;
         try {
             username = jwtUtil.getUsernameFromJwt(jwt);
-        } catch (Exception e) {
-            log.error("Exception occurred when getting username from JWT. JWT: {}, exception message: {}", jwt,
-                      e.getMessage());
-            ResponseUtil.renderJson(response, HttpStatus.UNAUTHORIZED, null);
+        } catch (SecurityException e) {
+            log.error("Exception occurred when getting username from JWT. Exception message: {} JWT: {}",
+                      e.getMessage(), jwt);
+            var httpStatus = HttpStatus.fromCode(e.getCode());
+            ResponseUtil.renderJson(response, httpStatus, null);
             return;
         }
         UserDetails userDetails;

@@ -118,16 +118,16 @@ public class JwtUtil {
             claims = Optional.ofNullable(jwtParser.parseClaimsJws(jwt).getBody())
                     .orElseThrow(() -> new BaseException(HttpStatus.TOKEN_PARSE_ERROR, "The JWT Claims Set is null"));
         } catch (ExpiredJwtException e) {
-            log.error("JWT is expired. JWT:{}, message: {}", jwt, e.getMessage());
+            log.error("JWT is expired. Message: {} JWT: {}", e.getMessage(), jwt);
             throw new SecurityException(HttpStatus.TOKEN_EXPIRED);
         } catch (UnsupportedJwtException e) {
-            log.error("JWT is unsupported. JWT:{}, message: {}", jwt, e.getMessage());
+            log.error("JWT is unsupported. Message: {} JWT: {}", e.getMessage(), jwt);
             throw new SecurityException(HttpStatus.TOKEN_PARSE_ERROR);
         } catch (MalformedJwtException e) {
-            log.error("JWT is invalid. JWT:{}, message: {}", jwt, e.getMessage());
+            log.error("JWT is invalid. Message: {} JWT: {}", e.getMessage(), jwt);
             throw new SecurityException(HttpStatus.TOKEN_PARSE_ERROR);
         } catch (IllegalArgumentException e) {
-            log.error("The parameter of JWT is invalid. JWT:{}, message: {}", jwt, e.getMessage());
+            log.error("The parameter of JWT is invalid. Message: {} JWT: {}", e.getMessage(), jwt);
             throw new SecurityException(HttpStatus.TOKEN_PARSE_ERROR);
         }
         String username = claims.getSubject();

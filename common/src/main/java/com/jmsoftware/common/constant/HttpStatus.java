@@ -15,6 +15,7 @@ import org.springframework.lang.Nullable;
  **/
 @Getter
 @ToString
+@SuppressWarnings("unused")
 public enum HttpStatus implements IUniversalStatus {
     // 2xx Success
     /**
@@ -31,7 +32,7 @@ public enum HttpStatus implements IUniversalStatus {
      * Forbidden
      */
     FORBIDDEN(403, "Forbidden. " +
-            "The request was formatted correctly but the server is refusing to supply the requested resource."),
+                   "The request was formatted correctly but the server is refusing to supply the requested resource."),
     /**
      * Not found
      */
@@ -48,7 +49,7 @@ public enum HttpStatus implements IUniversalStatus {
      * Param not matched
      */
     PARAM_NOT_MATCH(460, "Param not matched. " +
-            "The request could not be fulfilled due to the incorrect syntax of the request."),
+                         "The request could not be fulfilled due to the incorrect syntax of the request."),
     /**
      * Param not null
      */
@@ -94,8 +95,8 @@ public enum HttpStatus implements IUniversalStatus {
     /**
      * Token out of control
      */
-    TOKEN_OUT_OF_CONTROL(556, "Token out of control. " +
-            "Current user has logged in before. Please try to reset current password or sign in again."),
+    TOKEN_OUT_OF_CONTROL(556, "Token out of control. Current user has logged in before. " +
+                              "Please try to reset current password or sign in again."),
     /**
      * Kick out self 无法手动踢出自己，请尝试退出登录操作！
      */
@@ -104,11 +105,11 @@ public enum HttpStatus implements IUniversalStatus {
     /**
      * Code of status
      */
-    private Integer code;
+    private final Integer code;
     /**
      * Message of status
      */
-    private String message;
+    private final String message;
 
     HttpStatus(Integer code, String message) {
         this.code = code;
@@ -122,7 +123,7 @@ public enum HttpStatus implements IUniversalStatus {
                 return httpStatus;
             }
         }
-        return OK;
+        throw new IllegalArgumentException(String.format("Cannot find HTTP status by code: %d!", code));
     }
 
     /**
