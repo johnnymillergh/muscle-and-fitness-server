@@ -46,7 +46,7 @@ public class JwtUtil {
     private JwtParser jwtParser;
 
     @PostConstruct
-    public void init() {
+    private void init() {
         log.info("Start to init class members of {}.", this.getClass().getSimpleName());
         secretKey = Keys.hmacShaKeyFor(jwtConfiguration.getSigningKey().getBytes(StandardCharsets.UTF_8));
         log.warn("Secret key for JWT was generated. Algorithm: {}", secretKey.getAlgorithm());

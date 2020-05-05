@@ -24,7 +24,7 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 @Configuration
 public class RedirectConfiguration {
     @PostConstruct
-    public void postConstruct() {
+    private void postConstruct() {
         log.info("URL redirect service initialized.");
     }
 

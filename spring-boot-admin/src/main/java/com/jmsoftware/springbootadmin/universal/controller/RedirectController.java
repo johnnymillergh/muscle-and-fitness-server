@@ -28,7 +28,7 @@ public class RedirectController {
     private final ProjectProperty projectProperty;
 
     @PostConstruct
-    public void postConstruct() {
+    private void postConstruct() {
         log.info("URL redirect service initialized.");
     }
 
