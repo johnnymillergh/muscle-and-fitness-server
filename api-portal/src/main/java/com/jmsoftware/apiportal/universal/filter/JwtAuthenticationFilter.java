@@ -48,8 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     @SuppressWarnings("NullableProblems")
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         log.info("JWT authentication is filtering [{}] client requested access. URL: {}, HTTP method: {}",
                  RequestUtil.getRequestIpAndPort(request), request.getServletPath(), request.getMethod());
@@ -107,43 +106,43 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (ObjectUtil.isNull(httpMethod)) {
             httpMethod = HttpMethod.GET;
         }
-        Set<String> ignores = Sets.newHashSet();
+        Set<String> ignoredRequestSet = Sets.newHashSet();
         HttpMethod finalHttpMethod = httpMethod;
         Optional.ofNullable(customConfiguration.getIgnoredRequest())
                 .ifPresentOrElse((ignoredRequest -> {
-                    ignores.addAll(ignoredRequest.getPattern());
+                    ignoredRequestSet.addAll(ignoredRequest.getPattern());
                     switch (finalHttpMethod) {
                         case GET:
-                            ignores.addAll(ignoredRequest.getGet());
+                            ignoredRequestSet.addAll(ignoredRequest.getGet());
                             break;
                         case PUT:
-                            ignores.addAll(ignoredRequest.getPut());
+                            ignoredRequestSet.addAll(ignoredRequest.getPut());
                             break;
                         case HEAD:
-                            ignores.addAll(ignoredRequest.getHead());
+                            ignoredRequestSet.addAll(ignoredRequest.getHead());
                             break;
                         case POST:
-                            ignores.addAll(ignoredRequest.getPost());
+                            ignoredRequestSet.addAll(ignoredRequest.getPost());
                             break;
                         case PATCH:
-                            ignores.addAll(ignoredRequest.getPatch());
+                            ignoredRequestSet.addAll(ignoredRequest.getPatch());
                             break;
                         case TRACE:
-                            ignores.addAll(ignoredRequest.getTrace());
+                            ignoredRequestSet.addAll(ignoredRequest.getTrace());
                             break;
                         case DELETE:
-                            ignores.addAll(ignoredRequest.getDelete());
+                            ignoredRequestSet.addAll(ignoredRequest.getDelete());
                             break;
                         case OPTIONS:
-                            ignores.addAll(ignoredRequest.getOptions());
+                            ignoredRequestSet.addAll(ignoredRequest.getOptions());
                             break;
                         default:
                             break;
                     }
                 }), () -> log.warn("Security warning: Ignored request is empty! The ignored request configuration " +
                                    "might be invalid!"));
-        if (CollUtil.isNotEmpty(ignores)) {
-            for (String ignore : ignores) {
+        if (CollUtil.isNotEmpty(ignoredRequestSet)) {
+            for (String ignore : ignoredRequestSet) {
                 AntPathRequestMatcher matcher = new AntPathRequestMatcher(ignore, method);
                 if (matcher.matches(request)) {
                     return true;
@@ -152,5 +151,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         return false;
     }
-
 }
