@@ -50,23 +50,33 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        log.info("JWT authentication is filtering [{}] client requested access. URL: {}",
-                 RequestUtil.getRequestIpAndPort(request),
-                 request.getServletPath());
+        log.info("JWT authentication is filtering [{}] client requested access. URL: {}, HTTP method: {}",
+                 RequestUtil.getRequestIpAndPort(request), request.getServletPath(), request.getMethod());
         if (customConfiguration.getWebSecurityDisabled()) {
+            log.warn("The web security is disabled! Might face severe web security issue.");
             filterChain.doFilter(request, response);
             return;
         }
         if (checkIgnores(request)) {
+            log.info("The request can be ignored. URL: {}", request.getRequestURI());
             filterChain.doFilter(request, response);
             return;
         }
         String jwt = jwtUtil.getJwtFromRequest(request);
         if (StrUtil.isBlank(jwt)) {
+            log.error("Invalid JWT, the JWT of request is empty.");
             ResponseUtil.renderJson(response, HttpStatus.UNAUTHORIZED, null);
             return;
         }
-        String username = jwtUtil.getUsernameFromJwt(jwt);
+        String username;
+        try {
+            username = jwtUtil.getUsernameFromJwt(jwt);
+        } catch (Exception e) {
+            log.error("Exception occurred when getting username from JWT. JWT: {}, exception message: {}", jwt,
+                      e.getMessage());
+            ResponseUtil.renderJson(response, HttpStatus.UNAUTHORIZED, null);
+            return;
+        }
         UserDetails userDetails;
         try {
             userDetails = customUserDetailsServiceImpl.loadUserByUsername(username);

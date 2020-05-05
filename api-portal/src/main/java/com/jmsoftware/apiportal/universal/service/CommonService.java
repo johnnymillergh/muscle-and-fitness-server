@@ -26,4 +26,12 @@ public interface CommonService {
      * @param payload the payload
      */
     void validateObject(ValidationTestPayload payload);
+
+    /**
+     * Generate jwt string.
+     *
+     * @param username the username
+     * @return the string
+     */
+    String generateJwt(String username);
 }

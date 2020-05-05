@@ -38,4 +38,10 @@ public class CommonController {
         commonService.validateObject(payload);
         return ResponseBodyBean.ofDataAndMessage(payload.getName(), "validationTest()");
     }
+
+    @GetMapping("/get-jwt")
+    @ApiOperation(value = "/get-jwt", notes = "Get JWT")
+    public ResponseBodyBean<String> getJwt(String username) {
+        return ResponseBodyBean.ofData(commonService.generateJwt(username));
+    }
 }

@@ -43,6 +43,7 @@ logging:
 
 custom:
   configuration:
+    super-user: "admin"
     # Make `web-security-disabled` equal to true to disable web security. We suggest you do not turn off web security
     # feature unless development environment.
     web-security-disabled: false
@@ -59,6 +60,7 @@ custom:
         - "/auth/check-email-uniqueness"
         - "/auth/validate-username/**"
         - "/user/get-avatar"
+        - "/common/get-jwt"
       # Request need to be ignored that matches pattern.
       pattern:
         - "/druid/**"
