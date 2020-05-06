@@ -10,11 +10,11 @@ import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
-import javax.validation.*;
-import java.lang.annotation.Annotation;
-import java.util.ArrayList;
+import javax.validation.ConstraintViolation;
+import javax.validation.Valid;
+import javax.validation.Validation;
+import javax.validation.Validator;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -41,8 +41,9 @@ public class MethodArgumentValidationAspect {
     private final Validator validator;
 
     public MethodArgumentValidationAspect() {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        this.validator = factory.getValidator();
+        var validatorFactory = Validation.buildDefaultValidatorFactory();
+        this.validator = validatorFactory.getValidator();
+        log.info("Validator for {} has been initiated.", this.getClass().getSimpleName());
     }
 
     /**
@@ -82,37 +83,39 @@ public class MethodArgumentValidationAspect {
     @Around("validateMethodArgumentPointcut()")
     public Object aroundMethodHandleArgument(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         log.info("======= METHOD'S ARGUMENT VALIDATION START =======");
-        Object[] args = proceedingJoinPoint.getArgs();
-        MethodSignature signature = (MethodSignature) proceedingJoinPoint.getSignature();
-        Annotation[][] parameterAnnotations = signature.getMethod().getParameterAnnotations();
+        var args = proceedingJoinPoint.getArgs();
+        var signature = (MethodSignature) proceedingJoinPoint.getSignature();
+        var parameterAnnotations = signature.getMethod().getParameterAnnotations();
         // argumentIndexes is the array list that stores the index of argument we need to validate (the argument
         // annotated by `@Valid`)
-        List<Integer> argumentIndexes = new ArrayList<>();
-        for (Annotation[] parameterAnnotation : parameterAnnotations) {
+        var argumentIndexListThatNeedsToBeValidated = new LinkedList<Integer>();
+        for (var parameterAnnotation : parameterAnnotations) {
             int paramIndex = ArrayUtil.indexOf(parameterAnnotations, parameterAnnotation);
-            for (Annotation annotation : parameterAnnotation) {
+            for (var annotation : parameterAnnotation) {
                 if (annotation instanceof Valid) {
-                    argumentIndexes.add(paramIndex);
+                    argumentIndexListThatNeedsToBeValidated.add(paramIndex);
                 }
             }
         }
-
-        for (Integer index : argumentIndexes) {
-            Set<ConstraintViolation<Object>> constraintViolationSet = validator.validate(args[index]);
+        var errorMessageList = new LinkedList<String>();
+        for (var index : argumentIndexListThatNeedsToBeValidated) {
+            var constraintViolationSet = validator.validate(args[index]);
             if (CollUtil.isNotEmpty(constraintViolationSet)) {
-                String message = String.format("Argument validation failed: %s",
-                                               getAllErrorMessage(constraintViolationSet));
-                log.info("Method           : {}#{}",
-                         proceedingJoinPoint.getSignature().getDeclaringTypeName(),
-                         proceedingJoinPoint.getSignature().getName());
-                log.info("Argument         : {}", args);
-                log.error("Validation result: {}", message);
-                // If the argument doesn't pass validation, an IllegalArgumentException will be thrown, and not
-                // proceed the target method
-                throw new IllegalArgumentException(message);
+                var errorMessage = String.format("Argument validation failed: %s",
+                                                 getAllFieldErrorMessage(constraintViolationSet));
+                errorMessageList.add(errorMessage);
             }
         }
-
+        if (CollUtil.isNotEmpty(errorMessageList)) {
+            var joinedErrorMessage = StrUtil.join(", ", errorMessageList);
+            log.info("Method           : {}#{}", proceedingJoinPoint.getSignature().getDeclaringTypeName(),
+                     proceedingJoinPoint.getSignature().getName());
+            log.info("Argument         : {}", args);
+            log.error("Validation result: {}", joinedErrorMessage);
+            // If the argument doesn't pass validation, an IllegalArgumentException will be thrown, and not
+            // proceed the target method
+            throw new IllegalArgumentException(joinedErrorMessage);
+        }
         log.info("Validation result: Validation passed");
         return proceedingJoinPoint.proceed();
     }
@@ -140,13 +143,13 @@ public class MethodArgumentValidationAspect {
     }
 
     /**
-     * Gets all error message.
+     * Gets all field error message.
      *
      * @param constraintViolationSet the constraint violation set
-     * @return the all error message
+     * @return the all field error message
      */
-    private String getAllErrorMessage(Set<ConstraintViolation<Object>> constraintViolationSet) {
-        var allErrorMessageList = new LinkedList<>();
+    private String getAllFieldErrorMessage(Set<ConstraintViolation<Object>> constraintViolationSet) {
+        var allErrorMessageList = new LinkedList<String>();
         for (var constraintViolation : constraintViolationSet) {
             allErrorMessageList.add(String.format("invalid field: %s, %s", constraintViolation.getPropertyPath(),
                                                   constraintViolation.getMessage()));
