@@ -2,7 +2,6 @@ package com.jmsoftware.apiportal.universal.domain;
 
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.jmsoftware.apiportal.universal.mapper.PermissionPO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -109,8 +108,8 @@ public class UserPrincipal implements UserDetails {
                                  user.getBirthday(),
                                  user.getGender(),
                                  user.getStatus(),
-                                 user.getGmtCreated(),
-                                 user.getGmtModified(),
+                                 user.getCreatedTime(),
+                                 user.getModifiedTime(),
                                  roleNames,
                                  authorities);
     }

@@ -1,11 +1,11 @@
 package com.jmsoftware.apiportal.universal.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import com.jmsoftware.apiportal.universal.domain.PermissionPO;
 import com.jmsoftware.apiportal.universal.domain.RolePO;
 import com.jmsoftware.apiportal.universal.domain.UserPO;
 import com.jmsoftware.apiportal.universal.domain.UserPrincipal;
 import com.jmsoftware.apiportal.universal.mapper.PermissionMapper;
-import com.jmsoftware.apiportal.universal.mapper.PermissionPO;
 import com.jmsoftware.apiportal.universal.mapper.UserMapper;
 import com.jmsoftware.apiportal.universal.service.RoleService;
 import com.jmsoftware.common.constant.HttpStatus;

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jmsoftware.apiportal.universal.mapper.UserMapper">
+    <sql id="Base_Column_List">
+            id,
+            username,
+            email,
+            cellphone,
+            `password`,
+            full_name,
+            birthday,
+            gender,
+            avatar,
+            `status`,
+            created_time,
+            modified_time
+    </sql>
+
+    <resultMap id="BaseResultMap" type="com.jmsoftware.apiportal.universal.domain.UserPO">
+        <result column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="email" property="email"/>
+        <result column="cellphone" property="cellphone"/>
+        <result column="password" property="password"/>
+        <result column="full_name" property="fullName"/>
+        <result column="birthday" property="birthday"/>
+        <result column="gender" property="gender"/>
+        <result column="avatar" property="avatar"/>
+        <result column="status" property="status"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="modified_time" property="modifiedTime"/>
+    </resultMap>
+
+    <!-- TODO: do not retrieve useless fields -->
+    <select id="selectByUsernameOrEmailOrCellphone" resultMap="BaseResultMap">
+        SELECT id,
+               username,
+               email,
+               cellphone,
+               password,
+               full_name,
+               birthday,
+               gender,
+               created_time,
+               modified_time,
+               status
+        FROM user
+        <where>
+            <if test="username != null || email != null || cellphone != null">
+                (username = #{username} OR email = #{email} OR cellphone = #{cellphone})
+            </if>
+            AND status = 1
+        </where>
+    </select>
+
+    <select id="countByUsername" resultType="integer">
+        SELECT count(1)
+        FROM user
+        WHERE username = #{username}
+    </select>
+
+    <select id="countByEmail" resultType="integer">
+        SELECT count(1)
+        FROM user
+        WHERE email = #{email}
+    </select>
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO user(username,
+                           email,
+                           cellphone,
+                           password,
+                           full_name,
+                           birthday,
+                           gender,
+                           created_time,
+                           modified_time,
+                           status)
+        VALUES (#{username},
+                #{password},
+                #{cellphone},
+                #{password},
+                #{fullName},
+                #{birthday},
+                #{gender},
+                now(),
+                now(),
+                #{status})
+    </insert>
+
+    <insert id="register" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO user(username, password, email, created_time, modified_time, status)
+        VALUES (#{username}, #{password}, #{email}, now(), now(), 1)
+    </insert>
+
+    <select id="selectUserPageList" resultMap="BaseResultMap">
+        SELECT id,
+               username,
+               email,
+               gender,
+               created_time,
+               modified_time,
+               status
+        FROM user
+    </select>
+
+    <update id="updateUserBasicInfoById">
+        UPDATE user
+        <set>
+            <if test="updated.cellphone != null ">
+                cellphone = #{updated.cellphone},
+            </if>
+            <if test="updated.fullName != null">
+                full_name = #{updated.fullName},
+            </if>
+            <if test="updated.birthday != null">
+                birthday = #{updated.birthday},
+            </if>
+            gender = #{updated.gender},
+            <if test="updated.status != null">
+                status = #{updated.status},
+            </if>
+            modified_time = now()
+        </set>
+        WHERE id = #{updated.id}
+    </update>
+
+    <select id="selectByIdAndStatus" resultMap="BaseResultMap">
+        SELECT id,
+               username,
+               email,
+               cellphone,
+               full_name,
+               birthday,
+               gender,
+               status
+        FROM user
+        WHERE id = #{params.id}
+          AND `status` = #{params.status}
+    </select>
+
+    <select id="selectByUsername" resultMap="BaseResultMap">
+        SELECT id,
+               username,
+               email,
+               gender,
+               created_time,
+               modified_time,
+               status
+        FROM user
+        WHERE username = #{username}
+    </select>
+
+    <select id="selectUserListForSelection" resultMap="BaseResultMap">
+        SELECT id, username
+        FROM user
+        WHERE status = 1
+    </select>
+
+    <select id="selectStatusByIdAndUsername" resultType="integer">
+        SELECT tu.status
+        FROM user tu
+        WHERE tu.id = #{id}
+          AND tu.username = #{username}
+    </select>
+
+    <insert id="insertUserIdAndRoleIdList">
+        INSERT INTO user_role(user_id, role_id)
+        VALUES
+        <foreach collection="roleIdList" item="item" index="index" separator=",">
+            (#{userId}, #{item})
+        </foreach>
+    </insert>
+
+    <select id="selectIdAndAvatarByUsername" resultMap="BaseResultMap">
+        SELECT id,
+               avatar
+        FROM user
+        WHERE username = #{username}
+    </select>
+
+    <update id="updateAvatarByUsername">
+        UPDATE user
+        SET avatar        = #{updated.avatar},
+            modified_time = now()
+        WHERE username = #{updated.username}
+    </update>
+</mapper>

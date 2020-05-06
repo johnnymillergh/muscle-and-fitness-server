@@ -1,4 +1,4 @@
-package com.jmsoftware.apiportal.universal.mapper;
+package com.jmsoftware.apiportal.universal.domain;
 
 import lombok.Data;
 

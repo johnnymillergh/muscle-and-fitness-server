@@ -68,3 +68,16 @@ custom:
         - "/v2/api-docs/**"
         - "/webjars/**"
         - "/swagger-ui.html"
+
+sftp:
+  client:
+    configuration:
+      host: localhost
+      port: 23
+      user: johnny
+      password: atmoz@sftp
+      directory: upload
+      private-key:
+      private-key-pass-phrase:
+      session-cache-size: 20
+      session-wait-timeout: 15000

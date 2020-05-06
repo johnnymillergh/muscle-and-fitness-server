@@ -3,12 +3,13 @@ package com.jmsoftware.apiportal.universal.service;
 
 import com.jmsoftware.apiportal.universal.domain.ApiStatus;
 import com.jmsoftware.apiportal.universal.domain.GetApiListPLO;
-import com.jmsoftware.apiportal.universal.mapper.PermissionPO;
+import com.jmsoftware.apiportal.universal.domain.PermissionPO;
 
 import java.util.List;
 
 /**
- * Description: PermissionService, change description here.
+ * <h1>PermissionService</h1>
+ * <p>Change description here</p>
  *
  * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
  * @date 2019-05-10 20:45

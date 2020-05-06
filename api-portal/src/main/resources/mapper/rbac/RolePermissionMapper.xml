@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jmsoftware.apiportal.universal.mapper.RolePermissionMapper">
+    <delete id="deleteByRoleId">
+        DELETE
+        FROM role_permission
+        WHERE role_id = #{roleId}
+    </delete>
+
+    <insert id="insertBatch">
+        INSERT INTO role_permission(role_id, permission_id)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.roleId}, #{item.permissionId})
+        </foreach>
+    </insert>
+</mapper>

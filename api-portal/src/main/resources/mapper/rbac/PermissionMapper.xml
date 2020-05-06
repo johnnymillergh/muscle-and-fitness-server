@@ -16,7 +16,7 @@
                 now())
     </insert>
 
-    <select id="selectByRoleIdList" resultType="com.jmsoftware.apiportal.universal.mapper.PermissionPO">
+    <select id="selectByRoleIdList" resultType="com.jmsoftware.apiportal.universal.domain.PermissionPO">
         SELECT DISTINCT permission.id,
                         permission.url,
                         permission.description,
@@ -44,7 +44,7 @@
           AND type = 2
     </select>
 
-    <select id="selectApisByUrlPrefix" resultType="com.jmsoftware.apiportal.universal.mapper.PermissionPO">
+    <select id="selectApisByUrlPrefix" resultType="com.jmsoftware.apiportal.universal.domain.PermissionPO">
         SELECT id,
                url,
                description,
@@ -54,7 +54,7 @@
           AND type = 2
     </select>
 
-    <select id="selectApiPageList" resultType="com.jmsoftware.apiportal.universal.mapper.PermissionPO">
+    <select id="selectApiPageList" resultType="com.jmsoftware.apiportal.universal.domain.PermissionPO">
         SELECT permission.id,
                permission.url,
                permission.description,
