@@ -11,7 +11,6 @@ import com.jmsoftware.apiportal.universal.domain.UserPrincipal;
 import com.jmsoftware.apiportal.universal.service.PermissionService;
 import com.jmsoftware.apiportal.universal.service.RbacAuthorityService;
 import com.jmsoftware.apiportal.universal.service.RoleService;
-import com.jmsoftware.apiportal.universal.util.JwtUtil;
 import com.jmsoftware.common.constant.HttpStatus;
 import com.jmsoftware.common.exception.SecurityException;
 import lombok.RequiredArgsConstructor;
@@ -45,11 +44,11 @@ public class RbacAuthorityServiceImpl implements RbacAuthorityService {
     private final PermissionService permissionService;
     private final RequestMappingHandlerMapping mapping;
     private final CustomConfiguration customConfiguration;
-    private final JwtUtil jwtUtil;
+    private final JwtServiceImpl jwtServiceImpl;
 
     @Override
     public boolean hasPermission(HttpServletRequest request, Authentication authentication) {
-        String username = jwtUtil.getUsernameFromRequest(request);
+        String username = jwtServiceImpl.getUsernameFromRequest(request);
         // Super user has no restriction on any requests.
         if (customConfiguration.getSuperUser().equals(username)) {
             return true;

@@ -5,7 +5,6 @@ import com.jmsoftware.apiportal.universal.aspect.ValidateArgument;
 import com.jmsoftware.apiportal.universal.configuration.ProjectProperty;
 import com.jmsoftware.apiportal.universal.domain.ValidationTestPayload;
 import com.jmsoftware.apiportal.universal.service.CommonService;
-import com.jmsoftware.apiportal.universal.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,7 +30,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class CommonServiceImpl implements CommonService {
     private final ProjectProperty projectProperty;
-    private final JwtUtil jwtUtil;
+    private final JwtServiceImpl jwtServiceImpl;
 
     @Override
     public Map<String, Object> getApplicationInfo() {
@@ -54,7 +53,7 @@ public class CommonServiceImpl implements CommonService {
 
     @Override
     public String generateJwt(String username) {
-        return jwtUtil.createJwt(false, Long.MAX_VALUE, username, Lists.newLinkedList(), Lists.newLinkedList());
+        return jwtServiceImpl.createJwt(false, Long.MAX_VALUE, username, Lists.newLinkedList(), Lists.newLinkedList());
     }
 
     /**

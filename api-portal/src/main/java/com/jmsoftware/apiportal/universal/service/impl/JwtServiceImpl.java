@@ -1,4 +1,4 @@
-package com.jmsoftware.apiportal.universal.util;
+package com.jmsoftware.apiportal.universal.service.impl;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -6,6 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import com.jmsoftware.apiportal.universal.configuration.Constants;
 import com.jmsoftware.apiportal.universal.configuration.JwtConfiguration;
 import com.jmsoftware.apiportal.universal.domain.UserPrincipal;
+import com.jmsoftware.apiportal.universal.service.JwtService;
 import com.jmsoftware.apiportal.universal.service.RedisService;
 import com.jmsoftware.common.constant.HttpStatus;
 import com.jmsoftware.common.exception.BaseException;
@@ -14,9 +15,9 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.crypto.SecretKey;
@@ -29,17 +30,17 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 /**
- * <h1>JwtUtil</h1>
- * <p>JWT util</p>
+ * <h1>JwtServiceImpl</h1>
+ * Change description here.
  *
  * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
  * @date 2019-03-03 13:40
  **/
 @Slf4j
-@Configuration
+@Service
 @RequiredArgsConstructor
 @SuppressWarnings("unused")
-public class JwtUtil {
+public class JwtServiceImpl implements JwtService {
     private final JwtConfiguration jwtConfiguration;
     private final RedisService redisService;
     private SecretKey secretKey;
@@ -53,20 +54,15 @@ public class JwtUtil {
         jwtParser = Jwts.parserBuilder().setSigningKey(secretKey).build();
     }
 
-    /**
-     * Create JWT.
-     *
-     * @param rememberMe  Remember me
-     * @param id          User id
-     * @param subject     Username
-     * @param roles       Roles
-     * @param authorities Granted Authority
-     * @return JWT
-     */
-    public String createJwt(Boolean rememberMe,
-                            Long id,
-                            String subject,
-                            List<String> roles,
+    @Override
+    public String createJwt(Authentication authentication, Boolean rememberMe) {
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        return createJwt(rememberMe, userPrincipal.getId(), userPrincipal.getUsername(), userPrincipal.getRoles(),
+                         userPrincipal.getAuthorities());
+    }
+
+    @Override
+    public String createJwt(Boolean rememberMe, Long id, String subject, List<String> roles,
                             Collection<? extends GrantedAuthority> authorities) {
         var now = new Date();
         JwtBuilder builder = Jwts.builder()
@@ -93,25 +89,7 @@ public class JwtUtil {
         }
     }
 
-    /**
-     * Create JWT.
-     *
-     * @param authentication Authentication information
-     * @param rememberMe     Remember me
-     * @return JWT
-     */
-    public String createJwt(Authentication authentication, Boolean rememberMe) {
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        return createJwt(rememberMe, userPrincipal.getId(), userPrincipal.getUsername(), userPrincipal.getRoles(),
-                         userPrincipal.getAuthorities());
-    }
-
-    /**
-     * Parse JWT.
-     *
-     * @param jwt JWT
-     * @return {@link Claims}
-     */
+    @Override
     public Claims parseJwt(String jwt) {
         Claims claims;
         try {
@@ -147,11 +125,7 @@ public class JwtUtil {
         return claims;
     }
 
-    /**
-     * Invalidate JWT.
-     *
-     * @param request Request
-     */
+    @Override
     public void invalidateJwt(HttpServletRequest request) {
         String jwt = getJwtFromRequest(request);
         String username = getUsernameFromJwt(jwt);
@@ -160,34 +134,19 @@ public class JwtUtil {
         log.error("Invalidate JWT. Username = {}, deleted = {}", username, deleted);
     }
 
-    /**
-     * Get username from JWT.
-     *
-     * @param jwt JWT
-     * @return Username
-     */
+    @Override
     public String getUsernameFromJwt(String jwt) {
         Claims claims = parseJwt(jwt);
         return claims.getSubject();
     }
 
-    /**
-     * Get username from HTTP request.
-     *
-     * @param request HTTP request
-     * @return username
-     */
+    @Override
     public String getUsernameFromRequest(HttpServletRequest request) {
         String jwt = this.getJwtFromRequest(request);
         return this.getUsernameFromJwt(jwt);
     }
 
-    /**
-     * Get JWT from request's header.
-     *
-     * @param request request
-     * @return JWT
-     */
+    @Override
     public String getJwtFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader(Constants.REQUEST_TOKEN_KEY);
         if (StrUtil.isNotBlank(bearerToken) && bearerToken.startsWith(Constants.JWT_PREFIX)) {

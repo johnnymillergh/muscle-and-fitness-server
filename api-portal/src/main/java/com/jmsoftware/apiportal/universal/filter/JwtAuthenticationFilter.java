@@ -6,7 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.Sets;
 import com.jmsoftware.apiportal.universal.configuration.CustomConfiguration;
 import com.jmsoftware.apiportal.universal.service.impl.CustomUserDetailsServiceImpl;
-import com.jmsoftware.apiportal.universal.util.JwtUtil;
+import com.jmsoftware.apiportal.universal.service.impl.JwtServiceImpl;
 import com.jmsoftware.common.constant.HttpStatus;
 import com.jmsoftware.common.exception.SecurityException;
 import com.jmsoftware.common.util.RequestUtil;
@@ -43,7 +43,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final CustomUserDetailsServiceImpl customUserDetailsServiceImpl;
-    private final JwtUtil jwtUtil;
+    private final JwtServiceImpl jwtServiceImpl;
     private final CustomConfiguration customConfiguration;
 
     @Override
@@ -62,7 +62,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        String jwt = jwtUtil.getJwtFromRequest(request);
+        String jwt = jwtServiceImpl.getJwtFromRequest(request);
         if (StrUtil.isBlank(jwt)) {
             log.error("Invalid JWT, the JWT of request is empty.");
             ResponseUtil.renderJson(response, HttpStatus.UNAUTHORIZED, null);
@@ -70,7 +70,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         String username;
         try {
-            username = jwtUtil.getUsernameFromJwt(jwt);
+            username = jwtServiceImpl.getUsernameFromJwt(jwt);
         } catch (SecurityException e) {
             log.error("Exception occurred when getting username from JWT. Exception message: {} JWT: {}",
                       e.getMessage(), jwt);
