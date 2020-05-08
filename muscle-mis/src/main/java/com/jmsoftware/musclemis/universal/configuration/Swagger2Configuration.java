@@ -1,6 +1,7 @@
 package com.jmsoftware.musclemis.universal.configuration;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -39,11 +40,11 @@ public class Swagger2Configuration {
     }
 
     private ApiInfo apiInfo() {
-        var projectArtifactId = projectProperty.getProjectArtifactId();
-        var version = projectProperty.getVersion();
-        var developerEmail = projectProperty.getDeveloperEmail();
-        var developerUrl = projectProperty.getDeveloperUrl();
-        var environmentAlias = projectProperty.getEnvironmentAlias();
+        val projectArtifactId = projectProperty.getProjectArtifactId();
+        val version = projectProperty.getVersion();
+        val developerEmail = projectProperty.getDeveloperEmail();
+        val developerUrl = projectProperty.getDeveloperUrl();
+        val environmentAlias = projectProperty.getEnvironmentAlias();
         return new ApiInfoBuilder()
                 .title(String.format("API for %s@%s (%s)",
                                      projectArtifactId,

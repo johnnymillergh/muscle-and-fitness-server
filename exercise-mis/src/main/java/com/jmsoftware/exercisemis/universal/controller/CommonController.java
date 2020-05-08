@@ -6,6 +6,7 @@ import com.jmsoftware.exercisemis.universal.service.CommonService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -28,7 +29,7 @@ public class CommonController {
     @GetMapping("/app-info")
     @ApiOperation(value = "/app-info", notes = "Retrieve application information")
     public ResponseBodyBean<Map<String, Object>> applicationInformation() {
-        var data = commonService.getApplicationInfo();
+        val data = commonService.getApplicationInfo();
         return ResponseBodyBean.ofSuccess(data, "Succeed to retrieve app info.");
     }
 
