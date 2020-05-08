@@ -4,6 +4,7 @@ import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -26,8 +27,7 @@ import javax.sql.DataSource;
 public class DruidConfiguration {
     @Bean
     public ServletRegistrationBean<StatViewServlet> druidServlet() {
-        ServletRegistrationBean<StatViewServlet> servletRegistrationBean =
-                new ServletRegistrationBean<>(new StatViewServlet(), "/druid/*");
+        val servletRegistrationBean = new ServletRegistrationBean<>(new StatViewServlet(), "/druid/*");
         servletRegistrationBean.addInitParameter("loginUsername", "admin");
         servletRegistrationBean.addInitParameter("loginPassword", "admin");
         servletRegistrationBean.addInitParameter("resetEnable", "false");
@@ -36,7 +36,7 @@ public class DruidConfiguration {
 
     @Bean
     public FilterRegistrationBean<WebStatFilter> filterRegistrationBean() {
-        FilterRegistrationBean<WebStatFilter> filterRegistrationBean = new FilterRegistrationBean<>();
+        val filterRegistrationBean = new FilterRegistrationBean<WebStatFilter>();
         filterRegistrationBean.setFilter(new WebStatFilter());
         filterRegistrationBean.addUrlPatterns("/*");
         // Ignored resources

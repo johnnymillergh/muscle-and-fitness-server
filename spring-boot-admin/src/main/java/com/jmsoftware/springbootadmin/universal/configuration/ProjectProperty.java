@@ -1,7 +1,6 @@
 package com.jmsoftware.springbootadmin.universal.configuration;
 
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Component;
  * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
  * @date 2019-04-18 13:01
  **/
-@Slf4j
 @Data
 @Component
 @ConfigurationProperties(prefix = "project.property")
