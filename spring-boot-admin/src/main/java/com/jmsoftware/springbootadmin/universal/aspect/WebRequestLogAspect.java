@@ -7,14 +7,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jmsoftware.common.util.RequestUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * <h1>RequestLogAspect</h1>
@@ -61,9 +60,9 @@ public class WebRequestLogAspect {
      */
     @Before("requestLogPointcut()")
     public void beforeHandleRequest(JoinPoint joinPoint) {
-        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        val attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         assert attributes != null;
-        HttpServletRequest request = attributes.getRequest();
+        val request = attributes.getRequest();
         log.info("============ WEB REQUEST LOG START ============");
         log.info("URL                : {}", request.getRequestURL().toString());
         log.info("HTTP Method        : {}", request.getMethod());
@@ -84,9 +83,9 @@ public class WebRequestLogAspect {
      */
     @Around("requestLogPointcut()")
     public Object aroundHandleRequest(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        long startTime = System.currentTimeMillis();
-        Object result = proceedingJoinPoint.proceed();
-        long elapsedTime = System.currentTimeMillis() - startTime;
+        val startTime = System.currentTimeMillis();
+        val result = proceedingJoinPoint.proceed();
+        val elapsedTime = System.currentTimeMillis() - startTime;
         try {
             var formattedStringifiedJson = JSONUtil.formatJsonStr(mapper.writeValueAsString(result));
             if (formattedStringifiedJson.length() > 500) {
