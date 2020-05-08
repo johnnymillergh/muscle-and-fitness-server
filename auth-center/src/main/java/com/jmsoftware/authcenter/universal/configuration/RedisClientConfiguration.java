@@ -1,5 +1,6 @@
 package com.jmsoftware.authcenter.universal.configuration;
 
+import lombok.val;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
@@ -16,10 +17,10 @@ import java.io.Serializable;
 /**
  * <h1>RedisClientConfiguration</h1>
  * <p>
- * Redis configuration.
+ * Ignored request configuration.
  *
  * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
- * @date 2019-03-23 14:27
+ * @date 5/2/20 11:41 PM
  **/
 @Configuration
 @EnableCaching
@@ -30,7 +31,7 @@ public class RedisClientConfiguration extends CachingConfigurerSupport {
      */
     @Bean
     public RedisTemplate<String, Serializable> redisFactory(LettuceConnectionFactory lettuceConnectionFactory) {
-        RedisTemplate<String, Serializable> template = new RedisTemplate<>();
+        val template = new RedisTemplate<String, Serializable>();
         template.setKeySerializer(new StringRedisSerializer());
         template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
         template.setConnectionFactory(lettuceConnectionFactory);

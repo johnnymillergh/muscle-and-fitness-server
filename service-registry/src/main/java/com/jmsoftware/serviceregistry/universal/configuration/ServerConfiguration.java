@@ -3,6 +3,7 @@ package com.jmsoftware.serviceregistry.universal.configuration;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.boot.web.context.WebServerInitializedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
@@ -64,8 +65,8 @@ public class ServerConfiguration implements ApplicationListener<WebServerInitial
         }
         try {
             // An API provided by https://whatismyipaddress.com/api
-            URL url = new URL("https://ipv4bot.whatismyipaddress.com/");
-            BufferedReader sc = new BufferedReader(new InputStreamReader(url.openStream()));
+            val url = new URL("https://ipv4bot.whatismyipaddress.com/");
+            val sc = new BufferedReader(new InputStreamReader(url.openStream()));
             // Read system IP Address
             return sc.readLine().trim();
         } catch (Exception e) {
@@ -80,9 +81,9 @@ public class ServerConfiguration implements ApplicationListener<WebServerInitial
      * @return internet IP
      */
     private String getInternetIp() {
-        String intranetIp = this.getIntranetIp();
+        val intranetIp = this.getIntranetIp();
         try {
-            Enumeration<NetworkInterface> networks = NetworkInterface.getNetworkInterfaces();
+            val networks = NetworkInterface.getNetworkInterfaces();
             InetAddress ip;
             Enumeration<InetAddress> addresses;
             while (networks.hasMoreElements()) {

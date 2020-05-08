@@ -2,7 +2,6 @@ package com.jmsoftware.apiportal.universal.configuration;
 
 import com.jcraft.jsch.ChannelSftp;
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -27,7 +26,6 @@ import java.io.File;
  * @date 2019-07-04 18:18
  **/
 @Data
-@Slf4j
 @Component
 @ConfigurationProperties(prefix = "sftp.client.configuration")
 public class SftpClientConfiguration {
