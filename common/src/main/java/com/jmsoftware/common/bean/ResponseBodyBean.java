@@ -138,37 +138,6 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
     }
 
     /**
-     * Respond data and status is OK.
-     *
-     * @param <ResponseBodyDataType> the response body data type
-     * @param data                   data to be responded to client.
-     * @return response body
-     */
-    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofData(@NonNull final ResponseBodyDataType data) {
-        return ResponseBodyBean.<ResponseBodyDataType>builder()
-                .timestamp(new Date())
-                .status(HttpStatus.OK.getCode())
-                .message(HttpStatus.OK.getMessage())
-                .data(data)
-                .build();
-    }
-
-    /**
-     * Respond a message and status id OK.
-     *
-     * @param <ResponseBodyDataType> the response body data type
-     * @param message                message to be responded
-     * @return response body
-     */
-    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofMessage(@NonNull final String message) {
-        return ResponseBodyBean.<ResponseBodyDataType>builder()
-                .timestamp(new Date())
-                .status(HttpStatus.OK.getCode())
-                .message(message)
-                .build();
-    }
-
-    /**
      * Respond null data, and status is OK.
      *
      * @param <ResponseBodyDataType> the response body data type
@@ -179,6 +148,22 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
                 .timestamp(new Date())
                 .status(HttpStatus.OK.getCode())
                 .message(HttpStatus.OK.getMessage())
+                .build();
+    }
+
+    /**
+     * Respond data and status is OK.
+     *
+     * @param <ResponseBodyDataType> the response body data type
+     * @param data                   data to be responded to client.
+     * @return response body
+     */
+    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofSuccess(@NonNull final ResponseBodyDataType data) {
+        return ResponseBodyBean.<ResponseBodyDataType>builder()
+                .timestamp(new Date())
+                .status(HttpStatus.OK.getCode())
+                .message(HttpStatus.OK.getMessage())
+                .data(data)
                 .build();
     }
 
@@ -231,7 +216,7 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
      * @param data                   data to be responded
      * @return response body
      */
-    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofFailure(@NonNull final Object data) {
+    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofFailure(@NonNull final ResponseBodyDataType data) {
         throw new BusinessException(data);
     }
 

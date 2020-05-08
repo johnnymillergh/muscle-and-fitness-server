@@ -33,7 +33,7 @@ public class ExerciseController {
     @GetMapping("/get-by-id")
     @ApiOperation(value = "/get-by-id", notes = "Retrieve exercise by id")
     public ResponseBodyBean<ExercisePo> selectOne(Long id) {
-        return ResponseBodyBean.ofData(exerciseService.queryById(id));
+        return ResponseBodyBean.ofSuccess(exerciseService.queryById(id));
     }
 
     @GetMapping("/get-page-list")
@@ -41,6 +41,6 @@ public class ExerciseController {
     public ResponseBodyBean<List<ExercisePo>> getPageList(@Valid GetPageListPayload payload) {
         var exercisePo = new ExercisePo();
         BeanUtil.copyProperties(payload, exercisePo);
-        return ResponseBodyBean.ofData(exerciseService.getPageList(exercisePo));
+        return ResponseBodyBean.ofSuccess(exerciseService.getPageList(exercisePo));
     }
 }

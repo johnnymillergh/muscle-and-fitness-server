@@ -25,6 +25,6 @@ public class AuthController {
         result.setUid("ijohnnymiller");
         result.setToken("Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9" +
                         ".eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG5ueSBNaWxsZXIiLCJpYXQiOjE1MTYyMzkwMjIsImlkIjoxMTEyfQ.wLZClT_dntoiB3-HYH1wWav0S_nBmHn7xunxaDjPM1Q");
-        return ResponseBodyBean.ofData(result);
+        return ResponseBodyBean.ofSuccess(result);
     }
 }

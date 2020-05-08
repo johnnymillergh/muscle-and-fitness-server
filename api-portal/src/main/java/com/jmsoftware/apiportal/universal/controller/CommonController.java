@@ -42,6 +42,6 @@ public class CommonController {
     @GetMapping("/get-jwt")
     @ApiOperation(value = "/get-jwt", notes = "Get JWT")
     public ResponseBodyBean<String> getJwt(String username) {
-        return ResponseBodyBean.ofData(commonService.generateJwt(username));
+        return ResponseBodyBean.ofSuccess(commonService.generateJwt(username));
     }
 }
