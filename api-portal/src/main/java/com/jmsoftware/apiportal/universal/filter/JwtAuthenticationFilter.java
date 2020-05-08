@@ -3,7 +3,6 @@ package com.jmsoftware.apiportal.universal.filter;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.google.common.collect.Sets;
 import com.jmsoftware.apiportal.universal.configuration.CustomConfiguration;
 import com.jmsoftware.apiportal.universal.service.impl.CustomUserDetailsServiceImpl;
 import com.jmsoftware.apiportal.universal.service.impl.JwtServiceImpl;
@@ -13,6 +12,7 @@ import com.jmsoftware.common.util.RequestUtil;
 import com.jmsoftware.common.util.ResponseUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,8 +28,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * <h1>JwtAuthenticationFilter</h1>
@@ -62,7 +62,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        String jwt = jwtServiceImpl.getJwtFromRequest(request);
+        val jwt = jwtServiceImpl.getJwtFromRequest(request);
         if (StrUtil.isBlank(jwt)) {
             log.error("Invalid JWT, the JWT of request is empty.");
             ResponseUtil.renderJson(response, HttpStatus.UNAUTHORIZED, null);
@@ -86,8 +86,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             ResponseUtil.renderJson(response, HttpStatus.UNAUTHORIZED, null);
             return;
         }
-        UsernamePasswordAuthenticationToken authentication =
-                new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        val authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         log.info("JWT authentication passed! Authentication: {}", authentication);
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -101,13 +100,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
      * @return true - Ignored, false - Not ignored
      */
     private boolean checkIgnores(HttpServletRequest request) {
-        String method = request.getMethod();
-        HttpMethod httpMethod = HttpMethod.resolve(method);
+        val method = request.getMethod();
+        var httpMethod = HttpMethod.resolve(method);
         if (ObjectUtil.isNull(httpMethod)) {
             httpMethod = HttpMethod.GET;
         }
-        Set<String> ignoredRequestSet = Sets.newHashSet();
-        HttpMethod finalHttpMethod = httpMethod;
+        val ignoredRequestSet = new HashSet<String>();
+        val finalHttpMethod = httpMethod;
         Optional.ofNullable(customConfiguration.getIgnoredRequest())
                 .ifPresentOrElse((ignoredRequest -> {
                     ignoredRequestSet.addAll(ignoredRequest.getPattern());
@@ -142,8 +141,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }), () -> log.warn("Security warning: Ignored request is empty! The ignored request configuration " +
                                    "might be invalid!"));
         if (CollUtil.isNotEmpty(ignoredRequestSet)) {
-            for (String ignore : ignoredRequestSet) {
-                AntPathRequestMatcher matcher = new AntPathRequestMatcher(ignore, method);
+            for (val ignore : ignoredRequestSet) {
+                val matcher = new AntPathRequestMatcher(ignore, method);
                 if (matcher.matches(request)) {
                     return true;
                 }

@@ -2,6 +2,7 @@ package com.jmsoftware.apiportal.universal.configuration;
 
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.pagination.optimize.JsqlParserCountOptimize;
+import lombok.val;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -24,7 +25,7 @@ public class MyBatisPlusConfiguration {
      */
     @Bean
     public PaginationInterceptor paginationInterceptor() {
-        var paginationInterceptor = new PaginationInterceptor();
+        val paginationInterceptor = new PaginationInterceptor();
         // Set maximum query record count
         paginationInterceptor.setLimit(100L);
         // Enable JSQL Parser Count Optimizing (for left join)

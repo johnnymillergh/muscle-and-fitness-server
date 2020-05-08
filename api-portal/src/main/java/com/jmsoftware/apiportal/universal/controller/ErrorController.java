@@ -2,11 +2,11 @@ package com.jmsoftware.apiportal.universal.controller;
 
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolver;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,8 +35,8 @@ public class ErrorController extends BasicErrorController {
 
     @Override
     public ResponseEntity<Map<String, Object>> error(HttpServletRequest request) {
-        HttpStatus httpStatus = getStatus(request);
-        Map<String, Object> body = getErrorAttributes(request, isIncludeStackTrace(request, MediaType.ALL));
+        val httpStatus = getStatus(request);
+        val body = getErrorAttributes(request, isIncludeStackTrace(request, MediaType.ALL));
         body.put("message", httpStatus.getReasonPhrase());
         log.error("Captured HTTP request error. Response body = {}", body);
         return new ResponseEntity<>(body, httpStatus);

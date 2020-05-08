@@ -1,5 +1,6 @@
 package com.jmsoftware.apiportal.universal.configuration;
 
+import lombok.val;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
@@ -22,15 +23,15 @@ import java.io.Serializable;
  * @date 5/2/20 11:41 PM
  **/
 @Configuration
-@AutoConfigureAfter(RedisAutoConfiguration.class)
 @EnableCaching
+@AutoConfigureAfter(RedisAutoConfiguration.class)
 public class RedisClientConfiguration extends CachingConfigurerSupport {
     /**
      * Redis template. Support for &lt;String, Serializable&gt;
      */
     @Bean
     public RedisTemplate<String, Serializable> redisFactory(LettuceConnectionFactory lettuceConnectionFactory) {
-        RedisTemplate<String, Serializable> template = new RedisTemplate<>();
+        val template = new RedisTemplate<String, Serializable>();
         template.setKeySerializer(new StringRedisSerializer());
         template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
         template.setConnectionFactory(lettuceConnectionFactory);

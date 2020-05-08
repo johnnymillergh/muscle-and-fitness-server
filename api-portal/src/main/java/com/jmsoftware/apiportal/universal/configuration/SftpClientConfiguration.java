@@ -3,6 +3,7 @@ package com.jmsoftware.apiportal.universal.configuration;
 import com.jcraft.jsch.ChannelSftp;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.Resource;
@@ -69,7 +70,7 @@ public class SftpClientConfiguration {
 
     @Bean
     public SessionFactory<ChannelSftp.LsEntry> sftpSessionFactory() {
-        DefaultSftpSessionFactory factory = new DefaultSftpSessionFactory(true);
+        val factory = new DefaultSftpSessionFactory(true);
         factory.setHost(host);
         factory.setPort(port);
         factory.setUser(user);
@@ -81,8 +82,7 @@ public class SftpClientConfiguration {
         }
         factory.setAllowUnknownKeys(true);
         // We return a caching session factory, so that we don't have to reconnect to SFTP server for each time
-        CachingSessionFactory<ChannelSftp.LsEntry> cachingSessionFactory = new CachingSessionFactory<>(factory,
-                                                                                                       sessionCacheSize);
+        val cachingSessionFactory = new CachingSessionFactory<>(factory, sessionCacheSize);
         cachingSessionFactory.setSessionWaitTimeout(sessionWaitTimeout);
         return cachingSessionFactory;
     }
@@ -91,7 +91,7 @@ public class SftpClientConfiguration {
     @ServiceActivator(inputChannel = "toSftpChannel")
     @SuppressWarnings("UnresolvedMessageChannel")
     public MessageHandler handler(SessionFactory<ChannelSftp.LsEntry> sftpSessionFactory) {
-        SftpMessageHandler handler = new SftpMessageHandler(sftpSessionFactory);
+        val handler = new SftpMessageHandler(sftpSessionFactory);
         handler.setRemoteDirectoryExpression(new LiteralExpression(directory));
         handler.setFileNameGenerator(message -> {
             if (message.getPayload() instanceof File) {

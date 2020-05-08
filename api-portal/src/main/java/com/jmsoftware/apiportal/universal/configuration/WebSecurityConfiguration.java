@@ -4,6 +4,7 @@ import com.jmsoftware.apiportal.universal.filter.JwtAuthenticationFilter;
 import com.jmsoftware.apiportal.universal.service.impl.CustomUserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -95,7 +96,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
      */
     @Override
     public void configure(WebSecurity web) {
-        WebSecurity and = web.ignoring().and();
+        val and = web.ignoring().and();
         Optional.ofNullable(customConfiguration.getIgnoredRequest())
                 .ifPresentOrElse((ignoredRequest -> {
                     ignoredRequest.getGet().forEach(url -> and.ignoring().antMatchers(HttpMethod.GET, url));

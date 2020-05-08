@@ -3,6 +3,7 @@ package com.jmsoftware.apiportal.universal.configuration;
 import com.jmsoftware.apiportal.universal.domain.SftpSubDirectory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.integration.sftp.session.SftpRemoteFileTemplate;
@@ -39,8 +40,8 @@ public class SftpSubDirectoryRunner implements ApplicationRunner {
 
         log.info("Staring to initial SFTP server sub directory.");
         sftpRemoteFileTemplate.execute(session -> {
-            for (SftpSubDirectory sftpSubDirectory : SftpSubDirectory.values()) {
-                String fullPath = sftpClientConfiguration.getDirectory() + sftpSubDirectory.getSubDirectory();
+            for (val sftpSubDirectory : SftpSubDirectory.values()) {
+                val fullPath = sftpClientConfiguration.getDirectory() + sftpSubDirectory.getSubDirectory();
                 if (!session.exists(fullPath)) {
                     log.info("SFTP server sub directory does not exist. Creating sub directory: {}", fullPath);
                     session.mkdir(fullPath);
