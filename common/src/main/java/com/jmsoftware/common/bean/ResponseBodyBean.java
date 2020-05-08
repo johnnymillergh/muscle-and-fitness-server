@@ -6,9 +6,8 @@ import com.jmsoftware.common.constant.IUniversalStatus;
 import com.jmsoftware.common.exception.BaseException;
 import com.jmsoftware.common.exception.BusinessException;
 import lombok.Builder;
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.ToString;
+import lombok.Value;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -22,9 +21,8 @@ import java.util.Date;
  * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com
  * @date 2/27/20 9:24 AM
  */
-@Getter
+@Value
 @Builder
-@ToString
 @SuppressWarnings("unused")
 public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
     /**
@@ -36,19 +34,19 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
      * The Timestamp.
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private final Date timestamp;
+    Date timestamp;
     /**
      * Default status is OK[200]
      */
-    private final Integer status;
+    Integer status;
     /**
      * The Message.
      */
-    private final String message;
+    String message;
     /**
      * The Data.
      */
-    private final ResponseBodyDataType data;
+    ResponseBodyDataType data;
 
     /**
      * <p>Respond to client with IUniversalStatus (status may be OK or other).</p>
