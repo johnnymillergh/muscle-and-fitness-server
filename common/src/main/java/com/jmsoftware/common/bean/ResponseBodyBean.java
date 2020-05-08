@@ -7,6 +7,7 @@ import com.jmsoftware.common.exception.BaseException;
 import com.jmsoftware.common.exception.BusinessException;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.ToString;
 
 import java.io.Serializable;
@@ -17,7 +18,7 @@ import java.util.Date;
  * <p>
  * Response body bean.
  *
- * @param <T> the body type
+ * @param <ResponseBodyDataType> the response body data type
  * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com
  * @date 2/27/20 9:24 AM
  */
@@ -25,7 +26,7 @@ import java.util.Date;
 @Builder
 @ToString
 @SuppressWarnings("unused")
-public class ResponseBodyBean<T> implements Serializable {
+public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
     /**
      * The constant serialVersionUID.
      */
@@ -35,19 +36,19 @@ public class ResponseBodyBean<T> implements Serializable {
      * The Timestamp.
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Date timestamp;
+    private final Date timestamp;
     /**
      * Default status is OK[200]
      */
-    private Integer status;
+    private final Integer status;
     /**
      * The Message.
      */
-    private String message;
+    private final String message;
     /**
      * The Data.
      */
-    private T data;
+    private final ResponseBodyDataType data;
 
     /**
      * <p>Respond to client with IUniversalStatus (status may be OK or other).</p>
@@ -55,12 +56,13 @@ public class ResponseBodyBean<T> implements Serializable {
      * <p>This method CANNOT be used by controller or service or other class, only provided for Exception controller
      * .</p>
      *
-     * @param <ResponseBodyType> the type parameter
-     * @param status             IUniversalStatus
+     * @param <ResponseBodyDataType> the type parameter
+     * @param status                 IUniversalStatus
      * @return response body for ExceptionControllerAdvice javax.servlet.http.HttpServletResponse, Exception)
      */
-    public static <ResponseBodyType> ResponseBodyBean<ResponseBodyType> ofStatus(final IUniversalStatus status) {
-        return ResponseBodyBean.<ResponseBodyType>builder().timestamp(new Date())
+    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofStatus(@NonNull final IUniversalStatus status) {
+        return ResponseBodyBean.<ResponseBodyDataType>builder()
+                .timestamp(new Date())
                 .status(status.getCode())
                 .message(status.getMessage())
                 .build();
@@ -72,14 +74,15 @@ public class ResponseBodyBean<T> implements Serializable {
      * <p>This method CANNOT be used by controller or service or other class, only provided for Exception controller
      * .</p>
      *
-     * @param <ResponseBodyType> the type parameter
-     * @param status             IUniversalStatus
-     * @param data               data to be responded to client
+     * @param <ResponseBodyDataType> the response body data type
+     * @param status                 IUniversalStatus
+     * @param data                   data to be responded to client
      * @return response body for ExceptionControllerAdvice
      */
-    public static <ResponseBodyType> ResponseBodyBean<ResponseBodyType> ofStatus(final IUniversalStatus status,
-                                                                                 final ResponseBodyType data) {
-        return ResponseBodyBean.<ResponseBodyType>builder().timestamp(new Date())
+    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofStatus(@NonNull final IUniversalStatus status,
+                                                                                         @NonNull final ResponseBodyDataType data) {
+        return ResponseBodyBean.<ResponseBodyDataType>builder()
+                .timestamp(new Date())
                 .status(status.getCode())
                 .message(status.getMessage())
                 .data(data)
@@ -92,16 +95,21 @@ public class ResponseBodyBean<T> implements Serializable {
      * <p>This method CANNOT be used by controller or service or other class, only provided for Exception controller
      * .</p>
      *
-     * @param <ResponseBodyType> the type parameter
-     * @param status             status code
-     * @param message            message to be responded
-     * @param data               data to be responded
+     * @param <ResponseBodyDataType> the response body data type
+     * @param status                 status code
+     * @param message                message to be responded
+     * @param data                   data to be responded
      * @return response body for ExceptionControllerAdvice
      */
-    public static <ResponseBodyType> ResponseBodyBean<ResponseBodyType> ofStatus(final Integer status,
-                                                                                 final String message,
-                                                                                 final ResponseBodyType data) {
-        return ResponseBodyBean.<ResponseBodyType>builder().timestamp(new Date()).status(status).message(message).data(data).build();
+    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofStatus(@NonNull final Integer status,
+                                                                                         @NonNull final String message,
+                                                                                         @NonNull final ResponseBodyDataType data) {
+        return ResponseBodyBean.<ResponseBodyDataType>builder()
+                .timestamp(new Date())
+                .status(status)
+                .message(message)
+                .data(data)
+                .build();
     }
 
     /**
@@ -109,31 +117,38 @@ public class ResponseBodyBean<T> implements Serializable {
      * <p><strong>ATTENTION:</strong></p>
      * <p>This method CANNOT be used in ExceptionControllerAdvice.</p>
      *
-     * @param <ResponseBodyType> the type parameter
-     * @param status             status code
-     * @param message            message to be responded
-     * @param data               data to be responded
+     * @param <ResponseBodyDataType> the response body data type
+     * @param status                 status code
+     * @param message                message to be responded
+     * @param data                   data to be responded
      * @return response body
      */
-    public static <ResponseBodyType> ResponseBodyBean<ResponseBodyType> setResponse(final Integer status,
-                                                                                    final String message,
-                                                                                    final ResponseBodyType data) {
+    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> setResponse(@NonNull final Integer status,
+                                                                                            @NonNull final String message,
+                                                                                            final ResponseBodyDataType data) {
         if (!HttpStatus.OK.getCode().equals(status)) {
             throw new BaseException(status, message, data);
         }
-        return ResponseBodyBean.<ResponseBodyType>builder().timestamp(new Date()).status(status).message(message).data(data).build();
+        return ResponseBodyBean.<ResponseBodyDataType>builder()
+                .timestamp(new Date())
+                .status(status)
+                .message(message)
+                .data(data)
+                .build();
     }
 
     /**
      * Respond data and status is OK.
      *
-     * @param <ResponseBodyType> the type parameter
-     * @param data               data to be responded to client.
+     * @param <ResponseBodyDataType> the response body data type
+     * @param data                   data to be responded to client.
      * @return response body
      */
-    public static <ResponseBodyType> ResponseBodyBean<ResponseBodyType> ofData(final ResponseBodyType data) {
-        return ResponseBodyBean.<ResponseBodyType>builder().timestamp(new Date())
+    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofData(@NonNull final ResponseBodyDataType data) {
+        return ResponseBodyBean.<ResponseBodyDataType>builder()
+                .timestamp(new Date())
                 .status(HttpStatus.OK.getCode())
+                .message(HttpStatus.OK.getMessage())
                 .data(data)
                 .build();
     }
@@ -141,57 +156,41 @@ public class ResponseBodyBean<T> implements Serializable {
     /**
      * Respond a message and status id OK.
      *
-     * @param <ResponseBodyType> the type parameter
-     * @param message            message to be responded
+     * @param <ResponseBodyDataType> the response body data type
+     * @param message                message to be responded
      * @return response body
      */
-    public static <ResponseBodyType> ResponseBodyBean<ResponseBodyType> ofMessage(final String message) {
-        return ResponseBodyBean.<ResponseBodyType>builder().timestamp(new Date())
+    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofMessage(@NonNull final String message) {
+        return ResponseBodyBean.<ResponseBodyDataType>builder()
+                .timestamp(new Date())
                 .status(HttpStatus.OK.getCode())
                 .message(message)
                 .build();
     }
 
     /**
-     * Respond data, message and status is OK.
+     * Respond null data, and status is OK.
      *
-     * @param <ResponseBodyType> the type parameter
-     * @param data               data to be responded
-     * @param message            message to be responded
+     * @param <ResponseBodyDataType> the response body data type
      * @return response body
      */
-    public static <ResponseBodyType> ResponseBodyBean<ResponseBodyType> ofDataAndMessage(final ResponseBodyType data,
-                                                                                         final String message) {
-        return ResponseBodyBean.<ResponseBodyType>builder().timestamp(new Date())
+    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofSuccess() {
+        return ResponseBodyBean.<ResponseBodyDataType>builder()
+                .timestamp(new Date())
                 .status(HttpStatus.OK.getCode())
-                .data(data)
-                .message(message)
-                .build();
-    }
-
-    /**
-     * Respond data, and status is OK.
-     *
-     * @param <ResponseBodyType> the type parameter
-     * @param data               data to be responded
-     * @return response body
-     */
-    public static <ResponseBodyType> ResponseBodyBean<ResponseBodyType> ofSuccess(final ResponseBodyType data) {
-        return ResponseBodyBean.<ResponseBodyType>builder().timestamp(new Date())
-                .status(HttpStatus.OK.getCode())
-                .data(data)
+                .message(HttpStatus.OK.getMessage())
                 .build();
     }
 
     /**
      * Respond a message and status is OK.
      *
-     * @param <ResponseBodyType> the type parameter
-     * @param message            message to be responded
+     * @param <ResponseBodyDataType> the response body data type
+     * @param message                message to be responded
      * @return response body
      */
-    public static <ResponseBodyType> ResponseBodyBean<ResponseBodyType> ofSuccess(final String message) {
-        return ResponseBodyBean.<ResponseBodyType>builder().timestamp(new Date())
+    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofSuccess(@NonNull final String message) {
+        return ResponseBodyBean.<ResponseBodyDataType>builder().timestamp(new Date())
                 .status(HttpStatus.OK.getCode())
                 .message(message)
                 .build();
@@ -200,84 +199,85 @@ public class ResponseBodyBean<T> implements Serializable {
     /**
      * Respond data, message and status is OK.
      *
-     * @param <ResponseBodyType> the type parameter
-     * @param data               data to be responded
-     * @param message            message to be responded
+     * @param <ResponseBodyDataType> the response body data type
+     * @param data                   data to be responded
+     * @param message                message to be responded
      * @return response body
      */
-    public static <ResponseBodyType> ResponseBodyBean<ResponseBodyType> ofSuccess(final ResponseBodyType data,
-                                                                                  final String message) {
-        return ResponseBodyBean.<ResponseBodyType>builder().timestamp(new Date())
+    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofSuccess(@NonNull final ResponseBodyDataType data,
+                                                                                          @NonNull final String message) {
+        return ResponseBodyBean.<ResponseBodyDataType>builder().timestamp(new Date())
                 .status(HttpStatus.OK.getCode())
-                .data(data)
                 .message(message)
+                .data(data)
                 .build();
     }
 
     /**
      * Respond a message and status is FAILURE(464).
      *
-     * @param <ResponseBodyType> the type parameter
-     * @param message            message to be responded.
+     * @param <ResponseBodyDataType> the response body data type
+     * @param message                message to be responded.
      * @return response body
      */
-    public static <ResponseBodyType> ResponseBodyBean<ResponseBodyType> ofFailure(final String message) {
+    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofFailure(@NonNull final String message) {
         throw new BusinessException(message);
     }
 
     /**
      * Respond a message and status is FAILURE(464).
      *
-     * @param <ResponseBodyType> the type parameter
-     * @param data               data to be responded
+     * @param <ResponseBodyDataType> the response body data type
+     * @param data                   data to be responded
      * @return response body
      */
-    public static <ResponseBodyType> ResponseBodyBean<ResponseBodyType> ofFailure(final Object data) {
+    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofFailure(@NonNull final Object data) {
         throw new BusinessException(data);
     }
 
     /**
      * Respond data and message, and status if FAILURE(464).
      *
-     * @param <ResponseBodyType> the type parameter
-     * @param data               data to be responded
-     * @param message            message to be responded
+     * @param <ResponseBodyDataType> the response body data type
+     * @param data                   data to be responded
+     * @param message                message to be responded
      * @return response body
      */
-    public static <ResponseBodyType> ResponseBodyBean<ResponseBodyType> ofFailure(final ResponseBodyType data,
-                                                                                  final String message) {
+    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofFailure(@NonNull final ResponseBodyDataType data,
+                                                                                          @NonNull final String message) {
         throw new BusinessException(data, message);
     }
 
     /**
      * Respond an ERROR(500).
      *
-     * @param <ResponseBodyType> the type parameter
+     * @param <ResponseBodyDataType> the response body data type
      * @return response body
      */
-    public static <ResponseBodyType> ResponseBodyBean<ResponseBodyType> ofError() {
+    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofError() {
         return setResponse(HttpStatus.ERROR.getCode(), HttpStatus.ERROR.getMessage(), null);
     }
 
     /**
      * Respond a custom error.
      *
-     * @param <ResponseBodyType> the type parameter
-     * @param status             Error status, not OK(200)
+     * @param <ResponseBodyDataType> the response body data type
+     * @param status                 Error status, not OK(200)
      * @return response body
      */
-    public static <ResponseBodyType> ResponseBodyBean<ResponseBodyType> ofError(final IUniversalStatus status) {
+    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofError(@NonNull final IUniversalStatus status) {
         return setResponse(status.getCode(), status.getMessage(), null);
     }
 
     /**
      * Response an exception.
      *
-     * @param <BaseThrowable> Sub class of {@link BaseException}
-     * @param throwable       exception
-     * @return Exception information
+     * @param <ResponseBodyDataType> the response body data type
+     * @param <BaseThrowable>        Sub class of {@link BaseException}
+     * @param throwable              exception
+     * @return the response body bean
      */
-    public static <BaseThrowable extends BaseException> ResponseBodyBean<Object> ofException(final BaseThrowable throwable) {
-        throw new BaseException(throwable.getCode(), throwable.getMessage(), throwable.getData());
+    public static <ResponseBodyDataType, BaseThrowable extends BaseException> ResponseBodyBean<ResponseBodyDataType> ofException(@NonNull final BaseThrowable throwable) {
+        throw throwable;
     }
 }

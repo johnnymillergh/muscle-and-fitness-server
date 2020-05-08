@@ -29,14 +29,14 @@ public class CommonController {
     @ApiOperation(value = "/app-info", notes = "Retrieve application information")
     public ResponseBodyBean<Map<String, Object>> applicationInformation() {
         var data = commonService.getApplicationInfo();
-        return ResponseBodyBean.ofDataAndMessage(data, "Succeed to retrieve app info.");
+        return ResponseBodyBean.ofSuccess(data, "Succeed to retrieve app info.");
     }
 
     @PostMapping("/validation-test")
     @ApiOperation(value = "/validation-test", notes = "Validation of request payload test")
     public ResponseBodyBean<String> validationTest(@RequestBody ValidationTestPayload payload) {
         commonService.validateObject(payload);
-        return ResponseBodyBean.ofDataAndMessage(payload.getName(), "validationTest()");
+        return ResponseBodyBean.ofSuccess(payload.getName(), "validationTest()");
     }
 
     @GetMapping("/get-jwt")
