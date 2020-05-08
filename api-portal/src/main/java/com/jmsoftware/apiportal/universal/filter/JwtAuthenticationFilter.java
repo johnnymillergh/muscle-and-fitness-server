@@ -51,14 +51,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         log.info("JWT authentication is filtering [{}] client requested access. URL: {}, HTTP method: {}",
-                 RequestUtil.getRequestIpAndPort(request), request.getServletPath(), request.getMethod());
+                 RequestUtil.getRequestIpAndPort(request), request.getRequestURL(), request.getMethod());
         if (customConfiguration.getWebSecurityDisabled()) {
             log.warn("The web security is disabled! Might face severe web security issue.");
             filterChain.doFilter(request, response);
             return;
         }
         if (checkIgnores(request)) {
-            log.info("The request can be ignored. URL: {}", request.getRequestURI());
+            log.info("The request can be ignored. URL: {}", request.getRequestURL());
             filterChain.doFilter(request, response);
             return;
         }
