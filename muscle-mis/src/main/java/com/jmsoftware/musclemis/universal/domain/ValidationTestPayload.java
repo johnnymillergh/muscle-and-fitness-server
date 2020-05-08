@@ -1,4 +1,4 @@
-package com.jmsoftware.exercisemis.universal.domain;
+package com.jmsoftware.musclemis.universal.domain;
 
 import lombok.Data;
 

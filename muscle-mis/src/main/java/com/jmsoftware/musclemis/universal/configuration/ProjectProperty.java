@@ -1,4 +1,4 @@
-package com.jmsoftware.exercisemis.universal.configuration;
+package com.jmsoftware.musclemis.universal.configuration;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;

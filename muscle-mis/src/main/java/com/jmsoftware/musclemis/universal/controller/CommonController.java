@@ -1,8 +1,8 @@
-package com.jmsoftware.exercisemis.universal.controller;
+package com.jmsoftware.musclemis.universal.controller;
 
 import com.jmsoftware.common.bean.ResponseBodyBean;
-import com.jmsoftware.exercisemis.universal.domain.ValidationTestPayload;
-import com.jmsoftware.exercisemis.universal.service.CommonService;
+import com.jmsoftware.musclemis.universal.domain.ValidationTestPayload;
+import com.jmsoftware.musclemis.universal.service.CommonService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;

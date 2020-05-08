@@ -1,6 +1,6 @@
-package com.jmsoftware.exercisemis.universal.service;
+package com.jmsoftware.musclemis.universal.service;
 
-import com.jmsoftware.exercisemis.universal.domain.ValidationTestPayload;
+import com.jmsoftware.musclemis.universal.domain.ValidationTestPayload;
 
 import java.util.Map;
 

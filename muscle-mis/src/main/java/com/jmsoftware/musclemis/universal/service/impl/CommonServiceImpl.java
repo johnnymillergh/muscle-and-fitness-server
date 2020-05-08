@@ -1,9 +1,9 @@
-package com.jmsoftware.exercisemis.universal.service.impl;
+package com.jmsoftware.musclemis.universal.service.impl;
 
-import com.jmsoftware.exercisemis.universal.aspect.ValidateArgument;
-import com.jmsoftware.exercisemis.universal.configuration.ProjectProperty;
-import com.jmsoftware.exercisemis.universal.domain.ValidationTestPayload;
-import com.jmsoftware.exercisemis.universal.service.CommonService;
+import com.jmsoftware.musclemis.universal.aspect.ValidateArgument;
+import com.jmsoftware.musclemis.universal.configuration.ProjectProperty;
+import com.jmsoftware.musclemis.universal.domain.ValidationTestPayload;
+import com.jmsoftware.musclemis.universal.service.CommonService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

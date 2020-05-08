@@ -1,4 +1,4 @@
-package com.jmsoftware.exercisemis.universal.aspect;
+package com.jmsoftware.musclemis.universal.aspect;
 
 import java.lang.annotation.*;
 

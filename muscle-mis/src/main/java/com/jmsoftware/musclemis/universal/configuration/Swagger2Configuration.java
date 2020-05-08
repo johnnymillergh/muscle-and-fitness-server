@@ -1,4 +1,4 @@
-package com.jmsoftware.exercisemis.universal.configuration;
+package com.jmsoftware.musclemis.universal.configuration;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

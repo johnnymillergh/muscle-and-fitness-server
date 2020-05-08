@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class Constants {
     public Constants(ProjectProperty projectProperty) {
-        REDIS_JWT_KEY_PREFIX = projectProperty.getParentArtifactId() + ":jwt:";
+        REDIS_JWT_KEY_PREFIX = String.format("%s:jwt:", projectProperty.getParentArtifactId());
         log.info("Initiated 'REDIS_JWT_KEY_PREFIX': {}", REDIS_JWT_KEY_PREFIX);
     }
 

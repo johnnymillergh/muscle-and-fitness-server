@@ -1,6 +1,6 @@
-package com.jmsoftware.exercisemis.universal.controller;
+package com.jmsoftware.musclemis.universal.controller;
 
-import com.jmsoftware.exercisemis.universal.configuration.ProjectProperty;
+import com.jmsoftware.musclemis.universal.configuration.ProjectProperty;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;

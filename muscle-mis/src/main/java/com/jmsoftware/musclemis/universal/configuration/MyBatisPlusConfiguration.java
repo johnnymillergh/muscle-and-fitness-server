@@ -1,4 +1,4 @@
-package com.jmsoftware.exercisemis.universal.configuration;
+package com.jmsoftware.musclemis.universal.configuration;
 
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.pagination.optimize.JsqlParserCountOptimize;

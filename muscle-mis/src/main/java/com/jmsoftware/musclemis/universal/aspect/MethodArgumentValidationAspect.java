@@ -1,9 +1,10 @@
-package com.jmsoftware.exercisemis.universal.aspect;
+package com.jmsoftware.musclemis.universal.aspect;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
@@ -41,9 +42,9 @@ public class MethodArgumentValidationAspect {
     private final Validator validator;
 
     public MethodArgumentValidationAspect() {
-        var validatorFactory = Validation.buildDefaultValidatorFactory();
+        val validatorFactory = Validation.buildDefaultValidatorFactory();
         this.validator = validatorFactory.getValidator();
-        log.info("Validator for {} has been initiated.", this.getClass().getSimpleName());
+        log.info("The validator for {} has been initiated.", this.getClass().getSimpleName());
     }
 
     /**
@@ -53,7 +54,7 @@ public class MethodArgumentValidationAspect {
      * More detail at: <a href="https://howtodoinjava.com/spring-aop/aspectj-pointcut-expressions/">Spring aop aspectJ
      * pointcut expression examples</a>
      */
-    @Pointcut("@annotation(com.jmsoftware.exercisemis.universal.aspect.ValidateArgument)")
+    @Pointcut("@annotation(com.jmsoftware.musclemis.universal.aspect.ValidateArgument)")
     public void validateMethodArgumentPointcut() {
     }
 
@@ -83,31 +84,31 @@ public class MethodArgumentValidationAspect {
     @Around("validateMethodArgumentPointcut()")
     public Object aroundMethodHandleArgument(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         log.info("======= METHOD'S ARGUMENT VALIDATION START =======");
-        var args = proceedingJoinPoint.getArgs();
-        var signature = (MethodSignature) proceedingJoinPoint.getSignature();
-        var parameterAnnotations = signature.getMethod().getParameterAnnotations();
+        val args = proceedingJoinPoint.getArgs();
+        val signature = (MethodSignature) proceedingJoinPoint.getSignature();
+        val parameterAnnotations = signature.getMethod().getParameterAnnotations();
         // argumentIndexes is the array list that stores the index of argument we need to validate (the argument
         // annotated by `@Valid`)
-        var argumentIndexListThatNeedsToBeValidated = new LinkedList<Integer>();
-        for (var parameterAnnotation : parameterAnnotations) {
-            int paramIndex = ArrayUtil.indexOf(parameterAnnotations, parameterAnnotation);
-            for (var annotation : parameterAnnotation) {
+        val argumentIndexListThatNeedsToBeValidated = new LinkedList<Integer>();
+        for (val parameterAnnotation : parameterAnnotations) {
+            val paramIndex = ArrayUtil.indexOf(parameterAnnotations, parameterAnnotation);
+            for (val annotation : parameterAnnotation) {
                 if (annotation instanceof Valid) {
                     argumentIndexListThatNeedsToBeValidated.add(paramIndex);
                 }
             }
         }
-        var errorMessageList = new LinkedList<String>();
-        for (var index : argumentIndexListThatNeedsToBeValidated) {
-            var constraintViolationSet = validator.validate(args[index]);
+        val errorMessageList = new LinkedList<String>();
+        for (val index : argumentIndexListThatNeedsToBeValidated) {
+            val constraintViolationSet = validator.validate(args[index]);
             if (CollUtil.isNotEmpty(constraintViolationSet)) {
-                var errorMessage = String.format("Argument validation failed: %s",
+                val errorMessage = String.format("Argument validation failed: %s",
                                                  getAllFieldErrorMessage(constraintViolationSet));
                 errorMessageList.add(errorMessage);
             }
         }
         if (CollUtil.isNotEmpty(errorMessageList)) {
-            var joinedErrorMessage = StrUtil.join(", ", errorMessageList);
+            val joinedErrorMessage = StrUtil.join(", ", errorMessageList);
             log.info("Method           : {}#{}", proceedingJoinPoint.getSignature().getDeclaringTypeName(),
                      proceedingJoinPoint.getSignature().getName());
             log.info("Argument         : {}", args);
@@ -149,8 +150,8 @@ public class MethodArgumentValidationAspect {
      * @return the all field error message
      */
     private String getAllFieldErrorMessage(Set<ConstraintViolation<Object>> constraintViolationSet) {
-        var allErrorMessageList = new LinkedList<String>();
-        for (var constraintViolation : constraintViolationSet) {
+        val allErrorMessageList = new LinkedList<String>();
+        for (val constraintViolation : constraintViolationSet) {
             allErrorMessageList.add(String.format("invalid field: %s, %s", constraintViolation.getPropertyPath(),
                                                   constraintViolation.getMessage()));
         }

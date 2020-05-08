@@ -1,4 +1,4 @@
-package com.jmsoftware.exercisemis.universal.aspect;
+package com.jmsoftware.musclemis.universal.aspect;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.json.JSONUtil;
@@ -7,6 +7,7 @@ import com.jmsoftware.common.constant.HttpStatus;
 import com.jmsoftware.common.exception.BaseException;
 import com.jmsoftware.common.util.RequestUtil;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
@@ -124,18 +125,17 @@ public class ExceptionControllerAdvice {
      */
     private String getFieldErrorMessageFromException(MethodArgumentNotValidException exception) {
         try {
-            DefaultMessageSourceResolvable firstErrorField =
+            val firstErrorField =
                     (DefaultMessageSourceResolvable) Objects.requireNonNull(exception.getBindingResult()
                                                                                     .getAllErrors()
                                                                                     .get(0)
                                                                                     .getArguments())[0];
-            String firstErrorFieldName = firstErrorField.getDefaultMessage();
-            String firstErrorFieldMessage = exception.getBindingResult().getAllErrors().get(0).getDefaultMessage();
-            return firstErrorFieldName + " " + firstErrorFieldMessage;
+            val firstErrorFieldName = firstErrorField.getDefaultMessage();
+            val firstErrorFieldMessage = exception.getBindingResult().getAllErrors().get(0).getDefaultMessage();
+            return String.format("%s %s", firstErrorFieldName, firstErrorFieldMessage);
         } catch (Exception e) {
             log.error("Exception occurred when get field error message from exception. Exception message: {}",
-                      e.getMessage(),
-                      e);
+                      e.getMessage(), e);
             return HttpStatus.INVALID_PARAM.getMessage();
         }
     }

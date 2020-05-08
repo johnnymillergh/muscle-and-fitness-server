@@ -1,7 +1,7 @@
-package com.jmsoftware.exercisemis;
+package com.jmsoftware.musclemis;
 
-import com.jmsoftware.exercisemis.universal.configuration.ProjectProperty;
-import com.jmsoftware.exercisemis.universal.configuration.ServerConfiguration;
+import com.jmsoftware.musclemis.universal.configuration.ProjectProperty;
+import com.jmsoftware.musclemis.universal.configuration.ServerConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

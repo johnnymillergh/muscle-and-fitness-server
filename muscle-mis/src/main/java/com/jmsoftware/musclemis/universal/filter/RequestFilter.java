@@ -1,4 +1,4 @@
-package com.jmsoftware.exercisemis.universal.filter;
+package com.jmsoftware.musclemis.universal.filter;
 
 import com.jmsoftware.common.util.RequestUtil;
 import lombok.extern.slf4j.Slf4j;

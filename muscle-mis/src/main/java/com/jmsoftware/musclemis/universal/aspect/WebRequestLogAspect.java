@@ -1,4 +1,4 @@
-package com.jmsoftware.exercisemis.universal.aspect;
+package com.jmsoftware.musclemis.universal.aspect;
 
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.json.JSONUtil;

@@ -1,4 +1,4 @@
-package com.jmsoftware.exercisemis.universal.controller;
+package com.jmsoftware.musclemis.universal.controller;
 
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
