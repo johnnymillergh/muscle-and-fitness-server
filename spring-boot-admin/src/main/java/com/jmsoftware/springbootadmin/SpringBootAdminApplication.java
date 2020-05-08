@@ -4,6 +4,7 @@ import com.jmsoftware.springbootadmin.universal.configuration.ProjectProperty;
 import com.jmsoftware.springbootadmin.universal.configuration.ServerConfiguration;
 import de.codecentric.boot.admin.server.config.EnableAdminServer;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -35,10 +36,10 @@ public class SpringBootAdminApplication {
     }
 
     public static void main(String[] args) {
-        var startInstant = Instant.now();
+        val startInstant = Instant.now();
         SpringApplication.run(SpringBootAdminApplication.class, args);
-        var endInstant = Instant.now();
-        var duration = Duration.between(startInstant, endInstant);
+        val endInstant = Instant.now();
+        val duration = Duration.between(startInstant, endInstant);
         log.info("🥳 Congratulations! 🎉");
         log.info("🖥 {}@{} started!", projectProperty.getProjectArtifactId(), projectProperty.getVersion());
         log.info("⚙️ Environment: {} ({})", projectProperty.getEnvironment(), projectProperty.getEnvironmentAlias());
