@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -110,6 +111,12 @@ public class ExceptionControllerAdvice {
             log.error("[GlobalExceptionCapture]: Exception information: {} ", exception.getMessage());
             response.setStatus(HttpStatus.BAD_REQUEST.getCode());
             return ResponseBodyBean.ofStatus(HttpStatus.BAD_REQUEST.getCode(), exception.getMessage(), null);
+        } else if (exception instanceof BadCredentialsException) {
+            // IMPORTANT: org.springframework.security.authentication.BadCredentialsException only exists in the project
+            // that depends on org.springframework.boot.spring-boot-starter-security
+            log.error("[GlobalExceptionCapture]: Exception information: {} ", exception.getMessage());
+            response.setStatus(HttpStatus.BAD_CREDENTIALS.getCode());
+            return ResponseBodyBean.ofStatus(HttpStatus.BAD_CREDENTIALS.getCode(), exception.getMessage(), null);
         }
         log.error("[GlobalExceptionCapture]: Exception information: {} ", exception.getMessage(), exception);
         response.setStatus(HttpStatus.ERROR.getCode());
