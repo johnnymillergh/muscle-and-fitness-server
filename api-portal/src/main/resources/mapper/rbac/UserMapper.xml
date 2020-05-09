@@ -67,17 +67,17 @@
 
     <insert id="save" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO user(username,
-                           email,
-                           cellphone,
-                           password,
-                           full_name,
-                           birthday,
-                           gender,
-                           created_time,
-                           modified_time,
-                           status)
+                         email,
+                         cellphone,
+                         password,
+                         full_name,
+                         birthday,
+                         gender,
+                         created_time,
+                         modified_time,
+                         status)
         VALUES (#{username},
-                #{password},
+                #{email},
                 #{cellphone},
                 #{password},
                 #{fullName},
@@ -89,8 +89,18 @@
     </insert>
 
     <insert id="register" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO user(username, password, email, created_time, modified_time, status)
-        VALUES (#{username}, #{password}, #{email}, now(), now(), 1)
+        INSERT INTO user(username,
+                         password,
+                         email,
+                         created_time,
+                         modified_time,
+                         status)
+        VALUES (#{username},
+                #{password},
+                #{email},
+                now(),
+                now(),
+                1)
     </insert>
 
     <select id="selectUserPageList" resultMap="BaseResultMap">

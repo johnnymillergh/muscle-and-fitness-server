@@ -15,8 +15,8 @@ import java.util.List;
  * <p>Change description here</p>
  *
  * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
- * @date 2019-06-07 11:42
- **/
+ * @date 2019 -06-07 11:42
+ */
 public interface UserService {
     /**
      * Get user page list
@@ -54,7 +54,7 @@ public interface UserService {
      * Search user by username
      *
      * @param username username
-     * @return user
+     * @return user user po
      */
     UserPO searchUserByUsername(String username);
 
@@ -103,8 +103,15 @@ public interface UserService {
      * Get user's avatar resource
      *
      * @param username username
-     * @return user's avatar
+     * @return user 's avatar
      * @throws IOException IO exception
      */
     ByteArrayResource getUserAvatarResource(String username) throws IOException;
+
+    /**
+     * Save user.
+     *
+     * @param userPo the user po
+     */
+    void saveUser(UserPO userPo);
 }

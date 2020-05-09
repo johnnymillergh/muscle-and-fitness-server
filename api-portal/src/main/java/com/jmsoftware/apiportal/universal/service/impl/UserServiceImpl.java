@@ -128,4 +128,9 @@ public class UserServiceImpl implements UserService {
         @Cleanup InputStream stream = sftpService.read(po.getAvatar());
         return new ByteArrayResource(stream.readAllBytes());
     }
+
+    @Override
+    public void saveUser(UserPO userPo) {
+        userMapper.register(userPo);
+    }
 }
