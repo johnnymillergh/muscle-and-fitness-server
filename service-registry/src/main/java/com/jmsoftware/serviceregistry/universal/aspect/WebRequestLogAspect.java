@@ -119,7 +119,7 @@ public class WebRequestLogAspect {
     @AfterThrowing(pointcut = "requestLogPointcut()", throwing = "e")
     public void afterThrowingException(JoinPoint joinPoint, Exception e) {
         log.info("Signature          : {}", joinPoint.getSignature().toShortString());
-        log.error("Exception message : {}, message: {}", e.toString(), e.getMessage());
+        log.error("Exception          : {}, message: {}", e.toString(), e.getMessage());
         log.error("====== WEB REQUEST LOG END WITH EXCEPTION =====");
     }
 }
