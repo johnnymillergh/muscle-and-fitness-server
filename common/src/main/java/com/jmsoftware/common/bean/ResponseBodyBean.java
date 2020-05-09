@@ -101,7 +101,7 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
      */
     public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofStatus(@NonNull final Integer status,
                                                                                          @NonNull final String message,
-                                                                                         @NonNull final ResponseBodyDataType data) {
+                                                                                         final ResponseBodyDataType data) {
         return ResponseBodyBean.<ResponseBodyDataType>builder()
                 .timestamp(new Date())
                 .status(status)
