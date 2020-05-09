@@ -350,7 +350,7 @@ CREATE TABLE `role` (
   `modified_time` datetime NOT NULL COMMENT 'Modified time',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Role.';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Role.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -359,6 +359,7 @@ CREATE TABLE `role` (
 
 LOCK TABLES `role` WRITE;
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
+INSERT INTO `role` VALUES (1,'admin','M&F system admin','2020-05-09 16:18:45','2020-05-09 16:18:51');
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -431,7 +432,7 @@ CREATE TABLE `user` (
   `avatar` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'User avatar full path on SFTP server',
   `status` tinyint NOT NULL DEFAULT '1' COMMENT 'Status. 1 - enabled, 2 - disabled',
   `created_time` datetime NOT NULL COMMENT 'Created time',
-  `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
+  `modified_time` datetime NOT NULL COMMENT 'Modified time',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email_UNIQUE` (`email`),
   UNIQUE KEY `username_UNIQUE` (`username`),
@@ -445,7 +446,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'ijohnnymiller','ijohnnymiller@icloud.com','13100959832','123','Johnny Miller','1996-04-29',NULL,'',1,'2020-03-20 17:10:05',NULL);
+INSERT INTO `user` VALUES (1,'ijohnnymiller','ijohnnymiller@icloud.com','13100959832','$2a$10$zndhsonjmOxlC2zDYP58luhUHp4ejFerj8e3gWY3Q.buaDDutkNYe','Johnny Miller','1996-04-29','Cisgender Male','',1,'2020-05-09 15:13:19','2020-05-09 16:26:23');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -469,6 +470,7 @@ CREATE TABLE `user_role` (
 
 LOCK TABLES `user_role` WRITE;
 /*!40000 ALTER TABLE `user_role` DISABLE KEYS */;
+INSERT INTO `user_role` VALUES (1,1);
 /*!40000 ALTER TABLE `user_role` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -481,4 +483,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-05 20:46:38
+-- Dump completed on 2020-05-09 16:27:41
