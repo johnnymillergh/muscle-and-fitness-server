@@ -96,7 +96,7 @@ public enum HttpStatus implements IUniversalStatus {
 
     // --- 2xx Success ---
     /**
-     * Success
+     * OK
      */
     OK(200, "OK. The standard response for successful HTTP requests."),
 
@@ -112,8 +112,8 @@ public enum HttpStatus implements IUniversalStatus {
     /**
      * Forbidden
      */
-    FORBIDDEN(403, "Forbidden. " +
-                   "The request was formatted correctly but the server is refusing to supply the requested resource."),
+    FORBIDDEN(403, "Forbidden. The request was formatted correctly but the server is refusing to supply the requested" +
+                   " resource."),
     /**
      * Not found
      */
@@ -125,7 +125,7 @@ public enum HttpStatus implements IUniversalStatus {
     /**
      * Not acceptable
      */
-    NOT_ACCEPTABLE(406, "Not Acceptable. The requested resource is capable of generating only content not acceptable " +
+    NOT_ACCEPTABLE(406, "Not acceptable. The requested resource is capable of generating only content not acceptable " +
                         "according to the Accept headers sent in the request."),
     /**
      * Param not matched
@@ -155,7 +155,7 @@ public enum HttpStatus implements IUniversalStatus {
 
     // --- 5xx Server Error ---
     /**
-     * Error or failure
+     * Internal Server Error
      */
     ERROR(500, "Internal server error. A generic status for an error in the server itself."),
     /**
