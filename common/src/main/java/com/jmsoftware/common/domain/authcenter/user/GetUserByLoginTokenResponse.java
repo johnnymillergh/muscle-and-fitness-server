@@ -1,18 +1,20 @@
-package com.jmsoftware.authcenter.universal.domain;
+package com.jmsoftware.common.domain.authcenter.user;
 
 import lombok.Data;
 
 import java.util.Date;
 
 /**
- * <h1>UserPO</h1>
- * <p>Persistence class for table `t_user`</p>
+ * <h1>GetUserByLoginTokenResponse</h1>
+ * <p>
+ * Change description here.
  *
  * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
- * @date 2019-03-23 19:51
+ * @date 5/10/20 12:45 PM
  **/
 @Data
-public class UserPO {
+public class GetUserByLoginTokenResponse {
+
     /**
      * Primary key
      */
@@ -46,7 +48,7 @@ public class UserPO {
      */
     private String gender;
     /**
-     * UserPersistence avatar full path on SFTP server
+     * User avatar full path on SFTP server
      */
     private String avatar;
     /**

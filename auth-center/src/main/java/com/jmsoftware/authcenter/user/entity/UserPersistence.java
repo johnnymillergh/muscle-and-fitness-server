@@ -1,20 +1,23 @@
-package com.jmsoftware.authcenter.universal.domain;
+package com.jmsoftware.authcenter.user.entity;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
- * <h1>UserPO</h1>
- * <p>Persistence class for table `t_user`</p>
+ * <h1>UserPersistence</h1>
+ * <p>
+ * User Persistence object class
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
- * @date 2019-03-23 19:51
- **/
+ * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com
+ * @date 5/10/20 12:12 PM
+ */
 @Data
-public class UserPO {
+public class UserPersistence implements Serializable {
+    private static final long serialVersionUID = -11418821727467072L;
     /**
-     * Primary key
+     * Primary key of user
      */
     private Long id;
     /**
@@ -34,15 +37,15 @@ public class UserPO {
      */
     private String password;
     /**
-     * Nickname
+     * Full name
      */
     private String fullName;
     /**
-     * Birthday (yyyy-MM-dd)
+     * Birthday
      */
     private Date birthday;
     /**
-     * 58 gender options
+     * 26 gender options
      */
     private String gender;
     /**
@@ -54,11 +57,11 @@ public class UserPO {
      */
     private Integer status;
     /**
-     * Create time
+     * Created time
      */
     private Date createdTime;
     /**
-     * Modify time
+     * Modified time
      */
     private Date modifiedTime;
 }

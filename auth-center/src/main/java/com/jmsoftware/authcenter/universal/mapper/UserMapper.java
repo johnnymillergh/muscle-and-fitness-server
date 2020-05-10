@@ -4,9 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jmsoftware.authcenter.universal.domain.UserPO;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,8 +16,8 @@ import java.util.Optional;
  * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
  * @date 2019-03-02 17:32
  **/
-@Mapper
-@Component
+//@Mapper
+//@Component
 public interface UserMapper extends BaseMapper<UserPO> {
     /**
      * Find by username, email or cellphone.
@@ -62,7 +60,7 @@ public interface UserMapper extends BaseMapper<UserPO> {
     /**
      * Register
      *
-     * @param po User info
+     * @param po UserPersistence info
      * @return Registered user ID
      */
     Long register(UserPO po);
