@@ -23,7 +23,7 @@ import javax.validation.Valid;
  * @date 5/10/20 12:36 PM
  **/
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/user-remote-api")
 @RequiredArgsConstructor
 @Api(tags = {"User Remote API Controller"})
 public class UserRemoteApiController {

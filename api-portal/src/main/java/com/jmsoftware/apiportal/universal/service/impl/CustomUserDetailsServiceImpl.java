@@ -3,14 +3,15 @@ package com.jmsoftware.apiportal.universal.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
-import com.jmsoftware.apiportal.remoteapi.authcenter.user.UserRemoteApi;
+import com.jmsoftware.apiportal.remoteapi.AuthCenterRemoteApi;
 import com.jmsoftware.apiportal.universal.domain.PermissionPO;
 import com.jmsoftware.apiportal.universal.domain.RolePO;
 import com.jmsoftware.apiportal.universal.domain.UserPO;
 import com.jmsoftware.apiportal.universal.domain.UserPrincipal;
 import com.jmsoftware.apiportal.universal.mapper.PermissionMapper;
-import com.jmsoftware.apiportal.universal.service.RoleService;
 import com.jmsoftware.common.constant.HttpStatus;
+import com.jmsoftware.common.domain.authcenter.role.GetRoleListByUserIdPayload;
+import com.jmsoftware.common.domain.authcenter.role.GetRoleListByUserIdResponse;
 import com.jmsoftware.common.domain.authcenter.user.GetUserByLoginTokenPayload;
 import com.jmsoftware.common.exception.SecurityException;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,31 +37,39 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsServiceImpl implements UserDetailsService {
-    private final RoleService roleService;
     private final PermissionMapper permissionMapper;
-    private final UserRemoteApi userRemoteApi;
+    private final AuthCenterRemoteApi authCenterRemoteApi;
 
     @Override
     public UserDetails loadUserByUsername(String credentials) throws UsernameNotFoundException {
         val payload = new GetUserByLoginTokenPayload();
         payload.setLoginToken(credentials);
-        var response = userRemoteApi.getUserByLoginToken(payload);
+        val response = authCenterRemoteApi.getUserByLoginToken(payload);
         val data = response.getData();
         if (ObjectUtil.isNull(data)) {
-            String errorMessage = "User's account not found: " + credentials;
+            val errorMessage = String.format("User's account not found, credentials: %s", credentials);
             log.error(errorMessage);
             throw new UsernameNotFoundException(errorMessage);
         }
-        List<RolePO> rolesByUserId = roleService.getRolesByUserId(data.getId());
-        if (CollUtil.isEmpty(rolesByUserId)) {
+        val payload1 = new GetRoleListByUserIdPayload();
+        payload1.setUserId(data.getId());
+        val response2 = authCenterRemoteApi.getRoleListByUserId(payload1);
+        val roleList = response2.getData().getRoleList();
+        if (CollUtil.isEmpty(roleList)) {
             throw new SecurityException(HttpStatus.ROLE_NOT_FOUND);
         }
-        List<Long> roleIds = rolesByUserId.stream()
-                .map(RolePO::getId)
+        List<Long> roleIdList = roleList.stream()
+                .map(GetRoleListByUserIdResponse.Role::getId)
                 .collect(Collectors.toList());
-        List<PermissionPO> permissionList = permissionMapper.selectByRoleIdList(roleIds);
+        List<PermissionPO> permissionList = permissionMapper.selectByRoleIdList(roleIdList);
         var user = new UserPO();
         BeanUtil.copyProperties(data, user);
-        return UserPrincipal.create(user, rolesByUserId, permissionList);
+        List<RolePO> rolePOList = new LinkedList<>();
+        roleList.forEach(role -> {
+            val rolePO = new RolePO();
+            BeanUtil.copyProperties(role, rolePO);
+            rolePOList.add(rolePO);
+        });
+        return UserPrincipal.create(user, rolePOList, permissionList);
     }
 }

@@ -156,7 +156,7 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
      * @param data                   data to be responded to client.
      * @return response body
      */
-    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofSuccess(@NonNull final ResponseBodyDataType data) {
+    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofSuccess(final ResponseBodyDataType data) {
         return ResponseBodyBean.<ResponseBodyDataType>builder()
                 .timestamp(new Date())
                 .status(HttpStatus.OK.getCode())
@@ -187,7 +187,7 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
      * @param message                message to be responded
      * @return response body
      */
-    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofSuccess(@NonNull final ResponseBodyDataType data,
+    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofSuccess(final ResponseBodyDataType data,
                                                                                           @NonNull final String message) {
         return ResponseBodyBean.<ResponseBodyDataType>builder().timestamp(new Date())
                 .status(HttpStatus.OK.getCode())
@@ -214,7 +214,7 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
      * @param data                   data to be responded
      * @return response body
      */
-    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofFailure(@NonNull final ResponseBodyDataType data) {
+    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofFailure(final ResponseBodyDataType data) {
         throw new BusinessException(data);
     }
 
@@ -226,7 +226,7 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
      * @param message                message to be responded
      * @return response body
      */
-    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofFailure(@NonNull final ResponseBodyDataType data,
+    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofFailure(final ResponseBodyDataType data,
                                                                                           @NonNull final String message) {
         throw new BusinessException(data, message);
     }

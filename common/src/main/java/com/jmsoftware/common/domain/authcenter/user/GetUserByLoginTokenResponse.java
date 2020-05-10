@@ -14,7 +14,6 @@ import java.util.Date;
  **/
 @Data
 public class GetUserByLoginTokenResponse {
-
     /**
      * Primary key
      */
