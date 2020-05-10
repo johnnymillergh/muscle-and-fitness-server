@@ -5,13 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * <h1>JwtConfiguration</h1>
  * <p>
- * JWT configuration
+ * Ignored request configuration.
  *
  * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
- * @date 3/12/20 3:03 PM
+ * @date 5/2/20 11:41 PM
  **/
 @Data
 @Slf4j
@@ -19,8 +21,9 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "jwt.configuration")
 public class JwtConfiguration {
     public JwtConfiguration(ProjectProperty projectProperty) {
-        this.signingKey = projectProperty.getProjectArtifactId();
-        log.error("JWT signing key: {}", this.signingKey);
+        this.signingKey = String.format("%s %s", projectProperty.getParentArtifactId(), projectProperty.getVersion());
+        log.info("Initiated JWT signing key: {}. The specified key byte array is {} bits", this.signingKey,
+                 this.signingKey.getBytes(StandardCharsets.UTF_8).length * 8);
     }
 
     /**

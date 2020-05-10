@@ -40,3 +40,43 @@ logging:
   # Configure logging level for SFTP/JSCH
   level:
     com.jcraft.jsch: INFO
+
+custom:
+  configuration:
+    super-user: "admin"
+    # Make `web-security-disabled` equal to true to disable web security. We suggest you do not turn off web security
+    # feature unless development environment.
+    web-security-disabled: false
+    # Disable web request information log
+    web-request-log-disabled: false
+    ignored-request:
+      # POST Requests need to be ignored.
+      post:
+        - "/authentication/**"
+      get:
+        - "/auth/check-username-uniqueness"
+        - "/auth/check-email-uniqueness"
+        - "/auth/validate-username/**"
+        - "/user/get-avatar"
+        - "/common/get-jwt"
+      # Request need to be ignored that matches pattern.
+      pattern:
+        - "/actuator/**"
+        - "/druid/**"
+        - "/swagger-resources/**"
+        - "/v2/api-docs/**"
+        - "/webjars/**"
+        - "/swagger-ui.html"
+
+sftp:
+  client:
+    configuration:
+      host: localhost
+      port: 23
+      user: johnny
+      password: atmoz@sftp
+      directory: upload
+      private-key:
+      private-key-pass-phrase:
+      session-cache-size: 20
+      session-wait-timeout: 15000

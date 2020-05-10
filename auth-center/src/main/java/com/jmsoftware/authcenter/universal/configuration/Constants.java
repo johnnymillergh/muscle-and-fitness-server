@@ -1,6 +1,6 @@
-package com.jmsoftware.authcenter.universal;
+package com.jmsoftware.authcenter.universal.configuration;
 
-import com.jmsoftware.authcenter.universal.configuration.ProjectProperty;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 /**
@@ -9,12 +9,14 @@ import org.springframework.stereotype.Component;
  * Change description here.
  *
  * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
- * @date 3/12/20 3:19 PM
+ * @date 5/2/20 11:41 PM
  **/
+@Slf4j
 @Component
 public class Constants {
     public Constants(ProjectProperty projectProperty) {
-        Constants.REDIS_JWT_KEY_PREFIX = projectProperty.getProjectArtifactId() + ":jwt:";
+        REDIS_JWT_KEY_PREFIX = String.format("%s:jwt:", projectProperty.getParentArtifactId());
+        log.info("Initiated 'REDIS_JWT_KEY_PREFIX': {}", REDIS_JWT_KEY_PREFIX);
     }
 
     /**
@@ -29,4 +31,12 @@ public class Constants {
      * Prefix of JWT.
      */
     public static final String JWT_PREFIX = "Bearer ";
+    /**
+     * Star sign
+     */
+    public static final String ASTERISK = "*";
+    /**
+     * At sign
+     */
+    public static final String AT_SIGN = "@";
 }
