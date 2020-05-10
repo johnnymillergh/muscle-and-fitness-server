@@ -1,7 +1,6 @@
 package com.jmsoftware.authcenter.universal.aspect;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.json.JSONUtil;
 import com.jmsoftware.common.bean.ResponseBodyBean;
 import com.jmsoftware.common.constant.HttpStatus;
 import com.jmsoftware.common.exception.BaseException;
@@ -10,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -55,63 +56,75 @@ public class ExceptionControllerAdvice {
         // FIXME: THIS IS NOT A PROBLEM
         //  ATTENTION: Use only ResponseBodyBean.ofStatus() in handleException() method and DON'T throw any exception
         if (exception instanceof NoHandlerFoundException) {
-            log.error("[GlobalExceptionCapture] NoHandlerFoundException: Request URL = {}, HTTP method = {}",
+            log.error("NoHandlerFoundException: Request URL = {}, HTTP method = {}",
                       ((NoHandlerFoundException) exception).getRequestURL(),
                       ((NoHandlerFoundException) exception).getHttpMethod());
             response.setStatus(HttpStatus.NOT_FOUND.getCode());
             return ResponseBodyBean.ofStatus(HttpStatus.NOT_FOUND);
         } else if (exception instanceof HttpRequestMethodNotSupportedException) {
-            log.error("[GlobalExceptionCapture] HttpRequestMethodNotSupportedException: " +
+            log.error("Exception occurred when the request handler does not support a specific request method. " +
                       "Current method is {}, Support HTTP method = {}",
                       ((HttpRequestMethodNotSupportedException) exception).getMethod(),
-                      JSONUtil.toJsonStr(
-                              ((HttpRequestMethodNotSupportedException) exception).getSupportedHttpMethods()));
+                      ((HttpRequestMethodNotSupportedException) exception).getSupportedHttpMethods());
             response.setStatus(HttpStatus.METHOD_NOT_ALLOWED.getCode());
             return ResponseBodyBean.ofStatus(HttpStatus.METHOD_NOT_ALLOWED);
         } else if (exception instanceof MethodArgumentNotValidException) {
-            log.error("[GlobalExceptionCapture] MethodArgumentNotValidException: {}", exception.getMessage());
+            log.error("Exception occurred when validation on an argument annotated with fails. Exception message: {}",
+                      exception.getMessage());
             response.setStatus(HttpStatus.BAD_REQUEST.getCode());
             return ResponseBodyBean.ofStatus(HttpStatus.BAD_REQUEST.getCode(),
                                              getFieldErrorMessageFromException((MethodArgumentNotValidException) exception),
                                              null);
         } else if (exception instanceof ConstraintViolationException) {
-            log.error("[GlobalExceptionCapture] ConstraintViolationException: {}", exception.getMessage());
+            log.error("Constraint violations exception occurred. Exception message: {}", exception.getMessage());
             response.setStatus(HttpStatus.BAD_REQUEST.getCode());
             return ResponseBodyBean.ofStatus(HttpStatus.BAD_REQUEST.getCode(),
-                                             CollUtil.getFirst(((ConstraintViolationException) exception)
-                                                                       .getConstraintViolations())
-                                                     .getMessage(), null);
+                                             CollUtil.getFirst(((ConstraintViolationException) exception).getConstraintViolations()).getMessage(),
+                                             null);
         } else if (exception instanceof MethodArgumentTypeMismatchException) {
-            log.error("[GlobalExceptionCapture] MethodArgumentTypeMismatchException: " +
-                      "Parameter name = {}, Exception information: {}",
+            log.error("MethodArgumentTypeMismatchException: Parameter name = {}, Exception message: {}",
                       ((MethodArgumentTypeMismatchException) exception).getName(),
                       ((MethodArgumentTypeMismatchException) exception).getMessage());
             response.setStatus(HttpStatus.PARAM_NOT_MATCH.getCode());
             return ResponseBodyBean.ofStatus(HttpStatus.PARAM_NOT_MATCH);
         } else if (exception instanceof HttpMessageNotReadableException) {
-            log.error("[GlobalExceptionCapture] HttpMessageNotReadableException: {}",
+            log.error("HttpMessageNotReadableException: {}",
                       ((HttpMessageNotReadableException) exception).getMessage());
             response.setStatus(HttpStatus.PARAM_NOT_NULL.getCode());
             return ResponseBodyBean.ofStatus(HttpStatus.PARAM_NOT_NULL);
         } else if (exception instanceof BaseException) {
-            log.error("[GlobalExceptionCapture] BaseException: Status code: {}, message: {}, data: {}",
-                      ((BaseException) exception).getCode(),
-                      exception.getMessage(),
-                      ((BaseException) exception).getData());
+            log.error("BaseException: Status code: {}, message: {}, data: {}", ((BaseException) exception).getCode(),
+                      exception.getMessage(), ((BaseException) exception).getData());
             response.setStatus(((BaseException) exception).getCode());
-            return ResponseBodyBean.ofStatus(((BaseException) exception).getCode(),
-                                             exception.getMessage(),
+            return ResponseBodyBean.ofStatus(((BaseException) exception).getCode(), exception.getMessage(),
                                              ((BaseException) exception).getData());
         } else if (exception instanceof BindException) {
-            log.error("[GlobalExceptionCapture]: Exception information: {} ", exception.getMessage());
+            log.error("Exception message: {} ", exception.getMessage());
             response.setStatus(HttpStatus.INVALID_PARAM.getCode());
             return ResponseBodyBean.ofStatus(HttpStatus.INVALID_PARAM);
         } else if (exception instanceof IllegalArgumentException) {
-            log.error("[GlobalExceptionCapture]: Exception information: {} ", exception.getMessage());
+            log.error("Exception message: {} ", exception.getMessage());
             response.setStatus(HttpStatus.BAD_REQUEST.getCode());
             return ResponseBodyBean.ofStatus(HttpStatus.BAD_REQUEST.getCode(), exception.getMessage(), null);
+        } else if (exception instanceof BadCredentialsException) {
+            // IMPORTANT: org.springframework.security.authentication.BadCredentialsException only exists in the project
+            // that depends on org.springframework.boot.spring-boot-starter-security
+            log.error("Exception message: {} ", exception.getMessage());
+            response.setStatus(HttpStatus.BAD_CREDENTIALS.getCode());
+            return ResponseBodyBean.ofStatus(HttpStatus.BAD_CREDENTIALS.getCode(), exception.getMessage(), null);
+        } else if (exception instanceof InternalAuthenticationServiceException) {
+            log.error("An authentication request could not be processed due to a system problem that occurred " +
+                      "internally. Exception message: {} ", exception.getMessage());
+            if (exception.getCause() instanceof BaseException) {
+                val exceptionCause = (BaseException) exception.getCause();
+                val code = exceptionCause.getCode();
+                response.setStatus(code);
+                return ResponseBodyBean.ofStatus(HttpStatus.fromCode(code));
+            }
+            response.setStatus(HttpStatus.BAD_CREDENTIALS.getCode());
+            return ResponseBodyBean.ofStatus(HttpStatus.BAD_CREDENTIALS.getCode(), exception.getMessage(), null);
         }
-        log.error("[GlobalExceptionCapture]: Exception information: {} ", exception.getMessage(), exception);
+        log.error("Internal system exception occurred! Exception message: {} ", exception.getMessage(), exception);
         response.setStatus(HttpStatus.ERROR.getCode());
         return ResponseBodyBean.ofStatus(HttpStatus.ERROR.getCode(), HttpStatus.ERROR.getMessage(), null);
     }
