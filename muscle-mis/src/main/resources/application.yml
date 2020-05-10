@@ -25,7 +25,8 @@ feign:
       default:
         connectTimeout: 5000
         readTimeout: 10000
-
+        loggerLevel: basic
+\
 management:
   endpoints:
     web:
