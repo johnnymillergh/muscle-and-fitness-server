@@ -2,6 +2,8 @@ package com.jmsoftware.authcenter.user.service;
 
 import com.jmsoftware.authcenter.user.entity.UserPersistence;
 import com.jmsoftware.common.domain.authcenter.user.GetUserByLoginTokenResponse;
+import com.jmsoftware.common.domain.authcenter.user.SaveUserForRegisteringPayload;
+import com.jmsoftware.common.domain.authcenter.user.SaveUserForRegisteringResponse;
 
 import java.util.List;
 
@@ -62,4 +64,12 @@ public interface UserService {
      * @return the user by login token
      */
     GetUserByLoginTokenResponse getUserByLoginToken(String loginToken);
+
+    /**
+     * Save user for registering save user for registering response.
+     *
+     * @param payload the payload
+     * @return the save user for registering response
+     */
+    SaveUserForRegisteringResponse saveUserForRegistering(SaveUserForRegisteringPayload payload);
 }

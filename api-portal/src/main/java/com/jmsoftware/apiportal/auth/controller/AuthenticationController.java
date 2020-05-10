@@ -32,9 +32,8 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     @ApiOperation(value = "/register", notes = "Register (create an account)")
-    public ResponseBodyBean<Object> register(@Valid @RequestBody RegisterPayload payload) {
-        authenticationService.register(payload);
-        return ResponseBodyBean.ofSuccess();
+    public ResponseBodyBean<Long> register(@Valid @RequestBody RegisterPayload payload) {
+        return ResponseBodyBean.ofSuccess(authenticationService.register(payload));
     }
 
     @PostMapping("/login")

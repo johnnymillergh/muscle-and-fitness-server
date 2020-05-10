@@ -5,6 +5,8 @@ import com.jmsoftware.common.domain.authcenter.role.GetRoleListByUserIdPayload;
 import com.jmsoftware.common.domain.authcenter.role.GetRoleListByUserIdResponse;
 import com.jmsoftware.common.domain.authcenter.user.GetUserByLoginTokenPayload;
 import com.jmsoftware.common.domain.authcenter.user.GetUserByLoginTokenResponse;
+import com.jmsoftware.common.domain.authcenter.user.SaveUserForRegisteringPayload;
+import com.jmsoftware.common.domain.authcenter.user.SaveUserForRegisteringResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,4 +38,13 @@ public interface AuthCenterRemoteApi {
      */
     @PostMapping("/role-remote-api/get-role-list-by-user-id")
     ResponseBodyBean<GetRoleListByUserIdResponse> getRoleListByUserId(@RequestBody GetRoleListByUserIdPayload payload);
+
+    /**
+     * Save user for registering response body bean.
+     *
+     * @param payload the payload
+     * @return the response body bean
+     */
+    @PostMapping("/user-remote-api/save-user-for-registering")
+    ResponseBodyBean<SaveUserForRegisteringResponse> saveUserForRegistering(@RequestBody SaveUserForRegisteringPayload payload);
 }

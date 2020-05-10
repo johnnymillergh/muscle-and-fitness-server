@@ -3,14 +3,21 @@ package com.jmsoftware.authcenter.user.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import com.jmsoftware.authcenter.universal.aspect.ValidateArgument;
+import com.jmsoftware.authcenter.universal.domain.UserStatus;
 import com.jmsoftware.authcenter.user.entity.UserPersistence;
 import com.jmsoftware.authcenter.user.mapper.UserMapper;
 import com.jmsoftware.authcenter.user.service.UserService;
 import com.jmsoftware.common.domain.authcenter.user.GetUserByLoginTokenResponse;
+import com.jmsoftware.common.domain.authcenter.user.SaveUserForRegisteringPayload;
+import com.jmsoftware.common.domain.authcenter.user.SaveUserForRegisteringResponse;
+import com.jmsoftware.common.exception.BusinessException;
 import lombok.val;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -64,6 +71,26 @@ public class UserServiceImpl implements UserService {
         }
         val response = new GetUserByLoginTokenResponse();
         BeanUtil.copyProperties(userPersistence, response);
+        return response;
+    }
+
+    @Override
+    @ValidateArgument
+    public SaveUserForRegisteringResponse saveUserForRegistering(@Valid SaveUserForRegisteringPayload payload) {
+        val userPersistence = new UserPersistence();
+        userPersistence.setUsername(payload.getUsername());
+        userPersistence.setEmail(payload.getEmail());
+        userPersistence.setPassword(payload.getEncodedPassword());
+        userPersistence.setStatus(UserStatus.ENABLED.getStatus());
+        val currentTime = new Date();
+        userPersistence.setCreatedTime(currentTime);
+        userPersistence.setModifiedTime(currentTime);
+        this.insert(userPersistence);
+        if (ObjectUtil.isNull(userPersistence.getId())) {
+            throw new BusinessException("Cannot insert user into database!");
+        }
+        val response = new SaveUserForRegisteringResponse();
+        response.setUserId(userPersistence.getId());
         return response;
     }
 }

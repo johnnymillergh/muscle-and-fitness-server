@@ -4,10 +4,11 @@ import com.jmsoftware.apiportal.auth.entity.LoginPayload;
 import com.jmsoftware.apiportal.auth.entity.LoginResponse;
 import com.jmsoftware.apiportal.auth.entity.RegisterPayload;
 import com.jmsoftware.apiportal.auth.service.AuthenticationService;
-import com.jmsoftware.apiportal.universal.domain.UserPO;
+import com.jmsoftware.apiportal.remoteapi.AuthCenterRemoteApi;
 import com.jmsoftware.apiportal.universal.service.JwtService;
-import com.jmsoftware.apiportal.universal.service.UserService;
+import com.jmsoftware.common.domain.authcenter.user.SaveUserForRegisteringPayload;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,22 +24,24 @@ import org.springframework.stereotype.Service;
  * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
  * @date 5/8/20 2:04 PM
  **/
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
     private final BCryptPasswordEncoder encoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
-    private final UserService userService;
+    private final AuthCenterRemoteApi authCenterRemoteApi;
 
     @Override
-    public void register(RegisterPayload payload) {
-        val userPo = new UserPO();
-        userPo.setUsername(payload.getUsername());
-        userPo.setEmail(payload.getEmail());
-        userPo.setPassword(encoder.encode(payload.getPassword()));
-        // TODO: user service should be in the `auth-center`
-        userService.saveUser(userPo);
+    public Long register(RegisterPayload payload) {
+        val saveUserForRegisteringPayload = new SaveUserForRegisteringPayload();
+        saveUserForRegisteringPayload.setUsername(payload.getUsername());
+        saveUserForRegisteringPayload.setEmail(payload.getEmail());
+        saveUserForRegisteringPayload.setEncodedPassword(encoder.encode(payload.getPassword()));
+        val response = authCenterRemoteApi.saveUserForRegistering(saveUserForRegisteringPayload);
+        log.info("Registered an new user account. User ID: {}", response.getData().getUserId());
+        return response.getData().getUserId();
     }
 
     @Override

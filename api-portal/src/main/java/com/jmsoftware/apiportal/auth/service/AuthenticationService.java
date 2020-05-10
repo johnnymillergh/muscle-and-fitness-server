@@ -17,8 +17,9 @@ public interface AuthenticationService {
      * Register.
      *
      * @param payload the payload
+     * @return the long
      */
-    void register(RegisterPayload payload);
+    Long register(RegisterPayload payload);
 
     /**
      * Login login response.

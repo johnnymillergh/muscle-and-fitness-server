@@ -4,6 +4,8 @@ import com.jmsoftware.authcenter.user.service.UserService;
 import com.jmsoftware.common.bean.ResponseBodyBean;
 import com.jmsoftware.common.domain.authcenter.user.GetUserByLoginTokenPayload;
 import com.jmsoftware.common.domain.authcenter.user.GetUserByLoginTokenResponse;
+import com.jmsoftware.common.domain.authcenter.user.SaveUserForRegisteringPayload;
+import com.jmsoftware.common.domain.authcenter.user.SaveUserForRegisteringResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -33,5 +35,10 @@ public class UserRemoteApiController {
     @ApiOperation(value = "/get-user-by-login-token", notes = "Get user by login token")
     public ResponseBodyBean<GetUserByLoginTokenResponse> getUserByLoginToken(@Valid @RequestBody GetUserByLoginTokenPayload payload) {
         return ResponseBodyBean.ofSuccess(userService.getUserByLoginToken(payload.getLoginToken()));
+    }
+
+    @PostMapping("/save-user-for-registering")
+    public ResponseBodyBean<SaveUserForRegisteringResponse> saveUserForRegistering(@Valid @RequestBody SaveUserForRegisteringPayload payload) {
+        return ResponseBodyBean.ofSuccess(userService.saveUserForRegistering(payload));
     }
 }
