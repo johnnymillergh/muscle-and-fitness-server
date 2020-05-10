@@ -1,12 +1,9 @@
 package com.jmsoftware.apiportal.universal.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.jmsoftware.apiportal.remoteapi.AuthCenterRemoteApi;
 import com.jmsoftware.apiportal.universal.domain.PermissionPO;
-import com.jmsoftware.apiportal.universal.domain.RolePO;
-import com.jmsoftware.apiportal.universal.domain.UserPO;
 import com.jmsoftware.apiportal.universal.domain.UserPrincipal;
 import com.jmsoftware.apiportal.universal.mapper.PermissionMapper;
 import com.jmsoftware.common.constant.HttpStatus;
@@ -22,7 +19,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,8 +49,8 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
         }
         val payload1 = new GetRoleListByUserIdPayload();
         payload1.setUserId(data.getId());
-        val response2 = authCenterRemoteApi.getRoleListByUserId(payload1);
-        val roleList = response2.getData().getRoleList();
+        val roleListByUserIdResponse = authCenterRemoteApi.getRoleListByUserId(payload1);
+        val roleList = roleListByUserIdResponse.getData().getRoleList();
         if (CollUtil.isEmpty(roleList)) {
             throw new SecurityException(HttpStatus.ROLE_NOT_FOUND);
         }
@@ -62,14 +58,8 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
                 .map(GetRoleListByUserIdResponse.Role::getId)
                 .collect(Collectors.toList());
         List<PermissionPO> permissionList = permissionMapper.selectByRoleIdList(roleIdList);
-        var user = new UserPO();
-        BeanUtil.copyProperties(data, user);
-        List<RolePO> rolePOList = new LinkedList<>();
-        roleList.forEach(role -> {
-            val rolePO = new RolePO();
-            BeanUtil.copyProperties(role, rolePO);
-            rolePOList.add(rolePO);
-        });
-        return UserPrincipal.create(user, rolePOList, permissionList);
+        val roleNameList =
+                roleList.stream().map(GetRoleListByUserIdResponse.Role::getName).collect(Collectors.toList());
+        return UserPrincipal.create(data, roleNameList, permissionList);
     }
 }

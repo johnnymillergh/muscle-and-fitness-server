@@ -1,4 +1,4 @@
-package com.jmsoftware.apiportal.universal.domain;
+package com.jmsoftware.common.domain.authcenter.user;
 
 import lombok.Getter;
 

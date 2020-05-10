@@ -2,6 +2,7 @@ package com.jmsoftware.authcenter.universal.domain;
 
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.jmsoftware.common.domain.authcenter.user.UserStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
