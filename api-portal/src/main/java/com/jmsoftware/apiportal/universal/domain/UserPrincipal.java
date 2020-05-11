@@ -2,6 +2,7 @@ package com.jmsoftware.apiportal.universal.domain;
 
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.jmsoftware.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
 import com.jmsoftware.common.domain.authcenter.user.GetUserByLoginTokenResponse;
 import com.jmsoftware.common.domain.authcenter.user.UserStatus;
 import lombok.AllArgsConstructor;
@@ -94,7 +95,7 @@ public class UserPrincipal implements UserDetails {
      * @return user principal
      */
     public static UserPrincipal create(GetUserByLoginTokenResponse user, List<String> roleNameList,
-                                       List<PermissionPO> permissionList) {
+                                       List<GetPermissionListByRoleIdListResponse.Permission> permissionList) {
         val authorities =
                 permissionList.stream()
                         .filter(permission -> StrUtil.isNotBlank(permission.getPermissionExpression()))

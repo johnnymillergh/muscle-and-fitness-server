@@ -81,9 +81,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         UserDetails userDetails;
         try {
             userDetails = customUserDetailsServiceImpl.loadUserByUsername(username);
-        } catch (UsernameNotFoundException e) {
-            log.error("Cannot find user by username: {}", username);
-            ResponseUtil.renderJson(response, HttpStatus.UNAUTHORIZED, null);
+        } catch (Exception e) {
+            log.error("Exception occurred when loading user by username! Exception message: {} Username: {}",
+                      e.getMessage(), username);
+            if (e instanceof UsernameNotFoundException) {
+                ResponseUtil.renderJson(response, HttpStatus.UNAUTHORIZED, null);
+                return;
+            }
+            ResponseUtil.renderJson(response, HttpStatus.ERROR, e.getMessage());
             return;
         }
         val authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

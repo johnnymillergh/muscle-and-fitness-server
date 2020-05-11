@@ -3,10 +3,9 @@ package com.jmsoftware.apiportal.universal.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.jmsoftware.apiportal.remoteapi.AuthCenterRemoteApi;
-import com.jmsoftware.apiportal.universal.domain.PermissionPO;
 import com.jmsoftware.apiportal.universal.domain.UserPrincipal;
-import com.jmsoftware.apiportal.universal.mapper.PermissionMapper;
 import com.jmsoftware.common.constant.HttpStatus;
+import com.jmsoftware.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload;
 import com.jmsoftware.common.domain.authcenter.role.GetRoleListByUserIdPayload;
 import com.jmsoftware.common.domain.authcenter.role.GetRoleListByUserIdResponse;
 import com.jmsoftware.common.domain.authcenter.user.GetUserByLoginTokenPayload;
@@ -19,7 +18,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -33,7 +31,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsServiceImpl implements UserDetailsService {
-    private final PermissionMapper permissionMapper;
     private final AuthCenterRemoteApi authCenterRemoteApi;
 
     @Override
@@ -54,12 +51,14 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
         if (CollUtil.isEmpty(roleList)) {
             throw new SecurityException(HttpStatus.ROLE_NOT_FOUND);
         }
-        List<Long> roleIdList = roleList.stream()
-                .map(GetRoleListByUserIdResponse.Role::getId)
-                .collect(Collectors.toList());
-        List<PermissionPO> permissionList = permissionMapper.selectByRoleIdList(roleIdList);
+        val payload2 = new GetPermissionListByRoleIdListPayload();
+        roleList.forEach(role -> {
+            payload2.getRoleIdList().add(role.getId());
+        });
+        val permissionListByRoleIdListResponse = authCenterRemoteApi.getPermissionListByRoleIdList(payload2);
         val roleNameList =
                 roleList.stream().map(GetRoleListByUserIdResponse.Role::getName).collect(Collectors.toList());
-        return UserPrincipal.create(data, roleNameList, permissionList);
+        return UserPrincipal.create(data, roleNameList,
+                                    permissionListByRoleIdListResponse.getData().getPermissionList());
     }
 }

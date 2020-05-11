@@ -1,6 +1,9 @@
 package com.jmsoftware.apiportal.remoteapi;
 
+import com.jmsoftware.apiportal.universal.aspect.ValidateArgument;
 import com.jmsoftware.common.bean.ResponseBodyBean;
+import com.jmsoftware.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload;
+import com.jmsoftware.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
 import com.jmsoftware.common.domain.authcenter.role.GetRoleListByUserIdPayload;
 import com.jmsoftware.common.domain.authcenter.role.GetRoleListByUserIdResponse;
 import com.jmsoftware.common.domain.authcenter.user.GetUserByLoginTokenPayload;
@@ -10,6 +13,8 @@ import com.jmsoftware.common.domain.authcenter.user.SaveUserForRegisteringRespon
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import javax.validation.Valid;
 
 /**
  * <h1>AuthCenterRemoteApi</h1>
@@ -27,8 +32,9 @@ public interface AuthCenterRemoteApi {
      * @param payload the payload
      * @return the user by login token
      */
+    @ValidateArgument
     @PostMapping("/user-remote-api/get-user-by-login-token")
-    ResponseBodyBean<GetUserByLoginTokenResponse> getUserByLoginToken(@RequestBody GetUserByLoginTokenPayload payload);
+    ResponseBodyBean<GetUserByLoginTokenResponse> getUserByLoginToken(@Valid @RequestBody GetUserByLoginTokenPayload payload);
 
     /**
      * Gets role list by user id.
@@ -36,8 +42,9 @@ public interface AuthCenterRemoteApi {
      * @param payload the payload
      * @return the role list by user id
      */
+    @ValidateArgument
     @PostMapping("/role-remote-api/get-role-list-by-user-id")
-    ResponseBodyBean<GetRoleListByUserIdResponse> getRoleListByUserId(@RequestBody GetRoleListByUserIdPayload payload);
+    ResponseBodyBean<GetRoleListByUserIdResponse> getRoleListByUserId(@Valid @RequestBody GetRoleListByUserIdPayload payload);
 
     /**
      * Save user for registering response body bean.
@@ -45,6 +52,17 @@ public interface AuthCenterRemoteApi {
      * @param payload the payload
      * @return the response body bean
      */
+    @ValidateArgument
     @PostMapping("/user-remote-api/save-user-for-registering")
-    ResponseBodyBean<SaveUserForRegisteringResponse> saveUserForRegistering(@RequestBody SaveUserForRegisteringPayload payload);
+    ResponseBodyBean<SaveUserForRegisteringResponse> saveUserForRegistering(@Valid @RequestBody SaveUserForRegisteringPayload payload);
+
+    /**
+     * Gets permission list by role id list.
+     *
+     * @param payload the payload
+     * @return the permission list by role id list
+     */
+    @ValidateArgument
+    @PostMapping("/permission-remote-api/get-permission-list-by-role-id-list")
+    ResponseBodyBean<GetPermissionListByRoleIdListResponse> getPermissionListByRoleIdList(@Valid @RequestBody GetPermissionListByRoleIdListPayload payload);
 }
