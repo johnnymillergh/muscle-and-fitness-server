@@ -24,7 +24,7 @@ public class SecurityHandlerConfiguration {
         return ((request, response, authException) -> {
             log.error("Authentication encountered an exception! Exception message: {}", authException.getMessage(),
                       authException);
-            ResponseUtil.renderJson(response, HttpStatus.FORBIDDEN, null);
+            ResponseUtil.renderJson(response, HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.getMessage());
         });
     }
 
@@ -33,7 +33,7 @@ public class SecurityHandlerConfiguration {
         return ((request, response, accessDeniedException) -> {
             log.error("Access was denied! Exception message: {}", accessDeniedException.getMessage(),
                       accessDeniedException);
-            ResponseUtil.renderJson(response, HttpStatus.FORBIDDEN, null);
+            ResponseUtil.renderJson(response, HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.getMessage());
         });
     }
 }
