@@ -102,7 +102,7 @@ public class MethodArgumentValidationAspect {
         for (val index : argumentIndexListThatNeedsToBeValidated) {
             val constraintViolationSet = validator.validate(args[index]);
             if (CollUtil.isNotEmpty(constraintViolationSet)) {
-                val errorMessage = String.format("Argument validation failed: %s",
+                val errorMessage = String.format("Argument validation failed! %s",
                                                  getAllFieldErrorMessage(constraintViolationSet));
                 errorMessageList.add(errorMessage);
             }
