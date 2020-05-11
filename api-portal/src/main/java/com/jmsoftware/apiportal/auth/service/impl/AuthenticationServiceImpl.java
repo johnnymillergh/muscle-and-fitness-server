@@ -8,6 +8,7 @@ import com.jmsoftware.apiportal.remoteapi.AuthCenterRemoteApi;
 import com.jmsoftware.apiportal.universal.service.JwtService;
 import com.jmsoftware.common.domain.authcenter.user.SaveUserForRegisteringPayload;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -45,6 +46,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
+    @SneakyThrows
     public LoginResponse login(LoginPayload payload) {
         val authenticationToken = new UsernamePasswordAuthenticationToken(payload.getLoginToken(),
                                                                           payload.getPassword());

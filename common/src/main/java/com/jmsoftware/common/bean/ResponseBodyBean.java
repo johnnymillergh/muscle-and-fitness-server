@@ -123,7 +123,8 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
      */
     public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> setResponse(@NonNull final Integer status,
                                                                                             @NonNull final String message,
-                                                                                            final ResponseBodyDataType data) {
+                                                                                            final ResponseBodyDataType data)
+            throws BaseException {
         if (!HttpStatus.OK.getCode().equals(status)) {
             throw new BaseException(status, message, data);
         }
@@ -203,7 +204,7 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
      * @param message                message to be responded.
      * @return response body
      */
-    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofFailure(@NonNull final String message) {
+    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofFailure(@NonNull final String message) throws BusinessException {
         throw new BusinessException(message);
     }
 
@@ -214,7 +215,7 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
      * @param data                   data to be responded
      * @return response body
      */
-    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofFailure(final ResponseBodyDataType data) {
+    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofFailure(final ResponseBodyDataType data) throws BusinessException {
         throw new BusinessException(data);
     }
 
@@ -227,7 +228,7 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
      * @return response body
      */
     public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofFailure(final ResponseBodyDataType data,
-                                                                                          @NonNull final String message) {
+                                                                                          @NonNull final String message) throws BusinessException {
         throw new BusinessException(data, message);
     }
 
@@ -237,7 +238,7 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
      * @param <ResponseBodyDataType> the response body data type
      * @return response body
      */
-    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofError() {
+    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofError() throws BaseException {
         return setResponse(HttpStatus.ERROR.getCode(), HttpStatus.ERROR.getMessage(), null);
     }
 
@@ -248,7 +249,8 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
      * @param status                 Error status, not OK(200)
      * @return response body
      */
-    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofError(@NonNull final IUniversalStatus status) {
+    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofError(@NonNull final IUniversalStatus status)
+            throws BaseException {
         return setResponse(status.getCode(), status.getMessage(), null);
     }
 
@@ -260,7 +262,8 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
      * @param throwable              exception
      * @return the response body bean
      */
-    public static <ResponseBodyDataType, BaseThrowable extends BaseException> ResponseBodyBean<ResponseBodyDataType> ofException(@NonNull final BaseThrowable throwable) {
+    public static <ResponseBodyDataType, BaseThrowable extends BaseException> ResponseBodyBean<ResponseBodyDataType> ofException(@NonNull final BaseThrowable throwable)
+            throws BaseException {
         throw throwable;
     }
 }

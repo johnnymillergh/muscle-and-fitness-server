@@ -12,6 +12,7 @@ import com.jmsoftware.common.domain.authcenter.user.SaveUserForRegisteringPayloa
 import com.jmsoftware.common.domain.authcenter.user.SaveUserForRegisteringResponse;
 import com.jmsoftware.common.domain.authcenter.user.UserStatus;
 import com.jmsoftware.common.exception.BusinessException;
+import lombok.SneakyThrows;
 import lombok.val;
 import org.springframework.stereotype.Service;
 
@@ -75,6 +76,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @SneakyThrows
     @ValidateArgument
     public SaveUserForRegisteringResponse saveUserForRegistering(@Valid SaveUserForRegisteringPayload payload) {
         val userPersistence = new UserPersistence();

@@ -21,7 +21,7 @@ public class SecurityException extends BaseException {
         super(httpStatus);
     }
 
-    public SecurityException(HttpStatus httpStatus, Object data) {
-        super(httpStatus, data);
+    public SecurityException(HttpStatus httpStatus, String message, Object data) {
+        super(httpStatus.getCode(), message, data);
     }
 }

@@ -11,6 +11,7 @@ import com.jmsoftware.common.domain.authcenter.role.GetRoleListByUserIdResponse;
 import com.jmsoftware.common.domain.authcenter.user.GetUserByLoginTokenPayload;
 import com.jmsoftware.common.exception.SecurityException;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,6 +35,7 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
     private final AuthCenterRemoteApi authCenterRemoteApi;
 
     @Override
+    @SneakyThrows
     public UserDetails loadUserByUsername(String credentials) throws UsernameNotFoundException {
         val payload = new GetUserByLoginTokenPayload();
         payload.setLoginToken(credentials);

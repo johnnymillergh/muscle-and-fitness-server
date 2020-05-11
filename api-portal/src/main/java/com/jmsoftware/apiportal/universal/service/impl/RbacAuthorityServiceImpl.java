@@ -17,6 +17,7 @@ import com.jmsoftware.common.domain.authcenter.permission.GetPermissionListByRol
 import com.jmsoftware.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
 import com.jmsoftware.common.exception.SecurityException;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.security.core.Authentication;
@@ -49,8 +50,15 @@ public class RbacAuthorityServiceImpl implements RbacAuthorityService {
     private final JwtServiceImpl jwtServiceImpl;
 
     @Override
+    @SneakyThrows
     public boolean hasPermission(HttpServletRequest request, Authentication authentication) {
-        val username = jwtServiceImpl.getUsernameFromRequest(request);
+        String username;
+        try {
+            username = jwtServiceImpl.getUsernameFromRequest(request);
+        } catch (SecurityException e) {
+            log.error("Exception occurred when getting username from request. Exception message: {}", e.getMessage());
+            throw e;
+        }
         // Super user has no restriction on any requests.
         if (customConfiguration.getSuperUser().equals(username)) {
             log.info("Superuser(username: {}) can access any resource.", username);
@@ -102,6 +110,7 @@ public class RbacAuthorityServiceImpl implements RbacAuthorityService {
      *
      * @param request HTTP Request
      */
+    @SneakyThrows
     private void checkRequest(HttpServletRequest request) {
         val currentMethod = request.getMethod();
         val urlMapping = allUrlMapping();

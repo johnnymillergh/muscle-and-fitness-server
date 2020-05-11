@@ -75,7 +75,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             log.error("Exception occurred when getting username from JWT. Exception message: {} JWT: {}",
                       e.getMessage(), jwt);
             var httpStatus = HttpStatus.fromCode(e.getCode());
-            ResponseUtil.renderJson(response, httpStatus, null);
+            ResponseUtil.renderJson(response, httpStatus, httpStatus.getMessage());
             return;
         }
         UserDetails userDetails;
@@ -85,7 +85,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             log.error("Exception occurred when loading user by username! Exception message: {} Username: {}",
                       e.getMessage(), username);
             if (e instanceof UsernameNotFoundException) {
-                ResponseUtil.renderJson(response, HttpStatus.UNAUTHORIZED, null);
+                ResponseUtil.renderJson(response, HttpStatus.UNAUTHORIZED, HttpStatus.UNAUTHORIZED.getMessage());
                 return;
             }
             ResponseUtil.renderJson(response, HttpStatus.ERROR, e.getMessage());

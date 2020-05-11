@@ -9,12 +9,12 @@ import com.jmsoftware.apiportal.universal.domain.UserPrincipal;
 import com.jmsoftware.apiportal.universal.service.JwtService;
 import com.jmsoftware.apiportal.universal.service.RedisService;
 import com.jmsoftware.common.constant.HttpStatus;
-import com.jmsoftware.common.exception.BaseException;
 import com.jmsoftware.common.exception.SecurityException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
@@ -55,17 +55,17 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public String createJwt(Authentication authentication, Boolean rememberMe) {
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+    public String createJwt(Authentication authentication, Boolean rememberMe) throws SecurityException {
+        val userPrincipal = (UserPrincipal) authentication.getPrincipal();
         return createJwt(rememberMe, userPrincipal.getId(), userPrincipal.getUsername(), userPrincipal.getRoles(),
                          userPrincipal.getAuthorities());
     }
 
     @Override
     public String createJwt(Boolean rememberMe, Long id, String subject, List<String> roles,
-                            Collection<? extends GrantedAuthority> authorities) {
-        var now = new Date();
-        JwtBuilder builder = Jwts.builder()
+                            Collection<? extends GrantedAuthority> authorities) throws SecurityException {
+        val now = new Date();
+        val builder = Jwts.builder()
                 .setId(id.toString())
                 .setSubject(subject)
                 .setIssuedAt(now)
@@ -74,27 +74,28 @@ public class JwtServiceImpl implements JwtService {
         // TODO: Don't generate authority information in JWT.
         //  .claim("authorities", authorities)
         // Set expire duration of JWT.
-        Long ttl = rememberMe ? jwtConfiguration.getTtlForRememberMe() : jwtConfiguration.getTtl();
+        val ttl = rememberMe ? jwtConfiguration.getTtlForRememberMe() : jwtConfiguration.getTtl();
         if (ttl > 0) {
             builder.setExpiration(DateUtil.offsetMillisecond(now, ttl.intValue()));
         }
-        String jwt = builder.compact();
+        val jwt = builder.compact();
         // Store new JWT in Redis
-        var result = redisService.set(Constants.REDIS_JWT_KEY_PREFIX + subject, jwt, ttl,
+        val redisOperationResult = redisService.set(Constants.REDIS_JWT_KEY_PREFIX + subject, jwt, ttl,
                                       TimeUnit.MILLISECONDS);
-        if (result) {
+        if (redisOperationResult) {
             return jwt;
         } else {
-            throw new BaseException(HttpStatus.ERROR, "Cannot persist JWT into Redis");
+            throw new SecurityException(HttpStatus.ERROR, "Cannot persist JWT into Redis", null);
         }
     }
 
     @Override
-    public Claims parseJwt(String jwt) {
+    public Claims parseJwt(String jwt) throws SecurityException {
         Claims claims;
         try {
             claims = Optional.ofNullable(jwtParser.parseClaimsJws(jwt).getBody())
-                    .orElseThrow(() -> new BaseException(HttpStatus.TOKEN_PARSE_ERROR, "The JWT Claims Set is null"));
+                    .orElseThrow(() -> new SecurityException(HttpStatus.TOKEN_PARSE_ERROR,
+                                                             "The JWT Claims Set is null", null));
         } catch (ExpiredJwtException e) {
             log.error("JWT is expired. Message: {} JWT: {}", e.getMessage(), jwt);
             throw new SecurityException(HttpStatus.TOKEN_EXPIRED);
@@ -108,17 +109,17 @@ public class JwtServiceImpl implements JwtService {
             log.error("The parameter of JWT is invalid. Message: {} JWT: {}", e.getMessage(), jwt);
             throw new SecurityException(HttpStatus.TOKEN_PARSE_ERROR);
         }
-        String username = claims.getSubject();
-        String redisKeyOfJwt = Constants.REDIS_JWT_KEY_PREFIX + username;
+        val username = claims.getSubject();
+        val redisKeyOfJwt = Constants.REDIS_JWT_KEY_PREFIX + username;
         // Check if JWT exists
-        Long expire = redisService.getExpire(redisKeyOfJwt, TimeUnit.MILLISECONDS);
+        val expire = redisService.getExpire(redisKeyOfJwt, TimeUnit.MILLISECONDS);
         if (ObjectUtil.isNull(expire) || expire <= 0) {
             throw new SecurityException(HttpStatus.TOKEN_EXPIRED);
         }
         // Check if the current JWT is equal to the one in Redis.
         // If it's noe equal, that indicates current user has signed out or logged in before.
         // Both situations reveal the JWT has expired.
-        String jwtInRedis = redisService.get(redisKeyOfJwt);
+        val jwtInRedis = redisService.get(redisKeyOfJwt);
         if (!StrUtil.equals(jwt, jwtInRedis)) {
             throw new SecurityException(HttpStatus.TOKEN_OUT_OF_CONTROL);
         }
@@ -126,29 +127,29 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public void invalidateJwt(HttpServletRequest request) {
-        String jwt = getJwtFromRequest(request);
-        String username = getUsernameFromJwt(jwt);
+    public void invalidateJwt(HttpServletRequest request) throws SecurityException {
+        val jwt = getJwtFromRequest(request);
+        val username = getUsernameFromJwt(jwt);
         // Delete JWT from redis
-        Long deleted = redisService.delete(Constants.REDIS_JWT_KEY_PREFIX + username);
-        log.error("Invalidate JWT. Username = {}, deleted = {}", username, deleted);
+        val deletedKeyNumber = redisService.delete(Constants.REDIS_JWT_KEY_PREFIX + username);
+        log.error("Invalidate JWT. Username = {}, deleted = {}", username, deletedKeyNumber);
     }
 
     @Override
-    public String getUsernameFromJwt(String jwt) {
-        Claims claims = parseJwt(jwt);
+    public String getUsernameFromJwt(String jwt) throws SecurityException {
+        val claims = parseJwt(jwt);
         return claims.getSubject();
     }
 
     @Override
-    public String getUsernameFromRequest(HttpServletRequest request) {
-        String jwt = this.getJwtFromRequest(request);
+    public String getUsernameFromRequest(HttpServletRequest request) throws SecurityException {
+        val jwt = this.getJwtFromRequest(request);
         return this.getUsernameFromJwt(jwt);
     }
 
     @Override
     public String getJwtFromRequest(HttpServletRequest request) {
-        String bearerToken = request.getHeader(Constants.REQUEST_TOKEN_KEY);
+        val bearerToken = request.getHeader(Constants.REQUEST_TOKEN_KEY);
         if (StrUtil.isNotBlank(bearerToken) && bearerToken.startsWith(Constants.JWT_PREFIX)) {
             return bearerToken.substring(Constants.JWT_PREFIX.length());
         }

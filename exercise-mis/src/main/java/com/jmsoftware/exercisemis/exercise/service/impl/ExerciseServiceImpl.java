@@ -7,6 +7,7 @@ import com.jmsoftware.exercisemis.exercise.domain.ExercisePo;
 import com.jmsoftware.exercisemis.exercise.mapper.ExerciseMapper;
 import com.jmsoftware.exercisemis.exercise.service.ExerciseService;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,7 @@ public class ExerciseServiceImpl implements ExerciseService {
     private final ExerciseMapper exerciseMapper;
 
     @Override
+    @SneakyThrows
     public ExercisePo queryById(Long id) {
         if (ObjectUtil.isNull(id)) {
             throw new BusinessException("Cannot execute the query! Cause: the ID is null.");

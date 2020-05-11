@@ -1,5 +1,6 @@
 package com.jmsoftware.authcenter.universal.service;
 
+import com.jmsoftware.common.exception.SecurityException;
 import io.jsonwebtoken.Claims;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,7 +25,7 @@ public interface JwtService {
      * @param rememberMe     the remember me
      * @return the string
      */
-    String createJwt(Authentication authentication, Boolean rememberMe);
+    String createJwt(Authentication authentication, Boolean rememberMe) throws SecurityException;
 
     /**
      * Create JWT string.
@@ -37,7 +38,7 @@ public interface JwtService {
      * @return the JWT string
      */
     String createJwt(Boolean rememberMe, Long id, String subject, List<String> roles, Collection<?
-            extends GrantedAuthority> authorities);
+            extends GrantedAuthority> authorities) throws SecurityException;
 
     /**
      * Parse JWT.
@@ -45,14 +46,14 @@ public interface JwtService {
      * @param jwt the jwt
      * @return the claims
      */
-    Claims parseJwt(String jwt);
+    Claims parseJwt(String jwt) throws SecurityException;
 
     /**
      * Invalidate jwt.
      *
      * @param request the request
      */
-    void invalidateJwt(HttpServletRequest request);
+    void invalidateJwt(HttpServletRequest request) throws SecurityException;
 
     /**
      * Gets username from jwt.
@@ -60,7 +61,7 @@ public interface JwtService {
      * @param jwt the jwt
      * @return the username from jwt
      */
-    String getUsernameFromJwt(String jwt);
+    String getUsernameFromJwt(String jwt) throws SecurityException;
 
     /**
      * Gets username from request.
@@ -68,7 +69,7 @@ public interface JwtService {
      * @param request the request
      * @return the username from request
      */
-    String getUsernameFromRequest(HttpServletRequest request);
+    String getUsernameFromRequest(HttpServletRequest request) throws SecurityException;
 
     /**
      * Gets jwt from request.

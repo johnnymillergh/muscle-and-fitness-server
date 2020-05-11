@@ -41,6 +41,13 @@ public class ResponseUtil {
         }
     }
 
+    /**
+     * Render json.
+     *
+     * @param response   the response
+     * @param httpStatus the http status
+     * @param message    the message
+     */
     public static void renderJson(final HttpServletResponse response, final HttpStatus httpStatus,
                                   final String message) {
         standardizeHttpServletResponse(response, httpStatus);

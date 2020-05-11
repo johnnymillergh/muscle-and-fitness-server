@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
  **/
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class BaseException extends RuntimeException {
+public class BaseException extends Exception {
     private static final long serialVersionUID = 5049763892480652887L;
 
     /**
@@ -33,7 +33,7 @@ public class BaseException extends RuntimeException {
         this.message = httpStatus.getMessage();
     }
 
-    public BaseException(HttpStatus httpStatus, Object data) {
+    public BaseException(Object data, HttpStatus httpStatus) {
         this(httpStatus);
         this.data = data;
     }

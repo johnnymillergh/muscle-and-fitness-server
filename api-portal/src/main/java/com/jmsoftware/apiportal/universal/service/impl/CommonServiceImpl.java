@@ -6,6 +6,7 @@ import com.jmsoftware.apiportal.universal.configuration.ProjectProperty;
 import com.jmsoftware.apiportal.universal.domain.ValidationTestPayload;
 import com.jmsoftware.apiportal.universal.service.CommonService;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -52,6 +53,7 @@ public class CommonServiceImpl implements CommonService {
     }
 
     @Override
+    @SneakyThrows
     public String generateJwt(String username) {
         return jwtServiceImpl.createJwt(false, Long.MAX_VALUE, username, Lists.newLinkedList(), Lists.newLinkedList());
     }
