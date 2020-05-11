@@ -9,3 +9,9 @@ eureka:
     registryFetchIntervalSeconds: 5
     serviceUrl:
       defaultZone: http://localhost:8760/eureka/
+
+custom:
+  configuration:
+    # Stage swagger can only see "api-portal"
+    allowed-application-list:
+      - "api-portal"
