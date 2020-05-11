@@ -50,7 +50,6 @@ custom:
     # Disable web request information log
     web-request-log-disabled: false
     ignored-request:
-      # POST Requests need to be ignored.
       post:
         - "/authentication/**"
       get:
@@ -59,14 +58,11 @@ custom:
         - "/auth/validate-username/**"
         - "/user/get-avatar"
         - "/common/get-jwt"
-      # Request need to be ignored that matches pattern.
       pattern:
         - "/actuator/**"
         - "/druid/**"
         - "/swagger-resources/**"
         - "/v2/api-docs/**"
-        - "/webjars/**"
-        - "/swagger-ui.html"
 
 sftp:
   client:
