@@ -5,6 +5,7 @@ import com.jmsoftware.common.bean.ResponseBodyBean;
 import com.jmsoftware.common.domain.authcenter.role.GetRoleListByUserIdPayload;
 import com.jmsoftware.common.domain.authcenter.role.GetRoleListByUserIdResponse;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +30,7 @@ public class RoleRemoteApiController {
     private final RoleService roleService;
 
     @PostMapping("/get-role-list-by-user-id")
+    @ApiOperation(value = "/get-role-list-by-user-id", notes = "Get role list by user id")
     public ResponseBodyBean<GetRoleListByUserIdResponse> getRoleListByUserId(@Valid @RequestBody GetRoleListByUserIdPayload payload) {
         return ResponseBodyBean.ofSuccess(roleService.getRoleListByUserId(payload));
     }
