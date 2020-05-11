@@ -65,7 +65,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         val jwt = jwtServiceImpl.getJwtFromRequest(request);
         if (StrUtil.isBlank(jwt)) {
             log.error("Invalid JWT, the JWT of request is empty.");
-            ResponseUtil.renderJson(response, HttpStatus.UNAUTHORIZED, null);
+            ResponseUtil.renderJson(response, HttpStatus.UNAUTHORIZED, HttpStatus.UNAUTHORIZED.getMessage());
             return;
         }
         String username;
