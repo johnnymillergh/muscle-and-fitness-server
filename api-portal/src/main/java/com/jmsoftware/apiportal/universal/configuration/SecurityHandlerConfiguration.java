@@ -3,6 +3,7 @@ package com.jmsoftware.apiportal.universal.configuration;
 import com.jmsoftware.common.constant.HttpStatus;
 import com.jmsoftware.common.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -22,18 +23,20 @@ public class SecurityHandlerConfiguration {
     @Bean
     public AuthenticationEntryPoint authenticationEntryPoint() {
         return ((request, response, authException) -> {
-            log.error("Authentication encountered an exception! Exception message: {}", authException.getMessage(),
-                      authException);
-            ResponseUtil.renderJson(response, HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.getMessage());
+            val formattedMessage = String.format("Authentication encountered an exception! Exception message: %s",
+                                                 authException.getMessage());
+            log.error(formattedMessage);
+            ResponseUtil.renderJson(response, HttpStatus.FORBIDDEN, formattedMessage);
         });
     }
 
     @Bean
     public AccessDeniedHandler accessDeniedHandler() {
         return ((request, response, accessDeniedException) -> {
-            log.error("Access was denied! Exception message: {}", accessDeniedException.getMessage(),
-                      accessDeniedException);
-            ResponseUtil.renderJson(response, HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.getMessage());
+            val formattedMessage = String.format("Access was denied! Exception message: %s",
+                                                 accessDeniedException.getMessage());
+            log.error(formattedMessage);
+            ResponseUtil.renderJson(response, HttpStatus.FORBIDDEN, formattedMessage);
         });
     }
 }

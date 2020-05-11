@@ -53,6 +53,7 @@ public class RbacAuthorityServiceImpl implements RbacAuthorityService {
         val username = jwtServiceImpl.getUsernameFromRequest(request);
         // Super user has no restriction on any requests.
         if (customConfiguration.getSuperUser().equals(username)) {
+            log.info("Superuser(username: {}) can access any resource.", username);
             return true;
         }
         this.checkRequest(request);
@@ -61,7 +62,6 @@ public class RbacAuthorityServiceImpl implements RbacAuthorityService {
             log.error("Invalid user principal. {}", principal);
             return false;
         }
-        boolean hasPermission = false;
         UserPrincipal userPrincipal = (UserPrincipal) principal;
         Long userId = userPrincipal.getId();
         // TODO: auth-center roleService.getRolesByUserId(userId)
@@ -87,12 +87,14 @@ public class RbacAuthorityServiceImpl implements RbacAuthorityService {
             // TODO: check is AntPathRequestMatcher supports RESTFul request
             AntPathRequestMatcher antPathMatcher = new AntPathRequestMatcher(btnPerm.getUrl(), btnPerm.getMethod());
             if (antPathMatcher.matches(request)) {
-                hasPermission = true;
-                break;
+                log.info("Resource [{}] {} is accessible for user(username: {})", request.getMethod(),
+                         request.getRequestURL(), username);
+                return true;
             }
         }
-        return hasPermission;
-
+        log.warn("Resource [{}] {} is not accessible for user(username: {})", request.getMethod(),
+                 request.getRequestURL(), username);
+        return false;
     }
 
     /**
