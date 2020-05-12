@@ -4,6 +4,8 @@ import com.jmsoftware.apiportal.universal.aspect.ValidateArgument;
 import com.jmsoftware.common.bean.ResponseBodyBean;
 import com.jmsoftware.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload;
 import com.jmsoftware.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
+import com.jmsoftware.common.domain.authcenter.permission.GetPermissionListByUserIdPayload;
+import com.jmsoftware.common.domain.authcenter.permission.GetPermissionListByUserIdResponse;
 import com.jmsoftware.common.domain.authcenter.role.GetRoleListByUserIdPayload;
 import com.jmsoftware.common.domain.authcenter.role.GetRoleListByUserIdResponse;
 import com.jmsoftware.common.domain.authcenter.user.GetUserByLoginTokenPayload;
@@ -65,4 +67,14 @@ public interface AuthCenterRemoteApi {
     @ValidateArgument
     @PostMapping("/permission-remote-api/get-permission-list-by-role-id-list")
     ResponseBodyBean<GetPermissionListByRoleIdListResponse> getPermissionListByRoleIdList(@Valid @RequestBody GetPermissionListByRoleIdListPayload payload);
+
+    /**
+     * Get permission list by user id response body bean.
+     *
+     * @param payload the payload
+     * @return the response body bean
+     */
+    @ValidateArgument
+    @PostMapping("/permission-remote-api/get-permission-list-by-user-id")
+    ResponseBodyBean<GetPermissionListByUserIdResponse> getPermissionListByUserId(@Valid @RequestBody GetPermissionListByUserIdPayload payload);
 }

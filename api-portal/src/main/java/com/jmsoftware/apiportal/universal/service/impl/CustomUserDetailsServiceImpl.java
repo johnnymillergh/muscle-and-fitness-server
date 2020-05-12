@@ -37,30 +37,31 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
     @Override
     @SneakyThrows
     public UserDetails loadUserByUsername(String credentials) throws UsernameNotFoundException {
-        val payload = new GetUserByLoginTokenPayload();
-        payload.setLoginToken(credentials);
-        val response = authCenterRemoteApi.getUserByLoginToken(payload);
-        val data = response.getData();
-        if (ObjectUtil.isNull(data)) {
+        val getUserByLoginTokenPayload = new GetUserByLoginTokenPayload();
+        getUserByLoginTokenPayload.setLoginToken(credentials);
+        val getUserByLoginTokenResponseResponseBody =
+                authCenterRemoteApi.getUserByLoginToken(getUserByLoginTokenPayload);
+        val getUserByLoginTokenResponse = getUserByLoginTokenResponseResponseBody.getData();
+        if (ObjectUtil.isNull(getUserByLoginTokenResponse)) {
             val errorMessage = String.format("User's account not found, credentials: %s", credentials);
             log.error(errorMessage);
             throw new UsernameNotFoundException(errorMessage);
         }
-        val payload1 = new GetRoleListByUserIdPayload();
-        payload1.setUserId(data.getId());
-        val roleListByUserIdResponse = authCenterRemoteApi.getRoleListByUserId(payload1);
-        val roleList = roleListByUserIdResponse.getData().getRoleList();
+        val getRoleListByUserIdPayload = new GetRoleListByUserIdPayload();
+        getRoleListByUserIdPayload.setUserId(getUserByLoginTokenResponse.getId());
+        val getRoleListByUserIdResponseResponseBody =
+                authCenterRemoteApi.getRoleListByUserId(getRoleListByUserIdPayload);
+        val roleList = getRoleListByUserIdResponseResponseBody.getData().getRoleList();
         if (CollUtil.isEmpty(roleList)) {
             throw new SecurityException(HttpStatus.ROLE_NOT_FOUND);
         }
-        val payload2 = new GetPermissionListByRoleIdListPayload();
-        roleList.forEach(role -> {
-            payload2.getRoleIdList().add(role.getId());
-        });
-        val permissionListByRoleIdListResponse = authCenterRemoteApi.getPermissionListByRoleIdList(payload2);
+        val getPermissionListByRoleIdListPayload = new GetPermissionListByRoleIdListPayload();
+        roleList.forEach(role -> getPermissionListByRoleIdListPayload.getRoleIdList().add(role.getId()));
+        val permissionListByRoleIdListResponseBody =
+                authCenterRemoteApi.getPermissionListByRoleIdList(getPermissionListByRoleIdListPayload);
         val roleNameList =
                 roleList.stream().map(GetRoleListByUserIdResponse.Role::getName).collect(Collectors.toList());
-        return UserPrincipal.create(data, roleNameList,
-                                    permissionListByRoleIdListResponse.getData().getPermissionList());
+        return UserPrincipal.create(getUserByLoginTokenResponse, roleNameList,
+                                    permissionListByRoleIdListResponseBody.getData().getPermissionList());
     }
 }

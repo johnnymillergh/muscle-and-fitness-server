@@ -72,4 +72,12 @@ public interface PermissionMapper {
      * @return the list
      */
     List<PermissionPersistence> selectPermissionListByRoleIdList(List<Long> roleIdList);
+
+    /**
+     * Select permission list by user id list.
+     *
+     * @param userId the user id
+     * @return the list
+     */
+    List<PermissionPersistence> selectPermissionListByUserId(Long userId);
 }

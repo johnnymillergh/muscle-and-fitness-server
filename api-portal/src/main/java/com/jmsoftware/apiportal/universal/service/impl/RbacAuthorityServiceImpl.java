@@ -7,14 +7,11 @@ import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 import com.jmsoftware.apiportal.remoteapi.AuthCenterRemoteApi;
 import com.jmsoftware.apiportal.universal.configuration.CustomConfiguration;
-import com.jmsoftware.apiportal.universal.domain.PermissionType;
-import com.jmsoftware.apiportal.universal.domain.RolePO;
 import com.jmsoftware.apiportal.universal.domain.UserPrincipal;
 import com.jmsoftware.apiportal.universal.service.RbacAuthorityService;
-import com.jmsoftware.apiportal.universal.service.RoleService;
 import com.jmsoftware.common.constant.HttpStatus;
-import com.jmsoftware.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload;
-import com.jmsoftware.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
+import com.jmsoftware.common.domain.authcenter.permission.GetPermissionListByUserIdPayload;
+import com.jmsoftware.common.domain.authcenter.permission.PermissionType;
 import com.jmsoftware.common.exception.SecurityException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -24,11 +21,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondition;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -43,8 +38,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RbacAuthorityServiceImpl implements RbacAuthorityService {
     private final AuthCenterRemoteApi authCenterRemoteApi;
-
-    private final RoleService roleService;
     private final RequestMappingHandlerMapping mapping;
     private final CustomConfiguration customConfiguration;
     private final JwtServiceImpl jwtServiceImpl;
@@ -70,30 +63,26 @@ public class RbacAuthorityServiceImpl implements RbacAuthorityService {
             log.error("Invalid user principal. {}", principal);
             return false;
         }
-        UserPrincipal userPrincipal = (UserPrincipal) principal;
-        Long userId = userPrincipal.getId();
-        // TODO: auth-center roleService.getRolesByUserId(userId)
-        List<RolePO> rolesByUserId = roleService.getRolesByUserId(userId);
-        val payload = new GetPermissionListByRoleIdListPayload();
-        rolesByUserId.forEach(rolePO -> {
-            payload.getRoleIdList().add(rolePO.getId());
-        });
-        val permissionListByRoleIdListResponse = authCenterRemoteApi.getPermissionListByRoleIdList(payload);
-        val permissionList = permissionListByRoleIdListResponse.getData().getPermissionList();
+        val userPrincipal = (UserPrincipal) principal;
+        val userId = userPrincipal.getId();
+        val getPermissionListByUserIdPayload = new GetPermissionListByUserIdPayload();
+        getPermissionListByUserIdPayload.setUserId(userId);
+        val getPermissionListByUserIdResponse =
+                authCenterRemoteApi.getPermissionListByUserId(getPermissionListByUserIdPayload);
+        val permissionList = getPermissionListByUserIdResponse.getData().getPermissionList();
         // Filter button permission for frond-end
-        List<GetPermissionListByRoleIdListResponse.Permission> buttonPermissionList =
-                permissionList.stream()
-                        // Sieve out page permissions
-                        .filter(permission -> ObjectUtil.equal(permission.getType(),
-                                                               PermissionType.BUTTON.getType()))
-                        // Sieve out permission that has no URL
-                        .filter(permission -> StrUtil.isNotBlank(permission.getUrl()))
-                        // Sieve out permission that has no method
-                        .filter(permission -> StrUtil.isNotBlank(permission.getMethod()))
-                        .collect(Collectors.toList());
-        for (GetPermissionListByRoleIdListResponse.Permission btnPerm : buttonPermissionList) {
+        val buttonPermissionList = permissionList.stream()
+                // Sieve out page permissions
+                .filter(permission -> ObjectUtil.equal(permission.getType(),
+                                                       PermissionType.BUTTON.getType()))
+                // Sieve out permission that has no URL
+                .filter(permission -> StrUtil.isNotBlank(permission.getUrl()))
+                // Sieve out permission that has no method
+                .filter(permission -> StrUtil.isNotBlank(permission.getMethod()))
+                .collect(Collectors.toList());
+        for (val buttonPermission : buttonPermissionList) {
             // TODO: check is AntPathRequestMatcher supports RESTFul request
-            AntPathRequestMatcher antPathMatcher = new AntPathRequestMatcher(btnPerm.getUrl(), btnPerm.getMethod());
+            val antPathMatcher = new AntPathRequestMatcher(buttonPermission.getUrl(), buttonPermission.getMethod());
             if (antPathMatcher.matches(request)) {
                 log.info("Resource [{}] {} is accessible for user(username: {})", request.getMethod(),
                          request.getRequestURL(), username);
@@ -120,7 +109,7 @@ public class RbacAuthorityServiceImpl implements RbacAuthorityService {
             // 1：new AntPathRequestMatcher(uri,method) 这种方式可以直接判断方法是否匹配，
             //  因为这里我们把 方法不匹配 自定义抛出，所以，我们使用第2种方式创建
             // 2：new AntPathRequestMatcher(uri) 这种方式不校验请求方法，只校验请求路径
-            AntPathRequestMatcher antPathMatcher = new AntPathRequestMatcher(uri);
+            val antPathMatcher = new AntPathRequestMatcher(uri);
             if (antPathMatcher.matches(request)) {
                 if (!urlMapping.get(uri).contains(currentMethod)) {
                     throw new SecurityException(HttpStatus.METHOD_NOT_ALLOWED);
@@ -144,12 +133,10 @@ public class RbacAuthorityServiceImpl implements RbacAuthorityService {
         handlerMethods.forEach((key, value) -> {
             // 获取当前 key 下的获取所有URL
             val url = key.getPatternsCondition().getPatterns();
-            RequestMethodsRequestCondition method = key.getMethodsCondition();
+            val method = key.getMethodsCondition();
             // 为每个URL添加所有的请求方法
-            url.forEach(item -> urlMapping.putAll(item, method.getMethods()
-                    .stream()
-                    .map(Enum::toString)
-                    .collect(Collectors.toList())));
+            url.forEach(item -> urlMapping.putAll(item,
+                                                  method.getMethods().stream().map(Enum::toString).collect(Collectors.toList())));
         });
         return urlMapping;
     }

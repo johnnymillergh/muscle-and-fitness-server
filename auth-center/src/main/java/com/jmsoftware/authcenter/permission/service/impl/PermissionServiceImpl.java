@@ -8,6 +8,8 @@ import com.jmsoftware.authcenter.permission.service.PermissionService;
 import com.jmsoftware.authcenter.universal.aspect.ValidateArgument;
 import com.jmsoftware.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload;
 import com.jmsoftware.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
+import com.jmsoftware.common.domain.authcenter.permission.GetPermissionListByUserIdPayload;
+import com.jmsoftware.common.domain.authcenter.permission.GetPermissionListByUserIdResponse;
 import lombok.NonNull;
 import lombok.val;
 import org.springframework.stereotype.Service;
@@ -77,5 +79,23 @@ public class PermissionServiceImpl implements PermissionService {
             return Collections.emptyList();
         }
         return permissionMapper.selectPermissionListByRoleIdList(roleIdList);
+    }
+
+    @Override
+    @ValidateArgument
+    public GetPermissionListByUserIdResponse getPermissionListByUserId(@Valid GetPermissionListByUserIdPayload payload) {
+        val permissionList = this.getPermissionListByUserId(payload.getUserId());
+        val response = new GetPermissionListByUserIdResponse();
+        permissionList.forEach(permissionPersistence -> {
+            val permission = new GetPermissionListByUserIdResponse.Permission();
+            BeanUtil.copyProperties(permissionPersistence, permission);
+            response.getPermissionList().add(permission);
+        });
+        return response;
+    }
+
+    @Override
+    public List<PermissionPersistence> getPermissionListByUserId(@NonNull Long userId) {
+        return permissionMapper.selectPermissionListByUserId(userId);
     }
 }

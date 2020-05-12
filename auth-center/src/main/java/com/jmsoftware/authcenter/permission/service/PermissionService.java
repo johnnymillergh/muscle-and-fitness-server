@@ -3,6 +3,8 @@ package com.jmsoftware.authcenter.permission.service;
 import com.jmsoftware.authcenter.permission.entity.PermissionPersistence;
 import com.jmsoftware.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload;
 import com.jmsoftware.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
+import com.jmsoftware.common.domain.authcenter.permission.GetPermissionListByUserIdPayload;
+import com.jmsoftware.common.domain.authcenter.permission.GetPermissionListByUserIdResponse;
 import lombok.NonNull;
 
 import java.util.List;
@@ -72,4 +74,20 @@ public interface PermissionService {
      * @return the permission list by role id list
      */
     List<PermissionPersistence> getPermissionListByRoleIdList(@NonNull List<Long> roleIdList);
+
+    /**
+     * Gets permission list by user id.
+     *
+     * @param payload the payload
+     * @return the permission list by user id
+     */
+    GetPermissionListByUserIdResponse getPermissionListByUserId(GetPermissionListByUserIdPayload payload);
+
+    /**
+     * Gets permission list by user id.
+     *
+     * @param userId the user id
+     * @return the permission list by user id
+     */
+    List<PermissionPersistence> getPermissionListByUserId(@NonNull Long userId);
 }

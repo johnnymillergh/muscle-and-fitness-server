@@ -1,4 +1,4 @@
-package com.jmsoftware.apiportal.universal.domain;
+package com.jmsoftware.common.domain.authcenter.permission;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

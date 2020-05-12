@@ -4,7 +4,10 @@ import com.jmsoftware.authcenter.permission.service.PermissionService;
 import com.jmsoftware.common.bean.ResponseBodyBean;
 import com.jmsoftware.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload;
 import com.jmsoftware.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
+import com.jmsoftware.common.domain.authcenter.permission.GetPermissionListByUserIdPayload;
+import com.jmsoftware.common.domain.authcenter.permission.GetPermissionListByUserIdResponse;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +32,14 @@ public class PermissionRemoteApiController {
     private final PermissionService permissionService;
 
     @PostMapping("/get-permission-list-by-role-id-list")
+    @ApiOperation(value = "Get permission list by role id list", notes = "GGet permission list by role id list")
     public ResponseBodyBean<GetPermissionListByRoleIdListResponse> getPermissionListByRoleIdList(@Valid @RequestBody GetPermissionListByRoleIdListPayload payload) {
         return ResponseBodyBean.ofSuccess(permissionService.getPermissionListByRoleIdList(payload));
+    }
+
+    @PostMapping("/get-permission-list-by-user-id")
+    @ApiOperation(value = "Get permission list by user id", notes = "Get permission list by user id")
+    public ResponseBodyBean<GetPermissionListByUserIdResponse> getPermissionListByUserId(@Valid @RequestBody GetPermissionListByUserIdPayload payload) {
+        return ResponseBodyBean.ofSuccess(permissionService.getPermissionListByUserId(payload));
     }
 }
