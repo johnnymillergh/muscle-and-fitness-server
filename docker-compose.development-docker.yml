@@ -62,8 +62,8 @@ services:
       exrx_net_crawler_network:
         ipv4_address: 172.11.239.14
 
-  zipkin:
-    container_name: openzipkin/zipkin
+  open-zipkin:
+    container_name: open-zipkin
     image: openzipkin/zipkin
     # Environment settings are defined here https://github.com/openzipkin/zipkin/blob/master/zipkin-server/README.md#environment-variables
     environment:
