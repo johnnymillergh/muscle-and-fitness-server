@@ -1,8 +1,8 @@
 version: "3.7"
 
 services:
-  mysql-server:
-    container_name: mysql-server-m&f-dev_dkr
+  mysql:
+    container_name: mysql-m&f-dev_dkr
     image: "mysql:latest"
     environment:
       MYSQL_ROOT_PASSWORD: "jm@mysql"
@@ -15,9 +15,9 @@ services:
       exrx_net_crawler_network:
         ipv4_address: 172.16.238.10
 
-  redis-server:
-    container_name: redis-server-m&f-dev_dkr
-    image: redis:latest
+  redis:
+    container_name: redis-m&f-dev_dkr
+    image: redis:6.0.1
     ports:
       - "6379:6379"
     restart: always
@@ -27,8 +27,8 @@ services:
     command: "redis-server /usr/local/etc/redis/redis.conf"
     ipv4_address: 172.16.238.11
 
-  atmoz-sftp-server:
-    container_name: atmoz-sftp-server-m&f-dev_dkr
+  atmoz-sftp:
+    container_name: atmoz-sftp-m&f-dev_dkr
     image: atmoz/sftp:latest
     ports:
       - "23:22"
