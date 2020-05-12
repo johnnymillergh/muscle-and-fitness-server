@@ -17,11 +17,11 @@
         <developerUrl>https://www.linkedin.com/in/ijohnnymiller</developerUrl>
         <service-registry.port>8760</service-registry.port>
         <spring-boot-admin.port>8761</spring-boot-admin.port>
-        <api-portal.port>8763</api-portal.port>
-        <gateway.port>8080</gateway.port>
+        <api-portal.port>8762</api-portal.port>
         <auth-center.port>8071</auth-center.port>
         <exercise-mis.port>8072</exercise-mis.port>
         <muscle-mis.port>8073</muscle-mis.port>
+        <gateway.port>8080</gateway.port>
         <java.version>11</java.version>
         <spring-cloud.version>Hoxton.SR4</spring-cloud.version>
         <spring-content.version>1.0.0.M5</spring-content.version>

@@ -13,7 +13,7 @@ services:
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     networks:
       exrx_net_crawler_network:
-        ipv4_address: 172.16.238.10
+        ipv4_address: 172.16.238.1
 
   redis:
     container_name: redis-m&f-dev_dkr
@@ -25,7 +25,7 @@ services:
       - /Users/johnny/docker-file-mapping/redis-m&f/data:/data
       - /Users/johnny/docker-file-mapping/redis-m&f/redis.conf:/usr/local/etc/redis/redis.conf
     command: "redis-server /usr/local/etc/redis/redis.conf"
-    ipv4_address: 172.16.238.11
+    ipv4_address: 172.16.238.2
 
   atmoz-sftp:
     container_name: atmoz-sftp-m&f-dev_dkr
@@ -38,29 +38,7 @@ services:
     command: "johnny:atmoz@sftp:::upload"
     networks:
       exrx_net_crawler_network:
-        ipv4_address: 172.16.238.12
-
-  service-registry:
-    container_name: service-registry-dev_dkr
-    image: "ijohnnymiller/service-registry-dev_dkr:${TAG}"
-    ports:
-      - "8760:8760"
-    volumes:
-      - /Users/johnny/docker-file-mapping/service-registry:/logs-dev_dkr
-    networks:
-      exrx_net_crawler_network:
-        ipv4_address: 172.11.239.13
-
-  spring-boot-admin:
-    container_name: spring-boot-admin-dev_dkr
-    image: "ijohnnymiller/spring-boot-admin-dev_dkr:${TAG}"
-    ports:
-      - "8761:8761"
-    volumes:
-      - /Users/johnny/docker-file-mapping/spring-boot-admin:/logs-dev_dkr
-    networks:
-      exrx_net_crawler_network:
-        ipv4_address: 172.11.239.14
+        ipv4_address: 172.16.238.3
 
   open-zipkin:
     container_name: open-zipkin
@@ -83,7 +61,40 @@ services:
       # - 9410:9410
     networks:
       exrx_net_crawler_network:
-        ipv4_address: 172.11.239.15
+        ipv4_address: 172.11.239.4
+
+  service-registry:
+    container_name: service-registry-dev_dkr
+    image: "ijohnnymiller/service-registry-dev_dkr:${TAG}"
+    ports:
+      - "8760:8760"
+    volumes:
+      - /Users/johnny/docker-file-mapping/muscle-and-fitness-server:/logs-dev_dkr
+    networks:
+      exrx_net_crawler_network:
+        ipv4_address: 172.11.239.5
+
+  spring-boot-admin:
+    container_name: spring-boot-admin-dev_dkr
+    image: "ijohnnymiller/spring-boot-admin-dev_dkr:${TAG}"
+    ports:
+      - "8761:8761"
+    volumes:
+      - /Users/johnny/docker-file-mapping/muscle-and-fitness-server:/logs-dev_dkr
+    networks:
+      exrx_net_crawler_network:
+        ipv4_address: 172.11.239.6
+
+  api-portal:
+    container_name: api-portal-dev_dkr
+    image: "ijohnnymiller/api-portal-dev_dkr:${TAG}"
+    ports:
+      - "8762:8762"
+    volumes:
+      - /Users/johnny/docker-file-mapping/muscle-and-fitness-server:/logs-dev_dkr
+    networks:
+      exrx_net_crawler_network:
+        ipv4_address: 172.11.239.7
 
   auth-center:
     container_name: auth-center-dev_dkr
@@ -91,10 +102,10 @@ services:
     ports:
       - "8770:8770"
     volumes:
-      - /Users/johnny/docker-file-mapping/auth-center:/logs-dev_dkr
+      - /Users/johnny/docker-file-mapping/muscle-and-fitness-server:/logs-dev_dkr
     networks:
       exrx_net_crawler_network:
-        ipv4_address: 172.11.239.16
+        ipv4_address: 172.11.239.8
 
   exercise-mis:
     container_name: exercise-mis-dev_dkr
@@ -102,10 +113,10 @@ services:
     ports:
       - "8771:8771"
     volumes:
-      - /Users/johnny/docker-file-mapping/exercise-mis:/logs-dev_dkr
+      - /Users/johnny/docker-file-mapping/muscle-and-fitness-server:/logs-dev_dkr
     networks:
       exrx_net_crawler_network:
-        ipv4_address: 172.11.239.16
+        ipv4_address: 172.11.239.9
 
   muscle-mis:
     container_name: muscle-mis-dev_dkr
@@ -116,7 +127,18 @@ services:
       - /Users/johnny/docker-file-mapping/muscle-mis:/logs-dev_dkr
     networks:
       exrx_net_crawler_network:
-        ipv4_address: 172.11.239.17
+        ipv4_address: 172.11.239.10
+
+  gateway:
+    container_name: gateway-dev_dkr
+    image: "ijohnnymiller/gateway-dev_dkr:${TAG}"
+    ports:
+      - "8080:8080"
+    volumes:
+      - /Users/johnny/docker-file-mapping/muscle-and-fitness-server:/logs-dev_dkr
+    networks:
+      exrx_net_crawler_network:
+        ipv4_address: 172.11.239.254
 
 networks:
   exrx_net_crawler_network:
