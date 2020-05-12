@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * <h1>ErrorController</h1>
@@ -38,6 +39,14 @@ public class ErrorController extends BasicErrorController {
         val httpStatus = getStatus(request);
         val body = getErrorAttributes(request, isIncludeStackTrace(request, MediaType.ALL));
         body.put("message", httpStatus.getReasonPhrase());
+        val optionalTrace = Optional.ofNullable(body.get("trace"));
+        optionalTrace.ifPresent(trace -> {
+            val message = body.get("message");
+            val firstLineOfTrace = trace.toString().split("\\n")[0];
+            val joinedMessage = String.format("%s %s", message, firstLineOfTrace);
+            body.put("message", joinedMessage);
+            body.put("trace", "Trace has been simplified. Refer to 'message'");
+        });
         log.error("Captured HTTP request error. Response body = {}", body);
         return new ResponseEntity<>(body, httpStatus);
     }
