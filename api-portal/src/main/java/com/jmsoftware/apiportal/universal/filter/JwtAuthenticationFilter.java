@@ -10,6 +10,7 @@ import com.jmsoftware.common.constant.HttpStatus;
 import com.jmsoftware.common.exception.SecurityException;
 import com.jmsoftware.common.util.RequestUtil;
 import com.jmsoftware.common.util.ResponseUtil;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -95,7 +96,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         log.info("JWT authentication passed! Authentication: {}", authentication);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        filterChain.doFilter(request, response);
+        try {
+            filterChain.doFilter(request, response);
+        } catch (Exception e) {
+            log.error("Exception occurred when filtering request. Exception message: {}", e.getMessage(), e);
+            val exception = recursiveTraverseExceptionCause(e);
+            if (exception instanceof SecurityException) {
+                val code = ((SecurityException) exception).getCode();
+                final var httpStatus = HttpStatus.fromCode(code);
+                ResponseUtil.renderJson(response, httpStatus, exception.getMessage());
+                return;
+            }
+            ResponseUtil.renderJson(response, HttpStatus.ERROR, e.getMessage());
+        }
     }
 
     /**
@@ -154,5 +167,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         }
         return false;
+    }
+
+    /**
+     * Recursive traverse exception cause exception.
+     *
+     * @param exception the exception
+     * @return the exception
+     * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com
+     * @date 5/13/20 4:51 PM
+     */
+    private Exception recursiveTraverseExceptionCause(@NonNull Exception exception) {
+        if (ObjectUtil.isNotNull(exception.getCause())) {
+            return recursiveTraverseExceptionCause((Exception) exception.getCause());
+        }
+        return exception;
     }
 }
