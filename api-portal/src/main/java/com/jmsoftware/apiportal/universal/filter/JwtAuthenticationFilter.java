@@ -63,6 +63,31 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+        doJwtAuthentication(request, response);
+        try {
+            filterChain.doFilter(request, response);
+        } catch (Exception e) {
+            log.error("Exception occurred when filtering request. Exception message: {}", e.getMessage(), e);
+            val exception = recursiveTraverseExceptionCause(e);
+            if (exception instanceof SecurityException) {
+                val code = ((SecurityException) exception).getCode();
+                final var httpStatus = HttpStatus.fromCode(code);
+                ResponseUtil.renderJson(response, httpStatus, exception.getMessage());
+                return;
+            }
+            ResponseUtil.renderJson(response, HttpStatus.ERROR, e.getMessage());
+        }
+    }
+
+    /**
+     * Do JWT authentication. This method will not throw any exceptions.
+     *
+     * @param request  the request
+     * @param response the response
+     * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com
+     * @date 5/13/20 5:30 PM
+     */
+    private void doJwtAuthentication(HttpServletRequest request, HttpServletResponse response) {
         val jwt = jwtServiceImpl.getJwtFromRequest(request);
         if (StrUtil.isBlank(jwt)) {
             log.error("Invalid JWT, the JWT of request is empty.");
@@ -96,19 +121,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         log.info("JWT authentication passed! Authentication: {}", authentication);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        try {
-            filterChain.doFilter(request, response);
-        } catch (Exception e) {
-            log.error("Exception occurred when filtering request. Exception message: {}", e.getMessage(), e);
-            val exception = recursiveTraverseExceptionCause(e);
-            if (exception instanceof SecurityException) {
-                val code = ((SecurityException) exception).getCode();
-                final var httpStatus = HttpStatus.fromCode(code);
-                ResponseUtil.renderJson(response, httpStatus, exception.getMessage());
-                return;
-            }
-            ResponseUtil.renderJson(response, HttpStatus.ERROR, e.getMessage());
-        }
     }
 
     /**
