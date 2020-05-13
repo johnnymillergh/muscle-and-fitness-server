@@ -38,6 +38,12 @@ feign:
         connectTimeout: 5000
         readTimeout: 10000
         loggerLevel: full
+  compression:
+    request:
+      enabled: true
+    response:
+      enabled: true
+      useGzipDecoder: true
 
 management:
   endpoints:
