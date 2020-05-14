@@ -1,13 +1,17 @@
 version: "3.7"
 
 services:
+  ################################################################################
+  #                      Middleware of Muscle and Fitness                        #
+  ################################################################################
   mysql:
     container_name: mysql-mf-dev_dkr
-    image: "mysql:latest"
+    image: mysql:latest
     environment:
       MYSQL_ROOT_PASSWORD: "jm@mysql"
     ports:
       - "3306:3306"
+    restart: always
     volumes:
       - /Users/johnny/docker-file-mapping/mysql-mf:/var/lib/mysql
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
@@ -17,7 +21,7 @@ services:
 
   redis:
     container_name: redis-mf-dev_dkr
-    image: redis:6.0.1
+    image: redis:latest
     ports:
       - "6379:6379"
     restart: always
@@ -43,13 +47,16 @@ services:
         ipv4_address: 172.16.1.12
 
   open-zipkin:
-    container_name: open-zipkin-mf
+    container_name: open-zipkin-mf-dev_dkr
     image: openzipkin/zipkin
     # Environment settings are defined here https://github.com/openzipkin/zipkin/blob/master/zipkin-server/README.md#environment-variables
-    # environment:
-    # - STORAGE_TYPE=mysql
-    # Point the zipkin at the storage backend
-    # - MYSQL_HOST=mysql
+    environment:
+      - STORAGE_TYPE=mysql
+      - MYSQL_DB=zipkin
+      - MYSQL_USER=root
+      - MYSQL_PASS=jm@mysql
+      - MYSQL_HOST=172.16.1.10
+      - MYSQL_TCP_PORT=3306
     # Uncomment to enable scribe
     # - SCRIBE_ENABLED=true
     # Uncomment to enable self-tracing
@@ -61,20 +68,25 @@ services:
       - 9411:9411
       # Uncomment if you set SCRIBE_ENABLED=true
       # - 9410:9410
+    restart: always
     networks:
       muscle_and_fitness_network:
         ipv4_address: 172.16.1.13
 
+  ################################################################################
+  #                     Microservice of Muscle and Fitness                       #
+  ################################################################################
   service-registry:
     container_name: service-registry-dev_dkr
     image: "ijohnnymiller/service-registry-dev_dkr:${TAG}"
     ports:
       - "8760:8760"
+    restart: always
     volumes:
       - /Users/johnny/docker-file-mapping/muscle-and-fitness-server:/logs-dev_dkr
     networks:
       muscle_and_fitness_network:
-        ipv4_address: 172.16.1.14
+        ipv4_address: 172.16.1.20
 
   spring-boot-admin:
     container_name: spring-boot-admin-dev_dkr
@@ -85,57 +97,65 @@ services:
       - /Users/johnny/docker-file-mapping/muscle-and-fitness-server:/logs-dev_dkr
     networks:
       muscle_and_fitness_network:
-        ipv4_address: 172.16.1.15
+        ipv4_address: 172.16.1.21
 
   api-portal:
     container_name: api-portal-dev_dkr
     image: "ijohnnymiller/api-portal-dev_dkr:${TAG}"
     ports:
       - "8762:8762"
+    restart: always
     volumes:
       - /Users/johnny/docker-file-mapping/muscle-and-fitness-server:/logs-dev_dkr
     networks:
       muscle_and_fitness_network:
-        ipv4_address: 172.16.1.16
+        ipv4_address: 172.16.1.22
 
   auth-center:
     container_name: auth-center-dev_dkr
     image: "ijohnnymiller/auth-center-dev_dkr:${TAG}"
     ports:
       - "8770:8770"
+    restart: always
     volumes:
       - /Users/johnny/docker-file-mapping/muscle-and-fitness-server:/logs-dev_dkr
     networks:
       muscle_and_fitness_network:
-        ipv4_address: 172.16.1.17
+        ipv4_address: 172.16.1.23
 
   exercise-mis:
     container_name: exercise-mis-dev_dkr
     image: "ijohnnymiller/exercise-mis-dev_dkr:${TAG}"
     ports:
       - "8771:8771"
+    restart: always
     volumes:
       - /Users/johnny/docker-file-mapping/muscle-and-fitness-server:/logs-dev_dkr
     networks:
       muscle_and_fitness_network:
-        ipv4_address: 172.16.1.18
+        ipv4_address: 172.16.1.24
 
   muscle-mis:
     container_name: muscle-mis-dev_dkr
     image: "ijohnnymiller/muscle-mis-dev_dkr:${TAG}"
     ports:
       - "8772:8772"
+    restart: always
     volumes:
       - /Users/johnny/docker-file-mapping/muscle-mis:/logs-dev_dkr
     networks:
       muscle_and_fitness_network:
-        ipv4_address: 172.16.1.19
+        ipv4_address: 172.16.1.25
 
+  ################################################################################
+  #                       Gateway for Muscle and Fitness                         #
+  ################################################################################
   gateway:
     container_name: gateway-dev_dkr
     image: "ijohnnymiller/gateway-dev_dkr:${TAG}"
     ports:
       - "8080:8080"
+    restart: always
     volumes:
       - /Users/johnny/docker-file-mapping/muscle-and-fitness-server:/logs-dev_dkr
     networks:
@@ -143,6 +163,9 @@ services:
         # Gateway uses the last IP of the subnet
         ipv4_address: 172.16.1.255
 
+################################################################################
+#                       Network for Muscle and Fitness                         #
+################################################################################
 networks:
   muscle_and_fitness_network:
     ipam:
