@@ -51,19 +51,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @SuppressWarnings("NullableProblems")
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        log.info("JWT authentication is filtering [{}] client requested access. URL: {}, HTTP method: {}",
-                 RequestUtil.getRequestIpAndPort(request), request.getRequestURL(), request.getMethod());
+        val requesterIpAndPort = RequestUtil.getRequestIpAndPort(request);
+        val method = request.getMethod();
+        val requestUrl = request.getRequestURL();
+        log.info("JWT authentication is filtering requester({}) access. Resource: [{}] {}",
+                 requesterIpAndPort, method, requestUrl);
         if (customConfiguration.getWebSecurityDisabled()) {
             log.warn("The web security is disabled! Might face severe web security issue.");
             filterChain.doFilter(request, response);
             return;
         }
         if (checkIgnores(request)) {
-            log.info("The request can be ignored. URL: {}", request.getRequestURL());
+            log.info("The resource can be ignored. Resource: [{}] {}", method, requestUrl);
             filterChain.doFilter(request, response);
             return;
         }
-        doJwtAuthentication(request, response);
+        val passedJwtAuthentication = doJwtAuthentication(request, response);
+        if (!passedJwtAuthentication) {
+            log.warn("The requester did not pass JWT authentication. Requester: {}. Resource: [{}] {}", requesterIpAndPort,
+                     method, requestUrl);
+            return;
+        }
         try {
             filterChain.doFilter(request, response);
         } catch (Exception e) {
@@ -84,15 +92,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
      *
      * @param request  the request
      * @param response the response
+     * @return the boolean
      * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com
-     * @date 5/13/20 5:30 PM
+     * @date 5 /13/20 5:30 PM
      */
-    private void doJwtAuthentication(HttpServletRequest request, HttpServletResponse response) {
+    private boolean doJwtAuthentication(HttpServletRequest request, HttpServletResponse response) {
         val jwt = jwtServiceImpl.getJwtFromRequest(request);
         if (StrUtil.isBlank(jwt)) {
             log.error("Invalid JWT, the JWT of request is empty.");
             ResponseUtil.renderJson(response, HttpStatus.UNAUTHORIZED, HttpStatus.UNAUTHORIZED.getMessage());
-            return;
+            return false;
         }
         String username;
         try {
@@ -102,7 +111,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                       e.getMessage(), jwt);
             var httpStatus = HttpStatus.fromCode(e.getCode());
             ResponseUtil.renderJson(response, httpStatus, httpStatus.getMessage());
-            return;
+            return false;
         }
         UserDetails userDetails;
         try {
@@ -112,15 +121,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                       e.getMessage(), username);
             if (e instanceof UsernameNotFoundException) {
                 ResponseUtil.renderJson(response, HttpStatus.UNAUTHORIZED, HttpStatus.UNAUTHORIZED.getMessage());
-                return;
+                return false;
             }
             ResponseUtil.renderJson(response, HttpStatus.ERROR, e.getMessage());
-            return;
+            return false;
         }
         val authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         log.info("JWT authentication passed! Authentication: {}", authentication);
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        return true;
     }
 
     /**
