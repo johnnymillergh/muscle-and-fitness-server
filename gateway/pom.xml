@@ -50,7 +50,7 @@
                 </executions>
                 <configuration>
                     <from>
-                        <image>openjdk:11.0.5-slim</image>
+                        <image>openjdk:11.0.6-slim</image>
                     </from>
                     <to>
                         <image>docker.io/ijohnnymiller/${project.artifactId}-${envAlias}</image>
