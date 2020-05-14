@@ -1,5 +1,36 @@
 version: "3.7"
 
+################################################################################
+#                        ATTENTIONS of Docker Compose                          #
+################################################################################
+# 1. Pattern of 'container_name' must be:                                      #
+#    [service-name]-[system-short-name]-[environment-alias]                    #
+#    For instance, there is a 'MySQL service' for 'Muscle and Fitness Server'. #
+# 2. ${TAG} is defined in file '.env'.                                         #
+# 3. The differences between each environment docker-compose.yml:              #
+#    a. Environmental suffix. There are 4 types of environmental suffix:       #
+#       * '-dev_dkr'                                                           #
+#       * '-test'                                                              #
+#       * '-stage'                                                             #
+#       * '-prod'                                                              #
+#    b. 'subnet' and 'ipv4_address'.                                           #
+# 4. IP range definition (for instance of 'development-docker'):               #
+#    a. 172.16.1.10 ~ 172.16.1.19:  middleware of Muscle and Fitness           #
+#    b. 172.16.1.19 ~ 172.16.1.254: microservice of Muscle and Fitness         #
+#    c. 172.16.1.255:               gateway for Muscle and Fitness             #
+################################################################################
+
+################################################
+#       Private Network Subnet Assignment      #
+################################################
+#     Subnet      # Environment (profile's ID) #
+#-----------------#----------------------------#
+#  172.16.1.0/24  #     development-docker     #
+#  172.16.2.0/24  #            test            #
+#  172.16.3.0/24  #           stage            #
+#  172.16.4.0/24  #         production         #
+################################################
+
 services:
   ################################################################################
   #                      Middleware of Muscle and Fitness                        #
