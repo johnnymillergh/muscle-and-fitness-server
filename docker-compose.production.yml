@@ -18,6 +18,11 @@ version: "3.7"
 #    a. 172.16.1.10 ~ 172.16.1.19:  middleware of Muscle and Fitness           #
 #    b. 172.16.1.19 ~ 172.16.1.254: microservice of Muscle and Fitness         #
 #    c. 172.16.1.255:               gateway for Muscle and Fitness             #
+# 5. Conceal some service ports:                                               #
+#    a. api-portal                                                             #
+#    b. auth-center                                                            #
+#    c. exercise-mis                                                           #
+#    d. muscle-mis                                                             #
 ################################################################################
 
 ################################################
@@ -133,8 +138,6 @@ services:
   api-portal:
     container_name: api-portal-prod
     image: "ijohnnymiller/api-portal-prod:${TAG}"
-    ports:
-      - "8762:8762"
     restart: always
     volumes:
       - /Users/johnny/docker-file-mapping/logs-mf-prod:/logs-prod
@@ -145,8 +148,6 @@ services:
   auth-center:
     container_name: auth-center-prod
     image: "ijohnnymiller/auth-center-prod:${TAG}"
-    ports:
-      - "8770:8770"
     restart: always
     volumes:
       - /Users/johnny/docker-file-mapping/logs-mf-prod:/logs-prod
@@ -157,8 +158,6 @@ services:
   exercise-mis:
     container_name: exercise-mis-prod
     image: "ijohnnymiller/exercise-mis-prod:${TAG}"
-    ports:
-      - "8771:8771"
     restart: always
     volumes:
       - /Users/johnny/docker-file-mapping/logs-mf-prod:/logs-prod
@@ -169,8 +168,6 @@ services:
   muscle-mis:
     container_name: muscle-mis-prod
     image: "ijohnnymiller/muscle-mis-prod:${TAG}"
-    ports:
-      - "8772:8772"
     restart: always
     volumes:
       - /Users/johnny/docker-file-mapping/logs-mf-prod:/logs-prod

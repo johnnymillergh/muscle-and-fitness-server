@@ -18,6 +18,11 @@ version: "3.7"
 #    a. 172.16.1.10 ~ 172.16.1.19:  middleware of Muscle and Fitness           #
 #    b. 172.16.1.19 ~ 172.16.1.254: microservice of Muscle and Fitness         #
 #    c. 172.16.1.255:               gateway for Muscle and Fitness             #
+# 5. Conceal some service ports:                                               #
+#    a. api-portal                                                             #
+#    b. auth-center                                                            #
+#    c. exercise-mis                                                           #
+#    d. muscle-mis                                                             #
 ################################################################################
 
 ################################################
