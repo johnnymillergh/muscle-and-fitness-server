@@ -25,10 +25,8 @@ public class RequestFilter extends OncePerRequestFilter {
     @SuppressWarnings("NullableProblems")
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws IOException, ServletException {
-        log.info("[{}] Client requested access. Method: {}, URL: {}",
-                 RequestUtil.getRequestIpAndPort(request),
-                 request.getMethod(),
-                 request.getRequestURL());
+        log.info("The requester({}) requested resource. Resource: [{}] {}", RequestUtil.getRequestIpAndPort(request),
+                 request.getMethod(), request.getRequestURL());
         filterChain.doFilter(request, response);
     }
 }
