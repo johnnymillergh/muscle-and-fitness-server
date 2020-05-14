@@ -138,8 +138,6 @@ services:
   api-portal:
     container_name: api-portal-dev_dkr
     image: "ijohnnymiller/api-portal-dev_dkr:${TAG}"
-    ports:
-      - "8762:8762"
     restart: always
     volumes:
       - /Users/johnny/docker-file-mapping/logs-mf-dev_dkr:/logs-dev_dkr
@@ -150,8 +148,6 @@ services:
   auth-center:
     container_name: auth-center-dev_dkr
     image: "ijohnnymiller/auth-center-dev_dkr:${TAG}"
-    ports:
-      - "8770:8770"
     restart: always
     volumes:
       - /Users/johnny/docker-file-mapping/logs-mf-dev_dkr:/logs-dev_dkr
@@ -162,8 +158,6 @@ services:
   exercise-mis:
     container_name: exercise-mis-dev_dkr
     image: "ijohnnymiller/exercise-mis-dev_dkr:${TAG}"
-    ports:
-      - "8771:8771"
     restart: always
     volumes:
       - /Users/johnny/docker-file-mapping/logs-mf-dev_dkr:/logs-dev_dkr
@@ -174,8 +168,6 @@ services:
   muscle-mis:
     container_name: muscle-mis-dev_dkr
     image: "ijohnnymiller/muscle-mis-dev_dkr:${TAG}"
-    ports:
-      - "8772:8772"
     restart: always
     volumes:
       - /Users/johnny/docker-file-mapping/logs-mf-dev_dkr:/logs-dev_dkr
