@@ -16,8 +16,8 @@ version: "3.7"
 #    b. 'subnet' and 'ipv4_address'.                                           #
 # 4. IP range definition (for instance of 'development-docker'):               #
 #    a. 172.16.1.10 ~ 172.16.1.19:  middleware of Muscle and Fitness           #
-#    b. 172.16.1.19 ~ 172.16.1.254: microservice of Muscle and Fitness         #
-#    c. 172.16.1.255:               gateway for Muscle and Fitness             #
+#    b. 172.16.1.19 ~ 172.16.1.253: microservice of Muscle and Fitness         #
+#    c. 172.16.1.254:               gateway for Muscle and Fitness             #
 # 5. Conceal some service ports:                                               #
 #    a. api-portal                                                             #
 #    b. auth-center                                                            #
@@ -189,7 +189,7 @@ services:
     networks:
       muscle_and_fitness_network:
         # Gateway uses the last IP of the subnet
-        ipv4_address: 172.16.2.255
+        ipv4_address: 172.16.2.254
 
 ################################################################################
 #                       Network for Muscle and Fitness                         #
