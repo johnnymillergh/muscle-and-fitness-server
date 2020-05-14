@@ -1,50 +1,176 @@
 version: "3.7"
 
 services:
-  mysql-server:
-    container_name: mysql-server-enc-dev_dkr
-    image: "mysql:latest"
+  ################################################################################
+  #                      Middleware of Muscle and Fitness                        #
+  ################################################################################
+  mysql:
+    container_name: mysql-mf-prod
+    image: mysql:latest
     environment:
       MYSQL_ROOT_PASSWORD: "jm@mysql"
     ports:
       - "3306:3306"
+    restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/mysql-8.0.19-1debian9:/var/lib/mysql
+      - /Users/johnny/docker-file-mapping/mysql-mf:/var/lib/mysql
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     networks:
-      exrx_net_crawler_network:
-        ipv4_address: 172.16.238.10
+      muscle_and_fitness_network:
+        ipv4_address: 172.16.4.10
 
-  atmoz-sftp-server:
-    container_name: atmoz-sftp-server-enc-dev_dkr
+  redis:
+    container_name: redis-mf-prod
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    restart: always
+    volumes:
+      - /Users/johnny/docker-file-mapping/redis-mf-prod/data:/data
+      - /Users/johnny/docker-file-mapping/redis-mf-prod/redis.conf:/usr/local/etc/redis/redis.conf
+    command: "redis-server /usr/local/etc/redis/redis.conf"
+    networks:
+      muscle_and_fitness_network:
+        ipv4_address: 172.16.4.11
+
+  atmoz-sftp:
+    container_name: atmoz-sftp-mf-prod
     image: atmoz/sftp:latest
     ports:
       - "23:22"
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/atmoz-sftp:/home/johnny/upload
+      - /Users/johnny/docker-file-mapping/atmoz-sftp-mf-prod:/home/johnny/upload
     command: "johnny:atmoz@sftp:::upload"
     networks:
-      exrx_net_crawler_network:
-        ipv4_address: 172.16.238.11
+      muscle_and_fitness_network:
+        ipv4_address: 172.16.4.12
 
-  exrx-net-crawler-server:
-    depends_on:
-      - mysql-server
-      - atmoz-sftp-server
-    container_name: exrx-net-crawler-server-dev_dkr
-    image: "ijohnnymiller/exrx-net-crawler-server-dev_dkr:${TAG}"
+  open-zipkin:
+    container_name: open-zipkin-mf-prod
+    image: openzipkin/zipkin
+    # Environment settings are defined here https://github.com/openzipkin/zipkin/blob/master/zipkin-server/README.md#environment-variables
+    environment:
+      - STORAGE_TYPE=mysql
+      - MYSQL_DB=zipkin
+      - MYSQL_USER=root
+      - MYSQL_PASS=jm@mysql
+      - MYSQL_HOST=172.16.4.10
+      - MYSQL_TCP_PORT=3306
+    # Uncomment to enable scribe
+    # - SCRIBE_ENABLED=true
+    # Uncomment to enable self-tracing
+    # - SELF_TRACING_ENABLED=true
+    # Uncomment to enable debug logging
+    # - JAVA_OPTS=-Dlogging.level.zipkin2=DEBUG
+    ports:
+      # Port used for the Zipkin UI and HTTP Api
+      - 9411:9411
+      # Uncomment if you set SCRIBE_ENABLED=true
+      # - 9410:9410
+    restart: always
+    networks:
+      muscle_and_fitness_network:
+        ipv4_address: 172.16.4.13
+
+  ################################################################################
+  #                     Microservice of Muscle and Fitness                       #
+  ################################################################################
+  service-registry:
+    container_name: service-registry-prod
+    image: "ijohnnymiller/service-registry-prod:${TAG}"
+    ports:
+      - "8760:8760"
+    restart: always
+    volumes:
+      - /Users/johnny/docker-file-mapping/logs-mf-prod:/logs-prod
+    networks:
+      muscle_and_fitness_network:
+        ipv4_address: 172.16.4.20
+
+  spring-boot-admin:
+    container_name: spring-boot-admin-prod
+    image: "ijohnnymiller/spring-boot-admin-prod:${TAG}"
+    ports:
+      - "8761:8761"
+    volumes:
+      - /Users/johnny/docker-file-mapping/logs-mf-prod:/logs-prod
+    networks:
+      muscle_and_fitness_network:
+        ipv4_address: 172.16.4.21
+
+  api-portal:
+    container_name: api-portal-prod
+    image: "ijohnnymiller/api-portal-prod:${TAG}"
+    ports:
+      - "8762:8762"
+    restart: always
+    volumes:
+      - /Users/johnny/docker-file-mapping/logs-mf-prod:/logs-prod
+    networks:
+      muscle_and_fitness_network:
+        ipv4_address: 172.16.4.22
+
+  auth-center:
+    container_name: auth-center-prod
+    image: "ijohnnymiller/auth-center-prod:${TAG}"
+    ports:
+      - "8770:8770"
+    restart: always
+    volumes:
+      - /Users/johnny/docker-file-mapping/logs-mf-prod:/logs-prod
+    networks:
+      muscle_and_fitness_network:
+        ipv4_address: 172.16.4.23
+
+  exercise-mis:
+    container_name: exercise-mis-prod
+    image: "ijohnnymiller/exercise-mis-prod:${TAG}"
+    ports:
+      - "8771:8771"
+    restart: always
+    volumes:
+      - /Users/johnny/docker-file-mapping/logs-mf-prod:/logs-prod
+    networks:
+      muscle_and_fitness_network:
+        ipv4_address: 172.16.4.24
+
+  muscle-mis:
+    container_name: muscle-mis-prod
+    image: "ijohnnymiller/muscle-mis-prod:${TAG}"
+    ports:
+      - "8772:8772"
+    restart: always
+    volumes:
+      - /Users/johnny/docker-file-mapping/logs-mf-prod:/logs-prod
+    networks:
+      muscle_and_fitness_network:
+        ipv4_address: 172.16.4.25
+
+  ################################################################################
+  #                       Gateway for Muscle and Fitness                         #
+  ################################################################################
+  gateway:
+    container_name: gateway-prod
+    image: "ijohnnymiller/gateway-prod:${TAG}"
     ports:
       - "8080:8080"
+    restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/exrx-net-crawler-server:/log-prod
+      - /Users/johnny/docker-file-mapping/logs-mf-prod:/logs-prod
     networks:
-      exrx_net_crawler_network:
-        ipv4_address: 172.11.239.12
+      muscle_and_fitness_network:
+        # Gateway uses the last IP of the subnet
+        ipv4_address: 172.16.4.255
 
+################################################################################
+#                       Network for Muscle and Fitness                         #
+################################################################################
 networks:
-  exrx_net_crawler_network:
+  muscle_and_fitness_network:
     ipam:
       driver: default
       config:
-        - subnet: "172.11.239.0/24"
+        # Private Network (20-bit block): https://en.wikipedia.org/wiki/Private_network
+        # IP range of the private network: https://ipgeolocation.io/browse/ipv4/172.16.4.0/24
+        - subnet: "172.16.4.0/24"
