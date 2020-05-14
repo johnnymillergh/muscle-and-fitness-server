@@ -1,6 +1,5 @@
 package com.jmsoftware.exercisemis.universal.aspect;
 
-import cn.hutool.core.util.NumberUtil;
 import cn.hutool.json.JSONUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,6 +13,9 @@ import org.aspectj.lang.annotation.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
+import java.time.Duration;
+import java.time.Instant;
 
 /**
  * <h1>RequestLogAspect</h1>
@@ -32,6 +34,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @Component
 @RequiredArgsConstructor
 public class WebRequestLogAspect {
+    private static final int MAX_LENGTH_OF_JSON_STRING = 500;
     private static final String LINE_SEPARATOR = System.lineSeparator();
     private final ObjectMapper mapper = new ObjectMapper();
 
@@ -83,21 +86,22 @@ public class WebRequestLogAspect {
      */
     @Around("requestLogPointcut()")
     public Object aroundHandleRequest(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        val startTime = System.currentTimeMillis();
+        val startInstant = Instant.now();
         val result = proceedingJoinPoint.proceed();
-        val elapsedTime = System.currentTimeMillis() - startTime;
+        val duration = Duration.between(startInstant, Instant.now());
         try {
-            var formattedStringifiedJson = JSONUtil.formatJsonStr(mapper.writeValueAsString(result));
-            if (formattedStringifiedJson.length() > 500) {
-                formattedStringifiedJson = formattedStringifiedJson.substring(0, 499).concat("…");
+            var formattedJsonString = JSONUtil.formatJsonStr(mapper.writeValueAsString(result));
+            if (formattedJsonString.length() > MAX_LENGTH_OF_JSON_STRING) {
+                val substring = formattedJsonString.substring(0, MAX_LENGTH_OF_JSON_STRING - 1);
+                formattedJsonString =
+                        String.format("%s… [The length(%d) of JSON string is larger than the maximum(%d)]", substring,
+                                      formattedJsonString.length(), MAX_LENGTH_OF_JSON_STRING);
             }
-            log.info("Response           :{}{}", LINE_SEPARATOR, formattedStringifiedJson);
+            log.info("Response           :{}{}", LINE_SEPARATOR, formattedJsonString);
         } catch (JsonProcessingException e) {
             log.info("Response (non-JSON): {}", result);
         }
-        log.info("Elapsed time       : {} s ({} ms)",
-                 NumberUtil.decimalFormat("0.00", elapsedTime / 1000D),
-                 elapsedTime);
+        log.info("Elapsed time       : {} ({} ms)", duration, duration.toMillis());
         return result;
     }
 
