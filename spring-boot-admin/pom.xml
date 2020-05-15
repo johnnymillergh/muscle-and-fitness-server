@@ -29,7 +29,7 @@
                 <executions>
                     <!-- Bind `jib:dockerBuild` to a Maven lifecycle `package`. Jib will build your image directly to a Docker daemon.  -->
                     <execution>
-                        <id>compilingPhaseJib</id>
+                        <id>buildDockerImagePhase</id>
                         <phase>package</phase>
                         <goals>
                             <goal>dockerBuild</goal>
@@ -37,7 +37,7 @@
                     </execution>
                     <!-- Bind `jib:build` to a Maven lifecycle `verify`. Jib will build and push image to image registry. -->
                     <execution>
-                        <id>packagingPhaseJib</id>
+                        <id>buildAndPushDockerImagePhase</id>
                         <phase>verify</phase>
                         <goals>
                             <goal>build</goal>

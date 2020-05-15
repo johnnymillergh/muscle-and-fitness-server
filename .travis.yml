@@ -16,7 +16,9 @@ install: skip
 # We customize the script for compiling Maven application. For more about customizing the build:
 # https://docs.travis-ci.com/user/customizing-the-build
 script:
-  - mvn package -DskipTests=true -Dmaven.javadoc.skip=true -B -V -P development-docker
+  - echo "Starting to build. DOCKER_HUB_USERNAME:"
+  - echo "$DOCKER_HUB_USERNAME"
+  - "mvn verify -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Djib.to.auth.username=$DOCKER_HUB_USERNAME -Djib.to.auth.password=$DOCKER_HUB_PASSWORD -P development-docker"
 
 # https://docs.travis-ci.com/user/notifications#default-notification-settings
 notifications:
