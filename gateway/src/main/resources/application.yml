@@ -28,7 +28,7 @@ eureka:
     metadata-map:
       # needed to trigger info and endpoint update after restart
       startup: ${random.int}
-    instance-id: ${spring.cloud.client.hostname}:${spring.cloud.client.ip-address}:${server.port}
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}@${spring.cloud.client.hostname}@${spring.application.name}${random.int}
     prefer-ip-address: true
   client:
     registryFetchIntervalSeconds: 5
