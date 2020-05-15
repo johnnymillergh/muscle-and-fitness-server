@@ -1,7 +1,5 @@
 server:
   port: @exercise-mis.port@
-  #  servlet:
-  #    context-path: /@project.artifactId@-@envAlias@
   tomcat:
     uri-encoding: @project.build.sourceEncoding@
 
@@ -74,9 +72,6 @@ mybatis-plus:
   # mapper-locations should start with `classpath*` prefix
   # when project is based on Maven multi-module to load XML mapper in different jar
   mapper-locations: classpath*:/mapper/**/*Mapper.xml
-  global-config:
-    db-config:
-      table-prefix: t_
 
 logging:
   config: classpath:configuration/logback/logback-@env@.xml

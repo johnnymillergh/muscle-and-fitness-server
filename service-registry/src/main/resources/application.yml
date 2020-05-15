@@ -1,7 +1,5 @@
 server:
   port: @service-registry.port@
-#  servlet:
-#    context-path: /@project.artifactId@-@envAlias@
   tomcat:
     uri-encoding: @project.build.sourceEncoding@
 

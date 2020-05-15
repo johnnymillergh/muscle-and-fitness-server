@@ -1,7 +1,5 @@
 server:
   port: @port@
-#  servlet:
-#    context-path: /@project.artifactId@-@envAlias@
   tomcat:
     uri-encoding: @project.build.sourceEncoding@
 
