@@ -31,6 +31,19 @@ spring:
       # The default is 0. We set it as 0 too.
       file-size-threshold: 0
 
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    health-check-url-path: /actuator/health
+    status-page-url-path: /
+    metadata-map:
+      # needed to trigger info and endpoint update after restart
+      startup: ${random.int}
+    instance-id: ${spring.cloud.client.hostname}:${spring.cloud.client.ip-address}:${server.port}
+    prefer-ip-address: true
+  client:
+    registryFetchIntervalSeconds: 5
+
 feign:
   client:
     config:

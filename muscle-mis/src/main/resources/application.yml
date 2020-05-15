@@ -19,6 +19,19 @@ spring:
     sampler:
       probability: 1.0
 
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    health-check-url-path: /actuator/health
+    status-page-url-path: /
+    metadata-map:
+      # needed to trigger info and endpoint update after restart
+      startup: ${random.int}
+    instance-id: ${spring.cloud.client.hostname}:${spring.cloud.client.ip-address}:${server.port}
+    prefer-ip-address: true
+  client:
+    registryFetchIntervalSeconds: 5
+
 feign:
   client:
     config:
