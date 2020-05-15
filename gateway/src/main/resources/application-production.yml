@@ -3,6 +3,10 @@ eureka:
     serviceUrl:
       defaultZone: http://172.16.4.20:8760/eureka/
 
+spring:
+  zipkin:
+    base-url: http://172.16.4.13:9411
+
 custom:
   configuration:
     allowed-application-list:
