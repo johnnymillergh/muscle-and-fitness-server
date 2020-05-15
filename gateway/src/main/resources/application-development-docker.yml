@@ -5,5 +5,5 @@ eureka:
 
 custom:
   configuration:
-    # Leave `allowed-application-list` empty
     allowed-application-list:
+      - api-portal

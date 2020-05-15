@@ -1,17 +1,9 @@
 eureka:
-  instance:
-    leaseRenewalIntervalInSeconds: 10
-    health-check-url-path: /actuator/health
-    metadata-map:
-      # needed to trigger info and endpoint update after restart
-      startup: ${random.int}
   client:
-    registryFetchIntervalSeconds: 5
     serviceUrl:
-      defaultZone: http://localhost:8760/eureka/
+      defaultZone: http://172.16.3.20:8760/eureka/
 
 custom:
   configuration:
-    # Stage swagger can only see "api-portal"
     allowed-application-list:
-      - "api-portal"
+      - api-portal
