@@ -18,11 +18,14 @@ version: "3.7"
 #    a. 172.16.1.10 ~ 172.16.1.19:  middleware of Muscle and Fitness           #
 #    b. 172.16.1.19 ~ 172.16.1.253: microservice of Muscle and Fitness         #
 #    c. 172.16.1.254:               gateway for Muscle and Fitness             #
+#       CAUTION: 172.16.1.255 is not available for container.                  #
 # 5. Conceal some service ports:                                               #
 #    a. api-portal                                                             #
 #    b. auth-center                                                            #
 #    c. exercise-mis                                                           #
 #    d. muscle-mis                                                             #
+# 6. Define timezone for environment variable: Asia/Hong_Kong                  #
+# 7. Define 'depends_on' for service                                           #
 ################################################################################
 
 ################################################
@@ -45,6 +48,7 @@ services:
     image: mysql:latest
     environment:
       MYSQL_ROOT_PASSWORD: "jm@mysql"
+      TZ: Asia/Hong_Kong
     ports:
       - "3306:3306"
     restart: always
@@ -64,6 +68,8 @@ services:
     volumes:
       - /Users/johnny/docker-file-mapping/redis-mf-prod/data:/data
       - /Users/johnny/docker-file-mapping/redis-mf-prod/redis.conf:/usr/local/etc/redis/redis.conf
+    environment:
+      TZ: Asia/Hong_Kong
     command: "redis-server /usr/local/etc/redis/redis.conf"
     networks:
       muscle_and_fitness_network:
@@ -77,6 +83,8 @@ services:
     restart: always
     volumes:
       - /Users/johnny/docker-file-mapping/atmoz-sftp-mf-prod:/home/johnny/upload
+    environment:
+      TZ: Asia/Hong_Kong
     command: "johnny:atmoz@sftp:::upload"
     networks:
       muscle_and_fitness_network:
@@ -86,13 +94,16 @@ services:
     container_name: open-zipkin-mf-prod
     image: openzipkin/zipkin
     # Environment settings are defined here https://github.com/openzipkin/zipkin/blob/master/zipkin-server/README.md#environment-variables
+    depends_on:
+      - mysql
     environment:
-      - STORAGE_TYPE=mysql
-      - MYSQL_DB=zipkin
-      - MYSQL_USER=root
-      - MYSQL_PASS=jm@mysql
-      - MYSQL_HOST=172.16.4.10
-      - MYSQL_TCP_PORT=3306
+      STORAGE_TYPE: mysql
+      MYSQL_DB: zipkin
+      MYSQL_USER: root
+      MYSQL_PASS: "jm@mysql"
+      MYSQL_HOST: 172.16.1.10
+      MYSQL_TCP_PORT: 3306
+      TZ: Asia/Hong_Kong
     # Uncomment to enable scribe
     # - SCRIBE_ENABLED=true
     # Uncomment to enable self-tracing
@@ -120,6 +131,8 @@ services:
     restart: always
     volumes:
       - /Users/johnny/docker-file-mapping/logs-mf-prod:/logs-prod
+    environment:
+      TZ: Asia/Hong_Kong
     networks:
       muscle_and_fitness_network:
         ipv4_address: 172.16.4.20
@@ -127,10 +140,14 @@ services:
   spring-boot-admin:
     container_name: spring-boot-admin-prod
     image: "ijohnnymiller/spring-boot-admin-prod:${TAG}"
+    depends_on:
+      - service-registry
     ports:
       - "8761:8761"
     volumes:
       - /Users/johnny/docker-file-mapping/logs-mf-prod:/logs-prod
+    environment:
+      TZ: Asia/Hong_Kong
     networks:
       muscle_and_fitness_network:
         ipv4_address: 172.16.4.21
@@ -138,9 +155,16 @@ services:
   api-portal:
     container_name: api-portal-prod
     image: "ijohnnymiller/api-portal-prod:${TAG}"
+    depends_on:
+      - mysql
+      - redis
+      - atmoz-sftp
+      - service-registry
     restart: always
     volumes:
       - /Users/johnny/docker-file-mapping/logs-mf-prod:/logs-prod
+    environment:
+      TZ: Asia/Hong_Kong
     networks:
       muscle_and_fitness_network:
         ipv4_address: 172.16.4.22
@@ -148,9 +172,14 @@ services:
   auth-center:
     container_name: auth-center-prod
     image: "ijohnnymiller/auth-center-prod:${TAG}"
+    depends_on:
+      - mysql
+      - service-registry
     restart: always
     volumes:
       - /Users/johnny/docker-file-mapping/logs-mf-prod:/logs-prod
+    environment:
+      TZ: Asia/Hong_Kong
     networks:
       muscle_and_fitness_network:
         ipv4_address: 172.16.4.23
@@ -158,9 +187,14 @@ services:
   exercise-mis:
     container_name: exercise-mis-prod
     image: "ijohnnymiller/exercise-mis-prod:${TAG}"
+    depends_on:
+      - mysql
+      - service-registry
     restart: always
     volumes:
       - /Users/johnny/docker-file-mapping/logs-mf-prod:/logs-prod
+    environment:
+      TZ: Asia/Hong_Kong
     networks:
       muscle_and_fitness_network:
         ipv4_address: 172.16.4.24
@@ -168,9 +202,14 @@ services:
   muscle-mis:
     container_name: muscle-mis-prod
     image: "ijohnnymiller/muscle-mis-prod:${TAG}"
+    depends_on:
+      - mysql
+      - service-registry
     restart: always
     volumes:
       - /Users/johnny/docker-file-mapping/logs-mf-prod:/logs-prod
+    environment:
+      TZ: Asia/Hong_Kong
     networks:
       muscle_and_fitness_network:
         ipv4_address: 172.16.4.25
@@ -181,11 +220,15 @@ services:
   gateway:
     container_name: gateway-prod
     image: "ijohnnymiller/gateway-prod:${TAG}"
+    depends_on:
+      - service-registry
     ports:
       - "8080:8080"
     restart: always
     volumes:
       - /Users/johnny/docker-file-mapping/logs-mf-prod:/logs-prod
+    environment:
+      TZ: Asia/Hong_Kong
     networks:
       muscle_and_fitness_network:
         # Gateway uses the last IP of the subnet
