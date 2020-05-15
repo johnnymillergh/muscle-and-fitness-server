@@ -16,7 +16,7 @@ install: skip
 # We customize the script for compiling Maven application. For more about customizing the build:
 # https://docs.travis-ci.com/user/customizing-the-build
 script:
-  - mvn package -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+  - mvn package -DskipTests=true -Dmaven.javadoc.skip=true -B -V -P development-docker
 
 # https://docs.travis-ci.com/user/notifications#default-notification-settings
 notifications:
