@@ -53,7 +53,7 @@ services:
       - "3306:3306"
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/mysql-mf:/var/lib/mysql
+      - /Users/johnny/docker-file-mapping/mysql-mf-prod:/var/lib/mysql
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     networks:
       muscle_and_fitness_network:
