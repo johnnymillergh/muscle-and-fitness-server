@@ -5,7 +5,9 @@ version: "3.7"
 ################################################################################
 # 1. Pattern of 'container_name' must be:                                      #
 #    [service-name]-[system-short-name]-[environment-alias]                    #
-#    For instance, there is a 'MySQL service' for 'Muscle and Fitness Server'. #
+#    For instance, there is a 'MySQL service' for 'Muscle and Fitness Server', #
+#    the 'container_name' must be: mysql-maf-dev_dkr.                          #
+#    In Kubernetes, 'container_name' must not be set.                          #
 # 2. ${TAG} is defined in file '.env'.                                         #
 # 3. The differences between each environment docker-compose.yml:              #
 #    a. Environmental suffix. There are 4 types of environmental suffix:       #
@@ -44,7 +46,7 @@ services:
   #                      Middleware of Muscle and Fitness                        #
   ################################################################################
   mysql:
-    container_name: mysql-mf-dev_dkr
+    container_name: mysql-maf-dev_dkr
     image: mysql:latest
     environment:
       MYSQL_ROOT_PASSWORD: "jm@mysql"
@@ -53,21 +55,21 @@ services:
       - "3306:3306"
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/mysql-mf-dev_dkr:/var/lib/mysql
+      - /Users/johnny/docker-file-mapping/mysql-maf-dev_dkr:/var/lib/mysql
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     networks:
       muscle_and_fitness_network:
         ipv4_address: 172.16.1.10
 
   redis:
-    container_name: redis-mf-dev_dkr
+    container_name: redis-maf-dev_dkr
     image: redis:latest
     ports:
       - "6379:6379"
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/redis-mf-dev_dkr/data:/data
-      - /Users/johnny/docker-file-mapping/redis-mf-dev_dkr/redis.conf:/usr/local/etc/redis/redis.conf
+      - /Users/johnny/docker-file-mapping/redis-maf-dev_dkr/data:/data
+      - /Users/johnny/docker-file-mapping/redis-maf-dev_dkr/redis.conf:/usr/local/etc/redis/redis.conf
     environment:
       TZ: Asia/Hong_Kong
     command: "redis-server /usr/local/etc/redis/redis.conf"
@@ -76,13 +78,13 @@ services:
         ipv4_address: 172.16.1.11
 
   atmoz-sftp:
-    container_name: atmoz-sftp-mf-dev_dkr
+    container_name: atmoz-sftp-maf-dev_dkr
     image: atmoz/sftp:latest
     ports:
       - "23:22"
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/atmoz-sftp-mf-dev_dkr:/home/johnny/upload
+      - /Users/johnny/docker-file-mapping/atmoz-sftp-maf-dev_dkr:/home/johnny/upload
     environment:
       TZ: Asia/Hong_Kong
     command: "johnny:atmoz@sftp:::upload"
@@ -91,7 +93,7 @@ services:
         ipv4_address: 172.16.1.12
 
   open-zipkin:
-    container_name: open-zipkin-mf-dev_dkr
+    container_name: open-zipkin-maf-dev_dkr
     image: openzipkin/zipkin
     # Environment settings are defined here https://github.com/openzipkin/zipkin/blob/master/zipkin-server/README.md#environment-variables
     depends_on:
@@ -124,13 +126,13 @@ services:
   #                     Microservice of Muscle and Fitness                       #
   ################################################################################
   service-registry:
-    container_name: service-registry-dev_dkr
-    image: "ijohnnymiller/service-registry-dev_dkr:${TAG}"
+    container_name: service-registry-maf-dev_dkr
+    image: "ijohnnymiller/muscle-and-fitness-server/service-registry-dev_dkr:${TAG}"
     ports:
       - "8760:8760"
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/logs-mf-dev_dkr:/logs-dev_dkr
+      - /Users/johnny/docker-file-mapping/logs-maf-dev_dkr:/logs-dev_dkr
     environment:
       TZ: Asia/Hong_Kong
     networks:
@@ -138,14 +140,14 @@ services:
         ipv4_address: 172.16.1.20
 
   spring-boot-admin:
-    container_name: spring-boot-admin-dev_dkr
-    image: "ijohnnymiller/spring-boot-admin-dev_dkr:${TAG}"
+    container_name: spring-boot-admin-maf-dev_dkr
+    image: "ijohnnymiller/muscle-and-fitness-server/spring-boot-admin-dev_dkr:${TAG}"
     depends_on:
       - service-registry
     ports:
       - "8761:8761"
     volumes:
-      - /Users/johnny/docker-file-mapping/logs-mf-dev_dkr:/logs-dev_dkr
+      - /Users/johnny/docker-file-mapping/logs-maf-dev_dkr:/logs-dev_dkr
     environment:
       TZ: Asia/Hong_Kong
     networks:
@@ -153,8 +155,8 @@ services:
         ipv4_address: 172.16.1.21
 
   api-portal:
-    container_name: api-portal-dev_dkr
-    image: "ijohnnymiller/api-portal-dev_dkr:${TAG}"
+    container_name: api-portal-maf-dev_dkr
+    image: "ijohnnymiller/muscle-and-fitness-server/api-portal-dev_dkr:${TAG}"
     depends_on:
       - mysql
       - redis
@@ -162,7 +164,7 @@ services:
       - service-registry
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/logs-mf-dev_dkr:/logs-dev_dkr
+      - /Users/johnny/docker-file-mapping/logs-maf-dev_dkr:/logs-dev_dkr
     environment:
       TZ: Asia/Hong_Kong
     networks:
@@ -170,14 +172,14 @@ services:
         ipv4_address: 172.16.1.22
 
   auth-center:
-    container_name: auth-center-dev_dkr
-    image: "ijohnnymiller/auth-center-dev_dkr:${TAG}"
+    container_name: auth-center-maf-dev_dkr
+    image: "ijohnnymiller/muscle-and-fitness-server/auth-center-dev_dkr:${TAG}"
     depends_on:
       - mysql
       - service-registry
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/logs-mf-dev_dkr:/logs-dev_dkr
+      - /Users/johnny/docker-file-mapping/logs-maf-dev_dkr:/logs-dev_dkr
     environment:
       TZ: Asia/Hong_Kong
     networks:
@@ -185,14 +187,14 @@ services:
         ipv4_address: 172.16.1.23
 
   exercise-mis:
-    container_name: exercise-mis-dev_dkr
-    image: "ijohnnymiller/exercise-mis-dev_dkr:${TAG}"
+    container_name: exercise-mis-maf-dev_dkr
+    image: "ijohnnymiller/muscle-and-fitness-server/exercise-mis-dev_dkr:${TAG}"
     depends_on:
       - mysql
       - service-registry
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/logs-mf-dev_dkr:/logs-dev_dkr
+      - /Users/johnny/docker-file-mapping/logs-maf-dev_dkr:/logs-dev_dkr
     environment:
       TZ: Asia/Hong_Kong
     networks:
@@ -200,14 +202,14 @@ services:
         ipv4_address: 172.16.1.24
 
   muscle-mis:
-    container_name: muscle-mis-dev_dkr
-    image: "ijohnnymiller/muscle-mis-dev_dkr:${TAG}"
+    container_name: muscle-mis-maf-dev_dkr
+    image: "ijohnnymiller/muscle-and-fitness-server/muscle-mis-dev_dkr:${TAG}"
     depends_on:
       - mysql
       - service-registry
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/logs-mf-dev_dkr:/logs-dev_dkr
+      - /Users/johnny/docker-file-mapping/logs-maf-dev_dkr:/logs-dev_dkr
     environment:
       TZ: Asia/Hong_Kong
     networks:
@@ -218,15 +220,15 @@ services:
   #                       Gateway for Muscle and Fitness                         #
   ################################################################################
   gateway:
-    container_name: gateway-dev_dkr
-    image: "ijohnnymiller/gateway-dev_dkr:${TAG}"
+    container_name: gateway-maf-dev_dkr
+    image: "ijohnnymiller/muscle-and-fitness-server/gateway-dev_dkr:${TAG}"
     depends_on:
       - service-registry
     ports:
       - "8080:8080"
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/logs-mf-dev_dkr:/logs-dev_dkr
+      - /Users/johnny/docker-file-mapping/logs-maf-dev_dkr:/logs-dev_dkr
     environment:
       TZ: Asia/Hong_Kong
     networks:

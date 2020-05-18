@@ -5,23 +5,32 @@
     <!-- POM Reference https://maven.apache.org/pom.html -->
 
     <!-- Project Basics -->
-    <groupId>com.jmsoftware</groupId>
+    <groupId>com.jmsoftware.maf</groupId>
     <artifactId>muscle-and-fitness-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Muscle and Fitness Server</name>
     <description>Muscle and Fitness Server, Spring Cloud based.</description>
     <packaging>pom</packaging>
     <properties>
+        <!-- Developer Information -->
         <developerName>Johnny Miller (鍾俊)</developerName>
         <developerEmail>johnnysviva@outlook.com</developerEmail>
         <developerUrl>https://www.linkedin.com/in/ijohnnymiller</developerUrl>
+
+        <!-- Infrastructure Service. Port range: [8760, n]. -->
         <service-registry.port>8760</service-registry.port>
         <spring-boot-admin.port>8761</spring-boot-admin.port>
         <api-portal.port>8762</api-portal.port>
+
+        <!-- Business Service. Port range: [8071, n]. -->
         <auth-center.port>8071</auth-center.port>
         <exercise-mis.port>8072</exercise-mis.port>
         <muscle-mis.port>8073</muscle-mis.port>
+
+        <!-- Gateway Service. Port range: [8080, 8080]. -->
         <gateway.port>8080</gateway.port>
+
+        <!-- Version Definitions. -->
         <java.version>11</java.version>
         <spring-cloud.version>Hoxton.SR4</spring-cloud.version>
         <spring-content.version>1.0.0.M5</spring-content.version>
@@ -57,42 +66,42 @@
 
             <!-- Sub Modals Management -->
             <dependency>
-                <groupId>com.jmsoftware</groupId>
+                <groupId>com.jmsoftware.maf</groupId>
                 <artifactId>common</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>com.jmsoftware</groupId>
+                <groupId>com.jmsoftware.maf</groupId>
                 <artifactId>service-registry</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>com.jmsoftware</groupId>
+                <groupId>com.jmsoftware.maf</groupId>
                 <artifactId>spring-boot-admin</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>com.jmsoftware</groupId>
+                <groupId>com.jmsoftware.maf</groupId>
                 <artifactId>gateway</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>com.jmsoftware</groupId>
+                <groupId>com.jmsoftware.maf</groupId>
                 <artifactId>api-portal</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>com.jmsoftware</groupId>
+                <groupId>com.jmsoftware.maf</groupId>
                 <artifactId>auth-center</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>com.jmsoftware</groupId>
+                <groupId>com.jmsoftware.maf</groupId>
                 <artifactId>exercise-mis</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>com.jmsoftware</groupId>
+                <groupId>com.jmsoftware.maf</groupId>
                 <artifactId>muscle-mis</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
             </dependency>

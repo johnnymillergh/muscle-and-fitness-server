@@ -5,7 +5,9 @@ version: "3.7"
 ################################################################################
 # 1. Pattern of 'container_name' must be:                                      #
 #    [service-name]-[system-short-name]-[environment-alias]                    #
-#    For instance, there is a 'MySQL service' for 'Muscle and Fitness Server'. #
+#    For instance, there is a 'MySQL service' for 'Muscle and Fitness Server', #
+#    the 'container_name' must be: mysql-maf-dev_dkr.                          #
+#    In Kubernetes, 'container_name' must not be set.                          #
 # 2. ${TAG} is defined in file '.env'.                                         #
 # 3. The differences between each environment docker-compose.yml:              #
 #    a. Environmental suffix. There are 4 types of environmental suffix:       #
@@ -44,7 +46,7 @@ services:
   #                      Middleware of Muscle and Fitness                        #
   ################################################################################
   mysql:
-    container_name: mysql-mf-stage
+    container_name: mysql-maf-stage
     image: mysql:latest
     environment:
       MYSQL_ROOT_PASSWORD: "jm@mysql"
@@ -53,21 +55,21 @@ services:
       - "3306:3306"
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/mysql-mf-stage:/var/lib/mysql
+      - /Users/johnny/docker-file-mapping/mysql-maf-stage:/var/lib/mysql
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     networks:
       muscle_and_fitness_network:
         ipv4_address: 172.16.3.10
 
   redis:
-    container_name: redis-mf-stage
+    container_name: redis-maf-stage
     image: redis:latest
     ports:
       - "6379:6379"
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/redis-mf-stage/data:/data
-      - /Users/johnny/docker-file-mapping/redis-mf-stage/redis.conf:/usr/local/etc/redis/redis.conf
+      - /Users/johnny/docker-file-mapping/redis-maf-stage/data:/data
+      - /Users/johnny/docker-file-mapping/redis-maf-stage/redis.conf:/usr/local/etc/redis/redis.conf
     environment:
       TZ: Asia/Hong_Kong
     command: "redis-server /usr/local/etc/redis/redis.conf"
@@ -76,13 +78,13 @@ services:
         ipv4_address: 172.16.3.11
 
   atmoz-sftp:
-    container_name: atmoz-sftp-mf-stage
+    container_name: atmoz-sftp-maf-stage
     image: atmoz/sftp:latest
     ports:
       - "23:22"
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/atmoz-sftp-mf-stage:/home/johnny/upload
+      - /Users/johnny/docker-file-mapping/atmoz-sftp-maf-stage:/home/johnny/upload
     environment:
       TZ: Asia/Hong_Kong
     command: "johnny:atmoz@sftp:::upload"
@@ -91,7 +93,7 @@ services:
         ipv4_address: 172.16.3.12
 
   open-zipkin:
-    container_name: open-zipkin-mf-stage
+    container_name: open-zipkin-maf-stage
     image: openzipkin/zipkin
     # Environment settings are defined here https://github.com/openzipkin/zipkin/blob/master/zipkin-server/README.md#environment-variables
     depends_on:
@@ -124,13 +126,13 @@ services:
   #                     Microservice of Muscle and Fitness                       #
   ################################################################################
   service-registry:
-    container_name: service-registry-stage
-    image: "ijohnnymiller/service-registry-stage:${TAG}"
+    container_name: service-registry-maf-stage
+    image: "ijohnnymiller/muscle-and-fitness-server/service-registry-stage:${TAG}"
     ports:
       - "8760:8760"
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/logs-mf-stage:/logs-stage
+      - /Users/johnny/docker-file-mapping/logs-maf-stage:/logs-stage
     environment:
       TZ: Asia/Hong_Kong
     networks:
@@ -138,14 +140,14 @@ services:
         ipv4_address: 172.16.3.20
 
   spring-boot-admin:
-    container_name: spring-boot-admin-stage
-    image: "ijohnnymiller/spring-boot-admin-stage:${TAG}"
+    container_name: spring-boot-admin-maf-stage
+    image: "ijohnnymiller/muscle-and-fitness-server/spring-boot-admin-stage:${TAG}"
     depends_on:
       - service-registry
     ports:
       - "8761:8761"
     volumes:
-      - /Users/johnny/docker-file-mapping/logs-mf-stage:/logs-stage
+      - /Users/johnny/docker-file-mapping/logs-maf-stage:/logs-stage
     environment:
       TZ: Asia/Hong_Kong
     networks:
@@ -153,8 +155,8 @@ services:
         ipv4_address: 172.16.3.21
 
   api-portal:
-    container_name: api-portal-stage
-    image: "ijohnnymiller/api-portal-stage:${TAG}"
+    container_name: api-portal-maf-stage
+    image: "ijohnnymiller/muscle-and-fitness-server/api-portal-stage:${TAG}"
     depends_on:
       - mysql
       - redis
@@ -162,7 +164,7 @@ services:
       - service-registry
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/logs-mf-stage:/logs-stage
+      - /Users/johnny/docker-file-mapping/logs-maf-stage:/logs-stage
     environment:
       TZ: Asia/Hong_Kong
     networks:
@@ -170,14 +172,14 @@ services:
         ipv4_address: 172.16.3.22
 
   auth-center:
-    container_name: auth-center-stage
-    image: "ijohnnymiller/auth-center-stage:${TAG}"
+    container_name: auth-center-maf-stage
+    image: "ijohnnymiller/muscle-and-fitness-server/auth-center-stage:${TAG}"
     depends_on:
       - mysql
       - service-registry
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/logs-mf-stage:/logs-stage
+      - /Users/johnny/docker-file-mapping/logs-maf-stage:/logs-stage
     environment:
       TZ: Asia/Hong_Kong
     networks:
@@ -185,14 +187,14 @@ services:
         ipv4_address: 172.16.3.23
 
   exercise-mis:
-    container_name: exercise-mis-stage
-    image: "ijohnnymiller/exercise-mis-stage:${TAG}"
+    container_name: exercise-mis-maf-stage
+    image: "ijohnnymiller/muscle-and-fitness-server/exercise-mis-stage:${TAG}"
     depends_on:
       - mysql
       - service-registry
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/logs-mf-stage:/logs-stage
+      - /Users/johnny/docker-file-mapping/logs-maf-stage:/logs-stage
     environment:
       TZ: Asia/Hong_Kong
     networks:
@@ -200,14 +202,14 @@ services:
         ipv4_address: 172.16.3.24
 
   muscle-mis:
-    container_name: muscle-mis-stage
-    image: "ijohnnymiller/muscle-mis-stage:${TAG}"
+    container_name: muscle-mis-maf-stage
+    image: "ijohnnymiller/muscle-and-fitness-server/muscle-mis-stage:${TAG}"
     depends_on:
       - mysql
       - service-registry
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/logs-mf-stage:/logs-stage
+      - /Users/johnny/docker-file-mapping/logs-maf-stage:/logs-stage
     environment:
       TZ: Asia/Hong_Kong
     networks:
@@ -218,15 +220,15 @@ services:
   #                       Gateway for Muscle and Fitness                         #
   ################################################################################
   gateway:
-    container_name: gateway-stage
-    image: "ijohnnymiller/gateway-stage:${TAG}"
+    container_name: gateway-maf-stage
+    image: "ijohnnymiller/muscle-and-fitness-server/gateway-stage:${TAG}"
     depends_on:
       - service-registry
     ports:
       - "8080:8080"
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/logs-mf-stage:/logs-stage
+      - /Users/johnny/docker-file-mapping/logs-maf-stage:/logs-stage
     environment:
       TZ: Asia/Hong_Kong
     networks:

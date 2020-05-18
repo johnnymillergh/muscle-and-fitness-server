@@ -81,7 +81,7 @@ logging:
 
 project:
   property:
-    base-package: com.jmsoftware.exercisemis
+    base-package: com.jmsoftware.maf.exercisemis
     context-path:
     group-id: @project.groupId@
     parent-artifact-id: @parent.artifactId@

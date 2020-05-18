@@ -69,7 +69,7 @@ logging:
 
 project:
   property:
-    base-package: com.jmsoftware.musclemis
+    base-package: com.jmsoftware.maf.musclemis
     context-path:
     group-id: @project.groupId@
     parent-artifact-id: @parent.artifactId@

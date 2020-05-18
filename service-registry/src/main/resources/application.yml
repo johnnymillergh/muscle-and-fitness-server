@@ -29,7 +29,7 @@ logging:
 
 project:
   property:
-    base-package: com.jmsoftware.serviceregistry
+    base-package: com.jmsoftware.maf.serviceregistry
     context-path:
     group-id: @project.groupId@
     parent-artifact-id: @parent.artifactId@

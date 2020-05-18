@@ -81,7 +81,7 @@ logging:
 
 project:
   property:
-    base-package: com.jmsoftware.authcenter
+    base-package: com.jmsoftware.maf.authcenter
     context-path:
     group-id: @project.groupId@
     parent-artifact-id: @parent.artifactId@

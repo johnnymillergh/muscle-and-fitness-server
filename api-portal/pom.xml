@@ -5,12 +5,12 @@
 
     <!-- Sub-module Basics -->
     <artifactId>api-portal</artifactId>
-    <name>API Portal</name>
+    <name>Muscle and Fitness Server :: API Portal</name>
     <description>API Portal is an entrance for upcoming requests from any external devices. Responsible for aggregating
         internal microservices and exposing to external.
     </description>
     <parent>
-        <groupId>com.jmsoftware</groupId>
+        <groupId>com.jmsoftware.maf</groupId>
         <artifactId>muscle-and-fitness-server</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
@@ -51,7 +51,7 @@
                         <image>openjdk:11.0.6-slim</image>
                     </from>
                     <to>
-                        <image>docker.io/ijohnnymiller/${project.artifactId}-${envAlias}</image>
+                        <image>docker.io/ijohnnymiller/${parent.artifactId}/${project.artifactId}-${envAlias}</image>
                         <tags>
                             <tag>${project.version}</tag>
                         </tags>
@@ -106,7 +106,7 @@
         </dependency>
 
         <dependency>
-            <groupId>com.jmsoftware</groupId>
+            <groupId>com.jmsoftware.maf</groupId>
             <artifactId>common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
