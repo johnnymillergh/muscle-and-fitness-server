@@ -125,6 +125,8 @@ services:
   ################################################################################
   #                     Microservice of Muscle and Fitness                       #
   ################################################################################
+  #                            Infrastructure Service                            #
+  #------------------------------------------------------------------------------#
   service-registry:
     container_name: service-registry-maf-dev_dkr
     image: "ijohnnymiller/muscle-and-fitness-server/service-registry-dev_dkr:${TAG}"
@@ -171,6 +173,11 @@ services:
       muscle_and_fitness_network:
         ipv4_address: 172.16.1.22
 
+  ################################################################################
+  #                     Microservice of Muscle and Fitness                       #
+  ################################################################################
+  #                              Business Service                                #
+  #------------------------------------------------------------------------------#
   auth-center:
     container_name: auth-center-maf-dev_dkr
     image: "ijohnnymiller/muscle-and-fitness-server/auth-center-dev_dkr:${TAG}"

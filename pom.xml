@@ -22,10 +22,10 @@
         <spring-boot-admin.port>8761</spring-boot-admin.port>
         <api-portal.port>8762</api-portal.port>
 
-        <!-- Business Service. Port range: [8071, n]. -->
-        <auth-center.port>8071</auth-center.port>
-        <exercise-mis.port>8072</exercise-mis.port>
-        <muscle-mis.port>8073</muscle-mis.port>
+        <!-- Business Service. Port range: [8800, n]. -->
+        <auth-center.port>8800</auth-center.port>
+        <exercise-mis.port>8801</exercise-mis.port>
+        <muscle-mis.port>8802</muscle-mis.port>
 
         <!-- Gateway Service. Port range: [8080, 8080]. -->
         <gateway.port>8080</gateway.port>
