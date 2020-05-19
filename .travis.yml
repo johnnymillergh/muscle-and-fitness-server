@@ -18,7 +18,10 @@ install: skip
 script:
   - echo "Starting to build. DOCKER_HUB_USERNAME:"
   - echo "$DOCKER_HUB_USERNAME"
-  - "mvn verify -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Djib.to.auth.username=$DOCKER_HUB_USERNAME -Djib.to.auth.password=$DOCKER_HUB_PASSWORD -P $PROFILE_ID"
+  - "mvn verify -DskipTests=true -Dmaven.javadoc.skip=true -Djib.to.auth.username=$DOCKER_HUB_USERNAME -Djib.to.auth.password=$DOCKER_HUB_PASSWORD -P development-docker -B -V"
+  - "mvn verify -DskipTests=true -Dmaven.javadoc.skip=true -Djib.to.auth.username=$DOCKER_HUB_USERNAME -Djib.to.auth.password=$DOCKER_HUB_PASSWORD -P development-test -B -V"
+  - "mvn verify -DskipTests=true -Dmaven.javadoc.skip=true -Djib.to.auth.username=$DOCKER_HUB_USERNAME -Djib.to.auth.password=$DOCKER_HUB_PASSWORD -P development-stage -B -V"
+  - "mvn verify -DskipTests=true -Dmaven.javadoc.skip=true -Djib.to.auth.username=$DOCKER_HUB_USERNAME -Djib.to.auth.password=$DOCKER_HUB_PASSWORD -P development-production -B -V"
 
 # https://docs.travis-ci.com/user/notifications#default-notification-settings
 notifications:
