@@ -129,7 +129,7 @@ services:
   #------------------------------------------------------------------------------#
   service-registry:
     container_name: service-registry-maf-dev_dkr
-    image: "ijohnnymiller/muscle-and-fitness-server/service-registry-dev_dkr:${TAG}"
+    image: "ijohnnymiller/muscle-and-fitness-server.service-registry-dev_dkr:${TAG}"
     ports:
       - "8760:8760"
     restart: always
@@ -143,7 +143,7 @@ services:
 
   spring-boot-admin:
     container_name: spring-boot-admin-maf-dev_dkr
-    image: "ijohnnymiller/muscle-and-fitness-server/spring-boot-admin-dev_dkr:${TAG}"
+    image: "ijohnnymiller/muscle-and-fitness-server.spring-boot-admin-dev_dkr:${TAG}"
     depends_on:
       - service-registry
     ports:
@@ -158,7 +158,7 @@ services:
 
   api-portal:
     container_name: api-portal-maf-dev_dkr
-    image: "ijohnnymiller/muscle-and-fitness-server/api-portal-dev_dkr:${TAG}"
+    image: "ijohnnymiller/muscle-and-fitness-server.api-portal-dev_dkr:${TAG}"
     depends_on:
       - mysql
       - redis
@@ -180,7 +180,7 @@ services:
   #------------------------------------------------------------------------------#
   auth-center:
     container_name: auth-center-maf-dev_dkr
-    image: "ijohnnymiller/muscle-and-fitness-server/auth-center-dev_dkr:${TAG}"
+    image: "ijohnnymiller/muscle-and-fitness-server.auth-center-dev_dkr:${TAG}"
     depends_on:
       - mysql
       - service-registry
@@ -195,7 +195,7 @@ services:
 
   exercise-mis:
     container_name: exercise-mis-maf-dev_dkr
-    image: "ijohnnymiller/muscle-and-fitness-server/exercise-mis-dev_dkr:${TAG}"
+    image: "ijohnnymiller/muscle-and-fitness-server.exercise-mis-dev_dkr:${TAG}"
     depends_on:
       - mysql
       - service-registry
@@ -210,7 +210,7 @@ services:
 
   muscle-mis:
     container_name: muscle-mis-maf-dev_dkr
-    image: "ijohnnymiller/muscle-and-fitness-server/muscle-mis-dev_dkr:${TAG}"
+    image: "ijohnnymiller/muscle-and-fitness-server.muscle-mis-dev_dkr:${TAG}"
     depends_on:
       - mysql
       - service-registry
@@ -228,7 +228,7 @@ services:
   ################################################################################
   gateway:
     container_name: gateway-maf-dev_dkr
-    image: "ijohnnymiller/muscle-and-fitness-server/gateway-dev_dkr:${TAG}"
+    image: "ijohnnymiller/muscle-and-fitness-server.gateway-dev_dkr:${TAG}"
     depends_on:
       - service-registry
     ports:

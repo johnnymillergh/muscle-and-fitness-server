@@ -129,7 +129,7 @@ services:
   #------------------------------------------------------------------------------#
   service-registry:
     container_name: service-registry-maf-test
-    image: "ijohnnymiller/muscle-and-fitness-server/service-registry-test:${TAG}"
+    image: "ijohnnymiller/muscle-and-fitness-server.service-registry-test:${TAG}"
     ports:
       - "8760:8760"
     restart: always
@@ -143,7 +143,7 @@ services:
 
   spring-boot-admin:
     container_name: spring-boot-admin-maf-test
-    image: "ijohnnymiller/muscle-and-fitness-server/spring-boot-admin-test:${TAG}"
+    image: "ijohnnymiller/muscle-and-fitness-server.spring-boot-admin-test:${TAG}"
     depends_on:
       - service-registry
     ports:
@@ -158,6 +158,7 @@ services:
 
   api-portal:
     container_name: api-portal-maf-test
+    image: "ijohnnymiller/muscle-and-fitness-server.api-portal-test:${TAG}"
     depends_on:
       - mysql
       - redis
@@ -179,7 +180,7 @@ services:
   #------------------------------------------------------------------------------#
   auth-center:
     container_name: auth-center-maf-test
-    image: "ijohnnymiller/muscle-and-fitness-server/auth-center-test:${TAG}"
+    image: "ijohnnymiller/muscle-and-fitness-server.auth-center-test:${TAG}"
     depends_on:
       - mysql
       - service-registry
@@ -194,7 +195,7 @@ services:
 
   exercise-mis:
     container_name: exercise-mis-maf-test
-    image: "ijohnnymiller/muscle-and-fitness-server/exercise-mis-test:${TAG}"
+    image: "ijohnnymiller/muscle-and-fitness-server.exercise-mis-test:${TAG}"
     depends_on:
       - mysql
       - service-registry
@@ -209,7 +210,7 @@ services:
 
   muscle-mis:
     container_name: muscle-mis-maf-test
-    image: "ijohnnymiller/muscle-and-fitness-server/muscle-mis-test:${TAG}"
+    image: "ijohnnymiller/muscle-and-fitness-server.muscle-mis-test:${TAG}"
     depends_on:
       - mysql
       - service-registry
@@ -227,7 +228,7 @@ services:
   ################################################################################
   gateway:
     container_name: gateway-maf-test
-    image: "ijohnnymiller/muscle-and-fitness-server/gateway-test:${TAG}"
+    image: "ijohnnymiller/muscle-and-fitness-server.gateway-test:${TAG}"
     depends_on:
       - service-registry
     ports:
