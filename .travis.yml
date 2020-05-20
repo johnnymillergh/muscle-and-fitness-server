@@ -17,17 +17,8 @@ install: skip
 # https://docs.travis-ci.com/user/customizing-the-build
 script:
   - echo "Starting to build. DOCKER_HUB_USERNAME:"
-  - echo "$DOCKER_HUB_USERNAME"
-  - "mvn verify -DskipTests=true -Dmaven.javadoc.skip=true -Djib.to.auth.username=$DOCKER_HUB_USERNAME -Djib.to.auth.password=$DOCKER_HUB_PASSWORD -P development-docker -B -V"
-  - "mvn verify -DskipTests=true -Dmaven.javadoc.skip=true -Djib.to.auth.username=$DOCKER_HUB_USERNAME -Djib.to.auth.password=$DOCKER_HUB_PASSWORD -P test -B -V"
-  - "mvn verify -DskipTests=true -Dmaven.javadoc.skip=true -Djib.to.auth.username=$DOCKER_HUB_USERNAME -Djib.to.auth.password=$DOCKER_HUB_PASSWORD -P stage -B -V"
-  - "mvn verify -DskipTests=true -Dmaven.javadoc.skip=true -Djib.to.auth.username=$DOCKER_HUB_USERNAME -Djib.to.auth.password=$DOCKER_HUB_PASSWORD -P production -B -V"
-
-# https://docs.travis-ci.com/user/notifications#default-notification-settings
-notifications:
-  email:
-    on_success: change
-    on_failure: always
+  - echo $DOCKER_HUB_USERNAME
+  - $TARGET_JOB
 
 # https://docs.travis-ci.com/user/encryption-keys#usage
 # travis encrypt --pro KEY=value
@@ -35,3 +26,16 @@ env:
   global:
     - secure: "lXMz+459xVh0i7W1r3juQakFioovcdlAkW8r0rACk0CtbJyBuxbpscZ+JYEL+dCwGpl6+/1Sy1SBgf8PeIX3w6TF2NYIus11Ko/fEMKjm5O0ETUQSQCG6NY11zXxbD0HbllzGpfeW86NNKqhYKkioung6UcZz5BVkVsVR+sGaSQHMs5CBnKHWa88jV1A/IzswCu+8uNaPKevEtOSsCV4Bn2nfxZahBqFpYo3u60QmT/GB6py0ynQqQFcbBflrpQZhkek25DLFrHxVfzHQ1z7jBCR+ORYf2/chD4hnD0DwuhoyjuwpBtdBlMBaDjiPTuyyXcszMyvLOEl9VrmdYaJWDnQHkCwEQJhwXJHm/+cTBGX2Lm7s+Mc9Etn2ypo8IcVF9r+U5qA+2TtydRp40MkY5Mw6ZlnUwCIFj6Fh+LCs7S5MWLWfnTL7DioD+VF/hx4oJUwVfN4kclJLWArxErGT53Np0+PrwJ2KNdNP2P0edbUfPHQxF0MGcihGMvY+n2jdPJJgPc/s112HpQLLUeiJ0E/OezB94125gnVCYfLM4klGVUn7KFnGmh7yu+zENRKf84Rnmd6iiSq7ZGtUtzUvNe0xXnYJv4RyNzWDeWvYLzC55F+Dejtwif0qQ7pCSZFmvb10pwi3zBd1m5Dy7Ezboo4br6lsCKZNiZud4ncvNs="
     - secure: "YtNLKzV2xLiwJLnuzXTvXFaMYbQ4zJddu8Y+lNfhv3owgZsEonY0+FeIEOoaWSIu2ch4wPN4+vWh9eqfO39/67JpNs04XvTvCFLPAq7KFBj09nOLZW2hNhJJM4a/JIXYtKsU43zUMxB/1uGxC6Wg2X5WiQfn+ctjoJAA+Wxwc36lDqIZL6L6hoEs84MD8sT6OXYk4nGK775uemijuveqc9+PGAVAyfOn8xj+f7TYy5Tmbx74NCwiSsIvOzwkLxdyKgyhZvFuV3qZzaKiyxpUePChCOBRuw1vj5/U7BO00h9eJfNepL8R6Nh5D/YZjKZ53VGf5KAx+PeTFE6ZSYcUlJu7ZbZT5aKANMkdqYLqICKGW3Ky380xSD8xZh2rKbGePNk5/gCCi4kd/syhqngSWizAtlF4/gA1PCpBEenUPPbg+vXS4KRDt6UiezTTRdgAMG2uucrZ2Hzf8EElvLxBrGxc0T1tZVPc098BsR7RmGJZ42IYkFfoSFjPqEZmGdK4A+BVhRbYFzwHs8acacUOAySGGhNwYrgEc6VHaL6W2lgBc8Fz+YJfSlZjPuJ+Wp2QWg2chpUk6T3pl5pGhwuUc4ZmN6PHylaEtXOay6nRxffWCPYOSW0I70gUObz4r3pC9b8BkIUY3O0UeXRsupxFvqactJnmc+vlKklgIB8v46o="
+  # Speeding up the build
+  # https://docs.travis-ci.com/user/speeding-up-the-build/
+  matrix:
+    - TARGET_JOB="mvn verify -DskipTests=true -Dmaven.javadoc.skip=true -Djib.to.auth.username=$DOCKER_HUB_USERNAME -Djib.to.auth.password=$DOCKER_HUB_PASSWORD -P development-docker -B -V"
+    - TARGET_JOB="mvn verify -DskipTests=true -Dmaven.javadoc.skip=true -Djib.to.auth.username=$DOCKER_HUB_USERNAME -Djib.to.auth.password=$DOCKER_HUB_PASSWORD -P test -B -V"
+    - TARGET_JOB="mvn verify -DskipTests=true -Dmaven.javadoc.skip=true -Djib.to.auth.username=$DOCKER_HUB_USERNAME -Djib.to.auth.password=$DOCKER_HUB_PASSWORD -P stage -B -V"
+    - TARGET_JOB="mvn verify -DskipTests=true -Dmaven.javadoc.skip=true -Djib.to.auth.username=$DOCKER_HUB_USERNAME -Djib.to.auth.password=$DOCKER_HUB_PASSWORD -P production -B -V"
+
+# https://docs.travis-ci.com/user/notifications#default-notification-settings
+notifications:
+  email:
+    on_success: change
+    on_failure: always
