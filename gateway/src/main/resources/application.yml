@@ -57,7 +57,7 @@ project:
     base-package: com.jmsoftware.maf.gateway
     context-path:
     group-id: @project.groupId@
-    parent-artifact-id: @project.parent.artifactId@
+    project-parent-artifact-id: @project.parent.artifactId@
     project-artifact-id: @project.artifactId@
     version: @project.version@
     description: @project.description@
