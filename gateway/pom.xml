@@ -53,7 +53,7 @@
                         <image>openjdk:11.0.6-slim</image>
                     </from>
                     <to>
-                        <image>docker.io/ijohnnymiller/${parent.artifactId}.${project.artifactId}-${envAlias}</image>
+                        <image>docker.io/ijohnnymiller/${project.parent.artifactId}.${project.artifactId}-${envAlias}</image>
                         <tags>
                             <tag>${project.version}</tag>
                         </tags>
