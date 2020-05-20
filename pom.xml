@@ -39,12 +39,8 @@
         <spring-boot-admin.version>2.2.2</spring-boot-admin.version>
         <knife4j.version>2.0.2</knife4j.version>
     </properties>
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.7.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
-    </parent>
+
+    <!-- The modules (sometimes called subprojects) to build as a part of this project. -->
     <modules>
         <module>common</module>
         <module>service-registry</module>
@@ -55,9 +51,16 @@
         <module>exercise-mis</module>
         <module>muscle-mis</module>
     </modules>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.3.0.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
     <dependencyManagement>
         <dependencies>
-            <!-- Spring Cloud Dependencies -->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
