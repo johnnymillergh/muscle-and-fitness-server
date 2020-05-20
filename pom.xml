@@ -9,7 +9,9 @@
     <artifactId>muscle-and-fitness-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Muscle and Fitness Server</name>
-    <description>Muscle and Fitness Server, Spring Cloud based.</description>
+    <description>Muscle and Fitness Server (M&amp;F, maf), a Spring Cloud microservice based, back-end server for
+        managing data of muscle and fitness.
+    </description>
     <packaging>pom</packaging>
     <properties>
         <!-- Developer Information -->

@@ -9,11 +9,11 @@
 [![GitHub repo size](https://img.shields.io/github/repo-size/johnnymillergh/muscle-and-fitness-server.svg)](https://github.com/johnnymillergh/muscle-and-fitness-server)
 [![Twitter](https://img.shields.io/twitter/url/https/github.com/johnnymillergh/muscle-and-fitness-server?style=social)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fjohnnymillergh%2Fmuscle-and-fitness-server)
 
-# Service Registry
+# Muscle and Fitness Server :: Service Registry
 
-**Service Registry** a sub mudule of Muscle and Fitness Server (M&F), a service registry center for microservices.
+**Muscle and Fitness Server :: Service Registry**, a sub module of Muscle and Fitness Server (M&F), a service registry center for micro-services.
 
-[Official Docker Image](https://hub.docker.com/r/ijohnnymiller/service-registry-prod)
+[Official Docker Image](https://hub.docker.com/r/ijohnnymiller/muscle-and-fitness-server.service-registry-prod)
 
 ## Features
 

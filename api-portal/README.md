@@ -1,16 +1,62 @@
-# Getting Started
+![Muscle and Fitness Server Social Image](https://raw.githubusercontent.com/johnnymillergh/MaterialLibrary/master/muscle-and-fitness/muscle-and-fitness-server-social-image.png)
+[![GitHub release](https://img.shields.io/github/release/johnnymillergh/muscle-and-fitness-server.svg)](https://github.com/johnnymillergh/muscle-and-fitness-server/releases)
+[![Build Status](https://travis-ci.com/johnnymillergh/muscle-and-fitness-server.svg?branch=master)](https://travis-ci.com/johnnymillergh/muscle-and-fitness-server)
+[![GitHub issues](https://img.shields.io/github/issues/johnnymillergh/muscle-and-fitness-server)](https://github.com/johnnymillergh/muscle-and-fitness-server/issues)
+[![GitHub forks](https://img.shields.io/github/forks/johnnymillergh/muscle-and-fitness-server)](https://github.com/johnnymillergh/muscle-and-fitness-server/network)
+[![GitHub stars](https://img.shields.io/github/stars/johnnymillergh/muscle-and-fitness-server)](https://github.com/johnnymillergh/muscle-and-fitness-server)
+[![GitHub license](https://img.shields.io/github/license/johnnymillergh/muscle-and-fitness-server)](https://github.com/johnnymillergh/muscle-and-fitness-server/blob/master/LICENSE)
+[![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/johnnymillergh/muscle-and-fitness-server.svg?style=popout)](https://github.com/johnnymillergh/muscle-and-fitness-server)
+[![GitHub repo size](https://img.shields.io/github/repo-size/johnnymillergh/muscle-and-fitness-server.svg)](https://github.com/johnnymillergh/muscle-and-fitness-server)
+[![Twitter](https://img.shields.io/twitter/url/https/github.com/johnnymillergh/muscle-and-fitness-server?style=social)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fjohnnymillergh%2Fmuscle-and-fitness-server)
 
-### Reference Documentation
-For further reference, please consider the following sections:
+# Muscle and Fitness Server :: API Portal
 
-* [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
-* [Spring Boot Maven Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/2.2.5.RELEASE/maven-plugin/)
-* [Spring Security](https://docs.spring.io/spring-boot/docs/2.2.5.RELEASE/reference/htmlsingle/#boot-features-security)
+**Muscle and Fitness Server :: API Portal**, an entrance for upcoming requests from any external devices. Responsible for aggregating internal micro-services and exposing to external.
 
-### Guides
-The following guides illustrate how to use some features concretely:
+[Official Docker Image](https://hub.docker.com/r/ijohnnymiller/muscle-and-fitness-server.api-portal-prod)
 
-* [Securing a Web Application](https://spring.io/guides/gs/securing-web/)
-* [Spring Boot and OAuth2](https://spring.io/guides/tutorials/spring-boot-oauth2/)
-* [Authenticating a User with LDAP](https://spring.io/guides/gs/authenticating-ldap/)
+## Features
 
+Here is the highlights of **Muscle and Fitness Server :: API Portal**:
+
+1. Expose APIs for Web, App, etc. URL starts with `/api-portal`.
+2. Authentication and authorization for incoming requests.
+3. JWT support.
+
+## Usage
+
+1. Clone or download this project.
+
+   ```shell
+   $ git clone https://github.com/johnnymillergh/exrx-net-crawler-server.git
+   ```
+
+2. Build with newest Intellij IDEA.
+
+3. Click the green triangle to Run.
+
+## Maintainers
+
+[@johnnymillergh](https://github.com/johnnymillergh).
+
+## Contributing
+
+Feel free to dive in! [Open an issue](https://github.com/johnnymillergh/spring-cloud-tutorial/issues/new).
+
+### Contributors
+
+This project exists thanks to all the people who contribute. 
+
+- Johnny Miller [[@johnnymillergh](https://github.com/johnnymillergh)]
+- …
+
+
+### Sponsors
+
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://become-a-sponsor.org)]
+
+## License
+
+[Apache License](https://github.com/johnnymillergh/exrx-net-crawler-server/blob/master/LICENSE) © Johnny Miller
+
+2020 - Present

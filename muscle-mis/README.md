@@ -9,11 +9,11 @@
 [![GitHub repo size](https://img.shields.io/github/repo-size/johnnymillergh/muscle-and-fitness-server.svg)](https://github.com/johnnymillergh/muscle-and-fitness-server)
 [![Twitter](https://img.shields.io/twitter/url/https/github.com/johnnymillergh/muscle-and-fitness-server?style=social)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fjohnnymillergh%2Fmuscle-and-fitness-server)
 
-# Muscle MIS
+# Muscle and Fitness Server :: Muscle MIS
 
-**Muscle MIS** full name is Muscle Management Information Service, a sub module of Muscle and Fitness Server (M&F).
+**Muscle and Fitness Server :: Muscle MIS** full name is Muscle Management Information Service, a sub module of Muscle and Fitness Server (M&F).
 
-[Official Docker Image](https://hub.docker.com/r/ijohnnymiller/muscle-mis-prod)
+[Official Docker Image](https://hub.docker.com/r/ijohnnymiller/muscle-and-fitness-server.muscle-mis-prod)
 
 ## Features
 

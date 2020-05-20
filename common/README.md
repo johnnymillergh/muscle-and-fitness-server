@@ -9,9 +9,9 @@
 [![GitHub repo size](https://img.shields.io/github/repo-size/johnnymillergh/muscle-and-fitness-server.svg)](https://github.com/johnnymillergh/muscle-and-fitness-server)
 [![Twitter](https://img.shields.io/twitter/url/https/github.com/johnnymillergh/muscle-and-fitness-server?style=social)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fjohnnymillergh%2Fmuscle-and-fitness-server)
 
-# Common
+# Muscle and Fitness Server :: Common
 
-**Common** a sub mudule of Muscle and Fitness Server (M&F), common Java class collection for JM Software.
+**Muscle and Fitness Server :: Common**, a sub module of Muscle and Fitness Server (M&F), common Java class collection for JM Software.
 
 [Official Docker Image](https://hub.docker.com/r/ijohnnymiller/spring-boot-admin-prod)
 

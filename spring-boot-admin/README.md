@@ -9,11 +9,11 @@
 [![GitHub repo size](https://img.shields.io/github/repo-size/johnnymillergh/muscle-and-fitness-server.svg)](https://github.com/johnnymillergh/muscle-and-fitness-server)
 [![Twitter](https://img.shields.io/twitter/url/https/github.com/johnnymillergh/muscle-and-fitness-server?style=social)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fjohnnymillergh%2Fmuscle-and-fitness-server)
 
-# Spring Boot Admin
+# Muscle and Fitness Server :: Spring Boot Admin
 
-**Spring Boot Admin** a sub mudule of Muscle and Fitness Server (M&F), Admin UI for administration of spring boot applications.
+**Muscle and Fitness Server :: Spring Boot Admin**, a sub module of Muscle and Fitness Server (M&F), Admin UI for administration of spring boot applications.
 
-[Official Docker Image](https://hub.docker.com/r/ijohnnymiller/spring-boot-admin-prod)
+[Official Docker Image](https://hub.docker.com/r/ijohnnymiller/muscle-and-fitness-server.spring-boot-admin-prod)
 
 ## Features
 
@@ -24,7 +24,7 @@ Here is the highlights of **Spring Boot Admin**:
    `org.springframework.boot:spring-boot-starter-parent` - [![Spring Boot](https://maven-badges.herokuapp.com/maven-central/org.springframework.boot/spring-boot-starter-parent/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.springframework.boot/spring-boot-starter-parent/)
    `org.springframework.cloud:spring-cloud-dependencies` - [![Spring Cloud](https://maven-badges.herokuapp.com/maven-central/org.springframework.cloud/spring-cloud-dependencies/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.springframework.cloud/spring-cloud-dependencies/)
 
-2. Admin UI for administration of spring boot applications.
+2. Admin UI for administration of Spring Boot applications.
 
 ## Usage
 
