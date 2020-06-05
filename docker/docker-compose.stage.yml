@@ -130,6 +130,8 @@ services:
   service-registry:
     container_name: service-registry-maf-stage
     image: "ijohnnymiller/muscle-and-fitness-server.service-registry-stage:${TAG}"
+    depends_on:
+      - open-zipkin
     ports:
       - "8760:8760"
     restart: always
