@@ -70,7 +70,7 @@ services:
       - "6379:6379"
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/redis-maf-prod/data:/data
+      - /Users/johnny/docker-file-mapping/redis-maf-prod:/data
       - ./script/redis/redis.conf:/usr/local/etc/redis/redis.conf
     environment:
       TZ: Asia/Hong_Kong
