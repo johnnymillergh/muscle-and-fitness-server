@@ -57,7 +57,7 @@ services:
     restart: always
     volumes:
       - /Users/johnny/docker-file-mapping/mysql-maf-test:/var/lib/mysql
-      - ./mysql-init-script:/docker-entrypoint-initdb.d
+      - ./script/mysql-init-script:/docker-entrypoint-initdb.d
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     networks:
       muscle_and_fitness_network:
@@ -71,7 +71,7 @@ services:
     restart: always
     volumes:
       - /Users/johnny/docker-file-mapping/redis-maf-test/data:/data
-      - /Users/johnny/docker-file-mapping/redis-maf-test/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./script/redis/redis.conf:/usr/local/etc/redis/redis.conf
     environment:
       TZ: Asia/Hong_Kong
     command: "redis-server /usr/local/etc/redis/redis.conf"
