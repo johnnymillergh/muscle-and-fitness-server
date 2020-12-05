@@ -4,6 +4,9 @@
 # Copyright (c) Johnny Miller                                      #
 # Capability: macOS Big Sur 11.0.1 (20B29)                         #
 # Purpose:                                                         #
+#   1. Integrate easy and simple deployment,                       #
+#   2. Reduce memory usage of IntelliJ IDEA to run services,       #
+#   3. Improve the efficiency of local development,                #
 # Inspiration: https://google.github.io/styleguide/shellguide.html #
 ####################################################################
 
