@@ -16,11 +16,16 @@ readonly mavenActiveProfile="development-local"
 readonly javaParameter="-Xms256m -Xmx256m -Dspring.profiles.active=$mavenActiveProfile"
 # The name of service `service-registry` is `service-registry`, also equal to the directory `service-registry`.
 readonly runServices=(
-#  service-registry
-#  spring-boot-admin
-  api-portal
+  service-registry
+  spring-boot-admin
+#  api-portal
 )
-readonly skipBuild=true
+readonly skipGitPull=false
+readonly skipBuild=false
+# Available options for `startMode`: "keep-previous", "overlap"
+readonly startMode="overlap"
+# `waitToStopTimeout` is the timeout (unit: second) for waiting Java to stop
+readonly waitToStopTimeout=5
 
 ##################### Functions Declaration #######################
 # Bash tips: Colors and formatting (ANSI/VT100 Control sequences) #
@@ -104,7 +109,7 @@ function runJar() {
   runJarCommand="java $javaParameter -jar $jarFileRelativePath"
   # shellcheck disable=SC2086
   nohup $runJarCommand &
-  logInfo "[RUN] COMMAND: $runJarCommand"
+  logInfo "[RUN] Executed COMMAND: $runJarCommand"
 }
 
 #######################################
@@ -138,14 +143,18 @@ function gitPull() {
 #######################################
 function executePreBuildPhase() {
   logWarn "[PRE-BUILD] Active profile: $mavenActiveProfile"
-  logWarn "[PRE-BUILD] Current Git branch: $(gitCurrentBranch), pulling codes from Git…"
-  gitPull || {
-    logError "[PRE-BUILD] Git pull failed. gitPullExecutionResult: $gitPullExecutionResult" >&2
-    exit 1
-  }
-  gitPullExecutionResult=$?
-  if [ "$gitPullExecutionResult" -eq 0 ]; then
-    logInfo "[PRE-BUILD] Git pull success. gitPullExecutionResult: $gitPullExecutionResult"
+  if [ "$skipGitPull" = false ]; then
+    logWarn "[PRE-BUILD] Current Git branch: $(gitCurrentBranch), pulling codes from Git…"
+    gitPull || {
+      logError "[PRE-BUILD] Git pull failed. gitPullExecutionResult: $gitPullExecutionResult" >&2
+      exit 1
+    }
+    gitPullExecutionResult=$?
+    if [ "$gitPullExecutionResult" -eq 0 ]; then
+      logInfo "[PRE-BUILD] Git pull success. gitPullExecutionResult: $gitPullExecutionResult"
+    fi
+  else
+    logWarn "[PRE-BUILD] Current Git branch: $(gitCurrentBranch), skipped Git Pull"
   fi
   logWarn "[PRE-BUILD] CURRENT_DIR: $(pwd)"
   logWarn "[PRE-BUILD] List of CURRENT_DIR:"
@@ -178,6 +187,76 @@ function executeBuildPhase() {
 }
 
 #######################################
+# Check Java program state.
+# Arguments:
+#   $1 Java program name string.
+# Returns:
+#   0 Not running;
+#   1 Running.
+#######################################
+function checkJavaProgramState() {
+  jps -l | grep -c "$1"
+}
+
+#######################################
+# Kill java program.
+# Arguments:
+#   $1 Java program name string.
+# Returns:
+#   None.
+#######################################
+function killJavaProgram() {
+  # https://www.tutorialkart.com/bash-shell-scripting/bash-split-string/
+  # IFS=' ' # space is set as delimiter
+  # "$(jps -l | grep "$1")" is read into an array as tokens separated by IFS
+  read -ra jpsArray <<< "$(jps -l | grep "$1")"
+  # Access the first element of array
+  kill "${jpsArray[0]}"
+  killResult=$?
+  sleep $waitToStopTimeout
+  logError "[KILL] Waited $waitToStopTimeout (s) to kill pid: ${jpsArray[0]}. killResult: $killResult"
+}
+
+#######################################
+# Iteratively run java services. Function only for Run Phase
+# Arguments:
+#   None.
+# Returns:
+#   None.
+#######################################
+function iterativelyRunJavaServices() {
+  for index in "${!runServices[@]}"; do
+    serviceName="${runServices[$index]}"
+    isRunning=$(checkJavaProgramState "$serviceName") || {
+      # If exception happens when executing previous command, then set 0 to isRunning
+      isRunning=0
+    }
+    logInfo "[RUN] ### $(( index + 1 )). $serviceName, startMode: $startMode, isRunning: $isRunning"
+    case $startMode in
+    "keep-previous")
+      if [ "$isRunning" == "1" ]; then
+        logError "[RUN] The service \`$serviceName\` is running already. No need to start again."
+        continue
+      else
+        runJar "$serviceName"
+      fi
+      ;;
+    "overlap")
+      if [ "$isRunning" == "1" ]; then
+        logWarn "[RUN] The service \`$serviceName\` is running already. About to kill it."
+        killJavaProgram "$serviceName"
+      fi
+      runJar "$serviceName"
+      ;;
+    *)
+      logError "[RUN] Failed to startup! Caused by Invalid startMode: $startMode"
+      exit 1
+      ;;
+    esac
+  done
+}
+
+#######################################
 # Execute run phase.
 # Arguments:
 #   None.
@@ -185,19 +264,13 @@ function executeBuildPhase() {
 #   None.
 #######################################
 function executeRunPhase() {
-  for index in "${!runServices[@]}"; do
-  logInfo "[RUN] $((index + 1)). ${runServices[$index]}"
-  runJar "${runServices[$index]}"
-  done
-  runCommandResult=$?
-  if [ "$runCommandResult" -eq 0 ]; then
-    logInfo "[RUN] Run success. runCommandResult: $runCommandResult"
-    logInfo "[RUN] Java Program State:"
-    jps -l
-  else
-    logError "[DEPLOY] Deployment failed. runCommandResult: $runCommandResult" >&2
+  iterativelyRunJavaServices || {
+    # Capture exception
+    logError "[RUN] Failed to start Java services" >&2
     exit 1
-  fi
+  }
+  logInfo "[RUN] Run success. Command result: $?. Java Program State (jps -l):"
+  jps -l
 }
 
 ################### MAIN PROCEDURE START ###################
