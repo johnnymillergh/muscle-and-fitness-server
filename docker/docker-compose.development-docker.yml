@@ -31,14 +31,14 @@ version: "3.7"
 ################################################################################
 
 ################################################
-#       Private Network Subnet Assignment      #
+#       Private Network Subnet Assignment      #
 ################################################
-#     Subnet      # Environment (profile's ID) #
+#     Subnet      # Environment (profile's ID) #
 #-----------------#----------------------------#
-#  172.16.1.0/24  #     development-docker     #
-#  172.16.2.0/24  #            test            #
-#  172.16.3.0/24  #           stage            #
-#  172.16.4.0/24  #         production         #
+#  172.16.1.0/24  #     development-docker     #
+#  172.16.2.0/24  #            test            #
+#  172.16.3.0/24  #           stage            #
+#  172.16.4.0/24  #         production         #
 ################################################
 
 services:
@@ -99,9 +99,11 @@ services:
     image: openzipkin/zipkin
     # Environment settings are defined here https://github.com/openzipkin/zipkin/blob/master/zipkin-server/README.md#environment-variables
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     environment:
       STORAGE_TYPE: mysql
+      JAVA_OPTS: -Xms128m -Xmx128m -XX:+ExitOnOutOfMemoryError
       MYSQL_DB: zipkin
       MYSQL_USER: root
       MYSQL_PASS: "jm@mysql"
@@ -133,7 +135,8 @@ services:
     container_name: service-registry-maf-dev_dkr
     image: "ijohnnymiller/muscle-and-fitness-server.service-registry-dev_dkr:${TAG}"
     depends_on:
-      - open-zipkin
+      open-zipkin:
+        condition: service_healthy
     ports:
       - "8760:8760"
     restart: always
@@ -149,7 +152,8 @@ services:
     container_name: spring-boot-admin-maf-dev_dkr
     image: "ijohnnymiller/muscle-and-fitness-server.spring-boot-admin-dev_dkr:${TAG}"
     depends_on:
-      - service-registry
+      service-registry:
+        condition: service_healthy
     ports:
       - "8761:8761"
     volumes:
@@ -164,10 +168,14 @@ services:
     container_name: api-portal-maf-dev_dkr
     image: "ijohnnymiller/muscle-and-fitness-server.api-portal-dev_dkr:${TAG}"
     depends_on:
-      - mysql
-      - redis
-      - atmoz-sftp
-      - service-registry
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      atmoz-sftp:
+        condition: service_healthy
+      service-registry:
+        condition: service_healthy
     restart: always
     volumes:
       - /Users/johnny/docker-file-mapping/logs-maf-dev_dkr:/logs-dev_dkr
@@ -186,8 +194,10 @@ services:
     container_name: auth-center-maf-dev_dkr
     image: "ijohnnymiller/muscle-and-fitness-server.auth-center-dev_dkr:${TAG}"
     depends_on:
-      - mysql
-      - service-registry
+      mysql:
+        condition: service_healthy
+      service-registry:
+        condition: service_healthy
     restart: always
     volumes:
       - /Users/johnny/docker-file-mapping/logs-maf-dev_dkr:/logs-dev_dkr
@@ -201,8 +211,10 @@ services:
     container_name: exercise-mis-maf-dev_dkr
     image: "ijohnnymiller/muscle-and-fitness-server.exercise-mis-dev_dkr:${TAG}"
     depends_on:
-      - mysql
-      - service-registry
+      mysql:
+        condition: service_healthy
+      service-registry:
+        condition: service_healthy
     restart: always
     volumes:
       - /Users/johnny/docker-file-mapping/logs-maf-dev_dkr:/logs-dev_dkr
@@ -216,8 +228,10 @@ services:
     container_name: muscle-mis-maf-dev_dkr
     image: "ijohnnymiller/muscle-and-fitness-server.muscle-mis-dev_dkr:${TAG}"
     depends_on:
-      - mysql
-      - service-registry
+      mysql:
+        condition: service_healthy
+      service-registry:
+        condition: service_healthy
     restart: always
     volumes:
       - /Users/johnny/docker-file-mapping/logs-maf-dev_dkr:/logs-dev_dkr
@@ -234,7 +248,8 @@ services:
     container_name: gateway-maf-dev_dkr
     image: "ijohnnymiller/muscle-and-fitness-server.gateway-dev_dkr:${TAG}"
     depends_on:
-      - service-registry
+      service-registry:
+        condition: service_healthy
     ports:
       - "8080:8080"
     restart: always
