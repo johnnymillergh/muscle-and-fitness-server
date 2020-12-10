@@ -146,7 +146,7 @@
     <!-- Build Settings -->
     <build>
         <!-- set the name of .jar file -->
-        <finalName>${project.artifactId}-${envAlias}-${project.version}</finalName>
+        <finalName>${project.artifactId}-${project.version}</finalName>
 
         <plugins>
             <!-- The Versions Plugin updates the versions of components in the POM. -->

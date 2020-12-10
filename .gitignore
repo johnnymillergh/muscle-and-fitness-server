@@ -3,7 +3,7 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**
 !**/src/test/**
-logs-*
+logs/
 .DS_Store
 HELP.md
 nohup.out

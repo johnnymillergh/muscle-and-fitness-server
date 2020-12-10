@@ -10,28 +10,29 @@
                     converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
 
     <!-- Log Render Configuration -->
-    <property name="PROJECT_ARTIFACT_Id"
-              value="api-portal"/>
+    <property name="PROJECT_ARTIFACT_Id" value="api-portal"/>
     <property name="CONSOLE_LOG_PATTERN"
               value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID:- }){magenta} %clr(-){faint} %clr([%15.15t]){blue} %clr(%-48.48logger{48}){cyan} %clr(:){faint} %m%n%wex"/>
     <property name="FILE_LOG_PATTERN"
               value="%d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${PID:- } - [%t] %-48.48logger{48} : %m%n%wex"/>
+    <!-- Log home is nothing related with Spring profiles or environments -->
+    <property name="LOG_HOME" value="logs"/>
 
     <!-- Log for Multi Environment Configuration -->
     <springProfile name="development-local">
-        <property name="LOG_HOME" value="logs-dev_loc"/>
+        <property name="LOG_FILE_SUFFIX" value="-dev_loc"/>
     </springProfile>
     <springProfile name="development-docker">
-        <property name="LOG_HOME" value="logs-dev_dkr"/>
+        <property name="LOG_FILE_SUFFIX" value="-dev_dkr"/>
     </springProfile>
     <springProfile name="test">
-        <property name="LOG_HOME" value="logs-test"/>
+        <property name="LOG_FILE_SUFFIX" value="-test"/>
     </springProfile>
     <springProfile name="stage">
-        <property name="LOG_HOME" value="logs-stage"/>
+        <property name="LOG_FILE_SUFFIX" value="-stage"/>
     </springProfile>
     <springProfile name="production">
-        <property name="LOG_HOME" value="logs-prod"/>
+        <property name="LOG_FILE_SUFFIX" value="-prod"/>
     </springProfile>
 
     <!-- CONSOLE Log Configuration -->
@@ -59,7 +60,7 @@
         <!-- in particular if post-processing tools impose size limits on the log files. -->
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- rollover daily -->
-            <fileNamePattern>${LOG_HOME}/${PROJECT_ARTIFACT_Id}.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <fileNamePattern>${LOG_HOME}/${PROJECT_ARTIFACT_Id}${LOG_FILE_SUFFIX}.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
             <!-- each file should be at most 5MB, keep 7 days worth of history, but at most 1GB -->
             <maxFileSize>5MB</maxFileSize>
             <maxHistory>7</maxHistory>
