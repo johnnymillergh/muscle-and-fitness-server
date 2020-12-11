@@ -46,7 +46,7 @@ services:
   #                      Middleware of Muscle and Fitness                        #
   ################################################################################
   mysql:
-    container_name: mysql
+    container_name: maf-mysql
     image: mysql:latest
     environment:
       MYSQL_ROOT_PASSWORD: "jm@mysql"
@@ -56,7 +56,7 @@ services:
       - "3306:3306"
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/maf-mysql:/var/lib/mysql
+      - ~/docker-file-mapping/maf-mysql:/var/lib/mysql
       - ./script/mysql-init-script:/docker-entrypoint-initdb.d
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     networks:
@@ -64,13 +64,13 @@ services:
         ipv4_address: 172.16.1.10
 
   redis:
-    container_name: redis
+    container_name: maf-redis
     image: redis:latest
     ports:
       - "6379:6379"
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/redis-maf-dev_dkr:/data
+      - ~/docker-file-mapping/redis-maf-dev_dkr:/data
       - ./script/redis/redis.conf:/usr/local/etc/redis/redis.conf
     environment:
       TZ: Asia/Hong_Kong
@@ -80,13 +80,13 @@ services:
         ipv4_address: 172.16.1.11
 
   atmoz-sftp:
-    container_name: atmoz-sftp
+    container_name: maf-atmoz-sftp
     image: atmoz/sftp:latest
     ports:
       - "23:22"
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/atmoz-sftp-maf-dev_dkr:/home/johnny/upload
+      - ~/docker-file-mapping/atmoz-sftp-maf-dev_dkr:/home/johnny/upload
     environment:
       TZ: Asia/Hong_Kong
     command: "johnny:atmoz@sftp:::upload"
@@ -94,21 +94,54 @@ services:
       muscle_and_fitness_network:
         ipv4_address: 172.16.1.12
 
+  zipkin-cassandra:
+    image: openzipkin/zipkin-cassandra
+    # Uncomment to use DSE instead (minimum version 5.1)
+    # image: datastax/dse-server:5.1.20
+    environment:
+      CASSANDRA_USERNAME: cassandra_admin
+      CASSANDRA_PASSWORD: cassandra_password
+    container_name: maf-zipkin-cassandra
+    # Uncomment to expose the storage port for testing
+    # ports:
+    #  - "9042:9042"
+    networks:
+      muscle_and_fitness_network:
+        ipv4_address: 172.16.1.13
+
+  zipkin-dependencies:
+    image: openzipkin/zipkin-dependencies
+    container_name: maf-zipkin-dependencies
+    entrypoint: crond -f
+    environment:
+      # Uncomment to see dependency processing logs
+      ZIPKIN_LOG_LEVEL: DEBUG
+      STORAGE_TYPE: cassandra3
+      CASSANDRA_USERNAME: cassandra_admin
+      CASSANDRA_PASSWORD: cassandra_password
+      CASSANDRA_CONTACT_POINTS: 172.16.1.13:9042
+    depends_on:
+      - zipkin-cassandra
+    networks:
+      muscle_and_fitness_network:
+        ipv4_address: 172.16.1.14
+
   open-zipkin:
-    container_name: open-zipkin
+    container_name: maf-open-zipkin
     image: openzipkin/zipkin
     # Environment settings are defined here https://github.com/openzipkin/zipkin/blob/master/zipkin-server/README.md#environment-variables
     depends_on:
-      mysql:
+      zipkin-cassandra:
         condition: service_healthy
     environment:
-      STORAGE_TYPE: mysql
+      STORAGE_TYPE: cassandra3
+      CASSANDRA_CONTACT_POINTS: 172.16.1.13:9042
+      # Uncomment to configure authentication
+      CASSANDRA_USERNAME: cassandra_admin
+      CASSANDRA_PASSWORD: cassandra_password
+      # Uncomment to enable request logging (TRACE shows query values)
+      command: --logging.level.com.datastax.oss.driver.internal.core.tracker.RequestLogger=TRACE
       JAVA_OPTS: -Xms128m -Xmx128m -XX:+ExitOnOutOfMemoryError
-      MYSQL_DB: zipkin
-      MYSQL_USER: root
-      MYSQL_PASS: "jm@mysql"
-      MYSQL_HOST: 172.16.1.10
-      MYSQL_TCP_PORT: 3306
       TZ: Asia/Hong_Kong
     # Uncomment to enable scribe
     # - SCRIBE_ENABLED=true
@@ -124,7 +157,7 @@ services:
     restart: always
     networks:
       muscle_and_fitness_network:
-        ipv4_address: 172.16.1.13
+        ipv4_address: 172.16.1.15
 
   ################################################################################
   #                     Microservice of Muscle and Fitness                       #
@@ -141,7 +174,7 @@ services:
       - "8760:8760"
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/maf-logs:/logs
+      - ~/docker-file-mapping/maf-logs:/logs
     environment:
       TZ: Asia/Hong_Kong
     networks:
@@ -157,7 +190,7 @@ services:
     ports:
       - "8761:8761"
     volumes:
-      - /Users/johnny/docker-file-mapping/maf-logs:/logs
+      - ~/docker-file-mapping/maf-logs:/logs
     environment:
       TZ: Asia/Hong_Kong
     networks:
@@ -178,7 +211,7 @@ services:
         condition: service_healthy
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/maf-logs:/logs
+      - ~/docker-file-mapping/maf-logs:/logs
     environment:
       TZ: Asia/Hong_Kong
     networks:
@@ -200,7 +233,7 @@ services:
         condition: service_healthy
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/maf-logs:/logs
+      - ~/docker-file-mapping/maf-logs:/logs
     environment:
       TZ: Asia/Hong_Kong
     networks:
@@ -217,7 +250,7 @@ services:
         condition: service_healthy
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/maf-logs:/logs
+      - ~/docker-file-mapping/maf-logs:/logs
     environment:
       TZ: Asia/Hong_Kong
     networks:
@@ -234,7 +267,7 @@ services:
         condition: service_healthy
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/maf-logs:/logs
+      - ~/docker-file-mapping/maf-logs:/logs
     environment:
       TZ: Asia/Hong_Kong
     networks:
@@ -254,7 +287,7 @@ services:
       - "8080:8080"
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/maf-logs:/logs
+      - ~/docker-file-mapping/maf-logs:/logs
     environment:
       TZ: Asia/Hong_Kong
     networks:
