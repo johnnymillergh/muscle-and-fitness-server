@@ -1,4 +1,4 @@
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://maf.service-registry.dev_dkr:8760/eureka/
+      defaultZone: http://maf.service-registry.dev:8760/eureka/

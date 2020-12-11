@@ -46,7 +46,7 @@ services:
   #                      Middleware of Muscle and Fitness                        #
   ################################################################################
   mysql:
-    container_name: maf.mysql.dev_dkr
+    container_name: maf.mysql.dev
     image: mysql:latest
     environment:
       MYSQL_ROOT_PASSWORD: "jm@mysql"
@@ -61,10 +61,9 @@ services:
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     networks:
       muscle_and_fitness_network:
-        ipv4_address: 172.16.1.10
 
   redis:
-    container_name: maf.redis.dev_dkr
+    container_name: maf.redis.dev
     image: redis:latest
     ports:
       - "6379:6379"
@@ -77,10 +76,9 @@ services:
     command: "redis-server /usr/local/etc/redis/redis.conf"
     networks:
       muscle_and_fitness_network:
-        ipv4_address: 172.16.1.11
 
   atmoz-sftp:
-    container_name: maf.atmoz-sftp.dev_dkr
+    container_name: maf.atmoz-sftp.dev
     image: atmoz/sftp:latest
     ports:
       - "23:22"
@@ -92,13 +90,12 @@ services:
     command: "johnny:atmoz@sftp:::upload"
     networks:
       muscle_and_fitness_network:
-        ipv4_address: 172.16.1.12
 
   zipkin-cassandra:
     image: openzipkin/zipkin-cassandra
     # Uncomment to use DSE instead (minimum version 5.1)
     # image: datastax/dse-server:5.1.20
-    container_name: maf.zipkin-cassandra.dev_dkr
+    container_name: maf.zipkin-cassandra.dev
     environment:
       CASSANDRA_USERNAME: cassandra_admin
       CASSANDRA_PASSWORD: cassandra_password
@@ -107,11 +104,10 @@ services:
     #  - "9042:9042"
     networks:
       muscle_and_fitness_network:
-        ipv4_address: 172.16.1.13
 
   zipkin-dependencies:
     image: openzipkin/zipkin-dependencies
-    container_name: maf.zipkin-dependencies.dev_dkr
+    container_name: maf.zipkin-dependencies.dev
     entrypoint: crond -f
     environment:
       # Uncomment to see dependency processing logs
@@ -124,10 +120,9 @@ services:
       - zipkin-cassandra
     networks:
       muscle_and_fitness_network:
-        ipv4_address: 172.16.1.14
 
   open-zipkin:
-    container_name: maf.open-zipkin.dev_dkr
+    container_name: maf.open-zipkin.dev
     image: openzipkin/zipkin
     # Environment settings are defined here https://github.com/openzipkin/zipkin/blob/master/zipkin-server/README.md#environment-variables
     depends_on:
@@ -135,7 +130,7 @@ services:
         condition: service_healthy
     environment:
       STORAGE_TYPE: cassandra3
-      CASSANDRA_CONTACT_POINTS: maf.zipkin-cassandra.dev_dkr:9042
+      CASSANDRA_CONTACT_POINTS: maf.zipkin-cassandra.dev:9042
       # Uncomment to configure authentication
       CASSANDRA_USERNAME: cassandra_admin
       CASSANDRA_PASSWORD: cassandra_password
@@ -157,7 +152,6 @@ services:
     restart: always
     networks:
       muscle_and_fitness_network:
-        ipv4_address: 172.16.1.15
 
   ################################################################################
   #                     Microservice of Muscle and Fitness                       #
@@ -165,7 +159,7 @@ services:
   #                            Infrastructure Service                            #
   #------------------------------------------------------------------------------#
   service-registry:
-    container_name: maf.service-registry.dev_dkr
+    container_name: maf.service-registry.dev
     image: "ijohnnymiller/muscle-and-fitness-server.service-registry:${TAG}"
     depends_on:
       open-zipkin:
@@ -179,14 +173,13 @@ services:
       TZ: Asia/Hong_Kong
     networks:
       muscle_and_fitness_network:
-        ipv4_address: 172.16.1.20
 
   spring-boot-admin:
-    container_name: maf.spring-boot-admin.dev_dkr
+    container_name: maf.spring-boot-admin.dev
     image: "ijohnnymiller/muscle-and-fitness-server.spring-boot-admin:${TAG}"
     depends_on:
       service-registry:
-        condition: service_healthy
+        condition: service_started
     ports:
       - "8761:8761"
     volumes:
@@ -195,20 +188,19 @@ services:
       TZ: Asia/Hong_Kong
     networks:
       muscle_and_fitness_network:
-        ipv4_address: 172.16.1.21
 
   api-portal:
-    container_name: maf.api-portal.dev_dkr
+    container_name: maf.api-portal.dev
     image: "ijohnnymiller/muscle-and-fitness-server.api-portal:${TAG}"
     depends_on:
       mysql:
-        condition: service_healthy
+        condition: service_started
       redis:
-        condition: service_healthy
+        condition: service_started
       atmoz-sftp:
-        condition: service_healthy
+        condition: service_started
       service-registry:
-        condition: service_healthy
+        condition: service_started
     restart: always
     volumes:
       - ~/docker-file-mapping/maf.logs:/logs
@@ -216,7 +208,6 @@ services:
       TZ: Asia/Hong_Kong
     networks:
       muscle_and_fitness_network:
-        ipv4_address: 172.16.1.22
 
   ################################################################################
   #                     Microservice of Muscle and Fitness                       #
@@ -224,13 +215,13 @@ services:
   #                              Business Service                                #
   #------------------------------------------------------------------------------#
   auth-center:
-    container_name: maf.auth-center.dev_dkr
+    container_name: maf.auth-center.dev
     image: "ijohnnymiller/muscle-and-fitness-server.auth-center:${TAG}"
     depends_on:
       mysql:
-        condition: service_healthy
+        condition: service_started
       service-registry:
-        condition: service_healthy
+        condition: service_started
     restart: always
     volumes:
       - ~/docker-file-mapping/maf.logs:/logs
@@ -238,16 +229,15 @@ services:
       TZ: Asia/Hong_Kong
     networks:
       muscle_and_fitness_network:
-        ipv4_address: 172.16.1.23
 
   exercise-mis:
-    container_name: maf.exercise-mis.dev_dkr
+    container_name: maf.exercise-mis.dev
     image: "ijohnnymiller/muscle-and-fitness-server.exercise-mis:${TAG}"
     depends_on:
       mysql:
-        condition: service_healthy
+        condition: service_started
       service-registry:
-        condition: service_healthy
+        condition: service_started
     restart: always
     volumes:
       - ~/docker-file-mapping/maf.logs:/logs
@@ -255,16 +245,15 @@ services:
       TZ: Asia/Hong_Kong
     networks:
       muscle_and_fitness_network:
-        ipv4_address: 172.16.1.24
 
   muscle-mis:
-    container_name: maf.muscle-mis.dev_dkr
+    container_name: maf.muscle-mis.dev
     image: "ijohnnymiller/muscle-and-fitness-server.muscle-mis:${TAG}"
     depends_on:
       mysql:
-        condition: service_healthy
+        condition: service_started
       service-registry:
-        condition: service_healthy
+        condition: service_started
     restart: always
     volumes:
       - ~/docker-file-mapping/maf.logs:/logs
@@ -272,17 +261,16 @@ services:
       TZ: Asia/Hong_Kong
     networks:
       muscle_and_fitness_network:
-        ipv4_address: 172.16.1.25
 
   ################################################################################
   #                       Gateway for Muscle and Fitness                         #
   ################################################################################
   gateway:
-    container_name: maf.gateway.dev_dkr
+    container_name: maf.gateway.dev
     image: "ijohnnymiller/muscle-and-fitness-server.gateway:${TAG}"
     depends_on:
       service-registry:
-        condition: service_healthy
+        condition: service_started
     ports:
       - "8080:8080"
     restart: always
@@ -292,8 +280,6 @@ services:
       TZ: Asia/Hong_Kong
     networks:
       muscle_and_fitness_network:
-        # Gateway uses the last IP of the subnet
-        ipv4_address: 172.16.1.254
 
 ################################################################################
 #                       Network for Muscle and Fitness                         #
@@ -302,7 +288,7 @@ networks:
   muscle_and_fitness_network:
     ipam:
       driver: default
-      config:
+#      config:
         # Private Network (20-bit block): https://en.wikipedia.org/wiki/Private_network
         # IP range of the private network: https://ipgeolocation.io/browse/ipv4/172.16.1.0/24
-        - subnet: "172.16.1.0/24"
+#        - subnet: "172.16.1.0/24"
