@@ -141,7 +141,7 @@ services:
       - "8760:8760"
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/logs-maf-dev_dkr:/logs-dev_dkr
+      - /Users/johnny/docker-file-mapping/logs-maf-dev_dkr:/logs
     environment:
       TZ: Asia/Hong_Kong
     networks:
@@ -157,7 +157,7 @@ services:
     ports:
       - "8761:8761"
     volumes:
-      - /Users/johnny/docker-file-mapping/logs-maf-dev_dkr:/logs-dev_dkr
+      - /Users/johnny/docker-file-mapping/logs-maf-dev_dkr:/logs
     environment:
       TZ: Asia/Hong_Kong
     networks:
@@ -178,7 +178,7 @@ services:
         condition: service_healthy
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/logs-maf-dev_dkr:/logs-dev_dkr
+      - /Users/johnny/docker-file-mapping/logs-maf-dev_dkr:/logs
     environment:
       TZ: Asia/Hong_Kong
     networks:
@@ -200,7 +200,7 @@ services:
         condition: service_healthy
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/logs-maf-dev_dkr:/logs-dev_dkr
+      - /Users/johnny/docker-file-mapping/logs-maf-dev_dkr:/logs
     environment:
       TZ: Asia/Hong_Kong
     networks:
@@ -217,7 +217,7 @@ services:
         condition: service_healthy
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/logs-maf-dev_dkr:/logs-dev_dkr
+      - /Users/johnny/docker-file-mapping/logs-maf-dev_dkr:/logs
     environment:
       TZ: Asia/Hong_Kong
     networks:
@@ -234,7 +234,7 @@ services:
         condition: service_healthy
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/logs-maf-dev_dkr:/logs-dev_dkr
+      - /Users/johnny/docker-file-mapping/logs-maf-dev_dkr:/logs
     environment:
       TZ: Asia/Hong_Kong
     networks:
@@ -254,7 +254,7 @@ services:
       - "8080:8080"
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/logs-maf-dev_dkr:/logs-dev_dkr
+      - /Users/johnny/docker-file-mapping/logs-maf-dev_dkr:/logs
     environment:
       TZ: Asia/Hong_Kong
     networks:
