@@ -46,7 +46,7 @@ services:
   #                      Middleware of Muscle and Fitness                        #
   ################################################################################
   mysql:
-    container_name: mysql-maf-dev_dkr
+    container_name: mysql
     image: mysql:latest
     environment:
       MYSQL_ROOT_PASSWORD: "jm@mysql"
@@ -56,7 +56,7 @@ services:
       - "3306:3306"
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/mysql-maf-dev_dkr:/var/lib/mysql
+      - /Users/johnny/docker-file-mapping/maf-mysql:/var/lib/mysql
       - ./script/mysql-init-script:/docker-entrypoint-initdb.d
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     networks:
@@ -64,7 +64,7 @@ services:
         ipv4_address: 172.16.1.10
 
   redis:
-    container_name: redis-maf-dev_dkr
+    container_name: redis
     image: redis:latest
     ports:
       - "6379:6379"
@@ -80,7 +80,7 @@ services:
         ipv4_address: 172.16.1.11
 
   atmoz-sftp:
-    container_name: atmoz-sftp-maf-dev_dkr
+    container_name: atmoz-sftp
     image: atmoz/sftp:latest
     ports:
       - "23:22"
@@ -95,7 +95,7 @@ services:
         ipv4_address: 172.16.1.12
 
   open-zipkin:
-    container_name: open-zipkin-maf-dev_dkr
+    container_name: open-zipkin
     image: openzipkin/zipkin
     # Environment settings are defined here https://github.com/openzipkin/zipkin/blob/master/zipkin-server/README.md#environment-variables
     depends_on:
@@ -132,8 +132,8 @@ services:
   #                            Infrastructure Service                            #
   #------------------------------------------------------------------------------#
   service-registry:
-    container_name: service-registry-maf-dev_dkr
-    image: "ijohnnymiller/muscle-and-fitness-server.service-registry-dev_dkr:${TAG}"
+    container_name: maf-service-registry
+    image: "ijohnnymiller/muscle-and-fitness-server.service-registry:${TAG}"
     depends_on:
       open-zipkin:
         condition: service_healthy
@@ -141,7 +141,7 @@ services:
       - "8760:8760"
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/logs-maf-dev_dkr:/logs
+      - /Users/johnny/docker-file-mapping/maf-logs:/logs
     environment:
       TZ: Asia/Hong_Kong
     networks:
@@ -149,15 +149,15 @@ services:
         ipv4_address: 172.16.1.20
 
   spring-boot-admin:
-    container_name: spring-boot-admin-maf-dev_dkr
-    image: "ijohnnymiller/muscle-and-fitness-server.spring-boot-admin-dev_dkr:${TAG}"
+    container_name: maf-spring-boot-admin
+    image: "ijohnnymiller/muscle-and-fitness-server.spring-boot-admin:${TAG}"
     depends_on:
       service-registry:
         condition: service_healthy
     ports:
       - "8761:8761"
     volumes:
-      - /Users/johnny/docker-file-mapping/logs-maf-dev_dkr:/logs
+      - /Users/johnny/docker-file-mapping/maf-logs:/logs
     environment:
       TZ: Asia/Hong_Kong
     networks:
@@ -165,8 +165,8 @@ services:
         ipv4_address: 172.16.1.21
 
   api-portal:
-    container_name: api-portal-maf-dev_dkr
-    image: "ijohnnymiller/muscle-and-fitness-server.api-portal-dev_dkr:${TAG}"
+    container_name: maf-api-portal
+    image: "ijohnnymiller/muscle-and-fitness-server.api-portal:${TAG}"
     depends_on:
       mysql:
         condition: service_healthy
@@ -178,7 +178,7 @@ services:
         condition: service_healthy
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/logs-maf-dev_dkr:/logs
+      - /Users/johnny/docker-file-mapping/maf-logs:/logs
     environment:
       TZ: Asia/Hong_Kong
     networks:
@@ -191,8 +191,8 @@ services:
   #                              Business Service                                #
   #------------------------------------------------------------------------------#
   auth-center:
-    container_name: auth-center-maf-dev_dkr
-    image: "ijohnnymiller/muscle-and-fitness-server.auth-center-dev_dkr:${TAG}"
+    container_name: maf-auth-center
+    image: "ijohnnymiller/muscle-and-fitness-server.auth-center:${TAG}"
     depends_on:
       mysql:
         condition: service_healthy
@@ -200,7 +200,7 @@ services:
         condition: service_healthy
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/logs-maf-dev_dkr:/logs
+      - /Users/johnny/docker-file-mapping/maf-logs:/logs
     environment:
       TZ: Asia/Hong_Kong
     networks:
@@ -208,8 +208,8 @@ services:
         ipv4_address: 172.16.1.23
 
   exercise-mis:
-    container_name: exercise-mis-maf-dev_dkr
-    image: "ijohnnymiller/muscle-and-fitness-server.exercise-mis-dev_dkr:${TAG}"
+    container_name: maf-exercise-mis
+    image: "ijohnnymiller/muscle-and-fitness-server.exercise-mis:${TAG}"
     depends_on:
       mysql:
         condition: service_healthy
@@ -217,7 +217,7 @@ services:
         condition: service_healthy
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/logs-maf-dev_dkr:/logs
+      - /Users/johnny/docker-file-mapping/maf-logs:/logs
     environment:
       TZ: Asia/Hong_Kong
     networks:
@@ -225,8 +225,8 @@ services:
         ipv4_address: 172.16.1.24
 
   muscle-mis:
-    container_name: muscle-mis-maf-dev_dkr
-    image: "ijohnnymiller/muscle-and-fitness-server.muscle-mis-dev_dkr:${TAG}"
+    container_name: maf-muscle-mis
+    image: "ijohnnymiller/muscle-and-fitness-server.muscle-mis:${TAG}"
     depends_on:
       mysql:
         condition: service_healthy
@@ -234,7 +234,7 @@ services:
         condition: service_healthy
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/logs-maf-dev_dkr:/logs
+      - /Users/johnny/docker-file-mapping/maf-logs:/logs
     environment:
       TZ: Asia/Hong_Kong
     networks:
@@ -245,8 +245,8 @@ services:
   #                       Gateway for Muscle and Fitness                         #
   ################################################################################
   gateway:
-    container_name: gateway-maf-dev_dkr
-    image: "ijohnnymiller/muscle-and-fitness-server.gateway-dev_dkr:${TAG}"
+    container_name: maf-gateway
+    image: "ijohnnymiller/muscle-and-fitness-server.gateway:${TAG}"
     depends_on:
       service-registry:
         condition: service_healthy
@@ -254,7 +254,7 @@ services:
       - "8080:8080"
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/logs-maf-dev_dkr:/logs
+      - /Users/johnny/docker-file-mapping/maf-logs:/logs
     environment:
       TZ: Asia/Hong_Kong
     networks:
