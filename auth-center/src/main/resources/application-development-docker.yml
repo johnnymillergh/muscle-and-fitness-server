@@ -1,21 +1,21 @@
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://172.16.1.20:8760/eureka/
+      defaultZone: http://maf.service-registry.dev_dkr:8760/eureka/
 
 spring:
   zipkin:
-    base-url: http://172.16.1.13:9411
+    base-url: http://maf.open-zipkin.dev_dkr:9411
   datasource:
     name: muscle_and_fitness
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://172.16.1.10:3306/muscle_and_fitness?useSSL=true&useUnicode=true
+    url: jdbc:mysql://maf.mysql.dev_dkr:3306/muscle_and_fitness?useSSL=true&useUnicode=true
     username: root
     password: jm@mysql
   redis:
     database: 0
-    host: 172.16.1.11
+    host: maf.redis.dev_dkr
     port: 6379
     password: 123456
     timeout: 10000ms
@@ -34,7 +34,7 @@ logging:
 sftp:
   client:
     configuration:
-      host: 172.16.1.12
+      host: maf.atmoz-sftp.dev_dkr
       port: 22
       user: johnny
       password: atmoz@sftp
