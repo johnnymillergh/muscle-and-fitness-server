@@ -15,7 +15,7 @@ command "ls"
 
 printInfo "[INSTALL] Start to run Maven clean, install…"
 # Run the Maven clean install
-./mvnw clean install --quiet --batch-mode --show-version -DskipTests=true -Dmaven.javadoc.skip=true -Djib.to.auth.username=$DOCKER_HUB_USERNAME -Djib.to.auth.password=$DOCKER_HUB_PASSWORD
+./mvnw clean install --batch-mode --show-version -DskipTests=true -Dmaven.javadoc.skip=true -Djib.to.auth.username=$DOCKER_HUB_USERNAME -Djib.to.auth.password=$DOCKER_HUB_PASSWORD
 INSTALL_COMMAND_RESULT=$?
 if [ "$INSTALL_COMMAND_RESULT" -eq 0 ]; then
   printInfo "[INSTALL] Installation succeed. INSTALL_COMMAND_RESULT: $INSTALL_COMMAND_RESULT"
