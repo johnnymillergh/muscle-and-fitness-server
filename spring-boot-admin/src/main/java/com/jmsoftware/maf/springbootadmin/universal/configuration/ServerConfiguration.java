@@ -29,7 +29,7 @@ import java.util.Enumeration;
 @Component
 @RequiredArgsConstructor
 public class ServerConfiguration implements ApplicationListener<WebServerInitializedEvent> {
-    public static final String DEVELOPMENT_ENVIRONMENT_ALIAS = "dev";
+    private static final String DEVELOPMENT_ENVIRONMENT = "development";
     private final ProjectProperty projectProperty;
     private int serverPort;
 
@@ -60,7 +60,7 @@ public class ServerConfiguration implements ApplicationListener<WebServerInitial
      * @return public IP
      */
     public String getPublicIp() {
-        if (projectProperty.getEnvironmentAlias().contains(DEVELOPMENT_ENVIRONMENT_ALIAS)) {
+        if (projectProperty.getEnvironment().contains(DEVELOPMENT_ENVIRONMENT)) {
             return this.getInternetIp();
         }
         try {
@@ -91,8 +91,8 @@ public class ServerConfiguration implements ApplicationListener<WebServerInitial
                 while (addresses.hasMoreElements()) {
                     ip = addresses.nextElement();
                     if (ip instanceof Inet4Address
-                        && ip.isSiteLocalAddress()
-                        && !ip.getHostAddress().equals(intranetIp)) {
+                            && ip.isSiteLocalAddress()
+                            && !ip.getHostAddress().equals(intranetIp)) {
                         return ip.getHostAddress();
                     }
                 }

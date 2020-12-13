@@ -37,8 +37,7 @@ project:
     version: @project.version@
     description: @project.description@
     jdk-version: @java.version@
-    environment: @env@
-    environment-alias: @envAlias@
+    environment: ${spring.profiles.active}
     url: @project.url@
     inception-year: @inceptionYear@
     organization-name: @project.organization.name@

@@ -25,7 +25,6 @@ public class ProjectProperty {
     private String description;
     private String jdkVersion;
     private String environment;
-    private String environmentAlias;
     private String url;
     private String inceptionYear;
     private String organizationName;

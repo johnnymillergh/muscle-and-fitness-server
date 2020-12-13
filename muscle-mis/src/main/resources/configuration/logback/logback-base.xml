@@ -20,10 +20,10 @@
 
     <!-- Log for Multi Environment Configuration -->
     <springProfile name="development-local">
-        <property name="LOG_FILE_SUFFIX" value="-dev_loc"/>
+        <property name="LOG_FILE_SUFFIX" value="-development-local"/>
     </springProfile>
     <springProfile name="development-docker">
-        <property name="LOG_FILE_SUFFIX" value="-dev_dkr"/>
+        <property name="LOG_FILE_SUFFIX" value="-development-docker"/>
     </springProfile>
     <springProfile name="test">
         <property name="LOG_FILE_SUFFIX" value="-test"/>
@@ -32,7 +32,7 @@
         <property name="LOG_FILE_SUFFIX" value="-stage"/>
     </springProfile>
     <springProfile name="production">
-        <property name="LOG_FILE_SUFFIX" value="-prod"/>
+        <property name="LOG_FILE_SUFFIX" value="-production"/>
     </springProfile>
 
     <!-- CONSOLE Log Configuration -->

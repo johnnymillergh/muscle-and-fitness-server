@@ -29,10 +29,7 @@ env:
   # Speeding up the build
   # https://docs.travis-ci.com/user/speeding-up-the-build/
   matrix:
-    - TARGET_JOB="mvn verify -DskipTests=true -Dmaven.javadoc.skip=true -Djib.to.auth.username=$DOCKER_HUB_USERNAME -Djib.to.auth.password=$DOCKER_HUB_PASSWORD -P development-docker -B -V"
-    - TARGET_JOB="mvn verify -DskipTests=true -Dmaven.javadoc.skip=true -Djib.to.auth.username=$DOCKER_HUB_USERNAME -Djib.to.auth.password=$DOCKER_HUB_PASSWORD -P test -B -V"
-    - TARGET_JOB="mvn verify -DskipTests=true -Dmaven.javadoc.skip=true -Djib.to.auth.username=$DOCKER_HUB_USERNAME -Djib.to.auth.password=$DOCKER_HUB_PASSWORD -P stage -B -V"
-    - TARGET_JOB="mvn verify -DskipTests=true -Dmaven.javadoc.skip=true -Djib.to.auth.username=$DOCKER_HUB_USERNAME -Djib.to.auth.password=$DOCKER_HUB_PASSWORD -P production -B -V"
+    - TARGET_JOB="mvn install -DskipTests=true -Dmaven.javadoc.skip=true -Djib.to.auth.username=$DOCKER_HUB_USERNAME -Djib.to.auth.password=$DOCKER_HUB_PASSWORD -B -V"
 
 # https://docs.travis-ci.com/user/notifications#default-notification-settings
 notifications:

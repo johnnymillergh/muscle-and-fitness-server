@@ -181,7 +181,6 @@
             <id>development-docker</id>
             <properties>
                 <env>development-docker</env>
-                <envAlias>dev_dkr</envAlias>
             </properties>
         </profile>
 
@@ -189,7 +188,6 @@
             <id>test</id>
             <properties>
                 <env>test</env>
-                <envAlias>test</envAlias>
             </properties>
         </profile>
 
@@ -197,7 +195,6 @@
             <id>stage</id>
             <properties>
                 <env>stage</env>
-                <envAlias>stage</envAlias>
             </properties>
         </profile>
 
@@ -205,7 +202,6 @@
             <id>production</id>
             <properties>
                 <env>production</env>
-                <envAlias>prod</envAlias>
             </properties>
         </profile>
     </profiles>

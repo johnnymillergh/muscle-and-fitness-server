@@ -44,19 +44,14 @@ public class Swagger2Configuration {
         val version = projectProperty.getVersion();
         val developerEmail = projectProperty.getDeveloperEmail();
         val developerUrl = projectProperty.getDeveloperUrl();
-        val environmentAlias = projectProperty.getEnvironmentAlias();
         return new ApiInfoBuilder()
-                .title(String.format("API for %s@%s (%s)",
-                                     projectArtifactId,
-                                     version,
-                                     environmentAlias))
-                .description(String.format("%s %sArtifact ID: %s%sEnvironment: %s (%s)",
+                .title(String.format("API for %s@%s", projectArtifactId, version))
+                .description(String.format("%s %sArtifact ID: %s%sEnvironment: %s",
                                            projectProperty.getDescription(),
                                            LINE_SEPARATOR,
                                            projectArtifactId,
                                            LINE_SEPARATOR,
-                                           projectProperty.getEnvironment(),
-                                           environmentAlias))
+                                           projectProperty.getEnvironment()))
                 .contact(new Contact(String.format("%s, email: %s%sHome page: %s",
                                                    projectProperty.getDeveloperName(),
                                                    developerEmail,

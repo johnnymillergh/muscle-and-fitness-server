@@ -42,7 +42,7 @@ public class ExerciseMisApplication {
         val duration = Duration.between(startInstant, endInstant);
         log.info("🥳 Congratulations! 🎉");
         log.info("🖥 {}@{} started!", projectProperty.getProjectArtifactId(), projectProperty.getVersion());
-        log.info("⚙️ Environment: {} ({})", projectProperty.getEnvironment(), projectProperty.getEnvironmentAlias());
+        log.info("⚙️ Environment: {}", projectProperty.getEnvironment());
         log.info("⏳ Deployment duration: {} seconds ({} ms)", duration.getSeconds(), duration.toMillis());
         log.info("⏰ App started at {} (timezone - {})", endInstant, TimeZone.getDefault().getDisplayName());
         log.info("{}  App running at{}  - Local:   http://localhost:{}{}/{}  - Network: {}/",
