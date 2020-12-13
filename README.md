@@ -13,7 +13,7 @@
 
 **Muscle and Fitness Server** a Spring Cloud microservice based, back-end server for managing data of muscle and fitness.
 
-[Official Docker Image](https://hub.docker.com/r/ijohnnymiller/muscle-and-fitness-server-prod)
+[Official Docker Image](https://hub.docker.com/u/ijohnnymiller)
 
 ## Features
 
@@ -61,7 +61,7 @@ Here is the highlights of **Muscle and Fitness Server**:
 1. Clone or download this project.
 
    ```shell
-   $ git clone https://github.com/johnnymillergh/exrx-net-crawler-server.git
+   $ git clone https://github.com/johnnymillergh/muscle-and-fitness-server.git
    ```
 
 2. Build with newest Intellij IDEA.
