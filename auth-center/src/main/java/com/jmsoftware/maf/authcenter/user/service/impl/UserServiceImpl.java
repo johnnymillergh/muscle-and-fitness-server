@@ -3,7 +3,6 @@ package com.jmsoftware.maf.authcenter.user.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.jmsoftware.maf.authcenter.universal.aspect.ValidateArgument;
 import com.jmsoftware.maf.authcenter.user.entity.UserPersistence;
 import com.jmsoftware.maf.authcenter.user.mapper.UserMapper;
 import com.jmsoftware.maf.authcenter.user.service.UserService;
@@ -77,7 +76,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @SneakyThrows
-    @ValidateArgument
     public SaveUserForRegisteringResponse saveUserForRegistering(@Valid SaveUserForRegisteringPayload payload) {
         val userPersistence = new UserPersistence();
         userPersistence.setUsername(payload.getUsername());

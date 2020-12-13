@@ -1,9 +1,9 @@
 package com.jmsoftware.maf.authcenter.universal.controller;
 
-import com.jmsoftware.maf.authcenter.universal.domain.ValidationTestPayload;
 import com.jmsoftware.maf.authcenter.universal.service.CommonService;
 import com.jmsoftware.maf.authcenter.universal.service.RedisService;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
+import com.jmsoftware.maf.common.domain.ValidationTestPayload;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;

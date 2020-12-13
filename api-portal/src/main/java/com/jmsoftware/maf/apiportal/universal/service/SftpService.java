@@ -2,8 +2,10 @@ package com.jmsoftware.maf.apiportal.universal.service;
 
 import com.jmsoftware.maf.apiportal.universal.domain.SftpUploadFile;
 import org.springframework.integration.file.support.FileExistsMode;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -15,6 +17,7 @@ import java.util.List;
  * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
  * @date 2019-07-04 20:35
  **/
+@Validated
 public interface SftpService {
     /**
      * List all files under the full path
@@ -47,7 +50,7 @@ public interface SftpService {
      * @param sftpUploadFile encapsulated object
      * @return file's full path if successful, else null
      */
-    String upload(SftpUploadFile sftpUploadFile);
+    String upload(@Valid SftpUploadFile sftpUploadFile);
 
     /**
      * Upload file

@@ -1,8 +1,7 @@
 package com.jmsoftware.maf.exercisemis.universal.service.impl;
 
-import com.jmsoftware.maf.exercisemis.universal.aspect.ValidateArgument;
+import com.jmsoftware.maf.common.domain.ValidationTestPayload;
 import com.jmsoftware.maf.exercisemis.universal.configuration.ProjectProperty;
-import com.jmsoftware.maf.exercisemis.universal.domain.ValidationTestPayload;
 import com.jmsoftware.maf.exercisemis.universal.service.CommonService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +43,6 @@ public class CommonServiceImpl implements CommonService {
     }
 
     @Override
-    @ValidateArgument
     public void validateObject(@Valid ValidationTestPayload payload) {
         log.info("Validation passed! {}", payload);
     }

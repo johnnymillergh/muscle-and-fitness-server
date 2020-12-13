@@ -84,7 +84,10 @@
         <dependency>
             <groupId>com.jmsoftware.maf</groupId>
             <artifactId>common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.jmsoftware.maf</groupId>
+            <artifactId>muscle-and-fitness-server-spring-boot-starter</artifactId>
         </dependency>
     </dependencies>
 </project>

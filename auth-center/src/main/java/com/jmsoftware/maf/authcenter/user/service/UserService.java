@@ -4,7 +4,9 @@ import com.jmsoftware.maf.authcenter.user.entity.UserPersistence;
 import com.jmsoftware.maf.common.domain.authcenter.user.GetUserByLoginTokenResponse;
 import com.jmsoftware.maf.common.domain.authcenter.user.SaveUserForRegisteringPayload;
 import com.jmsoftware.maf.common.domain.authcenter.user.SaveUserForRegisteringResponse;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -15,6 +17,7 @@ import java.util.List;
  * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com
  * @date 5 /10/20 12:31 PM
  */
+@Validated
 public interface UserService {
     /**
      * Query by id user persistence.
@@ -71,5 +74,5 @@ public interface UserService {
      * @param payload the payload
      * @return the save user for registering response
      */
-    SaveUserForRegisteringResponse saveUserForRegistering(SaveUserForRegisteringPayload payload);
+    SaveUserForRegisteringResponse saveUserForRegistering(@Valid SaveUserForRegisteringPayload payload);
 }

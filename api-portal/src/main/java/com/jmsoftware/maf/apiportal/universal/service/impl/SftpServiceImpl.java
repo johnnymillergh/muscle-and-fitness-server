@@ -1,12 +1,11 @@
 package com.jmsoftware.maf.apiportal.universal.service.impl;
 
 import com.jcraft.jsch.ChannelSftp;
-import com.jmsoftware.maf.apiportal.universal.aspect.ValidateArgument;
 import com.jmsoftware.maf.apiportal.universal.configuration.SftpClientConfiguration;
 import com.jmsoftware.maf.apiportal.universal.configuration.SftpUploadGateway;
 import com.jmsoftware.maf.apiportal.universal.domain.SftpUploadFile;
 import com.jmsoftware.maf.apiportal.universal.service.SftpService;
-import com.jmsoftware.maf.common.util.FileUtil;
+import com.jmsoftware.maf.muscleandfitnessserverspringbootstarter.util.FileUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.BeanFactory;
@@ -85,11 +84,11 @@ public class SftpServiceImpl implements SftpService {
     }
 
     @Override
-    @ValidateArgument
     public String upload(@Valid SftpUploadFile sftpUploadFile) {
         log.info("Uploading single file to SFTP server. SftpUploadFile: {}", sftpUploadFile);
         Message<File> message = MessageBuilder.withPayload(sftpUploadFile.getFileToBeUploaded()).build();
-        sftpRemoteFileTemplate.setRemoteDirectoryExpression(new LiteralExpression(sftpClientConfiguration.getDirectory()));
+        sftpRemoteFileTemplate.setRemoteDirectoryExpression(
+                new LiteralExpression(sftpClientConfiguration.getDirectory()));
         sftpRemoteFileTemplate.setAutoCreateDirectory(true);
         sftpRemoteFileTemplate.setBeanFactory(beanFactory);
         // sftpRemoteFileTemplate.setCharset("UTF-8");
@@ -107,11 +106,12 @@ public class SftpServiceImpl implements SftpService {
                          boolean deleteSource) throws IOException {
         log.info("Uploading single multipart file to SFTP server. File name: {}", multipartFile.getOriginalFilename());
         File file = FileUtil.convertFrom(multipartFile);
-        SftpUploadFile sftpUploadFile = SftpUploadFile.builder()
-                                                      .fileToBeUploaded(file)
-                                                      .subDirectory(subDirectory)
-                                                      .fileExistsMode(fileExistsMode)
-                                                      .build();
+        SftpUploadFile sftpUploadFile = SftpUploadFile
+                .builder()
+                .fileToBeUploaded(file)
+                .subDirectory(subDirectory)
+                .fileExistsMode(fileExistsMode)
+                .build();
         String fileFullPath = this.upload(sftpUploadFile);
         if (deleteSource) {
             file.delete();

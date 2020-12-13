@@ -1,9 +1,8 @@
 package com.jmsoftware.maf.authcenter.universal.service.impl;
 
-import com.jmsoftware.maf.authcenter.universal.aspect.ValidateArgument;
 import com.jmsoftware.maf.authcenter.universal.configuration.ProjectProperty;
-import com.jmsoftware.maf.authcenter.universal.domain.ValidationTestPayload;
 import com.jmsoftware.maf.authcenter.universal.service.CommonService;
+import com.jmsoftware.maf.common.domain.ValidationTestPayload;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -44,7 +43,6 @@ public class CommonServiceImpl implements CommonService {
     }
 
     @Override
-    @ValidateArgument
     public void validateObject(@Valid ValidationTestPayload payload) {
         log.info("Validation passed! {}", payload);
     }

@@ -8,8 +8,8 @@ import com.jmsoftware.maf.apiportal.universal.service.impl.CustomUserDetailsServ
 import com.jmsoftware.maf.apiportal.universal.service.impl.JwtServiceImpl;
 import com.jmsoftware.maf.common.constant.HttpStatus;
 import com.jmsoftware.maf.common.exception.SecurityException;
-import com.jmsoftware.maf.common.util.RequestUtil;
-import com.jmsoftware.maf.common.util.ResponseUtil;
+import com.jmsoftware.maf.muscleandfitnessserverspringbootstarter.util.RequestUtil;
+import com.jmsoftware.maf.muscleandfitnessserverspringbootstarter.util.ResponseUtil;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

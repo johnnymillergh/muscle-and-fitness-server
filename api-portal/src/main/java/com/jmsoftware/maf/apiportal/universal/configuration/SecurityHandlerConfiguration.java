@@ -1,7 +1,7 @@
 package com.jmsoftware.maf.apiportal.universal.configuration;
 
 import com.jmsoftware.maf.common.constant.HttpStatus;
-import com.jmsoftware.maf.common.util.ResponseUtil;
+import com.jmsoftware.maf.muscleandfitnessserverspringbootstarter.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.context.annotation.Bean;

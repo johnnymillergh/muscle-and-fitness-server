@@ -5,7 +5,6 @@ import cn.hutool.core.collection.CollUtil;
 import com.jmsoftware.maf.authcenter.permission.entity.PermissionPersistence;
 import com.jmsoftware.maf.authcenter.permission.mapper.PermissionMapper;
 import com.jmsoftware.maf.authcenter.permission.service.PermissionService;
-import com.jmsoftware.maf.authcenter.universal.aspect.ValidateArgument;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByUserIdPayload;
@@ -60,7 +59,6 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    @ValidateArgument
     public GetPermissionListByRoleIdListResponse getPermissionListByRoleIdList(@Valid GetPermissionListByRoleIdListPayload payload) {
         val permissionList = this.getPermissionListByRoleIdList(payload.getRoleIdList());
         val response = new GetPermissionListByRoleIdListResponse();
@@ -82,7 +80,6 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    @ValidateArgument
     public GetPermissionListByUserIdResponse getPermissionListByUserId(@Valid GetPermissionListByUserIdPayload payload) {
         val permissionList = this.getPermissionListByUserId(payload.getUserId());
         val response = new GetPermissionListByUserIdResponse();

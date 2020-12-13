@@ -1,6 +1,5 @@
 package com.jmsoftware.maf.musclemis.universal.service.impl;
 
-import com.jmsoftware.maf.musclemis.universal.aspect.ValidateArgument;
 import com.jmsoftware.maf.musclemis.universal.configuration.ProjectProperty;
 import com.jmsoftware.maf.musclemis.universal.domain.ValidationTestPayload;
 import com.jmsoftware.maf.musclemis.universal.service.CommonService;
@@ -44,7 +43,6 @@ public class CommonServiceImpl implements CommonService {
     }
 
     @Override
-    @ValidateArgument
     public void validateObject(@Valid ValidationTestPayload payload) {
         log.info("Validation passed! {}", payload);
     }

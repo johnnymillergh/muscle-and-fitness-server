@@ -1,7 +1,9 @@
 package com.jmsoftware.maf.musclemis.universal.service;
 
 import com.jmsoftware.maf.musclemis.universal.domain.ValidationTestPayload;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
 import java.util.Map;
 
 /**
@@ -12,6 +14,7 @@ import java.util.Map;
  * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
  * @date 2/4/20 11:15 AM
  */
+@Validated
 public interface CommonService {
     /**
      * Gets application info.
@@ -25,5 +28,5 @@ public interface CommonService {
      *
      * @param payload the payload
      */
-    void validateObject(ValidationTestPayload payload);
+    void validateObject(@Valid ValidationTestPayload payload);
 }

@@ -1,7 +1,6 @@
 package com.jmsoftware.maf.apiportal.universal.service.impl;
 
 import com.google.common.collect.Lists;
-import com.jmsoftware.maf.apiportal.universal.aspect.ValidateArgument;
 import com.jmsoftware.maf.apiportal.universal.configuration.ProjectProperty;
 import com.jmsoftware.maf.apiportal.universal.domain.ValidationTestPayload;
 import com.jmsoftware.maf.apiportal.universal.service.CommonService;
@@ -47,7 +46,6 @@ public class CommonServiceImpl implements CommonService {
     }
 
     @Override
-    @ValidateArgument
     public void validateObject(@Valid ValidationTestPayload payload) {
         log.info("Validation passed! {}", payload);
     }

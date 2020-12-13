@@ -6,7 +6,9 @@ import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListB
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByUserIdPayload;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByUserIdResponse;
 import lombok.NonNull;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -17,6 +19,7 @@ import java.util.List;
  * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com
  * @date 5 /11/20 8:34 AM
  */
+@Validated
 public interface PermissionService {
     /**
      * Query by ID
@@ -65,7 +68,7 @@ public interface PermissionService {
      * @param payload the payload
      * @return the permission list by role id list
      */
-    GetPermissionListByRoleIdListResponse getPermissionListByRoleIdList(GetPermissionListByRoleIdListPayload payload);
+    GetPermissionListByRoleIdListResponse getPermissionListByRoleIdList(@Valid GetPermissionListByRoleIdListPayload payload);
 
     /**
      * Gets permission list by role id list.
@@ -81,7 +84,7 @@ public interface PermissionService {
      * @param payload the payload
      * @return the permission list by user id
      */
-    GetPermissionListByUserIdResponse getPermissionListByUserId(GetPermissionListByUserIdPayload payload);
+    GetPermissionListByUserIdResponse getPermissionListByUserId(@Valid GetPermissionListByUserIdPayload payload);
 
     /**
      * Gets permission list by user id.

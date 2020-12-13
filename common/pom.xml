@@ -8,9 +8,6 @@
     <artifactId>common</artifactId>
     <name>Muscle and Fitness Server :: Common</name>
     <description>Common Java class collection for JM Software.</description>
-    <properties>
-        <java.version>11</java.version>
-    </properties>
     <parent>
         <groupId>com.jmsoftware.maf</groupId>
         <artifactId>muscle-and-fitness-server</artifactId>
