@@ -6,7 +6,7 @@ version: "3.7"
 # 1. Pattern of 'container_name' must be:                                      #
 #    [service-name]-[system-short-name]-[environment-alias]                    #
 #    For instance, there is a 'MySQL service' for 'Muscle and Fitness Server', #
-#    the 'container_name' must be: mysql-maf-dev_dkr.                          #
+#    the 'container_name' must be: mysql-maf.dev.                              #
 #    In Kubernetes, 'container_name' must not be set.                          #
 # 2. ${TAG} is defined in file '.env'.                                         #
 # 3. The differences between each environment docker-compose.yml:              #
@@ -30,83 +30,102 @@ version: "3.7"
 # 7. Define 'depends_on' for service                                           #
 ################################################################################
 
-################################################
-#       Private Network Subnet Assignment      #
-################################################
-#     Subnet      # Environment (profile's ID) #
-#-----------------#----------------------------#
-#  172.16.1.0/24  #     development-docker     #
-#  172.16.2.0/24  #            test            #
-#  172.16.3.0/24  #           stage            #
-#  172.16.4.0/24  #         production         #
-################################################
-
 services:
   ################################################################################
   #                      Middleware of Muscle and Fitness                        #
   ################################################################################
   mysql:
-    container_name: mysql-maf-prod
+    container_name: maf.mysql.production
     image: mysql:latest
     environment:
       MYSQL_ROOT_PASSWORD: "jm@mysql"
-        MYSQL_DATABASE: muscle_and_fitness
+      MYSQL_DATABASE: muscle_and_fitness
       TZ: Asia/Hong_Kong
     ports:
       - "3306:3306"
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/mysql-maf-prod:/var/lib/mysql
+      - ~/docker-file-mapping/maf.mysql.production:/var/lib/mysql
       - ./script/mysql-init-script:/docker-entrypoint-initdb.d
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     networks:
       muscle_and_fitness_network:
-        ipv4_address: 172.16.4.10
 
   redis:
-    container_name: redis-maf-prod
+    container_name: maf.redis.production
     image: redis:latest
     ports:
       - "6379:6379"
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/redis-maf-prod:/data
+      - ~/docker-file-mapping/maf.redis.production:/data
       - ./script/redis/redis.conf:/usr/local/etc/redis/redis.conf
     environment:
       TZ: Asia/Hong_Kong
     command: "redis-server /usr/local/etc/redis/redis.conf"
     networks:
       muscle_and_fitness_network:
-        ipv4_address: 172.16.4.11
 
   atmoz-sftp:
-    container_name: atmoz-sftp-maf-prod
+    container_name: maf.atmoz-sftp.production
     image: atmoz/sftp:latest
     ports:
       - "23:22"
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/atmoz-sftp-maf-prod:/home/johnny/upload
+      - ~/docker-file-mapping/maf.atmoz-sftp.production:/home/johnny/upload
     environment:
       TZ: Asia/Hong_Kong
     command: "johnny:atmoz@sftp:::upload"
     networks:
       muscle_and_fitness_network:
-        ipv4_address: 172.16.4.12
+
+  zipkin-cassandra:
+    image: openzipkin/zipkin-cassandra
+    # Uncomment to use DSE instead (minimum version 5.1)
+    # image: datastax/dse-server:5.1.20
+    container_name: maf.zipkin-cassandra.production
+    environment:
+      CASSANDRA_USERNAME: cassandra_admin
+      CASSANDRA_PASSWORD: cassandra_password
+    # Uncomment to expose the storage port for testing
+    # ports:
+    #  - "9042:9042"
+    networks:
+      muscle_and_fitness_network:
+
+  zipkin-dependencies:
+    image: openzipkin/zipkin-dependencies
+    container_name: maf.zipkin-dependencies.production
+    entrypoint: crond -f
+    environment:
+      # Uncomment to see dependency processing logs
+      ZIPKIN_LOG_LEVEL: DEBUG
+      STORAGE_TYPE: cassandra3
+      CASSANDRA_USERNAME: cassandra_admin
+      CASSANDRA_PASSWORD: cassandra_password
+      CASSANDRA_CONTACT_POINTS: maf.zipkin-cassandra.production:9042
+    depends_on:
+      - zipkin-cassandra
+    networks:
+      muscle_and_fitness_network:
 
   open-zipkin:
-    container_name: open-zipkin-maf-prod
+    container_name: maf.open-zipkin.production
     image: openzipkin/zipkin
     # Environment settings are defined here https://github.com/openzipkin/zipkin/blob/master/zipkin-server/README.md#environment-variables
     depends_on:
-      - mysql
+      zipkin-cassandra:
+        condition: service_healthy
     environment:
-      STORAGE_TYPE: mysql
-      MYSQL_DB: zipkin
-      MYSQL_USER: root
-      MYSQL_PASS: "jm@mysql"
-      MYSQL_HOST: 172.16.4.10
-      MYSQL_TCP_PORT: 3306
+      STORAGE_TYPE: cassandra3
+      CASSANDRA_CONTACT_POINTS: maf.zipkin-cassandra.production:9042
+      # Uncomment to configure authentication
+      CASSANDRA_USERNAME: cassandra_admin
+      CASSANDRA_PASSWORD: cassandra_password
+      # Uncomment to enable request logging (TRACE shows query values)
+      command: --logging.level.com.datastax.oss.driver.internal.core.tracker.RequestLogger=TRACE
+      JAVA_OPTS: -Xms128m -Xmx128m -XX:+ExitOnOutOfMemoryError
       TZ: Asia/Hong_Kong
     # Uncomment to enable scribe
     # - SCRIBE_ENABLED=true
@@ -122,7 +141,6 @@ services:
     restart: always
     networks:
       muscle_and_fitness_network:
-        ipv4_address: 172.16.4.13
 
   ################################################################################
   #                     Microservice of Muscle and Fitness                       #
@@ -130,52 +148,58 @@ services:
   #                            Infrastructure Service                            #
   #------------------------------------------------------------------------------#
   service-registry:
-    container_name: service-registry-maf-prod
-    image: "ijohnnymiller/muscle-and-fitness-server.service-registry-prod:${TAG}"
+    container_name: maf.service-registry.production
+    image: "ijohnnymiller/muscle-and-fitness-server.service-registry:${TAG}"
     depends_on:
-      - open-zipkin
+      open-zipkin:
+        condition: service_healthy
     ports:
       - "8760:8760"
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/logs-maf-prod:/logs-prod
+      - ~/docker-file-mapping/maf.logs:/logs
     environment:
+      JAVA_TOOL_OPTIONS: -Xms128m -Xmx128m -Dspring.profiles.active=production
       TZ: Asia/Hong_Kong
     networks:
       muscle_and_fitness_network:
-        ipv4_address: 172.16.4.20
 
   spring-boot-admin:
-    container_name: spring-boot-admin-maf-prod
-    image: "ijohnnymiller/muscle-and-fitness-server.spring-boot-admin-prod:${TAG}"
+    container_name: maf.spring-boot-admin.production
+    image: "ijohnnymiller/muscle-and-fitness-server.spring-boot-admin:${TAG}"
     depends_on:
-      - service-registry
+      service-registry:
+        condition: service_started
     ports:
       - "8761:8761"
     volumes:
-      - /Users/johnny/docker-file-mapping/logs-maf-prod:/logs-prod
+      - ~/docker-file-mapping/maf.logs:/logs
     environment:
+      JAVA_TOOL_OPTIONS: -Xms128m -Xmx128m -Dspring.profiles.active=production
       TZ: Asia/Hong_Kong
     networks:
       muscle_and_fitness_network:
-        ipv4_address: 172.16.4.21
 
   api-portal:
-    container_name: api-portal-maf-prod
-    image: "ijohnnymiller/muscle-and-fitness-server.api-portal-prod:${TAG}"
+    container_name: maf.api-portal.production
+    image: "ijohnnymiller/muscle-and-fitness-server.api-portal:${TAG}"
     depends_on:
-      - mysql
-      - redis
-      - atmoz-sftp
-      - service-registry
+      mysql:
+        condition: service_started
+      redis:
+        condition: service_started
+      atmoz-sftp:
+        condition: service_started
+      service-registry:
+        condition: service_started
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/logs-maf-prod:/logs-prod
+      - ~/docker-file-mapping/maf.logs:/logs
     environment:
+      JAVA_TOOL_OPTIONS: -Xms128m -Xmx128m -Dspring.profiles.active=production
       TZ: Asia/Hong_Kong
     networks:
       muscle_and_fitness_network:
-        ipv4_address: 172.16.4.22
 
   ################################################################################
   #                     Microservice of Muscle and Fitness                       #
@@ -183,69 +207,75 @@ services:
   #                              Business Service                                #
   #------------------------------------------------------------------------------#
   auth-center:
-    container_name: auth-center-maf-prod
-    image: "ijohnnymiller/muscle-and-fitness-server.auth-center-prod:${TAG}"
+    container_name: maf.auth-center.production
+    image: "ijohnnymiller/muscle-and-fitness-server.auth-center:${TAG}"
     depends_on:
-      - mysql
-      - service-registry
+      mysql:
+        condition: service_started
+      service-registry:
+        condition: service_started
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/logs-maf-prod:/logs-prod
+      - ~/docker-file-mapping/maf.logs:/logs
     environment:
+      JAVA_TOOL_OPTIONS: -Xms128m -Xmx128m -Dspring.profiles.active=production
       TZ: Asia/Hong_Kong
     networks:
       muscle_and_fitness_network:
-        ipv4_address: 172.16.4.23
 
   exercise-mis:
-    container_name: exercise-mis-maf-prod
-    image: "ijohnnymiller/muscle-and-fitness-server.exercise-mis-prod:${TAG}"
+    container_name: maf.exercise-mis.production
+    image: "ijohnnymiller/muscle-and-fitness-server.exercise-mis:${TAG}"
     depends_on:
-      - mysql
-      - service-registry
+      mysql:
+        condition: service_started
+      service-registry:
+        condition: service_started
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/logs-maf-prod:/logs-prod
+      - ~/docker-file-mapping/maf.logs:/logs
     environment:
+      JAVA_TOOL_OPTIONS: -Xms128m -Xmx128m -Dspring.profiles.active=production
       TZ: Asia/Hong_Kong
     networks:
       muscle_and_fitness_network:
-        ipv4_address: 172.16.4.24
 
   muscle-mis:
-    container_name: muscle-mis-maf-prod
-    image: "ijohnnymiller/muscle-and-fitness-server.muscle-mis-prod:${TAG}"
+    container_name: maf.muscle-mis.production
+    image: "ijohnnymiller/muscle-and-fitness-server.muscle-mis:${TAG}"
     depends_on:
-      - mysql
-      - service-registry
+      mysql:
+        condition: service_started
+      service-registry:
+        condition: service_started
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/logs-maf-prod:/logs-prod
+      - ~/docker-file-mapping/maf.logs:/logs
     environment:
+      JAVA_TOOL_OPTIONS: -Xms128m -Xmx128m -Dspring.profiles.active=production
       TZ: Asia/Hong_Kong
     networks:
       muscle_and_fitness_network:
-        ipv4_address: 172.16.4.25
 
   ################################################################################
   #                       Gateway for Muscle and Fitness                         #
   ################################################################################
   gateway:
-    container_name: gateway-maf-prod
-    image: "ijohnnymiller/muscle-and-fitness-server.gateway-prod:${TAG}"
+    container_name: maf.gateway.production
+    image: "ijohnnymiller/muscle-and-fitness-server.gateway:${TAG}"
     depends_on:
-      - service-registry
+      service-registry:
+        condition: service_started
     ports:
       - "8080:8080"
     restart: always
     volumes:
-      - /Users/johnny/docker-file-mapping/logs-maf-prod:/logs-prod
+      - ~/docker-file-mapping/maf.logs:/logs
     environment:
+      JAVA_TOOL_OPTIONS: -Xms128m -Xmx128m -Dspring.profiles.active=production
       TZ: Asia/Hong_Kong
     networks:
       muscle_and_fitness_network:
-        # Gateway uses the last IP of the subnet
-        ipv4_address: 172.16.4.254
 
 ################################################################################
 #                       Network for Muscle and Fitness                         #
@@ -254,7 +284,7 @@ networks:
   muscle_and_fitness_network:
     ipam:
       driver: default
-      config:
+        #      config:
         # Private Network (20-bit block): https://en.wikipedia.org/wiki/Private_network
-        # IP range of the private network: https://ipgeolocation.io/browse/ipv4/172.16.4.0/24
-        - subnet: "172.16.4.0/24"
+      # IP range of the private network: https://ipgeolocation.io/browse/ipv4/172.16.1.0/24
+#        - subnet: "172.16.1.0/24"
