@@ -1,11 +1,11 @@
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://172.16.2.20:8760/eureka/
+      defaultZone: http://maf.service-registry.test:8760/eureka/
 
 spring:
   zipkin:
-    base-url: http://172.16.2.13:9411
+    base-url: http://maf.open-zipkin.test:9411
 
 custom:
   configuration:
