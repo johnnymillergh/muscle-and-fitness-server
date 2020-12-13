@@ -1,21 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <!-- Sub-module Basics -->
     <artifactId>common</artifactId>
-    <packaging>jar</packaging>
-    <name>Common Java Class</name>
+    <name>Muscle and Fitness Server :: Common</name>
     <description>Common Java class collection for JM Software.</description>
-    <properties>
-        <java.version>11</java.version>
-    </properties>
     <parent>
+        <groupId>com.jmsoftware.maf</groupId>
         <artifactId>muscle-and-fitness-server</artifactId>
-        <groupId>com.jmsoftware</groupId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.0.1</version>
     </parent>
 
     <!-- Scoped Dependencies Management -->
