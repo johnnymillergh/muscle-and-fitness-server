@@ -1,7 +1,5 @@
 server:
-  port: @port@
-  #  servlet:
-  #    context-path: /@project.artifactId@-@envAlias@
+  port: @muscle-mis.port@
   tomcat:
     uri-encoding: @project.build.sourceEncoding@
 
@@ -14,10 +12,23 @@ spring:
     throw-exception-if-no-handler-found: true
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
-    time-zone: GMT+8
+    time-zone: Asia/Hong_Kong
   sleuth:
     sampler:
       probability: 1.0
+
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    health-check-url-path: /actuator/health
+    status-page-url-path: /
+    metadata-map:
+      # needed to trigger info and endpoint update after restart
+      startup: ${random.int}
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}@${spring.cloud.client.hostname}@${spring.application.name}-${random.int}
+    prefer-ip-address: true
+  client:
+    registryFetchIntervalSeconds: 5
 
 feign:
   client:
@@ -25,6 +36,13 @@ feign:
       default:
         connectTimeout: 5000
         readTimeout: 10000
+        loggerLevel: full
+  compression:
+    request:
+      enabled: true
+    response:
+      enabled: true
+      useGzipDecoder: true
 
 management:
   endpoints:
@@ -42,9 +60,6 @@ mybatis-plus:
   # mapper-locations should start with `classpath*` prefix
   # when project is based on Maven multi-module to load XML mapper in different jar
   mapper-locations: classpath*:/mapper/**/*Mapper.xml
-  global-config:
-    db-config:
-      table-prefix: t_
 
 logging:
   config: classpath:configuration/logback/logback-@env@.xml
@@ -54,16 +69,15 @@ logging:
 
 project:
   property:
-    base-package: com.jmsoftware.musclemis
+    base-package: com.jmsoftware.maf.musclemis
     context-path:
     group-id: @project.groupId@
-    artifact-id: @project.artifactId@
+    project-parent-artifact-id: @project.parent.artifactId@
     project-artifact-id: @project.artifactId@
     version: @project.version@
     description: @project.description@
     jdk-version: @java.version@
     environment: @env@
-    environment-alias: @envAlias@
     url: @project.url@
     inception-year: @inceptionYear@
     organization-name: @project.organization.name@

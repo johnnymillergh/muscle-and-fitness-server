@@ -1,0 +1,68 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://maf.service-registry.dev:8760/eureka/
+
+spring:
+  zipkin:
+    base-url: http://maf.open-zipkin.dev:9411
+  datasource:
+    name: muscle_and_fitness
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://maf.mysql.dev:3306/muscle_and_fitness?useSSL=true&useUnicode=true
+    username: root
+    password: jm@mysql
+  redis:
+    database: 0
+    host: maf.redis.dev
+    port: 6379
+    password: 123456
+    timeout: 10000ms
+    lettuce:
+      pool:
+        max-active: 20
+        max-idle: 10
+        max-wait: -1ms
+        min-idle: 0
+
+logging:
+  # Configure logging level for SFTP/JSCH
+  level:
+    com.jcraft.jsch: INFO
+
+custom:
+  configuration:
+    super-user: "admin"
+    # Make `web-security-disabled` equal to true to disable web security. We suggest you do not turn off web security
+    # feature unless development environment.
+    web-security-disabled: false
+    # Disable web request information log
+    web-request-log-disabled: false
+    ignored-request:
+      post:
+        - "/authentication/**"
+      get:
+        - "/auth/check-username-uniqueness"
+        - "/auth/check-email-uniqueness"
+        - "/auth/validate-username/**"
+        - "/user/get-avatar"
+        - "/common/get-jwt"
+      pattern:
+        - "/actuator/**"
+        - "/druid/**"
+        - "/swagger-resources/**"
+        - "/v2/api-docs/**"
+
+sftp:
+  client:
+    configuration:
+      host: maf.atmoz-sftp.dev
+      port: 22
+      user: johnny
+      password: atmoz@sftp
+      directory: upload
+      private-key:
+      private-key-pass-phrase:
+      session-cache-size: 20
+      session-wait-timeout: 15000

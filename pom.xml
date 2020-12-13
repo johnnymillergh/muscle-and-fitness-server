@@ -5,40 +5,67 @@
     <!-- POM Reference https://maven.apache.org/pom.html -->
 
     <!-- Project Basics -->
-    <groupId>com.jmsoftware</groupId>
+    <groupId>com.jmsoftware.maf</groupId>
     <artifactId>muscle-and-fitness-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Muscle and Fitness Server</name>
-    <description>Muscle and Fitness Server, Spring Cloud based.</description>
+    <description>Muscle and Fitness Server (M&amp;F, maf), a Spring Cloud microservice based, back-end server for
+        managing data of muscle and fitness.
+    </description>
     <packaging>pom</packaging>
     <properties>
+        <!-- Developer Information -->
         <developerName>Johnny Miller (鍾俊)</developerName>
         <developerEmail>johnnysviva@outlook.com</developerEmail>
         <developerUrl>https://www.linkedin.com/in/ijohnnymiller</developerUrl>
+
+        <!-- Maven properties -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- Infrastructure Service. Port range: [8760, n]. -->
+        <service-registry.port>8760</service-registry.port>
+        <spring-boot-admin.port>8761</spring-boot-admin.port>
+        <api-portal.port>8762</api-portal.port>
+
+        <!-- Business Service. Port range: [8800, n]. -->
+        <auth-center.port>8800</auth-center.port>
+        <exercise-mis.port>8801</exercise-mis.port>
+        <muscle-mis.port>8802</muscle-mis.port>
+
+        <!-- Gateway Service. Port range: [8080, 8080]. -->
+        <gateway.port>8080</gateway.port>
+
+        <!-- Version Definitions. -->
         <java.version>11</java.version>
-        <spring-cloud.version>Hoxton.SR1</spring-cloud.version>
-        <spring-content-version>1.0.0.M5</spring-content-version>
-        <spring-boot-admin-version>2.2.2</spring-boot-admin-version>
+        <spring-cloud.version>Hoxton.SR4</spring-cloud.version>
+        <spring-content.version>1.0.0.M5</spring-content.version>
+        <spring-boot-admin.version>2.2.2</spring-boot-admin.version>
+        <knife4j.version>2.0.2</knife4j.version>
     </properties>
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.4.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
-    </parent>
+
+    <!-- The modules (sometimes called subprojects) to build as a part of this project. -->
     <modules>
         <module>common</module>
+        <module>muscle-and-fitness-server-spring-boot-starter</module>
+        <module>muscle-and-fitness-server-reactive-spring-boot-starter</module>
         <module>service-registry</module>
         <module>spring-boot-admin</module>
         <module>gateway</module>
-        <module>demo-one</module>
-        <module>demo-two</module>
+        <module>api-portal</module>
+        <module>auth-center</module>
         <module>exercise-mis</module>
         <module>muscle-mis</module>
     </modules>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.3.7.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
     <dependencyManagement>
         <dependencies>
-            <!-- Spring Cloud Dependencies -->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
@@ -49,44 +76,54 @@
 
             <!-- Sub Modals Management -->
             <dependency>
-                <groupId>com.jmsoftware</groupId>
+                <groupId>com.jmsoftware.maf</groupId>
                 <artifactId>common</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.jmsoftware</groupId>
+                <groupId>com.jmsoftware.maf</groupId>
+                <artifactId>muscle-and-fitness-server-spring-boot-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jmsoftware.maf</groupId>
+                <artifactId>muscle-and-fitness-server-reactive-spring-boot-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jmsoftware.maf</groupId>
                 <artifactId>service-registry</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.jmsoftware</groupId>
+                <groupId>com.jmsoftware.maf</groupId>
                 <artifactId>spring-boot-admin</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.jmsoftware</groupId>
+                <groupId>com.jmsoftware.maf</groupId>
                 <artifactId>gateway</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.jmsoftware</groupId>
-                <artifactId>demo-one</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
+                <groupId>com.jmsoftware.maf</groupId>
+                <artifactId>api-portal</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.jmsoftware</groupId>
-                <artifactId>demo-two</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
+                <groupId>com.jmsoftware.maf</groupId>
+                <artifactId>auth-center</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.jmsoftware</groupId>
+                <groupId>com.jmsoftware.maf</groupId>
                 <artifactId>exercise-mis</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.jmsoftware</groupId>
+                <groupId>com.jmsoftware.maf</groupId>
                 <artifactId>muscle-mis</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -124,14 +161,9 @@
     <!-- Build Settings -->
     <build>
         <!-- set the name of .jar file -->
-        <finalName>${project.artifactId}-${envAlias}-${project.version}</finalName>
+        <finalName>${project.artifactId}-${project.version}</finalName>
 
         <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-
             <!-- The Versions Plugin updates the versions of components in the POM. -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -164,7 +196,6 @@
             <id>development-docker</id>
             <properties>
                 <env>development-docker</env>
-                <envAlias>dev_dkr</envAlias>
             </properties>
         </profile>
 
@@ -172,7 +203,6 @@
             <id>test</id>
             <properties>
                 <env>test</env>
-                <envAlias>test</envAlias>
             </properties>
         </profile>
 
@@ -180,7 +210,6 @@
             <id>stage</id>
             <properties>
                 <env>stage</env>
-                <envAlias>stage</envAlias>
             </properties>
         </profile>
 
@@ -188,7 +217,6 @@
             <id>production</id>
             <properties>
                 <env>production</env>
-                <envAlias>prod</envAlias>
             </properties>
         </profile>
     </profiles>
@@ -227,6 +255,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>io.projectreactor</groupId>
@@ -238,19 +272,19 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>28.2-jre</version>
+            <version>29.0-jre</version>
         </dependency>
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>5.1.1</version>
+            <version>5.3.4</version>
         </dependency>
 
         <!-- Brings the popular ruby faker gem to Java https://github.com/DiUS/java-faker -->
         <dependency>
             <groupId>com.github.javafaker</groupId>
             <artifactId>javafaker</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.2</version>
         </dependency>
 
         <!-- Other -->
@@ -268,20 +302,9 @@
 
         <!-- Swagger: JSON API documentation for spring based applications -->
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>2.9.2</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>guava</artifactId>
-                    <groupId>com.google.guava</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
             <groupId>com.github.xiaoymin</groupId>
-            <artifactId>swagger-bootstrap-ui</artifactId>
-            <version>1.9.6</version>
+            <artifactId>knife4j-micro-spring-boot-starter</artifactId>
+            <version>${knife4j.version}</version>
         </dependency>
     </dependencies>
 </project>

@@ -1,47 +1,60 @@
-![ExRx Net Crawler Server Feature Graphics](https://raw.githubusercontent.com/johnnymillergh/MaterialLibrary/master/exrx-net-crawler/exrx-net-crawler-server-social-image.png)
-[![GitHub release](https://img.shields.io/github/release/johnnymillergh/exrx-net-crawler-server.svg)](https://github.com/johnnymillergh/exrx-net-crawler-server/releases)
-[![Build Status](https://travis-ci.com/johnnymillergh/exrx-net-crawler-server.svg?branch=master)](https://travis-ci.com/johnnymillergh/exrx-net-crawler-server)
-[![GitHub issues](https://img.shields.io/github/issues/johnnymillergh/exrx-net-crawler-server)](https://github.com/johnnymillergh/exrx-net-crawler-server/issues)
-[![GitHub forks](https://img.shields.io/github/forks/johnnymillergh/exrx-net-crawler-server)](https://github.com/johnnymillergh/exrx-net-crawler-server/network)
-[![GitHub stars](https://img.shields.io/github/stars/johnnymillergh/exrx-net-crawler-server)](https://github.com/johnnymillergh/exrx-net-crawler-server)
-[![GitHub license](https://img.shields.io/github/license/johnnymillergh/exrx-net-crawler-server)](https://github.com/johnnymillergh/exrx-net-crawler-server/blob/master/LICENSE)
-[![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/johnnymillergh/exrx-net-crawler-server.svg?style=popout)](https://github.com/johnnymillergh/exrx-net-crawler-server)
-[![GitHub repo size](https://img.shields.io/github/repo-size/johnnymillergh/exrx-net-crawler-server.svg)](https://github.com/johnnymillergh/exrx-net-crawler-server)
-[![Twitter](https://img.shields.io/twitter/url/https/github.com/johnnymillergh/exrx-net-crawler-server?style=social)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fjohnnymillergh%2Fexrx-net-crawler-server)
+![Muscle and Fitness Server Social Image](https://raw.githubusercontent.com/johnnymillergh/MaterialLibrary/master/muscle-and-fitness/muscle-and-fitness-server-social-image.png)
+[![GitHub release](https://img.shields.io/github/release/johnnymillergh/muscle-and-fitness-server.svg)](https://github.com/johnnymillergh/muscle-and-fitness-server/releases)
+[![Build Status](https://travis-ci.com/johnnymillergh/muscle-and-fitness-server.svg?branch=master)](https://travis-ci.com/johnnymillergh/muscle-and-fitness-server)
+[![GitHub issues](https://img.shields.io/github/issues/johnnymillergh/muscle-and-fitness-server)](https://github.com/johnnymillergh/muscle-and-fitness-server/issues)
+[![GitHub forks](https://img.shields.io/github/forks/johnnymillergh/muscle-and-fitness-server)](https://github.com/johnnymillergh/muscle-and-fitness-server/network)
+[![GitHub stars](https://img.shields.io/github/stars/johnnymillergh/muscle-and-fitness-server)](https://github.com/johnnymillergh/muscle-and-fitness-server)
+[![GitHub license](https://img.shields.io/github/license/johnnymillergh/muscle-and-fitness-server)](https://github.com/johnnymillergh/muscle-and-fitness-server/blob/master/LICENSE)
+[![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/johnnymillergh/muscle-and-fitness-server.svg?style=popout)](https://github.com/johnnymillergh/muscle-and-fitness-server)
+[![GitHub repo size](https://img.shields.io/github/repo-size/johnnymillergh/muscle-and-fitness-server.svg)](https://github.com/johnnymillergh/muscle-and-fitness-server)
+[![Twitter](https://img.shields.io/twitter/url/https/github.com/johnnymillergh/muscle-and-fitness-server?style=social)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fjohnnymillergh%2Fmuscle-and-fitness-server)
 
-# ExRx Net Crawler Server
+# Muscle and Fitness Server
 
-**ExRx Net Crawler Server** is a Spring Boot based project, which is responsible for managing the net-crawling and exercise data.
+**Muscle and Fitness Server** a Spring Cloud microservice based, back-end server for managing data of muscle and fitness.
 
-[Official Docker Image](https://hub.docker.com/r/ijohnnymiller/exrx-net-crawler-server-prod)
+[Official Docker Image](https://hub.docker.com/r/ijohnnymiller/muscle-and-fitness-server-prod)
 
 ## Features
 
-Here is the highlights of **ExRx Net Crawler Server**:
+Here is the highlights of **Muscle and Fitness Server**:
 
 1. Inherited from the most modern and newest Spring frameworks:
 
    `org.springframework.boot:spring-boot-starter-parent` - [![Spring Boot](https://maven-badges.herokuapp.com/maven-central/org.springframework.boot/spring-boot-starter-parent/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.springframework.boot/spring-boot-starter-parent/)
+   `org.springframework.cloud:spring-cloud-dependencies` - [![Spring Cloud](https://maven-badges.herokuapp.com/maven-central/org.springframework.cloud/spring-cloud-dependencies/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.springframework.cloud/spring-cloud-dependencies/)
 
-3. Multi-environment support.
+2. [Spring Cloud](https://spring.io/projects/spring-cloud) Feature:
+
+   - Eureka - Service registration and discovery.
+
+   - Spring Boot Admin - Admin UI for administration of spring boot applications.
+
+   - Spring Cloud OpenFeign - Declarative REST Client: Feign creates a dynamic implementation of an interface decorated with JAX-RS or Spring MVC annotations.
+
+   - Spring Cloud Gateway - provide a simple, yet effective way to route to APIs and provide cross cutting concerns to them such as: security, monitoring/metrics, and resiliency.
+
+   - Zipkin - a distributed tracing system. It helps gather timing data needed to troubleshoot latency problems in service architectures.
 
 3. Docker support.
 
-4. SFTP integration.
+4. Multi-environment support.
 
-5. API visualization. Enhanced Swagger API documentation.
+5. SFTP integration.
 
-6. Log compression.
+6. API visualization. Enhanced Swagger API documentation.
 
-7. Request log.
+7. Log compression.
 
-8. Method Argument Validation Aspect.
+8. Request log.
 
-9. Docker container log persistence.
+9. Method Argument Validation Aspect.
 
-10. Startup statistics.
+10. Docker container log persistence.
 
-11. Customized startup banner.
+11. Startup statistics.
+
+12. Customized startup banner.
 
 ## Usage
 

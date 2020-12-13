@@ -1,7 +1,5 @@
 server:
-  port: @port@
-#  servlet:
-#    context-path: /@project.artifactId@-@envAlias@
+  port: @service-registry.port@
   tomcat:
     uri-encoding: @project.build.sourceEncoding@
 
@@ -14,9 +12,11 @@ spring:
     throw-exception-if-no-handler-found: true
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
-    time-zone: GMT+8
+    time-zone: Asia/Hong_Kong
 
 eureka:
+  instance:
+    prefer-ip-address: true
   client:
     register-with-eureka: false
     fetch-registry: false
@@ -29,16 +29,15 @@ logging:
 
 project:
   property:
-    base-package: com.jmsoftware.serviceregistry
+    base-package: com.jmsoftware.maf.serviceregistry
     context-path:
     group-id: @project.groupId@
-    artifact-id: @project.artifactId@
+    project-parent-artifact-id: @project.parent.artifactId@
     project-artifact-id: @project.artifactId@
     version: @project.version@
     description: @project.description@
     jdk-version: @java.version@
-    environment: @env@
-    environment-alias: @envAlias@
+    environment: ${spring.profiles.active}
     url: @project.url@
     inception-year: @inceptionYear@
     organization-name: @project.organization.name@

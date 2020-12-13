@@ -5,15 +5,10 @@
 
     <!-- Sub-module Basics -->
     <artifactId>muscle-mis</artifactId>
-    <packaging>jar</packaging>
-    <name>Muscle MIS</name>
+    <name>Muscle and Fitness Server :: Muscle MIS</name>
     <description>Muscle Management Information Service.</description>
-    <properties>
-        <java.version>11</java.version>
-        <port>8773</port>
-    </properties>
     <parent>
-        <groupId>com.jmsoftware</groupId>
+        <groupId>com.jmsoftware.maf</groupId>
         <artifactId>muscle-and-fitness-server</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
@@ -30,22 +25,20 @@
             <plugin>
                 <groupId>com.google.cloud.tools</groupId>
                 <artifactId>jib-maven-plugin</artifactId>
-                <version>2.0.0</version>
+                <version>2.2.0</version>
                 <executions>
-                    <!-- Bind `jib:dockerBuild` to a Maven lifecycle `compile`.
-                    Jib will build your image directly to a Docker daemon.  -->
+                    <!-- Bind `jib:dockerBuild` to a Maven lifecycle `verify`. Jib will build your image directly to a Docker daemon. -->
                     <execution>
-                        <id>compilingPhaseJib</id>
-                        <phase>compile</phase>
+                        <id>buildDockerImagePhase</id>
+                        <phase>verify</phase>
                         <goals>
                             <goal>dockerBuild</goal>
                         </goals>
                     </execution>
-                    <!-- Bind `jib:build` to a Maven lifecycle `package`.
-                     Jib will build and push image to image registry. -->
+                    <!-- Bind `jib:build` to a Maven lifecycle `install`. Jib will build and push image to image registry. -->
                     <execution>
-                        <id>packagingPhaseJib</id>
-                        <phase>package</phase>
+                        <id>buildAndPushDockerImagePhase</id>
+                        <phase>install</phase>
                         <goals>
                             <goal>build</goal>
                         </goals>
@@ -53,22 +46,23 @@
                 </executions>
                 <configuration>
                     <from>
-                        <image>openjdk:11.0.6-slim</image>
+                        <!-- https://hub.docker.com/_/openjdk?tab=tags&page=1&ordering=last_updated&name=11.0.9.1-jre-slim -->
+                        <image>openjdk:11.0.9.1-jre-slim</image>
                     </from>
                     <to>
-                        <image>docker.io/ijohnnymiller/${project.artifactId}-${envAlias}</image>
+                        <image>docker.io/ijohnnymiller/${project.parent.artifactId}.${project.artifactId}</image>
                         <tags>
                             <tag>${project.version}</tag>
                         </tags>
                     </to>
                     <container>
                         <!-- The root directory on the container where the app's contents are placed. -->
-                        <appRoot>/${project.artifactId}-${envAlias}</appRoot>
+                        <appRoot>/${project.artifactId}</appRoot>
                         <jvmFlags>
-                            <jvmFlag>-Xmx256m</jvmFlag>
+                            <jvmFlag>-Dfile.encoding=${project.build.sourceEncoding}</jvmFlag>
                         </jvmFlags>
                         <ports>
-                            <port>${port}</port>
+                            <port>${muscle-mis.port}</port>
                         </ports>
                         <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
                     </container>
@@ -91,7 +85,7 @@
         <dependency>
             <groupId>de.codecentric</groupId>
             <artifactId>spring-boot-admin-starter-client</artifactId>
-            <version>${spring-boot-admin-version}</version>
+            <version>${spring-boot-admin.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -103,9 +97,12 @@
         </dependency>
 
         <dependency>
-            <groupId>com.jmsoftware</groupId>
+            <groupId>com.jmsoftware.maf</groupId>
             <artifactId>common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.jmsoftware.maf</groupId>
+            <artifactId>muscle-and-fitness-server-spring-boot-starter</artifactId>
         </dependency>
 
         <!-- ORM Library -->
@@ -122,7 +119,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
-            <version>1.1.21</version>
+            <version>1.1.22</version>
         </dependency>
     </dependencies>
 </project>

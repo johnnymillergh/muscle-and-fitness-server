@@ -1,15 +1,20 @@
 eureka:
-  instance:
-    leaseRenewalIntervalInSeconds: 10
-    health-check-url-path: /actuator/health
-    metadata-map:
-      # needed to trigger info and endpoint update after restart
-      startup: ${random.int}
   client:
-    registryFetchIntervalSeconds: 5
     serviceUrl:
-      defaultZone: http://localhost:8760/eureka/
+      defaultZone: http://172.16.2.20:8760/eureka/
 
 spring:
   zipkin:
-    base-url: http://localhost:9411
+    base-url: http://172.16.2.13:9411
+  datasource:
+    name: muscle_and_fitness
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://172.16.2.10:3306/muscle_and_fitness?useSSL=true&useUnicode=true
+    username: root
+    password: jm@mysql
+
+logging:
+  # Configure logging level for SFTP/JSCH
+  level:
+    com.jcraft.jsch: INFO
