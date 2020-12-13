@@ -58,7 +58,7 @@
                         <!-- The root directory on the container where the app's contents are placed. -->
                         <appRoot>/${project.artifactId}</appRoot>
                         <jvmFlags>
-                            <jvmFlag>-Xmx256m</jvmFlag>
+                            <jvmFlag>-Dfile.encoding=${project.build.sourceEncoding}</jvmFlag>
                         </jvmFlags>
                         <ports>
                             <port>${exercise-mis.port}</port>

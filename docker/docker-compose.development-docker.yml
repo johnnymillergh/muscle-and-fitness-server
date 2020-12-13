@@ -170,7 +170,7 @@ services:
     volumes:
       - ~/docker-file-mapping/maf.logs:/logs
     environment:
-      JAVA_TOOL_OPTIONS: -Xms128m -Xmx128m -Dfile.encoding=UTF-8 -Dspring.profiles.active=development-local
+      JAVA_TOOL_OPTIONS: -Xms128m -Xmx128m -Dspring.profiles.active=development-local
       TZ: Asia/Hong_Kong
     networks:
       muscle_and_fitness_network:
@@ -186,7 +186,7 @@ services:
     volumes:
       - ~/docker-file-mapping/maf.logs:/logs
     environment:
-      JAVA_TOOL_OPTIONS: -Xms128m -Xmx128m -Dfile.encoding=UTF-8 -Dspring.profiles.active=development-local
+      JAVA_TOOL_OPTIONS: -Xms128m -Xmx128m -Dspring.profiles.active=development-local
       TZ: Asia/Hong_Kong
     networks:
       muscle_and_fitness_network:
@@ -207,7 +207,7 @@ services:
     volumes:
       - ~/docker-file-mapping/maf.logs:/logs
     environment:
-      JAVA_TOOL_OPTIONS: -Xms128m -Xmx128m -Dfile.encoding=UTF-8 -Dspring.profiles.active=development-local
+      JAVA_TOOL_OPTIONS: -Xms128m -Xmx128m -Dspring.profiles.active=development-local
       TZ: Asia/Hong_Kong
     networks:
       muscle_and_fitness_network:
@@ -229,7 +229,7 @@ services:
     volumes:
       - ~/docker-file-mapping/maf.logs:/logs
     environment:
-      JAVA_TOOL_OPTIONS: -Xms128m -Xmx128m -Dfile.encoding=UTF-8 -Dspring.profiles.active=development-local
+      JAVA_TOOL_OPTIONS: -Xms128m -Xmx128m -Dspring.profiles.active=development-local
       TZ: Asia/Hong_Kong
     networks:
       muscle_and_fitness_network:
@@ -246,7 +246,7 @@ services:
     volumes:
       - ~/docker-file-mapping/maf.logs:/logs
     environment:
-      JAVA_TOOL_OPTIONS: -Xms128m -Xmx128m -Dfile.encoding=UTF-8 -Dspring.profiles.active=development-local
+      JAVA_TOOL_OPTIONS: -Xms128m -Xmx128m -Dspring.profiles.active=development-local
       TZ: Asia/Hong_Kong
     networks:
       muscle_and_fitness_network:
@@ -263,7 +263,7 @@ services:
     volumes:
       - ~/docker-file-mapping/maf.logs:/logs
     environment:
-      JAVA_TOOL_OPTIONS: -Xms128m -Xmx128m -Dfile.encoding=UTF-8 -Dspring.profiles.active=development-local
+      JAVA_TOOL_OPTIONS: -Xms128m -Xmx128m -Dspring.profiles.active=development-local
       TZ: Asia/Hong_Kong
     networks:
       muscle_and_fitness_network:
@@ -283,7 +283,7 @@ services:
     volumes:
       - ~/docker-file-mapping/maf.logs:/logs
     environment:
-      JAVA_TOOL_OPTIONS: -Xms128m -Xmx128m -Dfile.encoding=UTF-8 -Dspring.profiles.active=development-local
+      JAVA_TOOL_OPTIONS: -Xms128m -Xmx128m -Dspring.profiles.active=development-local
       TZ: Asia/Hong_Kong
     networks:
       muscle_and_fitness_network:
