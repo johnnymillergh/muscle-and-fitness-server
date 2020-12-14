@@ -84,7 +84,7 @@
         <dependency>
             <groupId>de.codecentric</groupId>
             <artifactId>spring-boot-admin-starter-server</artifactId>
-            <version>${spring-boot-admin.version}</version>
+            <version>${spring-boot-admin-starter-client.version}</version>
         </dependency>
 
         <dependency>

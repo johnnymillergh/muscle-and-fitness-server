@@ -39,8 +39,12 @@
         <java.version>11</java.version>
         <spring-cloud.version>Hoxton.SR4</spring-cloud.version>
         <spring-content.version>1.0.0.M5</spring-content.version>
-        <spring-boot-admin.version>2.2.2</spring-boot-admin.version>
-        <knife4j.version>2.0.2</knife4j.version>
+        <spring-boot-admin-starter-client.version>2.3.1</spring-boot-admin-starter-client.version>
+        <druid.version>1.2.4</druid.version>
+        <mybatis-plus-boot-starter.version>3.4.1</mybatis-plus-boot-starter.version>
+        <hutool-all.version>5.5.2</hutool-all.version>
+        <guava.version>30.0-jre</guava.version>
+        <knife4j.version>3.0.2</knife4j.version>
     </properties>
 
     <!-- The modules (sometimes called subprojects) to build as a part of this project. -->
@@ -272,12 +276,12 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>29.0-jre</version>
+            <version>${guava.version}</version>
         </dependency>
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>5.3.4</version>
+            <version>${hutool-all.version}</version>
         </dependency>
 
         <!-- Brings the popular ruby faker gem to Java https://github.com/DiUS/java-faker -->
