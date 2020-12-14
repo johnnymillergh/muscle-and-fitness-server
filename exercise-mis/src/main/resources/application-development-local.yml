@@ -14,8 +14,7 @@ spring:
     username: root
     password: jm@mysql
   devtools:
-    restart:
-      enabled: true
+    add-properties: true
 
 logging:
   # Configure logging level for SFTP/JSCH

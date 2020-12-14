@@ -44,7 +44,7 @@ logging:
 
 project:
   property:
-    base-package: com.jmsoftware.maf.gateway
+    base-package: @project.groupId@
     context-path:
     group-id: @project.groupId@
     project-parent-artifact-id: @project.parent.artifactId@

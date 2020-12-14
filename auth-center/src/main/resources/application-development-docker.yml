@@ -25,6 +25,8 @@ spring:
         max-idle: 10
         max-wait: -1ms
         min-idle: 0
+  devtools:
+    add-properties: true
 
 logging:
   # Configure logging level for SFTP/JSCH
