@@ -45,6 +45,7 @@
         <hutool-all.version>5.5.2</hutool-all.version>
         <guava.version>30.0-jre</guava.version>
         <knife4j.version>3.0.2</knife4j.version>
+        <jjwt.version>0.11.1</jjwt.version>
     </properties>
 
     <!-- The modules (sometimes called subprojects) to build as a part of this project. -->

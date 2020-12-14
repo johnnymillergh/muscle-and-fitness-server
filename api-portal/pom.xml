@@ -77,10 +77,6 @@
     <dependencies>
         <!-- Spring Frameworks -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
@@ -106,10 +102,6 @@
             <artifactId>spring-integration-sftp</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.jmsoftware.maf</groupId>
-            <artifactId>common</artifactId>
-        </dependency>
         <dependency>
             <groupId>com.jmsoftware.maf</groupId>
             <artifactId>muscle-and-fitness-server-spring-boot-starter</artifactId>
@@ -147,18 +139,18 @@
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
-            <version>0.11.1</version>
+            <version>${jjwt.version}</version>
         </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-impl</artifactId>
-            <version>0.11.1</version>
+            <version>${jjwt.version}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-jackson</artifactId> <!-- or jjwt-gson if Gson is preferred -->
-            <version>0.11.1</version>
+            <version>${jjwt.version}</version>
             <scope>runtime</scope>
         </dependency>
     </dependencies>

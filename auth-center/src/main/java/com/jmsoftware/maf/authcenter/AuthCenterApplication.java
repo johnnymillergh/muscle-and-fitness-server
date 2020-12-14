@@ -1,7 +1,7 @@
 package com.jmsoftware.maf.authcenter;
 
 import com.jmsoftware.maf.authcenter.universal.configuration.ProjectProperty;
-import com.jmsoftware.maf.authcenter.universal.configuration.ServerConfiguration;
+import com.jmsoftware.maf.muscleandfitnessserverspringbootstarter.helper.IpHelper;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.boot.SpringApplication;
@@ -28,11 +28,11 @@ import java.util.TimeZone;
 public class AuthCenterApplication {
     private static final String LINE_SEPARATOR = System.lineSeparator();
     private static ProjectProperty projectProperty;
-    private static ServerConfiguration serverConfiguration;
+    private static IpHelper ipHelper;
 
-    public AuthCenterApplication(ProjectProperty projectProperty, ServerConfiguration serverConfiguration) {
+    public AuthCenterApplication(ProjectProperty projectProperty, IpHelper ipHelper) {
         AuthCenterApplication.projectProperty = projectProperty;
-        AuthCenterApplication.serverConfiguration = serverConfiguration;
+        AuthCenterApplication.ipHelper = ipHelper;
     }
 
     public static void main(String[] args) {
@@ -45,8 +45,8 @@ public class AuthCenterApplication {
         log.info("⚙️ Environment: {}", projectProperty.getEnvironment());
         log.info("⏳ Deployment duration: {} seconds ({} ms)", duration.getSeconds(), duration.toMillis());
         log.info("⏰ App started at {} (timezone - {})", endInstant, TimeZone.getDefault().getDisplayName());
-        log.info("{}  App running at{}  - Local:   http://localhost:{}{}/{}  - Network: {}/",
-                 LINE_SEPARATOR, LINE_SEPARATOR, serverConfiguration.getServerPort(), projectProperty.getContextPath(),
-                 LINE_SEPARATOR, serverConfiguration.getBaseUrl());
+        log.info("{}  App running at{}  - Local:   http://localhost:{}{}/{}  - Network: http://{}/{}",
+                 LINE_SEPARATOR, LINE_SEPARATOR, ipHelper.getServerPort(), projectProperty.getContextPath(),
+                 LINE_SEPARATOR, ipHelper.getPublicIp(), projectProperty.getContextPath());
     }
 }

@@ -1,6 +1,7 @@
 package com.jmsoftware.maf.muscleandfitnessserverspringbootstarter.helper;
 
 import cn.hutool.core.util.StrUtil;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,7 @@ import java.util.Enumeration;
 @RequiredArgsConstructor
 public class IpHelper implements ApplicationListener<WebServerInitializedEvent> {
     private static final String DEVELOPMENT_ENVIRONMENT = "development";
+    @Getter(AccessLevel.NONE)
     private final Environment environment;
     private int serverPort;
 
