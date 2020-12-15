@@ -25,8 +25,8 @@ import javax.validation.Valid;
  * @date 5/10/20 12:36 PM
  **/
 @RestController
-@RequestMapping("/user-remote-api")
 @RequiredArgsConstructor
+@RequestMapping("/user-remote-api")
 @Api(tags = {"User Remote API Controller"})
 public class UserRemoteApiController {
     private final UserService userService;
@@ -37,8 +37,8 @@ public class UserRemoteApiController {
         return ResponseBodyBean.ofSuccess(userService.getUserByLoginToken(payload.getLoginToken()));
     }
 
-    @PostMapping("/save-user-for-registering")
-    public ResponseBodyBean<SaveUserForRegisteringResponse> saveUserForRegistering(@Valid @RequestBody SaveUserForRegisteringPayload payload) {
-        return ResponseBodyBean.ofSuccess(userService.saveUserForRegistering(payload));
+    @PostMapping("/save-user-for-register")
+    public ResponseBodyBean<SaveUserForRegisteringResponse> saveUserForRegister(@Valid @RequestBody SaveUserForRegisteringPayload payload) {
+        return ResponseBodyBean.ofSuccess(userService.saveUserForRegister(payload));
     }
 }

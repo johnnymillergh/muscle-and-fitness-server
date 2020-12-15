@@ -53,7 +53,7 @@ public interface AuthCenterRemoteApi {
      * @param payload the payload
      * @return the response body bean
      */
-    @PostMapping("/user-remote-api/save-user-for-registering")
+    @PostMapping("/user-remote-api/save-user-for-register")
     ResponseBodyBean<SaveUserForRegisteringResponse> saveUserForRegistering(@Valid @RequestBody SaveUserForRegisteringPayload payload);
 
     /**

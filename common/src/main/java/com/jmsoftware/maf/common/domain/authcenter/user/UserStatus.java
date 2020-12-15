@@ -13,16 +13,16 @@ public enum UserStatus {
     /**
      * Enabled user
      */
-    ENABLED(1, "Enabled user"),
+    ENABLED(Byte.valueOf("1"), "Enabled user"),
     /**
      * Disabled user
      */
-    DISABLED(0, "Disabled user");
+    DISABLED(Byte.valueOf("0"), "Disabled user");
 
-    private final Integer status;
+    private final Byte status;
     private final String description;
 
-    UserStatus(Integer status, String description) {
+    UserStatus(Byte status, String description) {
         this.status = status;
         this.description = description;
     }
@@ -33,7 +33,7 @@ public enum UserStatus {
      * @param status status value
      * @return user status enum
      */
-    public static UserStatus getByStatus(Integer status) {
+    public static UserStatus getByStatus(Byte status) {
         UserStatus result = UserStatus.DISABLED;
         UserStatus[] userStatuses = UserStatus.values();
         for (UserStatus userStatus : userStatuses) {

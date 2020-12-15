@@ -2,7 +2,9 @@ package com.jmsoftware.maf.authcenter.user.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jmsoftware.maf.authcenter.user.entity.UserPersistence;
 import com.jmsoftware.maf.authcenter.user.mapper.UserMapper;
 import com.jmsoftware.maf.authcenter.user.service.UserService;
@@ -10,15 +12,14 @@ import com.jmsoftware.maf.common.domain.authcenter.user.GetUserByLoginTokenRespo
 import com.jmsoftware.maf.common.domain.authcenter.user.SaveUserForRegisteringPayload;
 import com.jmsoftware.maf.common.domain.authcenter.user.SaveUserForRegisteringResponse;
 import com.jmsoftware.maf.common.domain.authcenter.user.UserStatus;
-import com.jmsoftware.maf.common.exception.BusinessException;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
-import java.util.List;
 
 /**
  * <h1>UserServiceImpl</h1>
@@ -28,44 +29,18 @@ import java.util.List;
  * @author Johnny Miller (鍾俊)
  * @date 2020-05-10 12:08:28
  */
-@Service("userService")
-public class UserServiceImpl implements UserService {
-    @Resource
-    private UserMapper userMapper;
-
+@Slf4j
+@Service
+public class UserServiceImpl extends ServiceImpl<UserMapper, UserPersistence> implements UserService {
     @Override
-    public UserPersistence queryById(Long id) {
-        return this.userMapper.selectById(id);
-    }
-
-    @Override
-    public List<UserPersistence> queryAllByLimit(int offset, int limit) {
-        return this.userMapper.selectAllByLimit(offset, limit);
-    }
-
-    @Override
-    public UserPersistence insert(UserPersistence userPersistence) {
-        this.userMapper.insert(userPersistence);
-        return userPersistence;
-    }
-
-    @Override
-    public UserPersistence update(UserPersistence userPersistence) {
-        this.userMapper.update(userPersistence);
-        return this.queryById(userPersistence.getId());
-    }
-
-    @Override
-    public boolean deleteById(Long id) {
-        return this.userMapper.deleteById(id) > 0;
-    }
-
-    @Override
-    public GetUserByLoginTokenResponse getUserByLoginToken(String loginToken) {
-        if (StrUtil.isBlank(loginToken)) {
-            return null;
-        }
-        val userPersistence = userMapper.selectUserByUsernameOrEmail(loginToken);
+    public GetUserByLoginTokenResponse getUserByLoginToken(@NotBlank String loginToken) {
+        LambdaQueryWrapper<UserPersistence> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(UserPersistence::getUsername, loginToken)
+                .or()
+                .eq(UserPersistence::getEmail, loginToken)
+                .or()
+                .eq(UserPersistence::getCellphone, loginToken);
+        val userPersistence = this.getBaseMapper().selectOne(wrapper);
         if (ObjectUtil.isNull(userPersistence)) {
             return null;
         }
@@ -76,7 +51,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @SneakyThrows
-    public SaveUserForRegisteringResponse saveUserForRegistering(@Valid SaveUserForRegisteringPayload payload) {
+    public SaveUserForRegisteringResponse saveUserForRegister(@Valid SaveUserForRegisteringPayload payload) {
         val userPersistence = new UserPersistence();
         userPersistence.setUsername(payload.getUsername());
         userPersistence.setEmail(payload.getEmail());
@@ -85,10 +60,8 @@ public class UserServiceImpl implements UserService {
         val currentTime = new Date();
         userPersistence.setCreatedTime(currentTime);
         userPersistence.setModifiedTime(currentTime);
-        this.insert(userPersistence);
-        if (ObjectUtil.isNull(userPersistence.getId())) {
-            throw new BusinessException("Cannot insert user into database!");
-        }
+        this.save(userPersistence);
+        log.warn("Saved user for register. {}", userPersistence);
         val response = new SaveUserForRegisteringResponse();
         response.setUserId(userPersistence.getId());
         return response;
