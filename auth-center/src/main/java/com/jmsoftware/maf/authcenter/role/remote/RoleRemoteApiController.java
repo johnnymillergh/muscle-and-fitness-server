@@ -2,17 +2,14 @@ package com.jmsoftware.maf.authcenter.role.remote;
 
 import com.jmsoftware.maf.authcenter.role.service.RoleService;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
-import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdPayload;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
 
 /**
  * <h1>RoleRemoteApiController</h1>
@@ -25,13 +22,13 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/role-remote-api")
-@Api(tags = {"Role Remote API Controller"})
+@Api(tags = {"Role Remote API"})
 public class RoleRemoteApiController {
     private final RoleService roleService;
 
-    @PostMapping("/get-role-list-by-user-id")
-    @ApiOperation(value = "/get-role-list-by-user-id", notes = "Get role list by user id")
-    public ResponseBodyBean<GetRoleListByUserIdResponse> getRoleListByUserId(@Valid @RequestBody GetRoleListByUserIdPayload payload) {
-        return ResponseBodyBean.ofSuccess(roleService.getRoleListByUserId(payload));
+    @GetMapping("/roles/{userId}")
+    @ApiOperation(value = "Get role list", notes = "Get role list (Remote API)")
+    public ResponseBodyBean<GetRoleListByUserIdResponse> getRoleList(@PathVariable Long userId) {
+        return ResponseBodyBean.ofSuccess(roleService.getRoleList(userId));
     }
 }

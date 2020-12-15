@@ -5,7 +5,6 @@ import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListB
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByUserIdPayload;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByUserIdResponse;
-import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdPayload;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdResponse;
 import com.jmsoftware.maf.common.domain.authcenter.user.GetUserByLoginTokenResponse;
 import com.jmsoftware.maf.common.domain.authcenter.user.SaveUserForRegisteringPayload;
@@ -42,11 +41,11 @@ public interface AuthCenterRemoteApi {
     /**
      * Gets role list by user id.
      *
-     * @param payload the payload
+     * @param userId the user id
      * @return the role list by user id
      */
-    @PostMapping("/role-remote-api/get-role-list-by-user-id")
-    ResponseBodyBean<GetRoleListByUserIdResponse> getRoleListByUserId(@Valid @RequestBody GetRoleListByUserIdPayload payload);
+    @GetMapping("/role-remote-api/roles/{userId}")
+    ResponseBodyBean<GetRoleListByUserIdResponse> getRoleListByUserId(@PathVariable Long userId);
 
     /**
      * Save user for registering response body bean.
@@ -54,8 +53,8 @@ public interface AuthCenterRemoteApi {
      * @param payload the payload
      * @return the response body bean
      */
-    @PostMapping("/user-remote-api/save-user-for-register")
-    ResponseBodyBean<SaveUserForRegisteringResponse> saveUserForRegistering(@Valid @RequestBody SaveUserForRegisteringPayload payload);
+    @PostMapping("/user-remote-api/users")
+    ResponseBodyBean<SaveUserForRegisteringResponse> saveUserForRegister(@Valid @RequestBody SaveUserForRegisteringPayload payload);
 
     /**
      * Gets permission list by role id list.

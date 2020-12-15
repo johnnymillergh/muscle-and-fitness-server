@@ -1,16 +1,15 @@
 package com.jmsoftware.maf.authcenter.role.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jmsoftware.maf.authcenter.role.entity.RolePersistence;
 import com.jmsoftware.maf.authcenter.role.mapper.RoleMapper;
 import com.jmsoftware.maf.authcenter.role.service.RoleService;
-import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdPayload;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdResponse;
 import lombok.NonNull;
 import lombok.val;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -21,19 +20,11 @@ import java.util.List;
  * @author Johnny Miller (鍾俊)
  * @date 2020-05-10 22:39:50
  */
-@Service("roleService")
-public class RoleServiceImpl implements RoleService {
-    @Resource
-    private RoleMapper roleMapper;
-
+@Service
+public class RoleServiceImpl extends ServiceImpl<RoleMapper, RolePersistence> implements RoleService {
     @Override
-    public RolePersistence queryById(Long id) {
-        return this.roleMapper.queryById(id);
-    }
-
-    @Override
-    public GetRoleListByUserIdResponse getRoleListByUserId(GetRoleListByUserIdPayload payload) {
-        val roleList = this.getRoleListByUserId(payload.getUserId());
+    public GetRoleListByUserIdResponse getRoleList(Long userId) {
+        val roleList = this.getRoleListByUserId(userId);
         GetRoleListByUserIdResponse response = new GetRoleListByUserIdResponse();
         roleList.forEach(rolePersistence -> {
             GetRoleListByUserIdResponse.Role role = new GetRoleListByUserIdResponse.Role();
@@ -45,28 +36,6 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<RolePersistence> getRoleListByUserId(@NonNull Long userId) {
-        return roleMapper.selectRoleListByUserId(userId);
-    }
-
-    @Override
-    public List<RolePersistence> queryAllByLimit(int offset, int limit) {
-        return this.roleMapper.queryAllByLimit(offset, limit);
-    }
-
-    @Override
-    public RolePersistence insert(RolePersistence rolePersistence) {
-        this.roleMapper.insert(rolePersistence);
-        return rolePersistence;
-    }
-
-    @Override
-    public RolePersistence update(RolePersistence rolePersistence) {
-        this.roleMapper.update(rolePersistence);
-        return this.queryById(rolePersistence.getId());
-    }
-
-    @Override
-    public boolean deleteById(Long id) {
-        return this.roleMapper.deleteById(id) > 0;
+        return this.getBaseMapper().selectRoleListByUserId(userId);
     }
 }

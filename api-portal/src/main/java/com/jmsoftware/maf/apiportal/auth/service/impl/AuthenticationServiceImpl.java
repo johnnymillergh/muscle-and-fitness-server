@@ -40,7 +40,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         saveUserForRegisteringPayload.setUsername(payload.getUsername());
         saveUserForRegisteringPayload.setEmail(payload.getEmail());
         saveUserForRegisteringPayload.setEncodedPassword(encoder.encode(payload.getPassword()));
-        val response = authCenterRemoteApi.saveUserForRegistering(saveUserForRegisteringPayload);
+        val response = authCenterRemoteApi.saveUserForRegister(saveUserForRegisteringPayload);
         log.info("Registered an new user account. User ID: {}", response.getData().getUserId());
         return response.getData().getUserId();
     }

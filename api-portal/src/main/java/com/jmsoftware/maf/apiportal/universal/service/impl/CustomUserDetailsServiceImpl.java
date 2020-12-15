@@ -1,12 +1,10 @@
 package com.jmsoftware.maf.apiportal.universal.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.ObjectUtil;
 import com.jmsoftware.maf.apiportal.remoteapi.AuthCenterRemoteApi;
 import com.jmsoftware.maf.apiportal.universal.domain.UserPrincipal;
 import com.jmsoftware.maf.common.constant.HttpStatus;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload;
-import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdPayload;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdResponse;
 import com.jmsoftware.maf.common.exception.SecurityException;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -37,16 +36,14 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
     @SneakyThrows
     public UserDetails loadUserByUsername(String credentials) throws UsernameNotFoundException {
         val getUserByLoginTokenResponseResponseBody = authCenterRemoteApi.getUserByLoginToken(credentials);
-        val getUserByLoginTokenResponse = getUserByLoginTokenResponseResponseBody.getData();
-        if (ObjectUtil.isNull(getUserByLoginTokenResponse)) {
-            val errorMessage = String.format("User's account not found, credentials: %s", credentials);
-            log.error(errorMessage);
-            throw new UsernameNotFoundException(errorMessage);
-        }
-        val getRoleListByUserIdPayload = new GetRoleListByUserIdPayload();
-        getRoleListByUserIdPayload.setUserId(getUserByLoginTokenResponse.getId());
+        val getUserByLoginTokenResponse = Optional.ofNullable(getUserByLoginTokenResponseResponseBody.getData())
+                .orElseThrow(() -> {
+                    val errorMessage = String.format("User's account not found, credentials: %s", credentials);
+                    log.error(errorMessage);
+                    return new UsernameNotFoundException(errorMessage);
+                });
         val getRoleListByUserIdResponseResponseBody =
-                authCenterRemoteApi.getRoleListByUserId(getRoleListByUserIdPayload);
+                authCenterRemoteApi.getRoleListByUserId(getUserByLoginTokenResponse.getId());
         val roleList = getRoleListByUserIdResponseResponseBody.getData().getRoleList();
         if (CollUtil.isEmpty(roleList)) {
             throw new SecurityException(HttpStatus.ROLE_NOT_FOUND);
