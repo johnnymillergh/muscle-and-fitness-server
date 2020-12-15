@@ -7,12 +7,13 @@ import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListB
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByUserIdResponse;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdPayload;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdResponse;
-import com.jmsoftware.maf.common.domain.authcenter.user.GetUserByLoginTokenPayload;
 import com.jmsoftware.maf.common.domain.authcenter.user.GetUserByLoginTokenResponse;
 import com.jmsoftware.maf.common.domain.authcenter.user.SaveUserForRegisteringPayload;
 import com.jmsoftware.maf.common.domain.authcenter.user.SaveUserForRegisteringResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -32,11 +33,11 @@ public interface AuthCenterRemoteApi {
     /**
      * Gets user by login token.
      *
-     * @param payload the payload
+     * @param loginToken the login token
      * @return the user by login token
      */
-    @PostMapping("/user-remote-api/get-user-by-login-token")
-    ResponseBodyBean<GetUserByLoginTokenResponse> getUserByLoginToken(@Valid @RequestBody GetUserByLoginTokenPayload payload);
+    @GetMapping("/user-remote-api/users/{loginToken}")
+    ResponseBodyBean<GetUserByLoginTokenResponse> getUserByLoginToken(@PathVariable String loginToken);
 
     /**
      * Gets role list by user id.

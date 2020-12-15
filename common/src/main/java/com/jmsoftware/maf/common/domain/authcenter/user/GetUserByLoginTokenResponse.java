@@ -53,7 +53,7 @@ public class GetUserByLoginTokenResponse {
     /**
      * Status. 1 - enabled, 2 - disabled
      */
-    private Integer status;
+    private Byte status;
     /**
      * Create time
      */

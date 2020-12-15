@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -70,15 +72,13 @@ public class ExceptionControllerAdvice {
                       exception.getMessage());
             response.setStatus(HttpStatus.BAD_REQUEST.getCode());
             return ResponseBodyBean.ofStatus(HttpStatus.BAD_REQUEST.getCode(),
-                                             getFieldErrorMessageFromException(
-                                                     (MethodArgumentNotValidException) exception),
+                                             getFieldErrorMessageFromException((MethodArgumentNotValidException) exception),
                                              null);
         } else if (exception instanceof ConstraintViolationException) {
             log.error("Constraint violations exception occurred. Exception message: {}", exception.getMessage());
             response.setStatus(HttpStatus.BAD_REQUEST.getCode());
             return ResponseBodyBean.ofStatus(HttpStatus.BAD_REQUEST.getCode(),
-                                             CollUtil.getFirst(
-                                                     ((ConstraintViolationException) exception).getConstraintViolations()).getMessage(),
+                                             CollUtil.getFirst(((ConstraintViolationException) exception).getConstraintViolations()).getMessage(),
                                              null);
         } else if (exception instanceof MethodArgumentTypeMismatchException) {
             log.error("MethodArgumentTypeMismatchException: Parameter name = {}, Exception message: {}",
@@ -105,6 +105,23 @@ public class ExceptionControllerAdvice {
             log.error("Exception message: {} ", exception.getMessage());
             response.setStatus(HttpStatus.BAD_REQUEST.getCode());
             return ResponseBodyBean.ofStatus(HttpStatus.BAD_REQUEST.getCode(), exception.getMessage(), null);
+        } else if (exception instanceof BadCredentialsException) {
+            // IMPORTANT: org.springframework.security.authentication.BadCredentialsException only exists in the project
+            // that depends on org.springframework.boot.spring-boot-starter-security
+            log.error("Exception message: {} ", exception.getMessage());
+            response.setStatus(HttpStatus.BAD_CREDENTIALS.getCode());
+            return ResponseBodyBean.ofStatus(HttpStatus.BAD_CREDENTIALS.getCode(), exception.getMessage(), null);
+        } else if (exception instanceof InternalAuthenticationServiceException) {
+            log.error("An authentication request could not be processed due to a system problem that occurred " +
+                              "internally. Exception message: {} ", exception.getMessage());
+            if (exception.getCause() instanceof BaseException) {
+                val exceptionCause = (BaseException) exception.getCause();
+                val code = exceptionCause.getCode();
+                response.setStatus(code);
+                return ResponseBodyBean.ofStatus(HttpStatus.fromCode(code));
+            }
+            response.setStatus(HttpStatus.BAD_CREDENTIALS.getCode());
+            return ResponseBodyBean.ofStatus(HttpStatus.BAD_CREDENTIALS.getCode(), exception.getMessage(), null);
         }
         log.error("Internal system exception occurred! Exception message: {} ", exception.getMessage(), exception);
         response.setStatus(HttpStatus.ERROR.getCode());

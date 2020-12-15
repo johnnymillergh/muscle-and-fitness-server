@@ -29,6 +29,10 @@
             <optional>true</optional>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.jmsoftware.maf</groupId>
             <artifactId>common</artifactId>
         </dependency>

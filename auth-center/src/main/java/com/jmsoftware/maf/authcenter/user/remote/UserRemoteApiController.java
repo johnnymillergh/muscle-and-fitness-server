@@ -2,17 +2,13 @@ package com.jmsoftware.maf.authcenter.user.remote;
 
 import com.jmsoftware.maf.authcenter.user.service.UserService;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
-import com.jmsoftware.maf.common.domain.authcenter.user.GetUserByLoginTokenPayload;
 import com.jmsoftware.maf.common.domain.authcenter.user.GetUserByLoginTokenResponse;
 import com.jmsoftware.maf.common.domain.authcenter.user.SaveUserForRegisteringPayload;
 import com.jmsoftware.maf.common.domain.authcenter.user.SaveUserForRegisteringResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -31,13 +27,14 @@ import javax.validation.Valid;
 public class UserRemoteApiController {
     private final UserService userService;
 
-    @PostMapping("/get-user-by-login-token")
+    @GetMapping("/users/{loginToken}")
     @ApiOperation(value = "/get-user-by-login-token", notes = "Get user by login token")
-    public ResponseBodyBean<GetUserByLoginTokenResponse> getUserByLoginToken(@Valid @RequestBody GetUserByLoginTokenPayload payload) {
-        return ResponseBodyBean.ofSuccess(userService.getUserByLoginToken(payload.getLoginToken()));
+    public ResponseBodyBean<GetUserByLoginTokenResponse> getUserByLoginToken(@PathVariable String loginToken) {
+        return ResponseBodyBean.ofSuccess(userService.getUserByLoginToken(loginToken));
     }
 
     @PostMapping("/save-user-for-register")
+    @ApiOperation(value = "/save-user-for-register", notes = "Save user for register")
     public ResponseBodyBean<SaveUserForRegisteringResponse> saveUserForRegister(@Valid @RequestBody SaveUserForRegisteringPayload payload) {
         return ResponseBodyBean.ofSuccess(userService.saveUserForRegister(payload));
     }

@@ -68,7 +68,7 @@ public class UserPrincipal implements UserDetails {
     /**
      * Status
      */
-    private Integer status;
+    private Byte status;
     /**
      * Create time
      */

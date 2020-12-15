@@ -8,7 +8,6 @@ import com.jmsoftware.maf.common.constant.HttpStatus;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdPayload;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdResponse;
-import com.jmsoftware.maf.common.domain.authcenter.user.GetUserByLoginTokenPayload;
 import com.jmsoftware.maf.common.exception.SecurityException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -37,10 +36,7 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
     @Override
     @SneakyThrows
     public UserDetails loadUserByUsername(String credentials) throws UsernameNotFoundException {
-        val getUserByLoginTokenPayload = new GetUserByLoginTokenPayload();
-        getUserByLoginTokenPayload.setLoginToken(credentials);
-        val getUserByLoginTokenResponseResponseBody =
-                authCenterRemoteApi.getUserByLoginToken(getUserByLoginTokenPayload);
+        val getUserByLoginTokenResponseResponseBody = authCenterRemoteApi.getUserByLoginToken(credentials);
         val getUserByLoginTokenResponse = getUserByLoginTokenResponseResponseBody.getData();
         if (ObjectUtil.isNull(getUserByLoginTokenResponse)) {
             val errorMessage = String.format("User's account not found, credentials: %s", credentials);
