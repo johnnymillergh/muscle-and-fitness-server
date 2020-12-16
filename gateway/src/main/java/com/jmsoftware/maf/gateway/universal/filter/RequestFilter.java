@@ -26,7 +26,7 @@ public class RequestFilter implements GlobalFilter {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        log.info("{} intercepted requester's access. Requester: {}, resource: [{}] {}",
+        log.info("{} intercepted requesters access. Requester: {}, resource: [{}] {}",
                  projectProperty.getProjectArtifactId().toUpperCase(),
                  RequestUtil.getRequestIpAndPort(exchange.getRequest()), exchange.getRequest().getMethod(),
                  exchange.getRequest().getURI());

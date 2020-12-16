@@ -30,7 +30,7 @@ public class RedirectConfiguration {
 
     @Bean
     public RouterFunction<ServerResponse> home() {
-        return route(GET("/home"), request -> {
+        return route(GET("/"), request -> {
             log.info("Redirect to Home page.");
             return ServerResponse.temporaryRedirect(URI.create("/static/home.html")).build();
         });
@@ -47,7 +47,7 @@ public class RedirectConfiguration {
     @Bean
     public RouterFunction<ServerResponse> favicon() {
         return route(GET("/favicon.ico"), request -> {
-            log.info("Redirect to Bootstrap Swagger API documentation.");
+            log.info("Redirect to favicon.");
             return ServerResponse.temporaryRedirect(URI.create("/static/icon/favicon.ico")).build();
         });
     }

@@ -7,10 +7,6 @@
     <artifactId>gateway</artifactId>
     <name>Muscle and Fitness Server :: Gateway</name>
     <description>Gateway for Muscle and Fitness microservices.</description>
-    <properties>
-        <java.version>11</java.version>
-        <port>8080</port>
-    </properties>
     <parent>
         <groupId>com.jmsoftware.maf</groupId>
         <artifactId>muscle-and-fitness-server</artifactId>
@@ -91,15 +87,26 @@
         </dependency>
 
         <dependency>
+            <groupId>com.playtika.reactivefeign</groupId>
+            <artifactId>feign-reactor-webclient</artifactId>
+            <version>${feign-reactor.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.playtika.reactivefeign</groupId>
+            <artifactId>feign-reactor-cloud</artifactId>
+            <version>${feign-reactor.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.playtika.reactivefeign</groupId>
+            <artifactId>feign-reactor-spring-configuration</artifactId>
+            <version>${feign-reactor.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.jmsoftware.maf</groupId>
             <artifactId>common</artifactId>
-            <version>0.0.2-SNAPSHOT</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-web</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>

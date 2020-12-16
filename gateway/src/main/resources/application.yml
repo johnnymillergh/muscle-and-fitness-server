@@ -1,5 +1,5 @@
 server:
-  port: @port@
+  port: @gateway.port@
   tomcat:
     uri-encoding: @project.build.sourceEncoding@
 
@@ -35,6 +35,20 @@ eureka:
     prefer-ip-address: true
   client:
     registryFetchIntervalSeconds: 5
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 10000
+        loggerLevel: full
+  compression:
+    request:
+      enabled: true
+    response:
+      enabled: true
+      useGzipDecoder: true
 
 management:
   endpoints:
