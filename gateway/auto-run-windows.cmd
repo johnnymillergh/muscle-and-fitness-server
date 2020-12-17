@@ -16,6 +16,7 @@ chcp 65001
 @REM #################### Configurable Environment Variables ###################
 SET skipGitPull=true
 SET skipMavenBuild=true
+SET javaExe=C:\Users\Administrator\.sdkman\candidates\java\11.0.9.hs-adpt\bin\java.exe
 SET mavenActiveProfile="development-local"
 SET javaParameter=-Dfile.encoding=UTF-8 -Xms256m -Xmx256m
 
@@ -76,7 +77,7 @@ EXIT /B 0
         CALL :gitPull
     )
     CALL :logInfo "[PRE-BUILD] Java Version Information"
-    CALL java -version
+    CALL %javaExe% -version
     CALL :logInfo "[PRE-BUILD] Maven Version Information"
     CALL mvn -v
     CALL :logInfo "[PRE-BUILD] Current directory:"
@@ -113,7 +114,7 @@ EXIT /B 0
     )
     CALL :logWarn "[RUN] Found JAR: %jarFileName%"
     CALL :setTerminalTitle %jarFileName%
-    SET runJarCommand=java %javaParameter% -Dspring.profiles.active=%mavenActiveProfile% -jar target\%jarFileName%
+    SET runJarCommand=%javaExe% %javaParameter% -Dspring.profiles.active=%mavenActiveProfile% -jar target\%jarFileName%
     CALL :logWarn "[RUN] Execute command: %runJarCommand%"
     CALL %runJarCommand%
 EXIT /B 0
