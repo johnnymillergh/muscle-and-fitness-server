@@ -2,6 +2,7 @@ package com.jmsoftware.maf.authcenter.permission.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jmsoftware.maf.authcenter.permission.entity.PermissionPersistence;
 import com.jmsoftware.maf.authcenter.permission.mapper.PermissionMapper;
 import com.jmsoftware.maf.authcenter.permission.service.PermissionService;
@@ -13,7 +14,6 @@ import lombok.NonNull;
 import lombok.val;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.Collections;
 import java.util.List;
@@ -27,37 +27,7 @@ import java.util.List;
  * @date 5/11/20 8:34 AM
  */
 @Service("permissionService")
-public class PermissionServiceImpl implements PermissionService {
-    @Resource
-    private PermissionMapper permissionMapper;
-
-    @Override
-    public PermissionPersistence queryById(Long id) {
-        return this.permissionMapper.queryById(id);
-    }
-
-    @Override
-    public List<PermissionPersistence> queryAllByLimit(int offset, int limit) {
-        return this.permissionMapper.queryAllByLimit(offset, limit);
-    }
-
-    @Override
-    public PermissionPersistence insert(PermissionPersistence permissionPersistence) {
-        this.permissionMapper.insert(permissionPersistence);
-        return permissionPersistence;
-    }
-
-    @Override
-    public PermissionPersistence update(PermissionPersistence permissionPersistence) {
-        this.permissionMapper.update(permissionPersistence);
-        return this.queryById(permissionPersistence.getId());
-    }
-
-    @Override
-    public boolean deleteById(Long id) {
-        return this.permissionMapper.deleteById(id) > 0;
-    }
-
+public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, PermissionPersistence> implements PermissionService {
     @Override
     public GetPermissionListByRoleIdListResponse getPermissionListByRoleIdList(@Valid GetPermissionListByRoleIdListPayload payload) {
         val permissionList = this.getPermissionListByRoleIdList(payload.getRoleIdList());
@@ -76,7 +46,7 @@ public class PermissionServiceImpl implements PermissionService {
         if (CollUtil.isEmpty(roleIdList)) {
             return Collections.emptyList();
         }
-        return permissionMapper.selectPermissionListByRoleIdList(roleIdList);
+        return this.getBaseMapper().selectPermissionListByRoleIdList(roleIdList);
     }
 
     @Override
@@ -93,6 +63,6 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public List<PermissionPersistence> getPermissionListByUserId(@NonNull Long userId) {
-        return permissionMapper.selectPermissionListByUserId(userId);
+        return this.getBaseMapper().selectPermissionListByUserId(userId);
     }
 }

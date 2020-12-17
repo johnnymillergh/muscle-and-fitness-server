@@ -1,14 +1,11 @@
 package com.jmsoftware.maf.authcenter.permission.controller;
 
-import com.jmsoftware.maf.authcenter.permission.entity.PermissionPersistence;
 import com.jmsoftware.maf.authcenter.permission.service.PermissionService;
-import org.springframework.web.bind.annotation.GetMapping;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
-
- /**
+/**
  * <h1>PermissionController</h1>
  * <p>
  * Controller implementation of Permission.(Permission)
@@ -17,13 +14,7 @@ import javax.annotation.Resource;
  * @date 5/11/20 8:34 AM
  */
 @RestController
-@RequestMapping("permission")
+@RequiredArgsConstructor
 public class PermissionController {
-    @Resource
-    private PermissionService permissionService;
-
-    @GetMapping("selectOne")
-    public PermissionPersistence selectOne(Long id) {
-        return this.permissionService.queryById(id);
-    }
+    private final PermissionService permissionService;
 }

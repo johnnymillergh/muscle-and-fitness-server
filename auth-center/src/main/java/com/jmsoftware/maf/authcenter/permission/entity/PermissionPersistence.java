@@ -1,5 +1,9 @@
 package com.jmsoftware.maf.authcenter.permission.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -12,50 +16,95 @@ import java.util.Date;
  * @date 5/11/20 8:34 AM
  */
 @Data
+@TableName(value = "permission")
 public class PermissionPersistence implements Serializable {
     private static final long serialVersionUID = -56601096713236790L;
+
     /**
-    * Primary key
-    */
+     * Primary key
+     */
+    @TableId(value = "id", type = IdType.INPUT)
     private Long id;
+
     /**
-    * URL. If type of record is page (1), URL stands for route; if type of record is button (2), URL stands for API
-    */
+     * URL. If type of record is page (1), URL stands for route; if type of record is button (2), URL stands for API
+     */
+    @TableField(value = "url")
     private String url;
+
     /**
-    * Permission description
-    */
+     * Permission description
+     */
+    @TableField(value = "description")
     private String description;
+
     /**
-    * Permission type. 1 - page; 2 - button
-    */
-    private Integer type;
+     * Permission type. 1 - page; 2 - button
+     */
+    @TableField(value = "`type`")
+    private Byte type;
+
     /**
-    * Permission expression
-    */
+     * Permission expression
+     */
+    @TableField(value = "permission_expression")
     private String permissionExpression;
+
     /**
-    * HTTP method of API
-    */
-    private String method;
+     * HTTP method of API
+     */
+    @TableField(value = "`method`")
+    private Object method;
+
     /**
-    * Sort number
-    */
+     * Sort number
+     */
+    @TableField(value = "sort")
     private Integer sort;
+
     /**
-    * Primary key of parent
-    */
+     * Primary key of parent
+     */
+    @TableField(value = "parent_id")
     private Long parentId;
+
     /**
-    * Deleted flag
-    */
-    private Integer deleted;
+     * Deleted flag
+     */
+    @TableField(value = "deleted")
+    private Byte deleted;
+
     /**
-    * Created time
-    */
+     * Created time
+     */
+    @TableField(value = "created_time")
     private Date createdTime;
+
     /**
-    * Modified time
-    */
+     * Modified time
+     */
+    @TableField(value = "modified_time")
     private Date modifiedTime;
+
+    public static final String COL_ID = "id";
+
+    public static final String COL_URL = "url";
+
+    public static final String COL_DESCRIPTION = "description";
+
+    public static final String COL_TYPE = "type";
+
+    public static final String COL_PERMISSION_EXPRESSION = "permission_expression";
+
+    public static final String COL_METHOD = "method";
+
+    public static final String COL_SORT = "sort";
+
+    public static final String COL_PARENT_ID = "parent_id";
+
+    public static final String COL_DELETED = "deleted";
+
+    public static final String COL_CREATED_TIME = "created_time";
+
+    public static final String COL_MODIFIED_TIME = "modified_time";
 }

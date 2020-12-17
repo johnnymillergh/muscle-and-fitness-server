@@ -22,6 +22,12 @@ spring:
         locator:
           enabled: true
           lower-case-service-id: true
+      # https://cloud.spring.io/spring-cloud-gateway/multi/multi__cors_configuration.html
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
 
 eureka:
   instance:

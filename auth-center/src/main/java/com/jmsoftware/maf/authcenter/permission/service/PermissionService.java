@@ -1,5 +1,6 @@
 package com.jmsoftware.maf.authcenter.permission.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.jmsoftware.maf.authcenter.permission.entity.PermissionPersistence;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
@@ -20,48 +21,7 @@ import java.util.List;
  * @date 5 /11/20 8:34 AM
  */
 @Validated
-public interface PermissionService {
-    /**
-     * Query by ID
-     *
-     * @param id the primary key ID
-     * @return the entity
-     */
-    PermissionPersistence queryById(Long id);
-
-    /**
-     * Query all by limit
-     *
-     * @param offset the offset
-     * @param limit  the limit
-     * @return the entity list
-     */
-    List<PermissionPersistence> queryAllByLimit(int offset, int limit);
-
-    /**
-     * Insert
-     *
-     * @param permissionPersistence the entity
-     * @return the entity
-     */
-    PermissionPersistence insert(PermissionPersistence permissionPersistence);
-
-    /**
-     * Update
-     *
-     * @param permissionPersistence the entity
-     * @return the entity
-     */
-    PermissionPersistence update(PermissionPersistence permissionPersistence);
-
-    /**
-     * Delete by ID
-     *
-     * @param id the primary key ID
-     * @return the boolean
-     */
-    boolean deleteById(Long id);
-
+public interface PermissionService extends IService<PermissionPersistence> {
     /**
      * Gets permission list by role id list.
      *

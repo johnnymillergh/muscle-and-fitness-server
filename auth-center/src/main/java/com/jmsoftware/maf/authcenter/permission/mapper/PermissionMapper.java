@@ -1,5 +1,6 @@
 package com.jmsoftware.maf.authcenter.permission.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.jmsoftware.maf.authcenter.permission.entity.PermissionPersistence;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -15,56 +16,7 @@ import java.util.List;
  * @date 5 /11/20 8:34 AM
  */
 @Mapper
-public interface PermissionMapper {
-    /**
-     * Query by id permission persistence.
-     *
-     * @param id the id
-     * @return the permission persistence
-     */
-    PermissionPersistence queryById(Long id);
-
-    /**
-     * Query all by limit list.
-     *
-     * @param offset the offset
-     * @param limit  the limit
-     * @return the list
-     */
-    List<PermissionPersistence> queryAllByLimit(@Param("offset") int offset, @Param("limit") int limit);
-
-    /**
-     * Query all list.
-     *
-     * @param permissionPersistence the permission persistence
-     * @return the list
-     */
-    List<PermissionPersistence> queryAll(PermissionPersistence permissionPersistence);
-
-    /**
-     * Insert int.
-     *
-     * @param permissionPersistence the permission persistence
-     * @return the int
-     */
-    int insert(PermissionPersistence permissionPersistence);
-
-    /**
-     * Update int.
-     *
-     * @param permissionPersistence the permission persistence
-     * @return the int
-     */
-    int update(PermissionPersistence permissionPersistence);
-
-    /**
-     * Delete by id int.
-     *
-     * @param id the id
-     * @return the int
-     */
-    int deleteById(Long id);
-
+public interface PermissionMapper extends BaseMapper<PermissionPersistence> {
     /**
      * Select permission list by role id list list.
      *
