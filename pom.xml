@@ -229,6 +229,7 @@
     </profiles>
 
     <!-- Global Dependencies -->
+    <!-- [CAUTION]: All the dependencies are in parent pom should be utilization dependency. -->
     <dependencies>
         <!-- Other -->
         <dependency>
