@@ -8,6 +8,18 @@ spring:
     base-url: http://localhost:9411
   devtools:
     add-properties: true
+  redis:
+    database: 0
+    host: localhost
+    port: 6379
+    password: 123456
+    timeout: 10000ms
+    lettuce:
+      pool:
+        max-active: 20
+        max-idle: 10
+        max-wait: -1ms
+        min-idle: 0
 
 custom:
   configuration:

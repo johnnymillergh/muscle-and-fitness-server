@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ import java.util.List;
  * @date 2019-03-23 14:24
  **/
 @Data
+@Validated
 @Component
 @ConfigurationProperties(prefix = "custom.configuration")
 public class CustomConfiguration {
@@ -23,4 +25,25 @@ public class CustomConfiguration {
      * The Allowed application list. If it's empty, gateway will allow all request to any applications (microservices)
      */
     private List<String> allowedApplicationList = Lists.newLinkedList();
+    /**
+     * <p>The username of super user who has no restriction to access any system&#39;s resources.</p>
+     * <p><strong>ATTENTION</strong>: The value of username of super user must be equal to the value that is
+     * persistent in database.</p>
+     */
+    private String superUser;
+    /**
+     * Ignore URLs
+     */
+    private IgnoredRequest ignoredRequest;
+    /**
+     * <p>Web security feature switch. Default is false.</p>
+     * true - disable web security; false - enable web security.
+     */
+    private Boolean webSecurityDisabled = false;
+    /**
+     * Web request log switch. Default is false.
+     * <p>
+     * true - disable web request log; false - enable web request log.
+     */
+    private Boolean webRequestLogDisabled = false;
 }
