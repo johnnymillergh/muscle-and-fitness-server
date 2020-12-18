@@ -10,7 +10,7 @@ import java.io.File;
  * <h1>SftpUploadGateway</h1>
  * <p>Change description here</p>
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 2019-07-04 21:03
  **/
 @Component

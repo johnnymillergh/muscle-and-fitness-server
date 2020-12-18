@@ -36,7 +36,7 @@ import java.util.Optional;
  * <h1>JwtAuthenticationFilter</h1>
  * <p>Jwt Authentication Filter.</p>
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 2019-03-23 14:24
  **/
 @Slf4j
@@ -93,7 +93,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
      * @param request  the request
      * @param response the response
      * @return the boolean
-     * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com
+     * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com
      * @date 5 /13/20 5:30 PM
      */
     private boolean doJwtAuthentication(HttpServletRequest request, HttpServletResponse response) {
@@ -196,7 +196,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
      *
      * @param exception the exception
      * @return the exception
-     * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com
+     * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com
      * @date 5/13/20 4:51 PM
      */
     private Exception recursiveTraverseExceptionCause(@NonNull Exception exception) {

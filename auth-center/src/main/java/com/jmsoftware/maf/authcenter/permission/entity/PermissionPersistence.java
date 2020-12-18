@@ -12,7 +12,7 @@ import java.util.Date;
 /**
  * Permission.(Permission) Persistence object class
  *
- * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com
  * @date 5/11/20 8:34 AM
  */
 @Data

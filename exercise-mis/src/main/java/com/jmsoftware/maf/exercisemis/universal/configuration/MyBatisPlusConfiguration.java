@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * <p>
  * Change description here.
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 2019-05-02 11:57
  **/
 @Configuration

@@ -20,7 +20,7 @@ import javax.validation.Valid;
  * <p>
  * Change description here.
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 5/8/20 11:06 AM
  **/
 @RestController

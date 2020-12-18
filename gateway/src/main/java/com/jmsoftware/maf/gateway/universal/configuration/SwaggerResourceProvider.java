@@ -25,7 +25,7 @@ import java.util.List;
  * <p>
  * TODO: Refactor this class.
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 2/15/20 5:40 PM
  * @see
  * <a href='https://doc.xiaominfo.com/guide/ui-front-gateway.html#%E6%96%87%E6%A1%A3%E8%81%9A%E5%90%88%E4%B8%9A%E5%8A%A1%E7%BC%96%E7%A0%81'>文档聚合业务编码</a>
@@ -45,7 +45,7 @@ public class SwaggerResourceProvider implements SwaggerResourcesProvider {
      * Generate Swagger resource.
      *
      * @return Swagger resource.
-     * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com
+     * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com
      * @date 2/15/20 11:06 PM
      */
     @Override

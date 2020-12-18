@@ -9,7 +9,7 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
  * <p>
  * Request util.
  *
- * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com
  * @date 2/15/20 9:58 PM
  **/
 public class RequestUtil {
@@ -19,7 +19,7 @@ public class RequestUtil {
      *
      * @param request HTTP request.
      * @return user's IP and port information. Pattern like: IP:Port.
-     * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com
+     * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com
      * @date 2/15/20 9:52 PM
      */
     public static String getRequestIpAndPort(ServerHttpRequest request) {

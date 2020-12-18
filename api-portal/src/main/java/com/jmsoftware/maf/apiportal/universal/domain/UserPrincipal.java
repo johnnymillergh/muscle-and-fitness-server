@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  * <h1>UserPrincipal</h1>
  * <p>Custom user details.</p>
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 2019-03-23 20:52
  **/
 @Data

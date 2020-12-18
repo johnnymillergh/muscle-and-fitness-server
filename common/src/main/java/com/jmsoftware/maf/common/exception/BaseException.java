@@ -4,16 +4,18 @@ import com.jmsoftware.maf.common.constant.HttpStatus;
 import com.jmsoftware.maf.common.constant.IUniversalStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * <h1>BaseException</h1>
  * <p>
  * Base exception.
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 2019-03-23 16:23
  **/
 @Data
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class BaseException extends Exception {
     private static final long serialVersionUID = 5049763892480652887L;

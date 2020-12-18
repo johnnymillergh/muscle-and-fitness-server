@@ -17,7 +17,7 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
  * <p>
  * Redirect Configuration.
  *
- * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com
  * @date 2/15/20 11:54 PM
  **/
 @Slf4j

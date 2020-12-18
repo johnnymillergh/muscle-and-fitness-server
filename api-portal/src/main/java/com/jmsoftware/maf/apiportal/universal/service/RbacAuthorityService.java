@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
  * <h1>RbacAuthorityService</h1>
  * <p>Route Authority service interface</p>
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 2019-04-07 19:52
  **/
 public interface RbacAuthorityService {

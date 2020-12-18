@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
  * <p>
  * Controller implementation of UserPersistence.(UserPersistence)
  *
- * @author Johnny Miller (鍾俊)
+ * @author Johnny Miller (锺俊)
  * @date 2020-05-10 12:08:28
  */
 @RestController

@@ -8,7 +8,7 @@ import com.jmsoftware.maf.common.constant.IUniversalStatus;
  * <p>
  * Business Exception
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 2019-03-02 17:15
  **/
 public class BusinessException extends BaseException {

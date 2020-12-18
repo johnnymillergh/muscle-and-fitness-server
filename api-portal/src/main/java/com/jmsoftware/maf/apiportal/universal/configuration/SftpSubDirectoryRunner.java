@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  * <p>After dependency injection finished, we must inti the SFTP server's sub directory for out business. If you want
  * to customize initialization configuration, config SftpSubDirectory.</p>
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 2019-07-05 08:51
  * @see SftpSubDirectory
  **/

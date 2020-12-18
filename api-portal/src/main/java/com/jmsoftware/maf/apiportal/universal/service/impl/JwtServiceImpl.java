@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
  * <h1>JwtServiceImpl</h1>
  * Change description here.
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 2019-03-03 13:40
  **/
 @Slf4j

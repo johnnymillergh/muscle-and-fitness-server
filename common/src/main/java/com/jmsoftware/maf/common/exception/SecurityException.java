@@ -3,13 +3,14 @@ package com.jmsoftware.maf.common.exception;
 import com.jmsoftware.maf.common.constant.HttpStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * <h1>SecurityException</h1>
  * <p>
  * Change description here.
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 3/12/20 3:15 PM
  **/
 @Data

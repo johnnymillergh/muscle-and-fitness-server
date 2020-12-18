@@ -8,7 +8,7 @@ import org.springframework.lang.Nullable;
  * <h1>HttpStatus</h1>
  * <p>Hypertext Transfer Protocol (HTTP) Status Code</p>
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 2019-03-23 16:48
  * @see <a href="https://www.iana.org/assignments/http-status-codes">HTTP Status Code Registry</a>
  * @see <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes">List of HTTP status codes</a>

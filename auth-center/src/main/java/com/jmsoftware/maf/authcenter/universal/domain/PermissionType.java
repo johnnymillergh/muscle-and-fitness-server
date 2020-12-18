@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
  * <h1>PermissionType</h1>
  * <p>Change description here</p>
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 2019-05-25 10:24
  **/
 @Slf4j

@@ -19,7 +19,7 @@ import java.io.Serializable;
  * <p>
  * Ignored request configuration.
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 5/2/20 11:41 PM
  **/
 @Configuration

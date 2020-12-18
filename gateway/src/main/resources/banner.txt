@@ -6,7 +6,7 @@ ${AnsiStyle.BOLD}${AnsiColor.BRIGHT_GREEN}
 \____/\__,_/\__/\___/|__/|__/\__,_/\__, /
                                   /____/
 ${AnsiStyle.BOLD}Gateway :: Powered by Spring Boot ::${spring-boot.formatted-version}
-${AnsiColor.CYAN}Author: Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+${AnsiColor.CYAN}Author: Johnny Miller (锺俊), email: johnnysviva@outlook.com
 ${AnsiStyle.NORMAL}${AnsiColor.MAGENTA}http://patorjk.com/software/taag/#p=display&f=Slant&t=Gateway
 ${AnsiColor.BRIGHT_BLACK}
 -------------------------------------------Font Info-------------------------------------------

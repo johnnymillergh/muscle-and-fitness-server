@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
  * <p>
  * Change description here.
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 2/18/20 2:27 PM
  **/
 @Data

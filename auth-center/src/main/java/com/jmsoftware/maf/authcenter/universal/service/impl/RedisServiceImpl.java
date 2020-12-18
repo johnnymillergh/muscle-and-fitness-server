@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
  * <h1>RedisServiceImpl</h1>
  * <p>Redis service implementation for Redis useful operations</p>
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 2019-07-05 09:39
  **/
 @Service

@@ -15,7 +15,7 @@
     <packaging>pom</packaging>
     <properties>
         <!-- Developer Information -->
-        <developerName>Johnny Miller (鍾俊)</developerName>
+        <developerName>Johnny Miller (锺俊)</developerName>
         <developerEmail>johnnysviva@outlook.com</developerEmail>
         <developerUrl>https://www.linkedin.com/in/ijohnnymiller</developerUrl>
 
@@ -150,7 +150,7 @@
     </organization>
     <developers>
         <developer>
-            <name>Johnny Miller (鍾俊)</name>
+            <name>Johnny Miller (锺俊)</name>
             <email>johnnysviva@outlook.com</email>
             <url>https://www.linkedin.com/in/ijohnnymiller</url>
             <organization>JM Software, Inc.</organization>

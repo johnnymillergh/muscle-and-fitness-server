@@ -12,7 +12,7 @@ import java.util.Date;
 /**
  * Role.(Role) Persistence object class
  *
- * @author Johnny Miller (鍾俊)
+ * @author Johnny Miller (锺俊)
  * @since 2020-05-10 22:39:45
  */
 @Data

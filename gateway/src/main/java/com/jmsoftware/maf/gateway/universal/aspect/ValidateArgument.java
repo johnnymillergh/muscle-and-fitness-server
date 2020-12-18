@@ -9,7 +9,7 @@ import java.lang.annotation.*;
  * <p><span>If the argument doesn&#39;t pass validation, an IllegalArgumentException will be thrown, and not proceed
  * the target method.</span></p>
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 2019-07-06 12:08
  **/
 @Retention(RetentionPolicy.RUNTIME)

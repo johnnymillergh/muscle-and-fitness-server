@@ -14,7 +14,7 @@ import java.util.Date;
  * <p>
  * User Persistence object class
  *
- * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com
  * @date 5/10/20 12:12 PM
  */
 @Data

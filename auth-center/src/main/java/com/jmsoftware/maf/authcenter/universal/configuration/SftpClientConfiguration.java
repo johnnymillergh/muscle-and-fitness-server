@@ -22,7 +22,7 @@ import java.io.File;
  * <h1>SftpClientConfiguration</h1>
  * <p>SFTP client configuration</p>
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 2019-07-04 18:18
  **/
 @Data

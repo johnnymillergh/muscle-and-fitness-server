@@ -11,7 +11,7 @@ import org.apache.ibatis.annotations.Param;
  * <p>
  * Exercise Mapper
  *
- * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com
  * @date 2/18/20 10:22 AM
  */
 @Mapper

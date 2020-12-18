@@ -28,7 +28,7 @@ import java.util.List;
  * <h1>SftpServiceImpl</h1>
  * <p>SFTP Service implementation</p>
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 2019-07-04 20:47
  **/
 @Slf4j

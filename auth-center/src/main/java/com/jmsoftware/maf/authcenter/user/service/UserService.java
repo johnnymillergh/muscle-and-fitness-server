@@ -15,7 +15,7 @@ import javax.validation.constraints.NotBlank;
  * <p>
  * Service of UserPersistence.(UserPersistence)
  *
- * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com
  * @date 5 /10/20 12:31 PM
  */
 @Validated

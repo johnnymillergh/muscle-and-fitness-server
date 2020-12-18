@@ -15,7 +15,7 @@ import java.io.IOException;
  * <p>
  * Response util
  *
- * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com
  * @date 2/27/20 9:45 AM
  **/
 @Slf4j

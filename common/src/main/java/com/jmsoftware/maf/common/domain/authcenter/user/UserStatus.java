@@ -5,7 +5,7 @@ import lombok.Getter;
 /**
  * Description: UserStatus, change description here.
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 2019-03-23 18:48
  **/
 @Getter

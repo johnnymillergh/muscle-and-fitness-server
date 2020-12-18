@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
  * "https://en.toolpage.org/cat/text-conversion">https://en.toolpage.org/cat/text-conversion</a>
  *
  * @author Yves Sorge <yves.sorge@toolpage.org>
- * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com
  * @date 2/27/20 9:45 AM
  * @see
  * <a href='https://github.com/toolpage/java-case-converter/blob/master/src/org/toolpage/util/text/CaseConverter.java'>Source</a>

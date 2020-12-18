@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
  * <p>
  * Change description here.
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 5/8/20 2:04 PM
  **/
 @Slf4j

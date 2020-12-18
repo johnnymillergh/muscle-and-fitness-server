@@ -18,7 +18,7 @@ import java.util.Date;
  * Response body bean.
  *
  * @param <ResponseBodyDataType> the response body data type
- * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com
  * @date 2/27/20 9:24 AM
  */
 @Value

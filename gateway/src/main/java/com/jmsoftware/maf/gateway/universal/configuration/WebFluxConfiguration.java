@@ -9,7 +9,7 @@ import org.springframework.web.reactive.config.WebFluxConfigurer;
  * <p>
  * Change description here.
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 2/17/20 5:16 PM
  **/
 @Configuration
@@ -17,7 +17,7 @@ public class WebFluxConfiguration implements WebFluxConfigurer {
     /**
      * Add resource handlers for serving static resources.
      *
-     * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com
+     * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com
      * @date 2/17/20 5:19 PM
      * @see ResourceHandlerRegistry registry
      */

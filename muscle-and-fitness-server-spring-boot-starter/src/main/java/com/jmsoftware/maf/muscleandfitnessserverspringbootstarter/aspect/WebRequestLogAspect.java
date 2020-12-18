@@ -25,7 +25,7 @@ import java.time.Instant;
  * <p>No methods in controller need to be decorated with annotation. This aspect would automatically cut the method
  * decorated with `@GetMapping` or `@PostMapping`.</p>
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 2019-05-05 19:55
  **/
 @Slf4j

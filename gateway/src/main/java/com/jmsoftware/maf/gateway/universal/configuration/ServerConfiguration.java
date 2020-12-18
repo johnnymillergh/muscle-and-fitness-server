@@ -21,7 +21,7 @@ import java.util.Enumeration;
  * <p>
  * Change description here.
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 2019-04-26 16:02
  **/
 @Slf4j
@@ -47,7 +47,7 @@ public class ServerConfiguration implements ApplicationListener<WebServerInitial
      * </ol>
      *
      * @return base URL
-     * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+     * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
      * @date 2019-05-03 16:05
      */
     public String getBaseUrl() {

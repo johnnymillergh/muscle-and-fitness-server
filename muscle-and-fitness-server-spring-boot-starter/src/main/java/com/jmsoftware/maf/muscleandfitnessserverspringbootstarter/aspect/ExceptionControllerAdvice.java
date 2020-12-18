@@ -30,7 +30,7 @@ import java.util.Objects;
  * <p>
  * Exception advice for global controllers.
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 2019-03-02 17:39
  **/
 @Slf4j

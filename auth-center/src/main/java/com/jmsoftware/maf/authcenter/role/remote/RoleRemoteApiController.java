@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  * <p>
  * Change description here.
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 5/10/20 10:43 PM
  **/
 @RestController

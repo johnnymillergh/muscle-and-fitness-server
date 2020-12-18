@@ -15,7 +15,7 @@ import java.io.IOException;
  * <h1>RequestFilter</h1>
  * <p>Request filter.</p>
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 2019-03-23 14:24
  **/
 @Slf4j

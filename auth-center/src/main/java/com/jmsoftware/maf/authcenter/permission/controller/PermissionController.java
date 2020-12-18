@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
  * <p>
  * Controller implementation of Permission.(Permission)
  *
- * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com
  * @date 5/11/20 8:34 AM
  */
 @RestController

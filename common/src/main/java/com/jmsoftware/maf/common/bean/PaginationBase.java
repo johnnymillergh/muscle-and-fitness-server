@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
  * <p>
  * Pagination Base.
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 2/17/20 11:18 PM
  **/
 @Data

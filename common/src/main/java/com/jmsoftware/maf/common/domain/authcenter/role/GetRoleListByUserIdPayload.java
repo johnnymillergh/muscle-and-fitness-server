@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
  * <p>
  * Change description here.
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 5/10/20 10:52 PM
  **/
 @Data

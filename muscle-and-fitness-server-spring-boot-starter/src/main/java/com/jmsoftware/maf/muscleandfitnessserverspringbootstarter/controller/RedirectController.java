@@ -16,7 +16,7 @@ import java.io.IOException;
  * <p>
  * HTTP Redirect Controller
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 1/21/20 1:18 PM
  **/
 @Slf4j

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  * <p>
  * Change description here.
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 2019-04-18 13:01
  **/
 @Slf4j

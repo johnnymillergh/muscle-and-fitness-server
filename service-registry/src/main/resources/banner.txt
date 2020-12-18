@@ -6,7 +6,7 @@ ${AnsiStyle.BOLD}${AnsiColor.BRIGHT_GREEN}
 /____/\___/_/    |___/_/\___/\___/  /_/ |_|\___/\__, /_/____/\__/_/   \__, /
                                                /____/                /____/
 ${AnsiStyle.BOLD}Service Registry :: Powered by Spring Boot ::${spring-boot.formatted-version}
-${AnsiColor.CYAN}Author: Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+${AnsiColor.CYAN}Author: Johnny Miller (锺俊), email: johnnysviva@outlook.com
 ${AnsiStyle.NORMAL}${AnsiColor.MAGENTA}http://patorjk.com/software/taag/#p=display&f=Slant&t=ExRx%20Net%20Crawler%20Server
 ${AnsiColor.BRIGHT_BLACK}
 -------------------------------------------Font Info-------------------------------------------
