@@ -24,6 +24,7 @@ public interface JwtService {
      * @param authentication the authentication
      * @param rememberMe     the remember me
      * @return the string
+     * @throws SecurityException the security exception
      */
     String createJwt(Authentication authentication, Boolean rememberMe) throws SecurityException;
 
@@ -36,6 +37,7 @@ public interface JwtService {
      * @param roles       the roles
      * @param authorities the authorities
      * @return the JWT string
+     * @throws SecurityException the security exception
      */
     String createJwt(Boolean rememberMe, Long id, String subject, List<String> roles, Collection<?
             extends GrantedAuthority> authorities) throws SecurityException;
@@ -45,6 +47,7 @@ public interface JwtService {
      *
      * @param jwt the jwt
      * @return the claims
+     * @throws SecurityException the security exception
      */
     Claims parseJwt(String jwt) throws SecurityException;
 
@@ -52,6 +55,7 @@ public interface JwtService {
      * Invalidate jwt.
      *
      * @param request the request
+     * @throws SecurityException the security exception
      */
     void invalidateJwt(HttpServletRequest request) throws SecurityException;
 
@@ -60,6 +64,7 @@ public interface JwtService {
      *
      * @param jwt the jwt
      * @return the username from jwt
+     * @throws SecurityException the security exception
      */
     String getUsernameFromJwt(String jwt) throws SecurityException;
 
@@ -68,6 +73,7 @@ public interface JwtService {
      *
      * @param request the request
      * @return the username from request
+     * @throws SecurityException the security exception
      */
     String getUsernameFromRequest(HttpServletRequest request) throws SecurityException;
 
