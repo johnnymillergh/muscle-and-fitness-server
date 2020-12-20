@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.connection.RedisStringCommands;
+import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.types.Expiration;
@@ -27,9 +28,12 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class RedisServiceImpl implements RedisService {
     private final RedisTemplate<String, Serializable> redisTemplate;
+    private final ReactiveRedisTemplate<String, Serializable> reactiveRedisTemplate;
 
-    public RedisServiceImpl(@Qualifier("redisFactory") RedisTemplate<String, Serializable> redisTemplate) {
+    public RedisServiceImpl(@Qualifier("redisFactory") RedisTemplate<String, Serializable> redisTemplate,
+                            @Qualifier("reactiveRedisTemplate") ReactiveRedisTemplate<String, Serializable> reactiveRedisTemplate) {
         this.redisTemplate = redisTemplate;
+        this.reactiveRedisTemplate = reactiveRedisTemplate;
     }
 
     @Override
@@ -37,9 +41,9 @@ public class RedisServiceImpl implements RedisService {
         return redisTemplate.execute((RedisCallback<Boolean>) connection -> {
             RedisSerializer<String> serializer = redisTemplate.getStringSerializer();
             Boolean result = connection.set(Objects.requireNonNull(serializer.serialize(key)),
-                                            Objects.requireNonNull(serializer.serialize(value)),
-                                            Expiration.from(expirationTime, timeUnit),
-                                            RedisStringCommands.SetOption.upsert());
+                    Objects.requireNonNull(serializer.serialize(value)),
+                    Expiration.from(expirationTime, timeUnit),
+                    RedisStringCommands.SetOption.upsert());
             return ObjectUtil.isNotNull(result) ? result : false;
         });
     }
@@ -55,7 +59,7 @@ public class RedisServiceImpl implements RedisService {
         return redisTemplate.execute((RedisCallback<Boolean>) connection -> {
             RedisSerializer<String> serializer = redisTemplate.getStringSerializer();
             Boolean result = connection.set(Objects.requireNonNull(serializer.serialize(key)),
-                                            Objects.requireNonNull(serializer.serialize(value)));
+                    Objects.requireNonNull(serializer.serialize(value)));
             return ObjectUtil.isNotNull(result) ? result : false;
         });
     }
