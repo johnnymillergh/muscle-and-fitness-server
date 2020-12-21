@@ -8,13 +8,13 @@ import com.jmsoftware.maf.authcenter.permission.mapper.PermissionMapper;
 import com.jmsoftware.maf.authcenter.permission.service.PermissionService;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
-import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByUserIdPayload;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByUserIdResponse;
 import lombok.NonNull;
 import lombok.val;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.Collections;
 import java.util.List;
 
@@ -50,8 +50,8 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     }
 
     @Override
-    public GetPermissionListByUserIdResponse getPermissionListByUserId(@Valid GetPermissionListByUserIdPayload payload) {
-        val permissionList = this.getPermissionListByUserId(payload.getUserId());
+    public GetPermissionListByUserIdResponse getPermissionListByUserId(@NotNull Long userId) {
+        val permissionList = this.getPermissionPersistenceListByUserId(userId);
         val response = new GetPermissionListByUserIdResponse();
         permissionList.forEach(permissionPersistence -> {
             val permission = new GetPermissionListByUserIdResponse.Permission();
@@ -62,7 +62,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     }
 
     @Override
-    public List<PermissionPersistence> getPermissionListByUserId(@NonNull Long userId) {
+    public List<PermissionPersistence> getPermissionPersistenceListByUserId(@NotNull Long userId) {
         return this.getBaseMapper().selectPermissionListByUserId(userId);
     }
 }

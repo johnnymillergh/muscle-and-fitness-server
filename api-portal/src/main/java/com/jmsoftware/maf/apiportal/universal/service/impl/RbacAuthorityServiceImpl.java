@@ -10,7 +10,6 @@ import com.jmsoftware.maf.apiportal.universal.configuration.CustomConfiguration;
 import com.jmsoftware.maf.apiportal.universal.domain.UserPrincipal;
 import com.jmsoftware.maf.apiportal.universal.service.RbacAuthorityService;
 import com.jmsoftware.maf.common.constant.HttpStatus;
-import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByUserIdPayload;
 import com.jmsoftware.maf.common.domain.authcenter.permission.PermissionType;
 import com.jmsoftware.maf.common.exception.SecurityException;
 import lombok.RequiredArgsConstructor;
@@ -65,10 +64,8 @@ public class RbacAuthorityServiceImpl implements RbacAuthorityService {
         }
         val userPrincipal = (UserPrincipal) principal;
         val userId = userPrincipal.getId();
-        val getPermissionListByUserIdPayload = new GetPermissionListByUserIdPayload();
-        getPermissionListByUserIdPayload.setUserId(userId);
         val getPermissionListByUserIdResponse =
-                authCenterRemoteApi.getPermissionListByUserId(getPermissionListByUserIdPayload);
+                authCenterRemoteApi.getPermissionListByUserId(userId);
         val permissionList = getPermissionListByUserIdResponse.getData().getPermissionList();
         // Filter button permission for frond-end
         val buttonPermissionList = permissionList.stream()

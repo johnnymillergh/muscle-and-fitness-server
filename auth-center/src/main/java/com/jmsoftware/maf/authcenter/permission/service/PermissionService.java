@@ -4,12 +4,12 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.jmsoftware.maf.authcenter.permission.entity.PermissionPersistence;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
-import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByUserIdPayload;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByUserIdResponse;
-import lombok.NonNull;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -36,15 +36,7 @@ public interface PermissionService extends IService<PermissionPersistence> {
      * @param roleIdList the role id list
      * @return the permission list by role id list
      */
-    List<PermissionPersistence> getPermissionListByRoleIdList(@NonNull List<Long> roleIdList);
-
-    /**
-     * Gets permission list by user id.
-     *
-     * @param payload the payload
-     * @return the permission list by user id
-     */
-    GetPermissionListByUserIdResponse getPermissionListByUserId(@Valid GetPermissionListByUserIdPayload payload);
+    List<PermissionPersistence> getPermissionListByRoleIdList(@NotEmpty List<Long> roleIdList);
 
     /**
      * Gets permission list by user id.
@@ -52,5 +44,14 @@ public interface PermissionService extends IService<PermissionPersistence> {
      * @param userId the user id
      * @return the permission list by user id
      */
-    List<PermissionPersistence> getPermissionListByUserId(@NonNull Long userId);
+    GetPermissionListByUserIdResponse getPermissionListByUserId(@NotNull Long userId);
+
+
+    /**
+     * Gets permission list by user id.
+     *
+     * @param userId the user id
+     * @return the permission list by user id
+     */
+    List<PermissionPersistence> getPermissionPersistenceListByUserId(@NotNull Long userId);
 }
