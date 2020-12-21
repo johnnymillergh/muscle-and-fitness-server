@@ -28,23 +28,21 @@ public class CustomServerSecurityContextRepository implements ServerSecurityCont
     private ReactiveAuthenticationManager authenticationManager;
 
     @Override
-    public Mono save(ServerWebExchange swe, SecurityContext sc) {
+    public Mono<Void> save(ServerWebExchange swe, SecurityContext sc) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public Mono load(ServerWebExchange swe) {
+    public Mono<SecurityContext> load(ServerWebExchange swe) {
         ServerHttpRequest request = swe.getRequest();
         String authHeader = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
         String authToken = null;
         if (authHeader != null && authHeader.startsWith(TOKEN_PREFIX)) {
             authToken = authHeader.replace(TOKEN_PREFIX, "");
-        }else {
-            log.warn("couldn't find bearer string, will ignore the header.");
         }
         if (authToken != null) {
             Authentication auth = new UsernamePasswordAuthenticationToken(authToken, authToken);
-            return this.authenticationManager.authenticate(auth).map((authentication) -> new SecurityContextImpl(authentication));
+            return this.authenticationManager.authenticate(auth).map(SecurityContextImpl::new);
         } else {
             return Mono.empty();
         }
