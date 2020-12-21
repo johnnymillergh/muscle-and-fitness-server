@@ -1,6 +1,7 @@
 package com.jmsoftware.maf.gateway.remoteapi;
 
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
+import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByUserIdResponse;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdResponse;
 import com.jmsoftware.maf.common.domain.authcenter.user.GetUserByLoginTokenResponse;
 import org.springframework.validation.annotation.Validated;
@@ -37,4 +38,13 @@ public interface AuthCenterRemoteApi {
      */
     @GetMapping("/role-remote-api/roles/{userId}")
     Mono<ResponseBodyBean<GetRoleListByUserIdResponse>> getRoleListByUserId(@PathVariable Long userId);
+
+    /**
+     * Get permission list by user id response body bean.
+     *
+     * @param userId the user id
+     * @return the response body bean
+     */
+    @GetMapping("/permission-remote-api/permissions/{userId}")
+    Mono<ResponseBodyBean<GetPermissionListByUserIdResponse>> getPermissionListByUserId(@PathVariable Long userId);
 }
