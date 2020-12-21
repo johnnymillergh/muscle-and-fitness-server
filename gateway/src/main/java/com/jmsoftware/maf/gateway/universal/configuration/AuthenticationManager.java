@@ -1,50 +1,57 @@
 package com.jmsoftware.maf.gateway.universal.configuration;
 
-import com.google.common.collect.Lists;
+import cn.hutool.core.util.StrUtil;
+import com.jmsoftware.maf.common.bean.ResponseBodyBean;
+import com.jmsoftware.maf.common.domain.authcenter.user.GetUserByLoginTokenResponse;
+import com.jmsoftware.maf.common.exception.BusinessException;
+import com.jmsoftware.maf.gateway.remoteapi.AuthCenterRemoteApi;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import lombok.val;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
+import javax.annotation.Resource;
 
 /**
  * Description: AuthenticationManager, change description here.
  *
  * @author 钟俊（zhongjun）, email: zhongjun@toguide.cn, date: 12/18/2020 3:40 PM
  **/
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class AuthenticationManager implements ReactiveAuthenticationManager {
     private final JwtService jwtService;
+    @Lazy
+    @Resource
+    private AuthCenterRemoteApi authCenterRemoteApi;
 
     @Override
     public Mono<Authentication> authenticate(Authentication authentication) {
-        String authToken = authentication.getCredentials().toString();
+        val jwt = authentication.getCredentials().toString();
         String username;
         try {
-            username = jwtService.getUsernameFromJwt(authToken);
+            username = jwtService.getUsernameFromJwt(jwt);
         } catch (Exception e) {
-            username = null;
+            log.error("Exception occurred when authenticating", e);
+            return Mono.empty();
         }
-//        if (username != null && !tokenProvider.isTokenExpired(authToken)) {
-//            Claims claims = tokenProvider.getAllClaimsFromToken(authToken);
-//            List roles = claims.get(AUTHORITIES_KEY, List.class);
-//            List authorities = roles.stream().map(role -> new SimpleGrantedAuthority(role)).collect(
-//                    Collectors.toList());
-//            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(username, username,
-//                                                                                               authorities);
-//            SecurityContextHolder.getContext().setAuthentication(new UserPrincipal(username, authorities));
-//            return Mono.just(auth);
-//        } else {
-//            return Mono.empty();
-//        }
-        List<GrantedAuthority> authorities = Lists.newLinkedList();
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(username, username,
-                                                                                           authorities);
-        return Mono.just(auth);
+        if (StrUtil.isBlank(username)) {
+            log.warn("Authentication failed! Cause: the username mustn't be blank");
+            return Mono.empty();
+        }
+        val response = authCenterRemoteApi.getUserByLoginToken(username);
+        Mono<GetUserByLoginTokenResponse> responseMono = response.map(ResponseBodyBean::getData)
+                .switchIfEmpty(Mono.error(new BusinessException("Authentication failed! Cause: User not found")));
+        return responseMono.map(getUserByLoginTokenResponse -> {
+            log.info("Authentication success. Username: {}", getUserByLoginTokenResponse.getUsername());
+            UserPrincipal userPrincipal = UserPrincipal.create(getUserByLoginTokenResponse, null, null);
+            return new UsernamePasswordAuthenticationToken(userPrincipal, null);
+        });
     }
 }

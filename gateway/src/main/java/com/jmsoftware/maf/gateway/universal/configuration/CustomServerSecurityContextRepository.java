@@ -1,7 +1,8 @@
 package com.jmsoftware.maf.gateway.universal.configuration;
 
+import cn.hutool.core.util.StrUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
@@ -21,31 +22,27 @@ import reactor.core.publisher.Mono;
  **/
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class CustomServerSecurityContextRepository implements ServerSecurityContextRepository {
     private static final String TOKEN_PREFIX = "Bearer ";
-
-    @Autowired
-    private ReactiveAuthenticationManager authenticationManager;
+    private final ReactiveAuthenticationManager authenticationManager;
 
     @Override
-    public Mono<Void> save(ServerWebExchange swe, SecurityContext sc) {
+    public Mono<Void> save(ServerWebExchange exchange, SecurityContext context) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public Mono<SecurityContext> load(ServerWebExchange swe) {
-        ServerHttpRequest request = swe.getRequest();
-        String authHeader = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-        String authToken = null;
-        if (authHeader != null && authHeader.startsWith(TOKEN_PREFIX)) {
-            authToken = authHeader.replace(TOKEN_PREFIX, "");
-        }
-        if (authToken != null) {
-            Authentication auth = new UsernamePasswordAuthenticationToken(authToken, authToken);
-            return this.authenticationManager.authenticate(auth).map(SecurityContextImpl::new);
-        } else {
+    public Mono<SecurityContext> load(ServerWebExchange exchange) {
+        ServerHttpRequest request = exchange.getRequest();
+        String authorization = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+        if (StrUtil.isBlank(authorization) || !authorization.startsWith(TOKEN_PREFIX)) {
+            log.warn("{} in HTTP headers not found! [{}] {}", HttpHeaders.AUTHORIZATION, request.getMethod(),
+                     request.getURI());
             return Mono.empty();
         }
+        String jwt = authorization.replace(TOKEN_PREFIX, "");
+        Authentication authentication = new UsernamePasswordAuthenticationToken(null, jwt);
+        return this.authenticationManager.authenticate(authentication).map(SecurityContextImpl::new);
     }
-
 }

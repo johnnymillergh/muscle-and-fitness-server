@@ -91,7 +91,7 @@ public class JwtServiceImpl implements JwtService {
                     .orElseThrow(() -> new SecurityException(HttpStatus.TOKEN_PARSE_ERROR,
                                                              "The JWT Claims Set is null", null));
         } catch (ExpiredJwtException e) {
-            log.error("JWT is expired. Message: {} JWT: {}", e.getMessage(), jwt);
+            log.error("JWT was expired. Message: {} JWT: {}", e.getMessage(), jwt);
             throw new SecurityException(HttpStatus.TOKEN_EXPIRED);
         } catch (UnsupportedJwtException e) {
             log.error("JWT is unsupported. Message: {} JWT: {}", e.getMessage(), jwt);

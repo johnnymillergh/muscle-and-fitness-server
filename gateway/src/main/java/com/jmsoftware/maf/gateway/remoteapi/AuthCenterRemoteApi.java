@@ -2,6 +2,7 @@ package com.jmsoftware.maf.gateway.remoteapi;
 
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdResponse;
+import com.jmsoftware.maf.common.domain.authcenter.user.GetUserByLoginTokenResponse;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,15 @@ import reactor.core.publisher.Mono;
 @Validated
 @ReactiveFeignClient(name = "auth-center")
 public interface AuthCenterRemoteApi {
+    /**
+     * Gets user by login token.
+     *
+     * @param loginToken the login token, e.q. username, email or phone number
+     * @return the user by login token
+     */
+    @GetMapping("/user-remote-api/users/{loginToken}")
+    Mono<ResponseBodyBean<GetUserByLoginTokenResponse>> getUserByLoginToken(@PathVariable String loginToken);
+
     /**
      * Gets role list by user id.
      *

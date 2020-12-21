@@ -13,10 +13,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -96,11 +93,12 @@ public class UserPrincipal implements UserDetails {
      */
     public static UserPrincipal create(GetUserByLoginTokenResponse user, List<String> roleNameList,
                                        List<GetPermissionListByRoleIdListResponse.Permission> permissionList) {
-        val authorities =
-                permissionList.stream()
-                        .filter(permission -> StrUtil.isNotBlank(permission.getPermissionExpression()))
-                        .map(permission -> new SimpleGrantedAuthority(permission.getPermissionExpression()))
-                        .collect(Collectors.toList());
+        val permissions =
+                Optional.ofNullable(permissionList).orElse(new LinkedList<>());
+        val authorities = permissions.stream()
+                .filter(permission -> StrUtil.isNotBlank(permission.getPermissionExpression()))
+                .map(permission -> new SimpleGrantedAuthority(permission.getPermissionExpression()))
+                .collect(Collectors.toList());
 
         return new UserPrincipal(user.getId(),
                                  user.getUsername(),

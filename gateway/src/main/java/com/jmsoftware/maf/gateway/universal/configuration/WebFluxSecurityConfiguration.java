@@ -34,6 +34,7 @@ import java.util.ArrayList;
 public class WebFluxSecurityConfiguration {
     private final CustomConfiguration customConfiguration;
     private final ReactiveAuthenticationManager reactiveAuthenticationManager;
+    private final RbacReactiveAuthorizationManager reactiveAuthorizationManager;
     private final ServerSecurityContextRepository securityContextRepository;
     private final ServerAuthenticationEntryPointImpl serverAuthenticationEntryPointImpl;
     private final CustomServerAccessDeniedHandler customServerAccessDeniedHandler;
@@ -49,12 +50,15 @@ public class WebFluxSecurityConfiguration {
                 .accessDeniedHandler(customServerAccessDeniedHandler)
                 .and()
                 .addFilterBefore(requestFilter, SecurityWebFiltersOrder.AUTHENTICATION)
+                // Authentication
                 .authenticationManager(reactiveAuthenticationManager)
                 .securityContextRepository(securityContextRepository)
                 .authorizeExchange()
                 .pathMatchers(flattenIgnoredUrls()).permitAll()
                 .pathMatchers(HttpMethod.OPTIONS).permitAll()
-                .anyExchange().authenticated()
+//                .anyExchange().authenticated()
+                // Authorization
+                .anyExchange().access(reactiveAuthorizationManager)
                 .and()
                 .build();
     }
