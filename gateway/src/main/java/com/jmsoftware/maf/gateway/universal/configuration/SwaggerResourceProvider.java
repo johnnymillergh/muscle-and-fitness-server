@@ -1,15 +1,20 @@
 package com.jmsoftware.maf.gateway.universal.configuration;
 
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.cloud.gateway.config.GatewayProperties;
 import org.springframework.cloud.gateway.route.RouteLocator;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
+import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger.web.SwaggerResource;
 import springfox.documentation.swagger.web.SwaggerResourcesProvider;
 
@@ -35,11 +40,10 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class SwaggerResourceProvider implements SwaggerResourcesProvider {
-    public static final String SWAGGER_API_URI = "/v2/api-docs";
-    private final RouteLocator routeLocator;
-    private final GatewayProperties gatewayProperties;
+    private static final String SWAGGER_API_URI = "/v2/api-docs";
+    private static final String LINE_SEPARATOR = System.lineSeparator();
     private final ProjectProperty projectProperty;
-    private final CustomConfiguration customConfiguration;
+    private final RouteLocator routeLocator;
 
     /**
      * Generate Swagger resource.
@@ -53,26 +57,48 @@ public class SwaggerResourceProvider implements SwaggerResourcesProvider {
         val swaggerResourceList = new LinkedList<SwaggerResource>();
         routeLocator.getRoutes().subscribe(route -> {
             val serviceName = route.getUri().toString().substring(5).toLowerCase();
-            log.info("{} found dynamic route for [{}] from subscription. {}", projectProperty.getProjectArtifactId(),
+            log.warn("{} found dynamic route. Service name: {}, route: {}", this.getClass().getSimpleName(),
                      serviceName, route);
             val swaggerResource = new SwaggerResource();
             swaggerResource.setName(serviceName.toUpperCase());
             swaggerResource.setLocation(String.format("%s%s", serviceName, SWAGGER_API_URI));
             swaggerResource.setSwaggerVersion("2.0");
-            log.info("Got allowed application list: {}", customConfiguration.getAllowedApplicationList());
-            if (CollUtil.isEmpty(customConfiguration.getAllowedApplicationList())) {
-                log.warn("Allowed application list is not configured. Swagger is able to access any applications.");
-                swaggerResourceList.add(swaggerResource);
-            } else {
-                customConfiguration.getAllowedApplicationList().forEach(allocationName -> {
-                    if (StrUtil.compareIgnoreCase(serviceName, allocationName, false) == 0) {
-                        log.warn("Swagger is adding resource. {}", JSONUtil.toJsonStr(swaggerResource));
-                        swaggerResourceList.add(swaggerResource);
-                    }
-                });
-            }
+            log.warn("Exposed Swagger Resource: {}", swaggerResource.toString());
+            swaggerResourceList.add(swaggerResource);
         });
-        log.info("Pre defined GatewayProperties. {}", gatewayProperties);
         return swaggerResourceList;
+    }
+
+    @Bean
+    public Docket createRestApi() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .apiInfo(apiInfo())
+                .select()
+                .apis(RequestHandlerSelectors.basePackage(projectProperty.getBasePackage()))
+                .paths(PathSelectors.any())
+                .build();
+    }
+
+    private ApiInfo apiInfo() {
+        val projectArtifactId = projectProperty.getProjectArtifactId();
+        val version = projectProperty.getVersion();
+        val developerEmail = projectProperty.getDeveloperEmail();
+        val developerUrl = projectProperty.getDeveloperUrl();
+        return new ApiInfoBuilder()
+                .title(String.format("API for %s@%s", projectArtifactId, version))
+                .description(String.format("%s %sArtifact ID: %s%sEnvironment: %s",
+                                           projectProperty.getDescription(),
+                                           LINE_SEPARATOR,
+                                           projectArtifactId,
+                                           LINE_SEPARATOR,
+                                           projectProperty.getEnvironment()))
+                .contact(new Contact(String.format("%s, email: %s%sHome page: %s",
+                                                   projectProperty.getDeveloperName(),
+                                                   developerEmail,
+                                                   LINE_SEPARATOR,
+                                                   developerUrl),
+                                     developerUrl, developerEmail))
+                .version(version)
+                .build();
     }
 }

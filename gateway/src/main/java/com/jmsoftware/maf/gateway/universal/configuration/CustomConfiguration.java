@@ -1,12 +1,11 @@
 package com.jmsoftware.maf.gateway.universal.configuration;
 
-import com.google.common.collect.Lists;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.List;
+import javax.validation.constraints.NotBlank;
 
 /**
  * <h1>CustomConfiguration</h1>
@@ -22,14 +21,11 @@ import java.util.List;
 @ConfigurationProperties(prefix = "custom.configuration")
 public class CustomConfiguration {
     /**
-     * The Allowed application list. If it's empty, gateway will allow all request to any applications (microservices)
-     */
-    private List<String> allowedApplicationList = Lists.newLinkedList();
-    /**
      * <p>The username of super user who has no restriction to access any system&#39;s resources.</p>
      * <p><strong>ATTENTION</strong>: The value of username of super user must be equal to the value that is
      * persistent in database.</p>
      */
+    @NotBlank
     private String superUser;
     /**
      * Ignore URLs

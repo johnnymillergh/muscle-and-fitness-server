@@ -1,6 +1,5 @@
 package com.jmsoftware.maf.gateway.universal.service.impl;
 
-import com.jmsoftware.maf.gateway.universal.aspect.ValidateArgument;
 import com.jmsoftware.maf.gateway.universal.configuration.ProjectProperty;
 import com.jmsoftware.maf.gateway.universal.domain.ValidationTestPayload;
 import com.jmsoftware.maf.gateway.universal.service.CommonService;
@@ -44,7 +43,6 @@ public class CommonServiceImpl implements CommonService {
     }
 
     @Override
-    @ValidateArgument
     public void validateObject(@Valid ValidationTestPayload payload) {
         log.info("Validation passed! {}", payload);
     }

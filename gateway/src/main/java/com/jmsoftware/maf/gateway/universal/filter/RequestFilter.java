@@ -1,13 +1,11 @@
 package com.jmsoftware.maf.gateway.universal.filter;
 
-import com.jmsoftware.maf.gateway.universal.configuration.ProjectProperty;
 import com.jmsoftware.maf.gateway.universal.util.RequestUtil;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cloud.gateway.filter.GatewayFilterChain;
-import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
+import org.springframework.web.server.WebFilter;
+import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
 /**
@@ -20,16 +18,20 @@ import reactor.core.publisher.Mono;
  **/
 @Slf4j
 @Component
-@RequiredArgsConstructor
-public class RequestFilter implements GlobalFilter {
-    private final ProjectProperty projectProperty;
-
+public class RequestFilter implements WebFilter {
     @Override
-    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        log.info("{} intercepted requesters access. Requester: {}, resource: [{}] {}",
-                 projectProperty.getProjectArtifactId().toUpperCase(),
+    @SuppressWarnings("NullableProblems")
+    public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+        log.info("{} (pre). Requester: {}, resource: [{}] {}",
+                 this.getClass().getSimpleName(),
                  RequestUtil.getRequestIpAndPort(exchange.getRequest()), exchange.getRequest().getMethod(),
                  exchange.getRequest().getURI());
-        return chain.filter(exchange);
+        return chain.filter(exchange).then(
+                Mono.fromRunnable(() -> log.info("{} (post). Requester: {}, resource: [{}] {}",
+                                                 this.getClass().getSimpleName(),
+                                                 RequestUtil.getRequestIpAndPort(exchange.getRequest()),
+                                                 exchange.getRequest().getMethod(),
+                                                 exchange.getRequest().getURI()))
+        );
     }
 }
