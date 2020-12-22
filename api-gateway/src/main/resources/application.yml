@@ -97,7 +97,7 @@ maf:
   configuration:
     ignored-url:
       post:
-        - "/authentication/**"
+        - "/auth-center/users/login"
       get:
         - "/favicon.ico"
         - "/auth/check-username-uniqueness"

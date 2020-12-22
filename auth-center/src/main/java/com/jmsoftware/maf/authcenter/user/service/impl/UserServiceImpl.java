@@ -5,16 +5,17 @@ import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.jmsoftware.maf.authcenter.universal.service.JwtService;
 import com.jmsoftware.maf.authcenter.user.entity.UserPersistence;
 import com.jmsoftware.maf.authcenter.user.mapper.UserMapper;
 import com.jmsoftware.maf.authcenter.user.service.UserService;
-import com.jmsoftware.maf.common.domain.authcenter.user.GetUserByLoginTokenResponse;
-import com.jmsoftware.maf.common.domain.authcenter.user.SaveUserForRegisteringPayload;
-import com.jmsoftware.maf.common.domain.authcenter.user.SaveUserForRegisteringResponse;
-import com.jmsoftware.maf.common.domain.authcenter.user.UserStatus;
+import com.jmsoftware.maf.common.domain.authcenter.user.*;
+import com.jmsoftware.maf.common.exception.BusinessException;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
@@ -31,7 +32,11 @@ import java.util.Date;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl extends ServiceImpl<UserMapper, UserPersistence> implements UserService {
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final JwtService jwtService;
+
     @Override
     public GetUserByLoginTokenResponse getUserByLoginToken(@NotBlank String loginToken) {
         LambdaQueryWrapper<UserPersistence> wrapper = Wrappers.lambdaQuery();
@@ -65,5 +70,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserPersistence> im
         val response = new SaveUserForRegisteringResponse();
         response.setUserId(userPersistence.getId());
         return response;
+    }
+
+    @Override
+    @SneakyThrows
+    public LoginResponse login(@Valid LoginPayload payload) {
+        val user = this.getUserByLoginToken(payload.getLoginToken());
+        log.info("User: {}", user);
+        boolean matched = bCryptPasswordEncoder.matches(payload.getPassword(), user.getPassword());
+        if (matched) {
+            String jwt = jwtService.createJwt(payload.getRememberMe(), user.getId(), user.getUsername(), null, null);
+            val response = new LoginResponse();
+            response.setJwt(jwt);
+            return response;
+        }
+        throw new BusinessException("Login failure!");
     }
 }

@@ -2,9 +2,7 @@ package com.jmsoftware.maf.authcenter.user.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jmsoftware.maf.authcenter.user.entity.UserPersistence;
-import com.jmsoftware.maf.common.domain.authcenter.user.GetUserByLoginTokenResponse;
-import com.jmsoftware.maf.common.domain.authcenter.user.SaveUserForRegisteringPayload;
-import com.jmsoftware.maf.common.domain.authcenter.user.SaveUserForRegisteringResponse;
+import com.jmsoftware.maf.common.domain.authcenter.user.*;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
@@ -35,4 +33,6 @@ public interface UserService extends IService<UserPersistence> {
      * @return the save user for registering response
      */
     SaveUserForRegisteringResponse saveUserForRegister(@Valid SaveUserForRegisteringPayload payload);
+
+    LoginResponse login(@Valid LoginPayload payload);
 }
