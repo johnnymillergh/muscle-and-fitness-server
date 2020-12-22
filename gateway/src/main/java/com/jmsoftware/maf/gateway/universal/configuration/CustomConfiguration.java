@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
 
 /**
  * <h1>CustomConfiguration</h1>
@@ -42,4 +43,24 @@ public class CustomConfiguration {
      * true - disable web request log; false - enable web request log.
      */
     private Boolean webRequestLogDisabled = false;
+
+    /**
+     * Flatten ignored urls string [ ].
+     *
+     * @return the string [ ]
+     */
+    public String[] flattenIgnoredUrls() {
+        final var ignoredRequests = this.getIgnoredRequest();
+        final var flattenIgnoredUrls = new ArrayList<String>();
+        flattenIgnoredUrls.addAll(ignoredRequests.getGet());
+        flattenIgnoredUrls.addAll(ignoredRequests.getPost());
+        flattenIgnoredUrls.addAll(ignoredRequests.getDelete());
+        flattenIgnoredUrls.addAll(ignoredRequests.getPut());
+        flattenIgnoredUrls.addAll(ignoredRequests.getHead());
+        flattenIgnoredUrls.addAll(ignoredRequests.getPatch());
+        flattenIgnoredUrls.addAll(ignoredRequests.getOptions());
+        flattenIgnoredUrls.addAll(ignoredRequests.getTrace());
+        flattenIgnoredUrls.addAll(ignoredRequests.getPattern());
+        return flattenIgnoredUrls.toArray(new String[0]);
+    }
 }

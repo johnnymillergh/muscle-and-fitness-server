@@ -16,7 +16,7 @@ import reactor.core.publisher.Mono;
  **/
 @Slf4j
 @Configuration
-public class CustomServerAccessDeniedHandler implements ServerAccessDeniedHandler {
+public class GatewayServerAccessDeniedHandler implements ServerAccessDeniedHandler {
     @Override
     public Mono<Void> handle(ServerWebExchange exchange, AccessDeniedException denied) {
         log.error("Access denied! Exception message: {}. Request URL: [{}] {}", denied.getMessage(),

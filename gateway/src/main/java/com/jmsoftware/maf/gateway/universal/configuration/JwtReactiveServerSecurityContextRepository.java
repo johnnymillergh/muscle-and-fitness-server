@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.web.server.context.ServerSecurityContextRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
@@ -24,7 +25,9 @@ import reactor.core.publisher.Mono;
 @Component
 @RequiredArgsConstructor
 public class JwtReactiveServerSecurityContextRepository implements ServerSecurityContextRepository {
+    private final CustomConfiguration customConfiguration;
     private final ReactiveAuthenticationManager authenticationManager;
+    private final AntPathMatcher antPathMatcher = new AntPathMatcher();
 
     @Override
     public Mono<Void> save(ServerWebExchange exchange, SecurityContext context) {
@@ -34,6 +37,12 @@ public class JwtReactiveServerSecurityContextRepository implements ServerSecurit
     @Override
     public Mono<SecurityContext> load(ServerWebExchange exchange) {
         ServerHttpRequest request = exchange.getRequest();
+        // Ignore allowed URL
+        for (String ignoredUrl : customConfiguration.flattenIgnoredUrls()) {
+            if (antPathMatcher.match(ignoredUrl, request.getURI().getPath())) {
+                return Mono.empty();
+            }
+        }
         String authorization = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
         if (StrUtil.isBlank(authorization) || !authorization.startsWith(JwtConfiguration.TOKEN_PREFIX)) {
             log.warn("Authentication failed! Cause: `{}` in HTTP headers not found. Request URL: [{}] {}",

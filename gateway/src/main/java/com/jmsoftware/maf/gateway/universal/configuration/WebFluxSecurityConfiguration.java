@@ -6,15 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
-import org.springframework.security.web.server.context.ServerSecurityContextRepository;
-
-import java.util.ArrayList;
 
 /**
  * Description: WebFluxSecurityConfiguration, change description here.
@@ -33,11 +29,11 @@ import java.util.ArrayList;
 @RequiredArgsConstructor
 public class WebFluxSecurityConfiguration {
     private final CustomConfiguration customConfiguration;
-    private final ReactiveAuthenticationManager reactiveAuthenticationManager;
+    private final JwtReactiveAuthenticationManager reactiveAuthenticationManager;
     private final RbacReactiveAuthorizationManager reactiveAuthorizationManager;
-    private final ServerSecurityContextRepository securityContextRepository;
-    private final ServerAuthenticationEntryPointImpl serverAuthenticationEntryPointImpl;
-    private final CustomServerAccessDeniedHandler customServerAccessDeniedHandler;
+    private final JwtReactiveServerSecurityContextRepository securityContextRepository;
+    private final ServerAuthenticationEntryPointImpl serverAuthenticationEntryPoint;
+    private final GatewayServerAccessDeniedHandler serverAccessDeniedHandler;
     private final RequestFilter requestFilter;
 
     @Bean
@@ -46,17 +42,16 @@ public class WebFluxSecurityConfiguration {
                 .cors().disable()
                 .csrf().disable()
                 .exceptionHandling()
-                .authenticationEntryPoint(serverAuthenticationEntryPointImpl)
-                .accessDeniedHandler(customServerAccessDeniedHandler)
+                .authenticationEntryPoint(serverAuthenticationEntryPoint)
+                .accessDeniedHandler(serverAccessDeniedHandler)
                 .and()
                 .addFilterBefore(requestFilter, SecurityWebFiltersOrder.AUTHENTICATION)
                 // Authentication
                 .authenticationManager(reactiveAuthenticationManager)
                 .securityContextRepository(securityContextRepository)
                 .authorizeExchange()
-                .pathMatchers(flattenIgnoredUrls()).permitAll()
+                .pathMatchers(customConfiguration.flattenIgnoredUrls()).permitAll()
                 .pathMatchers(HttpMethod.OPTIONS).permitAll()
-//                .anyExchange().authenticated()
                 // Authorization
                 .anyExchange().access(reactiveAuthorizationManager)
                 .and()
@@ -66,21 +61,5 @@ public class WebFluxSecurityConfiguration {
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    private String[] flattenIgnoredUrls() {
-        final var ignoredRequests = customConfiguration.getIgnoredRequest();
-        final var flattenIgnoredUrls = new ArrayList<String>();
-        flattenIgnoredUrls.addAll(ignoredRequests.getGet());
-        flattenIgnoredUrls.addAll(ignoredRequests.getPost());
-        flattenIgnoredUrls.addAll(ignoredRequests.getDelete());
-        flattenIgnoredUrls.addAll(ignoredRequests.getPut());
-        flattenIgnoredUrls.addAll(ignoredRequests.getHead());
-        flattenIgnoredUrls.addAll(ignoredRequests.getPatch());
-        flattenIgnoredUrls.addAll(ignoredRequests.getOptions());
-        flattenIgnoredUrls.addAll(ignoredRequests.getTrace());
-        flattenIgnoredUrls.addAll(ignoredRequests.getPattern());
-        log.info("Ignored URL list for WebFlux security: {}", flattenIgnoredUrls);
-        return flattenIgnoredUrls.toArray(new String[0]);
     }
 }
