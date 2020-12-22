@@ -38,16 +38,16 @@ public class JwtReactiveAuthenticationManager implements ReactiveAuthenticationM
         try {
             username = jwtService.getUsernameFromJwt(jwt);
         } catch (Exception e) {
-            log.error("Authentication failed! Cause: {}", e.getMessage());
+            log.error("Authentication failure! Cause: {}", e.getMessage());
             return Mono.empty();
         }
         if (StrUtil.isBlank(username)) {
-            log.warn("Authentication failed! Cause: the username mustn't be blank");
+            log.warn("Authentication failure! Cause: the username mustn't be blank");
             return Mono.empty();
         }
         val response = authCenterRemoteApi.getUserByLoginToken(username);
         Mono<GetUserByLoginTokenResponse> responseMono = response.map(ResponseBodyBean::getData)
-                .switchIfEmpty(Mono.error(new BusinessException("Authentication failed! Cause: User not found")));
+                .switchIfEmpty(Mono.error(new BusinessException("Authentication failure! Cause: User not found")));
         return responseMono.map(getUserByLoginTokenResponse -> {
             log.info("Authentication success! Found username: {}", getUserByLoginTokenResponse.getUsername());
             UserPrincipal userPrincipal = UserPrincipal.create(getUserByLoginTokenResponse, null, null);

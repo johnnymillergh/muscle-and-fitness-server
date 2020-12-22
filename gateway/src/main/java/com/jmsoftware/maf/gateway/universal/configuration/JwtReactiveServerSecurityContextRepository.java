@@ -45,7 +45,7 @@ public class JwtReactiveServerSecurityContextRepository implements ServerSecurit
         }
         String authorization = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
         if (StrUtil.isBlank(authorization) || !authorization.startsWith(JwtConfiguration.TOKEN_PREFIX)) {
-            log.warn("Authentication failed! Cause: `{}` in HTTP headers not found. Request URL: [{}] {}",
+            log.warn("Authentication failure! Cause: `{}` in HTTP headers not found. Request URL: [{}] {}",
                      HttpHeaders.AUTHORIZATION, request.getMethod(), request.getURI());
             return Mono.empty();
         }

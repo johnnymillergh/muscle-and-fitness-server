@@ -48,24 +48,24 @@ public class RbacReactiveAuthorizationManager implements ReactiveAuthorizationMa
                             .switchIfEmpty(Mono.error(new BusinessException("User not found!")));
                 });
         val zip = Mono.zip(getPermissionListByUserIdResponseMono, userPrincipalMono);
-        return zip.map(objects -> {
-            val permissionList = objects.getT1().getPermissionList();
+        return zip.map(mapper -> {
+            val permissionList = mapper.getT1().getPermissionList();
             val buttonPermissionList = permissionList.stream()
                     .filter(permission -> PermissionType.BUTTON.getType().equals(permission.getType()))
                     .filter(permission -> StrUtil.isNotBlank(permission.getUrl()))
                     .filter(permission -> StrUtil.isNotBlank(permission.getMethod()))
                     .collect(Collectors.toList());
             val path = request.getURI().getPath();
-            val userPrincipal = objects.getT2();
+            val userPrincipal = mapper.getT2();
             for (val buttonPermission : buttonPermissionList) {
                 if (antPathMatcher.match(buttonPermission.getUrl(), path)) {
-                    log.info("Resource [{}] {} is accessible for user(username: {})", request.getMethod(),
-                             request.getURI(), userPrincipal.getUsername());
+                    log.info("Authorization success! Resource [{}] {} is accessible for user(username: {})",
+                             request.getMethod(), request.getURI(), userPrincipal.getUsername());
                     return new AuthorizationDecision(true);
                 }
             }
-            log.warn("Resource [{}] {} is inaccessible for user(username: {})", request.getMethod(),
-                     request.getURI(), userPrincipal.getUsername());
+            log.warn("Authorization failure! Resource [{}] {} is inaccessible for user(username: {})",
+                     request.getMethod(), request.getURI(), userPrincipal.getUsername());
             return new AuthorizationDecision(false);
         });
     }
