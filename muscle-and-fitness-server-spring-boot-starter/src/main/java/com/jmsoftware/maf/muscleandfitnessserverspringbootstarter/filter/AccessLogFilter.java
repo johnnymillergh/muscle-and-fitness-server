@@ -1,8 +1,11 @@
 package com.jmsoftware.maf.muscleandfitnessserverspringbootstarter.filter;
 
+import com.jmsoftware.maf.muscleandfitnessserverspringbootstarter.configuration.MafConfiguration;
 import com.jmsoftware.maf.muscleandfitnessserverspringbootstarter.util.RequestUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -20,11 +23,22 @@ import java.io.IOException;
  **/
 @Slf4j
 @Component
-public class RequestFilter extends OncePerRequestFilter {
+@RequiredArgsConstructor
+public class AccessLogFilter extends OncePerRequestFilter {
+    private final MafConfiguration mafConfiguration;
+    private final AntPathMatcher antPathMatcher = new AntPathMatcher();
+
     @Override
     @SuppressWarnings("NullableProblems")
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws IOException, ServletException {
+        // Ignore URL
+        for (String ignoredUrl : mafConfiguration.flattenIgnoredUrls()) {
+            if (antPathMatcher.match(ignoredUrl, request.getRequestURI())) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+        }
         log.info("The requester({}) requested resource. Request URL: [{}] {}", RequestUtil.getRequestIpAndPort(request),
                  request.getMethod(), request.getRequestURL());
         filterChain.doFilter(request, response);

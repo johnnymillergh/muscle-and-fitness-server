@@ -106,3 +106,16 @@ jwt:
     # an hour
     ttl: 3600000
     ttl-for-remember-me: 604800000
+
+maf:
+  configuration:
+    ignored-url:
+      pattern:
+        - "/static/**"
+        - "/actuator/**"
+        - "/druid/**"
+        - "/swagger-resources/**"
+        - "/v2/api-docs/**"
+        - "/*/v2/api-docs/**"
+        - "/webjars/**"
+        - "/doc.html"

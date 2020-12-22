@@ -3,7 +3,7 @@ package com.jmsoftware.maf.muscleandfitnessserverspringbootstarter.configuration
 import com.jmsoftware.maf.muscleandfitnessserverspringbootstarter.aspect.ExceptionControllerAdvice;
 import com.jmsoftware.maf.muscleandfitnessserverspringbootstarter.aspect.WebRequestLogAspect;
 import com.jmsoftware.maf.muscleandfitnessserverspringbootstarter.controller.RedirectController;
-import com.jmsoftware.maf.muscleandfitnessserverspringbootstarter.filter.RequestFilter;
+import com.jmsoftware.maf.muscleandfitnessserverspringbootstarter.filter.AccessLogFilter;
 import com.jmsoftware.maf.muscleandfitnessserverspringbootstarter.helper.IpHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +32,13 @@ public class MuscleAndFitnessServerAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
+    public MafConfiguration mafConfiguration() {
+        log.debug("Initial bean: {}", MafConfiguration.class.getName());
+        return new MafConfiguration();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
     public ExceptionControllerAdvice exceptionControllerAdvice() {
         log.debug("Initial bean: {}", ExceptionControllerAdvice.class.getName());
         return new ExceptionControllerAdvice();
@@ -53,9 +60,9 @@ public class MuscleAndFitnessServerAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public RequestFilter requestFilter() {
-        log.debug("Initial bean: {}", RequestFilter.class.getName());
-        return new RequestFilter();
+    public AccessLogFilter requestFilter(MafConfiguration mafConfiguration) {
+        log.debug("Initial bean: {}", AccessLogFilter.class.getName());
+        return new AccessLogFilter(mafConfiguration);
     }
 
     @Bean

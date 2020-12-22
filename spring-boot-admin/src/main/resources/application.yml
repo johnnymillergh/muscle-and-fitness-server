@@ -62,3 +62,16 @@ project:
     developer-name: @developerName@
     developer-email: @developerEmail@
     developer-url: @developerUrl@
+
+maf:
+  configuration:
+    ignored-url:
+      pattern:
+        - "/static/**"
+        - "/actuator/**"
+        - "/druid/**"
+        - "/swagger-resources/**"
+        - "/v2/api-docs/**"
+        - "/*/v2/api-docs/**"
+        - "/webjars/**"
+        - "/doc.html"

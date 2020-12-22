@@ -47,3 +47,10 @@ project:
     developer-name: @developerName@
     developer-email: @developerEmail@
     developer-url: @developerUrl@
+
+maf:
+  configuration:
+    ignored-url:
+      pattern:
+        - "/actuator/**"
+    super-user: "admin"
