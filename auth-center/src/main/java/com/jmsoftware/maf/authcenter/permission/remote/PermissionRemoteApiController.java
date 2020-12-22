@@ -8,7 +8,10 @@ import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListB
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
@@ -33,7 +36,7 @@ public class PermissionRemoteApiController {
         return ResponseBodyBean.ofSuccess(permissionService.getPermissionListByRoleIdList(payload));
     }
 
-    @PostMapping("/permissions/{userId}")
+    @GetMapping("/permissions/{userId}")
     @ApiOperation(value = "Get permission list by user id", notes = "Get permission list by user id")
     public ResponseBodyBean<GetPermissionListByUserIdResponse> getPermissionListByUserId(@PathVariable Long userId) {
         return ResponseBodyBean.ofSuccess(permissionService.getPermissionListByUserId(userId));

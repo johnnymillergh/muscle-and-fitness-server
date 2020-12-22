@@ -1,5 +1,8 @@
 package com.jmsoftware.maf.common.bean;
 
+import cn.hutool.json.JSON;
+import cn.hutool.json.JSONConfig;
+import cn.hutool.json.JSONUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jmsoftware.maf.common.constant.HttpStatus;
 import com.jmsoftware.maf.common.constant.IUniversalStatus;
@@ -8,6 +11,8 @@ import com.jmsoftware.maf.common.exception.BusinessException;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import lombok.val;
+import org.springframework.lang.Nullable;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -265,5 +270,21 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
     public static <ResponseBodyDataType, BaseThrowable extends BaseException> ResponseBodyBean<ResponseBodyDataType> ofException(@NonNull final BaseThrowable throwable)
             throws BaseException {
         throw throwable;
+    }
+
+    /**
+     * Of json.
+     *
+     * @param message the message
+     * @param data    the data
+     * @param status  the status
+     * @return the json
+     * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 12/22/2020 10:16 AM
+     */
+    public static JSON of(@NonNull String message, @Nullable Object data, @NonNull Integer status) {
+        val responseBodyBean = ResponseBodyBean.ofStatus(status, message, data);
+        val config = new JSONConfig();
+        config.setIgnoreNullValue(false).setDateFormat("yyyy-MM-dd HH:mm:ss");
+        return JSONUtil.parse(responseBodyBean, config);
     }
 }

@@ -22,12 +22,12 @@ public class RequestFilter implements WebFilter {
     @Override
     @SuppressWarnings("NullableProblems")
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
-        log.info("{} (pre). Requester: {}, resource: [{}] {}",
+        log.info("{} (pre). Requester: {}, request URL: [{}] {}",
                  this.getClass().getSimpleName(),
                  RequestUtil.getRequestIpAndPort(exchange.getRequest()), exchange.getRequest().getMethod(),
                  exchange.getRequest().getURI());
         return chain.filter(exchange).then(
-                Mono.fromRunnable(() -> log.info("{} (post). Requester: {}, resource: [{}] {}",
+                Mono.fromRunnable(() -> log.info("{} (post). Requester: {}, request URL: [{}] {}",
                                                  this.getClass().getSimpleName(),
                                                  RequestUtil.getRequestIpAndPort(exchange.getRequest()),
                                                  exchange.getRequest().getMethod(),

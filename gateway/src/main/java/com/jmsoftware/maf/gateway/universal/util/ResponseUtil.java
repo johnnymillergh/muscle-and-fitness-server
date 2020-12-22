@@ -1,7 +1,8 @@
 package com.jmsoftware.maf.gateway.universal.util;
 
-import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSON;
 import cn.hutool.json.JSONUtil;
+import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
@@ -12,7 +13,6 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
 
 /**
  * Description: ResponseUtil, change description here.
@@ -33,13 +33,8 @@ public class ResponseUtil {
                                         @Nullable Object data) {
         exchange.getResponse().setStatusCode(httpStatus);
         val response = exchange.getResponse();
-        val responseJson = new JSONObject();
-        responseJson.getConfig().setIgnoreNullValue(false).setDateFormat("yyyy-MM-dd HH:mm:ss");
-        responseJson.set("timestamp", new Date())
-                .set("status", httpStatus.value())
-                .set("message", httpStatus.getReasonPhrase())
-                .set("data", data);
-        val responseBodyBytes = JSONUtil.toJsonStr(responseJson).getBytes(StandardCharsets.UTF_8);
+        JSON json = ResponseBodyBean.of(httpStatus.getReasonPhrase(), data, httpStatus.value());
+        val responseBodyBytes = JSONUtil.toJsonStr(json).getBytes(StandardCharsets.UTF_8);
         DataBuffer dataBuffer = response.bufferFactory().wrap(responseBodyBytes);
         response.setStatusCode(httpStatus);
         response.getHeaders().add("Content-Type", "application/json;charset=UTF-8");

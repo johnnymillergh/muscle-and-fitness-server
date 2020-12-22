@@ -21,7 +21,6 @@ public class ServerAuthenticationEntryPointImpl implements ServerAuthenticationE
     public Mono<Void> commence(ServerWebExchange serverWebExchange, AuthenticationException e) {
         log.error("Exception occurred when authenticating! Exception message: {}. Request URL: [{}] {}", e.getMessage(),
                   serverWebExchange.getRequest().getMethod(), serverWebExchange.getRequest().getURI());
-        log.error("{}", e.getMessage(), e);
         return ResponseUtil.renderJson(serverWebExchange, HttpStatus.NETWORK_AUTHENTICATION_REQUIRED, null);
     }
 }

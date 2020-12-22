@@ -16,14 +16,14 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 /**
- * Description: SecurityContextRepository, change description here.
+ * Description: ReactiveServerSecurityContextRepository, change description here.
  *
  * @author 钟俊（zhongjun）, email: zhongjun@toguide.cn, date: 12/18/2020 3:38 PM
  **/
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class CustomServerSecurityContextRepository implements ServerSecurityContextRepository {
+public class ReactiveServerSecurityContextRepository implements ServerSecurityContextRepository {
     private static final String TOKEN_PREFIX = "Bearer ";
     private final ReactiveAuthenticationManager authenticationManager;
 
@@ -37,8 +37,8 @@ public class CustomServerSecurityContextRepository implements ServerSecurityCont
         ServerHttpRequest request = exchange.getRequest();
         String authorization = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
         if (StrUtil.isBlank(authorization) || !authorization.startsWith(TOKEN_PREFIX)) {
-            log.warn("{} in HTTP headers not found! [{}] {}", HttpHeaders.AUTHORIZATION, request.getMethod(),
-                     request.getURI());
+            log.warn("Authentication failed! Cause: `{}` in HTTP headers not found. Request URL: [{}] {}",
+                     HttpHeaders.AUTHORIZATION, request.getMethod(), request.getURI());
             return Mono.empty();
         }
         String jwt = authorization.replace(TOKEN_PREFIX, "");

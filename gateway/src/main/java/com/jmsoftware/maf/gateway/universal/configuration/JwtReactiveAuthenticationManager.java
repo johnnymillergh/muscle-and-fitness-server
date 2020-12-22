@@ -25,7 +25,7 @@ import javax.annotation.Resource;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class AuthenticationManager implements ReactiveAuthenticationManager {
+public class JwtReactiveAuthenticationManager implements ReactiveAuthenticationManager {
     private final JwtService jwtService;
     @Lazy
     @Resource
@@ -49,7 +49,7 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
         Mono<GetUserByLoginTokenResponse> responseMono = response.map(ResponseBodyBean::getData)
                 .switchIfEmpty(Mono.error(new BusinessException("Authentication failed! Cause: User not found")));
         return responseMono.map(getUserByLoginTokenResponse -> {
-            log.info("Authentication success. Username: {}", getUserByLoginTokenResponse.getUsername());
+            log.info("Authentication success! Found username: {}", getUserByLoginTokenResponse.getUsername());
             UserPrincipal userPrincipal = UserPrincipal.create(getUserByLoginTokenResponse, null, null);
             return new UsernamePasswordAuthenticationToken(userPrincipal, null);
         });

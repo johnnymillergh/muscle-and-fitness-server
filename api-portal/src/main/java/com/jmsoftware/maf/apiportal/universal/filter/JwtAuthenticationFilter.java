@@ -54,7 +54,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         val requesterIpAndPort = RequestUtil.getRequestIpAndPort(request);
         val method = request.getMethod();
         val requestUrl = request.getRequestURL();
-        log.info("JWT authentication is filtering requester({}) access. Resource: [{}] {}",
+        log.info("JWT authentication is filtering requester({}) access. Request URL: [{}] {}",
                  requesterIpAndPort, method, requestUrl);
         if (customConfiguration.getWebSecurityDisabled()) {
             log.warn("The web security is disabled! Might face severe web security issue.");
@@ -62,13 +62,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
         if (checkIgnores(request)) {
-            log.info("The resource can be ignored. Resource: [{}] {}", method, requestUrl);
+            log.info("The resource can be ignored. Request URL: [{}] {}", method, requestUrl);
             filterChain.doFilter(request, response);
             return;
         }
         val passedJwtAuthentication = doJwtAuthentication(request, response);
         if (!passedJwtAuthentication) {
-            log.warn("The requester did not pass JWT authentication. Requester: {}. Resource: [{}] {}", requesterIpAndPort,
+            log.warn("The requester did not pass JWT authentication. Requester: {}. Request URL: [{}] {}", requesterIpAndPort,
                      method, requestUrl);
             return;
         }
