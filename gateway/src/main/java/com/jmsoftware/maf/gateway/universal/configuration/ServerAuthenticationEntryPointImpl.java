@@ -18,9 +18,9 @@ import reactor.core.publisher.Mono;
 @Configuration
 public class ServerAuthenticationEntryPointImpl implements ServerAuthenticationEntryPoint {
     @Override
-    public Mono<Void> commence(ServerWebExchange serverWebExchange, AuthenticationException e) {
+    public Mono<Void> commence(ServerWebExchange exchange, AuthenticationException e) {
         log.error("Exception occurred when authenticating! Exception message: {}. Request URL: [{}] {}", e.getMessage(),
-                  serverWebExchange.getRequest().getMethod(), serverWebExchange.getRequest().getURI());
-        return ResponseUtil.renderJson(serverWebExchange, HttpStatus.NETWORK_AUTHENTICATION_REQUIRED, null);
+                  exchange.getRequest().getMethod(), exchange.getRequest().getURI());
+        return ResponseUtil.renderJson(exchange, HttpStatus.NETWORK_AUTHENTICATION_REQUIRED, null);
     }
 }

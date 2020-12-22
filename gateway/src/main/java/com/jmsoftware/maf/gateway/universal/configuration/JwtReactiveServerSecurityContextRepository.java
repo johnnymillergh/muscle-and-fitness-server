@@ -23,8 +23,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ReactiveServerSecurityContextRepository implements ServerSecurityContextRepository {
-    private static final String TOKEN_PREFIX = "Bearer ";
+public class JwtReactiveServerSecurityContextRepository implements ServerSecurityContextRepository {
     private final ReactiveAuthenticationManager authenticationManager;
 
     @Override
@@ -36,12 +35,12 @@ public class ReactiveServerSecurityContextRepository implements ServerSecurityCo
     public Mono<SecurityContext> load(ServerWebExchange exchange) {
         ServerHttpRequest request = exchange.getRequest();
         String authorization = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-        if (StrUtil.isBlank(authorization) || !authorization.startsWith(TOKEN_PREFIX)) {
+        if (StrUtil.isBlank(authorization) || !authorization.startsWith(JwtConfiguration.TOKEN_PREFIX)) {
             log.warn("Authentication failed! Cause: `{}` in HTTP headers not found. Request URL: [{}] {}",
                      HttpHeaders.AUTHORIZATION, request.getMethod(), request.getURI());
             return Mono.empty();
         }
-        String jwt = authorization.replace(TOKEN_PREFIX, "");
+        String jwt = authorization.replace(JwtConfiguration.TOKEN_PREFIX, "");
         Authentication authentication = new UsernamePasswordAuthenticationToken(null, jwt);
         return this.authenticationManager.authenticate(authentication).map(SecurityContextImpl::new);
     }

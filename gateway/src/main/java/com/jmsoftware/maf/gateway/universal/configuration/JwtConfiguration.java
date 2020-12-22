@@ -20,6 +20,8 @@ import java.nio.charset.StandardCharsets;
 @Component
 @ConfigurationProperties(prefix = "jwt.configuration")
 public class JwtConfiguration {
+    public static final String TOKEN_PREFIX = "Bearer ";
+
     public JwtConfiguration(ProjectProperty projectProperty) {
         this.signingKey = String.format("%s %s", projectProperty.getProjectParentArtifactId(), projectProperty.getVersion());
         log.info("Initiated JWT signing key: {}. The specified key byte array is {} bits", this.signingKey,

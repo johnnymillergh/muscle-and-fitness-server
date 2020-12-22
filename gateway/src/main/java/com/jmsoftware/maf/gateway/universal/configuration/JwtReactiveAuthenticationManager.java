@@ -38,7 +38,7 @@ public class JwtReactiveAuthenticationManager implements ReactiveAuthenticationM
         try {
             username = jwtService.getUsernameFromJwt(jwt);
         } catch (Exception e) {
-            log.error("Exception occurred when authenticating", e);
+            log.error("Authentication failed! Cause: {}", e.getMessage());
             return Mono.empty();
         }
         if (StrUtil.isBlank(username)) {
