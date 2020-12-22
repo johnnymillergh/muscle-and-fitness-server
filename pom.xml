@@ -33,7 +33,7 @@
         <muscle-mis.port>8802</muscle-mis.port>
 
         <!-- Gateway Service. Port range: [8080, 8080]. -->
-        <gateway.port>8080</gateway.port>
+        <api-gateway.port>8080</api-gateway.port>
 
         <!-- Version Definitions. -->
         <java.version>11</java.version>
@@ -57,8 +57,7 @@
         <module>muscle-and-fitness-server-reactive-spring-boot-starter</module>
         <module>service-registry</module>
         <module>spring-boot-admin</module>
-        <module>gateway</module>
-        <module>api-portal</module>
+        <module>api-gateway</module>
         <module>auth-center</module>
         <module>exercise-mis</module>
         <module>muscle-mis</module>
@@ -110,11 +109,6 @@
             <dependency>
                 <groupId>com.jmsoftware.maf</groupId>
                 <artifactId>gateway</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.jmsoftware.maf</groupId>
-                <artifactId>api-portal</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

@@ -1,0 +1,10 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://maf.service-registry.production:8760/eureka/
+
+spring:
+  zipkin:
+    base-url: http://maf.open-zipkin.production:9411
+  devtools:
+    add-properties: false
