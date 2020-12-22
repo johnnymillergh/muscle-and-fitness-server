@@ -53,8 +53,8 @@
     <!-- The modules (sometimes called subprojects) to build as a part of this project. -->
     <modules>
         <module>common</module>
-        <module>muscle-and-fitness-server-spring-boot-starter</module>
-        <module>muscle-and-fitness-server-reactive-spring-boot-starter</module>
+        <module>spring-boot-starter</module>
+        <module>reactive-spring-boot-starter</module>
         <module>service-registry</module>
         <module>spring-boot-admin</module>
         <module>api-gateway</module>
@@ -88,12 +88,12 @@
             </dependency>
             <dependency>
                 <groupId>com.jmsoftware.maf</groupId>
-                <artifactId>muscle-and-fitness-server-spring-boot-starter</artifactId>
+                <artifactId>spring-boot-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.jmsoftware.maf</groupId>
-                <artifactId>muscle-and-fitness-server-reactive-spring-boot-starter</artifactId>
+                <artifactId>reactive-spring-boot-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

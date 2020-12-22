@@ -75,7 +75,7 @@
     <dependencies>
         <dependency>
             <groupId>com.jmsoftware.maf</groupId>
-            <artifactId>muscle-and-fitness-server-spring-boot-starter</artifactId>
+            <artifactId>spring-boot-starter</artifactId>
             <exclusions>
                 <exclusion>
                     <artifactId>spring-boot-starter-security</artifactId>
