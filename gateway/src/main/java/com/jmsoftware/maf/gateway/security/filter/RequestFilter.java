@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.gateway.universal.filter;
+package com.jmsoftware.maf.gateway.security.filter;
 
 import com.jmsoftware.maf.gateway.universal.configuration.CustomConfiguration;
 import com.jmsoftware.maf.gateway.universal.util.RequestUtil;

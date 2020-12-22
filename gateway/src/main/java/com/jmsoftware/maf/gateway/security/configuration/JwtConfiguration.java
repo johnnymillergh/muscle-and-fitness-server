@@ -1,5 +1,6 @@
-package com.jmsoftware.maf.gateway.universal.configuration;
+package com.jmsoftware.maf.gateway.security.configuration;
 
+import com.jmsoftware.maf.gateway.universal.configuration.ProjectProperty;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;

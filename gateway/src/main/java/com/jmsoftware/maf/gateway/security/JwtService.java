@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.gateway.universal.configuration;
+package com.jmsoftware.maf.gateway.security;
 
 import com.jmsoftware.maf.common.exception.SecurityException;
 import io.jsonwebtoken.Claims;

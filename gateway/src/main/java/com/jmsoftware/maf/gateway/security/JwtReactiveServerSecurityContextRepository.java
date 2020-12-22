@@ -1,6 +1,8 @@
-package com.jmsoftware.maf.gateway.universal.configuration;
+package com.jmsoftware.maf.gateway.security;
 
 import cn.hutool.core.util.StrUtil;
+import com.jmsoftware.maf.gateway.security.configuration.JwtConfiguration;
+import com.jmsoftware.maf.gateway.universal.configuration.CustomConfiguration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;

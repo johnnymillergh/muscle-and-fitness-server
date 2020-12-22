@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.gateway.universal.configuration;
+package com.jmsoftware.maf.gateway.security;
 
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;

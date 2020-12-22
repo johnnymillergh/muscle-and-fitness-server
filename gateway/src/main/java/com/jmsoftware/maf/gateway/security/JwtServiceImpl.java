@@ -1,10 +1,13 @@
-package com.jmsoftware.maf.gateway.universal.configuration;
+package com.jmsoftware.maf.gateway.security;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.jmsoftware.maf.common.constant.HttpStatus;
 import com.jmsoftware.maf.common.exception.SecurityException;
+import com.jmsoftware.maf.gateway.security.configuration.JwtConfiguration;
+import com.jmsoftware.maf.gateway.universal.configuration.Constants;
+import com.jmsoftware.maf.gateway.universal.configuration.RedisService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
@@ -75,7 +78,7 @@ public class JwtServiceImpl implements JwtService {
         val jwt = builder.compact();
         // Store new JWT in Redis
         val redisOperationResult = redisService.set(Constants.REDIS_JWT_KEY_PREFIX + subject, jwt, ttl,
-                                      TimeUnit.MILLISECONDS);
+                                                    TimeUnit.MILLISECONDS);
         if (redisOperationResult) {
             return jwt;
         } else {

@@ -1,6 +1,7 @@
-package com.jmsoftware.maf.gateway.universal.configuration;
+package com.jmsoftware.maf.gateway.security;
 
-import com.jmsoftware.maf.gateway.universal.filter.RequestFilter;
+import com.jmsoftware.maf.gateway.security.filter.RequestFilter;
+import com.jmsoftware.maf.gateway.universal.configuration.CustomConfiguration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
