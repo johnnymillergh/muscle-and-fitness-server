@@ -92,3 +92,26 @@ project:
     developer-name: @developerName@
     developer-email: @developerEmail@
     developer-url: @developerUrl@
+
+
+maf:
+  configuration:
+    ignored-url:
+      post:
+        - "/authentication/**"
+      get:
+        - "/favicon.ico"
+        - "/auth/check-username-uniqueness"
+        - "/auth/check-email-uniqueness"
+        - "/auth/validate-username/**"
+        - "/user/get-avatar"
+        - "/common/get-jwt"
+      pattern:
+        - "/static/**"
+        - "/actuator/**"
+        - "/druid/**"
+        - "/swagger-resources/**"
+        - "/v2/api-docs/**"
+        - "/*/v2/api-docs/**"
+        - "/webjars/**"
+        - "/doc.html"

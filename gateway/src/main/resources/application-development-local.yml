@@ -20,31 +20,3 @@ spring:
         max-idle: 10
         max-wait: -1ms
         min-idle: 0
-
-custom:
-  configuration:
-    super-user: "admin"
-    # Make `web-security-disabled` equal to true to disable web security. We suggest you do not turn off web security
-    # feature unless development environment.
-    web-security-disabled: false
-    # Disable web request information log
-    web-request-log-disabled: false
-    ignored-request:
-      post:
-        - "/authentication/**"
-      get:
-        - "/favicon.ico"
-        - "/auth/check-username-uniqueness"
-        - "/auth/check-email-uniqueness"
-        - "/auth/validate-username/**"
-        - "/user/get-avatar"
-        - "/common/get-jwt"
-      pattern:
-        - "/static/**"
-        - "/actuator/**"
-        - "/druid/**"
-        - "/swagger-resources/**"
-        - "/v2/api-docs/**"
-        - "/*/v2/api-docs/**"
-        - "/webjars/**"
-        - "/doc.html"

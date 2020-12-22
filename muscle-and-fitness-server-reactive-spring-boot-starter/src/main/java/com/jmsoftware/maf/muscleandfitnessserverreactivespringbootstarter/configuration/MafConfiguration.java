@@ -1,11 +1,15 @@
-package com.jmsoftware.maf.gateway.universal.configuration;
+package com.jmsoftware.maf.muscleandfitnessserverreactivespringbootstarter.configuration;
 
+import cn.hutool.core.util.ObjectUtil;
 import lombok.Data;
+import lombok.val;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 
 /**
@@ -19,29 +23,32 @@ import java.util.ArrayList;
 @Data
 @Validated
 @Component
-@ConfigurationProperties(prefix = "custom.configuration")
-public class CustomConfiguration {
+@ConfigurationProperties(prefix = "maf.configuration")
+public class MafConfiguration {
     /**
      * <p>The username of super user who has no restriction to access any system&#39;s resources.</p>
      * <p><strong>ATTENTION</strong>: The value of username of super user must be equal to the value that is
      * persistent in database.</p>
      */
     @NotBlank
-    private String superUser;
+    private String superUser = "admin";
     /**
      * Ignore URLs
      */
-    private IgnoredRequest ignoredRequest;
+    @Valid
+    private IgnoredUrl ignoredUrl;
     /**
      * <p>Web security feature switch. Default is false.</p>
      * true - disable web security; false - enable web security.
      */
+    @NotNull
     private Boolean webSecurityDisabled = false;
     /**
      * Web request log switch. Default is false.
      * <p>
      * true - disable web request log; false - enable web request log.
      */
+    @NotNull
     private Boolean webRequestLogDisabled = false;
 
     /**
@@ -50,17 +57,19 @@ public class CustomConfiguration {
      * @return the string [ ]
      */
     public String[] flattenIgnoredUrls() {
-        final var ignoredRequests = this.getIgnoredRequest();
-        final var flattenIgnoredUrls = new ArrayList<String>();
-        flattenIgnoredUrls.addAll(ignoredRequests.getGet());
-        flattenIgnoredUrls.addAll(ignoredRequests.getPost());
-        flattenIgnoredUrls.addAll(ignoredRequests.getDelete());
-        flattenIgnoredUrls.addAll(ignoredRequests.getPut());
-        flattenIgnoredUrls.addAll(ignoredRequests.getHead());
-        flattenIgnoredUrls.addAll(ignoredRequests.getPatch());
-        flattenIgnoredUrls.addAll(ignoredRequests.getOptions());
-        flattenIgnoredUrls.addAll(ignoredRequests.getTrace());
-        flattenIgnoredUrls.addAll(ignoredRequests.getPattern());
+        if (ObjectUtil.isNull(ignoredUrl)) {
+            return new String[0];
+        }
+        val flattenIgnoredUrls = new ArrayList<String>();
+        flattenIgnoredUrls.addAll(ignoredUrl.getGet());
+        flattenIgnoredUrls.addAll(ignoredUrl.getPost());
+        flattenIgnoredUrls.addAll(ignoredUrl.getDelete());
+        flattenIgnoredUrls.addAll(ignoredUrl.getPut());
+        flattenIgnoredUrls.addAll(ignoredUrl.getHead());
+        flattenIgnoredUrls.addAll(ignoredUrl.getPatch());
+        flattenIgnoredUrls.addAll(ignoredUrl.getOptions());
+        flattenIgnoredUrls.addAll(ignoredUrl.getTrace());
+        flattenIgnoredUrls.addAll(ignoredUrl.getPattern());
         return flattenIgnoredUrls.toArray(new String[0]);
     }
 }

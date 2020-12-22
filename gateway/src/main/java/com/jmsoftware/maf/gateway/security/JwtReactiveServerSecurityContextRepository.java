@@ -2,7 +2,7 @@ package com.jmsoftware.maf.gateway.security;
 
 import cn.hutool.core.util.StrUtil;
 import com.jmsoftware.maf.gateway.security.configuration.JwtConfiguration;
-import com.jmsoftware.maf.gateway.universal.configuration.CustomConfiguration;
+import com.jmsoftware.maf.muscleandfitnessserverreactivespringbootstarter.configuration.MafConfiguration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -27,7 +27,7 @@ import reactor.core.publisher.Mono;
 @Component
 @RequiredArgsConstructor
 public class JwtReactiveServerSecurityContextRepository implements ServerSecurityContextRepository {
-    private final CustomConfiguration customConfiguration;
+    private final MafConfiguration mafConfiguration;
     private final ReactiveAuthenticationManager authenticationManager;
     private final AntPathMatcher antPathMatcher = new AntPathMatcher();
 
@@ -40,7 +40,7 @@ public class JwtReactiveServerSecurityContextRepository implements ServerSecurit
     public Mono<SecurityContext> load(ServerWebExchange exchange) {
         ServerHttpRequest request = exchange.getRequest();
         // Ignore allowed URL
-        for (String ignoredUrl : customConfiguration.flattenIgnoredUrls()) {
+        for (String ignoredUrl : mafConfiguration.flattenIgnoredUrls()) {
             if (antPathMatcher.match(ignoredUrl, request.getURI().getPath())) {
                 return Mono.empty();
             }

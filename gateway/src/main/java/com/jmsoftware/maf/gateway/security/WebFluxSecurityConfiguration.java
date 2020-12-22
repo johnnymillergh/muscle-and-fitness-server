@@ -1,7 +1,7 @@
 package com.jmsoftware.maf.gateway.security;
 
-import com.jmsoftware.maf.gateway.security.filter.RequestFilter;
-import com.jmsoftware.maf.gateway.universal.configuration.CustomConfiguration;
+import com.jmsoftware.maf.muscleandfitnessserverreactivespringbootstarter.configuration.MafConfiguration;
+import com.jmsoftware.maf.muscleandfitnessserverreactivespringbootstarter.filter.AccessLogFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -29,13 +29,13 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 @EnableWebFluxSecurity
 @RequiredArgsConstructor
 public class WebFluxSecurityConfiguration {
-    private final CustomConfiguration customConfiguration;
+    private final MafConfiguration mafConfiguration;
     private final JwtReactiveAuthenticationManager reactiveAuthenticationManager;
     private final RbacReactiveAuthorizationManager reactiveAuthorizationManager;
     private final JwtReactiveServerSecurityContextRepository securityContextRepository;
     private final ServerAuthenticationEntryPointImpl serverAuthenticationEntryPoint;
     private final GatewayServerAccessDeniedHandler serverAccessDeniedHandler;
-    private final RequestFilter requestFilter;
+    private final AccessLogFilter accessLogFilter;
 
     @Bean
     SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) {
@@ -46,12 +46,12 @@ public class WebFluxSecurityConfiguration {
                 .authenticationEntryPoint(serverAuthenticationEntryPoint)
                 .accessDeniedHandler(serverAccessDeniedHandler)
                 .and()
-                .addFilterBefore(requestFilter, SecurityWebFiltersOrder.AUTHENTICATION)
+                .addFilterBefore(accessLogFilter, SecurityWebFiltersOrder.AUTHENTICATION)
                 // Authentication
                 .authenticationManager(reactiveAuthenticationManager)
                 .securityContextRepository(securityContextRepository)
                 .authorizeExchange()
-                .pathMatchers(customConfiguration.flattenIgnoredUrls()).permitAll()
+                .pathMatchers(mafConfiguration.flattenIgnoredUrls()).permitAll()
                 .pathMatchers(HttpMethod.OPTIONS).permitAll()
                 // Authorization
                 .anyExchange().access(reactiveAuthorizationManager)

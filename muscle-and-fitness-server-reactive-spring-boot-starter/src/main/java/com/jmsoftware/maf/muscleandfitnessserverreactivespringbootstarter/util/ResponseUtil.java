@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.gateway.universal.util;
+package com.jmsoftware.maf.muscleandfitnessserverreactivespringbootstarter.util;
 
 import cn.hutool.json.JSON;
 import cn.hutool.json.JSONUtil;
