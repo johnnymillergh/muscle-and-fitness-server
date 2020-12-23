@@ -10,11 +10,12 @@ import com.jmsoftware.maf.authcenter.user.entity.UserPersistence;
 import com.jmsoftware.maf.authcenter.user.mapper.UserMapper;
 import com.jmsoftware.maf.authcenter.user.service.UserService;
 import com.jmsoftware.maf.common.domain.authcenter.user.*;
-import com.jmsoftware.maf.common.exception.BusinessException;
+import com.jmsoftware.maf.common.exception.SecurityException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -73,9 +74,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserPersistence> im
     }
 
     @Override
-    @SneakyThrows
-    public LoginResponse login(@Valid LoginPayload payload) {
+    public LoginResponse login(@Valid LoginPayload payload) throws SecurityException {
         val user = this.getUserByLoginToken(payload.getLoginToken());
+        if (ObjectUtil.isNull(user)) {
+            throw new SecurityException(HttpStatus.UNAUTHORIZED);
+        }
         log.info("User: {}", user);
         boolean matched = bCryptPasswordEncoder.matches(payload.getPassword(), user.getPassword());
         if (matched) {
@@ -84,6 +87,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserPersistence> im
             response.setJwt(jwt);
             return response;
         }
-        throw new BusinessException("Login failure!");
+        throw new SecurityException(HttpStatus.UNAUTHORIZED);
     }
 }
