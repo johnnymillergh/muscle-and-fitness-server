@@ -71,6 +71,23 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
     }
 
     /**
+     * Of status response body bean.
+     *
+     * @param <ResponseBodyDataType> the type parameter
+     * @param status                 the status
+     * @param message                the message
+     * @return the response body bean
+     */
+    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofStatus(@NonNull final HttpStatus status,
+                                                                                         @NonNull final String message) {
+        return ResponseBodyBean.<ResponseBodyDataType>builder()
+                .timestamp(new Date())
+                .status(status.value())
+                .message(message)
+                .build();
+    }
+
+    /**
      * <p>Respond to client with IUniversalStatus and data.</p>
      * <p><strong>ATTENTION:</strong></p>
      * <p>This method CANNOT be used by controller or service or other class, only provided for Exception controller
@@ -82,7 +99,7 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
      * @return response body for ExceptionControllerAdvice
      */
     public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofStatus(@NonNull final HttpStatus status,
-                                                                                         @NonNull final ResponseBodyDataType data) {
+                                                                                         final ResponseBodyDataType data) {
         return ResponseBodyBean.<ResponseBodyDataType>builder()
                 .timestamp(new Date())
                 .status(status.value())

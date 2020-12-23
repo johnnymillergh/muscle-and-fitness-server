@@ -1,18 +1,16 @@
 package com.jmsoftware.maf.muscleandfitnessserverreactivespringbootstarter.util;
 
-import cn.hutool.json.JSON;
-import cn.hutool.json.JSONUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
-import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.core.io.buffer.DataBufferFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-
-import java.nio.charset.StandardCharsets;
 
 /**
  * Description: ResponseUtil, change description here.
@@ -31,13 +29,19 @@ public class ResponseUtil {
     @SneakyThrows
     public static Mono<Void> renderJson(@NonNull ServerWebExchange exchange, @NonNull HttpStatus httpStatus,
                                         @Nullable Object data) {
+        ObjectMapper objectMapper = new ObjectMapper();
         exchange.getResponse().setStatusCode(httpStatus);
         val response = exchange.getResponse();
-        JSON json = ResponseBodyBean.of(httpStatus.getReasonPhrase(), data, httpStatus.value());
-        val responseBodyBytes = JSONUtil.toJsonStr(json).getBytes(StandardCharsets.UTF_8);
-        DataBuffer dataBuffer = response.bufferFactory().wrap(responseBodyBytes);
         response.setStatusCode(httpStatus);
-        response.getHeaders().add("Content-Type", "application/json;charset=UTF-8");
-        return response.writeWith(Mono.just(dataBuffer));
+        response.getHeaders().set("Content-Type", "application/json;charset=UTF-8");
+        return response.writeWith(Mono.fromSupplier(() -> {
+            DataBufferFactory bufferFactory = response.bufferFactory();
+            final var responseBody = ResponseBodyBean.ofStatus(httpStatus, data);
+            try {
+                return bufferFactory.wrap(objectMapper.writeValueAsBytes(responseBody));
+            } catch (JsonProcessingException e) {
+                return bufferFactory.wrap(new byte[0]);
+            }
+        }));
     }
 }

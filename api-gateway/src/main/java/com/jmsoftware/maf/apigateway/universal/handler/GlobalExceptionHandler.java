@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.muscleandfitnessserverreactivespringbootstarter.util.RequestUtil;
+import com.netflix.hystrix.exception.HystrixRuntimeException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -37,10 +38,9 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
     @SuppressWarnings("NullableProblems")
     public Mono<Void> handle(ServerWebExchange exchange, Throwable ex) {
         val request = exchange.getRequest();
-        log.error("Exception occurred when [{}] requested access. Request URL: [{}] {}",
-                  RequestUtil.getRequestIpAndPort(request), request.getMethod(), request.getURI());
+        log.error("Exception occurred when [{}] requested access. Exception message: {}. Request URL: [{}] {}",
+                  RequestUtil.getRequestIpAndPort(request), ex.getMessage(), request.getMethod(), request.getURI(), ex);
         ServerHttpResponse response = exchange.getResponse();
-        log.error(ex.getMessage(), ex.fillInStackTrace());
         if (response.isCommitted()) {
             return Mono.error(ex);
         }
@@ -69,6 +69,9 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
         if (ex instanceof ResponseStatusException) {
             response.setStatusCode(((ResponseStatusException) ex).getStatus());
             return ResponseBodyBean.ofStatus(((ResponseStatusException) ex).getStatus());
+        } else if (ex instanceof HystrixRuntimeException) {
+            response.setStatusCode(HttpStatus.SERVICE_UNAVAILABLE);
+            return ResponseBodyBean.ofStatus(HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage());
         }
         response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
         return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
