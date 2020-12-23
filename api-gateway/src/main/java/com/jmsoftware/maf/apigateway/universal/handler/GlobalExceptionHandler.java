@@ -44,7 +44,8 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
         if (response.isCommitted()) {
             return Mono.error(ex);
         }
-        // Set HTTP header
+        // Set HTTP header, major browsers like Chrome now comply with the specification  and interpret correctly
+        // UTF-8 special characters without requiring a charset=UTF-8 parameter.
         response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
         return response.writeWith(Mono.fromSupplier(() -> {
             DataBufferFactory bufferFactory = response.bufferFactory();
@@ -71,7 +72,8 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
             return ResponseBodyBean.ofStatus(((ResponseStatusException) ex).getStatus());
         } else if (ex instanceof HystrixRuntimeException) {
             response.setStatusCode(HttpStatus.SERVICE_UNAVAILABLE);
-            return ResponseBodyBean.ofStatus(HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage());
+            return ResponseBodyBean.ofStatus(HttpStatus.SERVICE_UNAVAILABLE,
+                                             String.format("%s %s", ex.getMessage(), ex.getCause().getMessage()));
         }
         response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
         return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
