@@ -27,7 +27,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @RequiredArgsConstructor
 public class Swagger2Configuration {
     private final ProjectProperty projectProperty;
-    private static final String LINE_SEPARATOR = System.lineSeparator();
 
     @Bean
     public Docket createRestApi() {
@@ -46,16 +45,13 @@ public class Swagger2Configuration {
         val developerUrl = projectProperty.getDeveloperUrl();
         return new ApiInfoBuilder()
                 .title(String.format("API for %s@%s", projectArtifactId, version))
-                .description(String.format("%s %sArtifact ID: %s%sEnvironment: %s",
+                .description(String.format("%s Artifact ID: %s Environment: %s",
                                            projectProperty.getDescription(),
-                                           LINE_SEPARATOR,
                                            projectArtifactId,
-                                           LINE_SEPARATOR,
                                            projectProperty.getEnvironment()))
-                .contact(new Contact(String.format("%s, email: %s%sHome page: %s",
+                .contact(new Contact(String.format("%s, email: %s Home page: %s",
                                                    projectProperty.getDeveloperName(),
                                                    developerEmail,
-                                                   LINE_SEPARATOR,
                                                    developerUrl),
                                      developerUrl, developerEmail))
                 .version(version)
