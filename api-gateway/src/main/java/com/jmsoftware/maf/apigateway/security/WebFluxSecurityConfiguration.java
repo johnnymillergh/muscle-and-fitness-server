@@ -39,6 +39,13 @@ public class WebFluxSecurityConfiguration {
 
     @Bean
     SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) {
+        if (mafConfiguration.getWebSecurityDisabled()) {
+            log.warn("Web security was disabled.");
+            return http
+                    .cors().disable()
+                    .csrf().disable()
+                    .build();
+        }
         return http
                 .cors().disable()
                 .csrf().disable()
