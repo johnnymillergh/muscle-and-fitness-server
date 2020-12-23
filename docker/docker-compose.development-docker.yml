@@ -88,6 +88,7 @@ services:
     environment:
       CASSANDRA_USERNAME: cassandra_admin
       CASSANDRA_PASSWORD: cassandra_password
+    restart: always
     volumes:
       - ~/docker-file-mapping/maf.zipkin-cassandra.development:/cassandra/data
     # Uncomment to expose the storage port for testing
