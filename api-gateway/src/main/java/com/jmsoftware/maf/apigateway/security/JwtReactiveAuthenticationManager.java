@@ -3,7 +3,6 @@ package com.jmsoftware.maf.apigateway.security;
 import cn.hutool.core.util.StrUtil;
 import com.jmsoftware.maf.apigateway.remoteapi.AuthCenterRemoteApi;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
-import com.jmsoftware.maf.common.domain.authcenter.user.GetUserByLoginTokenResponse;
 import com.jmsoftware.maf.common.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,7 +45,7 @@ public class JwtReactiveAuthenticationManager implements ReactiveAuthenticationM
             return Mono.empty();
         }
         val response = authCenterRemoteApi.getUserByLoginToken(username);
-        Mono<GetUserByLoginTokenResponse> responseMono = response.map(ResponseBodyBean::getData)
+        val responseMono = response.map(ResponseBodyBean::getData)
                 .switchIfEmpty(Mono.error(new BusinessException("Authentication failure! Cause: User not found")));
         return responseMono.map(getUserByLoginTokenResponse -> {
             log.info("Authentication success! Found username: {}", getUserByLoginTokenResponse.getUsername());
