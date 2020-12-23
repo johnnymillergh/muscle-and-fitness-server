@@ -4,14 +4,13 @@ import cn.hutool.json.JSON;
 import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.jmsoftware.maf.common.constant.HttpStatus;
-import com.jmsoftware.maf.common.constant.IUniversalStatus;
 import com.jmsoftware.maf.common.exception.BaseException;
 import com.jmsoftware.maf.common.exception.BusinessException;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 import lombok.val;
+import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
 
 import java.io.Serializable;
@@ -63,11 +62,11 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
      * @param status                 IUniversalStatus
      * @return response body for ExceptionControllerAdvice javax.servlet.http.HttpServletResponse, Exception)
      */
-    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofStatus(@NonNull final IUniversalStatus status) {
+    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofStatus(@NonNull final HttpStatus status) {
         return ResponseBodyBean.<ResponseBodyDataType>builder()
                 .timestamp(new Date())
-                .status(status.getCode())
-                .message(status.getMessage())
+                .status(status.value())
+                .message(status.getReasonPhrase())
                 .build();
     }
 
@@ -82,12 +81,12 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
      * @param data                   data to be responded to client
      * @return response body for ExceptionControllerAdvice
      */
-    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofStatus(@NonNull final IUniversalStatus status,
+    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofStatus(@NonNull final HttpStatus status,
                                                                                          @NonNull final ResponseBodyDataType data) {
         return ResponseBodyBean.<ResponseBodyDataType>builder()
                 .timestamp(new Date())
-                .status(status.getCode())
-                .message(status.getMessage())
+                .status(status.value())
+                .message(status.getReasonPhrase())
                 .data(data)
                 .build();
     }
@@ -130,7 +129,7 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
                                                                                             @NonNull final String message,
                                                                                             final ResponseBodyDataType data)
             throws BaseException {
-        if (!HttpStatus.OK.getCode().equals(status)) {
+        if (!HttpStatus.valueOf(status).is2xxSuccessful()) {
             throw new BaseException(status, message, data);
         }
         return ResponseBodyBean.<ResponseBodyDataType>builder()
@@ -150,8 +149,8 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
     public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofSuccess() {
         return ResponseBodyBean.<ResponseBodyDataType>builder()
                 .timestamp(new Date())
-                .status(HttpStatus.OK.getCode())
-                .message(HttpStatus.OK.getMessage())
+                .status(HttpStatus.OK.value())
+                .message(HttpStatus.OK.getReasonPhrase())
                 .build();
     }
 
@@ -165,8 +164,8 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
     public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofSuccess(final ResponseBodyDataType data) {
         return ResponseBodyBean.<ResponseBodyDataType>builder()
                 .timestamp(new Date())
-                .status(HttpStatus.OK.getCode())
-                .message(HttpStatus.OK.getMessage())
+                .status(HttpStatus.OK.value())
+                .message(HttpStatus.OK.getReasonPhrase())
                 .data(data)
                 .build();
     }
@@ -180,7 +179,7 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
      */
     public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofSuccess(@NonNull final String message) {
         return ResponseBodyBean.<ResponseBodyDataType>builder().timestamp(new Date())
-                .status(HttpStatus.OK.getCode())
+                .status(HttpStatus.OK.value())
                 .message(message)
                 .build();
     }
@@ -196,7 +195,7 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
     public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofSuccess(final ResponseBodyDataType data,
                                                                                           @NonNull final String message) {
         return ResponseBodyBean.<ResponseBodyDataType>builder().timestamp(new Date())
-                .status(HttpStatus.OK.getCode())
+                .status(HttpStatus.OK.value())
                 .message(message)
                 .data(data)
                 .build();
@@ -244,7 +243,8 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
      * @return response body
      */
     public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofError() throws BaseException {
-        return setResponse(HttpStatus.ERROR.getCode(), HttpStatus.ERROR.getMessage(), null);
+        return setResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
+                           null);
     }
 
     /**
@@ -254,9 +254,9 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
      * @param status                 Error status, not OK(200)
      * @return response body
      */
-    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofError(@NonNull final IUniversalStatus status)
+    public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofError(@NonNull final HttpStatus status)
             throws BaseException {
-        return setResponse(status.getCode(), status.getMessage(), null);
+        return setResponse(status.value(), status.getReasonPhrase(), null);
     }
 
     /**

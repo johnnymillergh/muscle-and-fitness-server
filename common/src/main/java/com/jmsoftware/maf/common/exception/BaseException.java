@@ -1,10 +1,9 @@
 package com.jmsoftware.maf.common.exception;
 
-import com.jmsoftware.maf.common.constant.HttpStatus;
-import com.jmsoftware.maf.common.constant.IUniversalStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 /**
  * <h1>BaseException</h1>
@@ -23,7 +22,7 @@ public class BaseException extends Exception {
     /**
      * Code is REQUIRED. Default code is 464.
      */
-    private Integer code = HttpStatus.FAILURE.getCode();
+    private Integer code = HttpStatus.INTERNAL_SERVER_ERROR.value();
     /**
      * Message is REQUIRED. Default message is: Error. A generic status for an error in the server itself.
      */
@@ -31,8 +30,8 @@ public class BaseException extends Exception {
     private Object data;
 
     public BaseException(HttpStatus httpStatus) {
-        this.code = httpStatus.getCode();
-        this.message = httpStatus.getMessage();
+        this.code = httpStatus.value();
+        this.message = httpStatus.getReasonPhrase();
     }
 
     public BaseException(Object data, HttpStatus httpStatus) {
@@ -40,12 +39,7 @@ public class BaseException extends Exception {
         this.data = data;
     }
 
-    public BaseException(IUniversalStatus status) {
-        this.code = status.getCode();
-        this.message = status.getMessage();
-    }
-
-    public BaseException(IUniversalStatus status, Object data) {
+    public BaseException(HttpStatus status, Object data) {
         this(status);
         this.data = data;
     }

@@ -2,10 +2,10 @@ package com.jmsoftware.maf.muscleandfitnessserverspringbootstarter.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
-import com.jmsoftware.maf.common.constant.HttpStatus;
 import com.jmsoftware.maf.common.exception.BaseException;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.springframework.http.HttpStatus;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -32,8 +32,8 @@ public class ResponseUtil {
      */
     public static void renderJson(final HttpServletResponse response, final HttpStatus httpStatus, final Object data) {
         standardizeHttpServletResponse(response, httpStatus);
-        val responseBodyBean = ResponseBodyBean.ofStatus(httpStatus.getCode(),
-                                                                              httpStatus.getMessage(), data);
+        val responseBodyBean = ResponseBodyBean.ofStatus(httpStatus.value(),
+                                                         httpStatus.getReasonPhrase(), data);
         try {
             response.getWriter().write(MAPPER.writeValueAsString(responseBodyBean));
         } catch (IOException e) {
@@ -51,7 +51,7 @@ public class ResponseUtil {
     public static void renderJson(final HttpServletResponse response, final HttpStatus httpStatus,
                                   final String message) {
         standardizeHttpServletResponse(response, httpStatus);
-        val responseBodyBean = ResponseBodyBean.ofStatus(httpStatus.getCode(), message, null);
+        val responseBodyBean = ResponseBodyBean.ofStatus(httpStatus.value(), message, null);
         try {
             response.getWriter().write(MAPPER.writeValueAsString(responseBodyBean));
         } catch (IOException e) {
@@ -66,11 +66,11 @@ public class ResponseUtil {
      * @param exception Exception
      */
     public static void renderJson(final HttpServletResponse response, final BaseException exception) {
-        val httpStatus = HttpStatus.fromCode(exception.getCode());
+        val httpStatus = HttpStatus.valueOf(exception.getCode());
         standardizeHttpServletResponse(response, httpStatus);
         val responseBodyBean = ResponseBodyBean.ofStatus(exception.getCode(),
-                                                                              exception.getMessage(),
-                                                                              exception.getData());
+                                                         exception.getMessage(),
+                                                         exception.getData());
         try {
             response.getWriter().write(MAPPER.writeValueAsString(responseBodyBean));
         } catch (IOException e) {
@@ -89,6 +89,6 @@ public class ResponseUtil {
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "*");
         response.setContentType("application/json;charset=UTF-8");
-        response.setStatus(httpStatus.getCode());
+        response.setStatus(httpStatus.value());
     }
 }

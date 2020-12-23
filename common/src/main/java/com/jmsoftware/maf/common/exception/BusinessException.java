@@ -1,7 +1,6 @@
 package com.jmsoftware.maf.common.exception;
 
-import com.jmsoftware.maf.common.constant.HttpStatus;
-import com.jmsoftware.maf.common.constant.IUniversalStatus;
+import org.springframework.http.HttpStatus;
 
 /**
  * <h1>BusinessException</h1>
@@ -24,14 +23,6 @@ public class BusinessException extends BaseException {
 
     public BusinessException(HttpStatus httpStatus, String message) {
         super(httpStatus, message);
-    }
-
-    public BusinessException(IUniversalStatus status) {
-        super(status);
-    }
-
-    public BusinessException(IUniversalStatus status, Object data) {
-        super(status, data);
     }
 
     public BusinessException(String message) {

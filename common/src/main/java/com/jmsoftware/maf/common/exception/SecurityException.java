@@ -1,9 +1,8 @@
 package com.jmsoftware.maf.common.exception;
 
-import com.jmsoftware.maf.common.constant.HttpStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 /**
  * <h1>SecurityException</h1>
@@ -22,7 +21,11 @@ public class SecurityException extends BaseException {
         super(httpStatus);
     }
 
+    public SecurityException(HttpStatus httpStatus, String message) {
+        super(httpStatus, message);
+    }
+
     public SecurityException(HttpStatus httpStatus, String message, Object data) {
-        super(httpStatus.getCode(), message, data);
+        super(httpStatus.value(), message, data);
     }
 }
