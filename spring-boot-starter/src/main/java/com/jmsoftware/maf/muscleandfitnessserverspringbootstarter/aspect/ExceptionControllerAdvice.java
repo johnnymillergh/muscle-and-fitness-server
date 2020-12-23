@@ -46,11 +46,11 @@ public class ExceptionControllerAdvice {
      */
     @ResponseBody
     @ExceptionHandler(value = Exception.class)
-    public ResponseBodyBean<Object> handleException(HttpServletRequest request,
-                                                    HttpServletResponse response,
+    @SuppressWarnings("AlibabaMethodTooLong")
+    public ResponseBodyBean<?> handleException(HttpServletRequest request, HttpServletResponse response,
                                                     Exception exception) {
-        log.error("Exception occurred when [{}] requested access. URL: {}", RequestUtil.getRequestIpAndPort(request),
-                  request.getServletPath());
+        log.error("Exception occurred when [{}] requested access. Request URL: [{}] {}",
+                  RequestUtil.getRequestIpAndPort(request), request.getMethod(), request.getRequestURL());
 
         // FIXME: THIS IS NOT A PROBLEM
         //  ATTENTION: Use only ResponseBodyBean.ofStatus() in handleException() method and DON'T throw any exception
@@ -127,7 +127,8 @@ public class ExceptionControllerAdvice {
         }
         log.error("Internal system exception occurred! Exception message: {} ", exception.getMessage(), exception);
         response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-        return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR.value(), exception.getMessage(), null);
+        return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR,
+                                         "Exception message: " + exception.getMessage());
     }
 
     /**
