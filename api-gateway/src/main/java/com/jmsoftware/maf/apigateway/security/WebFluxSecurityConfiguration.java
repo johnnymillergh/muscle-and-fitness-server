@@ -8,15 +8,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
-import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
 import org.springframework.security.authorization.ReactiveAuthorizationManager;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.security.web.server.ServerAuthenticationEntryPoint;
 import org.springframework.security.web.server.authorization.AuthorizationContext;
+import org.springframework.security.web.server.authorization.ServerAccessDeniedHandler;
 import org.springframework.security.web.server.context.ServerSecurityContextRepository;
 
 /**
@@ -36,13 +37,13 @@ import org.springframework.security.web.server.context.ServerSecurityContextRepo
 @RequiredArgsConstructor
 public class WebFluxSecurityConfiguration {
     private final MafConfiguration mafConfiguration;
-    private final ServerAuthenticationEntryPointImpl serverAuthenticationEntryPoint;
-    private final GatewayServerAccessDeniedHandler serverAccessDeniedHandler;
     private final AccessLogFilter accessLogFilter;
     private final JwtService jwtService;
 
     @Bean
     SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http,
+                                                ServerAuthenticationEntryPoint serverAuthenticationEntryPoint,
+                                                ServerAccessDeniedHandler serverAccessDeniedHandler,
                                                 ReactiveAuthenticationManager reactiveAuthenticationManager,
                                                 ServerSecurityContextRepository serverSecurityContextRepository,
                                                 ReactiveAuthorizationManager<AuthorizationContext> reactiveAuthorizationManager) {
@@ -56,6 +57,8 @@ public class WebFluxSecurityConfiguration {
         return http
                 .cors().disable()
                 .csrf().disable()
+                .formLogin().disable()
+                .httpBasic().disable()
                 .exceptionHandling()
                 .authenticationEntryPoint(serverAuthenticationEntryPoint)
                 .accessDeniedHandler(serverAccessDeniedHandler)
@@ -75,8 +78,18 @@ public class WebFluxSecurityConfiguration {
     }
 
     @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public ServerAuthenticationEntryPoint serverAuthenticationEntryPoint() {
+        return new ServerAuthenticationEntryPointImpl();
+    }
+
+    @Bean
+    public ServerAccessDeniedHandler serverAccessDeniedHandler() {
+        return new GatewayServerAccessDeniedHandler();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     @Bean
@@ -91,12 +104,7 @@ public class WebFluxSecurityConfiguration {
     }
 
     @Bean
-    public ReactiveAuthenticationManager reactiveAuthenticationManager(ReactiveUserDetailsService reactiveUserDetailsService) {
-        return new UserDetailsRepositoryReactiveAuthenticationManager(reactiveUserDetailsService);
-    }
-
-    @Bean
-    public ReactiveUserDetailsService reactiveUserDetailsService(JwtService jwtService) {
-        return new ReactiveUserDetailsServiceImpl(jwtService);
+    public ReactiveAuthenticationManager reactiveAuthenticationManager() {
+        return new JwtReactiveAuthenticationManager();
     }
 }

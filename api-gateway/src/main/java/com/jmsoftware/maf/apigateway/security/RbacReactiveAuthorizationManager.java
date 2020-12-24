@@ -4,11 +4,12 @@ import cn.hutool.core.util.StrUtil;
 import com.jmsoftware.maf.apigateway.remoteapi.AuthCenterRemoteApi;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.authcenter.permission.PermissionType;
-import com.jmsoftware.maf.common.exception.BusinessException;
+import com.jmsoftware.maf.common.exception.SecurityException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.ReactiveAuthorizationManager;
 import org.springframework.security.core.Authentication;
@@ -45,7 +46,8 @@ public class RbacReactiveAuthorizationManager implements ReactiveAuthorizationMa
                     return authCenterRemoteApi
                             .getPermissionListByUserId(userPrincipal.getId())
                             .map(ResponseBodyBean::getData)
-                            .switchIfEmpty(Mono.error(new BusinessException("User not found!")));
+                            .switchIfEmpty(
+                                    Mono.error(new SecurityException(HttpStatus.UNAUTHORIZED, "Permission not found!")));
                 });
         val zip = Mono.zip(getPermissionListByUserIdResponseMono, userPrincipalMono);
         return zip.map(mapper -> {

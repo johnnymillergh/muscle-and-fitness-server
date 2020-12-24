@@ -21,25 +21,15 @@ import javax.annotation.Resource;
  * @author 钟俊（zhongjun）, email: zhongjun@toguide.cn, date: 12/18/2020 3:40 PM
  **/
 @Slf4j
-//@Component
-@Deprecated
 @RequiredArgsConstructor
 public class JwtReactiveAuthenticationManager implements ReactiveAuthenticationManager {
-    private final JwtService jwtService;
     @Lazy
     @Resource
     private AuthCenterRemoteApi authCenterRemoteApi;
 
     @Override
     public Mono<Authentication> authenticate(Authentication authentication) {
-        val jwt = authentication.getCredentials().toString();
-        String username;
-        try {
-            username = jwtService.getUsernameFromJwt(jwt);
-        } catch (Exception e) {
-            log.error("Authentication failure! Cause: {}", e.getMessage());
-            return Mono.empty();
-        }
+        val username = authentication.getName();
         if (StrUtil.isBlank(username)) {
             log.warn("Authentication failure! Cause: the username mustn't be blank");
             return Mono.empty();
