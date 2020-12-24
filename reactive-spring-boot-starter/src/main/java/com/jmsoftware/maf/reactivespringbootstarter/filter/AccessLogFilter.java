@@ -4,6 +4,7 @@ import com.jmsoftware.maf.reactivespringbootstarter.configuration.MafConfigurati
 import com.jmsoftware.maf.reactivespringbootstarter.util.RequestUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.Ordered;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
@@ -13,17 +14,16 @@ import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
 /**
- * <h1>RequestFilter</h1>
+ * <h1>AccessLogFilter</h1>
  * <p>
  * Change description here.
  *
- * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
- * @date 2/15/20 7:42 PM
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 12/24/2020 10:56 AM
  **/
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class AccessLogFilter implements WebFilter {
+public class AccessLogFilter implements WebFilter, Ordered {
     private final MafConfiguration mafConfiguration;
     private final AntPathMatcher antPathMatcher = new AntPathMatcher();
 
@@ -38,13 +38,18 @@ public class AccessLogFilter implements WebFilter {
         }
         // Only record non-ignored request log
         log.info("{} (pre). Requester: {}, request URL: [{}] {}",
-                 this.getClass().getSimpleName(), RequestUtil.getRequestIpAndPort(request), request.getMethod(),
+                 this.getClass().getSimpleName(), RequestUtil.getRequesterIpAndPort(request), request.getMethod(),
                  request.getURI());
         return chain.filter(exchange).then(
                 Mono.fromRunnable(() -> log.info("{} (post). Requester: {}, request URL: [{}] {}",
                                                  this.getClass().getSimpleName(),
-                                                 RequestUtil.getRequestIpAndPort(request), request.getMethod(),
+                                                 RequestUtil.getRequesterIpAndPort(request), request.getMethod(),
                                                  request.getURI()))
         );
+    }
+
+    @Override
+    public int getOrder() {
+        return -500;
     }
 }

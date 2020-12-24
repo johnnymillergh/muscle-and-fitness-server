@@ -39,7 +39,7 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
     public Mono<Void> handle(ServerWebExchange exchange, Throwable ex) {
         val request = exchange.getRequest();
         log.error("Exception occurred when [{}] requested access. Exception message: {}. Request URL: [{}] {}",
-                  RequestUtil.getRequestIpAndPort(request), ex.getMessage(), request.getMethod(), request.getURI(), ex);
+                  RequestUtil.getRequesterIpAndPort(request), ex.getMessage(), request.getMethod(), request.getURI(), ex);
         ServerHttpResponse response = exchange.getResponse();
         if (response.isCommitted()) {
             return Mono.error(ex);

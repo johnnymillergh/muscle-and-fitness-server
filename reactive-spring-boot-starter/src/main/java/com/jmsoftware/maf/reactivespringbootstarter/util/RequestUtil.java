@@ -22,11 +22,11 @@ public class RequestUtil {
      * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com
      * @date 2/15/20 9:52 PM
      */
-    public static String getRequestIpAndPort(ServerHttpRequest request) {
+    public static String getRequesterIpAndPort(ServerHttpRequest request) {
         var requestRemoteAddress = request.getRemoteAddress();
         if (ObjectUtil.isNotNull(requestRemoteAddress)) {
             return requestRemoteAddress.toString().substring(1);
         }
-        return "Unknown Request";
+        return "Unknown Requester";
     }
 }
