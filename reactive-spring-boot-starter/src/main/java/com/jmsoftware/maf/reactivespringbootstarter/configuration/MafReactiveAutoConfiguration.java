@@ -1,8 +1,9 @@
-package com.jmsoftware.maf.muscleandfitnessserverreactivespringbootstarter.configuration;
+package com.jmsoftware.maf.reactivespringbootstarter.configuration;
 
-import com.jmsoftware.maf.muscleandfitnessserverreactivespringbootstarter.filter.AccessLogFilter;
+import com.jmsoftware.maf.reactivespringbootstarter.filter.AccessLogFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -18,24 +19,26 @@ import javax.annotation.PostConstruct;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-@EnableConfigurationProperties(MuscleAndFitnessServerReactiveAutoConfiguration.class)
-public class MuscleAndFitnessServerReactiveAutoConfiguration {
+@AutoConfigureOrder(Integer.MIN_VALUE)
+@EnableConfigurationProperties(MafConfiguration.class)
+public class MafReactiveAutoConfiguration {
     @PostConstruct
-    public void afterInitialization() {
-        log.debug("{} initialization is done. About to inject beans.", getClass().getSimpleName());
+    public void postConstruct() {
+        log.warn("Post construction of [{}] is done. About to inject beans. Auto configure order: {}",
+                 getClass().getSimpleName(), Integer.MIN_VALUE);
     }
 
     @Bean
     @ConditionalOnMissingBean
     public MafConfiguration mafConfiguration() {
-        log.debug("Initial bean: {}", MafConfiguration.class.getName());
+        log.warn("Initial bean: {}", MafConfiguration.class.getName());
         return new MafConfiguration();
     }
 
     @Bean
     @ConditionalOnMissingBean
     public AccessLogFilter requestFilter(MafConfiguration mafConfiguration) {
-        log.debug("Initial bean: {}", AccessLogFilter.class.getName());
+        log.warn("Initial bean: {}", AccessLogFilter.class.getName());
         return new AccessLogFilter(mafConfiguration);
     }
 }

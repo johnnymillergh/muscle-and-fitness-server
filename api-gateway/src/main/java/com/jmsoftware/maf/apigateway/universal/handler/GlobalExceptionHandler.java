@@ -3,7 +3,7 @@ package com.jmsoftware.maf.apigateway.universal.handler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
-import com.jmsoftware.maf.muscleandfitnessserverreactivespringbootstarter.util.RequestUtil;
+import com.jmsoftware.maf.reactivespringbootstarter.util.RequestUtil;
 import com.netflix.hystrix.exception.HystrixRuntimeException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

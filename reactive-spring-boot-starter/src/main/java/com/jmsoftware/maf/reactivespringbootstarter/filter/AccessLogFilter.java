@@ -1,7 +1,7 @@
-package com.jmsoftware.maf.muscleandfitnessserverreactivespringbootstarter.filter;
+package com.jmsoftware.maf.reactivespringbootstarter.filter;
 
-import com.jmsoftware.maf.muscleandfitnessserverreactivespringbootstarter.configuration.MafConfiguration;
-import com.jmsoftware.maf.muscleandfitnessserverreactivespringbootstarter.util.RequestUtil;
+import com.jmsoftware.maf.reactivespringbootstarter.configuration.MafConfiguration;
+import com.jmsoftware.maf.reactivespringbootstarter.util.RequestUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.server.reactive.ServerHttpRequest;

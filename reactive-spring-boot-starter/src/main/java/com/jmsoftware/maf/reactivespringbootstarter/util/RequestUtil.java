@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.muscleandfitnessserverreactivespringbootstarter.util;
+package com.jmsoftware.maf.reactivespringbootstarter.util;
 
 
 import cn.hutool.core.util.ObjectUtil;

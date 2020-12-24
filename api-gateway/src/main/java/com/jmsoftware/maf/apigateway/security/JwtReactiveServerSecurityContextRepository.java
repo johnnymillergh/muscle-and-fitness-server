@@ -2,7 +2,7 @@ package com.jmsoftware.maf.apigateway.security;
 
 import cn.hutool.core.util.StrUtil;
 import com.jmsoftware.maf.apigateway.security.configuration.JwtConfiguration;
-import com.jmsoftware.maf.muscleandfitnessserverreactivespringbootstarter.configuration.MafConfiguration;
+import com.jmsoftware.maf.reactivespringbootstarter.configuration.MafConfiguration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;

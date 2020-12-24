@@ -1,6 +1,6 @@
 package com.jmsoftware.maf.apigateway.security;
 
-import com.jmsoftware.maf.muscleandfitnessserverreactivespringbootstarter.util.ResponseUtil;
+import com.jmsoftware.maf.reactivespringbootstarter.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;

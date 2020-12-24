@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.muscleandfitnessserverreactivespringbootstarter.util;
+package com.jmsoftware.maf.reactivespringbootstarter.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
