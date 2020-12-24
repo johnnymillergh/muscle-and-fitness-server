@@ -1,6 +1,7 @@
 package com.jmsoftware.maf.springbootstarter.aspect;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.exception.BaseException;
 import com.jmsoftware.maf.springbootstarter.util.RequestUtil;
@@ -48,7 +49,7 @@ public class ExceptionControllerAdvice {
     @ExceptionHandler(value = Exception.class)
     @SuppressWarnings("AlibabaMethodTooLong")
     public ResponseBodyBean<?> handleException(HttpServletRequest request, HttpServletResponse response,
-                                                    Exception exception) {
+                                               Exception exception) {
         log.error("Exception occurred when [{}] requested access. Request URL: [{}] {}",
                   RequestUtil.getRequestIpAndPort(request), request.getMethod(), request.getRequestURL());
 
@@ -86,33 +87,37 @@ public class ExceptionControllerAdvice {
             log.error("MethodArgumentTypeMismatchException: Parameter name = {}, Exception message: {}",
                       ((MethodArgumentTypeMismatchException) exception).getName(), exception.getMessage());
             response.setStatus(HttpStatus.BAD_REQUEST.value());
-            return ResponseBodyBean.ofStatus(HttpStatus.BAD_REQUEST, exception.getMessage());
+            return ResponseBodyBean.ofStatus(HttpStatus.BAD_REQUEST, removeLineSeparator(exception.getMessage()));
         } else if (exception instanceof HttpMessageNotReadableException) {
             log.error("HttpMessageNotReadableException: {}",
                       ((HttpMessageNotReadableException) exception).getMessage());
             response.setStatus(HttpStatus.BAD_REQUEST.value());
             return ResponseBodyBean.ofStatus(HttpStatus.BAD_REQUEST,
-                                             ((HttpMessageNotReadableException) exception).getMessage());
+                                             removeLineSeparator(
+                                                     ((HttpMessageNotReadableException) exception).getMessage()));
         } else if (exception instanceof BaseException) {
             log.error("BaseException: Status code: {}, message: {}, data: {}", ((BaseException) exception).getCode(),
                       exception.getMessage(), ((BaseException) exception).getData());
             response.setStatus(((BaseException) exception).getCode());
-            return ResponseBodyBean.ofStatus(((BaseException) exception).getCode(), exception.getMessage(),
+            return ResponseBodyBean.ofStatus(((BaseException) exception).getCode(),
+                                             removeLineSeparator(exception.getMessage()),
                                              ((BaseException) exception).getData());
         } else if (exception instanceof BindException) {
             log.error("Exception message: {} ", exception.getMessage());
             response.setStatus(HttpStatus.BAD_REQUEST.value());
-            return ResponseBodyBean.ofStatus(HttpStatus.BAD_REQUEST, exception.getMessage());
+            return ResponseBodyBean.ofStatus(HttpStatus.BAD_REQUEST, removeLineSeparator(exception.getMessage()));
         } else if (exception instanceof IllegalArgumentException) {
             log.error("Exception message: {} ", exception.getMessage());
             response.setStatus(HttpStatus.BAD_REQUEST.value());
-            return ResponseBodyBean.ofStatus(HttpStatus.BAD_REQUEST.value(), exception.getMessage(), null);
+            return ResponseBodyBean.ofStatus(HttpStatus.BAD_REQUEST.value(),
+                                             removeLineSeparator(exception.getMessage()), null);
         } else if (exception instanceof BadCredentialsException) {
             // IMPORTANT: org.springframework.security.authentication.BadCredentialsException only exists in the project
             // that depends on org.springframework.boot.spring-boot-starter-security
             log.error("Exception message: {} ", exception.getMessage());
             response.setStatus(HttpStatus.FORBIDDEN.value());
-            return ResponseBodyBean.ofStatus(HttpStatus.FORBIDDEN.value(), exception.getMessage(), null);
+            return ResponseBodyBean.ofStatus(HttpStatus.FORBIDDEN.value(), removeLineSeparator(exception.getMessage()),
+                                             null);
         } else if (exception instanceof InternalAuthenticationServiceException) {
             log.error("An authentication request could not be processed due to a system problem that occurred " +
                               "internally. Exception message: {} ", exception.getMessage());
@@ -120,15 +125,16 @@ public class ExceptionControllerAdvice {
                 val exceptionCause = (BaseException) exception.getCause();
                 val code = exceptionCause.getCode();
                 response.setStatus(code);
-                return ResponseBodyBean.ofStatus(HttpStatus.valueOf(code), exception.getMessage());
+                return ResponseBodyBean.ofStatus(HttpStatus.valueOf(code), removeLineSeparator(exception.getMessage()));
             }
             response.setStatus(HttpStatus.FORBIDDEN.value());
-            return ResponseBodyBean.ofStatus(HttpStatus.FORBIDDEN.value(), exception.getMessage(), null);
+            return ResponseBodyBean.ofStatus(HttpStatus.FORBIDDEN.value(), removeLineSeparator(exception.getMessage()),
+                                             null);
         }
         log.error("Internal system exception occurred! Exception message: {} ", exception.getMessage(), exception);
         response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR,
-                                         "Exception message: " + exception.getMessage());
+                                         "Exception message: " + removeLineSeparator(exception.getMessage()));
     }
 
     /**
@@ -153,5 +159,19 @@ public class ExceptionControllerAdvice {
                       e.getMessage(), e);
             return HttpStatus.BAD_REQUEST.getReasonPhrase();
         }
+    }
+
+    /**
+     * Remove line separator string.
+     *
+     * @param source the source
+     * @return the string
+     * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 12/24/2020 11:22 AM
+     */
+    private String removeLineSeparator(String source) {
+        if (StrUtil.isBlank(source)) {
+            return "source is blank";
+        }
+        return source.replaceAll(System.lineSeparator(), " ");
     }
 }
