@@ -3,31 +3,34 @@ package com.jmsoftware.maf.common.domain.authcenter.user;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 /**
- * Description: RegisterPayload, change description here.
+ * <h1>SignupPayload</h1>
+ * <p>
+ * Change description here.
  *
- * @author 钟俊（zhongjun）, email: zhongjun@toguide.cn, date: 12/22/2020 6:27 PM
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
+ * @date 5/11/20 5:34 AM
  **/
 @Data
 public class SignupPayload {
     /**
-     * Username (Unique)
+     * The Username.
      */
-    @NotEmpty
+    @NotBlank
     @Length(min = 4, max = 50)
     private String username;
     /**
-     * Email (Unique)
+     * The Email.
      */
-    @NotEmpty
+    @NotBlank
     @Length(max = 100)
     private String email;
     /**
-     * Password
+     * The Encoded password.
      */
-    @NotEmpty
-    @Length(min = 8, max = 30)
+    @NotBlank
+    @Length(min = 8, max = 60)
     private String password;
 }

@@ -12,7 +12,6 @@ import com.jmsoftware.maf.authcenter.user.service.UserService;
 import com.jmsoftware.maf.common.domain.authcenter.user.*;
 import com.jmsoftware.maf.common.exception.SecurityException;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.http.HttpStatus;
@@ -41,11 +40,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserPersistence> im
     @Override
     public GetUserByLoginTokenResponse getUserByLoginToken(@NotBlank String loginToken) {
         LambdaQueryWrapper<UserPersistence> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(UserPersistence::getUsername, loginToken)
-                .or()
-                .eq(UserPersistence::getEmail, loginToken)
-                .or()
-                .eq(UserPersistence::getCellphone, loginToken);
+        wrapper.eq(UserPersistence::getStatus, UserStatus.ENABLED.getStatus())
+                .and(queryWrapper -> queryWrapper.eq(UserPersistence::getUsername, loginToken)
+                        .or()
+                        .eq(UserPersistence::getEmail, loginToken)
+                        .or()
+                        .eq(UserPersistence::getCellphone, loginToken));
         val userPersistence = this.getBaseMapper().selectOne(wrapper);
         if (ObjectUtil.isNull(userPersistence)) {
             return null;
@@ -56,19 +56,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserPersistence> im
     }
 
     @Override
-    @SneakyThrows
-    public SaveUserForRegisteringResponse saveUserForRegister(@Valid SaveUserForRegisteringPayload payload) {
+    public SignupResponse saveUserForSignup(@Valid SignupPayload payload) {
         val userPersistence = new UserPersistence();
         userPersistence.setUsername(payload.getUsername());
         userPersistence.setEmail(payload.getEmail());
-        userPersistence.setPassword(payload.getEncodedPassword());
+        userPersistence.setPassword(bCryptPasswordEncoder.encode(payload.getPassword()));
         userPersistence.setStatus(UserStatus.ENABLED.getStatus());
         val currentTime = new Date();
         userPersistence.setCreatedTime(currentTime);
         userPersistence.setModifiedTime(currentTime);
         this.save(userPersistence);
-        log.warn("Saved user for register. {}", userPersistence);
-        val response = new SaveUserForRegisteringResponse();
+        log.warn("Saved user for signup. {}", userPersistence);
+        val response = new SignupResponse();
         response.setUserId(userPersistence.getId());
         return response;
     }

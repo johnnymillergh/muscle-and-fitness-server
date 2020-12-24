@@ -3,7 +3,7 @@ package com.jmsoftware.maf.common.domain.authcenter.user;
 import lombok.Data;
 
 /**
- * <h1>SaveUserForRegisteringResponse</h1>
+ * <h1>SignupResponse</h1>
  * <p>
  * Change description here.
  *
@@ -11,7 +11,7 @@ import lombok.Data;
  * @date 5/11/20 5:37 AM
  **/
 @Data
-public class SaveUserForRegisteringResponse {
+public class SignupResponse {
     /**
      * The User id.
      */

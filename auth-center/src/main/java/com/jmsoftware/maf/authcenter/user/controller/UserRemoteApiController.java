@@ -1,16 +1,15 @@
-package com.jmsoftware.maf.authcenter.user.remote;
+package com.jmsoftware.maf.authcenter.user.controller;
 
 import com.jmsoftware.maf.authcenter.user.service.UserService;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.authcenter.user.GetUserByLoginTokenResponse;
-import com.jmsoftware.maf.common.domain.authcenter.user.SaveUserForRegisteringPayload;
-import com.jmsoftware.maf.common.domain.authcenter.user.SaveUserForRegisteringResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <h1>UserRemoteApiController</h1>
@@ -31,11 +30,5 @@ public class UserRemoteApiController {
     @ApiOperation(value = "Get user by login token", notes = "Get user by login token (Remote)")
     public ResponseBodyBean<GetUserByLoginTokenResponse> getUserByLoginToken(@PathVariable String loginToken) {
         return ResponseBodyBean.ofSuccess(userService.getUserByLoginToken(loginToken));
-    }
-
-    @PostMapping("/users")
-    @ApiOperation(value = "Save user for register", notes = "Save user for register (Remote)")
-    public ResponseBodyBean<SaveUserForRegisteringResponse> saveUserForRegister(@Valid @RequestBody SaveUserForRegisteringPayload payload) {
-        return ResponseBodyBean.ofSuccess(userService.saveUserForRegister(payload));
     }
 }

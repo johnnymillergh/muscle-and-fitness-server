@@ -33,7 +33,7 @@ public interface UserService extends IService<UserPersistence> {
      * @param payload the payload
      * @return the save user for registering response
      */
-    SaveUserForRegisteringResponse saveUserForRegister(@Valid SaveUserForRegisteringPayload payload);
+    SignupResponse saveUserForSignup(@Valid SignupPayload payload);
 
     /**
      * Login login response.
