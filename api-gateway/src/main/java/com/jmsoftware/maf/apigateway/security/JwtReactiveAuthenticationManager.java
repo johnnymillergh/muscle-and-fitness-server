@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
@@ -22,7 +21,8 @@ import javax.annotation.Resource;
  * @author 钟俊（zhongjun）, email: zhongjun@toguide.cn, date: 12/18/2020 3:40 PM
  **/
 @Slf4j
-@Component
+//@Component
+@Deprecated
 @RequiredArgsConstructor
 public class JwtReactiveAuthenticationManager implements ReactiveAuthenticationManager {
     private final JwtService jwtService;

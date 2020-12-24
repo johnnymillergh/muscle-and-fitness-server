@@ -84,6 +84,19 @@ public class UserPrincipal implements UserDetails {
     private Collection<? extends GrantedAuthority> authorities;
 
     /**
+     * Create by username user principal.
+     *
+     * @param username the username
+     * @return the user principal
+     * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 12/24/2020 3:12 PM
+     */
+    public static UserPrincipal createByUsername(String username) {
+        UserPrincipal userPrincipal = new UserPrincipal();
+        userPrincipal.setUsername(username);
+        return userPrincipal;
+    }
+
+    /**
      * Create user principal
      *
      * @param user           user

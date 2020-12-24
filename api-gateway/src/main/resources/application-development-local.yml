@@ -20,7 +20,3 @@ spring:
         max-idle: 10
         max-wait: -1ms
         min-idle: 0
-
-maf:
-  configuration:
-    web-security-disabled: true

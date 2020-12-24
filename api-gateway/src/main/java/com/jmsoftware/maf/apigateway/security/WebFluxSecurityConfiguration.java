@@ -7,11 +7,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.ReactiveAuthenticationManager;
+import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
+import org.springframework.security.authorization.ReactiveAuthorizationManager;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.security.web.server.authorization.AuthorizationContext;
+import org.springframework.security.web.server.context.ServerSecurityContextRepository;
 
 /**
  * Description: WebFluxSecurityConfiguration, change description here.
@@ -30,15 +36,16 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 @RequiredArgsConstructor
 public class WebFluxSecurityConfiguration {
     private final MafConfiguration mafConfiguration;
-    private final JwtReactiveAuthenticationManager reactiveAuthenticationManager;
-    private final RbacReactiveAuthorizationManager reactiveAuthorizationManager;
-    private final JwtReactiveServerSecurityContextRepository securityContextRepository;
     private final ServerAuthenticationEntryPointImpl serverAuthenticationEntryPoint;
     private final GatewayServerAccessDeniedHandler serverAccessDeniedHandler;
     private final AccessLogFilter accessLogFilter;
+    private final JwtService jwtService;
 
     @Bean
-    SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) {
+    SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http,
+                                                ReactiveAuthenticationManager reactiveAuthenticationManager,
+                                                ServerSecurityContextRepository serverSecurityContextRepository,
+                                                ReactiveAuthorizationManager<AuthorizationContext> reactiveAuthorizationManager) {
         if (mafConfiguration.getWebSecurityDisabled()) {
             log.warn("Web security was disabled.");
             return http
@@ -53,10 +60,11 @@ public class WebFluxSecurityConfiguration {
                 .authenticationEntryPoint(serverAuthenticationEntryPoint)
                 .accessDeniedHandler(serverAccessDeniedHandler)
                 .and()
+                // TODO: this filter might be useless, since its order is -500
                 .addFilterBefore(accessLogFilter, SecurityWebFiltersOrder.AUTHENTICATION)
                 // Authentication
                 .authenticationManager(reactiveAuthenticationManager)
-                .securityContextRepository(securityContextRepository)
+                .securityContextRepository(serverSecurityContextRepository)
                 .authorizeExchange()
                 .pathMatchers(mafConfiguration.flattenIgnoredUrls()).permitAll()
                 .pathMatchers(HttpMethod.OPTIONS).permitAll()
@@ -69,5 +77,26 @@ public class WebFluxSecurityConfiguration {
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public ReactiveAuthorizationManager<AuthorizationContext> reactiveAuthorizationManager() {
+        return new RbacReactiveAuthorizationManager();
+    }
+
+    @Bean
+    public ServerSecurityContextRepository serverSecurityContextRepository(ReactiveAuthenticationManager reactiveAuthenticationManager) {
+        return new JwtReactiveServerSecurityContextRepository(mafConfiguration, reactiveAuthenticationManager,
+                                                              jwtService);
+    }
+
+    @Bean
+    public ReactiveAuthenticationManager reactiveAuthenticationManager(ReactiveUserDetailsService reactiveUserDetailsService) {
+        return new UserDetailsRepositoryReactiveAuthenticationManager(reactiveUserDetailsService);
+    }
+
+    @Bean
+    public ReactiveUserDetailsService reactiveUserDetailsService(JwtService jwtService) {
+        return new ReactiveUserDetailsServiceImpl(jwtService);
     }
 }
