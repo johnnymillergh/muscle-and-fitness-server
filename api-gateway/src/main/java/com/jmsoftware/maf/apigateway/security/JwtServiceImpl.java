@@ -4,7 +4,6 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.jmsoftware.maf.apigateway.security.configuration.JwtConfiguration;
-import com.jmsoftware.maf.apigateway.universal.configuration.Constants;
 import com.jmsoftware.maf.apigateway.universal.configuration.RedisService;
 import com.jmsoftware.maf.common.exception.SecurityException;
 import io.jsonwebtoken.*;
@@ -45,7 +44,6 @@ public class JwtServiceImpl implements JwtService {
 
     @PostConstruct
     private void init() {
-        log.info("Start to init class members of {}.", this.getClass().getSimpleName());
         secretKey = Keys.hmacShaKeyFor(jwtConfiguration.getSigningKey().getBytes(StandardCharsets.UTF_8));
         log.warn("Secret key for JWT was generated. Algorithm: {}", secretKey.getAlgorithm());
         jwtParser = Jwts.parserBuilder().setSigningKey(secretKey).build();
@@ -77,12 +75,12 @@ public class JwtServiceImpl implements JwtService {
         }
         val jwt = builder.compact();
         // Store new JWT in Redis
-        val redisOperationResult = redisService.set(Constants.REDIS_JWT_KEY_PREFIX + subject, jwt, ttl,
+        val redisOperationResult = redisService.set(jwtConfiguration.getJwtRedisKeyPrefix() + subject, jwt, ttl,
                                                     TimeUnit.MILLISECONDS);
         if (redisOperationResult) {
             return jwt;
         } else {
-            throw new SecurityException(HttpStatus.INTERNAL_SERVER_ERROR, "Cannot persist JWT into Redis", null);
+            throw new SecurityException(HttpStatus.INTERNAL_SERVER_ERROR, "Cannot persist JWT into Redis");
         }
     }
 
@@ -92,7 +90,7 @@ public class JwtServiceImpl implements JwtService {
         try {
             claims = Optional.ofNullable(jwtParser.parseClaimsJws(jwt).getBody())
                     .orElseThrow(() -> new SecurityException(HttpStatus.INTERNAL_SERVER_ERROR,
-                                                             "The JWT Claims Set is null", null));
+                                                             "The JWT Claims Set is null"));
         } catch (ExpiredJwtException e) {
             log.error("JWT is expired. Message: {} JWT: {}", e.getMessage(), jwt);
             throw new SecurityException(HttpStatus.UNAUTHORIZED, "JWT is expired (JWT itself)");
@@ -107,16 +105,16 @@ public class JwtServiceImpl implements JwtService {
             throw new SecurityException(HttpStatus.UNAUTHORIZED, "The parameter of JWT is invalid");
         }
         val username = claims.getSubject();
-        val redisKeyOfJwt = Constants.REDIS_JWT_KEY_PREFIX + username;
+        val jwtRedisKey = jwtConfiguration.getJwtRedisKeyPrefix() + username;
         // Check if JWT exists
-        val expire = redisService.getExpire(redisKeyOfJwt, TimeUnit.MILLISECONDS);
+        val expire = redisService.getExpire(jwtRedisKey, TimeUnit.MILLISECONDS);
         if (ObjectUtil.isNull(expire) || expire <= 0) {
             throw new SecurityException(HttpStatus.UNAUTHORIZED, "JWT is expired (Redis expiration)");
         }
         // Check if the current JWT is equal to the one in Redis.
         // If it's noe equal, that indicates current user has signed out or logged in before.
         // Both situations reveal the JWT has expired.
-        val jwtInRedis = redisService.get(redisKeyOfJwt);
+        val jwtInRedis = redisService.get(jwtRedisKey);
         if (!StrUtil.equals(jwt, jwtInRedis)) {
             throw new SecurityException(HttpStatus.UNAUTHORIZED, "JWT is expired (Not equaled)");
         }
