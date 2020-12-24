@@ -1,7 +1,7 @@
 package com.jmsoftware.maf.exercisemis;
 
 import com.jmsoftware.maf.exercisemis.universal.configuration.ProjectProperty;
-import com.jmsoftware.maf.muscleandfitnessserverspringbootstarter.helper.IpHelper;
+import com.jmsoftware.maf.springbootstarter.helper.IpHelper;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.boot.SpringApplication;

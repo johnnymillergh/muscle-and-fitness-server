@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.muscleandfitnessserverspringbootstarter.configuration;
+package com.jmsoftware.maf.springbootstarter.configuration;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;

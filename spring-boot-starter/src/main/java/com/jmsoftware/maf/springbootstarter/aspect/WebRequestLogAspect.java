@@ -1,9 +1,9 @@
-package com.jmsoftware.maf.muscleandfitnessserverspringbootstarter.aspect;
+package com.jmsoftware.maf.springbootstarter.aspect;
 
 import cn.hutool.json.JSONUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jmsoftware.maf.muscleandfitnessserverspringbootstarter.util.RequestUtil;
+import com.jmsoftware.maf.springbootstarter.util.RequestUtil;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.aspectj.lang.JoinPoint;

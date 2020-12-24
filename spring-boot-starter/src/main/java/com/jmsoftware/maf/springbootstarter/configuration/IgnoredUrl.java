@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.muscleandfitnessserverspringbootstarter.configuration;
+package com.jmsoftware.maf.springbootstarter.configuration;
 
 import com.google.common.collect.Lists;
 import lombok.Data;

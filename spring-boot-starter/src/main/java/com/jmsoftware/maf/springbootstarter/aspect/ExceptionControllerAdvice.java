@@ -1,9 +1,9 @@
-package com.jmsoftware.maf.muscleandfitnessserverspringbootstarter.aspect;
+package com.jmsoftware.maf.springbootstarter.aspect;
 
 import cn.hutool.core.collection.CollUtil;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.exception.BaseException;
-import com.jmsoftware.maf.muscleandfitnessserverspringbootstarter.util.RequestUtil;
+import com.jmsoftware.maf.springbootstarter.util.RequestUtil;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.context.support.DefaultMessageSourceResolvable;

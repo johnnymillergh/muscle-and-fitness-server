@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.muscleandfitnessserverspringbootstarter.helper;
+package com.jmsoftware.maf.springbootstarter.helper;
 
 import cn.hutool.core.util.StrUtil;
 import lombok.AccessLevel;

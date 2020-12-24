@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.muscleandfitnessserverspringbootstarter.util;
+package com.jmsoftware.maf.springbootstarter.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;

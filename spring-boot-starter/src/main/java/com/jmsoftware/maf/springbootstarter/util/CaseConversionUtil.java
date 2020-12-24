@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.muscleandfitnessserverspringbootstarter.util;
+package com.jmsoftware.maf.springbootstarter.util;
 
 import java.util.Random;
 import java.util.regex.Pattern;

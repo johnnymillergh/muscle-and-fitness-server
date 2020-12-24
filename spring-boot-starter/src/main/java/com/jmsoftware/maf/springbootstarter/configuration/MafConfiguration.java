@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.muscleandfitnessserverspringbootstarter.configuration;
+package com.jmsoftware.maf.springbootstarter.configuration;
 
 import cn.hutool.core.util.ObjectUtil;
 import lombok.Data;

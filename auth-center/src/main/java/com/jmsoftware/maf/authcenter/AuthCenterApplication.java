@@ -1,7 +1,7 @@
 package com.jmsoftware.maf.authcenter;
 
 import com.jmsoftware.maf.authcenter.universal.configuration.ProjectProperty;
-import com.jmsoftware.maf.muscleandfitnessserverspringbootstarter.helper.IpHelper;
+import com.jmsoftware.maf.springbootstarter.helper.IpHelper;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.boot.SpringApplication;

@@ -1,6 +1,5 @@
-package com.jmsoftware.maf.exercisemis.universal.controller;
+package com.jmsoftware.maf.springbootstarter.controller;
 
-import com.jmsoftware.maf.exercisemis.universal.configuration.ProjectProperty;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +24,6 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Api(tags = {"Redirect Controller"})
 public class RedirectController {
-    private final ProjectProperty projectProperty;
-
     @PostConstruct
     private void postConstruct() {
         log.info("URL redirect service initialized.");
@@ -36,20 +33,20 @@ public class RedirectController {
     @ApiOperation(value = "/home", notes = "Home page")
     public void handleHomeRequest(HttpServletResponse response) throws IOException {
         // Redirect to home page
-        response.sendRedirect(projectProperty.getContextPath() + "static/home.html");
+        response.sendRedirect("static/home.html");
     }
 
     @GetMapping("/doc")
     @ApiOperation(value = "/doc", notes = "Swagger API Documentation")
     public void handleDocRequest(HttpServletResponse response) throws IOException {
         // Redirect to Bootstrap Swagger API documentation
-        response.sendRedirect(projectProperty.getContextPath() + "/doc.html?cache=1&lang=en");
+        response.sendRedirect( "/doc.html?cache=1&lang=en");
     }
 
     @GetMapping("/webjars/bycdao-ui/images/api.ico")
     @ApiOperation(value = "/webjars/bycdao-ui/images/api.ico", notes = "Favicon redirection")
     public void handleFaviconRequest(HttpServletResponse response) throws IOException {
         // Redirect to a customized favicon
-        response.sendRedirect(projectProperty.getContextPath() + "/static/icon/favicon.ico");
+        response.sendRedirect("/static/icon/favicon.ico");
     }
 }
