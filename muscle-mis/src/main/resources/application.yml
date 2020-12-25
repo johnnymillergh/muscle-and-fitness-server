@@ -100,3 +100,4 @@ maf:
         - "/*/v2/api-docs/**"
         - "/webjars/**"
         - "/doc.html"
+    included-package-for-http-api-scan: ${project.property.base-package}

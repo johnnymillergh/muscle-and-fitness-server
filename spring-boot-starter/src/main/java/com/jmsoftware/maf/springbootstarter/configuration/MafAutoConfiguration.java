@@ -3,6 +3,7 @@ package com.jmsoftware.maf.springbootstarter.configuration;
 import com.jmsoftware.maf.springbootstarter.aspect.ExceptionControllerAdvice;
 import com.jmsoftware.maf.springbootstarter.aspect.WebRequestLogAspect;
 import com.jmsoftware.maf.springbootstarter.controller.GlobalErrorController;
+import com.jmsoftware.maf.springbootstarter.controller.HttpApiResourceRemoteApiController;
 import com.jmsoftware.maf.springbootstarter.controller.RedirectController;
 import com.jmsoftware.maf.springbootstarter.filter.AccessLogFilter;
 import com.jmsoftware.maf.springbootstarter.helper.HttpApiScanHelper;
@@ -106,5 +107,12 @@ public class MafAutoConfiguration {
     public HttpApiScanHelper httpApiScanHelper(RequestMappingHandlerMapping requestMappingHandlerMapping) {
         log.warn("Initial bean: {}", HttpApiScanHelper.class.getName());
         return new HttpApiScanHelper(requestMappingHandlerMapping);
+    }
+
+    @Bean
+    public HttpApiResourceRemoteApiController httpApiResourceRemoteController(MafConfiguration mafConfiguration,
+                                                                              HttpApiScanHelper httpApiScanHelper) {
+        log.warn("Initial bean: {}", HttpApiResourceRemoteApiController.class.getName());
+        return new HttpApiResourceRemoteApiController(mafConfiguration, httpApiScanHelper);
     }
 }

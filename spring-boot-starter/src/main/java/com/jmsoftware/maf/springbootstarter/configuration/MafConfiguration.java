@@ -33,7 +33,7 @@ public class MafConfiguration {
     @NotBlank
     private String superUser = "admin";
     /**
-     * Ignore URLs
+     * Ignore URLs, used by web access log filter and web security.
      */
     @Valid
     private IgnoredUrl ignoredUrl;
@@ -50,7 +50,11 @@ public class MafConfiguration {
      */
     @NotNull
     private Boolean webRequestLogDisabled = false;
-
+    /**
+     * Included package for http api scan, could be base package
+     */
+    @NotBlank
+    private String includedPackageForHttpApiScan;
     /**
      * Flatten ignored urls string [ ].
      *

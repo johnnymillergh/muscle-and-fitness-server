@@ -53,4 +53,4 @@ maf:
     ignored-url:
       pattern:
         - "/actuator/**"
-    super-user: "admin"
+    included-package-for-http-api-scan: ${project.property.base-package}
