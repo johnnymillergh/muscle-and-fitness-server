@@ -1,7 +1,9 @@
 package com.jmsoftware.maf.authcenter.permission.controller;
 
 import com.jmsoftware.maf.authcenter.permission.service.PermissionService;
+import com.jmsoftware.maf.authcenter.universal.configuration.ProjectProperty;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
+import com.jmsoftware.maf.springbootstarter.helper.HttpApiScanHelper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,8 @@ import java.util.List;
 public class PermissionController {
     private final PermissionService permissionService;
     private final DiscoveryClient discoveryClient;
+    private final HttpApiScanHelper httpApiScanHelper;
+    private final ProjectProperty projectProperty;
 
     @GetMapping("/permissions/services-info")
     @ApiOperation(value = "Get services info", notes = "Get services info")
@@ -41,6 +45,8 @@ public class PermissionController {
             log.info("Instances: {}", instances);
             resultMap.put(service, instances);
         });
+        val httpApiMap = httpApiScanHelper.scan(projectProperty.getBasePackage());
+        resultMap.put("httpApiMap", httpApiMap.toString());
         return ResponseBodyBean.ofSuccess(resultMap);
     }
 }

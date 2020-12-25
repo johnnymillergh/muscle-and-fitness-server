@@ -5,6 +5,7 @@ import com.jmsoftware.maf.springbootstarter.aspect.WebRequestLogAspect;
 import com.jmsoftware.maf.springbootstarter.controller.GlobalErrorController;
 import com.jmsoftware.maf.springbootstarter.controller.RedirectController;
 import com.jmsoftware.maf.springbootstarter.filter.AccessLogFilter;
+import com.jmsoftware.maf.springbootstarter.helper.HttpApiScanHelper;
 import com.jmsoftware.maf.springbootstarter.helper.IpHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
@@ -20,6 +21,7 @@ import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -98,5 +100,11 @@ public class MafAutoConfiguration {
                                                        List<ErrorViewResolver> errorViewResolvers) {
         log.warn("Initial bean: {}", GlobalErrorController.class.getName());
         return new GlobalErrorController(errorAttributes, serverProperties, errorViewResolvers);
+    }
+
+    @Bean
+    public HttpApiScanHelper httpApiScanHelper(RequestMappingHandlerMapping requestMappingHandlerMapping) {
+        log.warn("Initial bean: {}", HttpApiScanHelper.class.getName());
+        return new HttpApiScanHelper(requestMappingHandlerMapping);
     }
 }

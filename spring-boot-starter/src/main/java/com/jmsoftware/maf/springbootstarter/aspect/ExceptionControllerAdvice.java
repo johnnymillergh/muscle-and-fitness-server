@@ -131,7 +131,7 @@ public class ExceptionControllerAdvice {
             return ResponseBodyBean.ofStatus(HttpStatus.FORBIDDEN.value(), removeLineSeparator(exception.getMessage()),
                                              null);
         }
-        log.error("Internal system exception occurred! Exception message: {} ", exception.getMessage(), exception);
+        log.error("Internal server exception occurred! Exception message: {} ", exception.getMessage(), exception);
         response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR,
                                          "Exception message: " + removeLineSeparator(exception.getMessage()));
