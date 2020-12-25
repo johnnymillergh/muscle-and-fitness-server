@@ -12,6 +12,7 @@ import lombok.val;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -33,7 +34,16 @@ public class PermissionController {
     private final DiscoveryClient discoveryClient;
     private final HttpApiScanHelper httpApiScanHelper;
     private final ProjectProperty projectProperty;
+    private final RestTemplate restTemplate;
 
+    /**
+     * Services info response body bean.
+     *
+     * @return the response body bean
+     * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 12/25/2020 5:44 PM
+     * @see
+     * <a href='https://github.com/spring-cloud/spring-cloud-netflix/issues/990#issuecomment-214943106'>RestTemplate Excample</a>
+     */
     @GetMapping("/permissions/services-info")
     @ApiOperation(value = "Get services info", notes = "Get services info")
     public ResponseBodyBean<?> servicesInfo() {
@@ -44,6 +54,9 @@ public class PermissionController {
             val instances = discoveryClient.getInstances(service);
             log.info("Instances: {}", instances);
             resultMap.put(service, instances);
+            Object httpApiResources = restTemplate.getForObject(
+                    "http://" + service + "/http-api-resources", Object.class);
+            log.info("httpApiResources: {}", httpApiResources);
         });
         val httpApiMap = httpApiScanHelper.scan(projectProperty.getBasePackage());
         resultMap.put("httpApiMap", httpApiMap.toString());
