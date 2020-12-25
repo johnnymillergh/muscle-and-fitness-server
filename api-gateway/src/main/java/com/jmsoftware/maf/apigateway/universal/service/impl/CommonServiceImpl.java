@@ -1,8 +1,8 @@
 package com.jmsoftware.maf.apigateway.universal.service.impl;
 
 import com.jmsoftware.maf.apigateway.universal.configuration.ProjectProperty;
-import com.jmsoftware.maf.apigateway.universal.domain.ValidationTestPayload;
 import com.jmsoftware.maf.apigateway.universal.service.CommonService;
+import com.jmsoftware.maf.common.domain.ValidationTestPayload;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

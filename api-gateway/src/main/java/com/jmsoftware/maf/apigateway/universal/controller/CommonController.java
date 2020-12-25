@@ -1,9 +1,9 @@
 package com.jmsoftware.maf.apigateway.universal.controller;
 
 import com.jmsoftware.maf.apigateway.remoteapi.AuthCenterRemoteApi;
-import com.jmsoftware.maf.apigateway.universal.domain.ValidationTestPayload;
 import com.jmsoftware.maf.apigateway.universal.service.CommonService;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
+import com.jmsoftware.maf.common.domain.ValidationTestPayload;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;

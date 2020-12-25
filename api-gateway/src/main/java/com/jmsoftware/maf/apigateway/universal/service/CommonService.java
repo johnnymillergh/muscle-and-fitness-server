@@ -1,6 +1,6 @@
 package com.jmsoftware.maf.apigateway.universal.service;
 
-import com.jmsoftware.maf.apigateway.universal.domain.ValidationTestPayload;
+import com.jmsoftware.maf.common.domain.ValidationTestPayload;
 
 import java.util.Map;
 

@@ -1,7 +1,7 @@
 package com.jmsoftware.maf.serviceregistry.universal.service.impl;
 
+import com.jmsoftware.maf.common.domain.ValidationTestPayload;
 import com.jmsoftware.maf.serviceregistry.universal.configuration.ProjectProperty;
-import com.jmsoftware.maf.serviceregistry.universal.domain.ValidationTestPayload;
 import com.jmsoftware.maf.serviceregistry.universal.service.CommonService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

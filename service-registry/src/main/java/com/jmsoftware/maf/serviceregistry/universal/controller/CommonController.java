@@ -1,7 +1,7 @@
 package com.jmsoftware.maf.serviceregistry.universal.controller;
 
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
-import com.jmsoftware.maf.serviceregistry.universal.domain.ValidationTestPayload;
+import com.jmsoftware.maf.common.domain.ValidationTestPayload;
 import com.jmsoftware.maf.serviceregistry.universal.service.CommonService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

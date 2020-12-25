@@ -1,6 +1,6 @@
 package com.jmsoftware.maf.springbootadmin.universal.service;
 
-import com.jmsoftware.maf.springbootadmin.universal.domain.ValidationTestPayload;
+import com.jmsoftware.maf.common.domain.ValidationTestPayload;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;

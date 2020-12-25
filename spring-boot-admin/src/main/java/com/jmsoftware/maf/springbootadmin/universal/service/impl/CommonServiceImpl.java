@@ -1,7 +1,7 @@
 package com.jmsoftware.maf.springbootadmin.universal.service.impl;
 
+import com.jmsoftware.maf.common.domain.ValidationTestPayload;
 import com.jmsoftware.maf.springbootadmin.universal.configuration.ProjectProperty;
-import com.jmsoftware.maf.springbootadmin.universal.domain.ValidationTestPayload;
 import com.jmsoftware.maf.springbootadmin.universal.service.CommonService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
