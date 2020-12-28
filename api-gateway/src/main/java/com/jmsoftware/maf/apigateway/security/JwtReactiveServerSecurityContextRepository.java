@@ -2,11 +2,13 @@ package com.jmsoftware.maf.apigateway.security;
 
 import cn.hutool.core.util.StrUtil;
 import com.jmsoftware.maf.apigateway.security.configuration.JwtConfiguration;
+import com.jmsoftware.maf.common.exception.SecurityException;
 import com.jmsoftware.maf.reactivespringbootstarter.configuration.MafConfiguration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
@@ -48,7 +50,7 @@ public class JwtReactiveServerSecurityContextRepository implements ServerSecurit
         if (StrUtil.isBlank(authorization) || !authorization.startsWith(JwtConfiguration.TOKEN_PREFIX)) {
             log.warn("Pre-authentication failure! Cause: `{}` in HTTP headers not found. Request URL: [{}] {}",
                      HttpHeaders.AUTHORIZATION, request.getMethod(), request.getURI());
-            return Mono.empty();
+            return Mono.error(new SecurityException(HttpStatus.FORBIDDEN, "Invalid HTTP headers"));
         }
         val jwt = authorization.replace(JwtConfiguration.TOKEN_PREFIX, "");
         String username;
@@ -57,7 +59,7 @@ public class JwtReactiveServerSecurityContextRepository implements ServerSecurit
         } catch (Exception e) {
             log.warn("Pre-authentication failure! Cause: Exception occurred when parsing JWT. {}. Request URL: [{}] {}",
                      e.getMessage(), request.getMethod(), request.getURI());
-            return Mono.empty();
+            return Mono.error(new SecurityException(HttpStatus.FORBIDDEN, e.getMessage()));
         }
         val userPrincipal = UserPrincipal.createByUsername(username);
         log.info("User principal is created. {}", userPrincipal);

@@ -3,6 +3,7 @@ package com.jmsoftware.maf.apigateway.universal.handler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
+import com.jmsoftware.maf.common.exception.SecurityException;
 import com.jmsoftware.maf.reactivespringbootstarter.util.RequestUtil;
 import com.netflix.hystrix.exception.HystrixRuntimeException;
 import lombok.RequiredArgsConstructor;
@@ -75,6 +76,10 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
             response.setStatusCode(HttpStatus.SERVICE_UNAVAILABLE);
             return ResponseBodyBean.ofStatus(HttpStatus.SERVICE_UNAVAILABLE,
                                              String.format("%s %s", ex.getMessage(), ex.getCause().getMessage()));
+        } else if (ex instanceof SecurityException) {
+            HttpStatus status = HttpStatus.valueOf(((SecurityException) ex).getCode());
+            response.setStatusCode(status);
+            return ResponseBodyBean.ofStatus(status, ex.getMessage());
         }
         response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
         return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR,
