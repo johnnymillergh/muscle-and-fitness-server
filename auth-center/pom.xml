@@ -111,7 +111,8 @@
         </dependency>
 
         <!-- https://github.com/jwtk/jjwt -->
-        <!-- TODO: Remove jjwt -->
+        <!-- Cannot Remove jjwt dependencies, cuz the login process is in here `auth-center`,
+        and the auth process is in `api-gateway` -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>

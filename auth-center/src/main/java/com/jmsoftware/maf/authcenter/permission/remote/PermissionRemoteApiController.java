@@ -39,7 +39,7 @@ public class PermissionRemoteApiController {
     @GetMapping("/permissions/{userId}")
     @ApiOperation(value = "Get permission list by user id", notes = "Get permission list by user id")
     public ResponseBodyBean<GetPermissionListByUserIdResponse> getPermissionListByUserId(@PathVariable Long userId) {
-        // TODO: auth-center should respond /** for role "admin"
+        // auth-center will respond /** for role "admin"
         return ResponseBodyBean.ofSuccess(permissionService.getPermissionListByUserId(userId));
     }
 }
