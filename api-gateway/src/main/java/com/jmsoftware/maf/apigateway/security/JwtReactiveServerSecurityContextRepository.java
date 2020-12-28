@@ -50,7 +50,7 @@ public class JwtReactiveServerSecurityContextRepository implements ServerSecurit
         if (StrUtil.isBlank(authorization) || !authorization.startsWith(JwtConfiguration.TOKEN_PREFIX)) {
             log.warn("Pre-authentication failure! Cause: `{}` in HTTP headers not found. Request URL: [{}] {}",
                      HttpHeaders.AUTHORIZATION, request.getMethod(), request.getURI());
-            return Mono.error(new SecurityException(HttpStatus.FORBIDDEN, "Invalid HTTP headers"));
+            return Mono.error(new SecurityException(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED, "JWT Required"));
         }
         val jwt = authorization.replace(JwtConfiguration.TOKEN_PREFIX, "");
         String username;
