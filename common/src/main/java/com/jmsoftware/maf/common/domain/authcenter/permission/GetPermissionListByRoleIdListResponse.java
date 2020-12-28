@@ -29,7 +29,7 @@ public class GetPermissionListByRoleIdListResponse {
         /**
          * The Type.
          */
-        private Integer type;
+        private Byte type;
         /**
          * The Permission expression.
          */

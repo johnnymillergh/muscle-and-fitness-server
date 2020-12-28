@@ -16,25 +16,25 @@ public enum PermissionType {
     /**
      * Controller
      */
-    CONTROLLER(0, "Controller"),
+    CONTROLLER(Byte.valueOf("0"), "Controller"),
     /**
      * Page
      */
-    PAGE(1, "Page"),
+    PAGE(Byte.valueOf("1"), "Page"),
     /**
      * Button
      */
-    BUTTON(2, "Button (API)");
+    BUTTON(Byte.valueOf("2"), "Button (API)");
 
-    private final Integer type;
+    private final Byte type;
     private final String description;
 
-    PermissionType(Integer type, String description) {
+    PermissionType(Byte type, String description) {
         this.type = type;
         this.description = description;
     }
 
-    public static PermissionType getByType(Integer type) {
+    public static PermissionType getByType(Byte type) {
         PermissionType permissionType = null;
         PermissionType[] values = PermissionType.values();
         for (PermissionType pt : values) {

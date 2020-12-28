@@ -9,11 +9,13 @@ import com.jmsoftware.maf.authcenter.permission.entity.GetServicesInfoResponse;
 import com.jmsoftware.maf.authcenter.permission.entity.PermissionPersistence;
 import com.jmsoftware.maf.authcenter.permission.mapper.PermissionMapper;
 import com.jmsoftware.maf.authcenter.permission.service.PermissionService;
+import com.jmsoftware.maf.authcenter.role.service.RoleService;
 import com.jmsoftware.maf.authcenter.universal.configuration.ProjectProperty;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByUserIdResponse;
+import com.jmsoftware.maf.common.domain.authcenter.permission.PermissionType;
 import com.jmsoftware.maf.common.domain.springbootstarter.HttpApiResourcesResponse;
 import com.jmsoftware.maf.common.exception.BusinessException;
 import lombok.NonNull;
@@ -42,17 +44,28 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, PermissionPersistence> implements PermissionService {
+    private final RoleService roleService;
     private final DiscoveryClient discoveryClient;
     private final ProjectProperty projectProperty;
     private final RestTemplate restTemplate;
 
     @Override
     public GetPermissionListByRoleIdListResponse getPermissionListByRoleIdList(@Valid GetPermissionListByRoleIdListPayload payload) {
-        val permissionList = this.getPermissionListByRoleIdList(payload.getRoleIdList());
+        val adminRole = roleService.checkAdmin(payload.getRoleIdList());
         val response = new GetPermissionListByRoleIdListResponse();
+        if (adminRole) {
+            log.warn("Admin role checked. The role can access any resources");
+            val permission = new GetPermissionListByRoleIdListResponse.Permission();
+            permission.setUrl("/**");
+            permission.setType(PermissionType.BUTTON.getType());
+            permission.setPermissionExpression("admin-permission");
+            permission.setMethod("*");
+            response.getPermissionList().add(permission);
+            return response;
+        }
+        val permissionList = this.getPermissionListByRoleIdList(payload.getRoleIdList());
         permissionList.forEach(permissionPersistence -> {
-            GetPermissionListByRoleIdListResponse.Permission permission =
-                    new GetPermissionListByRoleIdListResponse.Permission();
+            val permission = new GetPermissionListByRoleIdListResponse.Permission();
             BeanUtil.copyProperties(permissionPersistence, permission);
             response.getPermissionList().add(permission);
         });
@@ -91,7 +104,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
         val response = new GetServicesInfoResponse();
         val mapper = new ObjectMapper();
         val ignoredServiceIdList = Lists.newArrayList(projectProperty.getProjectArtifactId(),
-                                                      "api-gateway", "spring-boot-admin");
+                "api-gateway", "spring-boot-admin");
         log.info("Ignored service ID list: {}", ignoredServiceIdList);
         for (String serviceId : serviceIdList) {
             if (ignoredServiceIdList.contains(serviceId)) {
@@ -104,7 +117,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
             val data = Optional.of(responseBodyBean.getData())
                     .orElseThrow(() -> new BusinessException("HttpApiResourcesResponse mustn't be null"));
             HttpApiResourcesResponse httpApiResourcesResponse = mapper.convertValue(data,
-                                                                                    HttpApiResourcesResponse.class);
+                    HttpApiResourcesResponse.class);
             GetServicesInfoResponse.ServiceInfo serviceInfo = new GetServicesInfoResponse.ServiceInfo();
             serviceInfo.setServiceId(serviceId);
             serviceInfo.setHttpApiResources(httpApiResourcesResponse);

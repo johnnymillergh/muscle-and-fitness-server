@@ -31,7 +31,7 @@ public class MafConfiguration {
      * persistent in database.</p>
      */
     @NotBlank
-    private String superUser = "admin";
+    private String superUserRole = "admin";
     /**
      * Ignore URLs, used by web access log filter and web security.
      */

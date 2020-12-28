@@ -58,11 +58,11 @@ public class RbacReactiveAuthorizationManager implements ReactiveAuthorizationMa
                 .filter(role -> StrUtil.equals("admin", role.getName()))
                 .map(GetRoleListByUserIdResponse.Role::getId).collectList()
                 .switchIfEmpty(getRoleListByUserIdResponseFlux
-                                       .map(GetRoleListByUserIdResponse.Role::getId)
-                                       .collectList());
+                        .map(GetRoleListByUserIdResponse.Role::getId)
+                        .collectList());
 
         // Get permission list based on the Mono<List<Long>>
-        // TODO: auth-center should respond /** for role "admin"
+        // auth-center will respond /** for role "admin"
         Mono<GetPermissionListByRoleIdListResponse> getPermissionListByRoleIdListResponseMono = roleIdListMono.flatMap(
                 roleIdList -> {
                     GetPermissionListByRoleIdListPayload payload = new GetPermissionListByRoleIdListPayload();
@@ -82,14 +82,15 @@ public class RbacReactiveAuthorizationManager implements ReactiveAuthorizationMa
             val path = request.getURI().getPath();
             val userPrincipal = mapper.getT2();
             for (val buttonPermission : buttonPermissionList) {
+                // FIXME: currently, the `method` in permission is useless
                 if (antPathMatcher.match(buttonPermission.getUrl(), path)) {
                     log.info("Authorization success! Resource [{}] {} is accessible for user(username: {})",
-                             request.getMethod(), request.getURI(), userPrincipal.getUsername());
+                            request.getMethod(), request.getURI(), userPrincipal.getUsername());
                     return new AuthorizationDecision(true);
                 }
             }
             log.warn("Authorization failure! Resource [{}] {} is inaccessible for user(username: {})",
-                     request.getMethod(), request.getURI(), userPrincipal.getUsername());
+                    request.getMethod(), request.getURI(), userPrincipal.getUsername());
             return new AuthorizationDecision(false);
         });
     }

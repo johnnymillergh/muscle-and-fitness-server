@@ -9,6 +9,7 @@ import com.jmsoftware.maf.springbootstarter.filter.AccessLogFilter;
 import com.jmsoftware.maf.springbootstarter.helper.HttpApiScanHelper;
 import com.jmsoftware.maf.springbootstarter.helper.IpHelper;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -48,7 +49,9 @@ public class MafAutoConfiguration {
     @ConditionalOnMissingBean
     public MafConfiguration mafConfiguration() {
         log.warn("Initial bean: {}", MafConfiguration.class.getSimpleName());
-        return new MafConfiguration();
+        val mafConfiguration = new MafConfiguration();
+        log.warn("{}", mafConfiguration);
+        return mafConfiguration;
     }
 
     @Bean

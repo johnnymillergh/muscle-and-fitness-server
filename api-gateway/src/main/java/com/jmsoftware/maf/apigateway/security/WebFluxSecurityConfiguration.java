@@ -10,7 +10,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authorization.ReactiveAuthorizationManager;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
-import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -63,8 +62,6 @@ public class WebFluxSecurityConfiguration {
                 .authenticationEntryPoint(serverAuthenticationEntryPoint)
                 .accessDeniedHandler(serverAccessDeniedHandler)
                 .and()
-                // TODO: this filter might be useless, since its order is -500
-                .addFilterBefore(accessLogFilter, SecurityWebFiltersOrder.AUTHENTICATION)
                 // Authentication
                 .authenticationManager(reactiveAuthenticationManager)
                 .securityContextRepository(serverSecurityContextRepository)

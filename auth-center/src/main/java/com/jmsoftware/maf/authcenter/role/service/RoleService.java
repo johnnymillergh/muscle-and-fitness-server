@@ -6,6 +6,8 @@ import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdRespo
 import lombok.NonNull;
 import org.springframework.validation.annotation.Validated;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -33,4 +35,12 @@ public interface RoleService extends IService<RolePersistence> {
      * @return the role list by user id
      */
     List<RolePersistence> getRoleListByUserId(@NonNull Long userId);
+
+    /**
+     * Check admin boolean.
+     *
+     * @param roleIdList the role id list
+     * @return the boolean
+     */
+    boolean checkAdmin(@NotEmpty List<@NotNull Long> roleIdList);
 }
