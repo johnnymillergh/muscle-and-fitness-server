@@ -47,14 +47,14 @@ public class MafAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public MafConfiguration mafConfiguration() {
-        log.warn("Initial bean: {}", MafConfiguration.class.getName());
+        log.warn("Initial bean: {}", MafConfiguration.class.getSimpleName());
         return new MafConfiguration();
     }
 
     @Bean
     @ConditionalOnMissingBean
     public ExceptionControllerAdvice exceptionControllerAdvice() {
-        log.warn("Initial bean: {}", ExceptionControllerAdvice.class.getName());
+        log.warn("Initial bean: {}", ExceptionControllerAdvice.class.getSimpleName());
         return new ExceptionControllerAdvice();
     }
 
@@ -62,35 +62,35 @@ public class MafAutoConfiguration {
     @ConditionalOnMissingBean
     @ConditionalOnProperty(value = "maf.configuration.webRequestLogDisabled", havingValue = "false")
     public WebRequestLogAspect webRequestLogAspect() {
-        log.warn("Initial bean: {}", WebRequestLogAspect.class.getName());
+        log.warn("Initial bean: {}", WebRequestLogAspect.class.getSimpleName());
         return new WebRequestLogAspect();
     }
 
     @Bean
     @ConditionalOnMissingBean
     public RedirectController redirectController() {
-        log.warn("Initial bean: {}", RedirectController.class.getName());
+        log.warn("Initial bean: {}", RedirectController.class.getSimpleName());
         return new RedirectController();
     }
 
     @Bean
     @ConditionalOnMissingBean
     public AccessLogFilter requestFilter(MafConfiguration mafConfiguration) {
-        log.warn("Initial bean: {}", AccessLogFilter.class.getName());
+        log.warn("Initial bean: {}", AccessLogFilter.class.getSimpleName());
         return new AccessLogFilter(mafConfiguration);
     }
 
     @Bean
     @ConditionalOnMissingBean
     public IpHelper ipHelper(Environment environment) {
-        log.warn("Initial bean: {}", IpHelper.class.getName());
+        log.warn("Initial bean: {}", IpHelper.class.getSimpleName());
         return new IpHelper(environment);
     }
 
     @Bean
     @ConditionalOnMissingBean
     public WebMvcConfiguration webMvcConfiguration() {
-        log.warn("Initial bean: {}", WebMvcConfiguration.class.getName());
+        log.warn("Initial bean: {}", WebMvcConfiguration.class.getSimpleName());
         return new WebMvcConfiguration();
     }
 
@@ -99,20 +99,20 @@ public class MafAutoConfiguration {
     public GlobalErrorController globalErrorController(ErrorAttributes errorAttributes,
                                                        ServerProperties serverProperties,
                                                        List<ErrorViewResolver> errorViewResolvers) {
-        log.warn("Initial bean: {}", GlobalErrorController.class.getName());
+        log.warn("Initial bean: {}", GlobalErrorController.class.getSimpleName());
         return new GlobalErrorController(errorAttributes, serverProperties, errorViewResolvers);
     }
 
     @Bean
     public HttpApiScanHelper httpApiScanHelper(RequestMappingHandlerMapping requestMappingHandlerMapping) {
-        log.warn("Initial bean: {}", HttpApiScanHelper.class.getName());
+        log.warn("Initial bean: {}", HttpApiScanHelper.class.getSimpleName());
         return new HttpApiScanHelper(requestMappingHandlerMapping);
     }
 
     @Bean
     public HttpApiResourceRemoteApiController httpApiResourceRemoteController(MafConfiguration mafConfiguration,
                                                                               HttpApiScanHelper httpApiScanHelper) {
-        log.warn("Initial bean: {}", HttpApiResourceRemoteApiController.class.getName());
+        log.warn("Initial bean: {}", HttpApiResourceRemoteApiController.class.getSimpleName());
         return new HttpApiResourceRemoteApiController(mafConfiguration, httpApiScanHelper);
     }
 }
