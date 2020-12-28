@@ -3,15 +3,24 @@ package com.jmsoftware.maf.authcenter.permission.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jmsoftware.maf.authcenter.permission.entity.GetServicesInfoResponse;
 import com.jmsoftware.maf.authcenter.permission.entity.PermissionPersistence;
 import com.jmsoftware.maf.authcenter.permission.mapper.PermissionMapper;
 import com.jmsoftware.maf.authcenter.permission.service.PermissionService;
+import com.jmsoftware.maf.authcenter.universal.configuration.ProjectProperty;
+import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByUserIdResponse;
+import com.jmsoftware.maf.common.domain.springbootstarter.HttpApiResourcesResponse;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -26,8 +35,14 @@ import java.util.List;
  * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com
  * @date 5/11/20 8:34 AM
  */
-@Service("permissionService")
+@Slf4j
+@Service
+@RequiredArgsConstructor
 public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, PermissionPersistence> implements PermissionService {
+    private final DiscoveryClient discoveryClient;
+    private final ProjectProperty projectProperty;
+    private final RestTemplate restTemplate;
+
     @Override
     public GetPermissionListByRoleIdListResponse getPermissionListByRoleIdList(@Valid GetPermissionListByRoleIdListPayload payload) {
         val permissionList = this.getPermissionListByRoleIdList(payload.getRoleIdList());
@@ -64,5 +79,29 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     @Override
     public List<PermissionPersistence> getPermissionPersistenceListByUserId(@NotNull Long userId) {
         return this.getBaseMapper().selectPermissionListByUserId(userId);
+    }
+
+    @Override
+    public GetServicesInfoResponse getServicesInfo() {
+        val serviceIdList = discoveryClient.getServices();
+        log.info("Getting service info from Service ID list: {}", serviceIdList);
+        GetServicesInfoResponse response = new GetServicesInfoResponse();
+        final ObjectMapper mapper = new ObjectMapper();
+        for (String serviceId : serviceIdList) {
+            if (serviceId.contains(projectProperty.getProjectArtifactId())) {
+                log.warn("Ignored service ID: {}", serviceId);
+                continue;
+            }
+            ResponseBodyBean<?> responseBodyBean = restTemplate.getForObject(
+                    String.format("http://%s/http-api-resources", serviceId), ResponseBodyBean.class);
+            assert responseBodyBean != null;
+            HttpApiResourcesResponse httpApiResourcesResponse = mapper.convertValue(responseBodyBean.getData(),
+                                                                                    HttpApiResourcesResponse.class);
+            GetServicesInfoResponse.ServiceInfo serviceInfo = new GetServicesInfoResponse.ServiceInfo();
+            serviceInfo.setServiceId(serviceId);
+            serviceInfo.setHttpApiResources(httpApiResourcesResponse);
+            response.getList().add(serviceInfo);
+        }
+        return response;
     }
 }

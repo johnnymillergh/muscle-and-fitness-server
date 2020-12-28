@@ -1,6 +1,7 @@
 package com.jmsoftware.maf.authcenter.permission.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.jmsoftware.maf.authcenter.permission.entity.GetServicesInfoResponse;
 import com.jmsoftware.maf.authcenter.permission.entity.PermissionPersistence;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
@@ -46,7 +47,6 @@ public interface PermissionService extends IService<PermissionPersistence> {
      */
     GetPermissionListByUserIdResponse getPermissionListByUserId(@NotNull Long userId);
 
-
     /**
      * Gets permission list by user id.
      *
@@ -54,4 +54,11 @@ public interface PermissionService extends IService<PermissionPersistence> {
      * @return the permission list by user id
      */
     List<PermissionPersistence> getPermissionPersistenceListByUserId(@NotNull Long userId);
+
+    /**
+     * Gets services info.
+     *
+     * @return the services info
+     */
+    GetServicesInfoResponse getServicesInfo();
 }
