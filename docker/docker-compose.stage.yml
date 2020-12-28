@@ -10,24 +10,13 @@ version: "3.7"
 #    In Kubernetes, 'container_name' must not be set.                          #
 # 2. ${TAG} is defined in file '.env'.                                         #
 # 3. The differences between each environment docker-compose.yml:              #
-#    a. Environmental suffix. There are 4 types of environmental suffix:       #
-#       * '-dev_dkr'                                                           #
-#       * '-test'                                                              #
-#       * '-stage'                                                             #
-#       * '-prod'                                                              #
-#    b. 'subnet' and 'ipv4_address'.                                           #
-# 4. IP range definition (for instance of 'development-docker'):               #
-#    a. 172.16.1.10 ~ 172.16.1.19:  middleware of Muscle and Fitness           #
-#    b. 172.16.1.19 ~ 172.16.1.253: microservice of Muscle and Fitness         #
-#    c. 172.16.1.254:               gateway for Muscle and Fitness             #
-#       CAUTION: 172.16.1.255 is not available for container.                  #
-# 5. Conceal some service ports:                                               #
-#    a. api-portal                                                             #
-#    b. auth-center                                                            #
-#    c. exercise-mis                                                           #
-#    d. muscle-mis                                                             #
-# 6. Define timezone for environment variable: Asia/Hong_Kong                  #
-# 7. Define 'depends_on' for service                                           #
+#    Environmental suffix. There are 4 types of environmental suffix:          #
+#       * '.dev'                                                               #
+#       * '.test'                                                              #
+#       * '.stage'                                                             #
+#       * '.prod'                                                              #
+# 4. Define timezone for environment variable: Asia/Hong_Kong                  #
+# 5. Define 'depends_on' for service                                           #
 ################################################################################
 
 services:
@@ -181,9 +170,9 @@ services:
     networks:
       muscle_and_fitness_network:
 
-  api-portal:
-    container_name: maf.api-portal.stage
-    image: "ijohnnymiller/muscle-and-fitness-server.api-portal:${TAG}"
+  api-gateway:
+    container_name: maf.api-gateway.stage
+    image: "ijohnnymiller/muscle-and-fitness-server.api-gateway:${TAG}"
     depends_on:
       mysql:
         condition: service_started
@@ -258,26 +247,6 @@ services:
     networks:
       muscle_and_fitness_network:
 
-  ################################################################################
-  #                       Gateway for Muscle and Fitness                         #
-  ################################################################################
-  gateway:
-    container_name: maf.gateway.stage
-    image: "ijohnnymiller/muscle-and-fitness-server.gateway:${TAG}"
-    depends_on:
-      service-registry:
-        condition: service_started
-    ports:
-      - "8080:8080"
-    restart: always
-    volumes:
-      - ~/docker-file-mapping/maf.logs:/logs
-    environment:
-      JAVA_TOOL_OPTIONS: -Xms128m -Xmx128m -Dspring.profiles.active=production
-      TZ: Asia/Hong_Kong
-    networks:
-      muscle_and_fitness_network:
-
 ################################################################################
 #                       Network for Muscle and Fitness                         #
 ################################################################################
@@ -285,7 +254,3 @@ networks:
   muscle_and_fitness_network:
     ipam:
       driver: default
-        #      config:
-      # Private Network (20-bit block): https://en.wikipedia.org/wiki/Private_network
-      # IP range of the private network: https://ipgeolocation.io/browse/ipv4/172.16.1.0/24
-#        - subnet: "172.16.1.0/24"
