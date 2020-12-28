@@ -6,10 +6,7 @@ import cn.hutool.json.JSONUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jmsoftware.maf.common.exception.BaseException;
 import com.jmsoftware.maf.common.exception.BusinessException;
-import lombok.Builder;
-import lombok.NonNull;
-import lombok.Value;
-import lombok.val;
+import lombok.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
 
@@ -25,8 +22,7 @@ import java.util.Date;
  * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com
  * @date 2/27/20 9:24 AM
  */
-@Value
-@Builder
+@Data
 @SuppressWarnings("unused")
 public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
     /**
@@ -37,16 +33,17 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
     /**
      * The Timestamp.
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    Date timestamp;
+    @Setter(AccessLevel.NONE)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    Date timestamp = new Date();
     /**
-     * Default status is OK[200]
+     * Default status is 200 OK.
      */
-    Integer status;
+    Integer status = HttpStatus.OK.value();
     /**
-     * The Message.
+     * The Message. Default: 200 OK.
      */
-    String message;
+    String message = HttpStatus.OK.getReasonPhrase();
     /**
      * The Data.
      */
@@ -63,11 +60,10 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
      * @return response body for ExceptionControllerAdvice javax.servlet.http.HttpServletResponse, Exception)
      */
     public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofStatus(@NonNull final HttpStatus status) {
-        return ResponseBodyBean.<ResponseBodyDataType>builder()
-                .timestamp(new Date())
-                .status(status.value())
-                .message(status.getReasonPhrase())
-                .build();
+        ResponseBodyBean<ResponseBodyDataType> responseBodyBean = new ResponseBodyBean<>();
+        responseBodyBean.setStatus(status.value());
+        responseBodyBean.setMessage(status.getReasonPhrase());
+        return responseBodyBean;
     }
 
     /**
@@ -80,11 +76,10 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
      */
     public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofStatus(@NonNull final HttpStatus status,
                                                                                          @NonNull final String message) {
-        return ResponseBodyBean.<ResponseBodyDataType>builder()
-                .timestamp(new Date())
-                .status(status.value())
-                .message(message)
-                .build();
+        ResponseBodyBean<ResponseBodyDataType> responseBodyBean = new ResponseBodyBean<>();
+        responseBodyBean.setStatus(status.value());
+        responseBodyBean.setMessage(message);
+        return responseBodyBean;
     }
 
     /**
@@ -100,12 +95,11 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
      */
     public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofStatus(@NonNull final HttpStatus status,
                                                                                          final ResponseBodyDataType data) {
-        return ResponseBodyBean.<ResponseBodyDataType>builder()
-                .timestamp(new Date())
-                .status(status.value())
-                .message(status.getReasonPhrase())
-                .data(data)
-                .build();
+        ResponseBodyBean<ResponseBodyDataType> responseBodyBean = new ResponseBodyBean<>();
+        responseBodyBean.setStatus(status.value());
+        responseBodyBean.setMessage(status.getReasonPhrase());
+        responseBodyBean.setData(data);
+        return responseBodyBean;
     }
 
     /**
@@ -123,12 +117,11 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
     public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofStatus(@NonNull final Integer status,
                                                                                          @NonNull final String message,
                                                                                          final ResponseBodyDataType data) {
-        return ResponseBodyBean.<ResponseBodyDataType>builder()
-                .timestamp(new Date())
-                .status(status)
-                .message(message)
-                .data(data)
-                .build();
+        ResponseBodyBean<ResponseBodyDataType> responseBodyBean = new ResponseBodyBean<>();
+        responseBodyBean.setStatus(status);
+        responseBodyBean.setMessage(message);
+        responseBodyBean.setData(data);
+        return responseBodyBean;
     }
 
     /**
@@ -149,12 +142,11 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
         if (!HttpStatus.valueOf(status).is2xxSuccessful()) {
             throw new BaseException(status, message, data);
         }
-        return ResponseBodyBean.<ResponseBodyDataType>builder()
-                .timestamp(new Date())
-                .status(status)
-                .message(message)
-                .data(data)
-                .build();
+        ResponseBodyBean<ResponseBodyDataType> responseBodyBean = new ResponseBodyBean<>();
+        responseBodyBean.setStatus(status);
+        responseBodyBean.setMessage(message);
+        responseBodyBean.setData(data);
+        return responseBodyBean;
     }
 
     /**
@@ -164,11 +156,7 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
      * @return response body
      */
     public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofSuccess() {
-        return ResponseBodyBean.<ResponseBodyDataType>builder()
-                .timestamp(new Date())
-                .status(HttpStatus.OK.value())
-                .message(HttpStatus.OK.getReasonPhrase())
-                .build();
+        return new ResponseBodyBean<>();
     }
 
     /**
@@ -179,12 +167,9 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
      * @return response body
      */
     public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofSuccess(final ResponseBodyDataType data) {
-        return ResponseBodyBean.<ResponseBodyDataType>builder()
-                .timestamp(new Date())
-                .status(HttpStatus.OK.value())
-                .message(HttpStatus.OK.getReasonPhrase())
-                .data(data)
-                .build();
+        ResponseBodyBean<ResponseBodyDataType> responseBodyBean = new ResponseBodyBean<>();
+        responseBodyBean.setData(data);
+        return responseBodyBean;
     }
 
     /**
@@ -195,10 +180,9 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
      * @return response body
      */
     public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofSuccess(@NonNull final String message) {
-        return ResponseBodyBean.<ResponseBodyDataType>builder().timestamp(new Date())
-                .status(HttpStatus.OK.value())
-                .message(message)
-                .build();
+        ResponseBodyBean<ResponseBodyDataType> responseBodyBean = new ResponseBodyBean<>();
+        responseBodyBean.setMessage(message);
+        return responseBodyBean;
     }
 
     /**
@@ -211,11 +195,10 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
      */
     public static <ResponseBodyDataType> ResponseBodyBean<ResponseBodyDataType> ofSuccess(final ResponseBodyDataType data,
                                                                                           @NonNull final String message) {
-        return ResponseBodyBean.<ResponseBodyDataType>builder().timestamp(new Date())
-                .status(HttpStatus.OK.value())
-                .message(message)
-                .data(data)
-                .build();
+        ResponseBodyBean<ResponseBodyDataType> responseBodyBean = new ResponseBodyBean<>();
+        responseBodyBean.setMessage(message);
+        responseBodyBean.setData(data);
+        return responseBodyBean;
     }
 
     /**
