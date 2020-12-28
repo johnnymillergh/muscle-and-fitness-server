@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
 import com.jmsoftware.maf.authcenter.permission.entity.GetServicesInfoResponse;
 import com.jmsoftware.maf.authcenter.permission.entity.PermissionPersistence;
 import com.jmsoftware.maf.authcenter.permission.mapper.PermissionMapper;
@@ -14,6 +15,7 @@ import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListB
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByUserIdResponse;
 import com.jmsoftware.maf.common.domain.springbootstarter.HttpApiResourcesResponse;
+import com.jmsoftware.maf.common.exception.BusinessException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +28,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * <h1>PermissionServiceImpl</h1>
@@ -82,25 +85,33 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     }
 
     @Override
-    public GetServicesInfoResponse getServicesInfo() {
+    public GetServicesInfoResponse getServicesInfo() throws BusinessException {
         val serviceIdList = discoveryClient.getServices();
         log.info("Getting service info from Service ID list: {}", serviceIdList);
-        GetServicesInfoResponse response = new GetServicesInfoResponse();
-        final ObjectMapper mapper = new ObjectMapper();
+        val response = new GetServicesInfoResponse();
+        val mapper = new ObjectMapper();
+        val ignoredServiceIdList = Lists.newArrayList(projectProperty.getProjectArtifactId(),
+                                                      "api-gateway", "spring-boot-admin");
+        log.info("Ignored service ID list: {}", ignoredServiceIdList);
         for (String serviceId : serviceIdList) {
-            if (serviceId.contains(projectProperty.getProjectArtifactId())) {
+            if (ignoredServiceIdList.contains(serviceId)) {
                 log.warn("Ignored service ID: {}", serviceId);
                 continue;
             }
-            ResponseBodyBean<?> responseBodyBean = restTemplate.getForObject(
-                    String.format("http://%s/http-api-resources", serviceId), ResponseBodyBean.class);
-            assert responseBodyBean != null;
-            HttpApiResourcesResponse httpApiResourcesResponse = mapper.convertValue(responseBodyBean.getData(),
+            ResponseBodyBean<?> responseBodyBean = Optional.ofNullable(restTemplate.getForObject(
+                    String.format("http://%s/http-api-resources", serviceId), ResponseBodyBean.class))
+                    .orElseThrow(() -> new BusinessException("Internal service mustn't respond null"));
+            val data = Optional.of(responseBodyBean.getData())
+                    .orElseThrow(() -> new BusinessException("HttpApiResourcesResponse mustn't be null"));
+            HttpApiResourcesResponse httpApiResourcesResponse = mapper.convertValue(data,
                                                                                     HttpApiResourcesResponse.class);
             GetServicesInfoResponse.ServiceInfo serviceInfo = new GetServicesInfoResponse.ServiceInfo();
             serviceInfo.setServiceId(serviceId);
             serviceInfo.setHttpApiResources(httpApiResourcesResponse);
             response.getList().add(serviceInfo);
+        }
+        if (CollUtil.isEmpty(response.getList())) {
+            log.warn("Got am empty ServiceInfo list");
         }
         return response;
     }

@@ -45,7 +45,3 @@ sftp:
       private-key-pass-phrase:
       session-cache-size: 20
       session-wait-timeout: 15000
-
-maf:
-  configuration:
-    web-request-log-disabled: true

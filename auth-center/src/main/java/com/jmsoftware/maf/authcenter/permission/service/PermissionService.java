@@ -6,6 +6,7 @@ import com.jmsoftware.maf.authcenter.permission.entity.PermissionPersistence;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByUserIdResponse;
+import com.jmsoftware.maf.common.exception.BusinessException;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
@@ -60,5 +61,5 @@ public interface PermissionService extends IService<PermissionPersistence> {
      *
      * @return the services info
      */
-    GetServicesInfoResponse getServicesInfo();
+    GetServicesInfoResponse getServicesInfo() throws BusinessException;
 }
