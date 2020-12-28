@@ -3,7 +3,6 @@ package com.jmsoftware.maf.authcenter.universal.service.impl;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.jmsoftware.maf.authcenter.universal.configuration.Constants;
 import com.jmsoftware.maf.authcenter.universal.configuration.JwtConfiguration;
 import com.jmsoftware.maf.authcenter.universal.domain.UserPrincipal;
 import com.jmsoftware.maf.authcenter.universal.service.JwtService;
@@ -80,7 +79,7 @@ public class JwtServiceImpl implements JwtService {
         }
         val jwt = builder.compact();
         // Store new JWT in Redis
-        val redisOperationResult = redisService.set(Constants.REDIS_JWT_KEY_PREFIX + subject, jwt, ttl,
+        val redisOperationResult = redisService.set(jwtConfiguration.getJwtRedisKeyPrefix() + subject, jwt, ttl,
                                                     TimeUnit.MILLISECONDS);
         if (redisOperationResult) {
             return jwt;
@@ -110,7 +109,7 @@ public class JwtServiceImpl implements JwtService {
             throw new SecurityException(HttpStatus.UNAUTHORIZED, "The parameter of JWT is invalid");
         }
         val username = claims.getSubject();
-        val redisKeyOfJwt = Constants.REDIS_JWT_KEY_PREFIX + username;
+        val redisKeyOfJwt = jwtConfiguration.getJwtRedisKeyPrefix() + username;
         // Check if JWT exists
         val expire = redisService.getExpire(redisKeyOfJwt, TimeUnit.MILLISECONDS);
         if (ObjectUtil.isNull(expire) || expire <= 0) {
@@ -131,7 +130,7 @@ public class JwtServiceImpl implements JwtService {
         val jwt = getJwtFromRequest(request);
         val username = getUsernameFromJwt(jwt);
         // Delete JWT from redis
-        val deletedKeyNumber = redisService.delete(Constants.REDIS_JWT_KEY_PREFIX + username);
+        val deletedKeyNumber = redisService.delete(jwtConfiguration.getJwtRedisKeyPrefix() + username);
         log.error("Invalidate JWT. Username = {}, deleted = {}", username, deletedKeyNumber);
     }
 
@@ -149,9 +148,9 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public String getJwtFromRequest(HttpServletRequest request) {
-        val bearerToken = request.getHeader(Constants.REQUEST_TOKEN_KEY);
-        if (StrUtil.isNotBlank(bearerToken) && bearerToken.startsWith(Constants.JWT_PREFIX)) {
-            return bearerToken.substring(Constants.JWT_PREFIX.length());
+        val bearerToken = request.getHeader(JwtConfiguration.TOKEN_PREFIX);
+        if (StrUtil.isNotBlank(bearerToken) && bearerToken.startsWith(JwtConfiguration.TOKEN_PREFIX)) {
+            return bearerToken.substring(JwtConfiguration.TOKEN_PREFIX.length());
         }
         return null;
     }

@@ -3,7 +3,6 @@ package com.jmsoftware.maf.common.domain.authcenter.permission;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -20,5 +19,5 @@ public class GetPermissionListByRoleIdListPayload {
      * The Role id list.
      */
     @NotEmpty
-    private final List<Long> roleIdList = new LinkedList<>();
+    private List<Long> roleIdList;
 }

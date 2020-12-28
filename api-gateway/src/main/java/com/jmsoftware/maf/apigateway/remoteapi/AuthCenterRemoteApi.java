@@ -1,14 +1,23 @@
 package com.jmsoftware.maf.apigateway.remoteapi;
 
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
+import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByUserIdResponse;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdResponse;
 import com.jmsoftware.maf.common.domain.authcenter.user.GetUserByLoginTokenResponse;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import reactivefeign.spring.config.ReactiveFeignClient;
 import reactor.core.publisher.Mono;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.util.List;
+
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 /**
  * <h1>AuthCenterRemoteApi</h1>
@@ -47,4 +56,14 @@ public interface AuthCenterRemoteApi {
      */
     @GetMapping("/permission-remote-api/permissions/{userId}")
     Mono<ResponseBodyBean<GetPermissionListByUserIdResponse>> getPermissionListByUserId(@PathVariable Long userId);
+
+    /**
+     * Get permission list by role id list
+     *
+     * @param roleIdList the role id list
+     * @return the response body bean
+     */
+    @RequestMapping(value = "/permission-remote-api/permissions", method = GET)
+    Mono<ResponseBodyBean<GetPermissionListByRoleIdListResponse>> getPermissionListByRoleIdList(
+            @Valid @RequestParam("roleIdList") List<@NotNull Long> roleIdList);
 }

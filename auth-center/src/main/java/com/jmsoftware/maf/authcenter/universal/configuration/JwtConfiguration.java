@@ -20,10 +20,18 @@ import java.nio.charset.StandardCharsets;
 @Component
 @ConfigurationProperties(prefix = "jwt.configuration")
 public class JwtConfiguration {
+    public static final String TOKEN_PREFIX = "Bearer ";
+    /**
+     * Key prefix of JWT stored in Redis.
+     */
+    private String jwtRedisKeyPrefix;
+
     public JwtConfiguration(ProjectProperty projectProperty) {
         this.signingKey = String.format("%s %s", projectProperty.getProjectParentArtifactId(), projectProperty.getVersion());
         log.info("Initiated JWT signing key: {}. The specified key byte array is {} bits", this.signingKey,
                  this.signingKey.getBytes(StandardCharsets.UTF_8).length * 8);
+        jwtRedisKeyPrefix = String.format("%s:jwt:", projectProperty.getProjectParentArtifactId());
+        log.warn("Initiated 'jwtRedisKeyPrefix': {}", jwtRedisKeyPrefix);
     }
 
     /**

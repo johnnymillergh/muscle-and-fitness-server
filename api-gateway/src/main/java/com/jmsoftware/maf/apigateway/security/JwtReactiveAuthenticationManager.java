@@ -38,7 +38,7 @@ public class JwtReactiveAuthenticationManager implements ReactiveAuthenticationM
         val responseMono = response.map(ResponseBodyBean::getData)
                 .switchIfEmpty(Mono.error(new BusinessException("Authentication failure! Cause: User not found")));
         return responseMono.map(getUserByLoginTokenResponse -> {
-            log.info("Authentication success! Found username: {}", getUserByLoginTokenResponse.getUsername());
+            log.info("Authentication success! Found {}", getUserByLoginTokenResponse);
             UserPrincipal userPrincipal = UserPrincipal.create(getUserByLoginTokenResponse, null, null);
             return new UsernamePasswordAuthenticationToken(userPrincipal, null);
         });
