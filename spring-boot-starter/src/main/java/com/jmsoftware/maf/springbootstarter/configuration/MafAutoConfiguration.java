@@ -60,7 +60,7 @@ public class MafAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnProperty(value = "maf.configuration.webRequestLogDisabled", havingValue = "false")
+    @ConditionalOnProperty(value = "maf.configuration.web-request-log-disabled", havingValue = "false")
     public WebRequestLogAspect webRequestLogAspect() {
         log.warn("Initial bean: {}", WebRequestLogAspect.class.getSimpleName());
         return new WebRequestLogAspect();
