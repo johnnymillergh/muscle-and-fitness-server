@@ -1,7 +1,7 @@
 package com.jmsoftware.maf.authcenter;
 
 import cn.hutool.core.util.StrUtil;
-import com.jmsoftware.maf.authcenter.universal.service.JwtService;
+import com.jmsoftware.maf.authcenter.security.service.JwtService;
 import com.jmsoftware.maf.common.domain.authcenter.security.UserPrincipal;
 import com.jmsoftware.maf.common.domain.authcenter.user.GetUserByLoginTokenResponse;
 import lombok.SneakyThrows;

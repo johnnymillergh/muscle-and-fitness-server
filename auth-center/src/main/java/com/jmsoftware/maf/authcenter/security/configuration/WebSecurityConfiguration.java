@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.authcenter.universal.configuration;
+package com.jmsoftware.maf.authcenter.security.configuration;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;

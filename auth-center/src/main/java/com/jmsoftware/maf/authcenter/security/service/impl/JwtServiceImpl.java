@@ -1,10 +1,10 @@
-package com.jmsoftware.maf.authcenter.universal.service.impl;
+package com.jmsoftware.maf.authcenter.security.service.impl;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import com.jmsoftware.maf.authcenter.security.service.JwtService;
 import com.jmsoftware.maf.authcenter.universal.configuration.JwtConfiguration;
-import com.jmsoftware.maf.authcenter.universal.service.JwtService;
 import com.jmsoftware.maf.authcenter.universal.service.RedisService;
 import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtPayload;
 import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtResponse;

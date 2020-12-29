@@ -1,6 +1,6 @@
-package com.jmsoftware.maf.authcenter.universal.controller;
+package com.jmsoftware.maf.authcenter.security.controller;
 
-import com.jmsoftware.maf.authcenter.universal.service.JwtService;
+import com.jmsoftware.maf.authcenter.security.service.JwtService;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtPayload;
 import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtResponse;

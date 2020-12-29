@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.authcenter.universal.service;
+package com.jmsoftware.maf.authcenter.security.service;
 
 import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtPayload;
 import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtResponse;
