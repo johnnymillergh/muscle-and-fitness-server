@@ -1,9 +1,8 @@
-package com.jmsoftware.maf.apigateway.universal.controller;
+package com.jmsoftware.maf.reactivespringbootstarter.controller;
 
-import com.jmsoftware.maf.apigateway.remoteapi.AuthCenterRemoteApi;
-import com.jmsoftware.maf.apigateway.universal.service.CommonService;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.ValidationTestPayload;
+import com.jmsoftware.maf.reactivespringbootstarter.service.CommonService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -28,20 +27,11 @@ import java.util.Map;
 @Api(tags = {"Common Controller"})
 public class CommonController {
     private final CommonService commonService;
-    private final AuthCenterRemoteApi authCenterRemoteApi;
 
     @GetMapping("/app-info")
     @ApiOperation(value = "/app-info", notes = "Retrieve application information")
     public ResponseBodyBean<Map<String, Object>> applicationInformation() {
         val data = commonService.getApplicationInfo();
-        final var roleListByUserId = authCenterRemoteApi.getRoleListByUserId(1L);
-        roleListByUserId
-                .map(getRoleListByUserIdResponseResponseBodyBean -> {
-                    log.info("Response1: {}", getRoleListByUserIdResponseResponseBodyBean);
-                    return getRoleListByUserIdResponseResponseBodyBean.getData();
-                })
-                .doOnNext(getRoleListByUserIdResponse -> log.info("Response2: {}", getRoleListByUserIdResponse.getRoleList()))
-                .subscribe();
         return ResponseBodyBean.ofSuccess(data, "Succeed to retrieve app info.");
     }
 

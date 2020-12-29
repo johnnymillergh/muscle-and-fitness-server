@@ -1,6 +1,10 @@
 package com.jmsoftware.maf.reactivespringbootstarter.configuration;
 
+import com.jmsoftware.maf.reactivespringbootstarter.controller.CommonController;
 import com.jmsoftware.maf.reactivespringbootstarter.filter.AccessLogFilter;
+import com.jmsoftware.maf.reactivespringbootstarter.helper.IpHelper;
+import com.jmsoftware.maf.reactivespringbootstarter.service.CommonService;
+import com.jmsoftware.maf.reactivespringbootstarter.service.impl.CommonServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
@@ -29,6 +33,12 @@ public class MafReactiveAutoConfiguration {
     }
 
     @Bean
+    public WebFluxConfiguration webFluxConfiguration() {
+        log.warn("Initial bean: {}", WebFluxConfiguration.class.getSimpleName());
+        return new WebFluxConfiguration();
+    }
+
+    @Bean
     @ConditionalOnMissingBean
     public MafConfiguration mafConfiguration() {
         log.warn("Initial bean: {}", MafConfiguration.class.getSimpleName());
@@ -46,5 +56,23 @@ public class MafReactiveAutoConfiguration {
     public MafProjectProperty mafProjectProperty() {
         log.warn("Initial bean: {}", MafProjectProperty.class.getSimpleName());
         return new MafProjectProperty();
+    }
+
+    @Bean
+    public IpHelper ipHelper(MafProjectProperty mafProjectProperty) {
+        log.warn("Initial bean: {}", IpHelper.class.getSimpleName());
+        return new IpHelper(mafProjectProperty);
+    }
+
+    @Bean
+    public CommonService commonService(MafProjectProperty mafProjectProperty) {
+        log.warn("Initial bean: {}", CommonServiceImpl.class.getSimpleName());
+        return new CommonServiceImpl(mafProjectProperty);
+    }
+
+    @Bean
+    public CommonController commonController(CommonService commonService) {
+        log.warn("Initial bean: {}", CommonController.class.getSimpleName());
+        return new CommonController(commonService);
     }
 }

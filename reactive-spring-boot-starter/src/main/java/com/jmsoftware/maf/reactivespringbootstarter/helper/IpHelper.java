@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.apigateway.universal.configuration;
+package com.jmsoftware.maf.reactivespringbootstarter.helper;
 
 import com.jmsoftware.maf.reactivespringbootstarter.configuration.MafProjectProperty;
 import lombok.Getter;
@@ -29,7 +29,7 @@ import java.util.Enumeration;
 @Getter
 @Component
 @RequiredArgsConstructor
-public class ServerConfiguration implements ApplicationListener<WebServerInitializedEvent> {
+public class IpHelper implements ApplicationListener<WebServerInitializedEvent> {
     private static final String DEVELOPMENT_ENVIRONMENT = "development";
     private final MafProjectProperty mafProjectProperty;
     private int serverPort;

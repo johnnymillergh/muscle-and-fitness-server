@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.apigateway.universal.service;
+package com.jmsoftware.maf.reactivespringbootstarter.service;
 
 import com.jmsoftware.maf.common.domain.ValidationTestPayload;
 

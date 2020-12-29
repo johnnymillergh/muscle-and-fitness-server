@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.apigateway.universal.configuration;
+package com.jmsoftware.maf.reactivespringbootstarter.configuration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.config.ResourceHandlerRegistry;

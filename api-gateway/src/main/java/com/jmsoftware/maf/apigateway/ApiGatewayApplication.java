@@ -1,7 +1,7 @@
 package com.jmsoftware.maf.apigateway;
 
-import com.jmsoftware.maf.apigateway.universal.configuration.ServerConfiguration;
 import com.jmsoftware.maf.reactivespringbootstarter.configuration.MafProjectProperty;
+import com.jmsoftware.maf.reactivespringbootstarter.helper.IpHelper;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.boot.SpringApplication;
@@ -29,11 +29,11 @@ import java.util.TimeZone;
 public class ApiGatewayApplication {
     private static final String LINE_SEPARATOR = System.lineSeparator();
     private static MafProjectProperty mafProjectProperty;
-    private static ServerConfiguration serverConfiguration;
+    private static IpHelper ipHelper;
 
-    public ApiGatewayApplication(MafProjectProperty mafProjectProperty, ServerConfiguration serverConfiguration) {
+    public ApiGatewayApplication(MafProjectProperty mafProjectProperty, IpHelper ipHelper) {
         ApiGatewayApplication.mafProjectProperty = mafProjectProperty;
-        ApiGatewayApplication.serverConfiguration = serverConfiguration;
+        ApiGatewayApplication.ipHelper = ipHelper;
     }
 
     public static void main(String[] args) {
@@ -47,7 +47,7 @@ public class ApiGatewayApplication {
         log.info("⏳ Deployment duration: {} seconds ({} ms)", duration.getSeconds(), duration.toMillis());
         log.info("⏰ App started at {} (timezone - {})", endInstant, TimeZone.getDefault().getDisplayName());
         log.info("{}  App running at{}  - Local:   http://localhost:{}{}/{}  - Network: {}/{}",
-                 LINE_SEPARATOR, LINE_SEPARATOR, serverConfiguration.getServerPort(), mafProjectProperty.getContextPath(),
-                 LINE_SEPARATOR, serverConfiguration.getBaseUrl(), mafProjectProperty.getContextPath());
+                 LINE_SEPARATOR, LINE_SEPARATOR, ipHelper.getServerPort(), mafProjectProperty.getContextPath(),
+                 LINE_SEPARATOR, ipHelper.getBaseUrl(), mafProjectProperty.getContextPath());
     }
 }
