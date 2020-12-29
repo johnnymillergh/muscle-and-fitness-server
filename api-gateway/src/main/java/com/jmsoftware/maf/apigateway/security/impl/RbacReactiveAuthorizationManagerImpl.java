@@ -4,7 +4,6 @@ import cn.hutool.core.util.StrUtil;
 import com.jmsoftware.maf.apigateway.remoteapi.AuthCenterRemoteApi;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload;
-import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
 import com.jmsoftware.maf.common.domain.authcenter.permission.PermissionType;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdResponse;
 import com.jmsoftware.maf.common.domain.authcenter.security.UserPrincipal;
@@ -24,7 +23,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -58,7 +56,7 @@ public class RbacReactiveAuthorizationManagerImpl implements ReactiveAuthorizati
                 .switchIfEmpty(Flux.error(new SecurityException(HttpStatus.UNAUTHORIZED, "Roles not assigned!")));
 
         // Filter "admin" role and then, map Flux<?> to Mono<List<Long>>
-        Mono<List<Long>> roleIdListMono = getRoleListByUserIdResponseFlux
+        val roleIdListMono = getRoleListByUserIdResponseFlux
                 .filter(role -> StrUtil.equals("admin", role.getName()))
                 .map(GetRoleListByUserIdResponse.Role::getId).collectList()
                 .switchIfEmpty(getRoleListByUserIdResponseFlux
@@ -67,7 +65,7 @@ public class RbacReactiveAuthorizationManagerImpl implements ReactiveAuthorizati
 
         // Get permission list based on the Mono<List<Long>>
         // auth-center will respond /** for role "admin"
-        Mono<GetPermissionListByRoleIdListResponse> getPermissionListByRoleIdListResponseMono = roleIdListMono.flatMap(
+        val getPermissionListByRoleIdListResponseMono = roleIdListMono.flatMap(
                 roleIdList -> {
                     GetPermissionListByRoleIdListPayload payload = new GetPermissionListByRoleIdListPayload();
                     payload.setRoleIdList(roleIdList);
