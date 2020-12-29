@@ -7,7 +7,7 @@ ${AnsiStyle.BOLD}${AnsiColor.BRIGHT_GREEN}
                                                /____/                /____/
 ${AnsiStyle.BOLD}Service Registry :: Powered by Spring Boot ::${spring-boot.formatted-version}
 ${AnsiColor.CYAN}Author: Johnny Miller (锺俊), email: johnnysviva@outlook.com
-${AnsiStyle.NORMAL}${AnsiColor.MAGENTA}http://patorjk.com/software/taag/#p=display&f=Slant&t=ExRx%20Net%20Crawler%20Server
+${AnsiStyle.NORMAL}${AnsiColor.MAGENTA}http://patorjk.com/software/taag/#p=display&f=Slant&t=Service%20Registry
 ${AnsiColor.BRIGHT_BLACK}
 -------------------------------------------Font Info-------------------------------------------
 Slant by Glenn Chappell 3/93 -- based on Standard

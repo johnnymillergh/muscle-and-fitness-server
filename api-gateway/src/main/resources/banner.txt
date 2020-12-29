@@ -1,13 +1,13 @@
 ${AnsiStyle.BOLD}${AnsiColor.BRIGHT_GREEN}
-   ______      __
-  / ____/___ _/ /____ _      ______ ___  __
- / / __/ __ `/ __/ _ \ | /| / / __ `/ / / /
-/ /_/ / /_/ / /_/  __/ |/ |/ / /_/ / /_/ /
-\____/\__,_/\__/\___/|__/|__/\__,_/\__, /
-                                  /____/
+    ___    ____  ____   ______      __
+   /   |  / __ \/  _/  / ____/___ _/ /____ _      ______ ___  __
+  / /| | / /_/ // /   / / __/ __ `/ __/ _ \ | /| / / __ `/ / / /
+ / ___ |/ ____// /   / /_/ / /_/ / /_/  __/ |/ |/ / /_/ / /_/ /
+/_/  |_/_/   /___/   \____/\__,_/\__/\___/|__/|__/\__,_/\__, /
+                                                       /____/
 ${AnsiStyle.BOLD}Gateway :: Powered by Spring Boot ::${spring-boot.formatted-version}
 ${AnsiColor.CYAN}Author: Johnny Miller (锺俊), email: johnnysviva@outlook.com
-${AnsiStyle.NORMAL}${AnsiColor.MAGENTA}http://patorjk.com/software/taag/#p=display&f=Slant&t=Gateway
+${AnsiStyle.NORMAL}${AnsiColor.MAGENTA}http://patorjk.com/software/taag/#p=display&f=Slant&t=API%20Gateway
 ${AnsiColor.BRIGHT_BLACK}
 -------------------------------------------Font Info-------------------------------------------
 Slant by Glenn Chappell 3/93 -- based on Standard
