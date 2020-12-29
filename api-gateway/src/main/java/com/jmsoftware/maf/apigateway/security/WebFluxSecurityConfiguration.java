@@ -36,7 +36,6 @@ import org.springframework.security.web.server.context.ServerSecurityContextRepo
 @RequiredArgsConstructor
 public class WebFluxSecurityConfiguration {
     private final MafConfiguration mafConfiguration;
-    private final JwtService jwtService;
 
     @Bean
     SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http,
@@ -95,8 +94,7 @@ public class WebFluxSecurityConfiguration {
 
     @Bean
     public ServerSecurityContextRepository serverSecurityContextRepository(ReactiveAuthenticationManager reactiveAuthenticationManager) {
-        return new JwtReactiveServerSecurityContextRepositoryImpl(mafConfiguration, reactiveAuthenticationManager,
-                                                                  jwtService);
+        return new JwtReactiveServerSecurityContextRepositoryImpl(mafConfiguration, reactiveAuthenticationManager);
     }
 
     @Bean

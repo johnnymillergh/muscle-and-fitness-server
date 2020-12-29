@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.authcenter.role.remote;
+package com.jmsoftware.maf.authcenter.role.controller;
 
 import com.jmsoftware.maf.authcenter.role.service.RoleService;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;

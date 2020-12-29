@@ -1,14 +1,18 @@
 package com.jmsoftware.maf.apigateway.security.impl;
 
 import cn.hutool.core.util.StrUtil;
-import com.jmsoftware.maf.apigateway.security.JwtService;
+import com.jmsoftware.maf.apigateway.remoteapi.AuthCenterRemoteApi;
 import com.jmsoftware.maf.apigateway.security.configuration.JwtConfiguration;
-import com.jmsoftware.maf.common.domain.authcenter.UserPrincipal;
+import com.jmsoftware.maf.common.bean.ResponseBodyBean;
+import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtPayload;
+import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtResponse;
+import com.jmsoftware.maf.common.domain.authcenter.security.UserPrincipal;
 import com.jmsoftware.maf.common.exception.SecurityException;
 import com.jmsoftware.maf.reactivespringbootstarter.configuration.MafConfiguration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
@@ -19,6 +23,8 @@ import org.springframework.security.web.server.context.ServerSecurityContextRepo
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+
+import javax.annotation.Resource;
 
 /**
  * Description: JwtReactiveServerSecurityContextRepositoryImpl
@@ -32,8 +38,10 @@ import reactor.core.publisher.Mono;
 public class JwtReactiveServerSecurityContextRepositoryImpl implements ServerSecurityContextRepository {
     private final MafConfiguration mafConfiguration;
     private final ReactiveAuthenticationManager authenticationManager;
-    private final JwtService jwtService;
     private final AntPathMatcher antPathMatcher = new AntPathMatcher();
+    @Lazy
+    @Resource
+    private AuthCenterRemoteApi authCenterRemoteApi;
 
     @Override
     public Mono<Void> save(ServerWebExchange exchange, SecurityContext context) {
@@ -57,19 +65,21 @@ public class JwtReactiveServerSecurityContextRepositoryImpl implements ServerSec
             return Mono.error(new SecurityException(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED, "JWT Required"));
         }
         val jwt = authorization.replace(JwtConfiguration.TOKEN_PREFIX, "");
-        String username;
-        try {
-            username = jwtService.getUsernameFromJwt(jwt);
-        } catch (Exception e) {
-            log.warn("Pre-authentication failure! Cause: Exception occurred when parsing JWT. {}. Request URL: [{}] {}",
-                     e.getMessage(), request.getMethod(), request.getURI());
-            return Mono.error(new SecurityException(HttpStatus.FORBIDDEN, e.getMessage()));
-        }
-        val userPrincipal = UserPrincipal.createByUsername(username);
-        log.info("User principal is created. {}", userPrincipal);
-        val authentication = new UsernamePasswordAuthenticationToken(userPrincipal, null);
-        log.info("Authentication is created. {}", authentication);
-        log.warn("About to authenticate…");
-        return this.authenticationManager.authenticate(authentication).map(SecurityContextImpl::new);
+        val parseJwtPayload = new ParseJwtPayload();
+        parseJwtPayload.setJwt(jwt);
+        Mono<ParseJwtResponse> parseJwtResponseMono = authCenterRemoteApi
+                .parse(parseJwtPayload)
+                .map(ResponseBodyBean::getData)
+                .switchIfEmpty(Mono.error(
+                        new SecurityException(HttpStatus.INTERNAL_SERVER_ERROR, "Got empty when parsing JWT")));
+        return parseJwtResponseMono.map(parseJwtResponse -> {
+            String username = parseJwtResponse.getUsername();
+            val userPrincipal = UserPrincipal.createByUsername(username);
+            log.info("User principal is created. {}", userPrincipal);
+            val authentication = new UsernamePasswordAuthenticationToken(userPrincipal, null);
+            log.warn("About to authenticate… Authentication is created. {}", authentication);
+            return authentication;
+        }).flatMap(authentication -> this.authenticationManager
+                .authenticate(authentication).map(SecurityContextImpl::new));
     }
 }

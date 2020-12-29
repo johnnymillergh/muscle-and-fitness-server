@@ -6,7 +6,9 @@ import cn.hutool.core.util.StrUtil;
 import com.jmsoftware.maf.authcenter.universal.configuration.JwtConfiguration;
 import com.jmsoftware.maf.authcenter.universal.service.JwtService;
 import com.jmsoftware.maf.authcenter.universal.service.RedisService;
-import com.jmsoftware.maf.common.domain.authcenter.UserPrincipal;
+import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtPayload;
+import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtResponse;
+import com.jmsoftware.maf.common.domain.authcenter.security.UserPrincipal;
 import com.jmsoftware.maf.common.exception.SecurityException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import javax.crypto.SecretKey;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Date;
@@ -153,5 +156,13 @@ public class JwtServiceImpl implements JwtService {
             return bearerToken.substring(JwtConfiguration.TOKEN_PREFIX.length());
         }
         return null;
+    }
+
+    @Override
+    public ParseJwtResponse parse(@Valid ParseJwtPayload payload) throws SecurityException {
+        String usernameFromJwt = this.getUsernameFromJwt(payload.getJwt());
+        ParseJwtResponse response = new ParseJwtResponse();
+        response.setUsername(usernameFromJwt);
+        return response;
     }
 }

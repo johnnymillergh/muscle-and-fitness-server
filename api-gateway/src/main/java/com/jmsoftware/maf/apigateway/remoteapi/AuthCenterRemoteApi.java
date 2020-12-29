@@ -4,12 +4,11 @@ import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByUserIdResponse;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdResponse;
+import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtPayload;
+import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtResponse;
 import com.jmsoftware.maf.common.domain.authcenter.user.GetUserByLoginTokenResponse;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import reactivefeign.spring.config.ReactiveFeignClient;
 import reactor.core.publisher.Mono;
 
@@ -66,4 +65,13 @@ public interface AuthCenterRemoteApi {
     @RequestMapping(value = "/permission-remote-api/permissions", method = GET)
     Mono<ResponseBodyBean<GetPermissionListByRoleIdListResponse>> getPermissionListByRoleIdList(
             @Valid @RequestParam("roleIdList") List<@NotNull Long> roleIdList);
+
+    /**
+     * Parse mono.
+     *
+     * @param payload the payload
+     * @return the mono
+     */
+    @PostMapping("/jwt-remote-api/parse")
+    Mono<ResponseBodyBean<ParseJwtResponse>> parse(@Valid @RequestBody ParseJwtPayload payload);
 }

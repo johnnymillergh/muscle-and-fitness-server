@@ -3,7 +3,7 @@ package com.jmsoftware.maf.apigateway.security.impl;
 import cn.hutool.core.util.StrUtil;
 import com.jmsoftware.maf.apigateway.remoteapi.AuthCenterRemoteApi;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
-import com.jmsoftware.maf.common.domain.authcenter.UserPrincipal;
+import com.jmsoftware.maf.common.domain.authcenter.security.UserPrincipal;
 import com.jmsoftware.maf.common.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

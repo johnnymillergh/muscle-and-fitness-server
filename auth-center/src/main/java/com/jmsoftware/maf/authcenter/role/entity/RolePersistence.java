@@ -22,7 +22,7 @@ public class RolePersistence implements Serializable {
     /**
      * Primary key
      */
-    @TableId(value = "id", type = IdType.INPUT)
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**
