@@ -1,8 +1,8 @@
-package com.jmsoftware.maf.exercisemis.universal.controller;
+package com.jmsoftware.maf.springbootstarter.controller;
 
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.ValidationTestPayload;
-import com.jmsoftware.maf.exercisemis.universal.service.CommonService;
+import com.jmsoftware.maf.springbootstarter.service.CommonService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +16,7 @@ import java.util.Map;
  * <p>
  * Change description here.
  *
- * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
- * @date 2/4/20 10:29 AM
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 12/29/2020 1:45 PM
  **/
 @RestController
 @RequiredArgsConstructor

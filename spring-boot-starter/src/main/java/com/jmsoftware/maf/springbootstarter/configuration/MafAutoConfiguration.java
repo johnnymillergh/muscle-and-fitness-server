@@ -2,12 +2,15 @@ package com.jmsoftware.maf.springbootstarter.configuration;
 
 import com.jmsoftware.maf.springbootstarter.aspect.ExceptionControllerAdvice;
 import com.jmsoftware.maf.springbootstarter.aspect.WebRequestLogAspect;
+import com.jmsoftware.maf.springbootstarter.controller.CommonController;
 import com.jmsoftware.maf.springbootstarter.controller.GlobalErrorController;
 import com.jmsoftware.maf.springbootstarter.controller.HttpApiResourceRemoteApiController;
 import com.jmsoftware.maf.springbootstarter.controller.RedirectController;
 import com.jmsoftware.maf.springbootstarter.filter.AccessLogFilter;
 import com.jmsoftware.maf.springbootstarter.helper.HttpApiScanHelper;
 import com.jmsoftware.maf.springbootstarter.helper.IpHelper;
+import com.jmsoftware.maf.springbootstarter.service.CommonService;
+import com.jmsoftware.maf.springbootstarter.service.impl.CommonServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
@@ -144,5 +147,17 @@ public class MafAutoConfiguration {
                 .apis(RequestHandlerSelectors.basePackage(mafProjectProperty.getBasePackage()))
                 .paths(PathSelectors.any())
                 .build();
+    }
+
+    @Bean
+    public CommonService commonService(MafProjectProperty mafProjectProperty) {
+        log.warn("Initial bean: {}", CommonServiceImpl.class.getSimpleName());
+        return new CommonServiceImpl(mafProjectProperty);
+    }
+
+    @Bean
+    public CommonController commonController(CommonService commonService) {
+        log.warn("Initial bean: {}", CommonController.class.getSimpleName());
+        return new CommonController(commonService);
     }
 }

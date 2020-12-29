@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.serviceregistry.universal.service;
+package com.jmsoftware.maf.springbootstarter.service;
 
 import com.jmsoftware.maf.common.domain.ValidationTestPayload;
 import org.springframework.validation.annotation.Validated;

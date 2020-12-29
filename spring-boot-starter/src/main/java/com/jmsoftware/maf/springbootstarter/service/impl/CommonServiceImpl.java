@@ -1,8 +1,8 @@
-package com.jmsoftware.maf.springbootadmin.universal.service.impl;
+package com.jmsoftware.maf.springbootstarter.service.impl;
 
 import com.jmsoftware.maf.common.domain.ValidationTestPayload;
-import com.jmsoftware.maf.springbootadmin.universal.service.CommonService;
 import com.jmsoftware.maf.springbootstarter.configuration.MafProjectProperty;
+import com.jmsoftware.maf.springbootstarter.service.CommonService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,8 +20,7 @@ import java.util.Map;
  * <p>
  * Change description here.
  *
- * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
- * @date 2/4/20 11:16 AM
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 12/29/2020 1:47 PM
  */
 @Slf4j
 @Service
