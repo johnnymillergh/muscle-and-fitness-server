@@ -133,12 +133,14 @@ public class MafAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnProperty(value ="maf.configuration.swagger-disabled", havingValue = "false")
     public Swagger2Configuration swagger2Configuration(MafProjectProperty mafProjectProperty) {
         log.warn("Initial bean: {}", Swagger2Configuration.class.getSimpleName());
         return new Swagger2Configuration(mafProjectProperty);
     }
 
     @Bean
+    @ConditionalOnProperty(value ="maf.configuration.swagger-disabled", havingValue = "false")
     public Docket docket(Swagger2Configuration swagger2Configuration, MafProjectProperty mafProjectProperty) {
         log.warn("Initial bean: {}", Docket.class.getSimpleName());
         return new Docket(DocumentationType.SWAGGER_2)

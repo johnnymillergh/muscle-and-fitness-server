@@ -52,4 +52,4 @@ maf:
       pattern:
         - "/actuator/**"
     included-package-for-http-api-scan: ${project.property.base-package}
-
+    swagger-disabled: true

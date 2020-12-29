@@ -56,6 +56,12 @@ public class MafConfiguration {
     @NotBlank
     private String includedPackageForHttpApiScan;
     /**
+     * Swagger disabled. true: disabled; false: enabled.
+     */
+    @NotNull
+    private Boolean swaggerDisabled;
+
+    /**
      * Flatten ignored urls string [ ].
      *
      * @return the string [ ]

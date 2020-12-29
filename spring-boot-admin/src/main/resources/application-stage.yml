@@ -6,3 +6,7 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://maf.service-registry.stage:8760/eureka/
+
+maf:
+  configuration:
+    swagger-disabled: true

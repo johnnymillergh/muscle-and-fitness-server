@@ -6,3 +6,7 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8760/eureka/
+
+maf:
+  configuration:
+    swagger-disabled: false

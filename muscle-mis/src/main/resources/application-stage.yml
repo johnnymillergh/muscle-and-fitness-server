@@ -16,7 +16,6 @@ spring:
   devtools:
     add-properties: false
 
-logging:
-  # Configure logging level for SFTP/JSCH
-  level:
-    com.jcraft.jsch: INFO
+maf:
+  configuration:
+    swagger-disabled: true

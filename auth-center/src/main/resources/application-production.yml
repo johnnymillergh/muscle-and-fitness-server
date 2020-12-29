@@ -28,11 +28,6 @@ spring:
   devtools:
     add-properties: false
 
-logging:
-  # Configure logging level for SFTP/JSCH
-  level:
-    com.jcraft.jsch: INFO
-
 sftp:
   client:
     configuration:
@@ -45,3 +40,7 @@ sftp:
       private-key-pass-phrase:
       session-cache-size: 20
       session-wait-timeout: 15000
+
+maf:
+  configuration:
+    swagger-disabled: true

@@ -48,4 +48,4 @@ sftp:
 
 maf:
   configuration:
-    web-request-log-disabled: false
+    swagger-disabled: false
