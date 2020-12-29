@@ -19,6 +19,6 @@ public class GatewayServerAccessDeniedHandler implements ServerAccessDeniedHandl
     public Mono<Void> handle(ServerWebExchange exchange, AccessDeniedException denied) {
         log.error("Access denied! Exception message: {}. Request URL: [{}] {}", denied.getMessage(),
                   exchange.getRequest().getMethod(), exchange.getRequest().getURI());
-        return ResponseUtil.renderJson(exchange, HttpStatus.FORBIDDEN, null);
+        return ResponseUtil.renderJson(exchange, HttpStatus.FORBIDDEN, denied.getMessage(), null);
     }
 }

@@ -6,7 +6,6 @@ import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
-import org.springframework.core.io.buffer.DataBufferFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
@@ -24,13 +23,14 @@ public class ResponseUtil {
      *
      * @param exchange   the exchange
      * @param httpStatus the http status
+     * @param message    the message
      * @param data       the data
      * @return the mono
      */
     @SneakyThrows
     public static Mono<Void> renderJson(@NonNull ServerWebExchange exchange, @NonNull HttpStatus httpStatus,
-                                        @Nullable Object data) {
-        ObjectMapper objectMapper = new ObjectMapper();
+                                        @Nullable String message, @Nullable Object data) {
+        val objectMapper = new ObjectMapper();
         exchange.getResponse().setStatusCode(httpStatus);
         val response = exchange.getResponse();
         response.setStatusCode(httpStatus);
@@ -38,8 +38,9 @@ public class ResponseUtil {
         // UTF-8 special characters without requiring a charset=UTF-8 parameter.
         response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
         return response.writeWith(Mono.fromSupplier(() -> {
-            DataBufferFactory bufferFactory = response.bufferFactory();
-            final var responseBody = ResponseBodyBean.ofStatus(httpStatus, data);
+            val bufferFactory = response.bufferFactory();
+            val message2 = String.format("%s. %s", httpStatus.getReasonPhrase(), message);
+            val responseBody = ResponseBodyBean.ofStatus(httpStatus.value(), message2, data);
             try {
                 return bufferFactory.wrap(objectMapper.writeValueAsBytes(responseBody));
             } catch (JsonProcessingException e) {
