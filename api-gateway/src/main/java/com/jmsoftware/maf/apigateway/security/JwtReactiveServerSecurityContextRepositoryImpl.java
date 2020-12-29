@@ -19,13 +19,15 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 /**
- * Description: ReactiveServerSecurityContextRepository, change description here.
+ * Description: JwtReactiveServerSecurityContextRepositoryImpl
+ * <p>
+ * Implementation of JWT reactive server security context repository
  *
- * @author 钟俊（zhongjun）, email: zhongjun@toguide.cn, date: 12/18/2020 3:38 PM
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 12/29/2020 9:58 AM
  **/
 @Slf4j
 @RequiredArgsConstructor
-public class JwtReactiveServerSecurityContextRepository implements ServerSecurityContextRepository {
+public class JwtReactiveServerSecurityContextRepositoryImpl implements ServerSecurityContextRepository {
     private final MafConfiguration mafConfiguration;
     private final ReactiveAuthenticationManager authenticationManager;
     private final JwtService jwtService;

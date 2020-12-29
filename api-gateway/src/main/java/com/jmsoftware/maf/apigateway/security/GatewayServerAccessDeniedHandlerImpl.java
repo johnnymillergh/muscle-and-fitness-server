@@ -9,12 +9,14 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 /**
- * Description: CustomServerAccessDeniedHandler, change description here.
+ * Description: GatewayServerAccessDeniedHandlerImpl
+ * <p>
+ * Implementation os gateway server access denied handler
  *
- * @author 钟俊（zhongjun）, email: zhongjun@toguide.cn, date: 12/21/2020 10:12 AM
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 12/29/2020 9:56 AM
  **/
 @Slf4j
-public class GatewayServerAccessDeniedHandler implements ServerAccessDeniedHandler {
+public class GatewayServerAccessDeniedHandlerImpl implements ServerAccessDeniedHandler {
     @Override
     public Mono<Void> handle(ServerWebExchange exchange, AccessDeniedException denied) {
         log.error("Access denied! Exception message: {}. Request URL: [{}] {}", denied.getMessage(),

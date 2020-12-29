@@ -16,13 +16,15 @@ import reactor.core.publisher.Mono;
 import javax.annotation.Resource;
 
 /**
- * Description: AuthenticationManager, change description here.
+ * Description: JwtReactiveAuthenticationManagerImpl
+ * <p>
+ * Implementation of JWT reactive authentication manager
  *
- * @author 钟俊（zhongjun）, email: zhongjun@toguide.cn, date: 12/18/2020 3:40 PM
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 12/29/2020 9:57 AM
  **/
 @Slf4j
 @RequiredArgsConstructor
-public class JwtReactiveAuthenticationManager implements ReactiveAuthenticationManager {
+public class JwtReactiveAuthenticationManagerImpl implements ReactiveAuthenticationManager {
     @Lazy
     @Resource
     private AuthCenterRemoteApi authCenterRemoteApi;

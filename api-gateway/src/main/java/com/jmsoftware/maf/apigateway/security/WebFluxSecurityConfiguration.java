@@ -1,7 +1,6 @@
 package com.jmsoftware.maf.apigateway.security;
 
 import com.jmsoftware.maf.reactivespringbootstarter.configuration.MafConfiguration;
-import com.jmsoftware.maf.reactivespringbootstarter.filter.AccessLogFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -11,7 +10,7 @@ import org.springframework.security.authentication.ReactiveAuthenticationManager
 import org.springframework.security.authorization.ReactiveAuthorizationManager;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.ServerAuthenticationEntryPoint;
@@ -36,7 +35,6 @@ import org.springframework.security.web.server.context.ServerSecurityContextRepo
 @RequiredArgsConstructor
 public class WebFluxSecurityConfiguration {
     private final MafConfiguration mafConfiguration;
-    private final AccessLogFilter accessLogFilter;
     private final JwtService jwtService;
 
     @Bean
@@ -81,27 +79,27 @@ public class WebFluxSecurityConfiguration {
 
     @Bean
     public ServerAccessDeniedHandler serverAccessDeniedHandler() {
-        return new GatewayServerAccessDeniedHandler();
+        return new GatewayServerAccessDeniedHandlerImpl();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
     public ReactiveAuthorizationManager<AuthorizationContext> reactiveAuthorizationManager() {
-        return new RbacReactiveAuthorizationManager();
+        return new RbacReactiveAuthorizationManagerImpl();
     }
 
     @Bean
     public ServerSecurityContextRepository serverSecurityContextRepository(ReactiveAuthenticationManager reactiveAuthenticationManager) {
-        return new JwtReactiveServerSecurityContextRepository(mafConfiguration, reactiveAuthenticationManager,
-                                                              jwtService);
+        return new JwtReactiveServerSecurityContextRepositoryImpl(mafConfiguration, reactiveAuthenticationManager,
+                                                                  jwtService);
     }
 
     @Bean
     public ReactiveAuthenticationManager reactiveAuthenticationManager() {
-        return new JwtReactiveAuthenticationManager();
+        return new JwtReactiveAuthenticationManagerImpl();
     }
 }

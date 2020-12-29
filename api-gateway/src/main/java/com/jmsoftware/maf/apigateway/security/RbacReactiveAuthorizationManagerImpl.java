@@ -27,14 +27,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Description: ReactiveAuthorizationManagerImpl, change description here.
+ * Description: RbacReactiveAuthorizationManagerImpl
+ * <p>
+ * Implementation of RBAC (Role-based access control) reactive authorization manager
  *
- * @author 钟俊（zhongjun）, email: zhongjun@toguide.cn, date: 12/21/2020 12:38 PM
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 12/29/2020 9:54 AM
+ * @see <a href='https://en.wikipedia.org/wiki/Role-based_access_control'>Role-based access control</a>
  **/
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class RbacReactiveAuthorizationManager implements ReactiveAuthorizationManager<AuthorizationContext> {
+public class RbacReactiveAuthorizationManagerImpl implements ReactiveAuthorizationManager<AuthorizationContext> {
     @Lazy
     @Resource
     private AuthCenterRemoteApi authCenterRemoteApi;
@@ -58,8 +61,8 @@ public class RbacReactiveAuthorizationManager implements ReactiveAuthorizationMa
                 .filter(role -> StrUtil.equals("admin", role.getName()))
                 .map(GetRoleListByUserIdResponse.Role::getId).collectList()
                 .switchIfEmpty(getRoleListByUserIdResponseFlux
-                        .map(GetRoleListByUserIdResponse.Role::getId)
-                        .collectList());
+                                       .map(GetRoleListByUserIdResponse.Role::getId)
+                                       .collectList());
 
         // Get permission list based on the Mono<List<Long>>
         // auth-center will respond /** for role "admin"
@@ -67,7 +70,8 @@ public class RbacReactiveAuthorizationManager implements ReactiveAuthorizationMa
                 roleIdList -> {
                     GetPermissionListByRoleIdListPayload payload = new GetPermissionListByRoleIdListPayload();
                     payload.setRoleIdList(roleIdList);
-                    return authCenterRemoteApi.getPermissionListByRoleIdList(payload.getRoleIdList()).map(ResponseBodyBean::getData);
+                    return authCenterRemoteApi.getPermissionListByRoleIdList(payload.getRoleIdList()).map(
+                            ResponseBodyBean::getData);
                 });
 
         // Aggregate 2 Mono
@@ -85,12 +89,12 @@ public class RbacReactiveAuthorizationManager implements ReactiveAuthorizationMa
                 // FIXME: currently, the `method` in permission is useless
                 if (antPathMatcher.match(buttonPermission.getUrl(), path)) {
                     log.info("Authorization success! Resource [{}] {} is accessible for user(username: {})",
-                            request.getMethod(), request.getURI(), userPrincipal.getUsername());
+                             request.getMethod(), request.getURI(), userPrincipal.getUsername());
                     return new AuthorizationDecision(true);
                 }
             }
             log.warn("Authorization failure! Resource [{}] {} is inaccessible for user(username: {})",
-                    request.getMethod(), request.getURI(), userPrincipal.getUsername());
+                     request.getMethod(), request.getURI(), userPrincipal.getUsername());
             return new AuthorizationDecision(false);
         });
     }
