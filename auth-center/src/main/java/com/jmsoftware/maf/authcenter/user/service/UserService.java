@@ -6,6 +6,7 @@ import com.jmsoftware.maf.common.domain.authcenter.user.*;
 import com.jmsoftware.maf.common.exception.SecurityException;
 import org.springframework.validation.annotation.Validated;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
@@ -43,4 +44,13 @@ public interface UserService extends IService<UserPersistence> {
      * @throws SecurityException the security exception
      */
     LoginResponse login(@Valid LoginPayload payload) throws SecurityException;
+
+    /**
+     * Logout boolean.
+     *
+     * @param request the request
+     * @return the boolean
+     * @throws SecurityException the security exception
+     */
+    boolean logout(HttpServletRequest request) throws SecurityException;
 }

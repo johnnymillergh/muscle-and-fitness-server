@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 /**
@@ -32,15 +33,21 @@ import javax.validation.Valid;
 public class UserController {
     private final UserService userService;
 
+    @PostMapping("/users/signup")
+    @ApiOperation(value = "Save user for signup", notes = "Save user for signup")
+    public ResponseBodyBean<SignupResponse> signup(@Valid @RequestBody SignupPayload payload) {
+        return ResponseBodyBean.ofSuccess(userService.saveUserForSignup(payload));
+    }
+
     @PostMapping("/users/login")
     @ApiOperation(value = "Login", notes = "Login")
     public ResponseBodyBean<LoginResponse> login(@Valid @RequestBody LoginPayload payload) throws SecurityException {
         return ResponseBodyBean.ofSuccess(userService.login(payload));
     }
 
-    @PostMapping("/users/signup")
-    @ApiOperation(value = "Save user for signup", notes = "Save user for signup")
-    public ResponseBodyBean<SignupResponse> signup(@Valid @RequestBody SignupPayload payload) {
-        return ResponseBodyBean.ofSuccess(userService.saveUserForSignup(payload));
+    @PostMapping("/users/logout")
+    @ApiOperation(value = "Logout", notes = "Logout")
+    public ResponseBodyBean<Boolean> logout(HttpServletRequest request) throws SecurityException {
+        return ResponseBodyBean.ofSuccess(userService.logout(request));
     }
 }

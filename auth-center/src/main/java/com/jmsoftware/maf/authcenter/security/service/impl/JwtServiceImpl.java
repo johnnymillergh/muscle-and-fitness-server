@@ -5,7 +5,6 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.jmsoftware.maf.authcenter.security.service.JwtService;
 import com.jmsoftware.maf.authcenter.universal.configuration.JwtConfiguration;
-import com.jmsoftware.maf.authcenter.universal.service.RedisService;
 import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtPayload;
 import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtResponse;
 import com.jmsoftware.maf.common.domain.authcenter.security.UserPrincipal;
@@ -15,6 +14,9 @@ import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -44,7 +46,7 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings("unused")
 public class JwtServiceImpl implements JwtService {
     private final JwtConfiguration jwtConfiguration;
-    private final RedisService redisService;
+    private final RedisTemplate<Object, Object> redisTemplate;
     private SecretKey secretKey;
     private JwtParser jwtParser;
 
@@ -54,10 +56,12 @@ public class JwtServiceImpl implements JwtService {
         secretKey = Keys.hmacShaKeyFor(jwtConfiguration.getSigningKey().getBytes(StandardCharsets.UTF_8));
         log.warn("Secret key for JWT was generated. Algorithm: {}", secretKey.getAlgorithm());
         jwtParser = Jwts.parserBuilder().setSigningKey(secretKey).build();
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new StringRedisSerializer());
     }
 
     @Override
-    public String createJwt(Authentication authentication, Boolean rememberMe) throws SecurityException {
+    public String createJwt(Authentication authentication, Boolean rememberMe) {
         val userPrincipal = (UserPrincipal) authentication.getPrincipal();
         return createJwt(rememberMe, userPrincipal.getId(), userPrincipal.getUsername(), userPrincipal.getRoles(),
                          userPrincipal.getAuthorities());
@@ -65,7 +69,7 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public String createJwt(Boolean rememberMe, Long id, String subject, List<String> roles,
-                            Collection<? extends GrantedAuthority> authorities) throws SecurityException {
+                            Collection<? extends GrantedAuthority> authorities) {
         val now = new Date();
         val builder = Jwts.builder()
                 .setId(id.toString())
@@ -82,13 +86,10 @@ public class JwtServiceImpl implements JwtService {
         }
         val jwt = builder.compact();
         // Store new JWT in Redis
-        val redisOperationResult = redisService.set(jwtConfiguration.getJwtRedisKeyPrefix() + subject, jwt, ttl,
-                                                    TimeUnit.MILLISECONDS);
-        if (redisOperationResult) {
-            return jwt;
-        } else {
-            throw new SecurityException(HttpStatus.INTERNAL_SERVER_ERROR, "Cannot persist JWT into Redis", null);
-        }
+        String redisKeyOfJwt = String.format("%s%s", jwtConfiguration.getJwtRedisKeyPrefix(), subject);
+        redisTemplate.opsForValue().set(redisKeyOfJwt, jwt, ttl, TimeUnit.MILLISECONDS);
+        log.info("Storing JWT in Redis. Key: {}, Value: {}", redisKeyOfJwt, jwt);
+        return jwt;
     }
 
     @Override
@@ -114,14 +115,14 @@ public class JwtServiceImpl implements JwtService {
         val username = claims.getSubject();
         val redisKeyOfJwt = jwtConfiguration.getJwtRedisKeyPrefix() + username;
         // Check if JWT exists
-        val expire = redisService.getExpire(redisKeyOfJwt, TimeUnit.MILLISECONDS);
+        val expire = redisTemplate.opsForValue().getOperations().getExpire(redisKeyOfJwt, TimeUnit.MILLISECONDS);
         if (ObjectUtil.isNull(expire) || expire <= 0) {
             throw new SecurityException(HttpStatus.UNAUTHORIZED, "JWT is expired (Redis expiration)");
         }
         // Check if the current JWT is equal to the one in Redis.
         // If it's noe equal, that indicates current user has signed out or logged in before.
         // Both situations reveal the JWT has expired.
-        val jwtInRedis = redisService.get(redisKeyOfJwt);
+        val jwtInRedis = (String) redisTemplate.opsForValue().get(redisKeyOfJwt);
         if (!StrUtil.equals(jwt, jwtInRedis)) {
             throw new SecurityException(HttpStatus.UNAUTHORIZED, "JWT is expired (Not equaled)");
         }
@@ -133,8 +134,9 @@ public class JwtServiceImpl implements JwtService {
         val jwt = getJwtFromRequest(request);
         val username = getUsernameFromJwt(jwt);
         // Delete JWT from redis
-        val deletedKeyNumber = redisService.delete(jwtConfiguration.getJwtRedisKeyPrefix() + username);
-        log.error("Invalidate JWT. Username = {}, deleted = {}", username, deletedKeyNumber);
+        String redisKeyOfJwt = String.format("%s%s", jwtConfiguration.getJwtRedisKeyPrefix(), username);
+        val deletedKeyNumber = redisTemplate.opsForValue().getOperations().delete(redisKeyOfJwt);
+        log.error("Invalidate JWT. Redis key of JWT = {}, deleted = {}", redisKeyOfJwt, deletedKeyNumber);
     }
 
     @Override
@@ -151,7 +153,7 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public String getJwtFromRequest(HttpServletRequest request) {
-        val bearerToken = request.getHeader(JwtConfiguration.TOKEN_PREFIX);
+        val bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (StrUtil.isNotBlank(bearerToken) && bearerToken.startsWith(JwtConfiguration.TOKEN_PREFIX)) {
             return bearerToken.substring(JwtConfiguration.TOKEN_PREFIX.length());
         }

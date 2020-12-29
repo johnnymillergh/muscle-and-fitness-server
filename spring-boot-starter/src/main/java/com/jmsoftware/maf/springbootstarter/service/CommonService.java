@@ -1,10 +1,10 @@
 package com.jmsoftware.maf.springbootstarter.service;
 
+import cn.hutool.json.JSON;
 import com.jmsoftware.maf.common.domain.ValidationTestPayload;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
-import java.util.Map;
 
 /**
  * <h1>CommonService</h1>
@@ -21,7 +21,7 @@ public interface CommonService {
      *
      * @return the application info.
      */
-    Map<String, Object> getApplicationInfo();
+    JSON getApplicationInfo();
 
     /**
      * Validate object.

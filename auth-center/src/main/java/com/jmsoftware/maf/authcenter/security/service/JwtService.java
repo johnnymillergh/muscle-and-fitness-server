@@ -28,9 +28,8 @@ public interface JwtService {
      * @param authentication the authentication
      * @param rememberMe     the remember me
      * @return the string
-     * @throws SecurityException the security exception
      */
-    String createJwt(Authentication authentication, Boolean rememberMe) throws SecurityException;
+    String createJwt(Authentication authentication, Boolean rememberMe);
 
     /**
      * Create JWT string.
@@ -41,10 +40,9 @@ public interface JwtService {
      * @param roles       the roles
      * @param authorities the authorities
      * @return the JWT string
-     * @throws SecurityException the security exception
      */
     String createJwt(Boolean rememberMe, Long id, String subject, List<String> roles, Collection<?
-            extends GrantedAuthority> authorities) throws SecurityException;
+            extends GrantedAuthority> authorities);
 
     /**
      * Parse JWT.

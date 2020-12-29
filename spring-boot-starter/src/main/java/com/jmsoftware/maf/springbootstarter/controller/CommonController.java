@@ -1,15 +1,13 @@
 package com.jmsoftware.maf.springbootstarter.controller;
 
+import cn.hutool.json.JSON;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.ValidationTestPayload;
 import com.jmsoftware.maf.springbootstarter.service.CommonService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 /**
  * <h1>CommonController</h1>
@@ -27,9 +25,8 @@ public class CommonController {
 
     @GetMapping("/app-info")
     @ApiOperation(value = "/app-info", notes = "Retrieve application information")
-    public ResponseBodyBean<Map<String, Object>> applicationInformation() {
-        val data = commonService.getApplicationInfo();
-        return ResponseBodyBean.ofSuccess(data, "Succeed to retrieve app info.");
+    public ResponseBodyBean<JSON> applicationInformation() {
+        return ResponseBodyBean.ofSuccess(commonService.getApplicationInfo(), "Succeed to retrieve app info.");
     }
 
     @PostMapping("/validation-test")

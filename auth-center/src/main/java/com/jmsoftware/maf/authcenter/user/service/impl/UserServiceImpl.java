@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
@@ -87,5 +88,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserPersistence> im
             return response;
         }
         throw new SecurityException(HttpStatus.UNAUTHORIZED);
+    }
+
+    @Override
+    public boolean logout(HttpServletRequest request) throws SecurityException {
+        jwtService.invalidateJwt(request);
+        return true;
     }
 }
