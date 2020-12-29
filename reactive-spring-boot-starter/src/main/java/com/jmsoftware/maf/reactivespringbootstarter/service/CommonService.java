@@ -1,8 +1,7 @@
 package com.jmsoftware.maf.reactivespringbootstarter.service;
 
+import cn.hutool.json.JSON;
 import com.jmsoftware.maf.common.domain.ValidationTestPayload;
-
-import java.util.Map;
 
 /**
  * <h1>CommonService</h1>
@@ -18,7 +17,7 @@ public interface CommonService {
      *
      * @return the application info.
      */
-    Map<String, Object> getApplicationInfo();
+    JSON getApplicationInfo();
 
     /**
      * Validate object.

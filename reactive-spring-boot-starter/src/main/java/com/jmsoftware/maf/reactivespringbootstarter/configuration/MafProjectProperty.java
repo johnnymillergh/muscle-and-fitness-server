@@ -5,6 +5,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
+import javax.validation.constraints.NotBlank;
+
 /**
  * <h1>MafProjectProperty</h1>
  * <p>
@@ -21,6 +23,7 @@ public class MafProjectProperty {
     /**
      * The Base package.
      */
+    @NotBlank
     private String basePackage;
     /**
      * The Context path.
@@ -29,30 +32,37 @@ public class MafProjectProperty {
     /**
      * The Group id.
      */
+    @NotBlank
     private String groupId;
     /**
      * The Project parent artifact id.
      */
+    @NotBlank
     private String projectParentArtifactId;
     /**
      * The Project artifact id.
      */
+    @NotBlank
     private String projectArtifactId;
     /**
      * The Version.
      */
+    @NotBlank
     private String version;
     /**
      * The Description.
      */
+    @NotBlank
     private String description;
     /**
      * The Jdk version.
      */
+    @NotBlank
     private String jdkVersion;
     /**
      * The Environment.
      */
+    @NotBlank
     private String environment;
     /**
      * The Url.

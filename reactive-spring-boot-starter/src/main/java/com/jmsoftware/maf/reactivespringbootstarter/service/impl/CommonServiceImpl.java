@@ -1,5 +1,7 @@
 package com.jmsoftware.maf.reactivespringbootstarter.service.impl;
 
+import cn.hutool.json.JSON;
+import cn.hutool.json.JSONUtil;
 import com.jmsoftware.maf.common.domain.ValidationTestPayload;
 import com.jmsoftware.maf.reactivespringbootstarter.configuration.MafProjectProperty;
 import com.jmsoftware.maf.reactivespringbootstarter.service.CommonService;
@@ -30,16 +32,8 @@ public class CommonServiceImpl implements CommonService {
     private final MafProjectProperty mafProjectProperty;
 
     @Override
-    public Map<String, Object> getApplicationInfo() {
-        var map = new HashMap<String, Object>(16);
-        var fieldsInfo = getFieldsInfo(mafProjectProperty);
-        fieldsInfo.forEach(fieldInfo -> {
-            var type = fieldInfo.get("type");
-            if ("class java.lang.String".equals(type)) {
-                map.put((String) fieldInfo.get("name"), fieldInfo.get("value"));
-            }
-        });
-        return map;
+    public JSON getApplicationInfo() {
+        return JSONUtil.parse(this.mafProjectProperty);
     }
 
     @Override
