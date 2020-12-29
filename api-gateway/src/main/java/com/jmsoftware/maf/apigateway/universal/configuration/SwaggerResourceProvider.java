@@ -1,5 +1,6 @@
 package com.jmsoftware.maf.apigateway.universal.configuration;
 
+import com.jmsoftware.maf.reactivespringbootstarter.configuration.MafProjectProperty;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -40,7 +41,7 @@ import java.util.List;
 public class SwaggerResourceProvider implements SwaggerResourcesProvider {
     private static final String SWAGGER_API_URI = "/v2/api-docs";
     private static final String LINE_SEPARATOR = System.lineSeparator();
-    private final ProjectProperty projectProperty;
+    private final MafProjectProperty mafProjectProperty;
     private final RouteLocator routeLocator;
 
     /**
@@ -72,26 +73,26 @@ public class SwaggerResourceProvider implements SwaggerResourcesProvider {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage(projectProperty.getBasePackage()))
+                .apis(RequestHandlerSelectors.basePackage(mafProjectProperty.getBasePackage()))
                 .paths(PathSelectors.any())
                 .build();
     }
 
     private ApiInfo apiInfo() {
-        val projectArtifactId = projectProperty.getProjectArtifactId();
-        val version = projectProperty.getVersion();
-        val developerEmail = projectProperty.getDeveloperEmail();
-        val developerUrl = projectProperty.getDeveloperUrl();
+        val projectArtifactId = mafProjectProperty.getProjectArtifactId();
+        val version = mafProjectProperty.getVersion();
+        val developerEmail = mafProjectProperty.getDeveloperEmail();
+        val developerUrl = mafProjectProperty.getDeveloperUrl();
         return new ApiInfoBuilder()
                 .title(String.format("API for %s@%s", projectArtifactId, version))
                 .description(String.format("%s %sArtifact ID: %s%sEnvironment: %s",
-                                           projectProperty.getDescription(),
+                                           mafProjectProperty.getDescription(),
                                            LINE_SEPARATOR,
                                            projectArtifactId,
                                            LINE_SEPARATOR,
-                                           projectProperty.getEnvironment()))
+                                           mafProjectProperty.getEnvironment()))
                 .contact(new Contact(String.format("%s, email: %s%sHome page: %s",
-                                                   projectProperty.getDeveloperName(),
+                                                   mafProjectProperty.getDeveloperName(),
                                                    developerEmail,
                                                    LINE_SEPARATOR,
                                                    developerUrl),

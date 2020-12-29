@@ -1,8 +1,8 @@
 package com.jmsoftware.maf.apigateway.universal.service.impl;
 
-import com.jmsoftware.maf.apigateway.universal.configuration.ProjectProperty;
 import com.jmsoftware.maf.apigateway.universal.service.CommonService;
 import com.jmsoftware.maf.common.domain.ValidationTestPayload;
+import com.jmsoftware.maf.reactivespringbootstarter.configuration.MafProjectProperty;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,12 +27,12 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class CommonServiceImpl implements CommonService {
-    private final ProjectProperty projectProperty;
+    private final MafProjectProperty mafProjectProperty;
 
     @Override
     public Map<String, Object> getApplicationInfo() {
         var map = new HashMap<String, Object>(16);
-        var fieldsInfo = getFieldsInfo(projectProperty);
+        var fieldsInfo = getFieldsInfo(mafProjectProperty);
         fieldsInfo.forEach(fieldInfo -> {
             var type = fieldInfo.get("type");
             if ("class java.lang.String".equals(type)) {

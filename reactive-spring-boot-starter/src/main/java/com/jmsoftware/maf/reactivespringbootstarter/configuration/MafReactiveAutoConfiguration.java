@@ -31,14 +31,20 @@ public class MafReactiveAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public MafConfiguration mafConfiguration() {
-        log.warn("Initial bean: {}", MafConfiguration.class.getName());
+        log.warn("Initial bean: {}", MafConfiguration.class.getSimpleName());
         return new MafConfiguration();
     }
 
     @Bean
     @ConditionalOnMissingBean
     public AccessLogFilter requestFilter(MafConfiguration mafConfiguration) {
-        log.warn("Initial bean: {}", AccessLogFilter.class.getName());
+        log.warn("Initial bean: {}", AccessLogFilter.class.getSimpleName());
         return new AccessLogFilter(mafConfiguration);
+    }
+
+    @Bean
+    public MafProjectProperty mafProjectProperty() {
+        log.warn("Initial bean: {}", MafProjectProperty.class.getSimpleName());
+        return new MafProjectProperty();
     }
 }

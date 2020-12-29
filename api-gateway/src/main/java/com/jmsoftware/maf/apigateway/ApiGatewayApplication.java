@@ -1,7 +1,7 @@
 package com.jmsoftware.maf.apigateway;
 
-import com.jmsoftware.maf.apigateway.universal.configuration.ProjectProperty;
 import com.jmsoftware.maf.apigateway.universal.configuration.ServerConfiguration;
+import com.jmsoftware.maf.reactivespringbootstarter.configuration.MafProjectProperty;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.boot.SpringApplication;
@@ -28,11 +28,11 @@ import java.util.TimeZone;
 @EnableReactiveFeignClients
 public class ApiGatewayApplication {
     private static final String LINE_SEPARATOR = System.lineSeparator();
-    private static ProjectProperty projectProperty;
+    private static MafProjectProperty mafProjectProperty;
     private static ServerConfiguration serverConfiguration;
 
-    public ApiGatewayApplication(ProjectProperty projectProperty, ServerConfiguration serverConfiguration) {
-        ApiGatewayApplication.projectProperty = projectProperty;
+    public ApiGatewayApplication(MafProjectProperty mafProjectProperty, ServerConfiguration serverConfiguration) {
+        ApiGatewayApplication.mafProjectProperty = mafProjectProperty;
         ApiGatewayApplication.serverConfiguration = serverConfiguration;
     }
 
@@ -42,12 +42,12 @@ public class ApiGatewayApplication {
         val endInstant = Instant.now();
         val duration = Duration.between(startInstant, endInstant);
         log.info("🥳 Congratulations! 🎉");
-        log.info("🖥 {}@{} started!", projectProperty.getProjectArtifactId(), projectProperty.getVersion());
-        log.info("⚙️ Environment: {}", projectProperty.getEnvironment());
+        log.info("🖥 {}@{} started!", mafProjectProperty.getProjectArtifactId(), mafProjectProperty.getVersion());
+        log.info("⚙️ Environment: {}", mafProjectProperty.getEnvironment());
         log.info("⏳ Deployment duration: {} seconds ({} ms)", duration.getSeconds(), duration.toMillis());
         log.info("⏰ App started at {} (timezone - {})", endInstant, TimeZone.getDefault().getDisplayName());
         log.info("{}  App running at{}  - Local:   http://localhost:{}{}/{}  - Network: {}/{}",
-                 LINE_SEPARATOR, LINE_SEPARATOR, serverConfiguration.getServerPort(), projectProperty.getContextPath(),
-                 LINE_SEPARATOR, serverConfiguration.getBaseUrl(), projectProperty.getContextPath());
+                 LINE_SEPARATOR, LINE_SEPARATOR, serverConfiguration.getServerPort(), mafProjectProperty.getContextPath(),
+                 LINE_SEPARATOR, serverConfiguration.getBaseUrl(), mafProjectProperty.getContextPath());
     }
 }

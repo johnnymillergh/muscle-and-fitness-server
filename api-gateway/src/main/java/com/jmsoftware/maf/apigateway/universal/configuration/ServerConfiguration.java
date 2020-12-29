@@ -1,5 +1,6 @@
 package com.jmsoftware.maf.apigateway.universal.configuration;
 
+import com.jmsoftware.maf.reactivespringbootstarter.configuration.MafProjectProperty;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +31,7 @@ import java.util.Enumeration;
 @RequiredArgsConstructor
 public class ServerConfiguration implements ApplicationListener<WebServerInitializedEvent> {
     private static final String DEVELOPMENT_ENVIRONMENT = "development";
-    private final ProjectProperty projectProperty;
+    private final MafProjectProperty mafProjectProperty;
     private int serverPort;
 
     @Override
@@ -51,7 +52,7 @@ public class ServerConfiguration implements ApplicationListener<WebServerInitial
      * @date 2019-05-03 16:05
      */
     public String getBaseUrl() {
-        return "http://" + this.getPublicIp() + ":" + serverPort + projectProperty.getContextPath();
+        return "http://" + this.getPublicIp() + ":" + serverPort + mafProjectProperty.getContextPath();
     }
 
     /**
@@ -60,7 +61,7 @@ public class ServerConfiguration implements ApplicationListener<WebServerInitial
      * @return public IP
      */
     public String getPublicIp() {
-        if (projectProperty.getEnvironment().contains(DEVELOPMENT_ENVIRONMENT)) {
+        if (mafProjectProperty.getEnvironment().contains(DEVELOPMENT_ENVIRONMENT)) {
             return this.getInternetIp();
         }
         try {

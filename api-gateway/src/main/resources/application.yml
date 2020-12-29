@@ -72,8 +72,8 @@ logging:
     com.jmsoftware: DEBUG
 #    org.springframework.cloud.gateway: debug
 
-project:
-  property:
+maf:
+  project-property:
     base-package: @project.groupId@
     context-path:
     group-id: @project.groupId@
@@ -92,8 +92,6 @@ project:
     developer-name: @developerName@
     developer-email: @developerEmail@
     developer-url: @developerUrl@
-
-maf:
   configuration:
     ignored-url:
       post:
