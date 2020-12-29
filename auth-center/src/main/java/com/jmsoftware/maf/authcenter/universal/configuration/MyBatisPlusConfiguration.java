@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * <p>
  * Change description here.
  *
+ * TODO: migrate this configuration to `spring-boot-starter`
+ *
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 2019-05-02 11:57
  **/
