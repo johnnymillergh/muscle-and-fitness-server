@@ -1,17 +1,12 @@
-package com.jmsoftware.maf.springbootadmin.universal.configuration;
+package com.jmsoftware.maf.springbootstarter.configuration;
 
-import com.jmsoftware.maf.springbootstarter.configuration.MafProjectProperty;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
@@ -23,23 +18,14 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 2019-02-07 16:15
  **/
+@Slf4j
 @Configuration
 @EnableSwagger2
 @RequiredArgsConstructor
 public class Swagger2Configuration {
     private final MafProjectProperty mafProjectProperty;
 
-    @Bean
-    public Docket createRestApi() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(apiInfo())
-                .select()
-                .apis(RequestHandlerSelectors.basePackage(mafProjectProperty.getBasePackage()))
-                .paths(PathSelectors.any())
-                .build();
-    }
-
-    private ApiInfo apiInfo() {
+    public ApiInfo apiInfo() {
         val projectArtifactId = mafProjectProperty.getProjectArtifactId();
         val version = mafProjectProperty.getVersion();
         val developerEmail = mafProjectProperty.getDeveloperEmail();

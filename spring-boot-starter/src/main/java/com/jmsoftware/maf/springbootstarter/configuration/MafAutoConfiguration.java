@@ -24,6 +24,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -123,5 +127,22 @@ public class MafAutoConfiguration {
     public MafProjectProperty mafProjectProperty() {
         log.warn("Initial bean: {}", MafProjectProperty.class.getSimpleName());
         return new MafProjectProperty();
+    }
+
+    @Bean
+    public Swagger2Configuration swagger2Configuration(MafProjectProperty mafProjectProperty) {
+        log.warn("Initial bean: {}", Swagger2Configuration.class.getSimpleName());
+        return new Swagger2Configuration(mafProjectProperty);
+    }
+
+    @Bean
+    public Docket docket(Swagger2Configuration swagger2Configuration, MafProjectProperty mafProjectProperty) {
+        log.warn("Initial bean: {}", Docket.class.getSimpleName());
+        return new Docket(DocumentationType.SWAGGER_2)
+                .apiInfo(swagger2Configuration.apiInfo())
+                .select()
+                .apis(RequestHandlerSelectors.basePackage(mafProjectProperty.getBasePackage()))
+                .paths(PathSelectors.any())
+                .build();
     }
 }
