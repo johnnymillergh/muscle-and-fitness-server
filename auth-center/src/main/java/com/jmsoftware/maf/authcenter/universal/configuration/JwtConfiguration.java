@@ -1,5 +1,6 @@
 package com.jmsoftware.maf.authcenter.universal.configuration;
 
+import com.jmsoftware.maf.springbootstarter.configuration.MafProjectProperty;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -26,11 +27,11 @@ public class JwtConfiguration {
      */
     private String jwtRedisKeyPrefix;
 
-    public JwtConfiguration(ProjectProperty projectProperty) {
-        this.signingKey = String.format("%s %s", projectProperty.getProjectParentArtifactId(), projectProperty.getVersion());
+    public JwtConfiguration(MafProjectProperty mafProjectProperty) {
+        this.signingKey = String.format("%s %s", mafProjectProperty.getProjectParentArtifactId(), mafProjectProperty.getVersion());
         log.info("Initiated JWT signing key: {}. The specified key byte array is {} bits", this.signingKey,
                  this.signingKey.getBytes(StandardCharsets.UTF_8).length * 8);
-        jwtRedisKeyPrefix = String.format("%s:jwt:", projectProperty.getProjectParentArtifactId());
+        jwtRedisKeyPrefix = String.format("%s:jwt:", mafProjectProperty.getProjectParentArtifactId());
         log.warn("Initiated 'jwtRedisKeyPrefix': {}", jwtRedisKeyPrefix);
     }
 

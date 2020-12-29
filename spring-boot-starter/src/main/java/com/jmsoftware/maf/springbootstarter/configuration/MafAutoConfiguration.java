@@ -118,4 +118,10 @@ public class MafAutoConfiguration {
         log.warn("Initial bean: {}", HttpApiResourceRemoteApiController.class.getSimpleName());
         return new HttpApiResourceRemoteApiController(mafConfiguration, httpApiScanHelper);
     }
+
+    @Bean
+    public MafProjectProperty mafProjectProperty() {
+        log.warn("Initial bean: {}", MafProjectProperty.class.getSimpleName());
+        return new MafProjectProperty();
+    }
 }

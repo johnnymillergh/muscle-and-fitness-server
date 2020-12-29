@@ -10,13 +10,13 @@ import com.jmsoftware.maf.authcenter.permission.entity.PermissionPersistence;
 import com.jmsoftware.maf.authcenter.permission.mapper.PermissionMapper;
 import com.jmsoftware.maf.authcenter.permission.service.PermissionService;
 import com.jmsoftware.maf.authcenter.role.service.RoleService;
-import com.jmsoftware.maf.authcenter.universal.configuration.ProjectProperty;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
 import com.jmsoftware.maf.common.domain.authcenter.permission.PermissionType;
 import com.jmsoftware.maf.common.domain.springbootstarter.HttpApiResourcesResponse;
 import com.jmsoftware.maf.common.exception.BusinessException;
+import com.jmsoftware.maf.springbootstarter.configuration.MafProjectProperty;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +44,7 @@ import java.util.Optional;
 public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, PermissionPersistence> implements PermissionService {
     private final RoleService roleService;
     private final DiscoveryClient discoveryClient;
-    private final ProjectProperty projectProperty;
+    private final MafProjectProperty mafProjectProperty;
     private final RestTemplate restTemplate;
 
     @Override
@@ -84,8 +84,8 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
         log.info("Getting service info from Service ID list: {}", serviceIdList);
         val response = new GetServicesInfoResponse();
         val mapper = new ObjectMapper();
-        val ignoredServiceIdList = Lists.newArrayList(projectProperty.getProjectArtifactId(),
-                "api-gateway", "spring-boot-admin");
+        val ignoredServiceIdList = Lists.newArrayList(mafProjectProperty.getProjectArtifactId(),
+                                                      "api-gateway", "spring-boot-admin");
         log.info("Ignored service ID list: {}", ignoredServiceIdList);
         for (String serviceId : serviceIdList) {
             if (ignoredServiceIdList.contains(serviceId)) {

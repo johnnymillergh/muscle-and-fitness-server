@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.apigateway.security;
+package com.jmsoftware.maf.apigateway.security.configuration;
 
 import com.jmsoftware.maf.apigateway.security.impl.*;
 import com.jmsoftware.maf.reactivespringbootstarter.configuration.MafConfiguration;

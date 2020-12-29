@@ -1,5 +1,6 @@
 package com.jmsoftware.maf.serviceregistry.universal.configuration;
 
+import com.jmsoftware.maf.springbootstarter.configuration.MafProjectProperty;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.context.annotation.Bean;
@@ -26,31 +27,31 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 @RequiredArgsConstructor
 public class Swagger2Configuration {
-    private final ProjectProperty projectProperty;
+    private final MafProjectProperty mafProjectProperty;
 
     @Bean
     public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage(projectProperty.getBasePackage()))
+                .apis(RequestHandlerSelectors.basePackage(mafProjectProperty.getBasePackage()))
                 .paths(PathSelectors.any())
                 .build();
     }
 
     private ApiInfo apiInfo() {
-        val projectArtifactId = projectProperty.getProjectArtifactId();
-        val version = projectProperty.getVersion();
-        val developerEmail = projectProperty.getDeveloperEmail();
-        val developerUrl = projectProperty.getDeveloperUrl();
+        val projectArtifactId = mafProjectProperty.getProjectArtifactId();
+        val version = mafProjectProperty.getVersion();
+        val developerEmail = mafProjectProperty.getDeveloperEmail();
+        val developerUrl = mafProjectProperty.getDeveloperUrl();
         return new ApiInfoBuilder()
                 .title(String.format("API for %s@%s", projectArtifactId, version))
                 .description(String.format("%s Artifact ID: %s Environment: %s",
-                                           projectProperty.getDescription(),
+                                           mafProjectProperty.getDescription(),
                                            projectArtifactId,
-                                           projectProperty.getEnvironment()))
+                                           mafProjectProperty.getEnvironment()))
                 .contact(new Contact(String.format("%s, email: %s Home page: %s",
-                                                   projectProperty.getDeveloperName(),
+                                                   mafProjectProperty.getDeveloperName(),
                                                    developerEmail,
                                                    developerUrl),
                                      developerUrl, developerEmail))

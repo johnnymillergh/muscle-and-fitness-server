@@ -1,6 +1,6 @@
 package com.jmsoftware.maf.serviceregistry;
 
-import com.jmsoftware.maf.serviceregistry.universal.configuration.ProjectProperty;
+import com.jmsoftware.maf.springbootstarter.configuration.MafProjectProperty;
 import com.jmsoftware.maf.springbootstarter.helper.IpHelper;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -25,11 +25,11 @@ import java.util.TimeZone;
 @SpringBootApplication
 public class ServiceRegistryApplication {
     private static final String LINE_SEPARATOR = System.lineSeparator();
-    private static ProjectProperty projectProperty;
+    private static MafProjectProperty mafProjectProperty;
     private static IpHelper ipHelper;
 
-    public ServiceRegistryApplication(ProjectProperty projectProperty, IpHelper ipHelper) {
-        ServiceRegistryApplication.projectProperty = projectProperty;
+    public ServiceRegistryApplication(MafProjectProperty mafProjectProperty, IpHelper ipHelper) {
+        ServiceRegistryApplication.mafProjectProperty = mafProjectProperty;
         ServiceRegistryApplication.ipHelper = ipHelper;
     }
 
@@ -39,12 +39,12 @@ public class ServiceRegistryApplication {
         val endInstant = Instant.now();
         val duration = Duration.between(startInstant, endInstant);
         log.info("🥳 Congratulations! 🎉");
-        log.info("🖥 {}@{} started!", projectProperty.getProjectArtifactId(), projectProperty.getVersion());
-        log.info("⚙️ Environment: {}", projectProperty.getEnvironment());
+        log.info("🖥 {}@{} started!", mafProjectProperty.getProjectArtifactId(), mafProjectProperty.getVersion());
+        log.info("⚙️ Environment: {}", mafProjectProperty.getEnvironment());
         log.info("⏳ Deployment duration: {} seconds ({} ms)", duration.getSeconds(), duration.toMillis());
         log.info("⏰ App started at {} (timezone - {})", endInstant, TimeZone.getDefault().getDisplayName());
         log.info("{}  App running at{}  - Local:   http://localhost:{}{}/{}  - Network: http://{}:{}/{}",
-                 LINE_SEPARATOR, LINE_SEPARATOR, ipHelper.getServerPort(), projectProperty.getContextPath(),
-                 LINE_SEPARATOR, ipHelper.getPublicIp(), ipHelper.getServerPort(), projectProperty.getContextPath());
+                 LINE_SEPARATOR, LINE_SEPARATOR, ipHelper.getServerPort(), mafProjectProperty.getContextPath(),
+                 LINE_SEPARATOR, ipHelper.getPublicIp(), ipHelper.getServerPort(), mafProjectProperty.getContextPath());
     }
 }

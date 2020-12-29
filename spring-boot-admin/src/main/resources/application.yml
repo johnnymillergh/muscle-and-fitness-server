@@ -42,8 +42,8 @@ logging:
   level:
     com.jmsoftware: DEBUG
 
-project:
-  property:
+maf:
+  project-property:
     base-package: @project.groupId@
     context-path:
     group-id: @project.groupId@
@@ -62,8 +62,6 @@ project:
     developer-name: @developerName@
     developer-email: @developerEmail@
     developer-url: @developerUrl@
-
-maf:
   configuration:
     ignored-url:
       pattern:
@@ -76,3 +74,4 @@ maf:
         - "/webjars/**"
         - "/doc.html"
     included-package-for-http-api-scan: ${project.property.base-package}
+

@@ -79,8 +79,8 @@ logging:
   level:
     com.jmsoftware: DEBUG
 
-project:
-  property:
+maf:
+  project-property:
     base-package: @project.groupId@
     context-path:
     group-id: @project.groupId@
@@ -99,15 +99,6 @@ project:
     developer-name: @developerName@
     developer-email: @developerEmail@
     developer-url: @developerUrl@
-
-# Customize JWT configuration for development environment.
-jwt:
-  configuration:
-    # an hour
-    ttl: 3600000
-    ttl-for-remember-me: 604800000
-
-maf:
   configuration:
     ignored-url:
       pattern:
@@ -120,3 +111,10 @@ maf:
         - "/webjars/**"
         - "/doc.html"
     included-package-for-http-api-scan: ${project.property.base-package}
+
+# Customize JWT configuration for development environment.
+jwt:
+  configuration:
+    # an hour
+    ttl: 3600000
+    ttl-for-remember-me: 604800000

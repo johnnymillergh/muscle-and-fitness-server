@@ -3,6 +3,7 @@ package com.jmsoftware.maf.apigateway.universal.configuration;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
 
 /**
  * <h1>ProjectProperty</h1>
@@ -13,7 +14,9 @@ import org.springframework.stereotype.Component;
  * @date 2019-04-18 13:01
  **/
 @Data
+@Validated
 @Component
+@SuppressWarnings("jol")
 @ConfigurationProperties(prefix = "project.property")
 public class ProjectProperty {
     private String basePackage;
