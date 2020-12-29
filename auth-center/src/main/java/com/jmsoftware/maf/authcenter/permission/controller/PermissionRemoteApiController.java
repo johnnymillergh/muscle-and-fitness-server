@@ -4,12 +4,10 @@ import com.jmsoftware.maf.authcenter.permission.service.PermissionService;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
-import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByUserIdResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,12 +32,5 @@ public class PermissionRemoteApiController {
     @ApiOperation(value = "Get permission list by role id list", notes = "Get permission list by role id list (remote)")
     public ResponseBodyBean<GetPermissionListByRoleIdListResponse> getPermissionListByRoleIdList(@Valid GetPermissionListByRoleIdListPayload payload) {
         return ResponseBodyBean.ofSuccess(permissionService.getPermissionListByRoleIdList(payload));
-    }
-
-    @GetMapping("/permissions/{userId}")
-    @ApiOperation(value = "Get permission list by user id", notes = "Get permission list by user id")
-    public ResponseBodyBean<GetPermissionListByUserIdResponse> getPermissionListByUserId(@PathVariable Long userId) {
-        // auth-center will respond /** for role "admin"
-        return ResponseBodyBean.ofSuccess(permissionService.getPermissionListByUserId(userId));
     }
 }

@@ -36,18 +36,4 @@
             #{item}
         </foreach>
     </select>
-
-    <select id="selectPermissionListByUserId" resultMap="BaseResultMap">
-        SELECT permission.id,
-               permission.url,
-               permission.type,
-               permission.permission_expression AS permissionExpression,
-               permission.method
-        FROM permission
-                 LEFT JOIN role_permission ON permission.id = role_permission.permission_id
-                 LEFT JOIN role ON role_permission.role_id = role.id
-                 LEFT JOIN user_role ON role.id = user_role.role_id
-                 LEFT JOIN user ON user_role.user_id = user.id
-        WHERE user.id = #{userId}
-    </select>
 </mapper>

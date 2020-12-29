@@ -3,7 +3,6 @@ package com.jmsoftware.maf.authcenter.permission.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.jmsoftware.maf.authcenter.permission.entity.PermissionPersistence;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -24,12 +23,4 @@ public interface PermissionMapper extends BaseMapper<PermissionPersistence> {
      * @return the list
      */
     List<PermissionPersistence> selectPermissionListByRoleIdList(List<Long> roleIdList);
-
-    /**
-     * Select permission list by user id list.
-     *
-     * @param userId the user id
-     * @return the list
-     */
-    List<PermissionPersistence> selectPermissionListByUserId(Long userId);
 }

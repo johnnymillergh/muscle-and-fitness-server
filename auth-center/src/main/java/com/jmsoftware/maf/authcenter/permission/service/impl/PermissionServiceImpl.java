@@ -14,7 +14,6 @@ import com.jmsoftware.maf.authcenter.universal.configuration.ProjectProperty;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
-import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByUserIdResponse;
 import com.jmsoftware.maf.common.domain.authcenter.permission.PermissionType;
 import com.jmsoftware.maf.common.domain.springbootstarter.HttpApiResourcesResponse;
 import com.jmsoftware.maf.common.exception.BusinessException;
@@ -27,7 +26,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -78,23 +76,6 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
             return Collections.emptyList();
         }
         return this.getBaseMapper().selectPermissionListByRoleIdList(roleIdList);
-    }
-
-    @Override
-    public GetPermissionListByUserIdResponse getPermissionListByUserId(@NotNull Long userId) {
-        val permissionList = this.getPermissionPersistenceListByUserId(userId);
-        val response = new GetPermissionListByUserIdResponse();
-        permissionList.forEach(permissionPersistence -> {
-            val permission = new GetPermissionListByUserIdResponse.Permission();
-            BeanUtil.copyProperties(permissionPersistence, permission);
-            response.getPermissionList().add(permission);
-        });
-        return response;
-    }
-
-    @Override
-    public List<PermissionPersistence> getPermissionPersistenceListByUserId(@NotNull Long userId) {
-        return this.getBaseMapper().selectPermissionListByUserId(userId);
     }
 
     @Override
