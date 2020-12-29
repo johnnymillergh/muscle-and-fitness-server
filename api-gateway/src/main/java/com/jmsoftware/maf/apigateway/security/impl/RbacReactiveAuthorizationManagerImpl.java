@@ -39,10 +39,10 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 public class RbacReactiveAuthorizationManagerImpl implements ReactiveAuthorizationManager<AuthorizationContext> {
+    private final AntPathMatcher antPathMatcher = new AntPathMatcher();
     @Lazy
     @Resource
     private AuthCenterRemoteApi authCenterRemoteApi;
-    private final AntPathMatcher antPathMatcher = new AntPathMatcher();
 
     @Override
     public Mono<AuthorizationDecision> check(Mono<Authentication> authentication, AuthorizationContext object) {

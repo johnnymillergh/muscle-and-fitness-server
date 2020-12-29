@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.authcenter.permission.remote;
+package com.jmsoftware.maf.authcenter.permission.controller;
 
 import com.jmsoftware.maf.authcenter.permission.service.PermissionService;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
