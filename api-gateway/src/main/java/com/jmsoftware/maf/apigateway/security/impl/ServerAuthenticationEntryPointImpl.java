@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.apigateway.security;
+package com.jmsoftware.maf.apigateway.security.impl;
 
 import com.jmsoftware.maf.reactivespringbootstarter.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;

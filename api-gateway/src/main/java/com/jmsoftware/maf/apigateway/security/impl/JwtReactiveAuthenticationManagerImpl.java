@@ -1,8 +1,9 @@
-package com.jmsoftware.maf.apigateway.security;
+package com.jmsoftware.maf.apigateway.security.impl;
 
 import cn.hutool.core.util.StrUtil;
 import com.jmsoftware.maf.apigateway.remoteapi.AuthCenterRemoteApi;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
+import com.jmsoftware.maf.common.domain.authcenter.UserPrincipal;
 import com.jmsoftware.maf.common.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +42,7 @@ public class JwtReactiveAuthenticationManagerImpl implements ReactiveAuthenticat
                 .switchIfEmpty(Mono.error(new BusinessException("Authentication failure! Cause: User not found")));
         return responseMono.map(getUserByLoginTokenResponse -> {
             log.info("Authentication success! Found {}", getUserByLoginTokenResponse);
-            UserPrincipal userPrincipal = UserPrincipal.create(getUserByLoginTokenResponse, null, null);
+            val userPrincipal = UserPrincipal.create(getUserByLoginTokenResponse, null, null);
             return new UsernamePasswordAuthenticationToken(userPrincipal, null);
         });
     }

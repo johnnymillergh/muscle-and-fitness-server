@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.apigateway.security;
+package com.jmsoftware.maf.common.domain.authcenter;
 
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;

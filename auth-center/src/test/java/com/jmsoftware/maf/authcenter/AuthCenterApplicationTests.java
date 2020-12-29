@@ -1,9 +1,9 @@
 package com.jmsoftware.maf.authcenter;
 
 import cn.hutool.core.util.StrUtil;
-import com.jmsoftware.maf.authcenter.universal.domain.UserPO;
-import com.jmsoftware.maf.authcenter.universal.domain.UserPrincipal;
 import com.jmsoftware.maf.authcenter.universal.service.JwtService;
+import com.jmsoftware.maf.common.domain.authcenter.UserPrincipal;
+import com.jmsoftware.maf.common.domain.authcenter.user.GetUserByLoginTokenResponse;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -29,11 +29,11 @@ class AuthCenterApplicationTests {
     @Test
     @SneakyThrows
     void mockLogin() {
-        UserPO userPO = new UserPO();
-        userPO.setId(1L);
-        userPO.setUsername("ijohnnymiller");
+        GetUserByLoginTokenResponse user = new GetUserByLoginTokenResponse();
+        user.setId(1L);
+        user.setUsername("ijohnnymiller");
         val authenticationToken = new UsernamePasswordAuthenticationToken(
-                UserPrincipal.create(userPO, new ArrayList<>(), new ArrayList<>()), 12345678);
+                UserPrincipal.create(user, new ArrayList<>(), new ArrayList<>()), 12345678);
         String jwt = jwtService.createJwt(authenticationToken, false);
         log.info("Generated JWT: {}", jwt);
         Assertions.assertTrue(StrUtil.isNotBlank(jwt));

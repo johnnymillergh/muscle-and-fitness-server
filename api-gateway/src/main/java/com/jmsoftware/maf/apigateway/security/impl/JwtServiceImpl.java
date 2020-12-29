@@ -1,10 +1,12 @@
-package com.jmsoftware.maf.apigateway.security;
+package com.jmsoftware.maf.apigateway.security.impl;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import com.jmsoftware.maf.apigateway.security.JwtService;
 import com.jmsoftware.maf.apigateway.security.configuration.JwtConfiguration;
 import com.jmsoftware.maf.apigateway.universal.configuration.RedisService;
+import com.jmsoftware.maf.common.domain.authcenter.UserPrincipal;
 import com.jmsoftware.maf.common.exception.SecurityException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
