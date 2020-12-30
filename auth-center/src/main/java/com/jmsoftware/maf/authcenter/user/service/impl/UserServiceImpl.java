@@ -45,8 +45,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserPersistence> im
     @Cacheable
     public GetUserByLoginTokenResponse getUserByLoginToken(@NotBlank String loginToken) {
         LambdaQueryWrapper<UserPersistence> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(UserPersistence::getStatus, UserStatus.ENABLED.getStatus())
-                .and(queryWrapper -> queryWrapper.eq(UserPersistence::getUsername, loginToken)
+        wrapper.and(queryWrapper -> queryWrapper.eq(UserPersistence::getUsername, loginToken)
                         .or()
                         .eq(UserPersistence::getEmail, loginToken)
                         .or()

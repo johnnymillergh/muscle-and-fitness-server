@@ -5,13 +5,16 @@ import com.jmsoftware.maf.apigateway.remoteapi.AuthCenterRemoteApi;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.authcenter.security.UserPrincipal;
 import com.jmsoftware.maf.common.exception.BusinessException;
+import com.jmsoftware.maf.common.exception.SecurityException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.security.authentication.ReactiveAuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsChecker;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
@@ -30,20 +33,50 @@ public class JwtReactiveAuthenticationManagerImpl implements ReactiveAuthenticat
     @Resource
     private AuthCenterRemoteApi authCenterRemoteApi;
 
-    @Override
-    public Mono<Authentication> authenticate(Authentication authentication) {
-        val username = authentication.getName();
+    private final UserDetailsChecker preAuthenticationChecks = user -> {
+        if (!user.isAccountNonLocked()) {
+            log.debug("User account is locked");
+            throw new LockedException("User account is locked");
+        }
+
+        if (!user.isEnabled()) {
+            log.debug("User account is disabled");
+            throw new DisabledException("User is disabled");
+        }
+
+        if (!user.isAccountNonExpired()) {
+            log.debug("User account is expired");
+            throw new AccountExpiredException("User account has expired");
+        }
+    };
+
+    private final UserDetailsChecker postAuthenticationChecks = user -> {
+        if (!user.isCredentialsNonExpired()) {
+            log.debug("User account credentials have expired");
+            throw new CredentialsExpiredException("User credentials have expired");
+        }
+    };
+
+    private Mono<UserDetails> retrieveUser(String username) {
         if (StrUtil.isBlank(username)) {
             log.warn("Authentication failure! Cause: the username mustn't be blank");
-            return Mono.empty();
+            return Mono.error(
+                    new SecurityException(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED, "Username mustn't be blank"));
         }
         val response = authCenterRemoteApi.getUserByLoginToken(username);
-        val responseMono = response.map(ResponseBodyBean::getData)
-                .switchIfEmpty(Mono.error(new BusinessException("Authentication failure! Cause: User not found")));
-        return responseMono.map(getUserByLoginTokenResponse -> {
-            log.info("Authentication success! Found {}", getUserByLoginTokenResponse);
-            val userPrincipal = UserPrincipal.create(getUserByLoginTokenResponse, null, null);
-            return new UsernamePasswordAuthenticationToken(userPrincipal, null);
-        });
+        return response.map(ResponseBodyBean::getData)
+                .switchIfEmpty(Mono.error(new BusinessException("Authentication failure! Cause: User not found")))
+                .map(getUserByLoginTokenResponse -> {
+                    log.info("Authentication success! Found {}", getUserByLoginTokenResponse);
+                    return UserPrincipal.create(getUserByLoginTokenResponse, null, null);
+                });
+    }
+
+    @Override
+    public Mono<Authentication> authenticate(Authentication authentication) {
+        return this.retrieveUser(authentication.getName())
+                .doOnNext(this.preAuthenticationChecks::check)
+                .doOnNext(this.postAuthenticationChecks::check)
+                .map(userDetails -> new UsernamePasswordAuthenticationToken(userDetails, null));
     }
 }
