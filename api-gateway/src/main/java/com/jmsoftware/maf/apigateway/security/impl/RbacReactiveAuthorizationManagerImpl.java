@@ -4,10 +4,12 @@ import cn.hutool.core.util.StrUtil;
 import com.jmsoftware.maf.apigateway.remoteapi.AuthCenterRemoteApi;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload;
+import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
 import com.jmsoftware.maf.common.domain.authcenter.permission.PermissionType;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdResponse;
 import com.jmsoftware.maf.common.domain.authcenter.security.UserPrincipal;
 import com.jmsoftware.maf.common.exception.SecurityException;
+import com.jmsoftware.maf.reactivespringbootstarter.configuration.MafConfiguration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -23,6 +25,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -32,51 +35,79 @@ import java.util.stream.Collectors;
  *
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 12/29/2020 9:54 AM
  * @see <a href='https://en.wikipedia.org/wiki/Role-based_access_control'>Role-based access control</a>
- **/
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class RbacReactiveAuthorizationManagerImpl implements ReactiveAuthorizationManager<AuthorizationContext> {
     private final AntPathMatcher antPathMatcher = new AntPathMatcher();
+    private final MafConfiguration mafConfiguration;
     @Lazy
     @Resource
     private AuthCenterRemoteApi authCenterRemoteApi;
 
-    @Override
-    public Mono<AuthorizationDecision> check(Mono<Authentication> authentication, AuthorizationContext object) {
-        val request = object.getExchange().getRequest();
-        val userPrincipalMono = authentication.map(auth -> (UserPrincipal) auth.getPrincipal());
-
+    /**
+     * Retrieve roles flux.
+     *
+     * @param userPrincipalMono the user principal mono
+     * @return the flux
+     */
+    private Flux<GetRoleListByUserIdResponse.Role> retrieveRoles(Mono<UserPrincipal> userPrincipalMono) {
         // Get role list by user ID, and then convert to Flux<?>
-        val getRoleListByUserIdResponseFlux = userPrincipalMono
+        return userPrincipalMono
                 .flatMap(userPrincipal -> authCenterRemoteApi.getRoleListByUserId(userPrincipal.getId())
                         .map(ResponseBodyBean::getData))
                 .map(GetRoleListByUserIdResponse::getRoleList)
                 .flatMapMany(Flux::fromIterable)
                 .switchIfEmpty(Flux.error(new SecurityException(HttpStatus.UNAUTHORIZED, "Roles not assigned!")));
+    }
 
+    /**
+     * Filter roles mono.
+     *
+     * @param roleFlux the role flux
+     * @return the mono
+     */
+    private Mono<List<Long>> filterRoles(Flux<GetRoleListByUserIdResponse.Role> roleFlux) {
         // Filter "admin" role and then, map Flux<?> to Mono<List<Long>>
-        val roleIdListMono = getRoleListByUserIdResponseFlux
-                .filter(role -> StrUtil.equals("admin", role.getName()))
-                .map(GetRoleListByUserIdResponse.Role::getId).collectList()
-                .switchIfEmpty(getRoleListByUserIdResponseFlux
-                                       .map(GetRoleListByUserIdResponse.Role::getId)
-                                       .collectList());
+        return roleFlux
+                .filter(role -> StrUtil.equals(mafConfiguration.getSuperUserRole(), role.getName()))
+                .map(GetRoleListByUserIdResponse.Role::getId)
+                .collectList()
+                .switchIfEmpty(roleFlux.map(GetRoleListByUserIdResponse.Role::getId).collectList());
+    }
 
+    /**
+     * Retrieve permissions mono.
+     *
+     * @param roleIdListMono the role id list mono
+     * @return the mono
+     */
+    private Mono<List<GetPermissionListByRoleIdListResponse.Permission>> retrievePermissions(Mono<List<Long>> roleIdListMono) {
         // Get permission list based on the Mono<List<Long>>
         // auth-center will respond /** for role "admin"
-        val getPermissionListByRoleIdListResponseMono = roleIdListMono.flatMap(
+        return roleIdListMono.flatMap(
                 roleIdList -> {
                     GetPermissionListByRoleIdListPayload payload = new GetPermissionListByRoleIdListPayload();
                     payload.setRoleIdList(roleIdList);
                     return authCenterRemoteApi.getPermissionListByRoleIdList(payload.getRoleIdList()).map(
                             ResponseBodyBean::getData);
-                });
+                }).map(GetPermissionListByRoleIdListResponse::getPermissionList)
+                .switchIfEmpty(Mono.error(new SecurityException(HttpStatus.FORBIDDEN, "Permission not found!")));
+    }
 
+    @Override
+    public Mono<AuthorizationDecision> check(Mono<Authentication> authentication, AuthorizationContext object) {
+        val request = object.getExchange().getRequest();
+        val userPrincipalMono = authentication.map(auth -> (UserPrincipal) auth.getPrincipal());
+        Flux<GetRoleListByUserIdResponse.Role> roleFlux = this.retrieveRoles(userPrincipalMono);
+        Mono<List<Long>> roleIdListMono = this.filterRoles(roleFlux);
+        Mono<List<GetPermissionListByRoleIdListResponse.Permission>> permissionListMono = this.retrievePermissions(
+                roleIdListMono);
         // Aggregate 2 Mono
-        val zip = Mono.zip(getPermissionListByRoleIdListResponseMono, userPrincipalMono);
+        val zip = Mono.zip(permissionListMono, userPrincipalMono);
         return zip.map(mapper -> {
-            val permissionList = mapper.getT1().getPermissionList();
+            val permissionList = mapper.getT1();
             val buttonPermissionList = permissionList.stream()
                     .filter(permission -> PermissionType.BUTTON.getType().equals(permission.getType()))
                     .filter(permission -> StrUtil.isNotBlank(permission.getUrl()))

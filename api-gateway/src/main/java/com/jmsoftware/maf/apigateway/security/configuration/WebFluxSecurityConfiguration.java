@@ -89,7 +89,7 @@ public class WebFluxSecurityConfiguration {
 
     @Bean
     public ReactiveAuthorizationManager<AuthorizationContext> reactiveAuthorizationManager() {
-        return new RbacReactiveAuthorizationManagerImpl();
+        return new RbacReactiveAuthorizationManagerImpl(mafConfiguration);
     }
 
     @Bean
