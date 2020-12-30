@@ -14,6 +14,8 @@ import com.jmsoftware.maf.common.exception.SecurityException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,11 +36,13 @@ import java.util.Date;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@CacheConfig(cacheNames = "user-service-cache")
 public class UserServiceImpl extends ServiceImpl<UserMapper, UserPersistence> implements UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtService jwtService;
 
     @Override
+    @Cacheable
     public GetUserByLoginTokenResponse getUserByLoginToken(@NotBlank String loginToken) {
         LambdaQueryWrapper<UserPersistence> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(UserPersistence::getStatus, UserStatus.ENABLED.getStatus())
