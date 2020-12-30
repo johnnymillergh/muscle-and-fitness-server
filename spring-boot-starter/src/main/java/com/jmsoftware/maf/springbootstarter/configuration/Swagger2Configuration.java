@@ -9,6 +9,8 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import javax.annotation.PostConstruct;
+
 /**
  * <h1>Swagger2Configuration</h1>
  * <p>
@@ -24,6 +26,11 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @RequiredArgsConstructor
 public class Swagger2Configuration {
     private final MafProjectProperty mafProjectProperty;
+
+    @PostConstruct
+    private void postConstruct() {
+        log.warn("[UNSAFE] Swagger 2 is enabled, the internal and external APIs will be exposed");
+    }
 
     public ApiInfo apiInfo() {
         val projectArtifactId = mafProjectProperty.getProjectArtifactId();
