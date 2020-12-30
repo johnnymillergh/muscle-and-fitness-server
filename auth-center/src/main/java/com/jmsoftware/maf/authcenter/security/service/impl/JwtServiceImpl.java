@@ -77,7 +77,7 @@ public class JwtServiceImpl implements JwtService {
                 .setIssuedAt(now)
                 .signWith(secretKey)
                 .claim("roles", roles);
-        // TODO: Don't generate authority information in JWT.
+        // Don't generate authority information in JWT.
         //  .claim("authorities", authorities)
         // Set expire duration of JWT.
         val ttl = rememberMe ? jwtConfiguration.getTtlForRememberMe() : jwtConfiguration.getTtl();
