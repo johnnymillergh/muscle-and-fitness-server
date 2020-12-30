@@ -53,8 +53,8 @@ public class ExceptionControllerAdvice {
         log.error("Exception occurred when [{}] requested access. Request URL: [{}] {}",
                   RequestUtil.getRequestIpAndPort(request), request.getMethod(), request.getRequestURL());
 
-        // FIXME: THIS IS NOT A PROBLEM
-        //  ATTENTION: Use only ResponseBodyBean.ofStatus() in handleException() method and DON'T throw any exception
+        //  ATTENTION: Use only ResponseBodyBean.ofStatus() in handleException() method and
+        //  DON'T throw any exceptions in this method
         if (exception instanceof NoHandlerFoundException) {
             log.error("NoHandlerFoundException: Request URL = {}, HTTP method = {}",
                       ((NoHandlerFoundException) exception).getRequestURL(),
