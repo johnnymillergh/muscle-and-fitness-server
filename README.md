@@ -68,6 +68,59 @@ Here is the highlights of **Muscle and Fitness Server**:
 
 3. Click the green triangle to Run.
 
+## Useful Commands
+
+### Maven
+
+1. Compile:
+
+   ```shell
+   $ mvn clean validate compile --batch-mode --show-version --quiet -f pom.xml
+   ```
+
+2. Package:
+
+   ```shell
+   $ mvn clean package --batch-mode --show-version --quiet -f pom.xml
+   ```
+
+3. Set Version:
+
+   ```sh
+   $ mvn versions:set -DgenerateBackupPoms=false -f pom.xml
+   ```
+
+4. Build Docker Images:
+
+   ```shell
+   $ mvn clean verify --batch-mode --show-version --quiet -f pom.xml
+   ```
+
+### Conventional Changelog CLI
+
+1. Install global dependencies (optional if installed):
+
+   ```
+   npm install -g conventional-changelog-cli
+   ```
+
+2. This will *not* overwrite any previous changelogs. The above generates a changelog based on commits since the last semver tag that matches the pattern of "Feature", "Fix", "Performance Improvement" or "Breaking Changes".
+
+   ```
+   conventional-changelog -p angular -i CHANGELOG.md -s
+   ```
+
+3. If this is your first time using this tool and you want to generate all previous changelogs, you could do:
+
+   ```
+   conventional-changelog -p angular -i CHANGELOG.md -s -r 0
+   ```
+
+## CI (Continuous Integration)
+
+- [Travis CI](https://travis-ci.com/github/johnnymillergh/media-streaming) is for publishing Docker Hub images of SNAPSHOT and RELEASE.
+- [GitHub Actions](https://github.com/johnnymillergh/media-streaming/actions) is for checking dependency updates and tests.
+
 ## Maintainers
 
 [@johnnymillergh](https://github.com/johnnymillergh).
