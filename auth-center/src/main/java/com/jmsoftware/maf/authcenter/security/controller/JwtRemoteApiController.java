@@ -29,6 +29,15 @@ import javax.validation.Valid;
 public class JwtRemoteApiController {
     private final JwtService jwtService;
 
+    /**
+     * Parse response body bean.
+     * <p>
+     * TODO: remove ParseJwtPayload, get JWT from HTTP header
+     *
+     * @param payload the payload
+     * @return the response body bean
+     * @throws SecurityException the security exception
+     */
     @PostMapping("/parse")
     @ApiOperation(value = "Parse JWT", notes = "Parse JWT (Remote API)")
     public ResponseBodyBean<ParseJwtResponse> parse(@Valid @RequestBody ParseJwtPayload payload) throws SecurityException {
