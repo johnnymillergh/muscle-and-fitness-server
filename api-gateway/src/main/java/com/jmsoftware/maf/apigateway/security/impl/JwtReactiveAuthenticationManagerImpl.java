@@ -35,24 +35,24 @@ public class JwtReactiveAuthenticationManagerImpl implements ReactiveAuthenticat
 
     private final UserDetailsChecker preAuthenticationChecks = user -> {
         if (!user.isAccountNonLocked()) {
-            log.debug("User account is locked");
+            log.error("User account is locked");
             throw new LockedException("User account is locked");
         }
 
         if (!user.isEnabled()) {
-            log.debug("User account is disabled");
+            log.error("User account is disabled");
             throw new DisabledException("User is disabled");
         }
 
         if (!user.isAccountNonExpired()) {
-            log.debug("User account is expired");
+            log.error("User account is expired");
             throw new AccountExpiredException("User account has expired");
         }
     };
 
     private final UserDetailsChecker postAuthenticationChecks = user -> {
         if (!user.isCredentialsNonExpired()) {
-            log.debug("User account credentials have expired");
+            log.error("User account credentials have expired");
             throw new CredentialsExpiredException("User credentials have expired");
         }
     };

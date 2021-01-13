@@ -75,7 +75,6 @@ public class JwtReactiveServerSecurityContextRepositoryImpl implements ServerSec
         return parseJwtResponseMono.map(parseJwtResponse -> {
             String username = parseJwtResponse.getUsername();
             val userPrincipal = UserPrincipal.createByUsername(username);
-            log.info("User principal is created. {}", userPrincipal);
             val authentication = new UsernamePasswordAuthenticationToken(userPrincipal, null);
             log.warn("About to authenticate… Authentication is created. {}", authentication);
             return authentication;
