@@ -23,4 +23,12 @@ public interface RoleMapper extends BaseMapper<RolePersistence> {
      * @return the list
      */
     List<RolePersistence> selectRoleListByUserId(Long userId);
+
+    /**
+     * Select by id role persistence.
+     *
+     * @param roleName the role name
+     * @return the role persistence
+     */
+    RolePersistence selectByName(String roleName);
 }

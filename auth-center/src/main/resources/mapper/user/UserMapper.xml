@@ -14,6 +14,7 @@
         <result column="gender" jdbcType="OTHER" property="gender"/>
         <result column="avatar" jdbcType="VARCHAR" property="avatar"/>
         <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="deleted" jdbcType="TINYINT" property="deleted"/>
         <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
         <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
     </resultMap>
@@ -21,7 +22,7 @@
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
         id, username, email, cellphone, `password`, full_name, birthday, gender, avatar,
-        `status`, created_time, modified_time
+        `status`, deleted, created_time, modified_time
     </sql>
 
     <!--

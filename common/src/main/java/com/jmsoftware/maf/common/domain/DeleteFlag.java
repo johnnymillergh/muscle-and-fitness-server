@@ -4,13 +4,13 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Description: DeleteField, change description here.
+ * Description: DeleteFlag, change description here.
  *
  * @author 钟俊 （zhongjun）, email: zhongjun@toguide.cn, date: 1/13/2021 6:32 PM
  */
 @Slf4j
 @Getter
-public enum DeleteField {
+public enum DeleteFlag {
     /**
      * Not deleted
      */
@@ -30,12 +30,12 @@ public enum DeleteField {
     private final String description;
 
     /**
-     * Instantiates a new Delete field.
+     * Instantiates a new Delete flag.
      *
      * @param value       the value
      * @param description the description
      */
-    DeleteField(Byte value, String description) {
+    DeleteFlag(Byte value, String description) {
         this.value = value;
         this.description = description;
     }

@@ -1,6 +1,7 @@
 package com.jmsoftware.maf.authcenter.user.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.jmsoftware.maf.common.domain.DeleteFlag;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -78,6 +79,15 @@ public class UserPersistence implements Serializable {
      */
     @TableField(value = "`status`")
     private Byte status;
+
+    /**
+     * Deleted flag
+     *
+     * @see DeleteFlag
+     */
+    @TableLogic
+    @TableField(value = "deleted", fill = FieldFill.INSERT)
+    private Byte deleted;
 
     /**
      * Created time

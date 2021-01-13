@@ -1,6 +1,7 @@
 package com.jmsoftware.maf.authcenter.role.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.jmsoftware.maf.common.domain.DeleteFlag;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -33,6 +34,15 @@ public class RolePersistence implements Serializable {
      */
     @TableField(value = "description")
     private String description;
+
+    /**
+     * Deleted flag
+     *
+     * @see DeleteFlag
+     */
+    @TableLogic
+    @TableField(value = "deleted", fill = FieldFill.INSERT)
+    private Byte deleted;
 
     /**
      * Created time

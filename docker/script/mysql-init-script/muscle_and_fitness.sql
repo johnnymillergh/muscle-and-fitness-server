@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.19, for macos10.15 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.22, for macos10.15 (x86_64)
 --
 -- Host: 127.0.0.1    Database: muscle_and_fitness
 -- ------------------------------------------------------
--- Server version	8.0.19
+-- Server version	8.0.22
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -286,11 +286,11 @@ DROP TABLE IF EXISTS `permission`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `permission` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'Primary key',
-  `url` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'URL. If type of record is page (1), URL stands for route; if type of record is button (2), URL stands for API',
-  `description` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Permission description',
+  `url` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'URL. If type of record is page (1), URL stands for route; if type of record is button (2), URL stands for API',
+  `description` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Permission description',
   `type` tinyint NOT NULL COMMENT 'Permission type. 1 - page; 2 - button',
-  `permission_expression` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Permission expression',
-  `method` enum('GET','HEAD','POST','PUT','DELETE','CONNECT','OPTIONS','TRACE','PATCH') COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'HTTP method of API',
+  `permission_expression` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Permission expression',
+  `method` enum('GET','HEAD','POST','PUT','DELETE','CONNECT','OPTIONS','TRACE','PATCH') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'HTTP method of API',
   `sort` int NOT NULL DEFAULT '0' COMMENT 'Sort number',
   `parent_id` bigint DEFAULT '0' COMMENT 'Primary key of parent',
   `deleted` tinyint NOT NULL DEFAULT '0' COMMENT 'Deleted flag',
@@ -344,8 +344,9 @@ DROP TABLE IF EXISTS `role`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `role` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'Primary key',
-  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Role name',
-  `description` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Role description',
+  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Role name',
+  `description` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Role description',
+  `deleted` tinyint NOT NULL DEFAULT '0' COMMENT 'Deleted flag.',
   `created_time` datetime NOT NULL COMMENT 'Created time',
   `modified_time` datetime NOT NULL COMMENT 'Modified time',
   PRIMARY KEY (`id`),
@@ -359,7 +360,7 @@ CREATE TABLE `role` (
 
 LOCK TABLES `role` WRITE;
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
-INSERT INTO `role` VALUES (1,'admin','M&F system admin','2020-05-09 16:18:45','2020-05-09 16:18:51');
+INSERT INTO `role` VALUES (1,'admin','M&F system admin',0,'2020-05-09 16:18:51','2020-05-09 16:18:45');
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -372,7 +373,7 @@ DROP TABLE IF EXISTS `role_permission`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `role_permission` (
   `role_id` bigint NOT NULL COMMENT 'Primary key of role',
-  `permission_id` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Primary key of permission',
+  `permission_id` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Primary key of permission',
   PRIMARY KEY (`role_id`,`permission_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Role-permission Relation.';
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -422,15 +423,16 @@ DROP TABLE IF EXISTS `user`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'Primary key of user',
-  `username` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Username',
-  `email` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Email',
-  `cellphone` varchar(11) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Cellphone number',
-  `password` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Password',
-  `full_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Full name',
+  `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Username',
+  `email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Email',
+  `cellphone` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Cellphone number',
+  `password` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Password',
+  `full_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Full name',
   `birthday` date DEFAULT NULL COMMENT 'Birthday',
-  `gender` enum('Agender','Androgyne','Bigender','Cisgender','Cisgender Female','Cisgender Male','Female to Male','Gender Fluid','Gender Nonconforming','Gender Questioning','Gender Variant','Genderqueer','Intersex','Male to Female','Neither','Neutrois','Non-binary','Other','Pangender','Transfeminine','Transgender','Transgender Female','Transgender Male','Transgender Person','Transmasculine','Two-Spirit') COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '26 gender options',
-  `avatar` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'User avatar full path on SFTP server',
+  `gender` enum('Agender','Androgyne','Bigender','Cisgender','Cisgender Female','Cisgender Male','Female to Male','Gender Fluid','Gender Nonconforming','Gender Questioning','Gender Variant','Genderqueer','Intersex','Male to Female','Neither','Neutrois','Non-binary','Other','Pangender','Transfeminine','Transgender','Transgender Female','Transgender Male','Transgender Person','Transmasculine','Two-Spirit') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '26 gender options',
+  `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'User avatar full path on SFTP server',
   `status` tinyint NOT NULL DEFAULT '1' COMMENT 'Status. 1 - enabled, 2 - disabled',
+  `deleted` tinyint NOT NULL DEFAULT '0' COMMENT 'Delete flag.',
   `created_time` datetime NOT NULL COMMENT 'Created time',
   `modified_time` datetime NOT NULL COMMENT 'Modified time',
   PRIMARY KEY (`id`),
@@ -446,7 +448,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'ijohnnymiller','ijohnnymiller@icloud.com','13100959832','$2a$10$2wDrBjRykjsFoUZfKgogyOm0LxIg6EdH42uR3sQ8fHOQcKg5/Mvsm','Johnny Miller','1996-04-29','Cisgender Male','',1,'2020-05-09 15:13:19','2020-05-09 16:26:23');
+INSERT INTO `user` VALUES (1,'ijohnnymiller','ijohnnymiller@icloud.com','13100959832','$2a$10$2wDrBjRykjsFoUZfKgogyOm0LxIg6EdH42uR3sQ8fHOQcKg5/Mvsm','Johnny Miller','1996-04-29','Cisgender Male','',1,0,'2020-05-09 16:26:23','2020-05-09 15:13:19');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -483,4 +485,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-09 16:27:41
+-- Dump completed on 2021-01-13 21:15:27

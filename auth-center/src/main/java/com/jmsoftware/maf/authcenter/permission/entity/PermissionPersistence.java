@@ -1,6 +1,7 @@
 package com.jmsoftware.maf.authcenter.permission.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.jmsoftware.maf.common.domain.DeleteFlag;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -67,6 +68,8 @@ public class PermissionPersistence implements Serializable {
 
     /**
      * Deleted flag
+     *
+     * @see DeleteFlag
      */
     @TableLogic
     @TableField(value = "deleted", fill = FieldFill.INSERT)

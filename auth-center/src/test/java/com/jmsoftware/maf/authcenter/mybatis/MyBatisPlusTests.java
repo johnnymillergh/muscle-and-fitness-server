@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.jmsoftware.maf.authcenter.role.entity.RolePersistence;
 import com.jmsoftware.maf.authcenter.role.mapper.RoleMapper;
 import com.jmsoftware.maf.authcenter.role.service.RoleService;
+import com.jmsoftware.maf.common.domain.DeleteFlag;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.junit.jupiter.api.*;
@@ -34,7 +35,7 @@ public class MyBatisPlusTests {
         rolePersistence.setDescription("Role for MyBatis Plus tests. Testing functions");
         int inserted;
         try {
-            inserted = roleMapper.insert(rolePersistence);
+            inserted = roleService.getBaseMapper().insert(rolePersistence);
         } catch (Exception e) {
             log.error("Error occurred when inserting role", e);
             return;
@@ -48,16 +49,24 @@ public class MyBatisPlusTests {
     void logicDeleteTest() {
         val lambdaQuery = Wrappers.lambdaQuery(RolePersistence.class);
         lambdaQuery.eq(RolePersistence::getName, "role-for-mybatis-plus-tests");
-        val optionalRolePersistence = Optional.ofNullable(roleMapper.selectOne(lambdaQuery));
-        if (optionalRolePersistence.isPresent()) {
-            val deleted = roleMapper.delete(lambdaQuery);
-            log.info("Logic delete result: {}", deleted);
-            Assertions.assertEquals(deleted, 1);
-            val rolePersistence = roleMapper.selectOne(lambdaQuery);
-            log.info("DeleteField role: {}", rolePersistence);
-            Assertions.assertNotEquals(rolePersistence.getCreatedTime(), rolePersistence.getModifiedTime());
+        var optionalRolePersistence = Optional.ofNullable(roleService.getBaseMapper().selectOne(lambdaQuery));
+        if (optionalRolePersistence.isEmpty()) {
+            optionalRolePersistence = Optional.ofNullable(roleMapper.selectByName("role-for-mybatis-plus-tests"));
+        }
+        Assertions.assertTrue(optionalRolePersistence.isPresent());
+        val rolePersistence = optionalRolePersistence.get();
+        if (DeleteFlag.DELETED.getValue().equals(rolePersistence.getDeleted())) {
+            log.warn("Role deleted. {}", rolePersistence);
             return;
         }
+        val deleted = roleService.getBaseMapper().delete(lambdaQuery);
+        log.info("Logic delete result: {}", deleted);
+        Assertions.assertEquals(deleted, 1);
+        lambdaQuery.eq(RolePersistence::getDeleted, DeleteFlag.DELETED.getValue());
+        val rolePersistence2 = roleMapper.selectByName(rolePersistence.getName());
+        log.info("Deleted role: {}", rolePersistence2);
+        Assertions.assertEquals(rolePersistence2.getDeleted(), DeleteFlag.DELETED.getValue());
+        roleMapper.selectByName("role-for-mybatis-plus-tests");
         log.warn("Role not found! {}", lambdaQuery.getEntity());
     }
 }

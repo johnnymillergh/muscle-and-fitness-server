@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
-import com.jmsoftware.maf.common.domain.DeleteField;
+import com.jmsoftware.maf.common.domain.DeleteFlag;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.ibatis.reflection.MetaObject;
@@ -69,7 +69,7 @@ public class MyBatisPlusConfiguration implements MetaObjectHandler {
     public void insertFill(MetaObject metaObject) {
         log.info("Start to insert fill ....");
         val now = new Date();
-        this.strictInsertFill(metaObject, "deleted", Byte.class, DeleteField.NOT_DELETED.getValue());
+        this.strictInsertFill(metaObject, "deleted", Byte.class, DeleteFlag.NOT_DELETED.getValue());
         this.strictInsertFill(metaObject, "createdTime", Date.class, now);
         this.strictInsertFill(metaObject, "modifiedTime", Date.class, now);
     }
