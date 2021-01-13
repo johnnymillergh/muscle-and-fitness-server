@@ -16,15 +16,15 @@ public enum PermissionType {
     /**
      * Controller
      */
-    CONTROLLER(Byte.valueOf("0"), "Controller"),
+    CONTROLLER((byte) 0, "Controller"),
     /**
      * Page
      */
-    PAGE(Byte.valueOf("1"), "Page"),
+    PAGE((byte) 1, "Page"),
     /**
      * Button
      */
-    BUTTON(Byte.valueOf("2"), "Button (API)");
+    BUTTON((byte) 2, "Button (API)");
 
     private final Byte type;
     private final String description;

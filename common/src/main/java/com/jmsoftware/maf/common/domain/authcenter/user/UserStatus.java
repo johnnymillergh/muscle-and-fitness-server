@@ -13,11 +13,11 @@ public enum UserStatus {
     /**
      * Enabled user
      */
-    ENABLED(Byte.valueOf("1"), "Enabled user"),
+    ENABLED((byte) 1, "Enabled user"),
     /**
      * Disabled user
      */
-    DISABLED(Byte.valueOf("0"), "Disabled user");
+    DISABLED((byte) 0, "Disabled user");
 
     private final Byte status;
     private final String description;
