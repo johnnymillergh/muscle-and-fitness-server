@@ -68,16 +68,14 @@ management:
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true
-    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   # mapper-locations should start with `classpath*` prefix
   # when project is based on Maven multi-module to load XML mapper in different jar
   mapper-locations: classpath*:/mapper/**/*Mapper.xml
 
 logging:
   config: classpath:configuration/logback/logback-@env@.xml
-  # Configure logging level of project as DEBUG to enable SQL logging and other logging.
   level:
-    com.jmsoftware: DEBUG
     # Configure logging level for SFTP/JSCH
     com.jcraft.jsch: INFO
 
