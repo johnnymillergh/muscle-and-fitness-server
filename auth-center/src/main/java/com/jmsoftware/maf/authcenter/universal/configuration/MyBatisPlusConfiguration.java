@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import com.jmsoftware.maf.common.domain.DeleteField;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.ibatis.reflection.MetaObject;
@@ -13,7 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <h1>MyBatisPlusConfiguration</h1>
@@ -67,12 +68,15 @@ public class MyBatisPlusConfiguration implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
         log.info("Start to insert fill ....");
-        this.strictInsertFill(metaObject, "createdTime", LocalDateTime.class, LocalDateTime.now());
+        val now = new Date();
+        this.strictInsertFill(metaObject, "deleted", Byte.class, DeleteField.NOT_DELETED.getValue());
+        this.strictInsertFill(metaObject, "createdTime", Date.class, now);
+        this.strictInsertFill(metaObject, "modifiedTime", Date.class, now);
     }
 
     @Override
     public void updateFill(MetaObject metaObject) {
         log.info("Start to update fill ....");
-        this.strictUpdateFill(metaObject, "modifiedTime", LocalDateTime::now, LocalDateTime.class);
+        this.strictUpdateFill(metaObject, "modifiedTime", Date.class, new Date());
     }
 }

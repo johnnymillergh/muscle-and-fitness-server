@@ -68,7 +68,8 @@ public class PermissionPersistence implements Serializable {
     /**
      * Deleted flag
      */
-    @TableField(value = "deleted")
+    @TableLogic
+    @TableField(value = "deleted", fill = FieldFill.INSERT)
     private Byte deleted;
 
     /**
