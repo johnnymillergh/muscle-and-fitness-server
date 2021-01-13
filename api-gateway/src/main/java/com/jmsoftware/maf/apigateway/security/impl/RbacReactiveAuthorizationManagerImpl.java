@@ -9,7 +9,6 @@ import com.jmsoftware.maf.common.domain.authcenter.permission.PermissionType;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdResponse;
 import com.jmsoftware.maf.common.domain.authcenter.security.UserPrincipal;
 import com.jmsoftware.maf.common.exception.SecurityException;
-import com.jmsoftware.maf.reactivespringbootstarter.configuration.MafConfiguration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -43,7 +42,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RbacReactiveAuthorizationManagerImpl implements ReactiveAuthorizationManager<AuthorizationContext> {
     private final AntPathMatcher antPathMatcher = new AntPathMatcher();
-    private final MafConfiguration mafConfiguration;
     @Lazy
     @Resource
     private AuthCenterRemoteApi authCenterRemoteApi;
@@ -70,10 +68,8 @@ public class RbacReactiveAuthorizationManagerImpl implements ReactiveAuthorizati
      * @param roleFlux the role flux
      * @return the mono
      */
-    private Mono<List<Long>> filterRoles(Flux<GetRoleListByUserIdResponse.Role> roleFlux) {
-        // Filter "admin" role and then, map Flux<?> to Mono<List<Long>>
+    private Mono<List<Long>> mapRole(Flux<GetRoleListByUserIdResponse.Role> roleFlux) {
         return roleFlux
-                .filter(role -> StrUtil.equals(mafConfiguration.getSuperUserRole(), role.getName()))
                 .map(GetRoleListByUserIdResponse.Role::getId)
                 .collectList()
                 .switchIfEmpty(roleFlux.map(GetRoleListByUserIdResponse.Role::getId).collectList());
@@ -102,9 +98,9 @@ public class RbacReactiveAuthorizationManagerImpl implements ReactiveAuthorizati
     public Mono<AuthorizationDecision> check(Mono<Authentication> authentication, AuthorizationContext object) {
         val request = object.getExchange().getRequest();
         val userPrincipalMono = authentication.map(auth -> (UserPrincipal) auth.getPrincipal());
-        Flux<GetRoleListByUserIdResponse.Role> roleFlux = this.retrieveRoles(userPrincipalMono);
-        Mono<List<Long>> roleIdListMono = this.filterRoles(roleFlux);
-        Mono<List<GetPermissionListByRoleIdListResponse.Permission>> permissionListMono = this.retrievePermissions(
+        val roleFlux = this.retrieveRoles(userPrincipalMono);
+        val roleIdListMono = this.mapRole(roleFlux);
+        val permissionListMono = this.retrievePermissions(
                 roleIdListMono);
         // Aggregate 2 Mono
         val zip = Mono.zip(permissionListMono, userPrincipalMono);
