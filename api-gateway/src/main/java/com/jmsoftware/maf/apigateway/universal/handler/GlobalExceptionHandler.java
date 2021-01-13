@@ -1,11 +1,13 @@
 package com.jmsoftware.maf.apigateway.universal.handler;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.exception.SecurityException;
 import com.jmsoftware.maf.reactivespringbootstarter.util.RequestUtil;
 import com.netflix.hystrix.exception.HystrixRuntimeException;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -73,6 +75,13 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
             response.setStatusCode(((ResponseStatusException) ex).getStatus());
             return ResponseBodyBean.ofStatus(((ResponseStatusException) ex).getStatus());
         } else if (ex instanceof HystrixRuntimeException) {
+            if (ObjectUtil.isNotNull(ex.getCause()) && ex.getCause() instanceof FeignException) {
+                val cause = (FeignException) ex.getCause();
+                val httpStatus = HttpStatus.valueOf(cause.status());
+                response.setStatusCode(httpStatus);
+                return ResponseBodyBean.ofStatus(httpStatus,
+                                                 String.format("%s %s", ex.getMessage(), ex.getCause().getMessage()));
+            }
             response.setStatusCode(HttpStatus.SERVICE_UNAVAILABLE);
             return ResponseBodyBean.ofStatus(HttpStatus.SERVICE_UNAVAILABLE,
                                              String.format("%s %s", ex.getMessage(), ex.getCause().getMessage()));
