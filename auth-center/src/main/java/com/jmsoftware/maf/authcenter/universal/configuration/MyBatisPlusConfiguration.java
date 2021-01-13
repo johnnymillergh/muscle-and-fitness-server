@@ -2,27 +2,32 @@ package com.jmsoftware.maf.authcenter.universal.configuration;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
+import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import java.time.LocalDateTime;
 
 /**
  * <h1>MyBatisPlusConfiguration</h1>
  * <p>
  * Change description here.
- *
- * TODO: migrate this configuration to `spring-boot-starter`
+ * <p>
  *
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 2019-05-02 11:57
  **/
+@Slf4j
 @Configuration
 @EnableTransactionManagement
-public class MyBatisPlusConfiguration {
+public class MyBatisPlusConfiguration implements MetaObjectHandler {
     @Bean
     public PaginationInnerInterceptor paginationInnerInterceptor() {
         val paginationInnerInterceptor = new PaginationInnerInterceptor(DbType.MYSQL);
@@ -57,5 +62,17 @@ public class MyBatisPlusConfiguration {
         mybatisPlusInterceptor.addInnerInterceptor(paginationInnerInterceptor);
         mybatisPlusInterceptor.addInnerInterceptor(blockAttackInnerInterceptor);
         return mybatisPlusInterceptor;
+    }
+
+    @Override
+    public void insertFill(MetaObject metaObject) {
+        log.info("Start to insert fill ....");
+        this.strictInsertFill(metaObject, "createdTime", LocalDateTime.class, LocalDateTime.now());
+    }
+
+    @Override
+    public void updateFill(MetaObject metaObject) {
+        log.info("Start to update fill ....");
+        this.strictUpdateFill(metaObject, "modifiedTime", LocalDateTime::now, LocalDateTime.class);
     }
 }

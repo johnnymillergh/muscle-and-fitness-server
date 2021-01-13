@@ -1,9 +1,6 @@
 package com.jmsoftware.maf.authcenter.role.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -40,13 +37,13 @@ public class RolePersistence implements Serializable {
     /**
      * Created time
      */
-    @TableField(value = "created_time")
+    @TableField(value = "created_time", fill = FieldFill.INSERT)
     private Date createdTime;
 
     /**
      * Modified time
      */
-    @TableField(value = "modified_time")
+    @TableField(value = "modified_time", fill = FieldFill.INSERT_UPDATE)
     private Date modifiedTime;
 
     public static final String COL_ID = "id";
