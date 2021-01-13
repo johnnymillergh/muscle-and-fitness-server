@@ -66,6 +66,9 @@ management:
       show-details: ALWAYS
 
 mybatis-plus:
+  global-config:
+    db-config:
+      logic-delete-field: deleted
   configuration:
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
