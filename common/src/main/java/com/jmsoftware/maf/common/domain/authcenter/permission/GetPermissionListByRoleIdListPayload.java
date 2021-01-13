@@ -20,4 +20,6 @@ public class GetPermissionListByRoleIdListPayload {
      */
     @NotEmpty
     private List<Long> roleIdList;
+    @NotEmpty
+    private List<PermissionType> permissionTypeList;
 }

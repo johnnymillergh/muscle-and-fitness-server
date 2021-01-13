@@ -2,6 +2,7 @@ package com.jmsoftware.maf.apigateway.remoteapi;
 
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
+import com.jmsoftware.maf.common.domain.authcenter.permission.PermissionType;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdResponse;
 import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtPayload;
 import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtResponse;
@@ -49,12 +50,14 @@ public interface AuthCenterRemoteApi {
     /**
      * Get permission list by role id list
      *
-     * @param roleIdList the role id list
+     * @param roleIdList         the role id list
+     * @param permissionTypeList the permission type list
      * @return the response body bean
      */
     @RequestMapping(value = "/permission-remote-api/permissions", method = GET)
     Mono<ResponseBodyBean<GetPermissionListByRoleIdListResponse>> getPermissionListByRoleIdList(
-            @Valid @RequestParam("roleIdList") List<@NotNull Long> roleIdList);
+            @Valid @RequestParam("roleIdList") List<@NotNull Long> roleIdList,
+            @Valid @RequestParam("permissionTypeList") List<@NotNull PermissionType> permissionTypeList);
 
     /**
      * Parse mono.

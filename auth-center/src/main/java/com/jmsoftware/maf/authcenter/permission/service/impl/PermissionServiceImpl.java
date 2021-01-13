@@ -17,7 +17,6 @@ import com.jmsoftware.maf.common.domain.authcenter.permission.PermissionType;
 import com.jmsoftware.maf.common.domain.springbootstarter.HttpApiResourcesResponse;
 import com.jmsoftware.maf.common.exception.BusinessException;
 import com.jmsoftware.maf.springbootstarter.configuration.MafProjectProperty;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -26,7 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
-import java.util.Collections;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,7 +60,8 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
             response.getPermissionList().add(permission);
             return response;
         }
-        val permissionList = this.getPermissionListByRoleIdList(payload.getRoleIdList());
+        val permissionList = this.getPermissionListByRoleIdList(payload.getRoleIdList(),
+                                                                payload.getPermissionTypeList());
         permissionList.forEach(permissionPersistence -> {
             val permission = new GetPermissionListByRoleIdListResponse.Permission();
             BeanUtil.copyProperties(permissionPersistence, permission);
@@ -71,11 +71,9 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     }
 
     @Override
-    public List<PermissionPersistence> getPermissionListByRoleIdList(@NonNull List<Long> roleIdList) {
-        if (CollUtil.isEmpty(roleIdList)) {
-            return Collections.emptyList();
-        }
-        return this.getBaseMapper().selectPermissionListByRoleIdList(roleIdList);
+    public List<PermissionPersistence> getPermissionListByRoleIdList(@NotEmpty List<Long> roleIdList,
+                                                                     @NotEmpty List<PermissionType> permissionTypeList) {
+        return this.getBaseMapper().selectPermissionListByRoleIdList(roleIdList, permissionTypeList);
     }
 
     @Override
@@ -97,9 +95,8 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
                     .orElseThrow(() -> new BusinessException("Internal service mustn't respond null"));
             val data = Optional.of(responseBodyBean.getData())
                     .orElseThrow(() -> new BusinessException("HttpApiResourcesResponse mustn't be null"));
-            HttpApiResourcesResponse httpApiResourcesResponse = mapper.convertValue(data,
-                    HttpApiResourcesResponse.class);
-            GetServicesInfoResponse.ServiceInfo serviceInfo = new GetServicesInfoResponse.ServiceInfo();
+            val httpApiResourcesResponse = mapper.convertValue(data, HttpApiResourcesResponse.class);
+            val serviceInfo = new GetServicesInfoResponse.ServiceInfo();
             serviceInfo.setServiceId(serviceId);
             serviceInfo.setHttpApiResources(httpApiResourcesResponse);
             response.getList().add(serviceInfo);

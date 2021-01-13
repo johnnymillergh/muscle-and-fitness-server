@@ -1,6 +1,7 @@
 package com.jmsoftware.maf.apigateway.security.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.google.common.collect.Lists;
 import com.jmsoftware.maf.apigateway.remoteapi.AuthCenterRemoteApi;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload;
@@ -86,10 +87,12 @@ public class RbacReactiveAuthorizationManagerImpl implements ReactiveAuthorizati
         // auth-center will respond /** for role "admin"
         return roleIdListMono.flatMap(
                 roleIdList -> {
-                    GetPermissionListByRoleIdListPayload payload = new GetPermissionListByRoleIdListPayload();
+                    val payload = new GetPermissionListByRoleIdListPayload();
                     payload.setRoleIdList(roleIdList);
-                    return authCenterRemoteApi.getPermissionListByRoleIdList(payload.getRoleIdList()).map(
-                            ResponseBodyBean::getData);
+                    payload.setPermissionTypeList(Lists.newArrayList(PermissionType.BUTTON));
+                    return authCenterRemoteApi.getPermissionListByRoleIdList(payload.getRoleIdList(),
+                                                                             payload.getPermissionTypeList())
+                            .map(ResponseBodyBean::getData);
                 }).map(GetPermissionListByRoleIdListResponse::getPermissionList)
                 .switchIfEmpty(Mono.error(new SecurityException(HttpStatus.FORBIDDEN, "Permission not found!")));
     }
@@ -100,14 +103,12 @@ public class RbacReactiveAuthorizationManagerImpl implements ReactiveAuthorizati
         val userPrincipalMono = authentication.map(auth -> (UserPrincipal) auth.getPrincipal());
         val roleFlux = this.retrieveRoles(userPrincipalMono);
         val roleIdListMono = this.mapRole(roleFlux);
-        val permissionListMono = this.retrievePermissions(
-                roleIdListMono);
+        val permissionListMono = this.retrievePermissions(roleIdListMono);
         // Aggregate 2 Mono
         val zip = Mono.zip(permissionListMono, userPrincipalMono);
         return zip.map(mapper -> {
             val permissionList = mapper.getT1();
             val buttonPermissionList = permissionList.stream()
-                    .filter(permission -> PermissionType.BUTTON.getType().equals(permission.getType()))
                     .filter(permission -> StrUtil.isNotBlank(permission.getUrl()))
                     .filter(permission -> StrUtil.isNotBlank(permission.getMethod()))
                     .collect(Collectors.toList());
