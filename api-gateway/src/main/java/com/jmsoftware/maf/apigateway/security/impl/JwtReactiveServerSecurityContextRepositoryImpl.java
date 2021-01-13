@@ -4,7 +4,6 @@ import cn.hutool.core.util.StrUtil;
 import com.jmsoftware.maf.apigateway.remoteapi.AuthCenterRemoteApi;
 import com.jmsoftware.maf.apigateway.security.configuration.JwtConfiguration;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
-import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtPayload;
 import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtResponse;
 import com.jmsoftware.maf.common.domain.authcenter.security.UserPrincipal;
 import com.jmsoftware.maf.common.exception.SecurityException;
@@ -25,6 +24,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 
 /**
  * Description: JwtReactiveServerSecurityContextRepositoryImpl
@@ -64,11 +64,10 @@ public class JwtReactiveServerSecurityContextRepositoryImpl implements ServerSec
                      HttpHeaders.AUTHORIZATION, request.getMethod(), request.getURI());
             return Mono.error(new SecurityException(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED, "JWT Required"));
         }
-        val jwt = authorization.replace(JwtConfiguration.TOKEN_PREFIX, "");
-        val parseJwtPayload = new ParseJwtPayload();
-        parseJwtPayload.setJwt(jwt);
+        val headers = new HashMap<String, String>(4);
+        headers.put(HttpHeaders.AUTHORIZATION, authorization);
         Mono<ParseJwtResponse> parseJwtResponseMono = authCenterRemoteApi
-                .parse(parseJwtPayload)
+                .parse(headers)
                 .map(ResponseBodyBean::getData)
                 .switchIfEmpty(Mono.error(
                         new SecurityException(HttpStatus.INTERNAL_SERVER_ERROR, "Got empty when parsing JWT")));

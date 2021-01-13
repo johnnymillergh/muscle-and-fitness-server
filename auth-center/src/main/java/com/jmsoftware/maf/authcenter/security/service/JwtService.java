@@ -1,7 +1,5 @@
 package com.jmsoftware.maf.authcenter.security.service;
 
-import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtPayload;
-import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtResponse;
 import com.jmsoftware.maf.common.exception.SecurityException;
 import io.jsonwebtoken.Claims;
 import org.springframework.security.core.Authentication;
@@ -9,7 +7,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.validation.annotation.Validated;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.util.Collection;
 import java.util.List;
 
@@ -86,13 +83,4 @@ public interface JwtService {
      * @return the jwt from request
      */
     String getJwtFromRequest(HttpServletRequest request);
-
-    /**
-     * Parse parse jwt response.
-     *
-     * @param payload the payload
-     * @return the parse jwt response
-     * @throws SecurityException the security exception
-     */
-    ParseJwtResponse parse(@Valid ParseJwtPayload payload) throws SecurityException;
 }

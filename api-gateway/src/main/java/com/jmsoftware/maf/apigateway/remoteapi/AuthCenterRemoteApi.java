@@ -4,7 +4,6 @@ import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
 import com.jmsoftware.maf.common.domain.authcenter.permission.PermissionType;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdResponse;
-import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtPayload;
 import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtResponse;
 import com.jmsoftware.maf.common.domain.authcenter.user.GetUserByLoginTokenResponse;
 import org.springframework.validation.annotation.Validated;
@@ -15,6 +14,7 @@ import reactor.core.publisher.Mono;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Map;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
@@ -62,9 +62,9 @@ public interface AuthCenterRemoteApi {
     /**
      * Parse mono.
      *
-     * @param payload the payload
+     * @param headers the HTTP headers
      * @return the mono
      */
-    @PostMapping("/jwt-remote-api/parse")
-    Mono<ResponseBodyBean<ParseJwtResponse>> parse(@Valid @RequestBody ParseJwtPayload payload);
+    @GetMapping("/jwt-remote-api/parse")
+    Mono<ResponseBodyBean<ParseJwtResponse>> parse(@RequestHeader Map<String, String> headers);
 }
