@@ -34,7 +34,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/users/signup")
-    @ApiOperation(value = "Save user for signup", notes = "Save user for signup")
+    @ApiOperation(value = "Signup", notes = "Save user for signup")
     public ResponseBodyBean<SignupResponse> signup(@Valid @RequestBody SignupPayload payload) {
         return ResponseBodyBean.ofSuccess(userService.saveUserForSignup(payload));
     }
