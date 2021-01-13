@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.ReactiveAuthorizationManager;
 import org.springframework.security.core.Authentication;
@@ -26,6 +27,7 @@ import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -113,19 +115,41 @@ public class RbacReactiveAuthorizationManagerImpl implements ReactiveAuthorizati
                     .filter(permission -> StrUtil.isNotBlank(permission.getUrl()))
                     .filter(permission -> StrUtil.isNotBlank(permission.getMethod()))
                     .collect(Collectors.toList());
-            val path = request.getURI().getPath();
             val userPrincipal = mapper.getT2();
             for (val buttonPermission : buttonPermissionList) {
-                // FIXME: currently, the `method` in permission is useless
-                if (antPathMatcher.match(buttonPermission.getUrl(), path)) {
+                if (checkRestfulAccess(buttonPermission, request)) {
                     log.info("Authorization success! Resource [{}] {} is accessible for user(username: {})",
                              request.getMethod(), request.getURI(), userPrincipal.getUsername());
                     return new AuthorizationDecision(true);
                 }
             }
-            log.warn("Authorization failure! Resource [{}] {} is inaccessible for user(username: {})",
+            log.warn("Authorization failure! Resource [{}] {} is not accessible for user(username: {})",
                      request.getMethod(), request.getURI(), userPrincipal.getUsername());
             return new AuthorizationDecision(false);
         });
+    }
+
+    /**
+     * <p>Check Restful access.</p>
+     * <ul>
+     * <li>Check if the URL is matched</li>
+     * <li>Check if the HTTP method is matched</li>
+     * </ul>
+     *
+     * @param buttonPermission the button permission
+     * @param request          the request
+     * @return true: accessible; false: not accessible
+     * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 1/13/2021 11:04 AM
+     */
+    private boolean checkRestfulAccess(GetPermissionListByRoleIdListResponse.Permission buttonPermission,
+                                       ServerHttpRequest request) {
+        val urlMatched = antPathMatcher.match(buttonPermission.getUrl(), request.getURI().getPath());
+        // "*" is for super user. Super user's permission is like URL: "/**", method: "*"
+        val allMethods = StrUtil.equals(buttonPermission.getMethod(), "*");
+        if (allMethods) {
+            return urlMatched;
+        }
+        val methodMatched = Objects.requireNonNull(request.getMethod()).matches(buttonPermission.getMethod());
+        return urlMatched && methodMatched;
     }
 }
