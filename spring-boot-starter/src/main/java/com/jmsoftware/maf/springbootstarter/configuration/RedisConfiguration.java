@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.authcenter.universal.configuration;
+package com.jmsoftware.maf.springbootstarter.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;

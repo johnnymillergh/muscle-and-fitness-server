@@ -1,10 +1,14 @@
 spring:
+  devtools:
+    add-properties: false
   datasource:
     url: jdbc:mysql://maf.mysql.production:3306/muscle_and_fitness?useSSL=true&useUnicode=true
     username: root
     password: jm@mysql
-  devtools:
-    add-properties: false
+  redis:
+    host: maf.redis.production
+    port: 6379
+    password: 123456
 
 eureka:
   client:

@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.authcenter.universal.configuration;
+package com.jmsoftware.maf.springbootstarter.configuration;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

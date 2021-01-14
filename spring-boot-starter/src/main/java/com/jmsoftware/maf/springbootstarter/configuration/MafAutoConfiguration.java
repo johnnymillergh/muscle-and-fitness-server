@@ -1,5 +1,6 @@
 package com.jmsoftware.maf.springbootstarter.configuration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jmsoftware.maf.springbootstarter.aspect.ExceptionControllerAdvice;
 import com.jmsoftware.maf.springbootstarter.aspect.WebRequestLogAspect;
 import com.jmsoftware.maf.springbootstarter.controller.CommonController;
@@ -23,9 +24,12 @@ import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolve
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.boot.web.servlet.error.ErrorController;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -179,5 +183,30 @@ public class MafAutoConfiguration {
     public MyBatisPlusConfiguration myBatisPlusConfiguration() {
         log.warn("Initial bean: {}", MyBatisPlusConfiguration.class.getSimpleName());
         return new MyBatisPlusConfiguration();
+    }
+
+//    @Bean
+//    RedisConnectionFactory redisConnectionFactory() {
+//        log.warn("Initial bean: {}", LettuceConnectionConfiguration.class.getSimpleName());
+//        return new LettuceConnectionConfiguration();
+//    }
+
+    @Bean
+    public RedisCachingConfiguration redisCachingConfiguration(RedisConnectionFactory redisConnectionFactory) {
+        log.warn("Initial bean: {}", RedisCachingConfiguration.class.getSimpleName());
+        return new RedisCachingConfiguration(redisConnectionFactory);
+    }
+
+    @Bean
+    public RedisConfiguration redisConfiguration(ObjectMapper objectMapper) {
+        log.warn("Initial bean: {}", RedisConfiguration.class.getSimpleName());
+        return new RedisConfiguration(objectMapper);
+    }
+
+    @Bean
+    @LoadBalanced
+    public RestTemplate restTemplate() {
+        log.warn("Initial bean: {}", RestTemplate.class.getSimpleName());
+        return new RestTemplate();
     }
 }

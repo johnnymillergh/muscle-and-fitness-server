@@ -66,7 +66,7 @@ public class MyBatisPlusTests {
         val rolePersistence2 = roleMapper.selectByName(rolePersistence.getName());
         log.info("Deleted role: {}", rolePersistence2);
         Assertions.assertEquals(rolePersistence2.getDeleted(), DeleteFlag.DELETED.getValue());
-        roleMapper.selectByName("role-for-mybatis-plus-tests");
-        log.warn("Role not found! {}", lambdaQuery.getEntity());
+        final var deletedRolePersistence = roleService.getOne(lambdaQuery);
+        Assertions.assertNull(deletedRolePersistence);
     }
 }
