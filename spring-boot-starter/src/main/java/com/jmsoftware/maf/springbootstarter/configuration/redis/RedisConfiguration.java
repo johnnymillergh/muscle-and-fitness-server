@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.springbootstarter.configuration;
+package com.jmsoftware.maf.springbootstarter.configuration.redis;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +14,8 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+import javax.annotation.PostConstruct;
+
 /**
  * Description: RedisConfiguration, change description here.
  *
@@ -24,6 +26,11 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @RequiredArgsConstructor
 public class RedisConfiguration {
     private final ObjectMapper objectMapper;
+
+    @PostConstruct
+    private void postConstruct() {
+        log.warn("Initial bean: {}", RedisConfiguration.class.getSimpleName());
+    }
 
     /**
      * RedisTemplate uses JDK byte code serialization (byte[]), which is not that readable and friendly to
@@ -66,7 +73,8 @@ public class RedisConfiguration {
         log.warn("Initial bean: {}", ReactiveRedisTemplate.class.getSimpleName());
         Jackson2JsonRedisSerializer<Object> valueSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
         RedisSerializationContext<Object, Object> serializationContext = RedisSerializationContext
-                .newSerializationContext(RedisSerializationContext.SerializationPair.fromSerializer(RedisSerializer.string()))
+                .newSerializationContext(
+                        RedisSerializationContext.SerializationPair.fromSerializer(RedisSerializer.string()))
                 .value(valueSerializer)
                 .hashValue(valueSerializer)
                 .build();

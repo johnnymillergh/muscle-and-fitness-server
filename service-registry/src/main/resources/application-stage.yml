@@ -14,3 +14,11 @@ eureka:
   client:
     service-url:
       defaultZone: http://${spring.cloud.client.ip-address}:${server.port}/eureka/
+
+sftp:
+  client:
+    configuration:
+      host: maf.atmoz-sftp.stage
+      port: 22
+      user: johnny
+      password: atmoz@sftp

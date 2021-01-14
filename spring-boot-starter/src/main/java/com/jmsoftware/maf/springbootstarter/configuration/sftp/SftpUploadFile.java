@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.authcenter.universal.domain;
+package com.jmsoftware.maf.springbootstarter.configuration.sftp;
 
 import lombok.Builder;
 import lombok.Data;

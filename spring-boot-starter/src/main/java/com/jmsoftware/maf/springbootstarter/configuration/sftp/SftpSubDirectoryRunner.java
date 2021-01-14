@@ -1,6 +1,5 @@
-package com.jmsoftware.maf.authcenter.universal.configuration;
+package com.jmsoftware.maf.springbootstarter.configuration.sftp;
 
-import com.jmsoftware.maf.authcenter.universal.domain.SftpSubDirectory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -11,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * <h1>SftpSubDirectoryRunner</h1>
- * <p>After dependency injection finished, we must inti the SFTP server's sub directory for out business. If you want
+ * <p>After dependency injection finished, we must inti the SFTP server's sub-directory for out business. If you want
  * to customize initialization configuration, config SftpSubDirectory.</p>
  *
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
@@ -38,19 +37,19 @@ public class SftpSubDirectoryRunner implements ApplicationRunner {
             return null;
         });
 
-        log.info("Staring to initial SFTP server sub directory.");
+        log.info("Staring to initial SFTP server sub-directory.");
         sftpRemoteFileTemplate.execute(session -> {
             for (val sftpSubDirectory : SftpSubDirectory.values()) {
                 val fullPath = sftpClientConfiguration.getDirectory() + sftpSubDirectory.getSubDirectory();
                 if (!session.exists(fullPath)) {
-                    log.info("SFTP server sub directory does not exist. Creating sub directory: {}", fullPath);
+                    log.info("SFTP server sub-directory does not exist. Creating sub-directory: {}", fullPath);
                     session.mkdir(fullPath);
                 } else {
-                    log.info("SFTP server sub directory exists. Path: {}", fullPath);
+                    log.info("SFTP server sub-directory exists. Path: {}", fullPath);
                 }
             }
             return null;
         });
-        log.info("Initialing SFTP server sub directory is done.");
+        log.warn("Initialing SFTP server sub-directory is done.");
     }
 }

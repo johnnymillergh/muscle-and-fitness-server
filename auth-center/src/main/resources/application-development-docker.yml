@@ -24,11 +24,6 @@ sftp:
       port: 22
       user: johnny
       password: atmoz@sftp
-      directory: upload
-      private-key:
-      private-key-pass-phrase:
-      session-cache-size: 20
-      session-wait-timeout: 15000
 
 maf:
   configuration:

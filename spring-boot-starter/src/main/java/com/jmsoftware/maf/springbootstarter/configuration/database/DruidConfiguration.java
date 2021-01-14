@@ -1,8 +1,9 @@
-package com.jmsoftware.maf.springbootstarter.configuration;
+package com.jmsoftware.maf.springbootstarter.configuration.database;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
+import com.jmsoftware.maf.springbootstarter.configuration.MafConfiguration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;

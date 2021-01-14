@@ -18,3 +18,11 @@ eureka:
 maf:
   configuration:
     swagger-disabled: false
+
+sftp:
+  client:
+    configuration:
+      host: maf.atmoz-sftp.dev
+      port: 22
+      user: johnny
+      password: atmoz@sftp

@@ -17,6 +17,14 @@ spring:
     port: 6379
     password: 123456
 
+sftp:
+  client:
+    configuration:
+      host: maf.atmoz-sftp.test
+      port: 22
+      user: johnny
+      password: atmoz@sftp
+
 maf:
   configuration:
     swagger-disabled: true

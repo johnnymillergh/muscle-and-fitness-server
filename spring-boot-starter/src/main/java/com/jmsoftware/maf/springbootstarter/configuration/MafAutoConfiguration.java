@@ -1,8 +1,17 @@
 package com.jmsoftware.maf.springbootstarter.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jcraft.jsch.ChannelSftp;
 import com.jmsoftware.maf.springbootstarter.aspect.ExceptionControllerAdvice;
 import com.jmsoftware.maf.springbootstarter.aspect.WebRequestLogAspect;
+import com.jmsoftware.maf.springbootstarter.configuration.database.DruidConfiguration;
+import com.jmsoftware.maf.springbootstarter.configuration.database.MyBatisPlusConfiguration;
+import com.jmsoftware.maf.springbootstarter.configuration.redis.RedisCachingConfiguration;
+import com.jmsoftware.maf.springbootstarter.configuration.redis.RedisConfiguration;
+import com.jmsoftware.maf.springbootstarter.configuration.sftp.SftpClientConfiguration;
+import com.jmsoftware.maf.springbootstarter.configuration.sftp.SftpHelper;
+import com.jmsoftware.maf.springbootstarter.configuration.sftp.SftpHelperImpl;
+import com.jmsoftware.maf.springbootstarter.configuration.sftp.SftpSubDirectoryRunner;
 import com.jmsoftware.maf.springbootstarter.controller.CommonController;
 import com.jmsoftware.maf.springbootstarter.controller.GlobalErrorController;
 import com.jmsoftware.maf.springbootstarter.controller.HttpApiResourceRemoteApiController;
@@ -29,6 +38,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.expression.common.LiteralExpression;
+import org.springframework.integration.annotation.IntegrationComponentScan;
+import org.springframework.integration.annotation.ServiceActivator;
+import org.springframework.integration.file.remote.session.CachingSessionFactory;
+import org.springframework.integration.file.remote.session.SessionFactory;
+import org.springframework.integration.sftp.outbound.SftpMessageHandler;
+import org.springframework.integration.sftp.session.DefaultSftpSessionFactory;
+import org.springframework.integration.sftp.session.SftpRemoteFileTemplate;
+import org.springframework.messaging.MessageHandler;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import springfox.documentation.builders.PathSelectors;
@@ -37,6 +55,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
 import java.util.List;
 
 /**
@@ -46,6 +65,7 @@ import java.util.List;
  **/
 @Slf4j
 @Configuration
+@IntegrationComponentScan
 @ConditionalOnWebApplication
 @AutoConfigureOrder(Integer.MIN_VALUE)
 @EnableConfigurationProperties(MafConfiguration.class)
@@ -137,14 +157,14 @@ public class MafAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnProperty(value ="maf.configuration.swagger-disabled", havingValue = "false")
+    @ConditionalOnProperty(value = "maf.configuration.swagger-disabled", havingValue = "false")
     public Swagger2Configuration swagger2Configuration(MafProjectProperty mafProjectProperty) {
         log.warn("Initial bean: {}", Swagger2Configuration.class.getSimpleName());
         return new Swagger2Configuration(mafProjectProperty);
     }
 
     @Bean
-    @ConditionalOnProperty(value ="maf.configuration.swagger-disabled", havingValue = "false")
+    @ConditionalOnProperty(value = "maf.configuration.swagger-disabled", havingValue = "false")
     public Docket docket(Swagger2Configuration swagger2Configuration, MafProjectProperty mafProjectProperty) {
         log.warn("Initial bean: {}", Docket.class.getSimpleName());
         return new Docket(DocumentationType.SWAGGER_2)
@@ -185,12 +205,6 @@ public class MafAutoConfiguration {
         return new MyBatisPlusConfiguration();
     }
 
-//    @Bean
-//    RedisConnectionFactory redisConnectionFactory() {
-//        log.warn("Initial bean: {}", LettuceConnectionConfiguration.class.getSimpleName());
-//        return new LettuceConnectionConfiguration();
-//    }
-
     @Bean
     public RedisCachingConfiguration redisCachingConfiguration(RedisConnectionFactory redisConnectionFactory) {
         log.warn("Initial bean: {}", RedisCachingConfiguration.class.getSimpleName());
@@ -208,5 +222,72 @@ public class MafAutoConfiguration {
     public RestTemplate restTemplate() {
         log.warn("Initial bean: {}", RestTemplate.class.getSimpleName());
         return new RestTemplate();
+    }
+
+    @Bean
+    public SftpClientConfiguration sftpClientConfiguration() {
+        log.warn("Initial bean: {}", SftpClientConfiguration.class.getSimpleName());
+        return new SftpClientConfiguration();
+    }
+
+    @Bean
+    public SessionFactory<ChannelSftp.LsEntry> sftpSessionFactory(SftpClientConfiguration sftpClientConfiguration) {
+        val factory = new DefaultSftpSessionFactory(true);
+        factory.setHost(sftpClientConfiguration.getHost());
+        factory.setPort(sftpClientConfiguration.getPort());
+        factory.setUser(sftpClientConfiguration.getUser());
+        if (sftpClientConfiguration.getPrivateKey() != null) {
+            factory.setPrivateKey(sftpClientConfiguration.getPrivateKey());
+            factory.setPrivateKeyPassphrase(sftpClientConfiguration.getPrivateKeyPassPhrase());
+        } else {
+            factory.setPassword(sftpClientConfiguration.getPassword());
+        }
+        factory.setAllowUnknownKeys(true);
+        // We return a caching session factory, so that we don't have to reconnect to SFTP server for each time
+        val cachingSessionFactory = new CachingSessionFactory<>(factory, sftpClientConfiguration.getSessionCacheSize());
+        cachingSessionFactory.setSessionWaitTimeout(sftpClientConfiguration.getSessionWaitTimeout());
+        return cachingSessionFactory;
+    }
+
+    @Bean
+    @ServiceActivator(inputChannel = "toSftpChannel")
+    @SuppressWarnings("UnresolvedMessageChannel")
+    public MessageHandler messageHandler(SessionFactory<ChannelSftp.LsEntry> sftpSessionFactory,
+                                         SftpClientConfiguration sftpClientConfiguration) {
+        val handler = new SftpMessageHandler(sftpSessionFactory);
+        handler.setRemoteDirectoryExpression(new LiteralExpression(sftpClientConfiguration.getDirectory()));
+        handler.setFileNameGenerator(message -> {
+            if (message.getPayload() instanceof File) {
+                return ((File) message.getPayload()).getName();
+            } else {
+                throw new IllegalArgumentException("File expected as payload.");
+            }
+        });
+        return handler;
+    }
+
+    @Bean
+    public SftpRemoteFileTemplate sftpRemoteFileTemplate(SessionFactory<ChannelSftp.LsEntry> sftpSessionFactory,
+                                                         SftpClientConfiguration sftpClientConfiguration) {
+        val sftpRemoteFileTemplate = new SftpRemoteFileTemplate(sftpSessionFactory);
+        sftpRemoteFileTemplate.setRemoteDirectoryExpression(
+                new LiteralExpression(sftpClientConfiguration.getDirectory()));
+        sftpRemoteFileTemplate.setAutoCreateDirectory(true);
+        // sftpRemoteFileTemplate.setBeanFactory(beanFactory);
+        sftpRemoteFileTemplate.afterPropertiesSet();
+        return sftpRemoteFileTemplate;
+    }
+
+    @Bean
+    public SftpSubDirectoryRunner sftpSubDirectoryRunner(SftpRemoteFileTemplate sftpRemoteFileTemplate,
+                                                         SftpClientConfiguration sftpClientConfiguration) {
+        log.warn("Initial bean: {}", SftpSubDirectoryRunner.class.getSimpleName());
+        return new SftpSubDirectoryRunner(sftpRemoteFileTemplate, sftpClientConfiguration);
+    }
+
+    @Bean
+    public SftpHelper sftpHelper(SftpRemoteFileTemplate sftpRemoteFileTemplate) {
+        log.warn("Initial bean: {}", SftpHelper.class.getSimpleName());
+        return new SftpHelperImpl(sftpRemoteFileTemplate);
     }
 }

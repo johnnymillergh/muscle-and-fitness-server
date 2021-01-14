@@ -74,3 +74,12 @@ maf:
         - "/actuator/**"
     included-package-for-http-api-scan: ${project.property.base-package}
     swagger-disabled: true
+
+sftp:
+  client:
+    configuration:
+      directory: upload
+      private-key:
+      private-key-pass-phrase:
+      session-cache-size: 20
+      session-wait-timeout: 15000

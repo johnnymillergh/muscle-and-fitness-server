@@ -134,3 +134,12 @@ jwt:
     # an hour
     ttl: 3600000
     ttl-for-remember-me: 604800000
+
+sftp:
+  client:
+    configuration:
+      directory: upload
+      private-key:
+      private-key-pass-phrase:
+      session-cache-size: 20
+      session-wait-timeout: 15000

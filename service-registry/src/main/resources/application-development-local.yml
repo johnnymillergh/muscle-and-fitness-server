@@ -14,3 +14,11 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:${server.port}/eureka/
+
+sftp:
+  client:
+    configuration:
+      host: localhost
+      port: 23
+      user: johnny
+      password: atmoz@sftp
