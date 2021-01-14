@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.springbootstarter.configuration.redis;
+package com.jmsoftware.maf.springbootstarter.redis;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;

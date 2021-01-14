@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.springbootstarter.configuration.database;
+package com.jmsoftware.maf.springbootstarter.database;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;

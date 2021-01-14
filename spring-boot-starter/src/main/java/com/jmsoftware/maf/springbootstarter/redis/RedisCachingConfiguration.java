@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.springbootstarter.configuration.redis;
+package com.jmsoftware.maf.springbootstarter.redis;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

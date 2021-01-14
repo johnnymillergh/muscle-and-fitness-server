@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.springbootstarter.configuration.sftp;
+package com.jmsoftware.maf.springbootstarter.sftp;
 
 import com.jcraft.jsch.ChannelSftp;
 import com.jmsoftware.maf.springbootstarter.util.FileUtil;

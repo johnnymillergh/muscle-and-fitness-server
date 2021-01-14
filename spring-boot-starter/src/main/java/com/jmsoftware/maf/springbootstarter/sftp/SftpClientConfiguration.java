@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.springbootstarter.configuration.sftp;
+package com.jmsoftware.maf.springbootstarter.sftp;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

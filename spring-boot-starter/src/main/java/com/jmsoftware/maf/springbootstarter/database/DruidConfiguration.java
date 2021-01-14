@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.springbootstarter.configuration.database;
+package com.jmsoftware.maf.springbootstarter.database;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.support.http.StatViewServlet;

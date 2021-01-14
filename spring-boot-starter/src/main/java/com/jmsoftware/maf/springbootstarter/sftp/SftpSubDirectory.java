@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.springbootstarter.configuration.sftp;
+package com.jmsoftware.maf.springbootstarter.sftp;
 
 import lombok.Getter;
 

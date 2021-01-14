@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.springbootstarter.configuration.sftp;
+package com.jmsoftware.maf.springbootstarter.sftp;
 
 import org.springframework.integration.file.support.FileExistsMode;
 import org.springframework.validation.annotation.Validated;
