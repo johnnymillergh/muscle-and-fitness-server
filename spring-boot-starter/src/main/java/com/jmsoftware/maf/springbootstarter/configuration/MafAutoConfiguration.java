@@ -164,8 +164,20 @@ public class MafAutoConfiguration {
     }
 
     @Bean
-    public JwtConfiguration commonController(MafProjectProperty mafProjectProperty) {
+    public JwtConfiguration jwtConfiguration(MafProjectProperty mafProjectProperty) {
         log.warn("Initial bean: {}", JwtConfiguration.class.getSimpleName());
         return new JwtConfiguration(mafProjectProperty);
+    }
+
+    @Bean
+    public DruidConfiguration druidConfiguration(MafConfiguration mafConfiguration) {
+        log.warn("Initial bean: {}", DruidConfiguration.class.getSimpleName());
+        return new DruidConfiguration(mafConfiguration);
+    }
+
+    @Bean
+    public MyBatisPlusConfiguration myBatisPlusConfiguration() {
+        log.warn("Initial bean: {}", MyBatisPlusConfiguration.class.getSimpleName());
+        return new MyBatisPlusConfiguration();
     }
 }

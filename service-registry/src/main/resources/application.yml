@@ -13,6 +13,10 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: Asia/Hong_Kong
+  datasource:
+    name: muscle_and_fitness
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
 
 eureka:
   instance:
@@ -20,6 +24,17 @@ eureka:
   client:
     register-with-eureka: false
     fetch-registry: false
+
+mybatis-plus:
+  global-config:
+    db-config:
+      logic-delete-field: deleted
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  # mapper-locations should start with `classpath*` prefix
+  # when project is based on Maven multi-module to load XML mapper in different jar
+  mapper-locations: classpath*:/mapper/**/*Mapper.xml
 
 logging:
   config: classpath:configuration/logback/logback-@env@.xml

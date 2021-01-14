@@ -28,6 +28,10 @@ spring:
       # `file-size-threshold` specifies the size threshold after which files will be written to disk.
       # The default is 0. We set it as 0 too.
       file-size-threshold: 0
+  datasource:
+    name: muscle_and_fitness
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
 
 eureka:
   instance:

@@ -72,5 +72,22 @@
             <artifactId>spring-boot-admin-starter-client</artifactId>
             <version>${spring-boot-admin-starter-client.version}</version>
         </dependency>
+
+        <!-- ORM Library -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>${mybatis-plus-boot-starter.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>${druid.version}</version>
+        </dependency>
     </dependencies>
 </project>

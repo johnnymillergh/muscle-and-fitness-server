@@ -1,4 +1,8 @@
 spring:
+  datasource:
+    url: jdbc:mysql://maf.mysql.production:3306/muscle_and_fitness?useSSL=true&useUnicode=true
+    username: root
+    password: jm@mysql
   devtools:
     add-properties: false
 

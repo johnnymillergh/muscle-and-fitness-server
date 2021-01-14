@@ -13,6 +13,10 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: Asia/Hong_Kong
+  datasource:
+    name: muscle_and_fitness
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
 
 eureka:
   instance:
