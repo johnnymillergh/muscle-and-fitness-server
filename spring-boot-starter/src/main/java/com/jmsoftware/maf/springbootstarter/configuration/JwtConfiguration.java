@@ -1,10 +1,8 @@
-package com.jmsoftware.maf.authcenter.universal.configuration;
+package com.jmsoftware.maf.springbootstarter.configuration;
 
-import com.jmsoftware.maf.springbootstarter.configuration.MafProjectProperty;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 
@@ -18,7 +16,6 @@ import java.nio.charset.StandardCharsets;
  **/
 @Data
 @Slf4j
-@Component
 @ConfigurationProperties(prefix = "jwt.configuration")
 public class JwtConfiguration {
     public static final String TOKEN_PREFIX = "Bearer ";

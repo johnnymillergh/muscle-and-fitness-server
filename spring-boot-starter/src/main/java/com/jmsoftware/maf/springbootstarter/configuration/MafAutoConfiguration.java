@@ -62,6 +62,12 @@ public class MafAutoConfiguration {
     }
 
     @Bean
+    public MafProjectProperty mafProjectProperty() {
+        log.warn("Initial bean: {}", MafProjectProperty.class.getSimpleName());
+        return new MafProjectProperty();
+    }
+
+    @Bean
     @ConditionalOnMissingBean
     public ExceptionControllerAdvice exceptionControllerAdvice() {
         log.warn("Initial bean: {}", ExceptionControllerAdvice.class.getSimpleName());
@@ -127,12 +133,6 @@ public class MafAutoConfiguration {
     }
 
     @Bean
-    public MafProjectProperty mafProjectProperty() {
-        log.warn("Initial bean: {}", MafProjectProperty.class.getSimpleName());
-        return new MafProjectProperty();
-    }
-
-    @Bean
     @ConditionalOnProperty(value ="maf.configuration.swagger-disabled", havingValue = "false")
     public Swagger2Configuration swagger2Configuration(MafProjectProperty mafProjectProperty) {
         log.warn("Initial bean: {}", Swagger2Configuration.class.getSimpleName());
@@ -161,5 +161,11 @@ public class MafAutoConfiguration {
     public CommonController commonController(CommonService commonService) {
         log.warn("Initial bean: {}", CommonController.class.getSimpleName());
         return new CommonController(commonService);
+    }
+
+    @Bean
+    public JwtConfiguration commonController(MafProjectProperty mafProjectProperty) {
+        log.warn("Initial bean: {}", JwtConfiguration.class.getSimpleName());
+        return new JwtConfiguration(mafProjectProperty);
     }
 }
