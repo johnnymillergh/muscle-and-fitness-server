@@ -3,7 +3,9 @@ package com.jmsoftware.maf.authcenter.universal.configuration;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
+import com.jmsoftware.maf.springbootstarter.configuration.MafConfiguration;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -22,14 +24,17 @@ import javax.sql.DataSource;
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 2019-03-24 13:31
  **/
+@Slf4j
 @Configuration
 @RequiredArgsConstructor
 public class DruidConfiguration {
+    private final MafConfiguration mafConfiguration;
+
     @Bean
     public ServletRegistrationBean<StatViewServlet> druidServlet() {
         val servletRegistrationBean = new ServletRegistrationBean<>(new StatViewServlet(), "/druid/*");
-        servletRegistrationBean.addInitParameter("loginUsername", "admin");
-        servletRegistrationBean.addInitParameter("loginPassword", "admin");
+        servletRegistrationBean.addInitParameter("loginUsername", mafConfiguration.getSuperUserRole());
+        servletRegistrationBean.addInitParameter("loginPassword", mafConfiguration.getSuperUserRole());
         servletRegistrationBean.addInitParameter("resetEnable", "false");
         return servletRegistrationBean;
     }
@@ -51,6 +56,7 @@ public class DruidConfiguration {
     @Bean
     @ConfigurationProperties(prefix = "spring.datasource")
     public DataSource druidDataSource() {
+        log.warn("Initial data source");
         return new DruidDataSource();
     }
 }
