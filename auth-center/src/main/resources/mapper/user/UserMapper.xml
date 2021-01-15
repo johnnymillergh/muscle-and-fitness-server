@@ -18,32 +18,4 @@
         <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
         <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
     </resultMap>
-
-    <sql id="Base_Column_List">
-        <!--@mbg.generated-->
-        id, username, email, cellphone, `password`, full_name, birthday, gender, avatar,
-        `status`, deleted, created_time, modified_time
-    </sql>
-
-    <!--
-    <select id="selectUserByUsernameOrEmail" resultMap="BaseResultMap">
-        SELECT id,
-               username,
-               email,
-               cellphone,
-               password,
-               full_name,
-               birthday,
-               gender,
-               created_time,
-               modified_time,
-               status
-        FROM user
-        <where>
-            <if test="loginToken != null and loginToken != ''">
-                (username = #{loginToken} OR email = #{loginToken} OR cellphone = #{loginToken})
-            </if>
-            AND status = 1
-        </where>
-    </select>-->
 </mapper>

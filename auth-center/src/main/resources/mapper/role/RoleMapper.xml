@@ -12,11 +12,6 @@
         <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
     </resultMap>
 
-    <sql id="Base_Column_List">
-        <!--@mbg.generated-->
-        id, `name`, description, deleted, created_time, modified_time
-    </sql>
-
     <select id="selectRoleListByUserId" resultMap="BaseResultMap">
         SELECT role.id,
                role.name,
@@ -24,8 +19,8 @@
                role.created_time,
                role.modified_time
         FROM role
-                 LEFT JOIN user_role ON role.id = user_role.role_id
-                 LEFT JOIN user ON user_role.user_id = user.id
+                     LEFT JOIN user_role ON role.id = user_role.role_id
+                     LEFT JOIN user ON user_role.user_id = user.id
         WHERE user.id = #{userId}
     </select>
 

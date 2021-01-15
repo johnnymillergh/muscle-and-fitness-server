@@ -16,11 +16,6 @@
         <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
         <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
     </resultMap>
-    <sql id="Base_Column_List">
-        <!--@mbg.generated-->
-        id, url, description, `type`, permission_expression, `method`, sort, parent_id, deleted,
-        created_time, modified_time
-    </sql>
 
     <select id="selectPermissionListByRoleIdList" resultMap="BaseResultMap">
         SELECT DISTINCT permission.id,
@@ -29,9 +24,9 @@
                         permission.permission_expression AS permissionExpression,
                         permission.method
         FROM permission
-               LEFT JOIN role_permission ON permission.id = role_permission.permission_id
-               LEFT JOIN role ON role.id = role_permission.role_id
-        WHERE role.id IN
+                     LEFT JOIN role_permission ON permission.id = role_permission.permission_id
+                     LEFT JOIN role ON role.id = role_permission.role_id
+                WHERE role.id IN
         <foreach item="item" collection="roleIdList" open="(" separator="," close=")">
             #{item}
         </foreach>
