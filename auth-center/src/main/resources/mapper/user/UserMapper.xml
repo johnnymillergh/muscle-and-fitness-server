@@ -18,4 +18,10 @@
         <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
         <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
     </resultMap>
+
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, username, email, cellphone, `password`, full_name, birthday, gender, avatar,
+        `status`, deleted, created_time, modified_time
+    </sql>
 </mapper>

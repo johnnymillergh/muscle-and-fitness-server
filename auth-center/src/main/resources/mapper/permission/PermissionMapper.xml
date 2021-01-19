@@ -17,6 +17,12 @@
         <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
     </resultMap>
 
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, url, description, `type`, permission_expression, `method`, sort, parent_id, deleted,
+        created_time, modified_time
+    </sql>
+
     <select id="selectPermissionListByRoleIdList" resultMap="BaseResultMap">
         SELECT DISTINCT permission.id,
                         permission.url,
