@@ -43,7 +43,7 @@
         <spring-content.version>1.0.0.M5</spring-content.version>
         <spring-boot-admin-starter-client.version>2.3.1</spring-boot-admin-starter-client.version>
         <druid.version>1.2.4</druid.version>
-        <mybatis-plus-boot-starter.version>3.4.1</mybatis-plus-boot-starter.version>
+        <mybatis-plus-boot-starter.version>3.4.2</mybatis-plus-boot-starter.version>
         <hutool-all.version>5.5.7</hutool-all.version>
         <guava.version>30.0-jre</guava.version>
         <knife4j.version>3.0.2</knife4j.version>
