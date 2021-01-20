@@ -37,6 +37,7 @@
 
         <!-- Version Definitions. -->
         <java.version>11</java.version>
+        <openjdk.version>11.0.9.1-jre-slim</openjdk.version>
         <spring-cloud.version>Hoxton.SR9</spring-cloud.version>
         <spring-content.version>1.0.0.M5</spring-content.version>
         <spring-boot-admin-starter-client.version>2.3.1</spring-boot-admin-starter-client.version>

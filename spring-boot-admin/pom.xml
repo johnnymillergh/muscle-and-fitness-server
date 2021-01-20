@@ -47,7 +47,7 @@
                 <configuration>
                     <from>
                         <!-- https://hub.docker.com/_/openjdk?tab=tags&page=1&ordering=last_updated&name=11.0.9.1-jre-slim -->
-                        <image>openjdk:11.0.9.1-jre-slim</image>
+                        <image>openjdk:${openjdk.version}</image>
                     </from>
                     <to>
                         <image>docker.io/ijohnnymiller/${project.parent.artifactId}.${project.artifactId}</image>
