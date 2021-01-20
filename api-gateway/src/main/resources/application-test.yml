@@ -5,6 +5,6 @@ eureka:
 
 spring:
   zipkin:
-    base-url: http://maf.open-zipkin.test:9411
+    base-url: http://maf.zipkin.test:9411
   devtools:
     add-properties: false

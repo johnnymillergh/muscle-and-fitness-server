@@ -73,8 +73,6 @@ services:
     image: openzipkin/zipkin-mysql
     container_name: maf.zipkin-mysql.production
     restart: always
-    volumes:
-      - ~/docker-file-mapping/maf.zipkin-mysql.production:/mysql/data
     networks:
       muscle_and_fitness_network:
 
@@ -95,8 +93,8 @@ services:
     networks:
       muscle_and_fitness_network:
 
-  open-zipkin:
-    container_name: maf.open-zipkin.production
+  zipkin:
+    container_name: maf.zipkin.production
     image: openzipkin/zipkin
     depends_on:
       zipkin-mysql:
@@ -142,7 +140,7 @@ services:
         condition: service_started
       atmoz-sftp:
         condition: service_started
-      open-zipkin:
+      zipkin:
         condition: service_healthy
     ports:
       - "8760:8760"

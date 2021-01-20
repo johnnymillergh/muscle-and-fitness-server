@@ -5,7 +5,7 @@ eureka:
 
 spring:
   zipkin:
-    base-url: http://maf.open-zipkin.stage:9411
+    base-url: http://maf.zipkin.stage:9411
   devtools:
     add-properties: false
   datasource:

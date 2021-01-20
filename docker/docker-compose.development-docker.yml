@@ -24,7 +24,7 @@ services:
   #                      Middleware of Muscle and Fitness                        #
   ################################################################################
   mysql:
-    container_name: maf.mysql.dev
+    container_name: maf.mysql.development
     image: mysql:latest
     environment:
       MYSQL_ROOT_PASSWORD: "jm@mysql"
@@ -41,7 +41,7 @@ services:
       muscle_and_fitness_network:
 
   redis:
-    container_name: maf.redis.dev
+    container_name: maf.redis.development
     image: redis:latest
     ports:
       - "6379:6379"
@@ -56,7 +56,7 @@ services:
       muscle_and_fitness_network:
 
   atmoz-sftp:
-    container_name: maf.atmoz-sftp.dev
+    container_name: maf.atmoz-sftp.development
     image: atmoz/sftp:latest
     ports:
       - "23:22"
@@ -71,22 +71,20 @@ services:
 
   zipkin-mysql:
     image: openzipkin/zipkin-mysql
-    container_name: maf.zipkin-mysql.dev
+    container_name: maf.zipkin-mysql.development
     restart: always
-    volumes:
-      - ~/docker-file-mapping/maf.zipkin-mysql.development:/mysql/data
     networks:
       muscle_and_fitness_network:
 
   zipkin-dependencies:
     image: openzipkin/zipkin-dependencies
-    container_name: maf.zipkin-dependencies.dev
+    container_name: maf.zipkin-dependencies.development
     entrypoint: crond -f
     environment:
       # Uncomment to see dependency processing logs
       ZIPKIN_LOG_LEVEL: DEBUG
       STORAGE_TYPE: mysql
-      MYSQL_HOST: maf.zipkin-mysql.dev
+      MYSQL_HOST: maf.zipkin-mysql.development
       MYSQL_USER: zipkin
       MYSQL_PASS: zipkin
     depends_on:
@@ -95,8 +93,8 @@ services:
     networks:
       muscle_and_fitness_network:
 
-  open-zipkin:
-    container_name: maf.open-zipkin.dev
+  zipkin:
+    container_name: maf.zipkin.development
     image: openzipkin/zipkin
     depends_on:
       zipkin-mysql:
@@ -105,7 +103,7 @@ services:
     environment:
       STORAGE_TYPE: mysql
       # Point the zipkin at the storage backend
-      MYSQL_HOST: maf.zipkin-mysql.dev
+      MYSQL_HOST: maf.zipkin-mysql.development
       MYSQL_USER: zipkin
       MYSQL_PASS: zipkin
       # Uncomment to enable request logging (TRACE shows query values)
@@ -133,7 +131,7 @@ services:
   #                            Infrastructure Service                            #
   #------------------------------------------------------------------------------#
   service-registry:
-    container_name: maf.service-registry.dev
+    container_name: maf.service-registry.development
     image: "ijohnnymiller/muscle-and-fitness-server.service-registry:${TAG}"
     depends_on:
       mysql:
@@ -142,7 +140,7 @@ services:
         condition: service_started
       atmoz-sftp:
         condition: service_started
-      open-zipkin:
+      zipkin:
         condition: service_healthy
     ports:
       - "8760:8760"
@@ -156,7 +154,7 @@ services:
       muscle_and_fitness_network:
 
   spring-boot-admin:
-    container_name: maf.spring-boot-admin.dev
+    container_name: maf.spring-boot-admin.development
     image: "ijohnnymiller/muscle-and-fitness-server.spring-boot-admin:${TAG}"
     depends_on:
       service-registry:
@@ -172,7 +170,7 @@ services:
       muscle_and_fitness_network:
 
   api-gateway:
-    container_name: maf.api-gateway.dev
+    container_name: maf.api-gateway.development
     image: "ijohnnymiller/muscle-and-fitness-server.api-gateway:${TAG}"
     depends_on:
       service-registry:
@@ -192,7 +190,7 @@ services:
   #                              Business Service                                #
   #------------------------------------------------------------------------------#
   auth-center:
-    container_name: maf.auth-center.dev
+    container_name: maf.auth-center.development
     image: "ijohnnymiller/muscle-and-fitness-server.auth-center:${TAG}"
     depends_on:
       service-registry:
@@ -207,7 +205,7 @@ services:
       muscle_and_fitness_network:
 
   exercise-mis:
-    container_name: maf.exercise-mis.dev
+    container_name: maf.exercise-mis.development
     image: "ijohnnymiller/muscle-and-fitness-server.exercise-mis:${TAG}"
     depends_on:
       service-registry:
@@ -222,7 +220,7 @@ services:
       muscle_and_fitness_network:
 
   muscle-mis:
-    container_name: maf.muscle-mis.dev
+    container_name: maf.muscle-mis.development
     image: "ijohnnymiller/muscle-and-fitness-server.muscle-mis:${TAG}"
     depends_on:
       service-registry:
