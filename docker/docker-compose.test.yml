@@ -69,20 +69,10 @@ services:
     networks:
       muscle_and_fitness_network:
 
-  zipkin-cassandra:
-    image: openzipkin/zipkin-cassandra
-    # Uncomment to use DSE instead (minimum version 5.1)
-    # image: datastax/dse-server:5.1.20
-    container_name: maf.zipkin-cassandra.test
-    environment:
-      CASSANDRA_USERNAME: cassandra_admin
-      CASSANDRA_PASSWORD: cassandra_password
+  zipkin-mysql:
+    image: openzipkin/zipkin-mysql
+    container_name: maf.zipkin-mysql.test
     restart: always
-    volumes:
-      - ~/docker-file-mapping/maf.zipkin-cassandra.development:/cassandra/data
-    # Uncomment to expose the storage port for testing
-    # ports:
-    #  - "9042:9042"
     networks:
       muscle_and_fitness_network:
 
@@ -93,28 +83,29 @@ services:
     environment:
       # Uncomment to see dependency processing logs
       ZIPKIN_LOG_LEVEL: DEBUG
-      STORAGE_TYPE: cassandra3
-      CASSANDRA_USERNAME: cassandra_admin
-      CASSANDRA_PASSWORD: cassandra_password
-      CASSANDRA_CONTACT_POINTS: maf.zipkin-cassandra.test:9042
+      STORAGE_TYPE: mysql
+      MYSQL_HOST: maf.zipkin-mysql.production
+      MYSQL_USER: zipkin
+      MYSQL_PASS: zipkin
     depends_on:
-      - zipkin-cassandra
+      zipkin-mysql:
+        condition: service_healthy
     networks:
       muscle_and_fitness_network:
 
   open-zipkin:
     container_name: maf.open-zipkin.test
     image: openzipkin/zipkin
-    # Environment settings are defined here https://github.com/openzipkin/zipkin/blob/master/zipkin-server/README.md#environment-variables
     depends_on:
-      zipkin-cassandra:
+      zipkin-mysql:
         condition: service_healthy
+    # Environment settings are defined here https://github.com/openzipkin/zipkin/blob/master/zipkin-server/README.md#environment-variables
     environment:
-      STORAGE_TYPE: cassandra3
-      CASSANDRA_CONTACT_POINTS: maf.zipkin-cassandra.test:9042
-      # Uncomment to configure authentication
-      CASSANDRA_USERNAME: cassandra_admin
-      CASSANDRA_PASSWORD: cassandra_password
+      STORAGE_TYPE: mysql
+      # Point the zipkin at the storage backend
+      MYSQL_HOST: maf.zipkin-mysql.test
+      MYSQL_USER: zipkin
+      MYSQL_PASS: zipkin
       # Uncomment to enable request logging (TRACE shows query values)
       command: --logging.level.com.datastax.oss.driver.internal.core.tracker.RequestLogger=TRACE
       JAVA_OPTS: -Xms128m -Xmx128m -XX:+ExitOnOutOfMemoryError
