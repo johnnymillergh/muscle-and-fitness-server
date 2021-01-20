@@ -133,6 +133,7 @@ services:
   #------------------------------------------------------------------------------#
   service-registry:
     container_name: maf.service-registry.production
+    hostname: maf.service-registry.production
     image: "ijohnnymiller/muscle-and-fitness-server.service-registry:${TAG}"
     depends_on:
       mysql:
@@ -156,6 +157,7 @@ services:
 
   spring-boot-admin:
     container_name: maf.spring-boot-admin.production
+    hostname: maf.spring-boot-admin.production
     image: "ijohnnymiller/muscle-and-fitness-server.spring-boot-admin:${TAG}"
     depends_on:
       service-registry:
@@ -173,6 +175,7 @@ services:
 
   api-gateway:
     container_name: maf.api-gateway.production
+    hostname: maf.api-gateway.production
     image: "ijohnnymiller/muscle-and-fitness-server.api-gateway:${TAG}"
     depends_on:
       service-registry:
@@ -195,6 +198,7 @@ services:
   #------------------------------------------------------------------------------#
   auth-center:
     container_name: maf.auth-center.production
+    hostname: maf.auth-center.production
     image: "ijohnnymiller/muscle-and-fitness-server.auth-center:${TAG}"
     depends_on:
       service-registry:
@@ -210,6 +214,7 @@ services:
 
   exercise-mis:
     container_name: maf.exercise-mis.production
+    hostname: maf.exercise-mis.production
     image: "ijohnnymiller/muscle-and-fitness-server.exercise-mis:${TAG}"
     depends_on:
       service-registry:
@@ -225,6 +230,7 @@ services:
 
   muscle-mis:
     container_name: maf.muscle-mis.production
+    hostname: maf.muscle-mis.production
     image: "ijohnnymiller/muscle-and-fitness-server.muscle-mis:${TAG}"
     depends_on:
       service-registry:
