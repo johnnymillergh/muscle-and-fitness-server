@@ -78,6 +78,8 @@ services:
       CASSANDRA_USERNAME: cassandra_admin
       CASSANDRA_PASSWORD: cassandra_password
     restart: always
+    volumes:
+      - ~/docker-file-mapping/maf.zipkin-cassandra.development:/cassandra/data
     # Uncomment to expose the storage port for testing
     # ports:
     #  - "9042:9042"
@@ -141,6 +143,12 @@ services:
     container_name: maf.service-registry.production
     image: "ijohnnymiller/muscle-and-fitness-server.service-registry:${TAG}"
     depends_on:
+      mysql:
+        condition: service_started
+      redis:
+        condition: service_started
+      atmoz-sftp:
+        condition: service_started
       open-zipkin:
         condition: service_healthy
     ports:
@@ -174,12 +182,6 @@ services:
     container_name: maf.api-gateway.production
     image: "ijohnnymiller/muscle-and-fitness-server.api-gateway:${TAG}"
     depends_on:
-      mysql:
-        condition: service_started
-      redis:
-        condition: service_started
-      atmoz-sftp:
-        condition: service_started
       service-registry:
         condition: service_started
     restart: always
@@ -200,8 +202,6 @@ services:
     container_name: maf.auth-center.production
     image: "ijohnnymiller/muscle-and-fitness-server.auth-center:${TAG}"
     depends_on:
-      mysql:
-        condition: service_started
       service-registry:
         condition: service_started
     restart: always
@@ -217,8 +217,6 @@ services:
     container_name: maf.exercise-mis.production
     image: "ijohnnymiller/muscle-and-fitness-server.exercise-mis:${TAG}"
     depends_on:
-      mysql:
-        condition: service_started
       service-registry:
         condition: service_started
     restart: always
@@ -234,8 +232,6 @@ services:
     container_name: maf.muscle-mis.production
     image: "ijohnnymiller/muscle-and-fitness-server.muscle-mis:${TAG}"
     depends_on:
-      mysql:
-        condition: service_started
       service-registry:
         condition: service_started
     restart: always
