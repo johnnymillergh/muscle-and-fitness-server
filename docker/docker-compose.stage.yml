@@ -176,6 +176,8 @@ services:
       service-registry:
         condition: service_started
     restart: always
+    ports:
+      - "8080:8080"
     volumes:
       - ~/docker-file-mapping/maf.logs:/logs
     environment:
