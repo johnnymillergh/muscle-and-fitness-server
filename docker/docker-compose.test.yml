@@ -73,6 +73,8 @@ services:
     image: openzipkin/zipkin-mysql
     container_name: maf.zipkin-mysql.test
     restart: always
+    volumes:
+      - ~/docker-file-mapping/maf.zipkin-mysql.test:/mysql/data
     networks:
       muscle_and_fitness_network:
 
