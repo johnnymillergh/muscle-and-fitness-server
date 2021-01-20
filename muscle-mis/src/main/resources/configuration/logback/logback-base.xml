@@ -20,19 +20,19 @@
 
     <!-- Log for Multi Environment Configuration -->
     <springProfile name="development-local">
-        <property name="LOG_FILE_SUFFIX" value="-development-local"/>
+        <property name="ENVIRONMENT" value="development-local"/>
     </springProfile>
     <springProfile name="development-docker">
-        <property name="LOG_FILE_SUFFIX" value="-development-docker"/>
+        <property name="ENVIRONMENT" value="development-docker"/>
     </springProfile>
     <springProfile name="test">
-        <property name="LOG_FILE_SUFFIX" value="-test"/>
+        <property name="ENVIRONMENT" value="test"/>
     </springProfile>
     <springProfile name="stage">
-        <property name="LOG_FILE_SUFFIX" value="-stage"/>
+        <property name="ENVIRONMENT" value="stage"/>
     </springProfile>
     <springProfile name="production">
-        <property name="LOG_FILE_SUFFIX" value="-production"/>
+        <property name="ENVIRONMENT" value="production"/>
     </springProfile>
 
     <!-- CONSOLE Log Configuration -->
@@ -60,7 +60,7 @@
         <!-- in particular if post-processing tools impose size limits on the log files. -->
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- rollover daily -->
-            <fileNamePattern>${LOG_HOME}/${PROJECT_ARTIFACT_Id}${LOG_FILE_SUFFIX}.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <fileNamePattern>${LOG_HOME}/${PROJECT_ARTIFACT_Id}-${ENVIRONMENT}-${HOSTNAME}.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
             <!-- each file should be at most 5MB, keep 7 days worth of history, but at most 1GB -->
             <maxFileSize>5MB</maxFileSize>
             <maxHistory>7</maxHistory>
