@@ -50,7 +50,7 @@ management:
       show-details: ALWAYS
 
 logging:
-  config: classpath:configuration/logback/logback-@env@.xml
+  config: classpath:logback-configuration/logback-@env@.xml
 
 maf:
   project-property:

@@ -90,7 +90,7 @@ mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*Mapper.xml
 
 logging:
-  config: classpath:configuration/logback/logback-@env@.xml
+  config: classpath:logback-configuration/logback-@env@.xml
   level:
     # Configure logging level for SFTP/JSCH
     com.jcraft.jsch: INFO
