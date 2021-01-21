@@ -13,19 +13,6 @@
         <version>0.0.2-SNAPSHOT</version>
     </parent>
 
-    <build>
-        <resources>
-            <resource>
-                <directory>${project.basedir}/src/main/resources/META-INF</directory>
-                <targetPath>META-INF</targetPath>
-            </resource>
-            <resource>
-                <directory>${project.basedir}/src/main/resources/static</directory>
-                <targetPath>META-INF/resources/static</targetPath>
-            </resource>
-        </resources>
-    </build>
-
     <!-- Scoped Dependencies Management -->
     <dependencies>
         <!-- Spring Frameworks -->
@@ -82,6 +69,10 @@
         <dependency>
             <groupId>com.jmsoftware.maf</groupId>
             <artifactId>common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jmsoftware.maf</groupId>
+            <artifactId>universal-ui</artifactId>
         </dependency>
 
         <dependency>

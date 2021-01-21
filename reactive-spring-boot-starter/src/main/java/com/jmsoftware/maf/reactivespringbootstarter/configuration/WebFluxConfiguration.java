@@ -21,8 +21,8 @@ public class WebFluxConfiguration implements WebFluxConfigurer {
      * @date 2/17/20 5:19 PM
      * @see ResourceHandlerRegistry registry
      */
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
-    }
+//    @Override
+//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//        registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
+//    }
 }

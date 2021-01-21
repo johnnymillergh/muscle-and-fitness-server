@@ -63,6 +63,7 @@
         <module>auth-center</module>
         <module>exercise-mis</module>
         <module>muscle-mis</module>
+        <module>universal-ui</module>
     </modules>
 
     <parent>
@@ -126,6 +127,11 @@
             <dependency>
                 <groupId>com.jmsoftware.maf</groupId>
                 <artifactId>muscle-mis</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jmsoftware.maf</groupId>
+                <artifactId>universal-ui</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
