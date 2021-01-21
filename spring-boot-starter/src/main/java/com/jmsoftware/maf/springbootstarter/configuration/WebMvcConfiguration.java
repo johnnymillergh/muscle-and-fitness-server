@@ -3,7 +3,6 @@ package com.jmsoftware.maf.springbootstarter.configuration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
@@ -17,18 +16,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @RequiredArgsConstructor
 public class WebMvcConfiguration implements WebMvcConfigurer {
-    private static final long MAX_AGE_SECS = 3600;
-
     /**
-     * 1. Config static path pattern
-     * 2. Config static resource location
-     *
-     * @param registry static resources register
+     * Max age: 3600 seconds (1 hour)
      */
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
-    }
+    private static final long MAX_AGE_SECS = 3600;
 
     /**
      * Configure cross origin requests processing.
