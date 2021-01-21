@@ -10,7 +10,7 @@
                     converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
 
     <!-- Log Render Configuration -->
-    <property name="PROJECT_ARTIFACT_Id" value="auth-center"/>
+    <springProperty scope="context" name="APPLICATION" source="spring.application.name"/>
     <property name="CONSOLE_LOG_PATTERN"
               value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID:- }){magenta} %clr(-){faint} %clr([%15.15t]){blue} %clr(%-48.48logger{48}){cyan} %clr(:){faint} %m%n%wex"/>
     <property name="FILE_LOG_PATTERN"
@@ -60,7 +60,7 @@
         <!-- in particular if post-processing tools impose size limits on the log files. -->
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- rollover daily -->
-            <fileNamePattern>${LOG_HOME}/${PROJECT_ARTIFACT_Id}-${ENVIRONMENT}-${HOSTNAME}.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <fileNamePattern>${LOG_HOME}/${APPLICATION}-${ENVIRONMENT}-${HOSTNAME}.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
             <!-- each file should be at most 5MB, keep 7 days worth of history, but at most 1GB -->
             <maxFileSize>5MB</maxFileSize>
             <maxHistory>7</maxHistory>
