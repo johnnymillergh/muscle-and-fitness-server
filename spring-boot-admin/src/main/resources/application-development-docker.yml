@@ -1,6 +1,8 @@
 spring:
   devtools:
     add-properties: true
+  zipkin:
+    base-url: http://maf.zipkin.development:9411
   datasource:
     url: jdbc:mysql://maf.mysql.development:3306/muscle_and_fitness?useSSL=true&useUnicode=true
     username: root
