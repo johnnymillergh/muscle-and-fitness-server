@@ -76,12 +76,6 @@
         <dependency>
             <groupId>com.jmsoftware.maf</groupId>
             <artifactId>spring-boot-starter</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-security</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>

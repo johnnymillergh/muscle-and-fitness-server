@@ -29,7 +29,7 @@ public class RedisConfiguration {
 
     @PostConstruct
     private void postConstruct() {
-        log.warn("Initial bean: {}", RedisConfiguration.class.getSimpleName());
+        log.warn("Initial bean: '{}'", RedisConfiguration.class.getSimpleName());
     }
 
     /**
@@ -44,7 +44,7 @@ public class RedisConfiguration {
      */
     @Bean
     public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        log.warn("Initial bean: {}", RedisTemplate.class.getSimpleName());
+        log.warn("Initial bean: '{}'", RedisTemplate.class.getSimpleName());
 
         RedisTemplate<Object, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
@@ -70,7 +70,7 @@ public class RedisConfiguration {
      */
     @Bean
     ReactiveRedisTemplate<Object, Object> reactiveRedisTemplate(ReactiveRedisConnectionFactory connectionFactory) {
-        log.warn("Initial bean: {}", ReactiveRedisTemplate.class.getSimpleName());
+        log.warn("Initial bean: '{}'", ReactiveRedisTemplate.class.getSimpleName());
         Jackson2JsonRedisSerializer<Object> valueSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
         RedisSerializationContext<Object, Object> serializationContext = RedisSerializationContext
                 .newSerializationContext(

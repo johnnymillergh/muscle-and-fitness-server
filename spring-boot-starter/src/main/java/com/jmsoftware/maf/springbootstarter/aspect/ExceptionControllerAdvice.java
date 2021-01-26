@@ -1,6 +1,5 @@
 package com.jmsoftware.maf.springbootstarter.aspect;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.exception.BaseException;
@@ -15,15 +14,14 @@ import org.springframework.security.authentication.InternalAuthenticationService
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.ConstraintViolationException;
 import java.util.Objects;
 
 /**
@@ -35,7 +33,7 @@ import java.util.Objects;
  * @date 2019-03-02 17:39
  **/
 @Slf4j
-@ControllerAdvice
+@RestControllerAdvice
 public class ExceptionControllerAdvice {
     /**
      * <p>Exception handler.</p>
@@ -45,96 +43,123 @@ public class ExceptionControllerAdvice {
      * @param exception any kinds of exception occurred in controller
      * @return custom exception info
      */
-    @ResponseBody
-    @ExceptionHandler(value = Exception.class)
-    @SuppressWarnings("AlibabaMethodTooLong")
-    public ResponseBodyBean<?> handleException(HttpServletRequest request, HttpServletResponse response,
-                                               Exception exception) {
-        log.error("Exception occurred when [{}] requested access. Request URL: [{}] {}",
-                  RequestUtil.getRequestIpAndPort(request), request.getMethod(), request.getRequestURL());
-
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(value = NoHandlerFoundException.class)
+    public ResponseBodyBean<?> handleException(HttpServletRequest request, NoHandlerFoundException exception) {
+        requestLog(request);
         //  ATTENTION: Use only ResponseBodyBean.ofStatus() in handleException() method and
         //  DON'T throw any exceptions in this method
-        if (exception instanceof NoHandlerFoundException) {
-            log.error("NoHandlerFoundException: Request URL = {}, HTTP method = {}",
-                      ((NoHandlerFoundException) exception).getRequestURL(),
-                      ((NoHandlerFoundException) exception).getHttpMethod());
-            response.setStatus(HttpStatus.NOT_FOUND.value());
-            return ResponseBodyBean.ofStatus(HttpStatus.NOT_FOUND);
-        } else if (exception instanceof HttpRequestMethodNotSupportedException) {
-            log.error("Exception occurred when the request handler does not support a specific request method. " +
-                              "Current method is {}, Support HTTP method = {}",
-                      ((HttpRequestMethodNotSupportedException) exception).getMethod(),
-                      ((HttpRequestMethodNotSupportedException) exception).getSupportedHttpMethods());
-            response.setStatus(HttpStatus.METHOD_NOT_ALLOWED.value());
-            return ResponseBodyBean.ofStatus(HttpStatus.METHOD_NOT_ALLOWED);
-        } else if (exception instanceof MethodArgumentNotValidException) {
-            log.error("Exception occurred when validation on an argument annotated with fails. Exception message: {}",
-                      exception.getMessage());
-            response.setStatus(HttpStatus.BAD_REQUEST.value());
-            return ResponseBodyBean.ofStatus(HttpStatus.BAD_REQUEST.value(),
-                                             getFieldErrorMessageFromException(
-                                                     (MethodArgumentNotValidException) exception),
-                                             null);
-        } else if (exception instanceof ConstraintViolationException) {
-            log.error("Constraint violations exception occurred. Exception message: {}", exception.getMessage());
-            response.setStatus(HttpStatus.BAD_REQUEST.value());
-            return ResponseBodyBean.ofStatus(HttpStatus.BAD_REQUEST.value(),
-                                             CollUtil.getFirst(
-                                                     ((ConstraintViolationException) exception).getConstraintViolations()).getMessage(),
-                                             null);
-        } else if (exception instanceof MethodArgumentTypeMismatchException) {
-            log.error("MethodArgumentTypeMismatchException: Parameter name = {}, Exception message: {}",
-                      ((MethodArgumentTypeMismatchException) exception).getName(), exception.getMessage());
-            response.setStatus(HttpStatus.BAD_REQUEST.value());
-            return ResponseBodyBean.ofStatus(HttpStatus.BAD_REQUEST, removeLineSeparator(exception.getMessage()));
-        } else if (exception instanceof HttpMessageNotReadableException) {
-            log.error("HttpMessageNotReadableException: {}",
-                      ((HttpMessageNotReadableException) exception).getMessage());
-            response.setStatus(HttpStatus.BAD_REQUEST.value());
-            return ResponseBodyBean.ofStatus(HttpStatus.BAD_REQUEST,
-                                             removeLineSeparator(
-                                                     ((HttpMessageNotReadableException) exception).getMessage()));
-        } else if (exception instanceof BaseException) {
-            log.error("BaseException: Status code: {}, message: {}, data: {}", ((BaseException) exception).getCode(),
-                      exception.getMessage(), ((BaseException) exception).getData());
-            response.setStatus(((BaseException) exception).getCode());
-            return ResponseBodyBean.ofStatus(((BaseException) exception).getCode(),
-                                             removeLineSeparator(exception.getMessage()),
-                                             ((BaseException) exception).getData());
-        } else if (exception instanceof BindException) {
-            log.error("Exception message: {} ", exception.getMessage());
-            response.setStatus(HttpStatus.BAD_REQUEST.value());
-            return ResponseBodyBean.ofStatus(HttpStatus.BAD_REQUEST, removeLineSeparator(exception.getMessage()));
-        } else if (exception instanceof IllegalArgumentException) {
-            log.error("Exception message: {} ", exception.getMessage());
-            response.setStatus(HttpStatus.BAD_REQUEST.value());
-            return ResponseBodyBean.ofStatus(HttpStatus.BAD_REQUEST.value(),
-                                             removeLineSeparator(exception.getMessage()), null);
-        } else if (exception instanceof BadCredentialsException) {
-            // IMPORTANT: org.springframework.security.authentication.BadCredentialsException only exists in the project
-            // that depends on org.springframework.boot.spring-boot-starter-security
-            log.error("Exception message: {} ", exception.getMessage());
-            response.setStatus(HttpStatus.FORBIDDEN.value());
-            return ResponseBodyBean.ofStatus(HttpStatus.FORBIDDEN.value(), removeLineSeparator(exception.getMessage()),
-                                             null);
-        } else if (exception instanceof InternalAuthenticationServiceException) {
-            log.error("An authentication request could not be processed due to a system problem that occurred " +
-                              "internally. Exception message: {} ", exception.getMessage());
-            if (exception.getCause() instanceof BaseException) {
-                val exceptionCause = (BaseException) exception.getCause();
-                val code = exceptionCause.getCode();
-                response.setStatus(code);
-                return ResponseBodyBean.ofStatus(HttpStatus.valueOf(code), removeLineSeparator(exception.getMessage()));
-            }
-            response.setStatus(HttpStatus.FORBIDDEN.value());
-            return ResponseBodyBean.ofStatus(HttpStatus.FORBIDDEN.value(), removeLineSeparator(exception.getMessage()),
-                                             null);
+        log.error("NoHandlerFoundException: Request URL = {}, HTTP method = {}", exception.getRequestURL(),
+                  exception.getHttpMethod());
+        return ResponseBodyBean.ofStatus(HttpStatus.NOT_FOUND);
+    }
+
+    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+    @ExceptionHandler(value = HttpRequestMethodNotSupportedException.class)
+    public ResponseBodyBean<?> handleException(HttpServletRequest request,
+                                               HttpRequestMethodNotSupportedException exception) {
+        requestLog(request);
+        log.error("Exception occurred when the request handler does not support a specific request method. " +
+                          "Current method is {}, Support HTTP method = {}", exception.getMethod(),
+                  exception.getSupportedHttpMethods());
+        return ResponseBodyBean.ofStatus(HttpStatus.METHOD_NOT_ALLOWED);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    public ResponseBodyBean<?> handleException(HttpServletRequest request, MethodArgumentNotValidException exception) {
+        requestLog(request);
+        log.error("Exception occurred when validation on an argument annotated with fails. Exception message: {}",
+                  exception.getMessage());
+        return ResponseBodyBean.ofStatus(HttpStatus.BAD_REQUEST.value(), getFieldErrorMessageFromException(exception),
+                                         null);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
+    public ResponseBodyBean<?> handleException(HttpServletRequest request,
+                                               MethodArgumentTypeMismatchException exception) {
+        requestLog(request);
+        log.error("MethodArgumentTypeMismatchException: Parameter name = {}, Exception message: {}",
+                  exception.getName(), exception.getMessage());
+        return ResponseBodyBean.ofStatus(HttpStatus.BAD_REQUEST, removeLineSeparator(exception.getMessage()));
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = HttpMessageNotReadableException.class)
+    public ResponseBodyBean<?> handleException(HttpServletRequest request, HttpMessageNotReadableException exception) {
+        requestLog(request);
+        log.error("HttpMessageNotReadableException: {}", exception.getMessage());
+        return ResponseBodyBean.ofStatus(HttpStatus.BAD_REQUEST, removeLineSeparator(exception.getMessage()));
+    }
+
+    @ExceptionHandler(value = BaseException.class)
+    public ResponseBodyBean<?> handleException(HttpServletRequest request, HttpServletResponse response,
+                                               BaseException exception) {
+        requestLog(request);
+        log.error("BaseException: Status code: {}, message: {}, data: {}", exception.getCode(),
+                  exception.getMessage(), exception.getData());
+        response.setStatus(exception.getCode());
+        return ResponseBodyBean.ofStatus(exception.getCode(), removeLineSeparator(exception.getMessage()),
+                                         exception.getData());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = BindException.class)
+    public ResponseBodyBean<?> handleException(HttpServletRequest request, BindException exception) {
+        requestLog(request);
+        log.error("Exception message: {} ", exception.getMessage());
+        return ResponseBodyBean.ofStatus(HttpStatus.BAD_REQUEST, removeLineSeparator(exception.getMessage()));
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = IllegalArgumentException.class)
+    public ResponseBodyBean<?> handleException(HttpServletRequest request, IllegalArgumentException exception) {
+        requestLog(request);
+        log.error("Exception message: {} ", exception.getMessage());
+        return ResponseBodyBean.ofStatus(HttpStatus.BAD_REQUEST.value(), removeLineSeparator(exception.getMessage()),
+                                         null);
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(value = BadCredentialsException.class)
+    public ResponseBodyBean<?> handleException(HttpServletRequest request, BadCredentialsException exception) {
+        requestLog(request);
+        // IMPORTANT: org.springframework.security.authentication.BadCredentialsException only exists in the project
+        // that depends on org.springframework.boot.spring-boot-starter-security
+        log.error("Exception message: {} ", exception.getMessage());
+        return ResponseBodyBean.ofStatus(HttpStatus.FORBIDDEN.value(), removeLineSeparator(exception.getMessage()),
+                                         null);
+    }
+
+    @ExceptionHandler(value = InternalAuthenticationServiceException.class)
+    public ResponseBodyBean<?> handleException(HttpServletRequest request, HttpServletResponse response,
+                                               InternalAuthenticationServiceException exception) {
+        requestLog(request);
+        log.error("An authentication request could not be processed due to a system problem that occurred " +
+                          "internally. Exception message: {} ", exception.getMessage());
+        if (exception.getCause() instanceof BaseException) {
+            val exceptionCause = (BaseException) exception.getCause();
+            val code = exceptionCause.getCode();
+            response.setStatus(code);
+            return ResponseBodyBean.ofStatus(HttpStatus.valueOf(code), removeLineSeparator(exception.getMessage()));
         }
-        log.error("Internal server exception occurred! Exception message: {} ", exception.getMessage(), exception);
-        response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        response.setStatus(HttpStatus.FORBIDDEN.value());
+        return ResponseBodyBean.ofStatus(HttpStatus.FORBIDDEN.value(), removeLineSeparator(exception.getMessage()),
+                                         null);
+    }
+
+    @ExceptionHandler(value = {Throwable.class})
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseBodyBean<?> handleError(Throwable ex) {
+        log.error("Internal server exception occurred! Exception message: {} ", ex.getMessage(), ex);
         return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR,
-                                         "Exception message: " + removeLineSeparator(exception.getMessage()));
+                                         String.format("Exception message: %s", removeLineSeparator(ex.getMessage())));
+    }
+
+    private void requestLog(HttpServletRequest request) {
+        log.error("Exception occurred when [{}] requested access. Request URL: [{}] {}",
+                  RequestUtil.getRequestIpAndPort(request), request.getMethod(), request.getRequestURL());
     }
 
     /**

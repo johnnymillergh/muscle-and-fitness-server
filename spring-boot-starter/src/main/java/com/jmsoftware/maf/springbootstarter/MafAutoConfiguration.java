@@ -48,6 +48,8 @@ import org.springframework.integration.sftp.outbound.SftpMessageHandler;
 import org.springframework.integration.sftp.session.DefaultSftpSessionFactory;
 import org.springframework.integration.sftp.session.SftpRemoteFileTemplate;
 import org.springframework.messaging.MessageHandler;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import springfox.documentation.builders.PathSelectors;
@@ -80,7 +82,7 @@ public class MafAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public MafConfiguration mafConfiguration() {
-        log.warn("Initial bean: {}", MafConfiguration.class.getSimpleName());
+        log.warn("Initial bean: '{}'", MafConfiguration.class.getSimpleName());
         val mafConfiguration = new MafConfiguration();
         log.warn("{}", mafConfiguration);
         return mafConfiguration;
@@ -88,14 +90,14 @@ public class MafAutoConfiguration {
 
     @Bean
     public MafProjectProperty mafProjectProperty() {
-        log.warn("Initial bean: {}", MafProjectProperty.class.getSimpleName());
+        log.warn("Initial bean: '{}'", MafProjectProperty.class.getSimpleName());
         return new MafProjectProperty();
     }
 
     @Bean
     @ConditionalOnMissingBean
     public ExceptionControllerAdvice exceptionControllerAdvice() {
-        log.warn("Initial bean: {}", ExceptionControllerAdvice.class.getSimpleName());
+        log.warn("Initial bean: '{}'", ExceptionControllerAdvice.class.getSimpleName());
         return new ExceptionControllerAdvice();
     }
 
@@ -103,35 +105,35 @@ public class MafAutoConfiguration {
     @ConditionalOnMissingBean
     @ConditionalOnProperty(value = "maf.configuration.web-request-log-disabled", havingValue = "false")
     public WebRequestLogAspect webRequestLogAspect() {
-        log.warn("Initial bean: {}", WebRequestLogAspect.class.getSimpleName());
+        log.warn("Initial bean: '{}'", WebRequestLogAspect.class.getSimpleName());
         return new WebRequestLogAspect();
     }
 
     @Bean
     @ConditionalOnMissingBean
     public RedirectController redirectController() {
-        log.warn("Initial bean: {}", RedirectController.class.getSimpleName());
+        log.warn("Initial bean: '{}'", RedirectController.class.getSimpleName());
         return new RedirectController();
     }
 
     @Bean
     @ConditionalOnMissingBean
     public AccessLogFilter requestFilter(MafConfiguration mafConfiguration) {
-        log.warn("Initial bean: {}", AccessLogFilter.class.getSimpleName());
+        log.warn("Initial bean: '{}'", AccessLogFilter.class.getSimpleName());
         return new AccessLogFilter(mafConfiguration);
     }
 
     @Bean
     @ConditionalOnMissingBean
     public IpHelper ipHelper(Environment environment) {
-        log.warn("Initial bean: {}", IpHelper.class.getSimpleName());
+        log.warn("Initial bean: '{}'", IpHelper.class.getSimpleName());
         return new IpHelper(environment);
     }
 
     @Bean
     @ConditionalOnMissingBean
     public WebMvcConfiguration webMvcConfiguration() {
-        log.warn("Initial bean: {}", WebMvcConfiguration.class.getSimpleName());
+        log.warn("Initial bean: '{}'", WebMvcConfiguration.class.getSimpleName());
         return new WebMvcConfiguration();
     }
 
@@ -140,34 +142,34 @@ public class MafAutoConfiguration {
     public GlobalErrorController globalErrorController(ErrorAttributes errorAttributes,
                                                        ServerProperties serverProperties,
                                                        List<ErrorViewResolver> errorViewResolvers) {
-        log.warn("Initial bean: {}", GlobalErrorController.class.getSimpleName());
+        log.warn("Initial bean: '{}'", GlobalErrorController.class.getSimpleName());
         return new GlobalErrorController(errorAttributes, serverProperties, errorViewResolvers);
     }
 
     @Bean
     public HttpApiScanHelper httpApiScanHelper(RequestMappingHandlerMapping requestMappingHandlerMapping) {
-        log.warn("Initial bean: {}", HttpApiScanHelper.class.getSimpleName());
+        log.warn("Initial bean: '{}'", HttpApiScanHelper.class.getSimpleName());
         return new HttpApiScanHelper(requestMappingHandlerMapping);
     }
 
     @Bean
     public HttpApiResourceRemoteApiController httpApiResourceRemoteController(MafConfiguration mafConfiguration,
                                                                               HttpApiScanHelper httpApiScanHelper) {
-        log.warn("Initial bean: {}", HttpApiResourceRemoteApiController.class.getSimpleName());
+        log.warn("Initial bean: '{}'", HttpApiResourceRemoteApiController.class.getSimpleName());
         return new HttpApiResourceRemoteApiController(mafConfiguration, httpApiScanHelper);
     }
 
     @Bean
     @ConditionalOnProperty(value = "maf.configuration.swagger-disabled", havingValue = "false")
     public Swagger2Configuration swagger2Configuration(MafProjectProperty mafProjectProperty) {
-        log.warn("Initial bean: {}", Swagger2Configuration.class.getSimpleName());
+        log.warn("Initial bean: '{}'", Swagger2Configuration.class.getSimpleName());
         return new Swagger2Configuration(mafProjectProperty);
     }
 
     @Bean
     @ConditionalOnProperty(value = "maf.configuration.swagger-disabled", havingValue = "false")
     public Docket docket(Swagger2Configuration swagger2Configuration, MafProjectProperty mafProjectProperty) {
-        log.warn("Initial bean: {}", Docket.class.getSimpleName());
+        log.warn("Initial bean: '{}'", Docket.class.getSimpleName());
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(swagger2Configuration.apiInfo())
                 .select()
@@ -178,56 +180,56 @@ public class MafAutoConfiguration {
 
     @Bean
     public CommonService commonService(MafProjectProperty mafProjectProperty) {
-        log.warn("Initial bean: {}", CommonServiceImpl.class.getSimpleName());
+        log.warn("Initial bean: '{}'", CommonServiceImpl.class.getSimpleName());
         return new CommonServiceImpl(mafProjectProperty);
     }
 
     @Bean
     public CommonController commonController(CommonService commonService) {
-        log.warn("Initial bean: {}", CommonController.class.getSimpleName());
+        log.warn("Initial bean: '{}'", CommonController.class.getSimpleName());
         return new CommonController(commonService);
     }
 
     @Bean
     public JwtConfiguration jwtConfiguration(MafProjectProperty mafProjectProperty) {
-        log.warn("Initial bean: {}", JwtConfiguration.class.getSimpleName());
+        log.warn("Initial bean: '{}'", JwtConfiguration.class.getSimpleName());
         return new JwtConfiguration(mafProjectProperty);
     }
 
     @Bean
     public DruidConfiguration druidConfiguration(MafConfiguration mafConfiguration) {
-        log.warn("Initial bean: {}", DruidConfiguration.class.getSimpleName());
+        log.warn("Initial bean: '{}'", DruidConfiguration.class.getSimpleName());
         return new DruidConfiguration(mafConfiguration);
     }
 
     @Bean
     public MyBatisPlusConfiguration myBatisPlusConfiguration() {
-        log.warn("Initial bean: {}", MyBatisPlusConfiguration.class.getSimpleName());
+        log.warn("Initial bean: '{}'", MyBatisPlusConfiguration.class.getSimpleName());
         return new MyBatisPlusConfiguration();
     }
 
     @Bean
     public RedisCachingConfiguration redisCachingConfiguration(RedisConnectionFactory redisConnectionFactory) {
-        log.warn("Initial bean: {}", RedisCachingConfiguration.class.getSimpleName());
+        log.warn("Initial bean: '{}'", RedisCachingConfiguration.class.getSimpleName());
         return new RedisCachingConfiguration(redisConnectionFactory);
     }
 
     @Bean
     public RedisConfiguration redisConfiguration(ObjectMapper objectMapper) {
-        log.warn("Initial bean: {}", RedisConfiguration.class.getSimpleName());
+        log.warn("Initial bean: '{}'", RedisConfiguration.class.getSimpleName());
         return new RedisConfiguration(objectMapper);
     }
 
     @Bean
     @LoadBalanced
     public RestTemplate restTemplate() {
-        log.warn("Initial bean: {}", RestTemplate.class.getSimpleName());
+        log.warn("Initial bean: '{}'", RestTemplate.class.getSimpleName());
         return new RestTemplate();
     }
 
     @Bean
     public SftpClientConfiguration sftpClientConfiguration() {
-        log.warn("Initial bean: {}", SftpClientConfiguration.class.getSimpleName());
+        log.warn("Initial bean: '{}'", SftpClientConfiguration.class.getSimpleName());
         return new SftpClientConfiguration();
     }
 
@@ -247,6 +249,7 @@ public class MafAutoConfiguration {
         // We return a caching session factory, so that we don't have to reconnect to SFTP server for each time
         val cachingSessionFactory = new CachingSessionFactory<>(factory, sftpClientConfiguration.getSessionCacheSize());
         cachingSessionFactory.setSessionWaitTimeout(sftpClientConfiguration.getSessionWaitTimeout());
+        log.warn("Initial bean: '{}'", cachingSessionFactory.getClass().getSimpleName());
         return cachingSessionFactory;
     }
 
@@ -264,6 +267,7 @@ public class MafAutoConfiguration {
                 throw new IllegalArgumentException("File expected as payload.");
             }
         });
+        log.warn("Initial bean: '{}'", handler.getClass().getSimpleName());
         return handler;
     }
 
@@ -276,19 +280,32 @@ public class MafAutoConfiguration {
         sftpRemoteFileTemplate.setAutoCreateDirectory(true);
         // sftpRemoteFileTemplate.setBeanFactory(beanFactory);
         sftpRemoteFileTemplate.afterPropertiesSet();
+        log.warn("Initial bean: '{}'", sftpRemoteFileTemplate.getClass().getSimpleName());
         return sftpRemoteFileTemplate;
     }
 
     @Bean
     public SftpSubDirectoryRunner sftpSubDirectoryRunner(SftpRemoteFileTemplate sftpRemoteFileTemplate,
                                                          SftpClientConfiguration sftpClientConfiguration) {
-        log.warn("Initial bean: {}", SftpSubDirectoryRunner.class.getSimpleName());
+        log.warn("Initial bean: '{}'", SftpSubDirectoryRunner.class.getSimpleName());
         return new SftpSubDirectoryRunner(sftpRemoteFileTemplate, sftpClientConfiguration);
     }
 
     @Bean
     public SftpHelper sftpHelper(SftpRemoteFileTemplate sftpRemoteFileTemplate) {
-        log.warn("Initial bean: {}", SftpHelper.class.getSimpleName());
+        log.warn("Initial bean: '{}'", SftpHelper.class.getSimpleName());
         return new SftpHelperImpl(sftpRemoteFileTemplate);
+    }
+
+    @Bean
+    public WebSecurityConfiguration webSecurityConfiguration() {
+        log.warn("Initial bean: '{}'", WebSecurityConfiguration.class.getSimpleName());
+        return new WebSecurityConfiguration();
+    }
+
+    @Bean
+    public BCryptPasswordEncoder bcryptPasswordEncoder() {
+        log.warn("Initial bean: '{}'", BCryptPasswordEncoder.class.getSimpleName());
+        return new BCryptPasswordEncoder();
     }
 }

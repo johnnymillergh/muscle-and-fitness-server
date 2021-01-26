@@ -35,7 +35,7 @@ public class RedisCachingConfiguration extends CachingConfigurerSupport {
 
     @PostConstruct
     private void postConstruct() {
-        log.warn("Initial bean: {}", RedisCachingConfiguration.class.getSimpleName());
+        log.warn("Initial bean: '{}'", RedisCachingConfiguration.class.getSimpleName());
     }
 
     @Bean

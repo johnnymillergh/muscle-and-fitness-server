@@ -34,45 +34,45 @@ public class MafReactiveAutoConfiguration {
 
     @Bean
     public WebFluxConfiguration webFluxConfiguration() {
-        log.warn("Initial bean: {}", WebFluxConfiguration.class.getSimpleName());
+        log.warn("Initial bean: '{}'", WebFluxConfiguration.class.getSimpleName());
         return new WebFluxConfiguration();
     }
 
     @Bean
     @ConditionalOnMissingBean
     public MafConfiguration mafConfiguration() {
-        log.warn("Initial bean: {}", MafConfiguration.class.getSimpleName());
+        log.warn("Initial bean: '{}'", MafConfiguration.class.getSimpleName());
         return new MafConfiguration();
     }
 
     @Bean
     @ConditionalOnMissingBean
     public AccessLogFilter requestFilter(MafConfiguration mafConfiguration) {
-        log.warn("Initial bean: {}", AccessLogFilter.class.getSimpleName());
+        log.warn("Initial bean: '{}'", AccessLogFilter.class.getSimpleName());
         return new AccessLogFilter(mafConfiguration);
     }
 
     @Bean
     public MafProjectProperty mafProjectProperty() {
-        log.warn("Initial bean: {}", MafProjectProperty.class.getSimpleName());
+        log.warn("Initial bean: '{}'", MafProjectProperty.class.getSimpleName());
         return new MafProjectProperty();
     }
 
     @Bean
     public IpHelper ipHelper(MafProjectProperty mafProjectProperty) {
-        log.warn("Initial bean: {}", IpHelper.class.getSimpleName());
+        log.warn("Initial bean: '{}'", IpHelper.class.getSimpleName());
         return new IpHelper(mafProjectProperty);
     }
 
     @Bean
     public CommonService commonService(MafProjectProperty mafProjectProperty) {
-        log.warn("Initial bean: {}", CommonServiceImpl.class.getSimpleName());
+        log.warn("Initial bean: '{}'", CommonServiceImpl.class.getSimpleName());
         return new CommonServiceImpl(mafProjectProperty);
     }
 
     @Bean
     public CommonController commonController(CommonService commonService) {
-        log.warn("Initial bean: {}", CommonController.class.getSimpleName());
+        log.warn("Initial bean: '{}'", CommonController.class.getSimpleName());
         return new CommonController(commonService);
     }
 }
