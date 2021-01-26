@@ -21,6 +21,7 @@ logging:
   # Configure logging level for SFTP/JSCH
   level:
     com.jcraft.jsch: INFO
+    org.springframework.web: DEBUG
 
 sftp:
   client:
