@@ -1,5 +1,8 @@
-package com.jmsoftware.maf.reactivespringbootstarter.configuration;
+package com.jmsoftware.maf.reactivespringbootstarter;
 
+import com.jmsoftware.maf.reactivespringbootstarter.configuration.MafConfiguration;
+import com.jmsoftware.maf.reactivespringbootstarter.configuration.MafProjectProperty;
+import com.jmsoftware.maf.reactivespringbootstarter.configuration.WebFluxConfiguration;
 import com.jmsoftware.maf.reactivespringbootstarter.controller.CommonController;
 import com.jmsoftware.maf.reactivespringbootstarter.filter.AccessLogFilter;
 import com.jmsoftware.maf.reactivespringbootstarter.helper.IpHelper;
@@ -10,8 +13,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import javax.annotation.PostConstruct;
 
@@ -74,5 +79,12 @@ public class MafReactiveAutoConfiguration {
     public CommonController commonController(CommonService commonService) {
         log.warn("Initial bean: '{}'", CommonController.class.getSimpleName());
         return new CommonController(commonService);
+    }
+
+    @Bean
+    @LoadBalanced
+    public WebClient.Builder loadBalancedWebClientBuilder() {
+        log.warn("Initial bean: '{}'", WebClient.Builder.class.getSimpleName());
+        return WebClient.builder();
     }
 }

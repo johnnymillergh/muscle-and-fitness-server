@@ -1,7 +1,7 @@
 package com.jmsoftware.maf.apigateway.security.impl;
 
 import cn.hutool.core.util.StrUtil;
-import com.jmsoftware.maf.apigateway.remoteapi.AuthCenterRemoteApi;
+import cn.hutool.json.JSONUtil;
 import com.jmsoftware.maf.apigateway.security.configuration.JwtConfiguration;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtResponse;
@@ -11,7 +11,6 @@ import com.jmsoftware.maf.reactivespringbootstarter.configuration.MafConfigurati
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
@@ -20,11 +19,11 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.web.server.context.ServerSecurityContextRepository;
 import org.springframework.util.AntPathMatcher;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
 
 /**
  * Description: JwtReactiveServerSecurityContextRepositoryImpl
@@ -39,9 +38,8 @@ public class JwtReactiveServerSecurityContextRepositoryImpl implements ServerSec
     private final MafConfiguration mafConfiguration;
     private final ReactiveAuthenticationManager authenticationManager;
     private final AntPathMatcher antPathMatcher = new AntPathMatcher();
-    @Lazy
     @Resource
-    private AuthCenterRemoteApi authCenterRemoteApi;
+    private WebClient.Builder webClientBuilder;
 
     @Override
     public Mono<Void> save(ServerWebExchange exchange, SecurityContext context) {
@@ -64,16 +62,17 @@ public class JwtReactiveServerSecurityContextRepositoryImpl implements ServerSec
                      HttpHeaders.AUTHORIZATION, request.getMethod(), request.getURI());
             return Mono.error(new SecurityException(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED, "JWT Required"));
         }
-        val headers = new HashMap<String, String>(4);
-        headers.put(HttpHeaders.AUTHORIZATION, authorization);
-        Mono<ParseJwtResponse> parseJwtResponseMono = authCenterRemoteApi
-                .parse(headers)
-                .map(ResponseBodyBean::getData)
-                .switchIfEmpty(Mono.error(
-                        new SecurityException(HttpStatus.INTERNAL_SERVER_ERROR, "Got empty when parsing JWT")));
-        return parseJwtResponseMono.map(parseJwtResponse -> {
-            String username = parseJwtResponse.getUsername();
-            val userPrincipal = UserPrincipal.createByUsername(username);
+        val parseJwtResponseMono = webClientBuilder
+                .build()
+                .get()
+                .uri("http://auth-center/jwt-remote-api/parse")
+                .headers(httpHeaders -> httpHeaders.set(HttpHeaders.AUTHORIZATION, authorization))
+                .retrieve()
+                .bodyToMono(ResponseBodyBean.class).map(ResponseBodyBean::getData);
+        return parseJwtResponseMono.map(data -> {
+            val parseJwtResponse = JSONUtil.toBean(JSONUtil.parseObj(data), ParseJwtResponse.class);
+            log.info("parseJwtResponse: {}", parseJwtResponse);
+            val userPrincipal = UserPrincipal.createByUsername(parseJwtResponse.getUsername());
             val authentication = new UsernamePasswordAuthenticationToken(userPrincipal, null);
             log.warn("About to authenticate… Authentication is created. {}", authentication);
             return authentication;

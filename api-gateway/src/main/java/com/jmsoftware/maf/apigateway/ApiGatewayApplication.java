@@ -7,8 +7,6 @@ import lombok.val;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.openfeign.EnableFeignClients;
-import reactivefeign.spring.config.EnableReactiveFeignClients;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -22,10 +20,8 @@ import java.util.TimeZone;
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 12/22/2020 3:39 PM
  **/
 @Slf4j
-@EnableFeignClients
 @EnableDiscoveryClient
 @SpringBootApplication
-@EnableReactiveFeignClients
 public class ApiGatewayApplication {
     private static final String LINE_SEPARATOR = System.lineSeparator();
     private static MafProjectProperty mafProjectProperty;

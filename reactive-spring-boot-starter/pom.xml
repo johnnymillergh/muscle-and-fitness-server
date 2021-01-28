@@ -54,22 +54,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.playtika.reactivefeign</groupId>
-            <artifactId>feign-reactor-webclient</artifactId>
-            <version>${feign-reactor.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.playtika.reactivefeign</groupId>
-            <artifactId>feign-reactor-cloud</artifactId>
-            <version>${feign-reactor.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.playtika.reactivefeign</groupId>
-            <artifactId>feign-reactor-spring-configuration</artifactId>
-            <version>${feign-reactor.version}</version>
-        </dependency>
-
-        <dependency>
             <groupId>com.jmsoftware.maf</groupId>
             <artifactId>common</artifactId>
         </dependency>

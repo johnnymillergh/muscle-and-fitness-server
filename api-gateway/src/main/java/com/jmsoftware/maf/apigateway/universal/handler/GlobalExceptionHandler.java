@@ -1,14 +1,10 @@
 package com.jmsoftware.maf.apigateway.universal.handler;
 
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.exception.SecurityException;
 import com.jmsoftware.maf.reactivespringbootstarter.util.RequestUtil;
-import com.netflix.hystrix.exception.HystrixRuntimeException;
-import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -22,8 +18,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-
-import java.util.Optional;
 
 /**
  * <h1>GlobalExceptionHandler</h1>
@@ -77,40 +71,6 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
         if (ex instanceof ResponseStatusException) {
             response.setStatusCode(((ResponseStatusException) ex).getStatus());
             return ResponseBodyBean.ofStatus(((ResponseStatusException) ex).getStatus());
-        } else if (ex instanceof HystrixRuntimeException) {
-            if (ObjectUtil.isNotNull(ex.getCause()) && ex.getCause() instanceof FeignException) {
-                val cause = (FeignException) ex.getCause();
-                val httpStatus = HttpStatus.valueOf(cause.status());
-                response.setStatusCode(httpStatus);
-                String responseBodyString = null;
-                if (cause.responseBody().isPresent()) {
-                    responseBodyString = new String(cause.responseBody().get().array());
-                }
-                Optional<ResponseBodyBean<?>> optionalResponseBodyBean = Optional.empty();
-                if (StrUtil.isNotBlank(responseBodyString)) {
-                    try {
-                        //noinspection unchecked
-                        optionalResponseBodyBean = Optional.ofNullable(
-                                objectMapper.readValue(responseBodyString, ResponseBodyBean.class));
-                    } catch (JsonProcessingException e) {
-                        log.error("Cannot deserialize response to {}", ResponseBodyBean.class.getSimpleName());
-                        optionalResponseBodyBean = Optional.empty();
-                    }
-                }
-                String errorMessage;
-                if (optionalResponseBodyBean.isPresent() && StrUtil.isNotBlank(
-                        optionalResponseBodyBean.get().getMessage())) {
-                    errorMessage = String.format("%s Feign exception: %s", ex.getMessage(),
-                                                 optionalResponseBodyBean.get().getMessage());
-                } else {
-                    errorMessage = String.format("%s Feign exception: %s", ex.getMessage(),
-                                                 ex.getCause().getMessage());
-                }
-                return ResponseBodyBean.ofStatus(httpStatus, errorMessage);
-            }
-            response.setStatusCode(HttpStatus.SERVICE_UNAVAILABLE);
-            return ResponseBodyBean.ofStatus(HttpStatus.SERVICE_UNAVAILABLE,
-                                             String.format("%s %s", ex.getMessage(), ex.getCause().getMessage()));
         } else if (ex instanceof SecurityException) {
             HttpStatus status = HttpStatus.valueOf(((SecurityException) ex).getCode());
             response.setStatusCode(status);

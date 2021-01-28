@@ -1,20 +1,21 @@
 package com.jmsoftware.maf.apigateway.security.impl;
 
 import cn.hutool.core.util.StrUtil;
-import com.jmsoftware.maf.apigateway.remoteapi.AuthCenterRemoteApi;
+import cn.hutool.json.JSONUtil;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.authcenter.security.UserPrincipal;
+import com.jmsoftware.maf.common.domain.authcenter.user.GetUserByLoginTokenResponse;
 import com.jmsoftware.maf.common.exception.BusinessException;
 import com.jmsoftware.maf.common.exception.SecurityException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsChecker;
+import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
@@ -29,9 +30,8 @@ import javax.annotation.Resource;
 @Slf4j
 @RequiredArgsConstructor
 public class JwtReactiveAuthenticationManagerImpl implements ReactiveAuthenticationManager {
-    @Lazy
     @Resource
-    private AuthCenterRemoteApi authCenterRemoteApi;
+    private WebClient.Builder webClientBuilder;
 
     private final UserDetailsChecker preAuthenticationChecks = user -> {
         if (!user.isAccountNonLocked()) {
@@ -63,11 +63,18 @@ public class JwtReactiveAuthenticationManagerImpl implements ReactiveAuthenticat
             return Mono.error(
                     new SecurityException(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED, "Username mustn't be blank"));
         }
-        val response = authCenterRemoteApi.getUserByLoginToken(username);
+        val response = webClientBuilder
+                .build()
+                .get()
+                .uri("http://auth-center/user-remote-api/users/{loginToken}", username)
+                .retrieve()
+                .bodyToMono(ResponseBodyBean.class);
         return response.map(ResponseBodyBean::getData)
                 .switchIfEmpty(Mono.error(new BusinessException("Authentication failure! Cause: User not found")))
-                .map(getUserByLoginTokenResponse -> {
-                    log.info("Authentication success! Found {}", getUserByLoginTokenResponse);
+                .map(data -> {
+                    log.info("Authentication success! Found {}", data);
+                    val getUserByLoginTokenResponse = JSONUtil.toBean(JSONUtil.parseObj(data),
+                                                                      GetUserByLoginTokenResponse.class);
                     return UserPrincipal.create(getUserByLoginTokenResponse, null, null);
                 });
     }

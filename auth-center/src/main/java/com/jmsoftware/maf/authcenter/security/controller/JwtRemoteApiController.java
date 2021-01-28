@@ -7,6 +7,8 @@ import com.jmsoftware.maf.common.exception.SecurityException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.info.BuildProperties;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,12 +22,14 @@ import javax.servlet.http.HttpServletRequest;
  * @author 钟俊（zhongjun）, email: zhongjun@toguide.cn, date: 12/29/2020 11:04 AM
  **/
 @Validated
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @Api(tags = {"JWT Remote API"})
 @RequestMapping("/jwt-remote-api")
 public class JwtRemoteApiController {
     private final JwtService jwtService;
+    private final BuildProperties buildProperties;
 
     /**
      * Parse response body bean.
@@ -35,6 +39,8 @@ public class JwtRemoteApiController {
     @GetMapping("/parse")
     @ApiOperation(value = "Parse JWT", notes = "Parse JWT (Remote API)")
     public ResponseBodyBean<ParseJwtResponse> parse(HttpServletRequest request) throws SecurityException {
-        return ResponseBodyBean.ofSuccess(new ParseJwtResponse().setUsername(jwtService.getUsernameFromRequest(request)));
+        log.info("buildProperties.getVersion {}", buildProperties.getVersion());
+        return ResponseBodyBean.ofSuccess(
+                new ParseJwtResponse().setUsername(jwtService.getUsernameFromRequest(request)));
     }
 }
