@@ -10,14 +10,16 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler;
 import org.springframework.core.annotation.Order;
-import org.springframework.core.io.buffer.DataBufferFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+
+import java.nio.charset.StandardCharsets;
 
 /**
  * <h1>GlobalExceptionHandler</h1>
@@ -41,7 +43,7 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
         log.error("Exception occurred when [{}] requested access. Exception message: {}. Request URL: [{}] {}",
                   RequestUtil.getRequesterIpAndPort(request), ex.getMessage(), request.getMethod(), request.getURI(),
                   ex);
-        ServerHttpResponse response = exchange.getResponse();
+        val response = exchange.getResponse();
         if (response.isCommitted()) {
             return Mono.error(ex);
         }
@@ -49,13 +51,13 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
         // UTF-8 special characters without requiring a charset=UTF-8 parameter.
         response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
         return response.writeWith(Mono.fromSupplier(() -> {
-            DataBufferFactory bufferFactory = response.bufferFactory();
-            final var responseBody = setResponseBody(response, ex);
+            val bufferFactory = response.bufferFactory();
+            val responseBody = setResponseBody(response, ex);
             try {
                 return bufferFactory.wrap(objectMapper.writeValueAsBytes(responseBody));
             } catch (JsonProcessingException e) {
                 log.warn("Exception occurred when writing response", e);
-                return bufferFactory.wrap(new byte[0]);
+                return bufferFactory.wrap(e.getMessage().getBytes(StandardCharsets.UTF_8));
             }
         }));
     }
@@ -75,6 +77,15 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
             HttpStatus status = HttpStatus.valueOf(((SecurityException) ex).getCode());
             response.setStatusCode(status);
             return ResponseBodyBean.ofStatus(status, ex.getMessage());
+        } else if (ex instanceof WebClientResponseException) {
+            val exception = (WebClientResponseException) ex;
+            response.setStatusCode(exception.getStatusCode());
+            try {
+                return objectMapper.readValue(exception.getResponseBodyAsString(), ResponseBodyBean.class);
+            } catch (JsonProcessingException e) {
+                log.warn("Exception occurred when writing response", e);
+                return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+            }
         }
         response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
         return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR,
