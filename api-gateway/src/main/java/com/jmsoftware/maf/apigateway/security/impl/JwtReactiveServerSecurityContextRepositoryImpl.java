@@ -1,10 +1,8 @@
 package com.jmsoftware.maf.apigateway.security.impl;
 
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
+import com.jmsoftware.maf.apigateway.remoteapi.AuthCenterRemoteApi;
 import com.jmsoftware.maf.apigateway.security.configuration.JwtConfiguration;
-import com.jmsoftware.maf.common.bean.ResponseBodyBean;
-import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtResponse;
 import com.jmsoftware.maf.common.domain.authcenter.security.UserPrincipal;
 import com.jmsoftware.maf.common.exception.SecurityException;
 import com.jmsoftware.maf.reactivespringbootstarter.configuration.MafConfiguration;
@@ -19,11 +17,8 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.web.server.context.ServerSecurityContextRepository;
 import org.springframework.util.AntPathMatcher;
-import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-
-import javax.annotation.Resource;
 
 /**
  * Description: JwtReactiveServerSecurityContextRepositoryImpl
@@ -38,8 +33,7 @@ public class JwtReactiveServerSecurityContextRepositoryImpl implements ServerSec
     private final MafConfiguration mafConfiguration;
     private final ReactiveAuthenticationManager authenticationManager;
     private final AntPathMatcher antPathMatcher = new AntPathMatcher();
-    @Resource
-    private WebClient.Builder webClientBuilder;
+    private final AuthCenterRemoteApi authCenterRemoteApi;
 
     @Override
     public Mono<Void> save(ServerWebExchange exchange, SecurityContext context) {
@@ -62,21 +56,14 @@ public class JwtReactiveServerSecurityContextRepositoryImpl implements ServerSec
                      HttpHeaders.AUTHORIZATION, request.getMethod(), request.getURI());
             return Mono.error(new SecurityException(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED, "JWT Required"));
         }
-        val parseJwtResponseMono = webClientBuilder
-                .build()
-                .get()
-                .uri("http://auth-center/jwt-remote-api/parse")
-                .headers(httpHeaders -> httpHeaders.set(HttpHeaders.AUTHORIZATION, authorization))
-                .retrieve()
-                .bodyToMono(ResponseBodyBean.class).map(ResponseBodyBean::getData);
-        return parseJwtResponseMono.map(data -> {
-            val parseJwtResponse = JSONUtil.toBean(JSONUtil.parseObj(data), ParseJwtResponse.class);
-            log.info("parseJwtResponse: {}", parseJwtResponse);
-            val userPrincipal = UserPrincipal.createByUsername(parseJwtResponse.getUsername());
-            val authentication = new UsernamePasswordAuthenticationToken(userPrincipal, null);
-            log.warn("About to authenticate… Authentication is created. {}", authentication);
-            return authentication;
-        }).flatMap(authentication -> this.authenticationManager
-                .authenticate(authentication).map(SecurityContextImpl::new));
+        return authCenterRemoteApi.parse(authorization)
+                .map(parseJwtResponse -> {
+                    log.info("parseJwtResponse: {}", parseJwtResponse);
+                    val userPrincipal = UserPrincipal.createByUsername(parseJwtResponse.getUsername());
+                    val authentication = new UsernamePasswordAuthenticationToken(userPrincipal, null);
+                    log.warn("About to authenticate… Authentication is created. {}", authentication);
+                    return authentication;
+                }).flatMap(authentication -> this.authenticationManager.authenticate(authentication)
+                        .map(SecurityContextImpl::new));
     }
 }

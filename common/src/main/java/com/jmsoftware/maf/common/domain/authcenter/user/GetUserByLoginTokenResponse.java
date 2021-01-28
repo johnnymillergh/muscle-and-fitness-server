@@ -13,7 +13,7 @@ import java.util.Date;
  * @date 5/10/20 12:45 PM
  **/
 @Data
-public class GetUserByLoginTokenResponse {
+public class  GetUserByLoginTokenResponse {
     /**
      * Primary key
      */

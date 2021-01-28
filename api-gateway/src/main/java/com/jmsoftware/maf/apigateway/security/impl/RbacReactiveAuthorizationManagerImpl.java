@@ -3,6 +3,7 @@ package com.jmsoftware.maf.apigateway.security.impl;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.google.common.collect.Lists;
+import com.jmsoftware.maf.apigateway.remoteapi.AuthCenterRemoteApi;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
@@ -43,8 +44,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RbacReactiveAuthorizationManagerImpl implements ReactiveAuthorizationManager<AuthorizationContext> {
     private final AntPathMatcher antPathMatcher = new AntPathMatcher();
-    @Resource
-    private WebClient.Builder webClientBuilder;
+    private final AuthCenterRemoteApi authCenterRemoteApi;
 
     /**
      * Retrieve roles flux.
@@ -55,14 +55,7 @@ public class RbacReactiveAuthorizationManagerImpl implements ReactiveAuthorizati
     private Flux<GetRoleListByUserIdResponse.Role> retrieveRoles(Mono<UserPrincipal> userPrincipalMono) {
         // Get role list by user ID, and then convert to Flux<?>
         return userPrincipalMono
-                .flatMap(userPrincipal -> webClientBuilder
-                        .build()
-                        .get()
-                        .uri("http://auth-center/role-remote-api/roles/{userId}", userPrincipal.getId())
-                        .retrieve()
-                        .bodyToMono(ResponseBodyBean.class)).map(ResponseBodyBean::getData)
-                .map(data -> JSONUtil.toList(JSONUtil.parseObj(data).getJSONArray("roleList"),
-                                             GetRoleListByUserIdResponse.Role.class))
+                .flatMap(userPrincipal -> authCenterRemoteApi.getRoleListByUserId(userPrincipal.getId()))
                 .flatMapMany(Flux::fromIterable)
                 .switchIfEmpty(Flux.error(new SecurityException(HttpStatus.UNAUTHORIZED, "Roles not assigned!")));
     }
@@ -94,20 +87,8 @@ public class RbacReactiveAuthorizationManagerImpl implements ReactiveAuthorizati
                     val payload = new GetPermissionListByRoleIdListPayload();
                     payload.setRoleIdList(roleIdList);
                     payload.setPermissionTypeList(Lists.newArrayList(PermissionType.BUTTON));
-                    return webClientBuilder
-                            .build()
-                            .get()
-                            .uri(uriBuilder -> uriBuilder
-                                    .host("auth-center")
-                                    .path("/permission-remote-api/permissions")
-                                    .queryParam("roleIdList", StrUtil.join(",", payload.getRoleIdList()))
-                                    .queryParam("permissionTypeList",
-                                                StrUtil.join(",", payload.getPermissionTypeList()))
-                                    .build())
-                            .retrieve()
-                            .bodyToMono(ResponseBodyBean.class).map(ResponseBodyBean::getData);
-                }).map(data -> JSONUtil.toList(JSONUtil.parseObj(data).getJSONArray("permissionList"),
-                                                   GetPermissionListByRoleIdListResponse.Permission.class))
+                    return authCenterRemoteApi.getPermissionListByRoleIdList(payload);
+                })
                 .switchIfEmpty(Mono.error(new SecurityException(HttpStatus.FORBIDDEN, "Permission not found!")));
     }
 

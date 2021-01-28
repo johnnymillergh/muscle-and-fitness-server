@@ -1,5 +1,6 @@
 package com.jmsoftware.maf.apigateway.security.configuration;
 
+import com.jmsoftware.maf.apigateway.remoteapi.AuthCenterRemoteApi;
 import com.jmsoftware.maf.apigateway.security.impl.*;
 import com.jmsoftware.maf.reactivespringbootstarter.configuration.MafConfiguration;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,7 @@ import org.springframework.security.web.server.context.ServerSecurityContextRepo
 @RequiredArgsConstructor
 public class WebFluxSecurityConfiguration {
     private final MafConfiguration mafConfiguration;
+    private final AuthCenterRemoteApi authCenterRemoteApi;
 
     @Bean
     SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http,
@@ -89,16 +91,17 @@ public class WebFluxSecurityConfiguration {
 
     @Bean
     public ReactiveAuthorizationManager<AuthorizationContext> reactiveAuthorizationManager() {
-        return new RbacReactiveAuthorizationManagerImpl();
+        return new RbacReactiveAuthorizationManagerImpl(authCenterRemoteApi);
     }
 
     @Bean
     public ServerSecurityContextRepository serverSecurityContextRepository(ReactiveAuthenticationManager reactiveAuthenticationManager) {
-        return new JwtReactiveServerSecurityContextRepositoryImpl(mafConfiguration, reactiveAuthenticationManager);
+        return new JwtReactiveServerSecurityContextRepositoryImpl(mafConfiguration, reactiveAuthenticationManager,
+                                                                  authCenterRemoteApi);
     }
 
     @Bean
     public ReactiveAuthenticationManager reactiveAuthenticationManager() {
-        return new JwtReactiveAuthenticationManagerImpl();
+        return new JwtReactiveAuthenticationManagerImpl(authCenterRemoteApi);
     }
 }
