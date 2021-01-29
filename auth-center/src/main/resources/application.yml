@@ -30,8 +30,28 @@ spring:
       file-size-threshold: 0
   datasource:
     name: muscle_and_fitness
-    driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      max-active: 100
+      initial-size: 5
+      max-wait: 60000
+      min-idle: 1
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 30000
+      validation-query: SELECT 'X'
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      max-pool-prepared-statement-per-connection-size: 20
+      max-open-prepared-statements: 50
+      stat-view-servlet:
+        enabled: true
+        login-username: root
+        login-password: sa
+        reset-enable: false
+        url-pattern: /druid/*
+
   redis:
     database: 0
     timeout: 10000ms
