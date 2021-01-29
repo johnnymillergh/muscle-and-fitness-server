@@ -1,7 +1,5 @@
 package com.jmsoftware.maf.springbootstarter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jcraft.jsch.ChannelSftp;
 import com.jmsoftware.maf.springbootstarter.aspect.ExceptionControllerAdvice;
 import com.jmsoftware.maf.springbootstarter.aspect.WebRequestLogAspect;
 import com.jmsoftware.maf.springbootstarter.configuration.*;
@@ -13,11 +11,10 @@ import com.jmsoftware.maf.springbootstarter.database.MyBatisPlusConfiguration;
 import com.jmsoftware.maf.springbootstarter.filter.AccessLogFilter;
 import com.jmsoftware.maf.springbootstarter.helper.HttpApiScanHelper;
 import com.jmsoftware.maf.springbootstarter.helper.IpHelper;
-import com.jmsoftware.maf.springbootstarter.redis.RedisCachingConfiguration;
 import com.jmsoftware.maf.springbootstarter.redis.RedisConfiguration;
 import com.jmsoftware.maf.springbootstarter.service.CommonService;
 import com.jmsoftware.maf.springbootstarter.service.impl.CommonServiceImpl;
-import com.jmsoftware.maf.springbootstarter.sftp.*;
+import com.jmsoftware.maf.springbootstarter.sftp.SftpConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
@@ -35,22 +32,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.expression.common.LiteralExpression;
 import org.springframework.integration.annotation.IntegrationComponentScan;
-import org.springframework.integration.annotation.ServiceActivator;
-import org.springframework.integration.file.remote.session.CachingSessionFactory;
-import org.springframework.integration.file.remote.session.SessionFactory;
-import org.springframework.integration.sftp.outbound.SftpMessageHandler;
-import org.springframework.integration.sftp.session.DefaultSftpSessionFactory;
-import org.springframework.integration.sftp.session.SftpRemoteFileTemplate;
-import org.springframework.messaging.MessageHandler;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import javax.annotation.PostConstruct;
-import java.io.File;
 import java.util.List;
 
 /**
