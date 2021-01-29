@@ -41,6 +41,7 @@ public class RedisCachingConfiguration extends CachingConfigurerSupport {
     @Bean
     @Override
     public CacheManager cacheManager() {
+        log.warn("Initial bean: '{}'", CacheManager.class.getSimpleName());
         RedisCacheConfiguration cacheConfiguration = defaultCacheConfig()
                 .disableCachingNullValues()
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(
@@ -54,12 +55,14 @@ public class RedisCachingConfiguration extends CachingConfigurerSupport {
     @Bean
     @Override
     public CacheResolver cacheResolver() {
+        log.warn("Initial bean: '{}'", SimpleCacheResolver.class.getSimpleName());
         return new SimpleCacheResolver(Objects.requireNonNull(cacheManager()));
     }
 
     @Bean
     @Override
     public KeyGenerator keyGenerator() {
+        log.warn("Initial bean: '{}'", KeyGenerator.class.getSimpleName());
         return (target, method, params) -> {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(target.getClass().getName()).append("#").append(method.getName());
@@ -73,6 +76,7 @@ public class RedisCachingConfiguration extends CachingConfigurerSupport {
     @Bean
     @Override
     public CacheErrorHandler errorHandler() {
+        log.warn("Initial bean: '{}'", CacheErrorHandler.class.getSimpleName());
         return new SimpleCacheErrorHandler();
     }
 }

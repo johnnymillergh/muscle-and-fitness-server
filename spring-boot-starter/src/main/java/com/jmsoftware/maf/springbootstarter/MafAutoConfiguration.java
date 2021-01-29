@@ -67,7 +67,11 @@ import java.util.List;
 @ConditionalOnWebApplication
 @AutoConfigureOrder(Integer.MIN_VALUE)
 @EnableConfigurationProperties(MafConfiguration.class)
-@Import({MyBatisPlusConfiguration.class, Swagger2Configuration.class})
+@Import({
+        MyBatisPlusConfiguration.class,
+        RedisConfiguration.class,
+        Swagger2Configuration.class
+})
 public class MafAutoConfiguration {
     @PostConstruct
     public void postConstruct() {
@@ -171,18 +175,6 @@ public class MafAutoConfiguration {
     public JwtConfiguration jwtConfiguration(MafProjectProperty mafProjectProperty) {
         log.warn("Initial bean: '{}'", JwtConfiguration.class.getSimpleName());
         return new JwtConfiguration(mafProjectProperty);
-    }
-
-    @Bean
-    public RedisCachingConfiguration redisCachingConfiguration(RedisConnectionFactory redisConnectionFactory) {
-        log.warn("Initial bean: '{}'", RedisCachingConfiguration.class.getSimpleName());
-        return new RedisCachingConfiguration(redisConnectionFactory);
-    }
-
-    @Bean
-    public RedisConfiguration redisConfiguration(ObjectMapper objectMapper) {
-        log.warn("Initial bean: '{}'", RedisConfiguration.class.getSimpleName());
-        return new RedisConfiguration(objectMapper);
     }
 
     @Bean

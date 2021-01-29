@@ -1,10 +1,14 @@
 package com.jmsoftware.maf.springbootstarter.redis;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jmsoftware.maf.springbootstarter.configuration.Swagger2Configuration;
+import com.jmsoftware.maf.springbootstarter.database.MyBatisPlusConfiguration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.redis.connection.ReactiveRedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
@@ -24,6 +28,9 @@ import javax.annotation.PostConstruct;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
+@Import({
+        RedisCachingConfiguration.class
+})
 public class RedisConfiguration {
     private final ObjectMapper objectMapper;
 
