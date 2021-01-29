@@ -55,7 +55,8 @@ import java.util.List;
         RedisConfiguration.class,
         Swagger2Configuration.class,
         SftpConfiguration.class,
-        WebSecurityConfiguration.class
+        WebSecurityConfiguration.class,
+        RestTemplateConfiguration.class
 })
 public class MafAutoConfiguration {
     @PostConstruct
@@ -160,12 +161,5 @@ public class MafAutoConfiguration {
     public JwtConfiguration jwtConfiguration(MafProjectProperty mafProjectProperty) {
         log.warn("Initial bean: '{}'", JwtConfiguration.class.getSimpleName());
         return new JwtConfiguration(mafProjectProperty);
-    }
-
-    @Bean
-    @LoadBalanced
-    public RestTemplate restTemplate() {
-        log.warn("Initial bean: '{}'", RestTemplate.class.getSimpleName());
-        return new RestTemplate();
     }
 }
