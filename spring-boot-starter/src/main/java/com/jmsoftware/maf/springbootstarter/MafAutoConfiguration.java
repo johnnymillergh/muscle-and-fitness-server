@@ -27,13 +27,11 @@ import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolve
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.boot.web.servlet.error.ErrorController;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 import org.springframework.integration.annotation.IntegrationComponentScan;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import javax.annotation.PostConstruct;
@@ -56,7 +54,8 @@ import java.util.List;
         Swagger2Configuration.class,
         SftpConfiguration.class,
         WebSecurityConfiguration.class,
-        RestTemplateConfiguration.class
+        RestTemplateConfiguration.class,
+        AsyncConfiguration.class
 })
 public class MafAutoConfiguration {
     @PostConstruct
