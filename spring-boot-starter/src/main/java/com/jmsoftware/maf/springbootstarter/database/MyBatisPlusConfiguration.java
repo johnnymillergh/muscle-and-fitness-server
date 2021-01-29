@@ -2,35 +2,27 @@ package com.jmsoftware.maf.springbootstarter.database;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
-import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
-import com.jmsoftware.maf.common.domain.DeleteFlag;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import java.util.Date;
-
 /**
- * <h1>MyBatisPlusConfiguration</h1>
- * <p>
- * Change description here.
- * <p>
+ * Description: MyBatisPlusConfiguration, change description here.
  *
- * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
- * @date 2019-05-02 11:57
+ * @author 钟俊（zhongjun）, email: zhongjun@toguide.cn, date: 1/29/2021 1:30 PM
  **/
 @Slf4j
 @Configuration
 @EnableTransactionManagement
-public class MyBatisPlusConfiguration implements MetaObjectHandler {
+public class MyBatisPlusConfiguration {
     @Bean
     public PaginationInnerInterceptor paginationInnerInterceptor() {
+        log.warn("Initial bean: '{}'", PaginationInnerInterceptor.class.getSimpleName());
         val paginationInnerInterceptor = new PaginationInnerInterceptor(DbType.MYSQL);
         paginationInnerInterceptor.setMaxLimit(100L);
         return paginationInnerInterceptor;
@@ -38,11 +30,13 @@ public class MyBatisPlusConfiguration implements MetaObjectHandler {
 
     @Bean
     public BlockAttackInnerInterceptor blockAttackInnerInterceptor() {
+        log.warn("Initial bean: '{}'", BlockAttackInnerInterceptor.class.getSimpleName());
         return new BlockAttackInnerInterceptor();
     }
 
     @Bean
     public ConfigurationCustomizer configurationCustomizer() {
+        log.warn("Initial bean: '{}'", ConfigurationCustomizer.class.getSimpleName());
         // 新的分页插件，一缓和二缓遵循 MyBatis 的规则。
         // 需要设置 MybatisConfiguration#useDeprecatedExecutor = false 避免缓存出现问题（该属性会在旧插件移除后一同移除）
         return configuration -> configuration.setUseDeprecatedExecutor(false);
@@ -59,24 +53,16 @@ public class MyBatisPlusConfiguration implements MetaObjectHandler {
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor(PaginationInnerInterceptor paginationInnerInterceptor,
                                                          BlockAttackInnerInterceptor blockAttackInnerInterceptor) {
+        log.warn("Initial bean: '{}'", MybatisPlusInterceptor.class.getSimpleName());
         MybatisPlusInterceptor mybatisPlusInterceptor = new MybatisPlusInterceptor();
         mybatisPlusInterceptor.addInnerInterceptor(paginationInnerInterceptor);
         mybatisPlusInterceptor.addInnerInterceptor(blockAttackInnerInterceptor);
         return mybatisPlusInterceptor;
     }
 
-    @Override
-    public void insertFill(MetaObject metaObject) {
-        log.info("Start to insert fill ....");
-        val now = new Date();
-        this.strictInsertFill(metaObject, "deleted", Byte.class, DeleteFlag.NOT_DELETED.getValue());
-        this.strictInsertFill(metaObject, "createdTime", Date.class, now);
-        this.strictInsertFill(metaObject, "modifiedTime", Date.class, now);
-    }
-
-    @Override
-    public void updateFill(MetaObject metaObject) {
-        log.info("Start to update fill ....");
-        this.strictUpdateFill(metaObject, "modifiedTime", Date.class, new Date());
+    @Bean
+    public MyBatisPlusMetaObjectHandler myBatisPlusConfiguration() {
+        log.warn("Initial bean: '{}'", MyBatisPlusMetaObjectHandler.class.getSimpleName());
+        return new MyBatisPlusMetaObjectHandler();
     }
 }

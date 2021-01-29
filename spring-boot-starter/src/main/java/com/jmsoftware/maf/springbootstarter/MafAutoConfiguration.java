@@ -9,7 +9,6 @@ import com.jmsoftware.maf.springbootstarter.controller.CommonController;
 import com.jmsoftware.maf.springbootstarter.controller.GlobalErrorController;
 import com.jmsoftware.maf.springbootstarter.controller.HttpApiResourceRemoteApiController;
 import com.jmsoftware.maf.springbootstarter.controller.RedirectController;
-import com.jmsoftware.maf.springbootstarter.database.DruidConfiguration;
 import com.jmsoftware.maf.springbootstarter.database.MyBatisPlusConfiguration;
 import com.jmsoftware.maf.springbootstarter.filter.AccessLogFilter;
 import com.jmsoftware.maf.springbootstarter.helper.HttpApiScanHelper;
@@ -37,6 +36,7 @@ import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.expression.common.LiteralExpression;
@@ -48,7 +48,6 @@ import org.springframework.integration.sftp.outbound.SftpMessageHandler;
 import org.springframework.integration.sftp.session.DefaultSftpSessionFactory;
 import org.springframework.integration.sftp.session.SftpRemoteFileTemplate;
 import org.springframework.messaging.MessageHandler;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
@@ -72,6 +71,7 @@ import java.util.List;
 @ConditionalOnWebApplication
 @AutoConfigureOrder(Integer.MIN_VALUE)
 @EnableConfigurationProperties(MafConfiguration.class)
+@Import({MyBatisPlusConfiguration.class})
 public class MafAutoConfiguration {
     @PostConstruct
     public void postConstruct() {
@@ -194,18 +194,6 @@ public class MafAutoConfiguration {
     public JwtConfiguration jwtConfiguration(MafProjectProperty mafProjectProperty) {
         log.warn("Initial bean: '{}'", JwtConfiguration.class.getSimpleName());
         return new JwtConfiguration(mafProjectProperty);
-    }
-
-    @Bean
-    public DruidConfiguration druidConfiguration(MafConfiguration mafConfiguration) {
-        log.warn("Initial bean: '{}'", DruidConfiguration.class.getSimpleName());
-        return new DruidConfiguration(mafConfiguration);
-    }
-
-    @Bean
-    public MyBatisPlusConfiguration myBatisPlusConfiguration() {
-        log.warn("Initial bean: '{}'", MyBatisPlusConfiguration.class.getSimpleName());
-        return new MyBatisPlusConfiguration();
     }
 
     @Bean
