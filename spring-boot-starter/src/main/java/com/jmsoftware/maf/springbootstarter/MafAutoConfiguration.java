@@ -51,10 +51,6 @@ import org.springframework.messaging.MessageHandler;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
@@ -71,7 +67,7 @@ import java.util.List;
 @ConditionalOnWebApplication
 @AutoConfigureOrder(Integer.MIN_VALUE)
 @EnableConfigurationProperties(MafConfiguration.class)
-@Import({MyBatisPlusConfiguration.class})
+@Import({MyBatisPlusConfiguration.class, Swagger2Configuration.class})
 public class MafAutoConfiguration {
     @PostConstruct
     public void postConstruct() {
@@ -157,25 +153,6 @@ public class MafAutoConfiguration {
                                                                               HttpApiScanHelper httpApiScanHelper) {
         log.warn("Initial bean: '{}'", HttpApiResourceRemoteApiController.class.getSimpleName());
         return new HttpApiResourceRemoteApiController(mafConfiguration, httpApiScanHelper);
-    }
-
-    @Bean
-    @ConditionalOnProperty(value = "maf.configuration.swagger-disabled", havingValue = "false")
-    public Swagger2Configuration swagger2Configuration(MafProjectProperty mafProjectProperty) {
-        log.warn("Initial bean: '{}'", Swagger2Configuration.class.getSimpleName());
-        return new Swagger2Configuration(mafProjectProperty);
-    }
-
-    @Bean
-    @ConditionalOnProperty(value = "maf.configuration.swagger-disabled", havingValue = "false")
-    public Docket docket(Swagger2Configuration swagger2Configuration, MafProjectProperty mafProjectProperty) {
-        log.warn("Initial bean: '{}'", Docket.class.getSimpleName());
-        return new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(swagger2Configuration.apiInfo())
-                .select()
-                .apis(RequestHandlerSelectors.basePackage(mafProjectProperty.getBasePackage()))
-                .paths(PathSelectors.any())
-                .build();
     }
 
     @Bean

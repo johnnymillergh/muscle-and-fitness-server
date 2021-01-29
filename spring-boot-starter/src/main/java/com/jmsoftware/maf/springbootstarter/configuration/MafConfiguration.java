@@ -59,7 +59,7 @@ public class MafConfiguration {
      * Swagger disabled. true: disabled; false: enabled.
      */
     @NotNull
-    private Boolean swaggerDisabled;
+    private Boolean swaggerDisabled = false;
 
     /**
      * Flatten ignored urls string [ ].
