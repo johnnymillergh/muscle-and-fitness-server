@@ -17,10 +17,7 @@ import com.jmsoftware.maf.springbootstarter.redis.RedisCachingConfiguration;
 import com.jmsoftware.maf.springbootstarter.redis.RedisConfiguration;
 import com.jmsoftware.maf.springbootstarter.service.CommonService;
 import com.jmsoftware.maf.springbootstarter.service.impl.CommonServiceImpl;
-import com.jmsoftware.maf.springbootstarter.sftp.SftpClientConfiguration;
-import com.jmsoftware.maf.springbootstarter.sftp.SftpHelper;
-import com.jmsoftware.maf.springbootstarter.sftp.SftpHelperImpl;
-import com.jmsoftware.maf.springbootstarter.sftp.SftpSubDirectoryRunner;
+import com.jmsoftware.maf.springbootstarter.sftp.*;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
@@ -70,7 +67,9 @@ import java.util.List;
 @Import({
         MyBatisPlusConfiguration.class,
         RedisConfiguration.class,
-        Swagger2Configuration.class
+        Swagger2Configuration.class,
+        SftpConfiguration.class,
+        WebSecurityConfiguration.class
 })
 public class MafAutoConfiguration {
     @PostConstruct
@@ -182,87 +181,5 @@ public class MafAutoConfiguration {
     public RestTemplate restTemplate() {
         log.warn("Initial bean: '{}'", RestTemplate.class.getSimpleName());
         return new RestTemplate();
-    }
-
-    @Bean
-    public SftpClientConfiguration sftpClientConfiguration() {
-        log.warn("Initial bean: '{}'", SftpClientConfiguration.class.getSimpleName());
-        return new SftpClientConfiguration();
-    }
-
-    @Bean
-    public SessionFactory<ChannelSftp.LsEntry> sftpSessionFactory(SftpClientConfiguration sftpClientConfiguration) {
-        val factory = new DefaultSftpSessionFactory(true);
-        factory.setHost(sftpClientConfiguration.getHost());
-        factory.setPort(sftpClientConfiguration.getPort());
-        factory.setUser(sftpClientConfiguration.getUser());
-        if (sftpClientConfiguration.getPrivateKey() != null) {
-            factory.setPrivateKey(sftpClientConfiguration.getPrivateKey());
-            factory.setPrivateKeyPassphrase(sftpClientConfiguration.getPrivateKeyPassPhrase());
-        } else {
-            factory.setPassword(sftpClientConfiguration.getPassword());
-        }
-        factory.setAllowUnknownKeys(true);
-        // We return a caching session factory, so that we don't have to reconnect to SFTP server for each time
-        val cachingSessionFactory = new CachingSessionFactory<>(factory, sftpClientConfiguration.getSessionCacheSize());
-        cachingSessionFactory.setSessionWaitTimeout(sftpClientConfiguration.getSessionWaitTimeout());
-        log.warn("Initial bean: '{}'", cachingSessionFactory.getClass().getSimpleName());
-        return cachingSessionFactory;
-    }
-
-    @Bean
-    @ServiceActivator(inputChannel = "toSftpChannel")
-    @SuppressWarnings("UnresolvedMessageChannel")
-    public MessageHandler messageHandler(SessionFactory<ChannelSftp.LsEntry> sftpSessionFactory,
-                                         SftpClientConfiguration sftpClientConfiguration) {
-        val handler = new SftpMessageHandler(sftpSessionFactory);
-        handler.setRemoteDirectoryExpression(new LiteralExpression(sftpClientConfiguration.getDirectory()));
-        handler.setFileNameGenerator(message -> {
-            if (message.getPayload() instanceof File) {
-                return ((File) message.getPayload()).getName();
-            } else {
-                throw new IllegalArgumentException("File expected as payload.");
-            }
-        });
-        log.warn("Initial bean: '{}'", handler.getClass().getSimpleName());
-        return handler;
-    }
-
-    @Bean
-    public SftpRemoteFileTemplate sftpRemoteFileTemplate(SessionFactory<ChannelSftp.LsEntry> sftpSessionFactory,
-                                                         SftpClientConfiguration sftpClientConfiguration) {
-        val sftpRemoteFileTemplate = new SftpRemoteFileTemplate(sftpSessionFactory);
-        sftpRemoteFileTemplate.setRemoteDirectoryExpression(
-                new LiteralExpression(sftpClientConfiguration.getDirectory()));
-        sftpRemoteFileTemplate.setAutoCreateDirectory(true);
-        // sftpRemoteFileTemplate.setBeanFactory(beanFactory);
-        sftpRemoteFileTemplate.afterPropertiesSet();
-        log.warn("Initial bean: '{}'", sftpRemoteFileTemplate.getClass().getSimpleName());
-        return sftpRemoteFileTemplate;
-    }
-
-    @Bean
-    public SftpSubDirectoryRunner sftpSubDirectoryRunner(SftpRemoteFileTemplate sftpRemoteFileTemplate,
-                                                         SftpClientConfiguration sftpClientConfiguration) {
-        log.warn("Initial bean: '{}'", SftpSubDirectoryRunner.class.getSimpleName());
-        return new SftpSubDirectoryRunner(sftpRemoteFileTemplate, sftpClientConfiguration);
-    }
-
-    @Bean
-    public SftpHelper sftpHelper(SftpRemoteFileTemplate sftpRemoteFileTemplate) {
-        log.warn("Initial bean: '{}'", SftpHelper.class.getSimpleName());
-        return new SftpHelperImpl(sftpRemoteFileTemplate);
-    }
-
-    @Bean
-    public WebSecurityConfiguration webSecurityConfiguration() {
-        log.warn("Initial bean: '{}'", WebSecurityConfiguration.class.getSimpleName());
-        return new WebSecurityConfiguration();
-    }
-
-    @Bean
-    public BCryptPasswordEncoder bcryptPasswordEncoder() {
-        log.warn("Initial bean: '{}'", BCryptPasswordEncoder.class.getSimpleName());
-        return new BCryptPasswordEncoder();
     }
 }
