@@ -39,7 +39,7 @@
         <java.version>11</java.version>
         <adoptopenjdk11.tag>x86_64-alpine-jre-11.0.9.1_1</adoptopenjdk11.tag>
         <jib-maven-plugin.version>2.7.1</jib-maven-plugin.version>
-        <spring-cloud.version>2020.0.0</spring-cloud.version>
+        <spring-cloud.version>2020.0.1</spring-cloud.version>
         <spring-content.version>1.0.0.M5</spring-content.version>
         <spring-boot-admin-starter-client.version>2.3.1</spring-boot-admin-starter-client.version>
         <druid-spring-boot-starter.version>1.2.4</druid-spring-boot-starter.version>
@@ -48,7 +48,6 @@
         <guava.version>30.0-jre</guava.version>
         <knife4j.version>3.0.2</knife4j.version>
         <jjwt.version>0.11.1</jjwt.version>
-        <feign-reactor.version>2.0.25</feign-reactor.version>
         <java-faker.version>1.0.2</java-faker.version>
     </properties>
 
