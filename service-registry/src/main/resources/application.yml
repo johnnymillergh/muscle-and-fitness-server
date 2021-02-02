@@ -22,7 +22,7 @@ spring:
       minIdle: 10
       max-active: 20
       max-wait: 60000
-      time-between-eviction-runs-millis: 2000
+      time-between-eviction-runs-millis: 10000
       min-evictable-idle-time-millis: 600000
       max-evictable-idle-time-millis: 900000
       validation-query: SELECT 1
@@ -67,7 +67,9 @@ spring:
         max-idle: 10
         max-wait: -1ms
         min-idle: 0
-
+druid:
+  mysql:
+    usePingMethod: false
 eureka:
   instance:
     prefer-ip-address: true
