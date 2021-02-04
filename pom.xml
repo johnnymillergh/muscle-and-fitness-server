@@ -23,9 +23,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Infrastructure Service. Port range: [8760, n]. -->
-        <service-registry.port>8760</service-registry.port>
         <spring-boot-admin.port>8761</spring-boot-admin.port>
-        <api-portal.port>8762</api-portal.port>
 
         <!-- Business Service. Port range: [8800, n]. -->
         <auth-center.port>8800</auth-center.port>
@@ -57,7 +55,6 @@
         <module>universal-ui</module>
         <module>spring-boot-starter</module>
         <module>reactive-spring-boot-starter</module>
-        <module>service-registry</module>
         <module>spring-boot-admin</module>
         <module>api-gateway</module>
         <module>auth-center</module>
@@ -96,11 +93,6 @@
             <dependency>
                 <groupId>com.jmsoftware.maf</groupId>
                 <artifactId>reactive-spring-boot-starter</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.jmsoftware.maf</groupId>
-                <artifactId>service-registry</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
