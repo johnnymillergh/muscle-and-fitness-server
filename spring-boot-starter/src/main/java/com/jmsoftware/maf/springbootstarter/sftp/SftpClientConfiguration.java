@@ -4,6 +4,10 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * <h1>SftpClientConfiguration</h1>
@@ -14,27 +18,33 @@ import org.springframework.stereotype.Component;
  **/
 @Data
 @Component
+@Validated
 @ConfigurationProperties(prefix = "sftp.client.configuration")
 public class SftpClientConfiguration {
     /**
      * SFTP server IP
      */
+    @NotBlank
     private String host;
     /**
      * SFTP server port
      */
+    @NotNull
     private Integer port;
     /**
      * Login user
      */
+    @NotBlank
     private String user;
     /**
      * Login password
      */
+    @NotBlank
     private String password;
     /**
      * Remote directory
      */
+    @NotBlank
     private String directory;
     /**
      * Private key

@@ -1,6 +1,9 @@
 package com.jmsoftware.maf.springbootstarter.configuration;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -22,6 +25,7 @@ public class JwtConfiguration {
     /**
      * Key prefix of JWT stored in Redis.
      */
+    @Setter(AccessLevel.NONE)
     private String jwtRedisKeyPrefix;
 
     public JwtConfiguration(MafProjectProperty mafProjectProperty) {
