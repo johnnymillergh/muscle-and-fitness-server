@@ -232,13 +232,7 @@
     <!-- Global Dependencies -->
     <!-- [CAUTION]: All the dependencies are in parent pom should be utilization dependency. -->
     <dependencies>
-        <!-- Other -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
-        </dependency>
+        <!-- Java Enhancement -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -262,13 +256,6 @@
             <groupId>com.github.javafaker</groupId>
             <artifactId>javafaker</artifactId>
             <version>${java-faker.version}</version>
-        </dependency>
-
-        <!-- Swagger: JSON API documentation for spring based applications -->
-        <dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-micro-spring-boot-starter</artifactId>
-            <version>${knife4j.version}</version>
         </dependency>
     </dependencies>
 </project>

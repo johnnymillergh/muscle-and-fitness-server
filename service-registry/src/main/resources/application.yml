@@ -67,9 +67,7 @@ spring:
         max-idle: 10
         max-wait: -1ms
         min-idle: 0
-druid:
-  mysql:
-    usePingMethod: false
+
 eureka:
   instance:
     prefer-ip-address: true
