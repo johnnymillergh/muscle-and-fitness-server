@@ -126,32 +126,19 @@ services:
     networks:
       muscle_and_fitness_network:
 
-  ################################################################################
-  #                     Microservice of Muscle and Fitness                       #
-  ################################################################################
-  #                            Infrastructure Service                            #
-  #------------------------------------------------------------------------------#
-  service-registry:
-    container_name: maf.service-registry.stage
-    hostname: maf.service-registry.stage
-    image: "ijohnnymiller/muscle-and-fitness-server.service-registry:${TAG}"
+  consul-service-registry:
+    container_name: maf.consul-service-registry.stage
+    hostname: maf.consul-service-registry.stage
+    image: consul:latest
     depends_on:
-      mysql:
-        condition: service_started
-      redis:
-        condition: service_started
-      atmoz-sftp:
-        condition: service_started
       zipkin:
         condition: service_healthy
     ports:
-      - "8760:8760"
+      - "8500:8500"
     restart: always
     volumes:
-      - ~/docker-file-mapping/maf.logs:/logs
-    environment:
-      JAVA_TOOL_OPTIONS: -Xms128m -Xmx128m -Dspring.profiles.active=production
-      TZ: Asia/Hong_Kong
+      - ~/docker-file-mapping/maf.consul-service-registry.stage:/consul/data
+    command: "agent -server -ui -disable-host-node-id -bootstrap-expect=1 -client=0.0.0.0"
     networks:
       muscle_and_fitness_network:
 
@@ -160,7 +147,7 @@ services:
     hostname: maf.spring-boot-admin.stage
     image: "ijohnnymiller/muscle-and-fitness-server.spring-boot-admin:${TAG}"
     depends_on:
-      service-registry:
+      consul-service-registry:
         condition: service_started
     ports:
       - "8761:8761"
@@ -178,7 +165,7 @@ services:
     hostname: maf.api-gateway.stage
     image: "ijohnnymiller/muscle-and-fitness-server.api-gateway:${TAG}"
     depends_on:
-      service-registry:
+      consul-service-registry:
         condition: service_started
     restart: always
     ports:
@@ -201,7 +188,7 @@ services:
     hostname: maf.auth-center.stage
     image: "ijohnnymiller/muscle-and-fitness-server.auth-center:${TAG}"
     depends_on:
-      service-registry:
+      consul-service-registry:
         condition: service_started
     restart: always
     volumes:
@@ -217,7 +204,7 @@ services:
     hostname: maf.exercise-mis.stage
     image: "ijohnnymiller/muscle-and-fitness-server.exercise-mis:${TAG}"
     depends_on:
-      service-registry:
+      consul-service-registry:
         condition: service_started
     restart: always
     volumes:
@@ -233,7 +220,7 @@ services:
     hostname: maf.muscle-mis.stage
     image: "ijohnnymiller/muscle-and-fitness-server.muscle-mis:${TAG}"
     depends_on:
-      service-registry:
+      consul-service-registry:
         condition: service_started
     restart: always
     volumes:

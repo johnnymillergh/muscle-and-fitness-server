@@ -1,6 +1,10 @@
 spring:
   devtools:
     add-properties: true
+  cloud:
+    consul:
+      host: maf.consul-service-registry.development
+      port: 8500
   zipkin:
     base-url: http://maf.zipkin.development:9411
   datasource:
@@ -11,11 +15,6 @@ spring:
     host: maf.redis.development
     port: 6379
     password: 123456
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://maf.service-registry.development:8760/eureka/
 
 maf:
   configuration:

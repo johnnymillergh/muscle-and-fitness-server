@@ -1,9 +1,8 @@
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://maf.service-registry.development:8760/eureka/
-
 spring:
+  cloud:
+    consul:
+      host: maf.consul-service-registry.development
+      port: 8500
   zipkin:
     base-url: http://maf.zipkin.development:9411
   devtools:
