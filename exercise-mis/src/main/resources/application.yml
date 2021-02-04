@@ -28,6 +28,26 @@ spring:
       # `file-size-threshold` specifies the size threshold after which files will be written to disk.
       # The default is 0. We set it as 0 too.
       file-size-threshold: 0
+  cloud:
+    consul:
+      config:
+        enabled: true
+        prefix: config
+        # `default-context` should be equal to Spring application name
+        default-context: ${spring.application.name}
+        profile-separator: "-"
+        format: YAML
+        data-key: "data"
+        watch:
+          enabled: true
+          delay: 1000
+      discovery:
+        register: true
+        instance-id: ${spring.cloud.client.hostname}-${spring.cloud.client.ip-address}-${server.port}-${spring.application.name}
+        service-name: ${spring.application.name}
+        port: ${server.port}
+        prefer-ip-address: true
+        ip-address: ${spring.cloud.client.ip-address}
   datasource:
     name: muscle_and_fitness
     type: com.alibaba.druid.pool.DruidDataSource
@@ -82,19 +102,6 @@ spring:
         max-idle: 10
         max-wait: -1ms
         min-idle: 0
-
-eureka:
-  instance:
-    leaseRenewalIntervalInSeconds: 10
-    health-check-url-path: /actuator/health
-    status-page-url-path: /
-    metadata-map:
-      # needed to trigger info and endpoint update after restart
-      startup: ${random.int}
-    instance-id: ${spring.cloud.client.ip-address}:${server.port}@${spring.cloud.client.hostname}@${spring.application.name}-${random.int}
-    prefer-ip-address: true
-  client:
-    registryFetchIntervalSeconds: 5
 
 feign:
   client:

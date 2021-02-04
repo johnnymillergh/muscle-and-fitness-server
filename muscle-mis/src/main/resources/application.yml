@@ -16,6 +16,26 @@ spring:
   sleuth:
     sampler:
       probability: 1.0
+  cloud:
+    consul:
+      config:
+        enabled: true
+        prefix: config
+        # `default-context` should be equal to Spring application name
+        default-context: ${spring.application.name}
+        profile-separator: "-"
+        format: YAML
+        data-key: "data"
+        watch:
+          enabled: true
+          delay: 1000
+      discovery:
+        register: true
+        instance-id: ${spring.cloud.client.hostname}-${spring.cloud.client.ip-address}-${server.port}-${spring.application.name}
+        service-name: ${spring.application.name}
+        port: ${server.port}
+        prefer-ip-address: true
+        ip-address: ${spring.cloud.client.ip-address}
   datasource:
     name: muscle_and_fitness
     type: com.alibaba.druid.pool.DruidDataSource

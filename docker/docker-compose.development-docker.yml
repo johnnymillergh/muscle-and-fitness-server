@@ -126,6 +126,16 @@ services:
     networks:
       muscle_and_fitness_network:
 
+  consul-service-registry:
+    container_name: maf.consul-service-registry.development
+    hostname: maf.consul-service-registry.development
+    image: consul:latest
+    ports:
+      - "8500:8500"
+    volumes:
+      - ~/docker-file-mapping/maf.consul-service-registry.development:/consul/data
+    command: "agent -server -ui -disable-host-node-id -bootstrap-expect=1 -client=0.0.0.0"
+
   ################################################################################
   #                     Microservice of Muscle and Fitness                       #
   ################################################################################
