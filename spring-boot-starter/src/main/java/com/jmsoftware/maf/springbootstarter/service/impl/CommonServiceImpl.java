@@ -24,8 +24,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class CommonServiceImpl implements CommonService {
     private final MafProjectProperty mafProjectProperty;
-
-    @Value("${greeting: Hello, World! (Embedded in Java)}")
+    @Value("${greeting:Hello, World! (Embedded in Java)}")
     private String greeting;
 
     @Override
