@@ -10,7 +10,7 @@ spring:
         prefix: config
         # `default-context` should be equal to Spring application name
         default-context: @project.artifactId@
-        profile-separator: '::'
+        profile-separator: "::"
         format: YAML
         data-key: "data"
         watch:
