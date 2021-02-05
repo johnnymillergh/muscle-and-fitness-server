@@ -1,27 +1,8 @@
 version: "3.7"
 
-################################################################################
-#                        ATTENTIONS of Docker Compose                          #
-################################################################################
-# 1. Pattern of 'container_name' must be:                                      #
-#    [service-name]-[system-short-name]-[environment-alias]                    #
-#    For instance, there is a 'MySQL service' for 'Muscle and Fitness Server', #
-#    the 'container_name' must be: mysql-maf.dev.                              #
-#    In Kubernetes, 'container_name' must not be set.                          #
-# 2. ${TAG} is defined in file '.env'.                                         #
-# 3. The differences between each environment docker-compose.yml:              #
-#    Environmental suffix. There are 4 types of environmental suffix:          #
-#       * '.dev'                                                               #
-#       * '.test'                                                              #
-#       * '.stage'                                                             #
-#       * '.prod'                                                              #
-# 4. Define timezone for environment variable: Asia/Hong_Kong                  #
-# 5. Define 'depends_on' for service                                           #
-################################################################################
-
 services:
   ################################################################################
-  #                      Middleware of Muscle and Fitness                        #
+  #                           Infrastructure Services                            #
   ################################################################################
   mysql:
     container_name: "${MYSQL_CONTAINER_NAME}"
@@ -34,7 +15,7 @@ services:
       - "3306:3306"
     restart: always
     volumes:
-      - ~/docker-file-mapping/maf.mysql.development:/var/lib/mysql
+      - "~/docker-file-mapping/${MYSQL_CONTAINER_NAME}:/var/lib/mysql"
       - ./script/mysql-init-script:/docker-entrypoint-initdb.d
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     networks:
@@ -47,7 +28,7 @@ services:
       - "6379:6379"
     restart: always
     volumes:
-      - ~/docker-file-mapping/maf.redis.development:/data
+      - "~/docker-file-mapping/${REDIS_CONTAINER_NAME}:/data"
       - ./script/redis/redis.conf:/usr/local/etc/redis/redis.conf
     environment:
       TZ: Asia/Hong_Kong
@@ -59,10 +40,11 @@ services:
     container_name: "${ATMOZ_SFTP_CONTAINER_NAME}"
     image: atmoz/sftp:latest
     ports:
+      # mapping local machine's port 23 to container port 22
       - "23:22"
     restart: always
     volumes:
-      - ~/docker-file-mapping/maf.atmoz-sftp.development:/home/johnny/upload
+      - "~/docker-file-mapping/${ATMOZ_SFTP_CONTAINER_NAME}:/home/johnny/upload"
     environment:
       TZ: Asia/Hong_Kong
     command: "johnny:atmoz@sftp:::upload"
@@ -153,25 +135,7 @@ services:
       - "8761:8761"
     restart: always
     volumes:
-      - ~/docker-file-mapping/maf.logs:/logs
-    environment:
-      JAVA_TOOL_OPTIONS: "${JAVA_TOOL_OPTIONS}"
-      TZ: Asia/Hong_Kong
-    networks:
-      muscle_and_fitness_network:
-
-  api-gateway:
-    container_name: "${API_GATEWAY_CONTAINER_NAME}"
-    hostname: "${API_GATEWAY_CONTAINER_NAME}"
-    image: "ijohnnymiller/muscle-and-fitness-server.api-gateway:${TAG}"
-    depends_on:
-      consul-service-registry:
-        condition: service_started
-    restart: always
-    ports:
-      - "8080:8080"
-    volumes:
-      - ~/docker-file-mapping/maf.logs:/logs
+      - "~/docker-file-mapping/${SPRING_BOOT_ADMIN_CONTAINER_NAME}:/logs"
     environment:
       JAVA_TOOL_OPTIONS: "${JAVA_TOOL_OPTIONS}"
       TZ: Asia/Hong_Kong
@@ -183,6 +147,24 @@ services:
   ################################################################################
   #                              Business Service                                #
   #------------------------------------------------------------------------------#
+  api-gateway:
+    container_name: "${API_GATEWAY_CONTAINER_NAME}"
+    hostname: "${API_GATEWAY_CONTAINER_NAME}"
+    image: "ijohnnymiller/muscle-and-fitness-server.api-gateway:${TAG}"
+    depends_on:
+      consul-service-registry:
+        condition: service_started
+    restart: always
+    ports:
+      - "8080:8080"
+    volumes:
+      - "~/docker-file-mapping/${API_GATEWAY_CONTAINER_NAME}:/logs"
+    environment:
+      JAVA_TOOL_OPTIONS: "${JAVA_TOOL_OPTIONS}"
+      TZ: Asia/Hong_Kong
+    networks:
+      muscle_and_fitness_network:
+
   auth-center:
     container_name: "${AUTH_CENTER_CONTAINER_NAME}"
     hostname: "${AUTH_CENTER_CONTAINER_NAME}"
@@ -192,7 +174,7 @@ services:
         condition: service_started
     restart: always
     volumes:
-      - ~/docker-file-mapping/maf.logs:/logs
+      - "~/docker-file-mapping/${AUTH_CENTER_CONTAINER_NAME}:/logs"
     environment:
       JAVA_TOOL_OPTIONS: "${JAVA_TOOL_OPTIONS}"
       TZ: Asia/Hong_Kong
@@ -208,7 +190,7 @@ services:
         condition: service_started
     restart: always
     volumes:
-      - ~/docker-file-mapping/maf.logs:/logs
+      - "~/docker-file-mapping/${EXERCISE_MIS_CONTAINER_NAME}:/logs"
     environment:
       JAVA_TOOL_OPTIONS: "${JAVA_TOOL_OPTIONS}"
       TZ: Asia/Hong_Kong
@@ -224,16 +206,13 @@ services:
         condition: service_started
     restart: always
     volumes:
-      - ~/docker-file-mapping/maf.logs:/logs
+      - "~/docker-file-mapping/${MUSCLE_MIS_CONTAINER_NAME}:/logs"
     environment:
       JAVA_TOOL_OPTIONS: "${JAVA_TOOL_OPTIONS}"
       TZ: Asia/Hong_Kong
     networks:
       muscle_and_fitness_network:
 
-################################################################################
-#                       Network for Muscle and Fitness                         #
-################################################################################
 networks:
   muscle_and_fitness_network:
     ipam:
