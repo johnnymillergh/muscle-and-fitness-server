@@ -1,5 +1,5 @@
 spring:
   zipkin:
-    base-url: http://maf.zipkin.development:9411
+    base-url: http://maf.zipkin.development-local:9411
   devtools:
     add-properties: true
