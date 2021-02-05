@@ -27,6 +27,7 @@ import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolve
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.boot.web.servlet.error.ErrorController;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -46,7 +47,7 @@ import java.util.List;
 @Configuration
 @IntegrationComponentScan
 @ConditionalOnWebApplication
-@AutoConfigureOrder(Integer.MIN_VALUE)
+//@AutoConfigureOrder(Integer.MIN_VALUE)
 @EnableConfigurationProperties(MafConfiguration.class)
 @Import({
         MyBatisPlusConfiguration.class,
@@ -145,6 +146,7 @@ public class MafAutoConfiguration {
     }
 
     @Bean
+    @RefreshScope
     public CommonService commonService(MafProjectProperty mafProjectProperty) {
         log.warn("Initial bean: '{}'", CommonServiceImpl.class.getSimpleName());
         return new CommonServiceImpl(mafProjectProperty);

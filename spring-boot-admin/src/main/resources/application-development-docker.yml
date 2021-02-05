@@ -1,10 +1,6 @@
 spring:
   devtools:
     add-properties: true
-  cloud:
-    consul:
-      host: maf.consul-service-registry.development
-      port: 8500
   zipkin:
     base-url: http://maf.zipkin.development:9411
   datasource:

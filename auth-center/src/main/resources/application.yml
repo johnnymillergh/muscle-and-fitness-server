@@ -4,8 +4,6 @@ server:
     uri-encoding: @project.build.sourceEncoding@
 
 spring:
-  application:
-    name: @project.artifactId@
   profiles:
     active: @env@
   mvc:
@@ -30,21 +28,10 @@ spring:
       file-size-threshold: 0
   cloud:
     consul:
-      config:
-        enabled: true
-        prefix: config
-        # `default-context` should be equal to Spring application name
-        default-context: ${spring.application.name}
-        profile-separator: "-"
-        format: YAML
-        data-key: "data"
-        watch:
-          enabled: true
-          delay: 1000
       discovery:
         register: true
-        instance-id: ${spring.cloud.client.hostname}-${spring.cloud.client.ip-address}-${server.port}-${spring.application.name}
-        service-name: ${spring.application.name}
+        instance-id: ${spring.cloud.client.hostname}-${spring.cloud.client.ip-address}-${server.port}-@project.artifactId@
+        service-name: @project.artifactId@
         port: ${server.port}
         prefer-ip-address: true
         ip-address: ${spring.cloud.client.ip-address}
@@ -57,7 +44,6 @@ spring:
       minIdle: 10
       max-active: 20
       max-wait: 60000
-      time-between-eviction-runs-millis: 10000
       min-evictable-idle-time-millis: 600000
       max-evictable-idle-time-millis: 900000
       validation-query: SELECT 1
@@ -174,7 +160,7 @@ maf:
         - "/*/v2/api-docs/**"
         - "/webjars/**"
         - "/doc.html"
-    included-package-for-http-api-scan: ${project.property.base-package}
+    included-package-for-http-api-scan: ${maf.project-property.base-package}
 
 # Customize JWT configuration for development environment.
 jwt:

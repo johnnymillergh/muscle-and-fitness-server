@@ -7,6 +7,7 @@ import com.jmsoftware.maf.springbootstarter.configuration.MafProjectProperty;
 import com.jmsoftware.maf.springbootstarter.service.CommonService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
@@ -24,9 +25,12 @@ import javax.validation.Valid;
 public class CommonServiceImpl implements CommonService {
     private final MafProjectProperty mafProjectProperty;
 
+    @Value("${greeting: Hello, World! (Embedded in Java)}")
+    private String greeting;
+
     @Override
     public JSON getApplicationInfo() {
-        return JSONUtil.parse(mafProjectProperty);
+        return JSONUtil.parseObj(mafProjectProperty).set("greeting", greeting);
     }
 
     @Override

@@ -1,8 +1,4 @@
 spring:
-  cloud:
-    consul:
-      host: maf.consul-service-registry.production
-      port: 8500
   zipkin:
     base-url: http://maf.zipkin.production:9411
   devtools:
