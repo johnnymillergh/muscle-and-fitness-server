@@ -1,21 +1,21 @@
 spring:
   zipkin:
-    base-url: http://maf.zipkin.development-local:9411
+    base-url: http://maf.zipkin.development-docker:9411
   devtools:
     add-properties: true
   datasource:
-    url: jdbc:mysql://maf.mysql.development-local:3306/muscle_and_fitness?useSSL=true&useUnicode=true
+    url: jdbc:mysql://maf.mysql.development-docker:3306/muscle_and_fitness?useSSL=true&useUnicode=true
     username: root
     password: jm@mysql
   redis:
-    host: maf.redis.development-local
+    host: maf.redis.development-docker
     port: 6379
     password: 123456
 
 sftp:
   client:
     configuration:
-      host: maf.atmoz-sftp.development-local
+      host: maf.atmoz-sftp.development-docker
       port: 22
       user: johnny
       password: atmoz@sftp
