@@ -16,7 +16,7 @@ import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListB
 import com.jmsoftware.maf.common.domain.authcenter.permission.PermissionType;
 import com.jmsoftware.maf.common.domain.springbootstarter.HttpApiResourcesResponse;
 import com.jmsoftware.maf.common.exception.BusinessException;
-import com.jmsoftware.maf.springbootstarter.configuration.MafProjectProperty;
+import com.jmsoftware.maf.springcloudstarter.configuration.MafProjectProperty;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;

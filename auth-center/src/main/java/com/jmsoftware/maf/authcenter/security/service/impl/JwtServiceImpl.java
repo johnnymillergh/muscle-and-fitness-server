@@ -6,7 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import com.jmsoftware.maf.authcenter.security.service.JwtService;
 import com.jmsoftware.maf.common.domain.authcenter.security.UserPrincipal;
 import com.jmsoftware.maf.common.exception.SecurityException;
-import com.jmsoftware.maf.springbootstarter.configuration.JwtConfiguration;
+import com.jmsoftware.maf.springcloudstarter.configuration.JwtConfiguration;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;

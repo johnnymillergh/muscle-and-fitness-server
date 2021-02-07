@@ -10,7 +10,7 @@ import com.jmsoftware.maf.authcenter.role.entity.RolePersistence;
 import com.jmsoftware.maf.authcenter.role.mapper.RoleMapper;
 import com.jmsoftware.maf.authcenter.role.service.RoleService;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdResponse;
-import com.jmsoftware.maf.springbootstarter.configuration.MafConfiguration;
+import com.jmsoftware.maf.springcloudstarter.configuration.MafConfiguration;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;

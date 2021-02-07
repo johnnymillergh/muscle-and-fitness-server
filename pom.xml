@@ -53,7 +53,7 @@
     <modules>
         <module>common</module>
         <module>universal-ui</module>
-        <module>spring-boot-starter</module>
+        <module>spring-cloud-starter</module>
         <module>reactive-spring-cloud-starter</module>
         <module>spring-boot-admin</module>
         <module>api-gateway</module>
@@ -87,7 +87,7 @@
             </dependency>
             <dependency>
                 <groupId>com.jmsoftware.maf</groupId>
-                <artifactId>spring-boot-starter</artifactId>
+                <artifactId>spring-cloud-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

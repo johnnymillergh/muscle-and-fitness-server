@@ -1,7 +1,7 @@
 package com.jmsoftware.maf.springbootadmin;
 
-import com.jmsoftware.maf.springbootstarter.configuration.MafProjectProperty;
-import com.jmsoftware.maf.springbootstarter.helper.IpHelper;
+import com.jmsoftware.maf.springcloudstarter.configuration.MafProjectProperty;
+import com.jmsoftware.maf.springcloudstarter.helper.IpHelper;
 import de.codecentric.boot.admin.server.config.EnableAdminServer;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
