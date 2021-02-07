@@ -79,6 +79,7 @@ spring:
   redis:
     database: 0
     timeout: 10000ms
+    client-type: LETTUCE
     lettuce:
       pool:
         max-active: 20
