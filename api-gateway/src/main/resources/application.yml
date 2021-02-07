@@ -11,9 +11,6 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: Asia/Hong_Kong
-  sleuth:
-    sampler:
-      probability: 1.0
   cloud:
     consul:
       discovery:
@@ -99,3 +96,8 @@ maf:
         - "/*/v2/api-docs/**"
         - "/webjars/**"
         - "/doc.html"
+    swagger:
+      ignored-service-id-set:
+        - "consul"
+        - "api-gateway"
+        - "spring-boot-admin"

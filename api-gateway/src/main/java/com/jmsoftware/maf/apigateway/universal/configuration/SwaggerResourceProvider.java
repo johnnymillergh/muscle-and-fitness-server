@@ -1,5 +1,7 @@
 package com.jmsoftware.maf.apigateway.universal.configuration;
 
+import cn.hutool.core.collection.CollUtil;
+import com.google.common.collect.Sets;
 import com.jmsoftware.maf.reactivespringcloudstarter.configuration.MafProjectProperty;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,8 +20,10 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger.web.SwaggerResource;
 import springfox.documentation.swagger.web.SwaggerResourcesProvider;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * <h1>SwaggerResourceProvider</h1>
@@ -43,6 +47,7 @@ public class SwaggerResourceProvider implements SwaggerResourcesProvider {
     private static final String LINE_SEPARATOR = System.lineSeparator();
     private final MafProjectProperty mafProjectProperty;
     private final RouteLocator routeLocator;
+    private final SwaggerConfiguration swaggerConfiguration;
 
     /**
      * Generate Swagger resource.
@@ -56,14 +61,16 @@ public class SwaggerResourceProvider implements SwaggerResourcesProvider {
         val swaggerResourceList = new LinkedList<SwaggerResource>();
         routeLocator.getRoutes().subscribe(route -> {
             val serviceName = route.getUri().toString().substring(5).toLowerCase();
-            log.warn("{} found dynamic route. Service name: {}, route: {}", this.getClass().getSimpleName(),
-                     serviceName, route);
-            val swaggerResource = new SwaggerResource();
-            swaggerResource.setName(serviceName.toUpperCase());
-            swaggerResource.setLocation(String.format("%s%s", serviceName, SWAGGER_API_URI));
-            swaggerResource.setSwaggerVersion("2.0");
-            log.warn("Exposed Swagger Resource: {}", swaggerResource.toString());
-            swaggerResourceList.add(swaggerResource);
+            if (!CollUtil.contains(swaggerConfiguration.getIgnoredServiceIdSet(), serviceName)) {
+                log.warn("{} found dynamic route. Service name: {}, route: {}", this.getClass().getSimpleName(),
+                         serviceName, route);
+                val swaggerResource = new SwaggerResource();
+                swaggerResource.setName(serviceName.toUpperCase());
+                swaggerResource.setLocation(String.format("%s%s", serviceName, SWAGGER_API_URI));
+                swaggerResource.setSwaggerVersion("2.0");
+                log.warn("Exposed Swagger Resource: {}", swaggerResource.toString());
+                swaggerResourceList.add(swaggerResource);
+            }
         });
         return swaggerResourceList;
     }
