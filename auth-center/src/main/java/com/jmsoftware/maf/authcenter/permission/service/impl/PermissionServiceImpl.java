@@ -83,7 +83,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
         val response = new GetServicesInfoResponse();
         val mapper = new ObjectMapper();
         val ignoredServiceIdList = Lists.newArrayList(mafProjectProperty.getProjectArtifactId(),
-                                                      "api-gateway", "spring-boot-admin");
+                                                      "api-gateway", "spring-boot-admin", "consul");
         log.info("Ignored service ID list: {}", ignoredServiceIdList);
         for (String serviceId : serviceIdList) {
             if (ignoredServiceIdList.contains(serviceId)) {
