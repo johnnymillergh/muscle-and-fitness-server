@@ -2,6 +2,7 @@ package com.jmsoftware.maf.reactivespringcloudstarter;
 
 import com.jmsoftware.maf.reactivespringcloudstarter.configuration.MafConfiguration;
 import com.jmsoftware.maf.reactivespringcloudstarter.configuration.MafProjectProperty;
+import com.jmsoftware.maf.reactivespringcloudstarter.configuration.RedisConfiguration;
 import com.jmsoftware.maf.reactivespringcloudstarter.configuration.WebFluxConfiguration;
 import com.jmsoftware.maf.reactivespringcloudstarter.controller.CommonController;
 import com.jmsoftware.maf.reactivespringcloudstarter.filter.AccessLogFilter;
@@ -16,6 +17,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import javax.annotation.PostConstruct;
@@ -30,6 +32,9 @@ import javax.annotation.PostConstruct;
 @RequiredArgsConstructor
 @AutoConfigureOrder(Integer.MIN_VALUE)
 @EnableConfigurationProperties(MafConfiguration.class)
+@Import({
+        RedisConfiguration.class
+})
 public class MafReactiveAutoConfiguration {
     @PostConstruct
     public void postConstruct() {

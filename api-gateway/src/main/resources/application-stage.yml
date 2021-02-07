@@ -1,5 +1,9 @@
 spring:
-  zipkin:
-    base-url: http://maf.zipkin.stage:9411
   devtools:
     add-properties: false
+  zipkin:
+    base-url: http://maf.zipkin.stage:9411
+  redis:
+    host: maf.redis.stage
+    port: 6379
+    password: 123456

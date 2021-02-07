@@ -3,3 +3,7 @@ spring:
     base-url: http://maf.zipkin.development-docker:9411
   devtools:
     add-properties: true
+  redis:
+    host: maf.redis.development-docker
+    port: 6379
+    password: 123456

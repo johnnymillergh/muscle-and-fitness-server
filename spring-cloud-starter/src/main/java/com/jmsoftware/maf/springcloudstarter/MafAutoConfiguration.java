@@ -46,7 +46,6 @@ import java.util.List;
 @Configuration
 @IntegrationComponentScan
 @ConditionalOnWebApplication
-//@AutoConfigureOrder(Integer.MIN_VALUE)
 @EnableConfigurationProperties(MafConfiguration.class)
 @Import({
         MyBatisPlusConfiguration.class,
