@@ -2,7 +2,7 @@ package com.jmsoftware.maf.apigateway.security.configuration;
 
 import com.jmsoftware.maf.apigateway.remoteapi.AuthCenterRemoteApi;
 import com.jmsoftware.maf.apigateway.security.impl.*;
-import com.jmsoftware.maf.reactivespringbootstarter.configuration.MafConfiguration;
+import com.jmsoftware.maf.reactivespringcloudstarter.configuration.MafConfiguration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;

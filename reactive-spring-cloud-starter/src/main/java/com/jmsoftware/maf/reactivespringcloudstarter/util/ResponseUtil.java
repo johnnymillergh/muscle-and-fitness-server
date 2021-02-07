@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.reactivespringbootstarter.util;
+package com.jmsoftware.maf.reactivespringcloudstarter.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

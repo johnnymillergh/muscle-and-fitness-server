@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.reactivespringbootstarter.configuration;
+package com.jmsoftware.maf.reactivespringcloudstarter.configuration;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

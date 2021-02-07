@@ -4,9 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!-- Sub-module Basics -->
-    <artifactId>reactive-spring-boot-starter</artifactId>
-    <name>Muscle and Fitness Server :: Reactive Spring Boot Starter</name>
-    <description>Muscle and Fitness Server Reactive Spring Boot Starter</description>
+    <artifactId>reactive-spring-cloud-starter</artifactId>
+    <name>Muscle and Fitness Server :: Reactive Spring Cloud Starter</name>
+    <description>Muscle and Fitness Server Reactive Spring Cloud Starter</description>
     <parent>
         <groupId>com.jmsoftware.maf</groupId>
         <artifactId>muscle-and-fitness-server</artifactId>

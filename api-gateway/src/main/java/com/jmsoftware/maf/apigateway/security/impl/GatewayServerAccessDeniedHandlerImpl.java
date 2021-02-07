@@ -1,6 +1,6 @@
 package com.jmsoftware.maf.apigateway.security.impl;
 
-import com.jmsoftware.maf.reactivespringbootstarter.util.ResponseUtil;
+import com.jmsoftware.maf.reactivespringcloudstarter.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;

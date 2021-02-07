@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.reactivespringbootstarter.service;
+package com.jmsoftware.maf.reactivespringcloudstarter.service;
 
 import cn.hutool.json.JSON;
 import com.jmsoftware.maf.common.domain.ValidationTestPayload;

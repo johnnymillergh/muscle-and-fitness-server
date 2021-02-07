@@ -1,6 +1,6 @@
-package com.jmsoftware.maf.reactivespringbootstarter.helper;
+package com.jmsoftware.maf.reactivespringcloudstarter.helper;
 
-import com.jmsoftware.maf.reactivespringbootstarter.configuration.MafProjectProperty;
+import com.jmsoftware.maf.reactivespringcloudstarter.configuration.MafProjectProperty;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

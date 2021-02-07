@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.reactivespringbootstarter.configuration;
+package com.jmsoftware.maf.reactivespringcloudstarter.configuration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.config.ResourceHandlerRegistry;

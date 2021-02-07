@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.reactivespringbootstarter.configuration;
+package com.jmsoftware.maf.reactivespringcloudstarter.configuration;
 
 import com.google.common.collect.Lists;
 import lombok.Data;

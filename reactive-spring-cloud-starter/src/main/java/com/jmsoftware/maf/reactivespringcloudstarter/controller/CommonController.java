@@ -1,9 +1,9 @@
-package com.jmsoftware.maf.reactivespringbootstarter.controller;
+package com.jmsoftware.maf.reactivespringcloudstarter.controller;
 
 import cn.hutool.json.JSON;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.ValidationTestPayload;
-import com.jmsoftware.maf.reactivespringbootstarter.service.CommonService;
+import com.jmsoftware.maf.reactivespringcloudstarter.service.CommonService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;

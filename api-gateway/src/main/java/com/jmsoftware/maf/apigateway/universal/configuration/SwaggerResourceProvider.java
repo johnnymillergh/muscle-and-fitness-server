@@ -1,6 +1,6 @@
 package com.jmsoftware.maf.apigateway.universal.configuration;
 
-import com.jmsoftware.maf.reactivespringbootstarter.configuration.MafProjectProperty;
+import com.jmsoftware.maf.reactivespringcloudstarter.configuration.MafProjectProperty;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;

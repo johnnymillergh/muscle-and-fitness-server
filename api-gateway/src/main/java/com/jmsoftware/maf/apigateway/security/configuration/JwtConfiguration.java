@@ -1,6 +1,6 @@
 package com.jmsoftware.maf.apigateway.security.configuration;
 
-import com.jmsoftware.maf.reactivespringbootstarter.configuration.MafProjectProperty;
+import com.jmsoftware.maf.reactivespringcloudstarter.configuration.MafProjectProperty;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;

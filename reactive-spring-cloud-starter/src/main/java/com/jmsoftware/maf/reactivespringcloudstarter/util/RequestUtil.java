@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.reactivespringbootstarter.util;
+package com.jmsoftware.maf.reactivespringcloudstarter.util;
 
 
 import cn.hutool.core.util.ObjectUtil;

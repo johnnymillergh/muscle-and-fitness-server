@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.reactivespringbootstarter.configuration;
+package com.jmsoftware.maf.reactivespringcloudstarter.configuration;
 
 import cn.hutool.core.util.ObjectUtil;
 import lombok.Data;

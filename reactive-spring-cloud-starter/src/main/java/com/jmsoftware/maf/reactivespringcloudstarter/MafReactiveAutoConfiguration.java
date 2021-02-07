@@ -1,13 +1,13 @@
-package com.jmsoftware.maf.reactivespringbootstarter;
+package com.jmsoftware.maf.reactivespringcloudstarter;
 
-import com.jmsoftware.maf.reactivespringbootstarter.configuration.MafConfiguration;
-import com.jmsoftware.maf.reactivespringbootstarter.configuration.MafProjectProperty;
-import com.jmsoftware.maf.reactivespringbootstarter.configuration.WebFluxConfiguration;
-import com.jmsoftware.maf.reactivespringbootstarter.controller.CommonController;
-import com.jmsoftware.maf.reactivespringbootstarter.filter.AccessLogFilter;
-import com.jmsoftware.maf.reactivespringbootstarter.helper.IpHelper;
-import com.jmsoftware.maf.reactivespringbootstarter.service.CommonService;
-import com.jmsoftware.maf.reactivespringbootstarter.service.impl.CommonServiceImpl;
+import com.jmsoftware.maf.reactivespringcloudstarter.configuration.MafConfiguration;
+import com.jmsoftware.maf.reactivespringcloudstarter.configuration.MafProjectProperty;
+import com.jmsoftware.maf.reactivespringcloudstarter.configuration.WebFluxConfiguration;
+import com.jmsoftware.maf.reactivespringcloudstarter.controller.CommonController;
+import com.jmsoftware.maf.reactivespringcloudstarter.filter.AccessLogFilter;
+import com.jmsoftware.maf.reactivespringcloudstarter.helper.IpHelper;
+import com.jmsoftware.maf.reactivespringcloudstarter.service.CommonService;
+import com.jmsoftware.maf.reactivespringcloudstarter.service.impl.CommonServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;

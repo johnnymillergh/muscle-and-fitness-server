@@ -1,7 +1,7 @@
-package com.jmsoftware.maf.reactivespringbootstarter.filter;
+package com.jmsoftware.maf.reactivespringcloudstarter.filter;
 
-import com.jmsoftware.maf.reactivespringbootstarter.configuration.MafConfiguration;
-import com.jmsoftware.maf.reactivespringbootstarter.util.RequestUtil;
+import com.jmsoftware.maf.reactivespringcloudstarter.configuration.MafConfiguration;
+import com.jmsoftware.maf.reactivespringcloudstarter.util.RequestUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;

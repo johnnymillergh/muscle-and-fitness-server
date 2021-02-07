@@ -84,7 +84,7 @@
     <dependencies>
         <dependency>
             <groupId>com.jmsoftware.maf</groupId>
-            <artifactId>reactive-spring-boot-starter</artifactId>
+            <artifactId>reactive-spring-cloud-starter</artifactId>
         </dependency>
 
         <dependency>

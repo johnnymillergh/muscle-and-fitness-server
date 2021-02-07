@@ -5,7 +5,7 @@ import com.jmsoftware.maf.apigateway.remoteapi.AuthCenterRemoteApi;
 import com.jmsoftware.maf.apigateway.security.configuration.JwtConfiguration;
 import com.jmsoftware.maf.common.domain.authcenter.security.UserPrincipal;
 import com.jmsoftware.maf.common.exception.SecurityException;
-import com.jmsoftware.maf.reactivespringbootstarter.configuration.MafConfiguration;
+import com.jmsoftware.maf.reactivespringcloudstarter.configuration.MafConfiguration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
