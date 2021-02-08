@@ -22,6 +22,7 @@ spring:
         port: ${server.port}
         prefer-ip-address: true
         ip-address: ${spring.cloud.client.ip-address}
+        health-check-critical-timeout: 15s
   datasource:
     name: muscle_and_fitness
     type: com.alibaba.druid.pool.DruidDataSource
