@@ -70,6 +70,7 @@ if %currentJavaMajorVersion% LSS %minimalJavaMajorVersion% (
   CALL :logError "Current Java version is too low, at least OpenJDK %minimalJavaMajorVersion% is needed"
   EXIT /B 1
 )
+CALL :logInfo "Passed Java major version cheking"
 EXIT /B 0
 
 @REM Pull the latest code of current branch from Git.

@@ -29,8 +29,8 @@ spring:
     consul:
       discovery:
         register: true
-        instance-id: ${spring.cloud.client.hostname}-${spring.cloud.client.ip-address}-${server.port}-@project.artifactId@
-        service-name: @project.artifactId@
+        instance-id: ${spring.application.name}-${spring.cloud.client.hostname}-${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
+        service-name: ${spring.application.name}
         port: ${server.port}
         prefer-ip-address: true
         ip-address: ${spring.cloud.client.ip-address}
