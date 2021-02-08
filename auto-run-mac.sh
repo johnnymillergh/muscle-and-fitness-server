@@ -16,10 +16,8 @@ set -e
 
 ############### Configurable Environment Variables ################
 readonly mavenActiveProfile="development-local"
-readonly javaParameter="-Xms256m -Xmx256m -Dspring.profiles.active=$mavenActiveProfile"
-# The name of service `service-registry` is `service-registry`, also equal to the directory `service-registry`.
+readonly javaParameter="-Xms256m -Xmx256m -Dfile.encoding=UTF-8 -Dspring.cloud.consul.host=localhost -Dspring.profiles.active=$mavenActiveProfile"
 readonly runServices=(
-  service-registry
   spring-boot-admin
 #  api-portal
 )
