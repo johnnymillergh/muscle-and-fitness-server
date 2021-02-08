@@ -16,7 +16,6 @@ import com.jmsoftware.maf.springcloudstarter.service.CommonService;
 import com.jmsoftware.maf.springcloudstarter.service.impl.CommonServiceImpl;
 import com.jmsoftware.maf.springcloudstarter.sftp.SftpConfiguration;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -46,7 +45,7 @@ import java.util.List;
 @Configuration
 @IntegrationComponentScan
 @ConditionalOnWebApplication
-@EnableConfigurationProperties(MafConfiguration.class)
+@EnableConfigurationProperties({MafConfiguration.class, MafProjectProperty.class})
 @Import({
         MyBatisPlusConfiguration.class,
         RedisConfiguration.class,
@@ -59,23 +58,7 @@ import java.util.List;
 public class MafAutoConfiguration {
     @PostConstruct
     public void postConstruct() {
-        log.warn("Post construction of [{}] is done. About to inject beans. Auto configure order: {}",
-                 getClass().getSimpleName(), Integer.MIN_VALUE);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public MafConfiguration mafConfiguration() {
-        log.warn("Initial bean: '{}'", MafConfiguration.class.getSimpleName());
-        val mafConfiguration = new MafConfiguration();
-        log.warn("{}", mafConfiguration);
-        return mafConfiguration;
-    }
-
-    @Bean
-    public MafProjectProperty mafProjectProperty() {
-        log.warn("Initial bean: '{}'", MafProjectProperty.class.getSimpleName());
-        return new MafProjectProperty();
+        log.warn("Post construction of '{}'", this.getClass().getSimpleName());
     }
 
     @Bean

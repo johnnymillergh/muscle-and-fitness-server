@@ -2,11 +2,13 @@ package com.jmsoftware.maf.springcloudstarter.configuration;
 
 import cn.hutool.core.util.ObjectUtil;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
+import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -21,6 +23,7 @@ import java.util.ArrayList;
  * @date 2019-03-23 14:24
  **/
 @Data
+@Slf4j
 @Validated
 @Component
 @ConfigurationProperties(prefix = "maf.configuration")
@@ -81,5 +84,10 @@ public class MafConfiguration {
         flattenIgnoredUrls.addAll(ignoredUrl.getTrace());
         flattenIgnoredUrls.addAll(ignoredUrl.getPattern());
         return flattenIgnoredUrls.toArray(new String[0]);
+    }
+
+    @PostConstruct
+    private void postConstruct() {
+        log.warn("Initial bean: '{}'", this.getClass().getSimpleName());
     }
 }

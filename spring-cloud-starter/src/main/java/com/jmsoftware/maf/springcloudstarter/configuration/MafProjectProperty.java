@@ -1,10 +1,12 @@
 package com.jmsoftware.maf.springcloudstarter.configuration;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
+import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotBlank;
 
 /**
@@ -15,6 +17,7 @@ import javax.validation.constraints.NotBlank;
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 12/29/2020 12:57 PM
  */
 @Data
+@Slf4j
 @Validated
 @Component
 @SuppressWarnings("jol")
@@ -100,4 +103,9 @@ public class MafProjectProperty {
      * The Developer url.
      */
     private String developerUrl;
+
+    @PostConstruct
+    private void postConstruct() {
+        log.warn("Initial bean: '{}'", this.getClass().getSimpleName());
+    }
 }
