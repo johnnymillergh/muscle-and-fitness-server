@@ -1,20 +1,22 @@
 package com.jmsoftware.maf.authcenter.security.controller;
 
+import cn.hutool.json.JSONUtil;
 import com.jmsoftware.maf.authcenter.security.service.JwtService;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtResponse;
 import com.jmsoftware.maf.common.exception.SecurityException;
+import com.jmsoftware.maf.springcloudstarter.configuration.MafProjectProperty;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.info.BuildProperties;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Stack;
 
 /**
  * Description: JwtRemoteApiController, change description here.
@@ -29,7 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/jwt-remote-api")
 public class JwtRemoteApiController {
     private final JwtService jwtService;
-    private final BuildProperties buildProperties;
+    private final MafProjectProperty mafProjectProperty;
 
     /**
      * Parse response body bean.
@@ -39,7 +41,7 @@ public class JwtRemoteApiController {
     @GetMapping("/parse")
     @ApiOperation(value = "Parse JWT", notes = "Parse JWT (Remote API)")
     public ResponseBodyBean<ParseJwtResponse> parse(HttpServletRequest request) throws SecurityException {
-        log.info("buildProperties.getVersion {}", buildProperties.getVersion());
+        log.info("buildProperties.getVersion {}", JSONUtil.toJsonStr(mafProjectProperty.getBuildProperties()));
         return ResponseBodyBean.ofSuccess(
                 new ParseJwtResponse().setUsername(jwtService.getUsernameFromRequest(request)));
     }
