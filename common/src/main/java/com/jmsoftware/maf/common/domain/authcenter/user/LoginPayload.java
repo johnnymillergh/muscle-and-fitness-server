@@ -3,7 +3,7 @@ package com.jmsoftware.maf.common.domain.authcenter.user;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -16,13 +16,13 @@ public class LoginPayload {
     /**
      * The Login token: username / email
      */
-    @NotEmpty
+    @NotBlank
     @Length(max = 100)
     private String loginToken;
     /**
      * The Password.
      */
-    @NotEmpty
+    @NotBlank
     @Length(max = 60)
     private String password;
     /**

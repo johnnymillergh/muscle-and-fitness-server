@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import org.springframework.integration.file.support.FileExistsMode;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.File;
 
@@ -27,7 +27,7 @@ public class SftpUploadFile {
      * SFTP server's sub directory (if sub directory does'nt exist, will be auto created). Not empty and it looks
      * like this: "/some/sub/directory/"
      */
-    @NotEmpty
+    @NotBlank
     private String subDirectory;
     /**
      * This enumeration indicates what action shall be taken in case the destination file already exists. In default,

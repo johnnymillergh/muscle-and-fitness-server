@@ -19,7 +19,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -104,7 +104,7 @@ public class AuthCenterRemoteApi {
      * @return the mono
      */
     @GetMapping("/jwt-remote-api/parse")
-    public Mono<ParseJwtResponse> parse(@NotEmpty String authorization) {
+    public Mono<ParseJwtResponse> parse(@NotBlank String authorization) {
         return webClientBuilder
                 .build()
                 .get()

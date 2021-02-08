@@ -3,7 +3,7 @@ package com.jmsoftware.maf.common.domain;
 import lombok.Data;
 
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -19,6 +19,6 @@ public class ValidationTestPayload {
     @NotNull
     @Min(value = 1L)
     private Long id;
-    @NotEmpty
+    @NotBlank
     private String name;
 }
