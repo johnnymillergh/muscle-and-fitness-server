@@ -2,6 +2,7 @@ server:
   port: @spring-boot-admin.port@
   tomcat:
     uri-encoding: @project.build.sourceEncoding@
+  shutdown: GRACEFUL
 
 spring:
   application:

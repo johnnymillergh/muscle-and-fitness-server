@@ -2,6 +2,7 @@ server:
   port: @exercise-mis.port@
   tomcat:
     uri-encoding: @project.build.sourceEncoding@
+  shutdown: GRACEFUL
 
 spring:
   application:
@@ -17,7 +18,7 @@ spring:
     multipart:
       # `location` specifies the directory where uploaded files will be stored. When not specified,
       # a temporary directory will be used. ATTENTION: it may differ due to OS.
-      location: ~/Documents/@project.parent.artifactId@/@project.artifactId@/temprary-file
+      location: ~/Documents/@project.parent.artifactId@/${spring.application.name}/temprary-file
       # `max-file-size` specifies the maximum size permitted for uploaded files. The default is 1MB. We set it as 64 MB.
       max-file-size: 64MB
       # `max-request-size` specifies the maximum size allowed for multipart/form-data requests. The default is 10MB.

@@ -2,6 +2,7 @@ server:
   port: @muscle-mis.port@
   tomcat:
     uri-encoding: @project.build.sourceEncoding@
+  shutdown: GRACEFUL
 
 spring:
   application:
