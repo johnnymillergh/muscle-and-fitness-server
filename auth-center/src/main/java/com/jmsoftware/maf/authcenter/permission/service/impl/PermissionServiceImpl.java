@@ -4,7 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Lists;
+import com.jmsoftware.maf.authcenter.permission.configuration.PermissionConfiguration;
 import com.jmsoftware.maf.authcenter.permission.entity.GetServicesInfoResponse;
 import com.jmsoftware.maf.authcenter.permission.entity.PermissionPersistence;
 import com.jmsoftware.maf.authcenter.permission.mapper.PermissionMapper;
@@ -16,7 +16,6 @@ import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListB
 import com.jmsoftware.maf.common.domain.authcenter.permission.PermissionType;
 import com.jmsoftware.maf.common.domain.springbootstarter.HttpApiResourcesResponse;
 import com.jmsoftware.maf.common.exception.BusinessException;
-import com.jmsoftware.maf.springcloudstarter.configuration.MafProjectProperty;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -43,8 +42,8 @@ import java.util.Optional;
 public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, PermissionPersistence> implements PermissionService {
     private final RoleService roleService;
     private final DiscoveryClient discoveryClient;
-    private final MafProjectProperty mafProjectProperty;
     private final RestTemplate restTemplate;
+    private final PermissionConfiguration permissionConfiguration;
 
     @Override
     public GetPermissionListByRoleIdListResponse getPermissionListByRoleIdList(@Valid GetPermissionListByRoleIdListPayload payload) {
@@ -82,11 +81,9 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
         log.info("Getting service info from Service ID list: {}", serviceIdList);
         val response = new GetServicesInfoResponse();
         val mapper = new ObjectMapper();
-        val ignoredServiceIdList = Lists.newArrayList(mafProjectProperty.getProjectArtifactId(),
-                                                      "api-gateway", "spring-boot-admin", "consul");
-        log.info("Ignored service ID list: {}", ignoredServiceIdList);
+        log.info("Ignored service ID: {}", permissionConfiguration.getIgnoredServiceIds());
         for (String serviceId : serviceIdList) {
-            if (ignoredServiceIdList.contains(serviceId)) {
+            if (CollUtil.contains(permissionConfiguration.getIgnoredServiceIds(), serviceId)) {
                 log.warn("Ignored service ID: {}", serviceId);
                 continue;
             }
