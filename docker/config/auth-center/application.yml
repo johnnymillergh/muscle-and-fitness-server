@@ -1,1 +1,8 @@
 greeting: "Hello, World! From Consul config center!"
+
+permission:
+  ignored-service-ids:
+    - "consul"
+    - "api-gateway"
+    - "spring-boot-admin"
+    - "auth-center"
