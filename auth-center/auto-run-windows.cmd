@@ -16,7 +16,8 @@ chcp 65001
 @REM #################### Configurable Environment Variables ###################
 SET skipGitPull=true
 SET skipMavenBuild=true
-SET javaExe=C:\Users\Administrator\.sdkman\candidates\java\11.0.9.hs-adpt\bin\java.exe
+SET minimalJavaMajorVersion=11
+SET javaExe=java
 SET mavenActiveProfile="development-local"
 SET javaParameter=-Xms256m -Xmx256m -Dfile.encoding=UTF-8 -Dspring.cloud.consul.host=localhost
 
@@ -55,6 +56,21 @@ EXIT /B 0
 EXIT /B 0
 
 @REM ############################ Custom Functions #############################
+
+@REM Check Java major version
+:checkJavaMajorVersion
+CALL :logWarn "Start to Check Java major version…"
+%javaExe% -version 1>nul 2>nul || (
+  CALL :logError "Java is not installed!"
+  EXIT /B 2
+)
+for /f tokens^=2-6^ delims^=.-_+^" %%j in ('%javaExe% -fullversion 2^>^&1') do set "currentJavaMajorVersion=%%j"
+CALL :logWarn "Got current Java major version number: %currentJavaMajorVersion%"
+if %currentJavaMajorVersion% LSS %minimalJavaMajorVersion% (
+  CALL :logError "Current Java version is too low, at least OpenJDK %minimalJavaMajorVersion% is needed"
+  EXIT /B 1
+)
+EXIT /B 0
 
 @REM Pull the latest code of current branch from Git.
 :gitPull
@@ -122,6 +138,14 @@ EXIT /B 0
 @REM ############################# MAIN Procedures #############################
 :MAIN
 cls
+
+@REM Check Java major version
+CALL :checkJavaMajorVersion
+if %ERRORLEVEL% NEQ 0 (
+    CALL :logError "Failed to check Java major version!"
+    EXIT /B %ERRORLEVEL%
+)
+
 @REM Pre-build phrase (Display version, Git pull)
 CALL :executePreBuildPhase
 if %ERRORLEVEL% NEQ 0 (
