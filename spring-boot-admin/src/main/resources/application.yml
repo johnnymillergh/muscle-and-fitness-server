@@ -5,6 +5,11 @@ server:
   shutdown: GRACEFUL
 
 spring:
+  boot:
+    admin:
+      discovery:
+        ignored-services:
+          - "consul"
   application:
     name: @project.artifactId@
   profiles:
