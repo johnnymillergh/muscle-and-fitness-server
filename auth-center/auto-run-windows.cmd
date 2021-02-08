@@ -18,7 +18,7 @@ SET skipGitPull=true
 SET skipMavenBuild=true
 SET javaExe=C:\Users\Administrator\.sdkman\candidates\java\11.0.9.hs-adpt\bin\java.exe
 SET mavenActiveProfile="development-local"
-SET javaParameter=-Dfile.encoding=UTF-8 -Xms256m -Xmx256m
+SET javaParameter=-Xms256m -Xmx256m -Dfile.encoding=UTF-8 -Dspring.cloud.consul.host=localhost
 
 GOTO:MAIN
 
