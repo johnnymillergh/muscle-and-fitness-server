@@ -1,7 +1,6 @@
 package com.jmsoftware.maf.apigateway.universal.configuration;
 
 import cn.hutool.core.collection.CollUtil;
-import com.google.common.collect.Sets;
 import com.jmsoftware.maf.reactivespringcloudstarter.configuration.MafProjectProperty;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,10 +19,8 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger.web.SwaggerResource;
 import springfox.documentation.swagger.web.SwaggerResourcesProvider;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * <h1>SwaggerResourceProvider</h1>
@@ -61,7 +58,7 @@ public class SwaggerResourceProvider implements SwaggerResourcesProvider {
         val swaggerResourceList = new LinkedList<SwaggerResource>();
         routeLocator.getRoutes().subscribe(route -> {
             val serviceName = route.getUri().toString().substring(5).toLowerCase();
-            if (!CollUtil.contains(swaggerConfiguration.getIgnoredServiceIdSet(), serviceName)) {
+            if (!CollUtil.contains(swaggerConfiguration.getIgnoredServiceIds(), serviceName)) {
                 log.warn("{} found dynamic route. Service name: {}, route: {}", this.getClass().getSimpleName(),
                          serviceName, route);
                 val swaggerResource = new SwaggerResource();

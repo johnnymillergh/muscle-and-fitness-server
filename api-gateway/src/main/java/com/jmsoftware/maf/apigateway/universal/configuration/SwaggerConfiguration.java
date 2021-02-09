@@ -2,10 +2,13 @@ package com.jmsoftware.maf.apigateway.universal.configuration;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.util.Set;
 
 /**
@@ -15,11 +18,14 @@ import java.util.Set;
  **/
 @Data
 @Validated
-@Component
-@ConfigurationProperties(prefix = "maf.configuration.swagger")
+@RefreshScope
+@Configuration
+@ConfigurationProperties(prefix = SwaggerConfiguration.PREFIX)
 public class SwaggerConfiguration {
+    public static final String PREFIX = "maf.configuration.swagger";
     /**
      * Ignored service id set
      */
-    private Set<@NotBlank String> ignoredServiceIdSet;
+   @NotEmpty
+   private Set<@NotBlank String> ignoredServiceIds;
 }

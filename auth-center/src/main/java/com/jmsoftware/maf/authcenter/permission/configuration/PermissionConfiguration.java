@@ -19,8 +19,9 @@ import java.util.Set;
 @Validated
 @RefreshScope
 @Configuration
-@ConfigurationProperties(prefix = "permission")
+@ConfigurationProperties(prefix = PermissionConfiguration.PREFIX)
 public class PermissionConfiguration {
+    public static final String PREFIX = "maf.configuration.permission";
     @NotEmpty
     private Set<@NotBlank String> ignoredServiceIds;
 }

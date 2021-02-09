@@ -1,6 +1,7 @@
 package com.jmsoftware.maf.springcloudstarter.configuration;
 
 import cn.hutool.core.util.ObjectUtil;
+import com.google.common.collect.Lists;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -12,7 +13,9 @@ import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <h1>CustomConfiguration</h1>
@@ -89,5 +92,65 @@ public class MafConfiguration {
     @PostConstruct
     private void postConstruct() {
         log.warn("Initial bean: '{}'", this.getClass().getSimpleName());
+    }
+
+    /**
+     * <h1>IgnoredUrl</h1>
+     * <p>
+     * Ignored URL configuration.
+     *
+     * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 2/9/2021 9:39 AM
+     **/
+    @Data
+    public static class IgnoredUrl {
+        private interface Constant {
+            String URL_REGEXP = "^(/.+)+$";
+        }
+
+        /**
+         * Ignored URL pattern.
+         */
+        @Valid
+        private List<@Pattern(regexp = Constant.URL_REGEXP) String> pattern = Lists.newArrayList();
+        /**
+         * Ignored GET request.
+         */
+        @Valid
+        private List<@Pattern(regexp = Constant.URL_REGEXP) String> get = Lists.newArrayList();
+        /**
+         * Ignored POST request.
+         */
+        @Valid
+        private List<@Pattern(regexp = Constant.URL_REGEXP) String> post = Lists.newArrayList();
+        /**
+         * Ignored DELETE request.
+         */
+        @Valid
+        private List<@Pattern(regexp = Constant.URL_REGEXP) String> delete = Lists.newArrayList();
+        /**
+         * Ignored PUT request.
+         */
+        @Valid
+        private List<@Pattern(regexp = Constant.URL_REGEXP) String> put = Lists.newArrayList();
+        /**
+         * Ignored HEAD request.
+         */
+        @Valid
+        private List<@Pattern(regexp = Constant.URL_REGEXP) String> head = Lists.newArrayList();
+        /**
+         * Ignored PATCH request.
+         */
+        @Valid
+        private List<@Pattern(regexp = Constant.URL_REGEXP) String> patch = Lists.newArrayList();
+        /**
+         * Ignored OPTIONS request.
+         */
+        @Valid
+        private List<@Pattern(regexp = Constant.URL_REGEXP) String> options = Lists.newArrayList();
+        /**
+         * Ignored TRACE request.
+         */
+        @Valid
+        private List<@Pattern(regexp = Constant.URL_REGEXP) String> trace = Lists.newArrayList();
     }
 }

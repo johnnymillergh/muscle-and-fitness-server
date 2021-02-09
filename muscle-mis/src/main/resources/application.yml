@@ -3,6 +3,8 @@ server:
   tomcat:
     uri-encoding: @project.build.sourceEncoding@
   shutdown: GRACEFUL
+  servlet:
+    context-path:
 
 spring:
   application:
@@ -79,19 +81,6 @@ spring:
         max-wait: -1ms
         min-idle: 0
 
-eureka:
-  instance:
-    leaseRenewalIntervalInSeconds: 10
-    health-check-url-path: /actuator/health
-    status-page-url-path: /
-    metadata-map:
-      # needed to trigger info and endpoint update after restart
-      startup: ${random.int}
-    instance-id: ${spring.cloud.client.ip-address}:${server.port}@${spring.cloud.client.hostname}@${spring.application.name}-${random.int}
-    prefer-ip-address: true
-  client:
-    registryFetchIntervalSeconds: 5
-
 feign:
   client:
     config:
@@ -132,7 +121,7 @@ logging:
 maf:
   project-property:
     base-package: @project.groupId@
-    context-path:
+    context-path: ${server.servlet.context-path}
     group-id: @project.groupId@
     project-parent-artifact-id: @project.parent.artifactId@
     project-artifact-id: @project.artifactId@

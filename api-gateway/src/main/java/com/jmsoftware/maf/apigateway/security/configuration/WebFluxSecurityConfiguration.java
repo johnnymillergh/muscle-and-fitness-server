@@ -1,5 +1,6 @@
 package com.jmsoftware.maf.apigateway.security.configuration;
 
+import com.google.common.collect.Lists;
 import com.jmsoftware.maf.apigateway.remoteapi.AuthCenterRemoteApi;
 import com.jmsoftware.maf.apigateway.security.impl.*;
 import com.jmsoftware.maf.reactivespringcloudstarter.configuration.MafConfiguration;
@@ -53,6 +54,8 @@ public class WebFluxSecurityConfiguration {
                     .csrf().disable()
                     .build();
         }
+        log.warn("Spring Security will ignore following URLs: {}",
+                 Lists.newArrayList(mafConfiguration.flattenIgnoredUrls()));
         return http
                 .cors().disable()
                 .csrf().disable()

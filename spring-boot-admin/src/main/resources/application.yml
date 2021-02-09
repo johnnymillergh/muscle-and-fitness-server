@@ -3,6 +3,8 @@ server:
   tomcat:
     uri-encoding: @project.build.sourceEncoding@
   shutdown: GRACEFUL
+  servlet:
+    context-path:
 
 spring:
   boot:
@@ -99,7 +101,7 @@ logging:
 maf:
   project-property:
     base-package: @project.groupId@
-    context-path:
+    context-path: ${server.servlet.context-path}
     group-id: @project.groupId@
     project-parent-artifact-id: @project.parent.artifactId@
     project-artifact-id: @project.artifactId@
