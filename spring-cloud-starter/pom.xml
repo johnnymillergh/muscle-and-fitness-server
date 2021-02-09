@@ -5,8 +5,8 @@
 
     <!-- Sub-module Basics -->
     <artifactId>spring-cloud-starter</artifactId>
-    <name>Muscle and Fitness Server :: Spring Boot Starter</name>
-    <description>Muscle and Fitness Server Spring Boot Starter</description>
+    <name>Muscle and Fitness Server :: Spring Cloud Starter</name>
+    <description>Muscle and Fitness Server Spring Cloud Starter</description>
     <parent>
         <groupId>com.jmsoftware.maf</groupId>
         <artifactId>muscle-and-fitness-server</artifactId>
