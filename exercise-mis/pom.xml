@@ -36,14 +36,14 @@
                 <artifactId>jib-maven-plugin</artifactId>
                 <version>${jib-maven-plugin.version}</version>
                 <executions>
-                    <!-- Bind `jib:dockerBuild` to a Maven lifecycle `verify`. Jib will build your image directly to a Docker daemon. -->
+                    <!-- Bind `jib:dockerBuild` to a Maven lifecycle `verify`. Jib will build your image directly to a Docker daemon.
                     <execution>
                         <id>buildDockerImagePhase</id>
                         <phase>verify</phase>
                         <goals>
                             <goal>dockerBuild</goal>
                         </goals>
-                    </execution>
+                    </execution>-->
                     <!-- Bind `jib:build` to a Maven lifecycle `install`. Jib will build and push image to image registry. -->
                     <execution>
                         <id>buildAndPushDockerImagePhase</id>
