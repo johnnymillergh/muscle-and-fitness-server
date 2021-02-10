@@ -11,6 +11,7 @@ import com.jmsoftware.maf.springcloudstarter.database.MyBatisPlusConfiguration;
 import com.jmsoftware.maf.springcloudstarter.filter.AccessLogFilter;
 import com.jmsoftware.maf.springcloudstarter.helper.HttpApiScanHelper;
 import com.jmsoftware.maf.springcloudstarter.helper.IpHelper;
+import com.jmsoftware.maf.springcloudstarter.helper.SpringBootStartupHelper;
 import com.jmsoftware.maf.springcloudstarter.redis.RedisConfiguration;
 import com.jmsoftware.maf.springcloudstarter.service.CommonService;
 import com.jmsoftware.maf.springcloudstarter.service.impl.CommonServiceImpl;
@@ -91,10 +92,16 @@ public class MafAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean
     public IpHelper ipHelper(Environment environment) {
         log.warn("Initial bean: '{}'", IpHelper.class.getSimpleName());
         return new IpHelper(environment);
+    }
+
+    @Bean
+    public SpringBootStartupHelper springBootStartupHelper(MafProjectProperty mafProjectProperty,
+                                                           IpHelper ipHelper) {
+        log.warn("Initial bean: '{}'", SpringBootStartupHelper.class.getSimpleName());
+        return new SpringBootStartupHelper(mafProjectProperty, ipHelper);
     }
 
     @Bean

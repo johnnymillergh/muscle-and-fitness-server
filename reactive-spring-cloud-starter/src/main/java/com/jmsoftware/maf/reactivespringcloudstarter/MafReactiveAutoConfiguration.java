@@ -7,6 +7,7 @@ import com.jmsoftware.maf.reactivespringcloudstarter.configuration.WebFluxConfig
 import com.jmsoftware.maf.reactivespringcloudstarter.controller.CommonController;
 import com.jmsoftware.maf.reactivespringcloudstarter.filter.AccessLogFilter;
 import com.jmsoftware.maf.reactivespringcloudstarter.helper.IpHelper;
+import com.jmsoftware.maf.reactivespringcloudstarter.helper.SpringBootStartupHelper;
 import com.jmsoftware.maf.reactivespringcloudstarter.service.CommonService;
 import com.jmsoftware.maf.reactivespringcloudstarter.service.impl.CommonServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -72,6 +73,13 @@ public class MafReactiveAutoConfiguration {
     public IpHelper ipHelper(MafProjectProperty mafProjectProperty) {
         log.warn("Initial bean: '{}'", IpHelper.class.getSimpleName());
         return new IpHelper(mafProjectProperty);
+    }
+
+    @Bean
+    public SpringBootStartupHelper springBootStartupHelper(MafProjectProperty mafProjectProperty,
+                                                           IpHelper ipHelper) {
+        log.warn("Initial bean: '{}'", SpringBootStartupHelper.class.getSimpleName());
+        return new SpringBootStartupHelper(mafProjectProperty, ipHelper);
     }
 
     @Bean

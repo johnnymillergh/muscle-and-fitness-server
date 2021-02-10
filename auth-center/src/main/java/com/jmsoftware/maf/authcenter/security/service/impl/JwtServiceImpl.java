@@ -52,8 +52,6 @@ public class JwtServiceImpl implements JwtService {
         secretKey = Keys.hmacShaKeyFor(jwtConfiguration.getSigningKey().getBytes(StandardCharsets.UTF_8));
         log.warn("Secret key for JWT was generated. Algorithm: {}", secretKey.getAlgorithm());
         jwtParser = Jwts.parserBuilder().setSigningKey(secretKey).build();
-//        redisTemplate.setKeySerializer(new StringRedisSerializer());
-//        redisTemplate.setValueSerializer(new StringRedisSerializer());
     }
 
     @Override

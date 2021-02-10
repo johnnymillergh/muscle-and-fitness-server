@@ -2,12 +2,14 @@ package com.jmsoftware.maf.musclemis;
 
 import com.jmsoftware.maf.springcloudstarter.configuration.MafProjectProperty;
 import com.jmsoftware.maf.springcloudstarter.helper.IpHelper;
+import com.jmsoftware.maf.springcloudstarter.helper.SpringBootStartupHelper;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.util.StopWatch;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -26,27 +28,16 @@ import java.util.TimeZone;
 @EnableDiscoveryClient
 @SpringBootApplication
 public class MuscleMisApplication {
-    private static final String LINE_SEPARATOR = System.lineSeparator();
-    private static MafProjectProperty mafProjectProperty;
-    private static IpHelper ipHelper;
+    private static final StopWatch STOP_WATCH = new StopWatch();
+    private static SpringBootStartupHelper springBootStartupHelper;
 
-    public MuscleMisApplication(MafProjectProperty mafProjectProperty, IpHelper ipHelper) {
-        MuscleMisApplication.mafProjectProperty = mafProjectProperty;
-        MuscleMisApplication.ipHelper = ipHelper;
+    public MuscleMisApplication(SpringBootStartupHelper springBootStartupHelper) {
+        MuscleMisApplication.springBootStartupHelper = springBootStartupHelper;
     }
 
     public static void main(String[] args) {
-        val startInstant = Instant.now();
+        STOP_WATCH.start();
         SpringApplication.run(MuscleMisApplication.class, args);
-        val endInstant = Instant.now();
-        val duration = Duration.between(startInstant, endInstant);
-        log.info("🥳 Congratulations! 🎉");
-        log.info("🖥 {}@{} started!", mafProjectProperty.getProjectArtifactId(), mafProjectProperty.getVersion());
-        log.info("⚙️ Environment: {}", mafProjectProperty.getEnvironment());
-        log.info("⏳ Deployment duration: {} seconds ({} ms)", duration.getSeconds(), duration.toMillis());
-        log.info("⏰ App started at {} (timezone - {})", endInstant, TimeZone.getDefault().getDisplayName());
-        log.info("{}  App running at{}  - Local:   http://localhost:{}{}/{}  - Network: http://{}:{}/{}",
-                 LINE_SEPARATOR, LINE_SEPARATOR, ipHelper.getServerPort(), mafProjectProperty.getContextPath(),
-                 LINE_SEPARATOR, ipHelper.getPublicIp(), ipHelper.getServerPort(), mafProjectProperty.getContextPath());
+        springBootStartupHelper.stop(STOP_WATCH);
     }
 }
