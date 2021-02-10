@@ -1,18 +1,11 @@
 package com.jmsoftware.maf.apigateway;
 
-import com.jmsoftware.maf.reactivespringcloudstarter.configuration.MafProjectProperty;
-import com.jmsoftware.maf.reactivespringcloudstarter.helper.IpHelper;
 import com.jmsoftware.maf.reactivespringcloudstarter.helper.SpringBootStartupHelper;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.util.StopWatch;
-
-import java.time.Duration;
-import java.time.Instant;
-import java.util.TimeZone;
 
 /**
  * <h1>ApiGatewayApplication</h1>
