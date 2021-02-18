@@ -675,7 +675,7 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
             Cell cell = row.getCell(i, Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
             String value = "";
             if (cell != null) {
-                switch (cell.getCellTypeEnum()) {
+                switch (cell.getCellType()) {
                     case STRING:
                         value = cell.getStringCellValue();
                         break;
@@ -793,7 +793,7 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
     private String getCellValue2String(Cell cell) {
         String returnString = "";
         if (cell != null) {
-            switch (cell.getCellTypeEnum()) {
+            switch (cell.getCellType()) {
                 case BLANK:
                     return "";
                 case NUMERIC:
