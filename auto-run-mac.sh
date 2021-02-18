@@ -2,7 +2,7 @@
 ############################## auto-run ############################
 # Author: Johnny Miller, date: 7:31 AM, Dec. 5, 2020               #
 # Copyright (c) Johnny Miller                                      #
-# Capability: macOS Big Sur 11.0.1 (20B29)                         #
+# Capability: macOS Big Sur 11.2.1 (20D74)                         #
 # Purpose:                                                         #
 #   1. Integrate easy and simple deployment,                       #
 #   2. Reduce memory usage of IntelliJ IDEA to run services,       #
