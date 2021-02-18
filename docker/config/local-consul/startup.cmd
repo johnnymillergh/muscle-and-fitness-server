@@ -4,7 +4,8 @@
 @REM # Copyright (c) Johnny Miller                                      #
 @REM # Capability: Windows 10 Pro (20H2)                                #
 @REM # Purpose:                                                         #
-@REM #   1. Integrate easy and simple deployment,                       #
+@REM #   1. Integrate easy and simple deployment                        #
+@REM # Download: https://www.consul.io/downloads                        #
 @REM ####################################################################
 
 SETLOCAL EnableDelayedExpansion
