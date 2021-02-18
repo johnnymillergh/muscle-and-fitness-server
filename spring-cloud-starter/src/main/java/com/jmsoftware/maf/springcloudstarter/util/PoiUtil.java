@@ -1,10 +1,9 @@
 package com.jmsoftware.maf.springcloudstarter.util;
 
+import lombok.val;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
-
-import java.util.Iterator;
 
 /**
  * <h1>PoiUtil</h1>
@@ -15,6 +14,12 @@ import java.util.Iterator;
  */
 @SuppressWarnings({"AlibabaRemoveCommentedCode", "unused"})
 public class PoiUtil {
+    /**
+     * Copy cell style.
+     *
+     * @param sourceCellStyle the source cell style
+     * @param targetCellStyle the target cell style
+     */
     public static void copyCellStyle(HSSFCellStyle sourceCellStyle, HSSFCellStyle targetCellStyle) {
         targetCellStyle.setAlignment(sourceCellStyle.getAlignment());
         // Boarder style
@@ -41,26 +46,37 @@ public class PoiUtil {
         targetCellStyle.setWrapText(sourceCellStyle.getWrapText());
     }
 
-
+    /**
+     * Copy sheet.
+     *
+     * @param workbook    the workbook
+     * @param sourceSheet the source sheet
+     * @param targetSheet the target sheet
+     * @param copyValue   the copy value
+     */
     public static void copySheet(HSSFWorkbook workbook, HSSFSheet sourceSheet, HSSFSheet targetSheet,
                                  boolean copyValue) {
         mergerRegion(sourceSheet, targetSheet);
-        for (Iterator<Row> rowIt = sourceSheet.rowIterator(); rowIt.hasNext(); ) {
-            HSSFRow tmpRow = (HSSFRow) rowIt.next();
-            HSSFRow newRow = targetSheet.createRow(tmpRow.getRowNum());
-            copyRow(workbook, tmpRow, newRow, copyValue);
-        }
+        sourceSheet.rowIterator().forEachRemaining(oldRow -> {
+            val newRow = targetSheet.createRow(oldRow.getRowNum());
+            copyRow(workbook, (HSSFRow) oldRow, newRow, copyValue);
+        });
     }
 
-
+    /**
+     * Copy row.
+     *
+     * @param workbook  the workbook
+     * @param sourceRow the source row
+     * @param targetRow the target row
+     * @param copyValue the copy value
+     */
     public static void copyRow(HSSFWorkbook workbook, HSSFRow sourceRow, HSSFRow targetRow, boolean copyValue) {
-        for (Iterator<Cell> cellIt = sourceRow.cellIterator(); cellIt.hasNext(); ) {
-            HSSFCell tmpCell = (HSSFCell) cellIt.next();
-            HSSFCell newCell = targetRow.createCell(tmpCell.getColumnIndex());
-            copyCell(workbook, tmpCell, newCell, copyValue);
-        }
+        sourceRow.cellIterator().forEachRemaining(oldCell -> {
+            val newCell = targetRow.createCell(oldCell.getColumnIndex());
+            copyCell(workbook, oldCell, newCell, copyValue);
+        });
     }
-
 
     /**
      * Merger region.
@@ -69,13 +85,12 @@ public class PoiUtil {
      * @param targetSheet the target sheet
      */
     public static void mergerRegion(HSSFSheet sourceSheet, HSSFSheet targetSheet) {
-        int sheetMergerCount = sourceSheet.getNumMergedRegions();
-        for (int i = 0; i < sheetMergerCount; i++) {
-            CellRangeAddress mergedRegionAt = sourceSheet.getMergedRegion(i);
+        val sheetMergerCount = sourceSheet.getNumMergedRegions();
+        for (var i = 0; i < sheetMergerCount; i++) {
+            val mergedRegionAt = sourceSheet.getMergedRegion(i);
             targetSheet.addMergedRegion(mergedRegionAt);
         }
     }
-
 
     /**
      * Copy cell.
@@ -86,13 +101,13 @@ public class PoiUtil {
      * @param copyValue  the copy value
      */
     public static void copyCell(HSSFWorkbook workbook, HSSFCell sourceCell, HSSFCell targetCell, boolean copyValue) {
-        HSSFCellStyle newStyle = workbook.createCellStyle();
+        val newStyle = workbook.createCellStyle();
         copyCellStyle(sourceCell.getCellStyle(), newStyle);
         targetCell.setCellStyle(newStyle);
         if (sourceCell.getCellComment() != null) {
             targetCell.setCellComment(sourceCell.getCellComment());
         }
-        CellType srcCellType = sourceCell.getCellType();
+        val srcCellType = sourceCell.getCellType();
         targetCell.setCellType(srcCellType);
         if (copyValue) {
             switch (srcCellType) {
@@ -122,22 +137,28 @@ public class PoiUtil {
         }
     }
 
-
+    /**
+     * Copy row.
+     *
+     * @param copyValue the copy value
+     * @param workbook  the workbook
+     * @param sourceRow the source row
+     * @param targetRow the target row
+     */
     public static void copyRow(boolean copyValue, Workbook workbook, Row sourceRow, Row targetRow) {
         targetRow.setHeight(sourceRow.getHeight());
 
-        for (Iterator<Cell> cellIt = sourceRow.cellIterator(); cellIt.hasNext(); ) {
-            Cell tmpCell = cellIt.next();
-            Cell newCell = targetRow.createCell(tmpCell.getColumnIndex());
-            copyCell(workbook, tmpCell, newCell, copyValue);
-        }
+        sourceRow.cellIterator().forEachRemaining(oldCell -> {
+            Cell newCell = targetRow.createCell(oldCell.getColumnIndex());
+            copyCell(workbook, oldCell, newCell, copyValue);
+        });
 
-        Sheet worksheet = sourceRow.getSheet();
+        val worksheet = sourceRow.getSheet();
 
-        for (int i = 0; i < worksheet.getNumMergedRegions(); i++) {
-            CellRangeAddress cellRangeAddress = worksheet.getMergedRegion(i);
+        for (var i = 0; i < worksheet.getNumMergedRegions(); i++) {
+            val cellRangeAddress = worksheet.getMergedRegion(i);
             if (cellRangeAddress.getFirstRow() == sourceRow.getRowNum()) {
-                CellRangeAddress newCellRangeAddress =
+                val newCellRangeAddress =
                         new CellRangeAddress(targetRow.getRowNum(),
                                              (targetRow.getRowNum() + (cellRangeAddress.getLastRow() - cellRangeAddress.getFirstRow())),
                                              cellRangeAddress.getFirstColumn(),
@@ -147,11 +168,19 @@ public class PoiUtil {
         }
     }
 
+    /**
+     * Copy cell.
+     *
+     * @param workbook   the workbook
+     * @param sourceCell the source cell
+     * @param targetCell the target cell
+     * @param copyValue  the copy value
+     */
     public static void copyCell(Workbook workbook, Cell sourceCell, Cell targetCell, boolean copyValue) {
         if (sourceCell.getCellComment() != null) {
             targetCell.setCellComment(sourceCell.getCellComment());
         }
-        CellType srcCellType = sourceCell.getCellType();
+        val srcCellType = sourceCell.getCellType();
         if (copyValue) {
             switch (srcCellType) {
                 case NUMERIC:
