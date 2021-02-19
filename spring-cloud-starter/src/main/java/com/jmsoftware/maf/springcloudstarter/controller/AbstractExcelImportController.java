@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -280,12 +279,11 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
      * Upload excel file. Any exceptions happened in any lifecycle will not interrupt the whole process.
      *
      * @param request  the request
-     * @param response the response
      * @return the response body bean
      */
     @PostMapping(value = "/upload", headers = "content-type=multipart/form-data")
     @ApiOperation(value = "Upload Excel file", notes = "Upload Excel file")
-    public ResponseBodyBean<ExcelImportResult> upload(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseBodyBean<ExcelImportResult> upload(HttpServletRequest request) {
         beforeExecute();
         initLocaleContext();
         try {
