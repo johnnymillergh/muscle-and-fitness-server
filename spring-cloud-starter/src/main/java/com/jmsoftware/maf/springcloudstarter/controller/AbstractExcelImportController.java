@@ -7,7 +7,9 @@ import com.jmsoftware.maf.common.bean.ExcelImportResult;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.springcloudstarter.util.PoiUtil;
 import io.swagger.annotations.ApiOperation;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.http.client.utils.DateUtils;
@@ -36,76 +38,73 @@ import java.util.*;
 
 /**
  * <h1>AbstractExcelImportController</h1>
- * <p>Excel 表格数据导入抽象类。</p>
- * <h1>亮点功能</h1>
- * <p>经过 <code>钟俊 (jun.zhong)</code> 改造，给该类增添许多令人激动的新特性：</p>
+ * <p>Abstract controller for excel data import.</p>
+ * <h2>Features</h2>
  * <ol>
- * <li>将校验有错误、不通过的 Excel 的行，复制到一个新的 Excel 表中，将校验有误信息放在最后一列，通过将这个新的 Excel 表上传到 UDFS，提供文件 URL 给前端进行下载；</li>
- * <li>范型的加持  - <code>ExcelImportBeanType</code>。在 <code>ExcelImportBeanType</code> 中定义 Excel 表的中各个列数据（即表头）；</li>
- * <li>在自定义表头类 <code>ExcelImportBeanType</code> 中使用 <code>@ExcelColumn</code> 来对表头对中文名称进行标注，可以达到事半功倍对效果。还增加 Excel
- * 单元格类型的支持，默认为 <code>Cell.CELL_TYPE_STRING</code>；</li>
- * <li>支持部分导入。</li>
+ * <li>Row validation. If not valid, will generate error message at the last cell.</li>
+ * <li>Generalization support. <code>AbstractExcelImportController&lt;ExcelImportBeanType&gt;</code></li>
+ * <li>Using annotation <code>@ExcelColumn</code> for fields can be generating Excel easier than ever.</li>
+ * <li>Support partial data import.</li>
  *
  * </ol>
- * <h1>理解生命周期（生命钩子）</h1>
- * <p>理解生命周期有助于减少编写代码时出现意想不到的错误。以下是该类的生命周期的解释，参考方法引用：<code>com.ucarinc.inner.asset.common.base
- * .AbstractExcelImportController#AbstractExcelImportController</code>、<code>com.ucarinc.inner.asset.common.base
- * .AbstractExcelImportController#upload</code>。</p>
- * <h2>I. initContext()</h2>
- * <p>初始化上下文。通过反射生成 ExcelImportBeanType 字段名称数组。</p>
- * <h2>II. registerBindHandlerMethods()</h2>
- * <p>注册绑定方法。</p>
- * <h2>III. registerHandlerMethods()</h2>
- * <p>注册默认匹配规则的校验方法。</p>
- * <h2>IV. beforeExecute()</h2>
- * <p>默认不执行操作。可以被子类重写覆盖。</p>
- * <h2>V. initLocaleContext()</h2>
- * <p>初始化当前线程的现场上下文，主要的工作有：</p>
- * <ol>
- * <li>对各个当前线程持有的变量进行初始化，如：<code>errorMessageList</code> 错误信息列表、<code>beanList</code>
- * 实体类列表、<code>returnMessageList</code> 需要返回的信息列表、<code>rowLocation</code> 当前行位置、<code>columnLocation</code>
- * 当前列位置、<code>sheetLocation</code> 当前 Excel 表单位置、<code>readingRowCount</code> 总读取行数…</li>
- * <li>在完成初始化现场上下文后，开始对 Excel 表进行上传、读取、绑定数据、校验数据。</li>
+ * <h2>Understanding of the Lifecycle</h2>
+ * <p>Understanding of the lifecycle will help us make less mistakes during programming.</p>
+ * <h3>I. initContext()</h3>
+ * <p>Initialize context. Generate the field name array of ExcelImportBeanType by reflection.</p>
+ * <h3>II. registerBindHandlerMethods()</h3>
+ * <p>Register bind handler methods (starts with ‘“check”, like <code>checkString()</code>).</p>
+ * <h3>III. registerHandlerMethods()</h3>
+ * <p>Register default handler methods (starts with ‘“check”, like <code>checkString()</code>).</p>
+ * <h3>IV. beforeExecute()</h3>
+ * <p>Left black. Can be overridden by sub class.</p>
+ * <h3>V. initLocaleContext()</h3>
+ * <p>Initialize locale context for current thread. Main work below:</p>
+ * <ul>
+ * <li>errorMessageList</li>
+ * <li>beanList</li>
+ * <li>returnMessageList</li>
+ * <li>rowLocation</li>
+ * <li>columnLocation</li>
+ * <li>sheetLocation</li>
+ * <li>readingRowCount</li>
  *
- * </ol>
- * <h2>VI. beforeDatabaseOperation()</h2>
- * <p>执行插入数据前操作，默认不执行任何操作。可以被子类重写覆盖。</p>
- * <h2>VII. executeDatabaseOperation()</h2>
- * <p>执行自定义的数据库操作。本方法为抽象方法，必须由子类实现。</p>
- * <h2>VIII. onExceptionOccurred()</h2>
- * <p>当前面当生命周期中，发生了任何异常，该方法会被回调。本方法为抽象方法，必须由子类实现。</p>
- * <h2>Ⅸ. afterExecute()</h2>
- * <p>执行后钩子方法。删除文件。</p>
- * <h2>X. destroyLocaleContext()</h2>
- * <p>销毁当前线程的现场环境。与 <code>initLocaleContext()</code> 相对应。</p>
+ * </ul>
+ * <p>After initializing, will upload Excel, read and bind data, validate data.</p>
+ * <h3>VI. beforeDatabaseOperation()</h3>
+ * <p>Left black. Can be overridden by sub class.</p>
+ * <h3>VII. executeDatabaseOperation()</h3>
+ * <p>Must be implemented by sub class.</p>
+ * <h3>VIII. onExceptionOccurred()</h3>
+ * <p>If any exceptions occur, this method will be called. Must be implemented by sub class.</p>
+ * <h3>Ⅸ. afterExecute()</h3>
+ * <p>Delete temporary file.</p>
+ * <h3>X. destroyLocaleContext()</h3>
+ * <p>Destroy locale context, in opposite of <code>initLocaleContext()</code>.</p>
  *
- * @param <ExcelImportBeanType> 导入 Excel 表的 bean 的类型
- * @author 钟俊 (jun.zhong), email: jun.zhong@ucarinc.com
- * @date 4/28/20 2:32 PM
+ * @param <ExcelImportBeanType> Excel import bean type
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 2/19/2021 10:06 AM
  */
 @Slf4j
 @SuppressWarnings({"unused"})
 public abstract class AbstractExcelImportController<ExcelImportBeanType> {
     /**
-     * 本地临时文件存放地址
+     * Temporary file path
      */
     private static final String TEMP_FILE_PATH =
             new ApplicationHome(AbstractExcelImportController.class).getSource()
                     .getParent() + "/temp-file/";
     /**
-     * FTP 上传文件路径文件夹名称
+     * FTP upload directory
+     * TODO: check if it's necessary
      */
     private static final String FTP_DIR = "excel/";
     /**
-     * 默认的访问请求中对应上传文件的键值对的 key 为 upload_file
+     * File key in MultipartFile
+     * TODO: check if it's necessary
      */
     private static final String FILE_KEY = "upload_file";
     /**
-     * The constant HTTP.
-     */
-    private static final String HTTP = "http://";
-    /**
-     * 默认校验方法前缀
+     * Default check method prefix
      */
     private static final String DEFAULT_CHECK_METHOD_PREFIX = "check";
     /**
@@ -117,7 +116,8 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
      */
     private static final String XLSX = "xlsx";
     /**
-     * 导入总条数
+     * Maximum row count
+     * TODO: make it configurable
      */
     private static final Integer MAXIMUM_ROW_COUNT = 2000;
     /**
@@ -125,58 +125,59 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
      */
     protected ThreadLocal<String> userDefinedMessage = new ThreadLocal<>();
     /**
-     * 当出现数据校验失败时是否全部回滚。默认为 true
+     * Deny all data when data validation fails. Default value is true.
      */
     private Boolean denyAll = Boolean.TRUE;
     /**
-     * Excel 导入的数据绑定的类型
+     * The class of ExcelImportBeanType
      */
     private Class<ExcelImportBeanType> bindClass;
     /**
-     * Excel 导入的数据依据数据类型不同指定的不同绑定方法
+     * Data type and bind method
      */
     private final Map<Class<?>, Method> bindMethodMap = new HashMap<>();
     /**
-     * Excel 导入的列按从左到右顺序对应的 bingClass 中的属性名称数组
+     * The field names arrays of the ExcelImportBeanType
      */
     private String[] fieldNameArray;
     /**
-     * 文件名称
+     * File name
      */
     private String fileName;
     /**
-     * 自定义校验方法，默认匹配原则：
-     * 以 check 方法开头，接需要校验的属性字段名称，参数为 List list，返回值为 String 或 Boolean。
+     * Custom validation method
+     * <p>
+     * Start with `check`, parameter is List list, return value is String or Boolean.
      * <p>
      * e.g public String checkName(List list)
      */
     private final Map<String, Method> checkMethodMap = new HashMap<>();
     /**
-     * 绑定数据时当前扫描的 Sheet，-1 时为用户自定义数据绑定。
+     * Sheet location when binging data.
      */
     private final ThreadLocal<Integer> sheetLocation = new ThreadLocal<>();
     /**
-     * 绑定数据时当前扫描位置坐标 X，-1时为用户自定义数据绑定。
+     * Row location
      */
     private final ThreadLocal<Integer> rowLocation = new ThreadLocal<>();
     /**
-     * 绑定数据时当前扫描位置坐标 Y，-1时为用户自定义数据绑定。
+     * Column location
      */
     private final ThreadLocal<Integer> columnLocation = new ThreadLocal<>();
     /**
-     * 总读取记录条数。
+     * Reading row count
      */
     private final ThreadLocal<Integer> readingRowCount = new ThreadLocal<>();
     /**
-     * 错误消息列表。最后将在前台展示的校验错误信息。
+     * Error message list
      */
     protected ThreadLocal<List<String>> errorMessageList = new ThreadLocal<>();
     /**
-     * 最终解析完成的可操作数据列表
+     * Bean list. After reading Excel
      */
     protected final ThreadLocal<List<ExcelImportBeanType>> beanList = new ThreadLocal<>();
     /**
-     * 最终返回的消息集合
+     * Return message list
      */
     private final ThreadLocal<List<String>> returnMessageList = new ThreadLocal<>();
     /**
@@ -219,11 +220,13 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
     }
 
     /**
-     * <p>AbstractExcelImportController 的构造方法</p>
+     * <p>Constructor of AbstractExcelImportController</p>
      * <ol>
-     * <li><p>执行默认的校验方法注册</p>
+     * <li><p>Init context</p>
      * </li>
-     * <li><p>执行默认的环境初始化</p>
+     * <li><p>Register bind handler methods</p>
+     * </li>
+     * <li><p>Register handler methods</p>
      * </li>
      * </ol>
      */
@@ -234,7 +237,7 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
     }
 
     /**
-     * 初始化当前线程的现场环境
+     * Init locale context.
      */
     private void initLocaleContext() {
         errorMessageList.set(new LinkedList<>());
@@ -254,7 +257,7 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
     protected abstract void onExceptionOccurred();
 
     /**
-     * 销毁当前线程的现场环境
+     * Destroy locale context.
      */
     private void destroyLocaleContext() {
         errorMessageList.remove();
@@ -273,59 +276,66 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
     }
 
     /**
-     * 上传文件
+     * Upload excel file. Any exceptions happened in any lifecycle will not interrupt the whole process.
      *
      * @param request  the request
      * @param response the response
-     * @return String result
+     * @return the response body bean
      */
     @PostMapping(value = "/upload", headers = "content-type=multipart/form-data")
-    @ApiOperation(value = "上传 Excel 文件", notes = "上传 Excel 文件")
+    @ApiOperation(value = "Upload Excel file", notes = "Upload Excel file")
     public ResponseBodyBean<ExcelImportResult> upload(HttpServletRequest request, HttpServletResponse response) {
         beforeExecute();
         initLocaleContext();
         try {
-            setReturnMessageList("开始 - 上传 Excel 文件……");
+            setReturnMessageList("Starting - Upload Excel file…");
             file.set(uploadFile((MultipartHttpServletRequest) request));
-            setReturnMessageList("完成 - 上传 Excel 文件……");
+            setReturnMessageList("Finished - Upload Excel file");
         } catch (IOException e) {
-            log.error("上传 Excel 文件出现异常！", e);
-            setErrorMessage("上传 Excel 文件出现异常！异常信息：" + e.getMessage());
+            log.error("Exception occurred when uploading file!", e);
+            setErrorMessage(
+                    String.format("Exception occurred when uploading file! Exception message: %s", e.getMessage()));
         }
         try {
-            setReturnMessageList("开始 - 读取 Excel 文件……");
+            setReturnMessageList("Starting - Read Excel file…");
             workbook.set(readFile(file.get()));
-            setReturnMessageList("完成 - 读取 Excel 文件……");
+            setReturnMessageList("Finished - Read Excel file");
         } catch (IOException e) {
-            log.error("读取 Excel 文件时发生异常！", e);
-            setErrorMessage("读取 Excel 文件时发生异常！异常信息：" + e.getMessage());
+            log.error("Exception occurred when reading Excel file!", e);
+            setErrorMessage(
+                    String.format("Exception occurred when reading Excel file! Exception message: %s", e.getMessage()));
         }
         try {
-            setReturnMessageList("开始 - 绑定数据、校验数据……");
+            setReturnMessageList("Starting - Validate and bind data…");
             bindData(workbook.get());
-            setReturnMessageList("完成 - 绑定数据、校验数据……");
+            setReturnMessageList("Finished - Validate and bind data");
         } catch (Exception e) {
-            log.error("绑定数据、校验数据时发生异常！", e);
-            setErrorMessage("绑定数据、校验数据时发生异常！异常信息：" + e.getMessage());
+            log.error("Exception occurred when validating and binding data!", e);
+            setErrorMessage(String.format("Exception occurred when validating and binding data! Exception message: %s",
+                                          e.getMessage()));
         }
         beforeDatabaseOperation(this.beanList.get());
-        // 如果没有错误信息（errorMessageList 为空）或者不是 denyAll，则进行数据库操作
+        // if no error message (errorMessageList if empty) or not denyAll, then execute DB operation
         if (CollectionUtil.isEmpty(this.errorMessageList.get()) || !denyAll) {
             if (CollectionUtil.isNotEmpty(this.beanList.get())) {
-                setReturnMessageList("开始 - 导入数据……");
+                setReturnMessageList("Starting - Import data…");
                 try {
                     executeDatabaseOperation(this.beanList.get());
-                    setReturnMessageList(String.format("完成 - 导入数据。本次成功导入 %d 条数据！", beanList.get().size()));
+                    setReturnMessageList(
+                            String.format("Finished - Import data. Imported count: %d", beanList.get().size()));
                 } catch (Exception e) {
                     exceptionOccurred.set(true);
-                    log.error("执行数据库操作时发生异常！", e);
-                    setErrorMessage("执行数据库操作时发生异常！异常信息：" + e.getMessage());
+                    log.error("Exception occurred when executing DB operation!", e);
+                    setErrorMessage(
+                            String.format("Exception occurred when executing DB operation! Exception message: %s",
+                                          e.getMessage()));
                 }
             } else {
-                setReturnMessageList(String.format("完成 - 导入数据。本次成功导入 %d 条数据！", beanList.get().size()));
+                setReturnMessageList(
+                        String.format("Finished - Import data. Empty list. Imported count: %d", beanList.get().size()));
             }
         } else {
-            setReturnMessageList("【警告】存在不符合要求的数据，数据全部导入失败！");
+            setReturnMessageList("[Warning] Found not valid data. Data import all failed!");
         }
         if (exceptionOccurred.get()) {
             onExceptionOccurred();
@@ -339,31 +349,31 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
     }
 
     /**
-     * 执行前钩子方法，默认不执行任何操作
+     * Before execute.
      */
     protected void beforeExecute() {
     }
 
     /**
-     * 执行后钩子方法。删除文件。
+     * After execute. Delete file.
      */
     protected void afterExecute() {
         Optional<File> optionalFile = Optional.ofNullable(file.get());
         optionalFile.ifPresent(file1 -> {
-            boolean delete = file1.delete();
-            if (delete) {
-                log.warn("删除文件！{}", file1.getAbsolutePath());
+            boolean deleted = file1.delete();
+            if (deleted) {
+                log.warn("Deleted file. File absolute path: {}", file1.getAbsolutePath());
             } else {
-                log.warn("文件不能删除！{}", file1.getAbsolutePath());
+                log.warn("The file cannot be deleted！File absolute path: {}", file1.getAbsolutePath());
             }
         });
         if (optionalFile.isEmpty()) {
-            log.warn("文件不存在！");
+            log.warn("The file does not exist!");
         }
     }
 
     /**
-     * 执行插入数据前操作，默认不执行任何操作
+     * Before database operation.
      *
      * @param beanList the bean list
      */
@@ -371,18 +381,16 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
     }
 
     /**
-     * <p>注册默认匹配规则的校验方法。</p>
+     * <p>Register handler methods</p>
      * <ul>
-     * <li><p>e.g: private Boolean checkXXX(String value,Integer index)</p>
-     * </li>
-     * <li><p>e.g: private String checkXXX(String value,Integer index)</p>
-     * </li>
+     * <li>e.g: <code>private Boolean checkXXX(String value,Integer index)</code></li>
+     * <li>e.g: <code>private String checkXXX(String value,Integer index)</code>, the return value can be empty or
+     * “true”, or other error message which will be added to  errorMessage</li>
      * </ul>
      */
     private void registerHandlerMethods() {
-        // 清除数据
         this.checkMethodMap.clear();
-        // 注册符合默认匹配原则的方法
+        // Register valid methods for validation
         Method[] methods = this.getClass().getDeclaredMethods();
         for (Method method : methods) {
             if (isCheckMethod(method)) {
@@ -392,15 +400,18 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
     }
 
     /**
-     * <p>检查是否符合默认匹配原则。</p>
+     * <p>Check if method is valid for validation.</p>
      * <ol>
-     * <li><p>以 check 方法开头，接需要校验的属性字段名称；</p>
+     * <li><p>Method name starts with `check`</p>
      * </li>
-     * <li><p>参数为 String value；</p>
+     * <li><p>Parameter is String value</p>
      * </li>
-     * <li><p>返回值为 Boolean</p>
+     * <li><p>Return value is Boolean</p>
      * </li>
      * </ol>
+     *
+     * @param method the method
+     * @return the boolean
      */
     private Boolean isCheckMethod(Method method) {
         Class<?> returnType = method.getReturnType();
@@ -416,29 +427,24 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
     }
 
     /**
-     * 注册校验方法
+     * Register check method.
      *
-     * @param method 将要被注册的方法对象
+     * @param method the method
      */
     private void registerCheckMethod(Method method) {
         String fieldName = method.getName().
                 substring(DEFAULT_CHECK_METHOD_PREFIX.length());
         fieldName = fieldName.substring(0, 1).toLowerCase() + fieldName.substring(1);
         this.checkMethodMap.put(fieldName, method);
-        log.info("Register check method [" + method.getName() + "]");
+        log.info("Registered check method [" + method.getName() + "]");
     }
 
     /**
-     * <p>初始化上下文。</p>
+     * <p>Init context.</p>
      * <ol>
-     * <li><p>调用 <code>setBindClass(Class&amp;lt;?&amp;gt; bindClass)</code> 设置数据绑定类；</p>
+     * <li><p>Call <code>getGenericClass()</code> to set Excel import type；</p>
      * </li>
-     * <li><p>调用 <code>setFieldNamesArray(String[] fieldNameArray)</code> 设置数据绑定列(列名为绑定类中的属性名,顺序需和Excel导入的列顺序一致)；</p>
-     * </li>
-     * <li><p>调用 <code>registCustomCheckMethod(String fieldName,String methodName)</code> 添加自定义名称校验方法(默认会注册特定名称的校验方法)
-     * ；</p>
-     * </li>
-     * <li><p>调用 <code>setIsDenyAll()</code> 配置修改当校验出现失败情况时的操作。true 为全部回退，false 为校验失败的回退。默认为 true。</p>
+     * <li><p>Set fieldNameArray</p>
      * </li>
      * </ol>
      */
@@ -450,14 +456,20 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
             Field declaredField = declaredFields[index];
             fieldNameArray[index] = declaredField.getName();
         }
-        log.info("通过反射生成 {} 字段名称数组：{}", bindClass.getSimpleName(), fieldNameArray);
+        log.info("Generated {} field name array by reflection, fieldNameArray: {}", bindClass.getSimpleName(),
+                 fieldNameArray);
         this.setFieldNameArray(fieldNameArray);
     }
 
+    /**
+     * Gets generic class.
+     *
+     * @return the generic class
+     */
     @SuppressWarnings("unchecked")
     private Class<ExcelImportBeanType> getGenericClass() {
         Type type = getClass().getGenericSuperclass();
-        log.info("通过反射获取范型的类型: {}", type.getTypeName());
+        log.info("Got type by reflection, typeName: {}", type.getTypeName());
         if (type instanceof ParameterizedType) {
             ParameterizedType parameterizedType = (ParameterizedType) type;
             String typeName = parameterizedType.getActualTypeArguments()[0].getTypeName();
@@ -465,29 +477,30 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
             try {
                 aClass = (Class<ExcelImportBeanType>) Class.forName(typeName);
             } catch (ClassNotFoundException e) {
-                log.error("获取类的时候发生异常！", e);
-                throw new RuntimeException("获取类的时候发生异常！异常原因：" + e.getMessage());
+                log.error("Exception occurred when looking for class!", e);
+                throw new RuntimeException(
+                        "Exception occurred when looking for class! Exception message：" + e.getMessage());
             }
             return aClass;
         }
-        throw new RuntimeException("未能找到范型的类型！");
+        throw new RuntimeException("Cannot find the type from the generic class!");
     }
 
     /**
-     * 执行自定义的数据库操作。
+     * Execute database operation.
      *
-     * @param beanList 校验完成的所有可用于执行数据库操作的 bean 列表
+     * @param beanList the bean list that can be used for DB operations
      * @throws Exception the exception
      */
     protected abstract void executeDatabaseOperation(List<ExcelImportBeanType> beanList) throws Exception;
 
     /**
-     * 整体校验，校验即将加入 beanList 的 bean 是否与之前的bean有冲突。
+     * Validate before adding to bean list boolean.
      *
-     * @param beanList 已经校验通过的 bean 列表
-     * @param bean     待校验的 bean
-     * @param index    当前带校验 bean 实际指代的 Excel 文件数据所在的行索引
-     * @return boolean boolean
+     * @param beanList the bean list that contains validated bean
+     * @param bean     the bean that needs to be validated
+     * @param index    the index that is the reference to the row number of the Excel file
+     * @return the boolean
      * @throws Exception the exception
      */
     protected abstract boolean validateBeforeAddToBeanList(List<ExcelImportBeanType> beanList,
@@ -495,9 +508,9 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
                                                            int index) throws Exception;
 
     /**
-     * 设置 fieldNameArray
+     * Sets field name array.
      *
-     * @param fieldNameArray bindClass 中需要绑定的列数组
+     * @param fieldNameArray the field name array
      */
     public void setFieldNameArray(String[] fieldNameArray) {
         this.fieldNameArray = fieldNameArray;
@@ -505,6 +518,8 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
 
     /**
      * 上传文件到本地（暂时）
+     * <p>
+     * TODO: check the method if is necessary or not
      *
      * @param itemBytes the item bytes
      * @param fileName  the file name
@@ -525,7 +540,7 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
     }
 
     /**
-     * 上传文件。
+     * Upload file.
      *
      * @param request the request
      * @return File file
@@ -550,14 +565,13 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
     }
 
     /**
-     * 读取 Excel 文件置入 Workbook 实例对象中。
+     * Read the file into workbook.
      *
-     * @param file 需要读取的文件对象
-     * @return Workbook workbook
+     * @param file the file
+     * @return the workbook
      * @throws IOException the io exception
      */
-    private Workbook readFile(File file) throws IOException {
-        Assert.notNull(file, "file must not be null!");
+    private Workbook readFile(@NonNull File file) throws IOException {
         Workbook workbook = null;
         String extension = FilenameUtils.getExtension(file.getName());
         if (XLS.equals(extension)) {
@@ -583,7 +597,8 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
 //            InputStream in = new FileInputStream(file);
 //            ftp.connectServer();
 //            ftp.upload(path + DateUtils.formatDate(new Date(), "yyyyMM"), new String(file.getName().getBytes("GBK"),
-//                                                                                     StandardCharsets.ISO_8859_1), in);
+//                                                                                     StandardCharsets.ISO_8859_1),
+//                                                                                     in);
 //        } catch (IOException e) {
 //            log.error("上传文件至 FTP 时发生异常！异常信息：{}", e.getMessage());
 //        } finally {
@@ -592,92 +607,94 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
     }
 
     /**
-     * 过滤不需要处理的 sheet 页。默认所有 sheet 都处理。
+     * Filter sheet. In default, will proceed all sheets.
      *
      * @param sheet the sheet
      * @return the boolean
      */
-    protected boolean sheetFilter(Sheet sheet) {
+    protected boolean filterSheet(Sheet sheet) {
         return true;
     }
 
     /**
-     * <p>绑定数据到对象上。所做的工作有：</p>
+     * <p>Bind data from the workbook. Processes below: </p>
      * <ul>
-     * <li><p>依据 fieldNameArray 绑定数据至 bindClass 实例上</p>
+     * <li><p>Bind data to the instance of bindClass, according to the fieldNameArray.</p>
      * </li>
-     * <li><p>通过回调，校验字段的有效性</p>
+     * <li><p>Validate the field by callback method</p>
      * </li>
      * </ul>
      *
      * @param workbook the workbook
+     * @throws Exception the exception
      */
     @SuppressWarnings("RedundantThrows")
     private void bindData(Workbook workbook) throws Exception {
         for (int k = 0; k < workbook.getNumberOfSheets(); k++) {
             Sheet sheet = workbook.getSheetAt(k);
-            // 过滤掉不需要处理的 sheet 页
-            if (!sheetFilter(sheet)) {
+            if (!filterSheet(sheet)) {
                 continue;
             }
-            // 指定当前 sheet 位置
+            // Specify current sheet location
             sheetLocation.set(k + 1);
             sheet.getSheetName();
-            // 计算总记录数
+            // Set Reading row count
             readingRowCount.set(readingRowCount.get() + sheet.getLastRowNum() - sheet.getFirstRowNum());
-            // 验证导入数量是否大于最大值
+            // Check if exceeding the MAXIMUM_ROW_COUNT
             if (readingRowCount.get() > MAXIMUM_ROW_COUNT) {
-                setErrorMessage(String.format("导入条数不能大于 %d 条（表头也计入行数）！当前总条数：%d", MAXIMUM_ROW_COUNT,
-                                              readingRowCount.get()));
+                setErrorMessage(String.format(
+                        "The amount of importing data cannot be greater than %d (Table head included)! " +
+                                "Current reading row count: %d", MAXIMUM_ROW_COUNT, readingRowCount.get()));
                 continue;
             }
-            // 验证导入数量是否大于最大值
+            // Check if the readingRowCount is equal to zero
             if (readingRowCount.get() == 0) {
-                setErrorMessage("没有可导入的数据，请检查。");
+                setErrorMessage("Not available data to import. Check Excel again.");
                 continue;
             }
-            // 获取开始结束位置
+            // Check if the first row is equal to null
             if (sheet.getRow(0) == null) {
-                // sheet 页格式不合法，没有标题，本页不解析
-                setErrorMessage(String.format("第 %d 页表单格式不合法，没有标题。", sheetLocation.get()));
+                setErrorMessage(String.format("Sheet [%s] (No. %d) format is invalid: no title! ", sheet.getSheetName(),
+                                              sheetLocation.get()));
+                // If the sheet is not valid, then skip it
                 continue;
             }
             int startIndex = sheet.getRow(0).getFirstCellNum();
             int endIndex = sheet.getRow(0).getLastCellNum();
-            // 从第二行开始解析
+            // Parse from the second row
             for (int i = sheet.getFirstRowNum() + 1; i <= sheet.getLastRowNum(); i++) {
-                // 指定当前坐标X
+                // Specify current row location
                 rowLocation.set(i + 1);
                 Row row = sheet.getRow(i);
                 if (isBlankRow(row)) {
-                    // 空行不计入总行数
+                    // Blank row will not be considered as a effective row, not be included in `readingRowCount`
                     readingRowCount.set(readingRowCount.get() - 1);
                     continue;
                 }
-                // 绑定到实例 bean
+                // Bind row to bean
                 bindRowToBean(row, startIndex, endIndex);
             }
         }
     }
 
     /**
-     * 判断是否为空行
+     * Check if the row is blank. If there is one cell of the row is not blank, then the row is not blank.
      *
      * @param row the row
-     * @return the boolean
+     * @return true if the row is blank; or vice versa.
      */
     private boolean isBlankRow(Row row) {
         if (row == null) {
             return true;
         }
-        boolean result = true;
-        for (int i = row.getFirstCellNum(); i < row.getLastCellNum(); i++) {
-            Cell cell = row.getCell(i, Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
-            String value = "";
+        Cell cell;
+        var value = "";
+        for (var i = row.getFirstCellNum(); i < row.getLastCellNum(); i++) {
+            cell = row.getCell(i, Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
             if (cell != null) {
                 switch (cell.getCellType()) {
                     case STRING:
-                        value = cell.getStringCellValue();
+                        value = cell.getStringCellValue().trim();
                         break;
                     case NUMERIC:
                         value = String.valueOf((int) cell.getNumericCellValue());
@@ -691,41 +708,40 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
                     default:
                         break;
                 }
-                if (!"".equals(value.trim())) {
-                    result = false;
-                    break;
+                if (StrUtil.isNotBlank(value)) {
+                    return false;
                 }
             }
         }
-        return result;
+        return true;
     }
 
     /**
-     * 绑定行到数据对象上
+     * Bind row to bean.
      *
-     * @param row        Row
+     * @param row        the row
      * @param startIndex the start index
      * @param endIndex   the end index
      */
     private void bindRowToBean(Row row, int startIndex, int endIndex) {
         Assert.notNull(this.bindClass, "bindClass must not be null!");
         Assert.notNull(this.fieldNameArray, "fieldNameArray must not be null!");
-        boolean bindingResult = false;
+        var bindingResult = false;
         try {
-            // 新建数据实例
-            ExcelImportBeanType bean = this.bindClass.getDeclaredConstructor().newInstance();
-            Field[] fields = this.bindClass.getDeclaredFields();
-            for (int i = startIndex; i < endIndex; i++) {
-                // 出现多余数据，则当前行绑定失效
-                if (i >= fieldNameArray.length) {
+            // New bean instance
+            val bean = this.bindClass.getDeclaredConstructor().newInstance();
+            val fields = this.bindClass.getDeclaredFields();
+            for (var index = startIndex; index < endIndex; index++) {
+                // If found more data, then binding failed
+                if (index >= fieldNameArray.length) {
                     bindingResult = false;
-                    setErrorMessage(String.format("第 %d 行存在多余数据，请检查。", rowLocation.get()));
+                    setErrorMessage(
+                            String.format("Found redundant data on row number %d. Check again.", rowLocation.get()));
                     break;
                 }
-                // 获取需要绑定的属性名称
+                // Get the field that needs binding
                 Field field = null;
-                String fieldName = fieldNameArray[i];
-                // 获取需要绑定的Field实例
+                val fieldName = fieldNameArray[index];
                 for (Field f : fields) {
                     if (f.getName().equals(fieldName)) {
                         field = f;
@@ -733,30 +749,30 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
                     }
                 }
                 if (field != null) {
-                    String value = getCellValue2String(row.getCell(i));
-                    // 绑定开始
-                    // 指定当前坐标Y
-                    columnLocation.set(i + 1);
-                    // 执行自定义校验
-                    Method method = this.checkMethodMap.get(fieldName);
+                    val value = getCellValue2String(row.getCell(index));
+                    // Start to bind
+                    // Specify current column location
+                    columnLocation.set(index + 1);
+                    // Execute custom validation method
+                    val method = this.checkMethodMap.get(fieldName);
                     Object returnObj = null;
                     if (method != null) {
                         method.setAccessible(true);
                         returnObj = method.invoke(this, value, rowLocation.get(), bean);
                         method.setAccessible(false);
                     }
-                    String returnStr = returnObj == null ? null : returnObj.toString();
-                    if (null == returnStr || "".equals(returnStr) || "true".equals(returnStr)) {
-                        // 执行数据绑定
+                    val validationResult = returnObj == null ? null : returnObj.toString();
+                    // If `validationResult` is blank or equal to "true"
+                    if (StrUtil.isBlank(validationResult) || Boolean.TRUE.toString().equals(validationResult)) {
                         bindingResult = bind(value, field, bean);
                     } else {
                         bindingResult = false;
-                        // 添加自定义校验错误信息
-                        if (!"false".equals(returnStr)) {
-                            setErrorMessage(returnStr);
+                        // If `validationResult` is not equal to "false" then add to error message list
+                        if (!Boolean.FALSE.toString().equals(validationResult)) {
+                            setErrorMessage(validationResult);
                         }
                     }
-                    // 绑定结束
+                    // Finished binding
                     if (!bindingResult) {
                         break;
                     }
@@ -773,7 +789,9 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
         } catch (Exception e) {
             log.error("bindRowToBean method has encountered a problem!", e);
             exceptionOccurred.set(true);
-            String errorMessage = String.format("绑定并校验第 %d 行数据时发生异常，异常信息：%s", rowLocation.get(), e.getMessage());
+            String errorMessage = String.format(
+                    "Exception occurred when binding and validating the data of row number %d. " +
+                            "Exception message: %s", rowLocation.get(), e.getMessage());
             setErrorMessage(errorMessage);
             short lastCellNum = row.getLastCellNum();
             Cell errorInformationCell = row.createCell(fieldNameArray.length);
@@ -785,10 +803,10 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
     }
 
     /**
-     * 转换单元格信息为 String 字符创
+     * Gets cell value 2 string.
      *
      * @param cell the cell
-     * @return the cell value 2 string
+     * @return the string
      */
     private String getCellValue2String(Cell cell) {
         String returnString = "";
@@ -797,17 +815,17 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
                 case BLANK:
                     return "";
                 case NUMERIC:
-                    // 如果为输入为日期格式
+                    // If it's date
                     if (DateUtil.isCellDateFormatted(cell)) {
-                        Date date = cell.getDateCellValue();
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        val date = cell.getDateCellValue();
+                        val dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         returnString = dateFormat.format(date);
                     } else {
-                        BigDecimal bg = new BigDecimal(String.valueOf(cell.getNumericCellValue()).trim());
-                        // 若小数部分为 0 则仅保留整数部分
-                        String tempStr = bg.toPlainString();
-                        int dotIndex = tempStr.indexOf(".");
-                        if ((bg.doubleValue() - bg.longValue()) == 0 && dotIndex > 0) {
+                        val bigDecimal = new BigDecimal(String.valueOf(cell.getNumericCellValue()).trim());
+                        // Keep decimal fraction parts which are not zero
+                        val tempStr = bigDecimal.toPlainString();
+                        val dotIndex = tempStr.indexOf(".");
+                        if ((bigDecimal.doubleValue() - bigDecimal.longValue()) == 0 && dotIndex > 0) {
                             returnString = tempStr.substring(0, dotIndex);
                         } else {
                             returnString = tempStr;
@@ -826,9 +844,9 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
     }
 
     /**
-     * 注册绑定方法
+     * Register bind handler methods.
      */
-    protected void registerBindHandlerMethods() {
+    private void registerBindHandlerMethods() {
         try {
             Method bindStringField = ReflectionUtils.findMethod(this.getClass(),
                                                                 "bindStringField",
@@ -872,12 +890,12 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
     }
 
     /**
-     * 实际绑定动作
+     * Real binding value to the bean's field.
      *
-     * @param value Excel 文件对应单元格数据的字符串形式
-     * @param field 将要绑定到的 bean 的对应属性对象
-     * @param bean  将要绑定到的 bean
-     * @return the boolean
+     * @param value the string value of the excel cell
+     * @param field the the field of the bean
+     * @param bean  the bean
+     * @return true if the binding succeeded, or vice versa.
      * @throws RuntimeException the runtime exception
      */
     private Boolean bind(String value, Field field, Object bean) throws RuntimeException {
@@ -890,10 +908,10 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
             try {
                 result = (Boolean) bindMethod.invoke(this, value, field, bean);
             } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-                StringBuilder exceptionMessage = new StringBuilder("绑定数据时发生异常！");
+                val exceptionMessage = new StringBuilder("Exception occurred when binding! ");
                 if (!StrUtil.isBlank(e.getMessage())) {
                     log.error("Exception occurred when invoking method!", e);
-                    exceptionMessage.append(e.getMessage());
+                    exceptionMessage.append(e.getMessage()).append(" ");
                 }
                 if (ObjectUtil.isNotNull(e.getCause()) && !StrUtil.isBlank(e.getCause().getMessage())) {
                     log.error("Exception occurred when invoking method!", e.getCause());
@@ -908,7 +926,7 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
     }
 
     /**
-     * 绑定 int，Integer 属性
+     * Bind int field boolean.
      *
      * @param value the value
      * @param field the field
@@ -927,8 +945,9 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
             field.set(bean, realValue);
             field.setAccessible(false);
         } catch (NumberFormatException e) {
-            log.error("绑定 int，Integer 属性时发生异常！异常信息：{}。Value：{}，field：{}", e.getMessage(), value, field.getName());
-            String formattedMessage = String.format("第 %d 行，第 %d 列数据格式有误，须为整数，请校对后重新导入。",
+            log.error("Exception occurred when binding int/Integer field! Exception message: {}, value: {}, field: {}",
+                      e.getMessage(), value, field.getName());
+            String formattedMessage = String.format("Invalid data of the row %d, col %d, must be integer",
                                                     rowLocation.get(), columnLocation.get());
             setErrorMessage(formattedMessage);
             throw new IllegalArgumentException(formattedMessage);
@@ -936,9 +955,8 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
         return true;
     }
 
-
     /**
-     * 绑定 long，Long 属性
+     * Bind long field boolean.
      *
      * @param value the value
      * @param field the field
@@ -948,7 +966,7 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
      */
     private Boolean bindLongField(String value, Field field, Object bean) throws IllegalAccessException {
         try {
-            Long realValue = value == null ? null : (long) Double.parseDouble(value);
+            var realValue = value == null ? null : (long) Double.parseDouble(value);
             if (realValue == null && field.getType() == long.class) {
                 realValue = 0L;
             }
@@ -956,8 +974,9 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
             field.set(bean, realValue);
             field.setAccessible(false);
         } catch (NumberFormatException e) {
-            log.error("绑定 long，Long 属性时发生异常！异常信息：{}。Value：{}，field：{}", e.getMessage(), value, field.getName());
-            String formattedMessage = String.format("第 %d 行，第 %d 列数据格式有误，须为整数，请校对后重新导入。",
+            log.error("Exception occurred when binding long/Long field! Exception message: {}, value: {}, field: {}",
+                      e.getMessage(), value, field.getName());
+            String formattedMessage = String.format("Invalid data of the row %d, col %d, must be long integer",
                                                     rowLocation.get(), columnLocation.get());
             setErrorMessage(formattedMessage);
             throw new IllegalArgumentException(formattedMessage);
@@ -966,7 +985,32 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
     }
 
     /**
-     * 绑定 float，Float 属性
+     * Bind long field boolean.
+     *
+     * @param value the value
+     * @param field the field
+     * @param bean  the bean
+     * @return the boolean
+     * @throws IllegalAccessException the illegal access exception
+     */
+    private Boolean bindLongField(Long value, Field field, Object bean) throws IllegalAccessException {
+        try {
+            field.setAccessible(true);
+            field.set(bean, value);
+            field.setAccessible(false);
+        } catch (IllegalArgumentException e) {
+            log.error("Exception occurred when binding Long field! Exception message: {}, value: {}, field: {}",
+                      e.getMessage(), value, field.getName());
+            String formattedMessage = String.format("Invalid data of the row %d, col %d, must be Long integer",
+                                                    rowLocation.get(), columnLocation.get());
+            setErrorMessage(formattedMessage);
+            throw new IllegalArgumentException(formattedMessage);
+        }
+        return true;
+    }
+
+    /**
+     * Bind float field boolean.
      *
      * @param value the value
      * @param field the field
@@ -984,8 +1028,9 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
             field.set(bean, realValue);
             field.setAccessible(false);
         } catch (NumberFormatException e) {
-            log.error("绑定 float，Float 属性时发生异常！异常信息：{}。Value：{}，field：{}", e.getMessage(), value, field.getName());
-            String formattedMessage = String.format("第 %d 行，第 %d 列数据格式有误，须为单精度浮点数，请校对后重新导入。",
+            log.error("Exception occurred when binding float/Float field! Exception message: {}, value: {}, field: {}",
+                      e.getMessage(), value, field.getName());
+            String formattedMessage = String.format("Invalid data of the row %d, col %d, must be float",
                                                     rowLocation.get(), columnLocation.get());
             setErrorMessage(formattedMessage);
             throw new IllegalArgumentException(formattedMessage);
@@ -993,9 +1038,8 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
         return true;
     }
 
-
     /**
-     * 绑定 double，Double 属性
+     * Bind double field boolean.
      *
      * @param value the value
      * @param field the field
@@ -1013,8 +1057,9 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
             field.set(bean, realValue);
             field.setAccessible(false);
         } catch (NumberFormatException e) {
-            log.error("绑定 double，Double 属性时发生异常！异常信息：{}。Value：{}，field：{}", e.getMessage(), value, field.getName());
-            String formattedMessage = String.format("第 %d 行，第 %d 列数据格式有误，须为双精度浮点数，请校对后重新导入。",
+            log.error("Exception occurred when binding double/Double field! Exception message: {}, value: {}, field: {}",
+                      e.getMessage(), value, field.getName());
+            String formattedMessage = String.format("Invalid data of the row %d, col %d, must be double",
                                                     rowLocation.get(), columnLocation.get());
             setErrorMessage(formattedMessage);
             throw new IllegalArgumentException(formattedMessage);
@@ -1023,7 +1068,7 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
     }
 
     /**
-     * 绑定 String 属性
+     * Bind string field boolean.
      *
      * @param value the value
      * @param field the field
@@ -1037,8 +1082,9 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
             field.set(bean, value);
             field.setAccessible(false);
         } catch (IllegalArgumentException e) {
-            log.error("绑定 String 属性时发生异常！异常信息：{}。Value：{}，field：{}", e.getMessage(), value, field.getName());
-            String formattedMessage = String.format("第 %d 行,第 %d 列数据格式有误，须为字符串，请校对后重新导入。",
+            log.error("Exception occurred when binding String field! Exception message: {}, value: {}, field: {}",
+                      e.getMessage(), value, field.getName());
+            String formattedMessage = String.format("Invalid data of the row %d, col %d, must be string",
                                                     rowLocation.get(), columnLocation.get());
             setErrorMessage(formattedMessage);
             throw new IllegalArgumentException(formattedMessage);
@@ -1047,31 +1093,7 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
     }
 
     /**
-     * 绑定 Long 属性
-     *
-     * @param value the value
-     * @param field the field
-     * @param bean  the bean
-     * @return the boolean
-     * @throws IllegalAccessException the illegal access exception
-     */
-    private Boolean bindLongField(Long value, Field field, Object bean) throws IllegalAccessException {
-        try {
-            field.setAccessible(true);
-            field.set(bean, value);
-            field.setAccessible(false);
-        } catch (IllegalArgumentException e) {
-            log.error("绑定 Long 属性时发生异常！异常信息：{}。Value：{}，field：{}", e.getMessage(), value, field.getName());
-            String formattedMessage = String.format("第 %d 行，第 %d 列数据格式有误，须为字符串，请校对后重新导入。",
-                                                    rowLocation.get(), columnLocation.get());
-            setErrorMessage(formattedMessage);
-            throw new IllegalArgumentException(formattedMessage);
-        }
-        return true;
-    }
-
-    /**
-     * 绑定 Date 属性
+     * Bind date field boolean.
      *
      * @param value the value
      * @param field the field
@@ -1087,8 +1109,9 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
             field.set(bean, date);
             field.setAccessible(false);
         } catch (ParseException e) {
-            log.error("绑定 Date 属性时发生异常！异常信息：{}。Value：{}，field：{}", e.getMessage(), value, field.getName());
-            String formattedMessage = String.format("第 %d 行，第 %d 列数据格式有误，须为 yyyy-MM-dd HH:mm 日期形式，请校对后重新导入。",
+            log.error("Exception occurred when binding Date field! Exception message: {}, value: {}, field: {}",
+                      e.getMessage(), value, field.getName());
+            String formattedMessage = String.format("Invalid data of the row %d, col %d, must be date",
                                                     rowLocation.get(), columnLocation.get());
             setErrorMessage(formattedMessage);
             throw new IllegalArgumentException(formattedMessage);
@@ -1097,18 +1120,18 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
     }
 
     /**
-     * 允许通过配置修改当校验出现失败情况时的操作
+     * Sets deny all. When exception occurred, deny all data or not
      *
-     * @param denyAll 出现异常时是否需要拒绝所有已经校验成功的 bean，true 为拒绝，false为不拒绝
+     * @param denyAll the deny all
      */
     public void setDenyAll(Boolean denyAll) {
         this.denyAll = denyAll;
     }
 
     /**
-     * 可以使用该方法添加自定义校验错误信息
+     * Sets error message.
      *
-     * @param errorInfo 错误信息
+     * @param errorInfo the error info
      */
     protected void setErrorMessage(String errorInfo) {
         this.errorMessageList.get().add(errorInfo);
@@ -1116,11 +1139,11 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
     }
 
     /**
-     * 可以使用该方法添加自定义返回页面消息错误信息
+     * Sets return message list.
      *
-     * @param msg the msg
+     * @param message the message
      */
-    protected void setReturnMessageList(String msg) {
-        this.returnMessageList.get().add(msg);
+    protected void setReturnMessageList(String message) {
+        this.returnMessageList.get().add(message);
     }
 }
