@@ -16,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -40,16 +42,17 @@ import java.util.Date;
 public class UserServiceImpl extends ServiceImpl<UserMapper, UserPersistence> implements UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtService jwtService;
+    private final MessageSource messageSource;
 
     @Override
     @Cacheable
     public GetUserByLoginTokenResponse getUserByLoginToken(@NotBlank String loginToken) {
         LambdaQueryWrapper<UserPersistence> wrapper = Wrappers.lambdaQuery();
         wrapper.and(queryWrapper -> queryWrapper.eq(UserPersistence::getUsername, loginToken)
-                        .or()
-                        .eq(UserPersistence::getEmail, loginToken)
-                        .or()
-                        .eq(UserPersistence::getCellphone, loginToken));
+                .or()
+                .eq(UserPersistence::getEmail, loginToken)
+                .or()
+                .eq(UserPersistence::getCellphone, loginToken));
         val userPersistence = this.getBaseMapper().selectOne(wrapper);
         if (ObjectUtil.isNull(userPersistence)) {
             return null;
@@ -87,6 +90,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserPersistence> im
         if (matched) {
             String jwt = jwtService.createJwt(payload.getRememberMe(), user.getId(), user.getUsername(), null, null);
             val response = new LoginResponse();
+            response.setGreeting(messageSource.getMessage(("greeting"), null, LocaleContextHolder.getLocale()));
             response.setJwt(jwt);
             return response;
         }

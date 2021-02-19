@@ -48,6 +48,7 @@ import java.util.List;
 @ConditionalOnWebApplication
 @EnableConfigurationProperties({MafConfiguration.class, MafProjectProperty.class})
 @Import({
+        WebMvcConfiguration.class,
         MyBatisPlusConfiguration.class,
         RedisConfiguration.class,
         Swagger2Configuration.class,
@@ -102,13 +103,6 @@ public class MafAutoConfiguration {
                                                            IpHelper ipHelper) {
         log.warn("Initial bean: '{}'", SpringBootStartupHelper.class.getSimpleName());
         return new SpringBootStartupHelper(mafProjectProperty, ipHelper);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public WebMvcConfiguration webMvcConfiguration() {
-        log.warn("Initial bean: '{}'", WebMvcConfiguration.class.getSimpleName());
-        return new WebMvcConfiguration();
     }
 
     @Bean

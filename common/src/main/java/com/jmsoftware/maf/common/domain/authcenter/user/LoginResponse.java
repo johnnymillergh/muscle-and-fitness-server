@@ -9,5 +9,6 @@ import lombok.Data;
  **/
 @Data
 public class LoginResponse {
+    private String greeting;
     private String jwt;
 }
