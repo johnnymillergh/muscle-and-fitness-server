@@ -142,6 +142,12 @@ services:
     environment:
       JAVA_TOOL_OPTIONS: "${JAVA_TOOL_OPTIONS}"
       TZ: Asia/Hong_Kong
+    healthcheck:
+      test: "wget localhost:8761/actuator/health -q -O - > /dev/null 2>&1"
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
     networks:
       muscle_and_fitness_network:
 
@@ -165,6 +171,12 @@ services:
     environment:
       JAVA_TOOL_OPTIONS: "${JAVA_TOOL_OPTIONS}"
       TZ: Asia/Hong_Kong
+    healthcheck:
+      test: "wget localhost:8080/actuator/health -q -O - > /dev/null 2>&1"
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
     networks:
       muscle_and_fitness_network:
 
@@ -181,6 +193,12 @@ services:
     environment:
       JAVA_TOOL_OPTIONS: "${JAVA_TOOL_OPTIONS}"
       TZ: Asia/Hong_Kong
+    healthcheck:
+      test: "wget localhost:8800/actuator/health -q -O - > /dev/null 2>&1"
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
     networks:
       muscle_and_fitness_network:
 
@@ -197,6 +215,12 @@ services:
     environment:
       JAVA_TOOL_OPTIONS: "${JAVA_TOOL_OPTIONS}"
       TZ: Asia/Hong_Kong
+    healthcheck:
+      test: "wget localhost:8801/actuator/health -q -O - > /dev/null 2>&1"
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
     networks:
       muscle_and_fitness_network:
 
@@ -213,6 +237,12 @@ services:
     environment:
       JAVA_TOOL_OPTIONS: "${JAVA_TOOL_OPTIONS}"
       TZ: Asia/Hong_Kong
+    healthcheck:
+      test: "wget localhost:8802/actuator/health -q -O - > /dev/null 2>&1"
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
     networks:
       muscle_and_fitness_network:
 
