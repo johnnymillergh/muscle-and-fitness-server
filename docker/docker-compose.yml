@@ -18,7 +18,7 @@ services:
       - "3306:3306"
     restart: always
     volumes:
-      - "~/docker-file-mapping/${MYSQL_CONTAINER_NAME}:/var/lib/mysql"
+      - "~/docker-file-mapping/${MYSQL_SERVER_CONTAINER_NAME}:/var/lib/mysql"
       - ./script/mysql-init-script:/docker-entrypoint-initdb.d
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     networks:
