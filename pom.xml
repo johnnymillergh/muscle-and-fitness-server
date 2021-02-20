@@ -40,7 +40,7 @@
         <spring-cloud.version>2020.0.1</spring-cloud.version>
         <spring-content.version>1.0.0.M5</spring-content.version>
         <spring-boot-admin-starter-client.version>2.3.1</spring-boot-admin-starter-client.version>
-        <druid-spring-boot-starter.version>1.2.4</druid-spring-boot-starter.version>
+        <druid-spring-boot-starter.version>1.2.5</druid-spring-boot-starter.version>
         <mybatis-plus-boot-starter.version>3.4.2</mybatis-plus-boot-starter.version>
         <hutool-all.version>5.5.8</hutool-all.version>
         <guava.version>30.0-jre</guava.version>
