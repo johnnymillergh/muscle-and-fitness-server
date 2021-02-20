@@ -16,6 +16,9 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: Asia/Hong_Kong
+  sleuth:
+    sampler:
+      probability: 1.0
   servlet:
     multipart:
       # `location` specifies the directory where uploaded files will be stored. When not specified,

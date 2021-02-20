@@ -21,6 +21,9 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: Asia/Hong_Kong
+  sleuth:
+    sampler:
+      probability: 1.0
   cloud:
     consul:
       discovery:
