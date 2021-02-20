@@ -82,6 +82,7 @@ spring:
         reset-enable: false
         login-username: root
         login-password: 123456
+        allow:
   redis:
     database: 0
     timeout: 10000ms
