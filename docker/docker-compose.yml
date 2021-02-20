@@ -6,10 +6,13 @@ services:
   ################################################################################
   mysql:
     container_name: "${MYSQL_CONTAINER_NAME}"
-    image: mysql:${MYSQL_TAG}
+    image: mysql/mysql-server:${MYSQL_TAG}
     environment:
+      MYSQL_ROOT_HOST: "%"
       MYSQL_ROOT_PASSWORD: "jm@mysql"
       MYSQL_DATABASE: muscle_and_fitness
+      MYSQL_USER: maf_mysql_rw
+      MYSQL_PASSWORD: "maf@mysql"
       TZ: Asia/Hong_Kong
     ports:
       - "3306:3306"
