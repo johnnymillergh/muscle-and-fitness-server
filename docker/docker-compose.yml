@@ -4,8 +4,8 @@ services:
   ################################################################################
   #                           Infrastructure Services                            #
   ################################################################################
-  mysql:
-    container_name: "${MYSQL_CONTAINER_NAME}"
+  mysql-server:
+    container_name: "${MYSQL_SERVER_CONTAINER_NAME}"
     image: mysql/mysql-server:${MYSQL_TAG}
     environment:
       MYSQL_ROOT_HOST: "%"

@@ -4,7 +4,7 @@ spring:
   devtools:
     add-properties: false
   datasource:
-    url: jdbc:mysql://maf.mysql.stage:3306/muscle_and_fitness?useSSL=true&useUnicode=true
+    url: jdbc:mysql://maf.mysql-server.stage:3306/muscle_and_fitness?useSSL=true&useUnicode=true
     username: maf_mysql_rw
     password: maf@mysql
   redis:
