@@ -143,22 +143,6 @@ services:
     networks:
       muscle_and_fitness_network:
 
-  kibana:
-    container_name: "${KIBANA_CONTAINER_NAME}"
-    image: kibana:${KIBANA_TAG}
-    links:
-      - elasticsearch:es # Not sure what the fuck is this for
-    depends_on:
-      elasticsearch:
-        condition: service_started
-    ports:
-      - "5601:5601"
-    restart: always
-    environment:
-      elasticsearch.hosts: "http://${ELASTICSEARCH_CONTAINER_NAME}:9200"
-    networks:
-      muscle_and_fitness_network:
-
   logstash:
     container_name: "${LOGSTASH_CONTAINER_NAME}"
     image: logstash:${LOGSTASH_TAG}
@@ -173,6 +157,22 @@ services:
     volumes:
       - ./config/logstash/logstash-spring-boot.conf:/usr/share/logstash/pipeline/logstash.conf
       # - "~/docker-file-mapping/${LOGSTASH_CONTAINER_NAME}:/usr/share/logstash/config/logstash.yml"
+    networks:
+      muscle_and_fitness_network:
+
+  kibana:
+    container_name: "${KIBANA_CONTAINER_NAME}"
+    image: kibana:${KIBANA_TAG}
+    links:
+      - elasticsearch:es # Not sure what the fuck is this for
+    depends_on:
+      elasticsearch:
+        condition: service_started
+    ports:
+      - "5601:5601"
+    restart: always
+    environment:
+      elasticsearch.hosts: "http://${ELASTICSEARCH_CONTAINER_NAME}:9200"
     networks:
       muscle_and_fitness_network:
 
