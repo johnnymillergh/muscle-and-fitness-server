@@ -127,6 +127,53 @@ services:
     networks:
       muscle_and_fitness_network:
 
+  elasticsearch:
+    container_name: "${ELASTICSEARCH_CONTAINER_NAME}"
+    image: elasticsearch:${ELASTICSEARCH_TAG}
+    ports:
+      - "9200:9200"
+    restart: always
+    volumes:
+      - "~/docker-file-mapping/${ELASTICSEARCH_CONTAINER_NAME}/plugins:/usr/share/elasticsearch/plugins"
+      - "~/docker-file-mapping/${ELASTICSEARCH_CONTAINER_NAME}/data:/usr/share/elasticsearch/data"
+    environment:
+      - "cluster.name=elasticsearch"
+      - "discovery.type=single-node"
+      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+    networks:
+      muscle_and_fitness_network:
+
+  kibana:
+    container_name: "${KIBANA_CONTAINER_NAME}"
+    image: kibana:${KIBANA_TAG}
+    links:
+      - elasticsearch:es # Not sure what the fuck is this for
+    depends_on:
+      elasticsearch:
+        condition: service_started
+    environment:
+      elasticsearch.hosts: "http://${ELASTICSEARCH_CONTAINER_NAME}:9200"
+    ports:
+      - "5601:5601"
+    networks:
+      muscle_and_fitness_network:
+
+  logstash:
+    container_name: "${LOGSTASH_CONTAINER_NAME}"
+    image: logstash:${LOGSTASH_TAG}
+    links:
+      - elasticsearch:es # Not sure what the fuck is this for
+    depends_on:
+      elasticsearch:
+        condition: service_started
+    volumes:
+      - ./config/logstash/logstash-spring-boot.conf:/usr/share/logstash/pipeline/logstash.conf
+      # - "~/docker-file-mapping/${LOGSTASH_CONTAINER_NAME}:/usr/share/logstash/config/logstash.yml"
+    ports:
+      - "4560:4560"
+    networks:
+      muscle_and_fitness_network:
+
   spring-boot-admin:
     container_name: "${SPRING_BOOT_ADMIN_CONTAINER_NAME}"
     hostname: "${SPRING_BOOT_ADMIN_CONTAINER_NAME}"

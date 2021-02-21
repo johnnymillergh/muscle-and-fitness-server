@@ -21,18 +21,23 @@
     <!-- Log for Multi Environment Configuration -->
     <springProfile name="development-local">
         <property name="ENVIRONMENT" value="development-local"/>
+        <property name="LOGSTASH_HOST" value="localhost"/>
     </springProfile>
     <springProfile name="development-docker">
         <property name="ENVIRONMENT" value="development-docker"/>
+        <property name="LOGSTASH_HOST" value="maf.logstash.${ENVIRONMENT}"/>
     </springProfile>
     <springProfile name="test">
         <property name="ENVIRONMENT" value="test"/>
+        <property name="LOGSTASH_HOST" value="maf.logstash.${ENVIRONMENT}"/>
     </springProfile>
     <springProfile name="stage">
         <property name="ENVIRONMENT" value="stage"/>
+        <property name="LOGSTASH_HOST" value="maf.logstash.${ENVIRONMENT}"/>
     </springProfile>
     <springProfile name="production">
         <property name="ENVIRONMENT" value="production"/>
+        <property name="LOGSTASH_HOST" value="maf.logstash.${ENVIRONMENT}"/>
     </springProfile>
 
     <!-- CONSOLE Log Configuration -->
@@ -66,5 +71,13 @@
             <maxHistory>7</maxHistory>
             <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
+    </appender>
+
+    <!-- LOGSTASH -->
+    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>${LOGSTASH_HOST}:4560</destination>
+        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder">
+            <customFields>{"appname": "${APPLICATION}"}</customFields>
+        </encoder>
     </appender>
 </included>

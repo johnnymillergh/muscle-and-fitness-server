@@ -95,9 +95,16 @@
             <version>${knife4j.version}</version>
         </dependency>
 
+        <!-- The Apache Commons Object Pooling Library -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>${logstash-logback-encoder.version}</version>
         </dependency>
     </dependencies>
 </project>
