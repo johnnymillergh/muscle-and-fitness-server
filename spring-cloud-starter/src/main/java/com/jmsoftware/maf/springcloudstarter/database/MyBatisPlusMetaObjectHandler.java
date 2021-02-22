@@ -27,16 +27,18 @@ public class MyBatisPlusMetaObjectHandler implements MetaObjectHandler {
 
     @Override
     public void insertFill(MetaObject metaObject) {
-        log.info("Start to insert fill metaObject: {}", metaObject.getOriginalObject());
+        log.info("Starting to insert fill metaObject: {}", metaObject.getOriginalObject());
         val now = new Date();
-        this.strictInsertFill(metaObject, DELETED_FIELD_NAME, Byte.class, DeletedField.NOT_DELETED.getValue());
-        this.strictInsertFill(metaObject, CREATED_TIME_FIELD_NAME, Date.class, now);
-        this.strictInsertFill(metaObject, MODIFIED_TIME_FIELD_NAME, Date.class, now);
+        this.strictInsertFill(metaObject, DELETED_FIELD_NAME, Byte.class, DeletedField.NOT_DELETED.getValue())
+                .strictInsertFill(metaObject, CREATED_TIME_FIELD_NAME, Date.class, now)
+                .strictInsertFill(metaObject, MODIFIED_TIME_FIELD_NAME, Date.class, now);
+        log.info("Finished to insert fill metaObject: {}", metaObject.getOriginalObject());
     }
 
     @Override
     public void updateFill(MetaObject metaObject) {
-        log.info("Start to update fill metaObject: {}", metaObject.getOriginalObject());
-        this.strictUpdateFill(metaObject, "modifiedTime", Date.class, new Date());
+        log.info("Starting to update fill metaObject: {}", metaObject.getOriginalObject());
+        this.strictUpdateFill(metaObject, MODIFIED_TIME_FIELD_NAME, Date.class, new Date());
+        log.info("Finished to update fill metaObject: {}", metaObject.getOriginalObject());
     }
 }
