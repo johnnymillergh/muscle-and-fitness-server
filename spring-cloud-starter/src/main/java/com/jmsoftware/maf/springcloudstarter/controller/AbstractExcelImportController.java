@@ -563,6 +563,10 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
         return targetFile;
     }
 
+    public static void main(String[] args) {
+        System.out.println(DateUtils.formatDate(new Date(), "yyyyMMddHHmmssSSS"));
+    }
+
     /**
      * Read the file into workbook.
      *
