@@ -140,6 +140,8 @@ services:
       cluster.name: elasticsearch
       discovery.type: single-node
       ES_JAVA_OPTS: "-Xms256m -Xmx256m"
+      ELASTIC_PASSWORD: ${MAF_ELASTICSEARCH_PASSWORD}
+      xpack.security.enabled: "true"
     networks:
       muscle_and_fitness_network:
 
@@ -163,8 +165,6 @@ services:
   kibana:
     container_name: "${KIBANA_CONTAINER_NAME}"
     image: kibana:${KIBANA_TAG}
-    links:
-      - elasticsearch:es # Not sure what the fuck is this for
     depends_on:
       elasticsearch:
         condition: service_started
@@ -173,6 +173,8 @@ services:
     restart: always
     environment:
       elasticsearch.hosts: "http://${ELASTICSEARCH_CONTAINER_NAME}:9200"
+      ELASTICSEARCH_USERNAME: elastic
+      ELASTICSEARCH_PASSWORD: ${MAF_ELASTICSEARCH_PASSWORD}
     networks:
       muscle_and_fitness_network:
 
