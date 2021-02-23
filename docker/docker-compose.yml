@@ -5,15 +5,15 @@ services:
   #                           Infrastructure Services                            #
   ################################################################################
   mysql-server:
-    container_name: "${MYSQL_SERVER_CONTAINER_NAME}"
+    container_name: ${MYSQL_SERVER_CONTAINER_NAME}
     image: mysql/mysql-server:${MYSQL_TAG}
     environment:
       MYSQL_ROOT_HOST: "%"
-      MYSQL_ROOT_PASSWORD: "jm@mysql"
-      MYSQL_DATABASE: muscle_and_fitness
-      MYSQL_USER: maf_mysql_rw
-      MYSQL_PASSWORD: "maf@mysql"
-      TZ: Asia/Hong_Kong
+      MYSQL_ROOT_PASSWORD: ${MAF_MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MAF_MYSQL_DATABASE}
+      MYSQL_USER: ${MAF_MYSQL_USER}
+      MYSQL_PASSWORD: ${MAF_MYSQL_PASSWORD}
+      TZ: ${MAF_TIMEZONE}
     ports:
       - "3306:3306"
     restart: always
@@ -25,7 +25,7 @@ services:
       muscle_and_fitness_network:
 
   redis:
-    container_name: "${REDIS_CONTAINER_NAME}"
+    container_name: ${REDIS_CONTAINER_NAME}
     image: redis:${REDIS_TAG}
     ports:
       - "6379:6379"
@@ -34,13 +34,13 @@ services:
       - "~/docker-file-mapping/${REDIS_CONTAINER_NAME}:/data"
       - ./script/redis/redis.conf:/usr/local/etc/redis/redis.conf
     environment:
-      TZ: Asia/Hong_Kong
+      TZ: ${MAF_TIMEZONE}
     command: "redis-server /usr/local/etc/redis/redis.conf"
     networks:
       muscle_and_fitness_network:
 
   atmoz-sftp:
-    container_name: "${ATMOZ_SFTP_CONTAINER_NAME}"
+    container_name: ${ATMOZ_SFTP_CONTAINER_NAME}
     image: atmoz/sftp:${ATMOZ_SFTP_TAG}
     ports:
       # mapping local machine's port 23 to container port 22
@@ -49,27 +49,27 @@ services:
     volumes:
       - "~/docker-file-mapping/${ATMOZ_SFTP_CONTAINER_NAME}:/home/johnny/upload"
     environment:
-      TZ: Asia/Hong_Kong
+      TZ: ${MAF_TIMEZONE}
     command: "johnny:atmoz@sftp:::upload"
     networks:
       muscle_and_fitness_network:
 
   zipkin-mysql:
-    container_name: "${ZIPKIN_MYSQL_CONTAINER_NAME}"
+    container_name: ${ZIPKIN_MYSQL_CONTAINER_NAME}
     image: openzipkin/zipkin-mysql:${ZIPKIN_MYSQL_TAG}
     restart: always
     networks:
       muscle_and_fitness_network:
 
   zipkin-dependencies:
-    container_name: "${ZIPKIN_DEPENDENCIES_CONTAINER_NAME}"
+    container_name: ${ZIPKIN_DEPENDENCIES_CONTAINER_NAME}
     image: openzipkin/zipkin-dependencies:${ZIPKIN_DEPENDENCIES_TAG}
     entrypoint: crond -f
     environment:
       # Uncomment to see dependency processing logs
       ZIPKIN_LOG_LEVEL: DEBUG
       STORAGE_TYPE: mysql
-      MYSQL_HOST: "${ZIPKIN_MYSQL_CONTAINER_NAME}"
+      MYSQL_HOST: ${ZIPKIN_MYSQL_CONTAINER_NAME}
       MYSQL_USER: zipkin
       MYSQL_PASS: zipkin
     depends_on:
@@ -80,7 +80,7 @@ services:
       muscle_and_fitness_network:
 
   zipkin:
-    container_name: "${ZIPKIN_CONTAINER_NAME}"
+    container_name: ${ZIPKIN_CONTAINER_NAME}
     image: openzipkin/zipkin:${ZIPKIN_TAG}
     depends_on:
       zipkin-mysql:
@@ -89,13 +89,13 @@ services:
     environment:
       STORAGE_TYPE: mysql
       # Point the zipkin at the storage backend
-      MYSQL_HOST: "${ZIPKIN_MYSQL_CONTAINER_NAME}"
+      MYSQL_HOST: ${ZIPKIN_MYSQL_CONTAINER_NAME}
       MYSQL_USER: zipkin
       MYSQL_PASS: zipkin
       # Uncomment to enable request logging (TRACE shows query values)
       command: --logging.level.com.datastax.oss.driver.internal.core.tracker.RequestLogger=TRACE
       JAVA_OPTS: -Xms128m -Xmx128m -XX:+ExitOnOutOfMemoryError
-      TZ: Asia/Hong_Kong
+      TZ: ${MAF_TIMEZONE}
     # Uncomment to enable scribe
     # - SCRIBE_ENABLED=true
     # Uncomment to enable self-tracing
@@ -112,8 +112,8 @@ services:
       muscle_and_fitness_network:
 
   consul-service-registry:
-    container_name: "${CONSUL_SERVICE_REGISTRY_CONTAINER_NAME}"
-    hostname: "${CONSUL_SERVICE_REGISTRY_CONTAINER_NAME}"
+    container_name: ${CONSUL_SERVICE_REGISTRY_CONTAINER_NAME}
+    hostname: ${CONSUL_SERVICE_REGISTRY_CONTAINER_NAME}
     image: consul:${CONSUL_TAG}
     depends_on:
       zipkin:
@@ -128,7 +128,7 @@ services:
       muscle_and_fitness_network:
 
   elasticsearch:
-    container_name: "${ELASTICSEARCH_CONTAINER_NAME}"
+    container_name: ${ELASTICSEARCH_CONTAINER_NAME}
     image: elasticsearch:${ELASTICSEARCH_TAG}
     ports:
       - "9200:9200"
@@ -146,7 +146,7 @@ services:
       muscle_and_fitness_network:
 
   logstash:
-    container_name: "${LOGSTASH_CONTAINER_NAME}"
+    container_name: ${LOGSTASH_CONTAINER_NAME}
     image: logstash:${LOGSTASH_TAG}
     links:
       - elasticsearch:es # Not sure what the fuck is this for
@@ -163,7 +163,7 @@ services:
       muscle_and_fitness_network:
 
   kibana:
-    container_name: "${KIBANA_CONTAINER_NAME}"
+    container_name: ${KIBANA_CONTAINER_NAME}
     image: kibana:${KIBANA_TAG}
     depends_on:
       elasticsearch:
@@ -179,9 +179,9 @@ services:
       muscle_and_fitness_network:
 
   spring-boot-admin:
-    container_name: "${SPRING_BOOT_ADMIN_CONTAINER_NAME}"
-    hostname: "${SPRING_BOOT_ADMIN_CONTAINER_NAME}"
-    image: "ijohnnymiller/muscle-and-fitness-server.spring-boot-admin:${MAF_TAG}"
+    container_name: ${SPRING_BOOT_ADMIN_CONTAINER_NAME}
+    hostname: ${SPRING_BOOT_ADMIN_CONTAINER_NAME}
+    image: ijohnnymiller/muscle-and-fitness-server.spring-boot-admin:${MAF_TAG}
     depends_on:
       consul-service-registry:
         condition: service_started
@@ -192,7 +192,7 @@ services:
       - "~/docker-file-mapping/${SPRING_BOOT_ADMIN_CONTAINER_NAME}:/logs"
     environment:
       JAVA_TOOL_OPTIONS: "${JAVA_TOOL_OPTIONS}"
-      TZ: Asia/Hong_Kong
+      TZ: ${MAF_TIMEZONE}
     healthcheck:
       test: "wget localhost:8761/actuator/health -q -O - > /dev/null 2>&1"
       interval: 20s
@@ -208,9 +208,9 @@ services:
   #                              Business Service                                #
   #------------------------------------------------------------------------------#
   api-gateway:
-    container_name: "${API_GATEWAY_CONTAINER_NAME}"
-    hostname: "${API_GATEWAY_CONTAINER_NAME}"
-    image: "ijohnnymiller/muscle-and-fitness-server.api-gateway:${MAF_TAG}"
+    container_name: ${API_GATEWAY_CONTAINER_NAME}
+    hostname: ${API_GATEWAY_CONTAINER_NAME}
+    image: ijohnnymiller/muscle-and-fitness-server.api-gateway:${MAF_TAG}
     depends_on:
       consul-service-registry:
         condition: service_started
@@ -220,8 +220,8 @@ services:
     volumes:
       - "~/docker-file-mapping/${API_GATEWAY_CONTAINER_NAME}:/logs"
     environment:
-      JAVA_TOOL_OPTIONS: "${JAVA_TOOL_OPTIONS}"
-      TZ: Asia/Hong_Kong
+      JAVA_TOOL_OPTIONS: ${JAVA_TOOL_OPTIONS}
+      TZ: ${MAF_TIMEZONE}
     healthcheck:
       test: "wget localhost:8080/actuator/health -q -O - > /dev/null 2>&1"
       interval: 20s
@@ -232,9 +232,9 @@ services:
       muscle_and_fitness_network:
 
   auth-center:
-    container_name: "${AUTH_CENTER_CONTAINER_NAME}"
-    hostname: "${AUTH_CENTER_CONTAINER_NAME}"
-    image: "ijohnnymiller/muscle-and-fitness-server.auth-center:${MAF_TAG}"
+    container_name: ${AUTH_CENTER_CONTAINER_NAME}
+    hostname: ${AUTH_CENTER_CONTAINER_NAME}
+    image: ijohnnymiller/muscle-and-fitness-server.auth-center:${MAF_TAG}
     depends_on:
       consul-service-registry:
         condition: service_started
@@ -242,8 +242,8 @@ services:
     volumes:
       - "~/docker-file-mapping/${AUTH_CENTER_CONTAINER_NAME}:/logs"
     environment:
-      JAVA_TOOL_OPTIONS: "${JAVA_TOOL_OPTIONS}"
-      TZ: Asia/Hong_Kong
+      JAVA_TOOL_OPTIONS: ${JAVA_TOOL_OPTIONS}
+      TZ: ${MAF_TIMEZONE}
     healthcheck:
       test: "wget localhost:8800/actuator/health -q -O - > /dev/null 2>&1"
       interval: 20s
@@ -254,9 +254,9 @@ services:
       muscle_and_fitness_network:
 
   exercise-mis:
-    container_name: "${EXERCISE_MIS_CONTAINER_NAME}"
-    hostname: "${EXERCISE_MIS_CONTAINER_NAME}"
-    image: "ijohnnymiller/muscle-and-fitness-server.exercise-mis:${MAF_TAG}"
+    container_name: ${EXERCISE_MIS_CONTAINER_NAME}
+    hostname: ${EXERCISE_MIS_CONTAINER_NAME}
+    image: ijohnnymiller/muscle-and-fitness-server.exercise-mis:${MAF_TAG}
     depends_on:
       consul-service-registry:
         condition: service_started
@@ -264,8 +264,8 @@ services:
     volumes:
       - "~/docker-file-mapping/${EXERCISE_MIS_CONTAINER_NAME}:/logs"
     environment:
-      JAVA_TOOL_OPTIONS: "${JAVA_TOOL_OPTIONS}"
-      TZ: Asia/Hong_Kong
+      JAVA_TOOL_OPTIONS: ${JAVA_TOOL_OPTIONS}
+      TZ: ${MAF_TIMEZONE}
     healthcheck:
       test: "wget localhost:8801/actuator/health -q -O - > /dev/null 2>&1"
       interval: 20s
@@ -276,9 +276,9 @@ services:
       muscle_and_fitness_network:
 
   muscle-mis:
-    container_name: "${MUSCLE_MIS_CONTAINER_NAME}"
-    hostname: "${MUSCLE_MIS_CONTAINER_NAME}"
-    image: "ijohnnymiller/muscle-and-fitness-server.muscle-mis:${MAF_TAG}"
+    container_name: ${MUSCLE_MIS_CONTAINER_NAME}
+    hostname: ${MUSCLE_MIS_CONTAINER_NAME}
+    image: ijohnnymiller/muscle-and-fitness-server.muscle-mis:${MAF_TAG}
     depends_on:
       consul-service-registry:
         condition: service_started
@@ -286,8 +286,8 @@ services:
     volumes:
       - "~/docker-file-mapping/${MUSCLE_MIS_CONTAINER_NAME}:/logs"
     environment:
-      JAVA_TOOL_OPTIONS: "${JAVA_TOOL_OPTIONS}"
-      TZ: Asia/Hong_Kong
+      JAVA_TOOL_OPTIONS: ${JAVA_TOOL_OPTIONS}
+      TZ: ${MAF_TIMEZONE}
     healthcheck:
       test: "wget localhost:8802/actuator/health -q -O - > /dev/null 2>&1"
       interval: 20s
