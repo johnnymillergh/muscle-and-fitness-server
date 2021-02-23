@@ -1,4 +1,4 @@
-version: "3.7"
+version: "3.8"
 
 services:
   ################################################################################
@@ -183,6 +183,12 @@ services:
     hostname: ${SPRING_BOOT_ADMIN_CONTAINER_NAME}
     image: ijohnnymiller/muscle-and-fitness-server.spring-boot-admin:${MAF_TAG}
     depends_on:
+      mysql-server:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      atmoz-sftp:
+        condition: service_started
       consul-service-registry:
         condition: service_started
     ports:
@@ -212,6 +218,12 @@ services:
     hostname: ${API_GATEWAY_CONTAINER_NAME}
     image: ijohnnymiller/muscle-and-fitness-server.api-gateway:${MAF_TAG}
     depends_on:
+      mysql-server:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      atmoz-sftp:
+        condition: service_started
       consul-service-registry:
         condition: service_started
     restart: always
@@ -236,6 +248,8 @@ services:
     hostname: ${AUTH_CENTER_CONTAINER_NAME}
     image: ijohnnymiller/muscle-and-fitness-server.auth-center:${MAF_TAG}
     depends_on:
+      redis:
+        condition: service_started
       consul-service-registry:
         condition: service_started
     restart: always
@@ -258,6 +272,12 @@ services:
     hostname: ${EXERCISE_MIS_CONTAINER_NAME}
     image: ijohnnymiller/muscle-and-fitness-server.exercise-mis:${MAF_TAG}
     depends_on:
+      mysql-server:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      atmoz-sftp:
+        condition: service_started
       consul-service-registry:
         condition: service_started
     restart: always
@@ -280,6 +300,12 @@ services:
     hostname: ${MUSCLE_MIS_CONTAINER_NAME}
     image: ijohnnymiller/muscle-and-fitness-server.muscle-mis:${MAF_TAG}
     depends_on:
+      mysql-server:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      atmoz-sftp:
+        condition: service_started
       consul-service-registry:
         condition: service_started
     restart: always
