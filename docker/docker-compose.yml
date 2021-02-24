@@ -149,7 +149,8 @@ services:
     container_name: ${LOGSTASH_CONTAINER_NAME}
     image: logstash:${LOGSTASH_TAG}
     links:
-      - elasticsearch:es # Not sure what the fuck is this for
+      # The Logstash configuration uses domain `es` to reach the elasticsearch service
+      - elasticsearch:es
     depends_on:
       elasticsearch:
         condition: service_started
@@ -157,7 +158,7 @@ services:
       - "4560:4560"
     restart: always
     volumes:
-      - ./config/logstash/logstash-spring-boot.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./config/logstash/logstash-maf.conf:/usr/share/logstash/pipeline/logstash.conf
       # - "~/docker-file-mapping/${LOGSTASH_CONTAINER_NAME}:/usr/share/logstash/config/logstash.yml"
     networks:
       muscle_and_fitness_network:
