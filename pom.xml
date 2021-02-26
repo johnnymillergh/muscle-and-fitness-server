@@ -35,7 +35,7 @@
 
         <!-- Version Definitions. -->
         <java.version>11</java.version>
-        <adoptopenjdk11.tag>x86_64-alpine-jre-11.0.9.1_1</adoptopenjdk11.tag>
+        <adoptopenjdk11.tag>x86_64-alpine-jre-11.0.10_9</adoptopenjdk11.tag>
         <jib-maven-plugin.version>2.7.1</jib-maven-plugin.version>
         <spring-cloud.version>2020.0.1</spring-cloud.version>
         <spring-content.version>1.0.0.M5</spring-content.version>
