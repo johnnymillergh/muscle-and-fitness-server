@@ -1,12 +1,16 @@
 package com.jmsoftware.maf.springcloudstarter.util;
 
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
+import org.apache.commons.io.FileUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
-import java.util.Date;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -15,8 +19,8 @@ import java.util.UUID;
  * <p>Change description here</p>
  *
  * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com
- * @date 2/27/20 9:45 AM
- **/
+ * @date 2 /27/20 9:45 AM
+ */
 @Slf4j
 @SuppressWarnings("unused")
 public class FileUtil {
@@ -24,16 +28,15 @@ public class FileUtil {
      * Convert multipart file to file
      *
      * @param multipartFile multipart file
-     * @return file
+     * @return file file
      * @throws IOException IO exception
      */
-    public static File convertFrom(final MultipartFile multipartFile) throws IOException {
-        log.info("Converting multipart file, original multipart file name: {}", multipartFile.getOriginalFilename());
-        var convertFile = new File(Objects.requireNonNull(multipartFile.getOriginalFilename()));
-        var fos = new FileOutputStream(convertFile);
-        fos.write(multipartFile.getBytes());
-        fos.close();
-        return convertFile;
+    public static File convertFrom(@NonNull final MultipartFile multipartFile) throws IOException {
+        log.info("Converting MultipartFile, original multipart file name: {}", multipartFile.getOriginalFilename());
+        val newFile = new File(Objects.requireNonNull(multipartFile.getOriginalFilename()));
+        multipartFile.transferTo(newFile);
+        log.info("Converted MultipartFile to newFile: {}", newFile);
+        return newFile;
     }
 
     /**
@@ -41,47 +44,27 @@ public class FileUtil {
      *
      * @param inputStream input stream
      * @param savePath    path for saving file
-     * @return file
+     * @return file file
+     * @throws IOException the io exception
      */
-    public static File convertFrom(final InputStream inputStream, final String savePath) {
+    public static File convertFrom(final InputStream inputStream, final String savePath) throws IOException {
         log.info("Converting InputStream to file, save path: {}", savePath);
-        var file = new File(savePath);
-        try (OutputStream outputStream = new FileOutputStream(file)) {
-            int read;
-            byte[] bytes = new byte[1024];
-            while ((read = inputStream.read(bytes)) != -1) {
-                outputStream.write(bytes, 0, read);
-            }
-        } catch (IOException e) {
-            log.error("Exception occurred when initializing FileOutputStream. Exception message: {}",
-                      e.getMessage(),
-                      e);
-        } finally {
-            try {
-                inputStream.close();
-            } catch (IOException e) {
-                log.error("Exception occurred when closing FileOutputStream. Exception message: {}", e.getMessage(), e);
-            }
-        }
-        return file;
+        val newFile = new File(savePath);
+        FileUtils.copyInputStreamToFile(inputStream, newFile);
+        log.info("Converted MultipartFile to newFile: {}", newFile);
+        return newFile;
     }
 
     /**
-     * Generate date-format storage path (relative path, w/o SFTP's server directory)
+     * Generate date-format storage path (relative path, w/o SFTP server directory)
      *
      * @param sftpSubDirectory SFTP server's sub directory
      * @return full storage path (absolute path). Null if file name is empty.
      */
-    public static String generateDateFormatStoragePath(final String sftpSubDirectory) {
-        var today = new Date();
-        var year = DateUtil.format(today, "yyyy");
-        var month = DateUtil.format(today, "MM");
-        var day = DateUtil.format(today, "dd");
-        return sftpSubDirectory
-                + year
-                + "/" + month
-                + "/" + day
-                + "/";
+    public static String generateDateFormatStoragePath(@NonNull final String sftpSubDirectory) {
+        val localDate = LocalDate.now();
+        return String.format("%s%d/%d/%d/", sftpSubDirectory, localDate.getYear(), localDate.getMonth().getValue(),
+                             localDate.getDayOfMonth());
     }
 
     /**

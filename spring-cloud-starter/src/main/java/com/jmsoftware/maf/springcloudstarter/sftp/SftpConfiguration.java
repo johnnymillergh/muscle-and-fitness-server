@@ -89,6 +89,6 @@ public class SftpConfiguration {
     @Bean
     public SftpHelper sftpHelper(SftpRemoteFileTemplate sftpRemoteFileTemplate) {
         log.warn("Initial bean: '{}'", SftpHelper.class.getSimpleName());
-        return new SftpHelperImpl(sftpRemoteFileTemplate);
+        return new SftpHelper(sftpRemoteFileTemplate);
     }
 }
