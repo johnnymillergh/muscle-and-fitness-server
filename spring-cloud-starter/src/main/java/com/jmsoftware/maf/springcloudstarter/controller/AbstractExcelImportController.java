@@ -5,11 +5,12 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.jmsoftware.maf.common.bean.ExcelImportResult;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
+import com.jmsoftware.maf.springcloudstarter.sftp.SftpHelper;
+import com.jmsoftware.maf.springcloudstarter.sftp.SftpUploadFile;
 import com.jmsoftware.maf.springcloudstarter.util.PoiUtil;
 import io.swagger.annotations.ApiOperation;
-import lombok.NonNull;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.http.client.utils.DateUtils;
@@ -18,11 +19,13 @@ import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.boot.system.ApplicationHome;
+import org.springframework.integration.file.support.FileExistsMode;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -95,10 +98,9 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
             new ApplicationHome(AbstractExcelImportController.class).getSource()
                     .getParent() + "/temp-file/";
     /**
-     * FTP upload directory
-     * TODO: check if it's necessary
+     * SFTP upload directory
      */
-    private static final String FTP_DIR = "excel/";
+    private static final String SFTP_DIR = "excels/";
     /**
      * File key in MultipartFile
      * TODO: check if it's necessary
@@ -144,6 +146,8 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
     /**
      * File name
      */
+    @Getter
+    @Setter
     private String fileName;
     /**
      * Custom validation method
@@ -202,23 +206,8 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
      */
     protected final ThreadLocal<File> file = new ThreadLocal<>();
 
-    /**
-     * Gets fill name.
-     *
-     * @return the fill name
-     */
-    public String getFileName() {
-        return fileName;
-    }
-
-    /**
-     * Sets fill name.
-     *
-     * @param fileName the file name
-     */
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
+    @Resource
+    protected SftpHelper sftpHelper;
 
     /**
      * <p>Constructor of AbstractExcelImportController</p>
@@ -297,7 +286,7 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
     /**
      * Upload excel file. Any exceptions happened in any lifecycle will not interrupt the whole process.
      *
-     * @param request  the request
+     * @param request the request
      * @return the response body bean
      */
     @PostMapping(value = "/upload", headers = "content-type=multipart/form-data")
@@ -567,23 +556,16 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
      * <a href='https://blog.sayem.dev/2017/07/upload-large-files-spring-boot-html/'>Upload large files : Spring Boot</a>
      */
     private File uploadFile(MultipartHttpServletRequest request) throws IOException {
-        // 获得字节流
         val multipartFile = request.getFileMap().get(FILE_KEY);
         // Don't do this.
         // it loads all of the bytes in java heap memory that leads to OutOfMemoryError. We'll use stream instead.
         // byte[] fileBytes = multipartFile.getBytes();
-        val fileStream = multipartFile.getInputStream();
+        @Cleanup val fileStream = new BufferedInputStream(multipartFile.getInputStream());
         val fileName = DateUtils.formatDate(new Date(), "yyyyMMddHHmmssSSS") + multipartFile.getOriginalFilename();
         val targetFile = new File(TEMP_FILE_PATH + fileName);
         FileUtils.copyInputStreamToFile(fileStream, targetFile);
-        // byte[] itemBytes = multipartFile.getBytes();
-        // File excelFile = uploadTempFile(itemBytes, fileName);
-        // uploadFileToFtp(excelFile, FTP_DIR);
+        uploadFileToSftp(targetFile);
         return targetFile;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(DateUtils.formatDate(new Date(), "yyyyMMddHHmmssSSS"));
     }
 
     /**
@@ -608,24 +590,20 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
     }
 
     /**
-     * Upload file to ftp.
+     * Upload file to SFTP
      *
      * @param file the file
-     * @param path the path
      */
-    private void uploadFileToFtp(File file, String path) {
-//        FtpUtil ftp = FtpUtil.getInstance();
-//        try {
-//            InputStream in = new FileInputStream(file);
-//            ftp.connectServer();
-//            ftp.upload(path + DateUtils.formatDate(new Date(), "yyyyMM"), new String(file.getName().getBytes("GBK"),
-//                                                                                     StandardCharsets.ISO_8859_1),
-//                                                                                     in);
-//        } catch (IOException e) {
-//            log.error("上传文件至 FTP 时发生异常！异常信息：{}", e.getMessage());
-//        } finally {
-//            ftp.closeConnect();
-//        }
+    private void uploadFileToSftp(File file) {
+        val sftpUploadFile = SftpUploadFile.builder()
+                .fileToBeUploaded(file)
+                .fileExistsMode(FileExistsMode.REPLACE)
+                .subDirectory(SFTP_DIR).build();
+        try {
+            sftpHelper.upload(sftpUploadFile);
+        } catch (Exception e) {
+            log.error("Exception occurred when uploading file to SFTP! Exception message：{}", e.getMessage());
+        }
     }
 
     /**
