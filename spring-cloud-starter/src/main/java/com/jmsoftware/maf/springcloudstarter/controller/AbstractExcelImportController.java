@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -268,11 +269,29 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
         sheetLocation.remove();
         readingRowCount.remove();
         userDefinedMessage.remove();
+        closeWorkbook(workbook.get());
         workbook.remove();
+        closeWorkbook(workbookWithErrorMessage.get());
         workbookWithErrorMessage.remove();
         excelFilePath.remove();
         exceptionOccurred.remove();
         file.remove();
+    }
+
+    /**
+     * Close workbook.
+     *
+     * @param workbook the workbook
+     */
+    private void closeWorkbook(Workbook workbook) {
+        if (workbook != null) {
+            try {
+                workbook.close();
+            } catch (IOException e) {
+                log.error("Exception occurred when closing workbook! Exception message: {}, workbook: {}",
+                          e.getMessage(), workbook);
+            }
+        }
     }
 
     /**
@@ -577,13 +596,13 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
     private Workbook readFile(@NonNull File file) throws IOException {
         Workbook workbook = null;
         val extension = FilenameUtils.getExtension(file.getName());
+        val bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
         if (XLS.equals(extension)) {
-            FileInputStream fileInputStream = new FileInputStream(file);
-            POIFSFileSystem poifsFileSystem = new POIFSFileSystem(fileInputStream);
+            POIFSFileSystem poifsFileSystem = new POIFSFileSystem(bufferedInputStream);
             workbook = new HSSFWorkbook(poifsFileSystem);
-            fileInputStream.close();
+            bufferedInputStream.close();
         } else if (XLSX.equals(extension)) {
-            workbook = new XSSFWorkbook(new FileInputStream(file));
+            workbook = new XSSFWorkbook(bufferedInputStream);
         }
         return workbook;
     }
