@@ -23,7 +23,12 @@ import javax.annotation.PostConstruct;
 @Configuration
 @RequiredArgsConstructor
 public class DiscoveryRouteConfiguration {
+    public final String FILTER_NAME = "RequestRateLimiter";
+    public final String REPLENISH_RATE_KEY = "redis-rate-limiter.replenishRate";
+    public final String BURST_CAPACITY_KEY = "redis-rate-limiter.burstCapacity";
+    public final String REQUESTED_TOKENS_KEY = "redis-rate-limiter.requestedTokens";
     private final DiscoveryLocatorProperties discoveryLocatorProperties;
+    private final RedisRateLimiterConfiguration redisRateLimiterConfiguration;
 
     /**
      * Post construct.
@@ -34,14 +39,13 @@ public class DiscoveryRouteConfiguration {
     @PostConstruct
     void postConstruct() {
         val filter = new FilterDefinition();
-        filter.setName("RequestRateLimiter");
-        // TODO: arguments should be passed from configuration dynamically
-        // setting replenishRate=1, requestedTokens=1 and burstCapacity=1
+        filter.setName(FILTER_NAME);
+        // Setting replenishRate=1, requestedTokens=1 and burstCapacity=1
         // will result in a limit of 1 request per 1 second.
         // setting replenishRate=1, requestedTokens=60 and burstCapacity=60 will result in a limit of 1 request/min.
-        filter.addArg("redis-rate-limiter.replenishRate", "1");
-        filter.addArg("redis-rate-limiter.burstCapacity", "1");
-        filter.addArg("redis-rate-limiter.requestedTokens", "1");
+        filter.addArg(REPLENISH_RATE_KEY, redisRateLimiterConfiguration.getReplenishRate());
+        filter.addArg(BURST_CAPACITY_KEY, redisRateLimiterConfiguration.getBurstCapacity());
+        filter.addArg(REQUESTED_TOKENS_KEY, redisRateLimiterConfiguration.getRequestedTokens());
         discoveryLocatorProperties.getFilters().add(filter);
         log.info("Added filter[{}] for discovery services, filters: {}", RedisRateLimiter.class.getSimpleName(),
                  discoveryLocatorProperties.getFilters());

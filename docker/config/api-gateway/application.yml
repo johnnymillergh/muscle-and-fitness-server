@@ -7,3 +7,7 @@ maf:
         - "consul"
         - "api-gateway"
         - "spring-boot-admin"
+    redis-rate-limiter:
+      replenish-rate: 1
+      burst-capacity: 1
+      requested-tokens: 1
