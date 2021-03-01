@@ -32,7 +32,7 @@ services:
     restart: always
     volumes:
       - "~/docker-file-mapping/${REDIS_CONTAINER_NAME}:/data"
-      - ./script/redis/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./config/redis/redis.conf:/usr/local/etc/redis/redis.conf
     environment:
       TZ: ${MAF_TIMEZONE}
     command: "redis-server /usr/local/etc/redis/redis.conf"
