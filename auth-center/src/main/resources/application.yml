@@ -167,13 +167,12 @@ maf:
         - "/webjars/**"
         - "/doc.html"
     included-package-for-http-api-scan: ${maf.project-property.base-package}
+    jwt:
+      # an hour
+      ttl: 3600000
 
 # Customize JWT configuration for development environment.
-jwt:
-  configuration:
-    # an hour
-    ttl: 3600000
-    ttl-for-remember-me: 604800000
+
 
 sftp:
   client:

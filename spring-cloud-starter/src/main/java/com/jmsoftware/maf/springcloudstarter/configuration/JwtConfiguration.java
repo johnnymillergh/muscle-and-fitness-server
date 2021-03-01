@@ -5,7 +5,9 @@ import lombok.Data;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.constraints.NotNull;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -13,15 +15,17 @@ import java.nio.charset.StandardCharsets;
  * <p>
  * Ignored request configuration.
  *
- * TODO: make prefix under "maf."
- *
- * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
- * @date 5/2/20 11:41 PM
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 3/1/2021 10:28 AM
  **/
 @Data
 @Slf4j
-@ConfigurationProperties(prefix = "jwt.configuration")
+@Validated
+@ConfigurationProperties(prefix = JwtConfiguration.PREFIX)
 public class JwtConfiguration {
+    /**
+     * The constant PREFIX.
+     */
+    public static final String PREFIX = "maf.configuration.jwt";
     public static final String TOKEN_PREFIX = "Bearer ";
     /**
      * Key prefix of JWT stored in Redis.
@@ -30,7 +34,8 @@ public class JwtConfiguration {
     private String jwtRedisKeyPrefix;
 
     public JwtConfiguration(MafProjectProperty mafProjectProperty) {
-        this.signingKey = String.format("%s %s", mafProjectProperty.getProjectParentArtifactId(), mafProjectProperty.getVersion());
+        this.signingKey = String.format("%s@%s", mafProjectProperty.getProjectParentArtifactId(),
+                                        mafProjectProperty.getVersion());
         log.info("Initiated JWT signing key: {}. The specified key byte array is {} bits", this.signingKey,
                  this.signingKey.getBytes(StandardCharsets.UTF_8).length * 8);
         jwtRedisKeyPrefix = String.format("%s:jwt:", mafProjectProperty.getProjectParentArtifactId());
@@ -38,15 +43,18 @@ public class JwtConfiguration {
     }
 
     /**
-     * JWT signing key, which is equal to the string value of group id of project.
+     * JWT signing key. Pattern: [project-parent-artifact-id]@[version]
      */
+    @Setter(AccessLevel.NONE)
     private String signingKey;
     /**
-     * Time to live of JWT. Default: 3 * 600000 milliseconds (30 min).
+     * Time to live of JWT. Default: 3 * 600000 milliseconds (1800000 ms, 30 min).
      */
+    @NotNull
     private Long ttl = 3 * 600000L;
     /**
-     * Time to live of JWT for remember me, Default: 7 * 86400000 milliseconds (7 day)
+     * Time to live of JWT for remember me, Default: 7 * 86400000 milliseconds (604800000 ms, 7 day)
      */
+    @NotNull
     private Long ttlForRememberMe = 7 * 86400000L;
 }
