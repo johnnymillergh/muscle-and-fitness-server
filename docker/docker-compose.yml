@@ -6,7 +6,7 @@ services:
   ################################################################################
   mysql-server:
     container_name: ${MYSQL_SERVER_CONTAINER_NAME}
-    image: mysql/mysql-server:${MYSQL_TAG}
+    image: mysql/mysql-server:${MYSQL_SERVER_TAG}
     environment:
       MYSQL_ROOT_HOST: "%"
       MYSQL_ROOT_PASSWORD: ${MAF_MYSQL_ROOT_PASSWORD}
