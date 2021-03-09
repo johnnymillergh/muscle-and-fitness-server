@@ -54,6 +54,24 @@ services:
     networks:
       muscle_and_fitness_network:
 
+  rabbitmq:
+    container_name: ${RABBITMQ_CONTAINER_NAME}
+    hostname: ${RABBITMQ_CONTAINER_NAME}
+    image: rabbitmq:${RABBITMQ_TAG}
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    restart: always
+    volumes:
+      - "~/docker-file-mapping/${RABBITMQ_CONTAINER_NAME}:/var/lib/rabbitmq"
+      - ./plugin/rabbitmq/rabbitmq_delayed_message_exchange-3.8.9-0199d11c.ez:/plugins/rabbitmq_delayed_message_exchange-3.8.9-0199d11c.ez
+      - ./plugin/rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins
+    environment:
+      RABBITMQ_DEFAULT_USER: rabbitmq_su
+      RABBITMQ_DEFAULT_PASS: rabbitmq_password
+    networks:
+      muscle_and_fitness_network:
+
   zipkin-mysql:
     container_name: ${ZIPKIN_MYSQL_CONTAINER_NAME}
     image: openzipkin/zipkin-mysql:${ZIPKIN_MYSQL_TAG}
