@@ -55,7 +55,8 @@ import java.util.List;
         SftpConfiguration.class,
         WebSecurityConfiguration.class,
         RestTemplateConfiguration.class,
-        AsyncConfiguration.class
+        AsyncConfiguration.class,
+        RabbitmqConfiguration.class
 })
 public class MafAutoConfiguration {
     @PostConstruct

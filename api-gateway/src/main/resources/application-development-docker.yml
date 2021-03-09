@@ -6,4 +6,4 @@ spring:
   redis:
     host: maf.redis.development-docker
     port: 6379
-    password: 123456
+    password: maf@redis

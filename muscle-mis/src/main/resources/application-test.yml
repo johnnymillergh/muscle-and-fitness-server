@@ -10,7 +10,12 @@ spring:
   redis:
     host: maf.redis.test
     port: 6379
-    password: 123456
+    password: maf@redis
+  rabbitmq:
+    host: maf.rabbitmq.test
+    port: 5672
+    username: maf_rabbitmq_su
+    password: maf@rabbitmq
 
 sftp:
   client:

@@ -67,8 +67,8 @@ services:
       - ./plugin/rabbitmq/rabbitmq_delayed_message_exchange-3.8.9-0199d11c.ez:/plugins/rabbitmq_delayed_message_exchange-3.8.9-0199d11c.ez
       - ./plugin/rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins
     environment:
-      RABBITMQ_DEFAULT_USER: rabbitmq_su
-      RABBITMQ_DEFAULT_PASS: rabbitmq_password
+      RABBITMQ_DEFAULT_USER: ${MAF_RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${MAF_RABBITMQ_PASSWORD}
     networks:
       muscle_and_fitness_network:
 

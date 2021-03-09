@@ -10,7 +10,12 @@ spring:
   redis:
     host: maf.redis.development-docker
     port: 6379
-    password: 123456
+    password: maf@redis
+  rabbitmq:
+    host: maf.rabbitmq.development-docker
+    port: 5672
+    username: maf_rabbitmq_su
+    password: maf@rabbitmq
 
 sftp:
   client:

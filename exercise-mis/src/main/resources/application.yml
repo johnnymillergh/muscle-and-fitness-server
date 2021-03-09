@@ -84,7 +84,7 @@ spring:
         url-pattern: /druid/*
         reset-enable: false
         login-username: root
-        login-password: 123456
+        login-password: maf_druid_password
         allow:
   redis:
     database: 0
