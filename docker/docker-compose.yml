@@ -69,6 +69,11 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: ${MAF_RABBITMQ_USER}
       RABBITMQ_DEFAULT_PASS: ${MAF_RABBITMQ_PASSWORD}
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 30s
+      retries: 3
     networks:
       muscle_and_fitness_network:
 
@@ -210,6 +215,8 @@ services:
         condition: service_started
       consul-service-registry:
         condition: service_started
+      rabbitmq:
+        condition: service_healthy
     ports:
       - "8761:8761"
     restart: always
@@ -271,6 +278,8 @@ services:
         condition: service_started
       consul-service-registry:
         condition: service_started
+      rabbitmq:
+        condition: service_healthy
     restart: always
     volumes:
       - "~/docker-file-mapping/${AUTH_CENTER_CONTAINER_NAME}:/logs"
@@ -299,6 +308,8 @@ services:
         condition: service_started
       consul-service-registry:
         condition: service_started
+      rabbitmq:
+        condition: service_healthy
     restart: always
     volumes:
       - "~/docker-file-mapping/${EXERCISE_MIS_CONTAINER_NAME}:/logs"
@@ -327,6 +338,8 @@ services:
         condition: service_started
       consul-service-registry:
         condition: service_started
+      rabbitmq:
+        condition: service_healthy
     restart: always
     volumes:
       - "~/docker-file-mapping/${MUSCLE_MIS_CONTAINER_NAME}:/logs"
