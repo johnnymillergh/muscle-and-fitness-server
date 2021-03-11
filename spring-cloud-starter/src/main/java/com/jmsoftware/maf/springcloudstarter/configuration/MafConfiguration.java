@@ -18,8 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <h1>CustomConfiguration</h1>
- * <p>Custom configurations which are written in .yml files, containing a variety of fragmentary configs. Such as,
+ * <h1>MafConfiguration</h1>
+ * <p>MAF Configuration which are written in .yml files, containing a variety of fragmentary configs. Such as,
  * Druid login info, web security switch, web log and so on.</p>
  *
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com

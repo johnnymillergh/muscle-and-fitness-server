@@ -46,7 +46,11 @@ import java.util.List;
 @Configuration
 @IntegrationComponentScan
 @ConditionalOnWebApplication
-@EnableConfigurationProperties({MafConfiguration.class, MafProjectProperty.class})
+@EnableConfigurationProperties({
+        MafConfiguration.class,
+        MafProjectProperty.class,
+        ExcelImportConfiguration.class
+})
 @Import({
         WebMvcConfiguration.class,
         MyBatisPlusConfiguration.class,

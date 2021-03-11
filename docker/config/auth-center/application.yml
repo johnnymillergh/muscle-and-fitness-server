@@ -8,3 +8,5 @@ maf:
         - "api-gateway"
         - "spring-boot-admin"
         - "auth-center"
+    excel:
+      maximum-row-count: 3000

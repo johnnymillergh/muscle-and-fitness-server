@@ -5,6 +5,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.jmsoftware.maf.common.bean.ExcelImportResult;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
+import com.jmsoftware.maf.springcloudstarter.configuration.ExcelImportConfiguration;
 import com.jmsoftware.maf.springcloudstarter.sftp.SftpHelper;
 import com.jmsoftware.maf.springcloudstarter.sftp.SftpUploadFile;
 import com.jmsoftware.maf.springcloudstarter.util.PoiUtil;
@@ -119,11 +120,6 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
      */
     private static final String XLSX = "xlsx";
     /**
-     * Maximum row count
-     * TODO: make it configurable
-     */
-    private static final Integer MAXIMUM_ROW_COUNT = 2000;
-    /**
      * The User defined message.
      */
     protected ThreadLocal<String> userDefinedMessage = new ThreadLocal<>();
@@ -208,6 +204,8 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
 
     @Resource
     protected SftpHelper sftpHelper;
+    @Resource
+    protected ExcelImportConfiguration excelImportConfiguration;
 
     /**
      * <p>Constructor of AbstractExcelImportController</p>
@@ -641,10 +639,11 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
             // Set Reading row count
             readingRowCount.set(readingRowCount.get() + sheet.getLastRowNum() - sheet.getFirstRowNum());
             // Check if exceeding the MAXIMUM_ROW_COUNT
-            if (readingRowCount.get() > MAXIMUM_ROW_COUNT) {
+            if (readingRowCount.get() > excelImportConfiguration.getMaximumRowCount()) {
                 setErrorMessage(String.format(
                         "The amount of importing data cannot be greater than %d (Table head included)! " +
-                                "Current reading row count: %d", MAXIMUM_ROW_COUNT, readingRowCount.get()));
+                                "Current reading row count: %d", excelImportConfiguration.getMaximumRowCount(),
+                        readingRowCount.get()));
                 continue;
             }
             // Check if the readingRowCount is equal to zero
