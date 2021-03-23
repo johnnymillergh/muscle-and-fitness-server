@@ -56,7 +56,7 @@ management:
       show-details: ALWAYS
 
 logging:
-  config: classpath:logback-configuration/logback-@env@.xml
+  config: classpath:logback-configuration/logback-${spring.profiles.active}.xml
 
 maf:
   project-property:
@@ -68,7 +68,7 @@ maf:
     version: @project.version@
     description: @project.description@
     jdk-version: @java.version@
-    environment: @env@
+    environment: ${spring.profiles.active}
     url: @project.url@
     inception-year: @inceptionYear@
     organization-name: @project.organization.name@

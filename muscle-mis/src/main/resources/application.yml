@@ -117,7 +117,7 @@ mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*Mapper.xml
 
 logging:
-  config: classpath:logback-configuration/logback-@env@.xml
+  config: classpath:logback-configuration/logback-${spring.profiles.active}.xml
   level:
     # Configure logging level for SFTP/JSCH
     com.jcraft.jsch: INFO
@@ -132,7 +132,7 @@ maf:
     version: @project.version@
     description: @project.description@
     jdk-version: @java.version@
-    environment: @env@
+    environment: ${spring.profiles.active}
     url: @project.url@
     inception-year: @inceptionYear@
     organization-name: @project.organization.name@
