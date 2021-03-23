@@ -3,7 +3,6 @@ package com.jmsoftware.maf.springcloudstarter.configuration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -20,8 +19,7 @@ import javax.annotation.PostConstruct;
 /**
  * <h1>Swagger2Configuration</h1>
  * <p>
- * Swagger 2 Configuration
- * <a href="http://192.168.1.4:8080/jm-spring-boot-template-dev/swagger-ui.html">Click me to view<a/>
+ * <a href="http://localhost:8080/doc.html">Click me to view API documentation</a>
  *
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 2019-02-07 16:15
@@ -30,8 +28,8 @@ import javax.annotation.PostConstruct;
 @Configuration
 @EnableSwagger2
 @RequiredArgsConstructor
-@ConditionalOnProperty(value = "maf.configuration.swagger-disabled", havingValue = "false")
 public class Swagger2Configuration {
+    private final MafConfiguration mafConfiguration;
     private final MafProjectProperty mafProjectProperty;
 
     @PostConstruct
@@ -39,7 +37,7 @@ public class Swagger2Configuration {
         log.warn("[UNSAFE] Swagger 2 is enabled, the internal and external APIs will be exposed");
     }
 
-    public ApiInfo apiInfo() {
+    private ApiInfo apiInfo() {
         val projectArtifactId = mafProjectProperty.getProjectArtifactId();
         val version = mafProjectProperty.getVersion();
         val developerEmail = mafProjectProperty.getDeveloperEmail();
@@ -60,10 +58,11 @@ public class Swagger2Configuration {
     }
 
     @Bean
-    public Docket docket(Swagger2Configuration swagger2Configuration, MafProjectProperty mafProjectProperty) {
+    public Docket docket(MafProjectProperty mafProjectProperty) {
         log.warn("Initial bean: '{}'", Docket.class.getSimpleName());
         return new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(swagger2Configuration.apiInfo())
+                .enable(mafConfiguration.getSwaggerDisabled())
+                .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.basePackage(mafProjectProperty.getBasePackage()))
                 .paths(PathSelectors.any())
