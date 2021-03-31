@@ -13,6 +13,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -57,7 +59,7 @@ public class UserPrincipal implements UserDetails {
     /**
      * Birthday
      */
-    private Date birthday;
+    private LocalDate birthday;
     /**
      * Gender
      */
@@ -69,11 +71,11 @@ public class UserPrincipal implements UserDetails {
     /**
      * Create time
      */
-    private Date gmtCreated;
+    private LocalDateTime gmtCreated;
     /**
      * Modify time
      */
-    private Date gmtModified;
+    private LocalDateTime gmtModified;
     /**
      * Roles that user has
      */

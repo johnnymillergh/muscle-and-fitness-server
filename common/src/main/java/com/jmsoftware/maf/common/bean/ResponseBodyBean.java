@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * <h1>ResponseBodyBean</h1>
@@ -35,7 +35,7 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
      */
     @Setter(AccessLevel.NONE)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    Date timestamp = new Date();
+    LocalDateTime timestamp = LocalDateTime.now();
     /**
      * Default status is 200 OK.
      */

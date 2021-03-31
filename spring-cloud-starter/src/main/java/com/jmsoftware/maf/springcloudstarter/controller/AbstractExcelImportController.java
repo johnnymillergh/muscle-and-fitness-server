@@ -14,7 +14,6 @@ import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.http.client.utils.DateUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.*;
@@ -37,8 +36,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.math.BigDecimal;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
 /**
@@ -553,13 +554,17 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
      * @see
      * <a href='https://blog.sayem.dev/2017/07/upload-large-files-spring-boot-html/'>Upload large files : Spring Boot</a>
      */
+    @SuppressWarnings("AlibabaRemoveCommentedCode")
     private File uploadFile(MultipartHttpServletRequest request) throws IOException {
         val multipartFile = request.getFileMap().get(FILE_KEY);
         // Don't do this.
         // it loads all of the bytes in java heap memory that leads to OutOfMemoryError. We'll use stream instead.
         // byte[] fileBytes = multipartFile.getBytes();
         @Cleanup val fileStream = new BufferedInputStream(multipartFile.getInputStream());
-        val fileName = DateUtils.formatDate(new Date(), "yyyyMMddHHmmssSSS") + multipartFile.getOriginalFilename();
+        LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS"));
+        val fileName = String.format("%s%s",
+                                     LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS")),
+                                     multipartFile.getOriginalFilename());
         val targetFile = new File(TEMP_FILE_PATH + fileName);
         FileUtils.copyInputStreamToFile(fileStream, targetFile);
         uploadFileToSftp(targetFile);
@@ -872,8 +877,8 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
                                                              String.class,
                                                              Field.class,
                                                              Object.class);
-            val bindDateField = ReflectionUtils.findMethod(this.getClass(),
-                                                           "bindDateField",
+            val bindLocalDateTimeField = ReflectionUtils.findMethod(this.getClass(),
+                                                           "bindLocalDateTimeField",
                                                            String.class,
                                                            Field.class,
                                                            Object.class);
@@ -882,7 +887,7 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
             this.bindMethodMap.put(Long.class, bindLongField);
             this.bindMethodMap.put(Float.class, bindFloatField);
             this.bindMethodMap.put(Double.class, bindDoubleField);
-            this.bindMethodMap.put(Date.class, bindDateField);
+            this.bindMethodMap.put(LocalDateTime.class, bindLocalDateTimeField);
         } catch (Exception e) {
             log.error("The bindMethod required was not found in this class!", e);
         }
@@ -1091,7 +1096,7 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
     }
 
     /**
-     * Bind date field boolean.
+     * Bind LocalDateTime field boolean.
      *
      * @param value the value
      * @param field the field
@@ -1099,15 +1104,14 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
      * @return the boolean
      * @throws IllegalAccessException the illegal access exception
      */
-    private Boolean bindDateField(String value, Field field, Object bean) throws IllegalAccessException {
+    private Boolean bindLocalDateTimeField(String value, Field field, Object bean) throws IllegalAccessException {
         try {
-            val simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            val date = value == null ? null : simpleDateFormat.parse(value);
+            val date = value == null ? null : LocalDateTime.parse(value, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
             field.setAccessible(true);
             field.set(bean, date);
             field.setAccessible(false);
-        } catch (ParseException e) {
-            log.error("Exception occurred when binding Date field! Exception message: {}, value: {}, field: {}",
+        } catch (DateTimeParseException e) {
+            log.error("Exception occurred when binding LocalDateTime field! Exception message: {}, value: {}, field: {}",
                       e.getMessage(), value, field.getName());
             val formattedMessage = String.format("Invalid data of the row %d, col %d, must be date",
                                                  rowLocation.get(), columnLocation.get());

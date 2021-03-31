@@ -2,7 +2,8 @@ package com.jmsoftware.maf.common.domain.authcenter.user;
 
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * <h1>GetUserByLoginTokenResponse</h1>
@@ -41,7 +42,7 @@ public class  GetUserByLoginTokenResponse {
     /**
      * Birthday (yyyy-MM-dd)
      */
-    private Date birthday;
+    private LocalDate birthday;
     /**
      * 58 gender options
      */
@@ -57,9 +58,9 @@ public class  GetUserByLoginTokenResponse {
     /**
      * Create time
      */
-    private Date createdTime;
+    private LocalDateTime createdTime;
     /**
      * Modify time
      */
-    private Date modifiedTime;
+    private LocalDateTime modifiedTime;
 }

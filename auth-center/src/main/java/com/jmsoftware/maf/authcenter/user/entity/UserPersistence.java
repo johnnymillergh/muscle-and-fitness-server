@@ -5,7 +5,8 @@ import com.jmsoftware.maf.common.domain.DeletedField;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * <h1>UserPersistence</h1>
@@ -60,7 +61,7 @@ public class UserPersistence implements Serializable {
      * Birthday
      */
     @TableField(value = "birthday")
-    private Date birthday;
+    private LocalDate birthday;
 
     /**
      * 26 gender options
@@ -93,13 +94,13 @@ public class UserPersistence implements Serializable {
      * Created time
      */
     @TableField(value = "created_time", fill = FieldFill.INSERT)
-    private Date createdTime;
+    private LocalDateTime createdTime;
 
     /**
      * Modified time
      */
     @TableField(value = "modified_time", fill = FieldFill.INSERT_UPDATE)
-    private Date modifiedTime;
+    private LocalDateTime modifiedTime;
 
     public static final String COL_ID = "id";
 

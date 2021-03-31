@@ -25,7 +25,6 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-import java.util.Date;
 
 /**
  * <h1>UserServiceImpl</h1>
@@ -69,9 +68,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserPersistence> im
         userPersistence.setEmail(payload.getEmail());
         userPersistence.setPassword(bCryptPasswordEncoder.encode(payload.getPassword()));
         userPersistence.setStatus(UserStatus.ENABLED.getStatus());
-        val currentTime = new Date();
-        userPersistence.setCreatedTime(currentTime);
-        userPersistence.setModifiedTime(currentTime);
         this.save(userPersistence);
         log.warn("Saved user for signup. {}", userPersistence);
         val response = new SignupResponse();

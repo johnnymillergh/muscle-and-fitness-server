@@ -3,11 +3,10 @@ package com.jmsoftware.maf.springcloudstarter.database;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.jmsoftware.maf.common.domain.DeletedField;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * <h1>MyBatisPlusConfiguration</h1>
@@ -28,17 +27,17 @@ public class MyBatisPlusMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
         log.info("Starting to insert fill metaObject: {}", metaObject.getOriginalObject());
-        val now = new Date();
+        LocalDateTime now = LocalDateTime.now();
         this.strictInsertFill(metaObject, DELETED_FIELD_NAME, Byte.class, DeletedField.NOT_DELETED.getValue())
-                .strictInsertFill(metaObject, CREATED_TIME_FIELD_NAME, Date.class, now)
-                .strictInsertFill(metaObject, MODIFIED_TIME_FIELD_NAME, Date.class, now);
+                .strictInsertFill(metaObject, CREATED_TIME_FIELD_NAME, LocalDateTime.class, now)
+                .strictInsertFill(metaObject, MODIFIED_TIME_FIELD_NAME, LocalDateTime.class, now);
         log.info("Finished to insert fill metaObject: {}", metaObject.getOriginalObject());
     }
 
     @Override
     public void updateFill(MetaObject metaObject) {
         log.info("Starting to update fill metaObject: {}", metaObject.getOriginalObject());
-        this.strictUpdateFill(metaObject, MODIFIED_TIME_FIELD_NAME, Date.class, new Date());
+        this.strictUpdateFill(metaObject, MODIFIED_TIME_FIELD_NAME, LocalDateTime.class, LocalDateTime.now());
         log.info("Finished to update fill metaObject: {}", metaObject.getOriginalObject());
     }
 }

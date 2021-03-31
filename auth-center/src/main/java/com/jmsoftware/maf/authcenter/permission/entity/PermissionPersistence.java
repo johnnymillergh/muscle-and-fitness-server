@@ -5,7 +5,7 @@ import com.jmsoftware.maf.common.domain.DeletedField;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * Permission.(Permission) Persistence object class
@@ -79,13 +79,13 @@ public class PermissionPersistence implements Serializable {
      * Created time
      */
     @TableField(value = "created_time", fill = FieldFill.INSERT)
-    private Date createdTime;
+    private LocalDateTime createdTime;
 
     /**
      * Modified time
      */
     @TableField(value = "modified_time", fill = FieldFill.INSERT_UPDATE)
-    private Date modifiedTime;
+    private LocalDateTime modifiedTime;
 
     public static final String COL_ID = "id";
 
