@@ -6,7 +6,8 @@ import com.jmsoftware.maf.common.domain.authcenter.security.UserPrincipal;
 import com.jmsoftware.maf.common.exception.BusinessException;
 import com.jmsoftware.maf.common.exception.SecurityException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
@@ -21,9 +22,9 @@ import reactor.core.publisher.Mono;
  *
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 12/29/2020 9:57 AM
  **/
-@Slf4j
 @RequiredArgsConstructor
 public class JwtReactiveAuthenticationManagerImpl implements ReactiveAuthenticationManager {
+    private final static Logger log = LoggerFactory.getLogger(JwtReactiveAuthenticationManagerImpl.class);
     private final AuthCenterRemoteApi authCenterRemoteApi;
 
     private final UserDetailsChecker preAuthenticationChecks = user -> {

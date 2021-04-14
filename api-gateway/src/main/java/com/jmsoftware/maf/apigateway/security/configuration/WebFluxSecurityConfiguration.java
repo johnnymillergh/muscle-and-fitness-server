@@ -93,11 +93,6 @@ public class WebFluxSecurityConfiguration {
     }
 
     @Bean
-    public ReactiveAuthorizationManager<AuthorizationContext> reactiveAuthorizationManager() {
-        return new RbacReactiveAuthorizationManagerImpl(authCenterRemoteApi);
-    }
-
-    @Bean
     public ServerSecurityContextRepository serverSecurityContextRepository(ReactiveAuthenticationManager reactiveAuthenticationManager) {
         return new JwtReactiveServerSecurityContextRepositoryImpl(mafConfiguration, reactiveAuthenticationManager,
                                                                   authCenterRemoteApi);
@@ -106,5 +101,10 @@ public class WebFluxSecurityConfiguration {
     @Bean
     public ReactiveAuthenticationManager reactiveAuthenticationManager() {
         return new JwtReactiveAuthenticationManagerImpl(authCenterRemoteApi);
+    }
+
+    @Bean
+    public ReactiveAuthorizationManager<AuthorizationContext> reactiveAuthorizationManager() {
+        return new RbacReactiveAuthorizationManagerImpl(authCenterRemoteApi);
     }
 }
