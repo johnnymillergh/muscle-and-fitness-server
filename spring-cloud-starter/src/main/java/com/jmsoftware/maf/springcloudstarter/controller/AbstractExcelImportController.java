@@ -722,6 +722,8 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
 
     /**
      * Bind row to bean.
+     * <p>
+     * FIXME: Don't use field reflection
      *
      * @param row        the row
      * @param startIndex the start index
@@ -878,10 +880,10 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
                                                              Field.class,
                                                              Object.class);
             val bindLocalDateTimeField = ReflectionUtils.findMethod(this.getClass(),
-                                                           "bindLocalDateTimeField",
-                                                           String.class,
-                                                           Field.class,
-                                                           Object.class);
+                                                                    "bindLocalDateTimeField",
+                                                                    String.class,
+                                                                    Field.class,
+                                                                    Object.class);
             this.bindMethodMap.put(String.class, bindStringField);
             this.bindMethodMap.put(Integer.class, bindIntField);
             this.bindMethodMap.put(Long.class, bindLongField);
@@ -895,6 +897,8 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
 
     /**
      * Real binding value to the bean's field.
+     * <p>
+     * FIXME: Don't use field reflection
      *
      * @param value the string value of the excel cell
      * @param field the the field of the bean
@@ -930,6 +934,8 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
 
     /**
      * Bind int field boolean.
+     * <p>
+     * FIXME: Don't use field reflection
      *
      * @param value the value
      * @param field the field
@@ -943,6 +949,7 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
             if (realValue == null && field.getType() == int.class) {
                 realValue = 0;
             }
+            // FIXME:
             field.setAccessible(true);
             field.set(bean, realValue);
             field.setAccessible(false);
@@ -959,6 +966,8 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
 
     /**
      * Bind long field boolean.
+     * <p>
+     * FIXME: Don't use field reflection
      *
      * @param value the value
      * @param field the field
@@ -988,6 +997,8 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
 
     /**
      * Bind long field boolean.
+     * <p>
+     * FIXME: Don't use field reflection
      *
      * @param value the value
      * @param field the field
@@ -1013,6 +1024,8 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
 
     /**
      * Bind float field boolean.
+     * <p>
+     * FIXME: Don't use field reflection
      *
      * @param value the value
      * @param field the field
@@ -1042,6 +1055,8 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
 
     /**
      * Bind double field boolean.
+     * <p>
+     * FIXME: Don't use field reflection
      *
      * @param value the value
      * @param field the field
@@ -1072,6 +1087,8 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
 
     /**
      * Bind string field boolean.
+     * <p>
+     * FIXME: Don't use field reflection
      *
      * @param value the value
      * @param field the field
@@ -1097,6 +1114,8 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
 
     /**
      * Bind LocalDateTime field boolean.
+     * <p>
+     * FIXME: Don't use field reflection
      *
      * @param value the value
      * @param field the field
@@ -1106,13 +1125,15 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
      */
     private Boolean bindLocalDateTimeField(String value, Field field, Object bean) throws IllegalAccessException {
         try {
-            val date = value == null ? null : LocalDateTime.parse(value, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            val date = value == null ? null : LocalDateTime.parse(value,
+                                                                  DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
             field.setAccessible(true);
             field.set(bean, date);
             field.setAccessible(false);
         } catch (DateTimeParseException e) {
-            log.error("Exception occurred when binding LocalDateTime field! Exception message: {}, value: {}, field: {}",
-                      e.getMessage(), value, field.getName());
+            log.error(
+                    "Exception occurred when binding LocalDateTime field! Exception message: {}, value: {}, field: {}",
+                    e.getMessage(), value, field.getName());
             val formattedMessage = String.format("Invalid data of the row %d, col %d, must be date",
                                                  rowLocation.get(), columnLocation.get());
             setErrorMessage(formattedMessage);
