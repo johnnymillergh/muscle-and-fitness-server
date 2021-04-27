@@ -27,11 +27,13 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -507,11 +509,11 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
      * @param bean     the bean that needs to be validated
      * @param index    the index that is the reference to the row number of the Excel file
      * @return the boolean
-     * @throws Exception the exception
+     * @throws IllegalArgumentException the illegal argument exception
      */
     protected abstract boolean validateBeforeAddToBeanList(List<ExcelImportBeanType> beanList,
                                                            ExcelImportBeanType bean,
-                                                           int index) throws Exception;
+                                                           int index) throws IllegalArgumentException;
 
     /**
      * Sets field name array.
@@ -722,8 +724,6 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
 
     /**
      * Bind row to bean.
-     * <p>
-     * FIXME: Don't use field reflection
      *
      * @param row        the row
      * @param startIndex the start index
@@ -736,7 +736,8 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
         try {
             // New bean instance
             val bean = this.bindClass.getDeclaredConstructor().newInstance();
-            val fields = this.bindClass.getDeclaredFields();
+            val beanInfo = Introspector.getBeanInfo(bean.getClass());
+            val propertyDescriptors = beanInfo.getPropertyDescriptors();
             for (var index = startIndex; index < endIndex; index++) {
                 // If found more data, then binding failed
                 if (index >= fieldNameArray.length) {
@@ -746,44 +747,41 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
                     break;
                 }
                 // Get the field that needs binding
-                Field field = null;
                 val fieldName = fieldNameArray[index];
-                for (Field f : fields) {
-                    if (f.getName().equals(fieldName)) {
-                        field = f;
+                PropertyDescriptor propertyDescriptor = null;
+                for (val pd : propertyDescriptors) {
+                    if (pd.getName().equals(fieldName)) {
+                        propertyDescriptor = pd;
                         break;
                     }
                 }
-                if (field != null) {
-                    val value = getCellValue2String(row.getCell(index));
-                    // Start to bind
-                    // Specify current column location
-                    columnLocation.set(index + 1);
-                    // Execute custom validation method
-                    val method = this.checkMethodMap.get(fieldName);
-                    Object returnObj = null;
-                    if (method != null) {
-                        method.setAccessible(true);
-                        returnObj = method.invoke(this, value, rowLocation.get(), bean);
-                        method.setAccessible(false);
-                    }
-                    val validationResult = returnObj == null ? null : returnObj.toString();
-                    // If `validationResult` is blank or equal to "true"
-                    if (StrUtil.isBlank(validationResult) || Boolean.TRUE.toString().equals(validationResult)) {
-                        bindingResult = bind(value, field, bean);
-                    } else {
-                        bindingResult = false;
-                        // If `validationResult` is not equal to "false" then add to error message list
-                        if (!Boolean.FALSE.toString().equals(validationResult)) {
-                            setErrorMessage(validationResult);
-                        }
-                    }
-                    // Finished binding
-                    if (!bindingResult) {
-                        break;
-                    }
-                } else {
+                if (ObjectUtil.isNull(propertyDescriptor)) {
                     throw new RuntimeException("Cannot find the field in the specify class!");
+                }
+                val value = getCellValue2String(row.getCell(index));
+                // Start to bind
+                // Specify current column location
+                columnLocation.set(index + 1);
+                // Execute custom validation method
+                val customValidationMethod = this.checkMethodMap.get(fieldName);
+                Object returnObj = null;
+                if (ObjectUtil.isNotNull(customValidationMethod)) {
+                    returnObj = customValidationMethod.invoke(this, value, rowLocation.get(), bean);
+                }
+                val validationResult = returnObj == null ? null : returnObj.toString();
+                // If `validationResult` is blank or equal to "true"
+                if (StrUtil.isBlank(validationResult) || Boolean.TRUE.toString().equals(validationResult)) {
+                    bindingResult = bind(value, propertyDescriptor, bean);
+                } else {
+                    bindingResult = false;
+                    // If `validationResult` is not equal to "false" then add to error message list
+                    if (!Boolean.FALSE.toString().equals(validationResult)) {
+                        setErrorMessage(validationResult);
+                    }
+                }
+                // Finished binding
+                if (!bindingResult) {
+                    break;
                 }
             }
             if (bindingResult) {
@@ -792,7 +790,11 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
             if (bindingResult) {
                 this.beanList.get().add(bean);
             }
-        } catch (Exception e) {
+        } catch (IntrospectionException
+                | InvocationTargetException
+                | InstantiationException
+                | IllegalAccessException
+                | NoSuchMethodException e) {
             log.error("bindRowToBean method has encountered a problem!", e);
             exceptionOccurred.set(true);
             val errorMessage = String.format(
@@ -816,37 +818,38 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
      */
     private String getCellValue2String(Cell cell) {
         var returnString = "";
-        if (cell != null) {
-            switch (cell.getCellType()) {
-                case BLANK:
-                    return "";
-                case NUMERIC:
-                    // If it's date
-                    if (DateUtil.isCellDateFormatted(cell)) {
-                        val date = cell.getDateCellValue();
-                        val dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                        returnString = dateFormat.format(date);
-                    } else {
-                        val bigDecimal = new BigDecimal(String.valueOf(cell.getNumericCellValue()).trim());
-                        // Keep decimal fraction parts which are not zero
-                        val tempStr = bigDecimal.toPlainString();
-                        val dotIndex = tempStr.indexOf(".");
-                        if ((bigDecimal.doubleValue() - bigDecimal.longValue()) == 0 && dotIndex > 0) {
-                            returnString = tempStr.substring(0, dotIndex);
-                        } else {
-                            returnString = tempStr;
-                        }
-                    }
-                    break;
-                case STRING:
-                    if (cell.getStringCellValue() != null) {
-                        returnString = cell.getStringCellValue().trim();
-                    }
-                    break;
-                default:
-            }
+        if (ObjectUtil.isNull(cell)) {
+            return returnString;
         }
-        return returnString;
+        switch (cell.getCellType()) {
+            case BLANK:
+                return "";
+            case NUMERIC:
+                // If it's date
+                if (DateUtil.isCellDateFormatted(cell)) {
+                    val date = cell.getDateCellValue();
+                    val dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    returnString = dateFormat.format(date);
+                    return returnString;
+                }
+                val bigDecimal = new BigDecimal(String.valueOf(cell.getNumericCellValue()).trim());
+                // Keep decimal fraction parts which are not zero
+                val tempStr = bigDecimal.toPlainString();
+                val dotIndex = tempStr.indexOf(".");
+                if ((bigDecimal.doubleValue() - bigDecimal.longValue()) == 0 && dotIndex > 0) {
+                    returnString = tempStr.substring(0, dotIndex);
+                } else {
+                    returnString = tempStr;
+                }
+                return returnString;
+            case STRING:
+                if (cell.getStringCellValue() != null) {
+                    returnString = cell.getStringCellValue().trim();
+                }
+                return returnString;
+            default:
+                return returnString;
+        }
     }
 
     /**
@@ -857,32 +860,32 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
             val bindStringField = ReflectionUtils.findMethod(this.getClass(),
                                                              "bindStringField",
                                                              String.class,
-                                                             Field.class,
+                                                             PropertyDescriptor.class,
                                                              Object.class);
             val bindIntField = ReflectionUtils.findMethod(this.getClass(),
                                                           "bindIntField",
                                                           String.class,
-                                                          Field.class,
+                                                          PropertyDescriptor.class,
                                                           Object.class);
             val bindLongField = ReflectionUtils.findMethod(this.getClass(),
                                                            "bindLongField",
                                                            String.class,
-                                                           Field.class,
+                                                           PropertyDescriptor.class,
                                                            Object.class);
             val bindFloatField = ReflectionUtils.findMethod(this.getClass(),
                                                             "bindFloatField",
                                                             String.class,
-                                                            Field.class,
+                                                            PropertyDescriptor.class,
                                                             Object.class);
             val bindDoubleField = ReflectionUtils.findMethod(this.getClass(),
                                                              "bindDoubleField",
                                                              String.class,
-                                                             Field.class,
+                                                             PropertyDescriptor.class,
                                                              Object.class);
             val bindLocalDateTimeField = ReflectionUtils.findMethod(this.getClass(),
                                                                     "bindLocalDateTimeField",
                                                                     String.class,
-                                                                    Field.class,
+                                                                    PropertyDescriptor.class,
                                                                     Object.class);
             this.bindMethodMap.put(String.class, bindStringField);
             this.bindMethodMap.put(Integer.class, bindIntField);
@@ -898,64 +901,63 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
     /**
      * Real binding value to the bean's field.
      * <p>
-     * FIXME: Don't use field reflection
      *
-     * @param value the string value of the excel cell
-     * @param field the the field of the bean
-     * @param bean  the bean
+     * @param value              the string value of the excel cell
+     * @param propertyDescriptor the the field of the bean
+     * @param bean               the bean
      * @return true if the binding succeeded, or vice versa.
      * @throws RuntimeException the runtime exception
      */
-    private Boolean bind(String value, Field field, Object bean) throws RuntimeException {
+    private Boolean bind(String value, PropertyDescriptor propertyDescriptor, Object bean) throws RuntimeException {
         boolean result;
-        val fieldType = field.getType();
-        if (this.bindMethodMap.containsKey(fieldType)) {
-            val bindMethod = this.bindMethodMap.get(fieldType);
-            value = StrUtil.isBlank(value) ? null : value;
-            try {
-                result = (Boolean) bindMethod.invoke(this, value, field, bean);
-            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-                val exceptionMessage = new StringBuilder("Exception occurred when binding! ");
-                if (!StrUtil.isBlank(e.getMessage())) {
-                    log.error("Exception occurred when invoking method!", e);
-                    exceptionMessage.append(e.getMessage()).append(" ");
-                }
-                if (ObjectUtil.isNotNull(e.getCause()) && !StrUtil.isBlank(e.getCause().getMessage())) {
-                    log.error("Exception occurred when invoking method!", e.getCause());
-                    exceptionMessage.append(e.getCause().getMessage());
-                }
-                throw new RuntimeException(exceptionMessage.toString());
+        val fieldType = propertyDescriptor.getPropertyType();
+        if (!this.bindMethodMap.containsKey(fieldType)) {
+            throw new RuntimeException(
+                    String.format("The bindMethod required was not found in bindMethodMap! Field type: %s",
+                                  fieldType.getSimpleName()));
+        }
+        val bindMethod = this.bindMethodMap.get(fieldType);
+        value = StrUtil.isBlank(value) ? null : value;
+        try {
+            // Why is the parameter 'this' required? Because it's this class calling the 'bindMethod',
+            // and the 'bingMethod' belongs to this class object.
+            result = (Boolean) bindMethod.invoke(this, value, propertyDescriptor, bean);
+        } catch (IllegalAccessException
+                | IllegalArgumentException
+                | InvocationTargetException e) {
+            val exceptionMessage = new StringBuilder("Exception occurred when binding! ");
+            if (!StrUtil.isBlank(e.getMessage())) {
+                log.error("Exception occurred when invoking method!", e);
+                exceptionMessage.append(e.getMessage()).append(" ");
             }
-        } else {
-            throw new RuntimeException("The bindMethod required was not found in bindMethodMap!");
+            if (ObjectUtil.isNotNull(e.getCause()) && !StrUtil.isBlank(e.getCause().getMessage())) {
+                log.error("Exception occurred when invoking method!", e.getCause());
+                exceptionMessage.append(e.getCause().getMessage());
+            }
+            throw new RuntimeException(exceptionMessage.toString());
         }
         return result;
     }
 
     /**
      * Bind int field boolean.
-     * <p>
-     * FIXME: Don't use field reflection
      *
-     * @param value the value
-     * @param field the field
-     * @param bean  the bean
+     * @param value              the value
+     * @param propertyDescriptor the property descriptor
+     * @param bean               the bean
      * @return the boolean
      * @throws IllegalAccessException the illegal access exception
      */
-    private Boolean bindIntField(String value, Field field, Object bean) throws IllegalAccessException {
+    private Boolean bindIntField(String value, PropertyDescriptor propertyDescriptor, Object bean) throws IllegalAccessException {
         try {
             var realValue = value == null ? null : Integer.parseInt(value);
-            if (realValue == null && field.getType() == int.class) {
+            if (ObjectUtil.isNull(realValue) && propertyDescriptor.getPropertyType() == int.class) {
                 realValue = 0;
             }
-            // FIXME:
-            field.setAccessible(true);
-            field.set(bean, realValue);
-            field.setAccessible(false);
-        } catch (NumberFormatException e) {
+            propertyDescriptor.getWriteMethod().invoke(bean, realValue);
+        } catch (NumberFormatException | InvocationTargetException e) {
             log.error("Exception occurred when binding int/Integer field! Exception message: {}, value: {}, field: {}",
-                      e.getMessage(), value, field.getName());
+                      e.getMessage(), value, propertyDescriptor.getName());
             val formattedMessage = String.format("Invalid data of the row %d, col %d, must be integer",
                                                  rowLocation.get(), columnLocation.get());
             setErrorMessage(formattedMessage);
@@ -966,27 +968,23 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
 
     /**
      * Bind long field boolean.
-     * <p>
-     * FIXME: Don't use field reflection
      *
-     * @param value the value
-     * @param field the field
-     * @param bean  the bean
+     * @param value              the value
+     * @param propertyDescriptor the property descriptor
+     * @param bean               the bean
      * @return the boolean
      * @throws IllegalAccessException the illegal access exception
      */
-    private Boolean bindLongField(String value, Field field, Object bean) throws IllegalAccessException {
+    private Boolean bindLongField(String value, PropertyDescriptor propertyDescriptor, Object bean) throws IllegalAccessException {
         try {
             var realValue = value == null ? null : (long) Double.parseDouble(value);
-            if (realValue == null && field.getType() == long.class) {
+            if (ObjectUtil.isNull(realValue) && propertyDescriptor.getPropertyType() == long.class) {
                 realValue = 0L;
             }
-            field.setAccessible(true);
-            field.set(bean, realValue);
-            field.setAccessible(false);
-        } catch (NumberFormatException e) {
+            propertyDescriptor.getWriteMethod().invoke(bean, realValue);
+        } catch (NumberFormatException | InvocationTargetException e) {
             log.error("Exception occurred when binding long/Long field! Exception message: {}, value: {}, field: {}",
-                      e.getMessage(), value, field.getName());
+                      e.getMessage(), value, propertyDescriptor.getName());
             val formattedMessage = String.format("Invalid data of the row %d, col %d, must be long integer",
                                                  rowLocation.get(), columnLocation.get());
             setErrorMessage(formattedMessage);
@@ -996,55 +994,24 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
     }
 
     /**
-     * Bind long field boolean.
-     * <p>
-     * FIXME: Don't use field reflection
-     *
-     * @param value the value
-     * @param field the field
-     * @param bean  the bean
-     * @return the boolean
-     * @throws IllegalAccessException the illegal access exception
-     */
-    private Boolean bindLongField(Long value, Field field, Object bean) throws IllegalAccessException {
-        try {
-            field.setAccessible(true);
-            field.set(bean, value);
-            field.setAccessible(false);
-        } catch (IllegalArgumentException e) {
-            log.error("Exception occurred when binding Long field! Exception message: {}, value: {}, field: {}",
-                      e.getMessage(), value, field.getName());
-            val formattedMessage = String.format("Invalid data of the row %d, col %d, must be Long integer",
-                                                 rowLocation.get(), columnLocation.get());
-            setErrorMessage(formattedMessage);
-            throw new IllegalArgumentException(formattedMessage);
-        }
-        return true;
-    }
-
-    /**
      * Bind float field boolean.
-     * <p>
-     * FIXME: Don't use field reflection
      *
-     * @param value the value
-     * @param field the field
-     * @param bean  the bean
+     * @param value              the value
+     * @param propertyDescriptor the property descriptor
+     * @param bean               the bean
      * @return the boolean
      * @throws IllegalAccessException the illegal access exception
      */
-    private Boolean bindFloatField(String value, Field field, Object bean) throws IllegalAccessException {
+    private Boolean bindFloatField(String value, PropertyDescriptor propertyDescriptor, Object bean) throws IllegalAccessException {
         try {
             var realValue = value == null ? null : Float.parseFloat(value);
-            if (realValue == null && field.getType() == float.class) {
+            if (ObjectUtil.isNull(realValue) && propertyDescriptor.getPropertyType() == float.class) {
                 realValue = 0F;
             }
-            field.setAccessible(true);
-            field.set(bean, realValue);
-            field.setAccessible(false);
-        } catch (NumberFormatException e) {
+            propertyDescriptor.getWriteMethod().invoke(bean, realValue);
+        } catch (NumberFormatException | InvocationTargetException e) {
             log.error("Exception occurred when binding float/Float field! Exception message: {}, value: {}, field: {}",
-                      e.getMessage(), value, field.getName());
+                      e.getMessage(), value, propertyDescriptor.getName());
             val formattedMessage = String.format("Invalid data of the row %d, col %d, must be float",
                                                  rowLocation.get(), columnLocation.get());
             setErrorMessage(formattedMessage);
@@ -1055,28 +1022,24 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
 
     /**
      * Bind double field boolean.
-     * <p>
-     * FIXME: Don't use field reflection
      *
-     * @param value the value
-     * @param field the field
-     * @param bean  the bean
+     * @param value              the value
+     * @param propertyDescriptor the property descriptor
+     * @param bean               the bean
      * @return the boolean
      * @throws IllegalAccessException the illegal access exception
      */
-    private Boolean bindDoubleField(String value, Field field, Object bean) throws IllegalAccessException {
+    private Boolean bindDoubleField(String value, PropertyDescriptor propertyDescriptor, Object bean) throws IllegalAccessException {
         try {
             var realValue = value == null ? null : Double.parseDouble(value);
-            if (realValue == null && field.getType() == double.class) {
+            if (ObjectUtil.isNull(realValue) && propertyDescriptor.getPropertyType() == double.class) {
                 realValue = 0D;
             }
-            field.setAccessible(true);
-            field.set(bean, realValue);
-            field.setAccessible(false);
-        } catch (NumberFormatException e) {
+            propertyDescriptor.getWriteMethod().invoke(bean, realValue);
+        } catch (NumberFormatException | InvocationTargetException e) {
             log.error(
                     "Exception occurred when binding double/Double field! Exception message: {}, value: {}, field: {}",
-                    e.getMessage(), value, field.getName());
+                    e.getMessage(), value, propertyDescriptor.getName());
             val formattedMessage = String.format("Invalid data of the row %d, col %d, must be double",
                                                  rowLocation.get(), columnLocation.get());
             setErrorMessage(formattedMessage);
@@ -1087,23 +1050,19 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
 
     /**
      * Bind string field boolean.
-     * <p>
-     * FIXME: Don't use field reflection
      *
-     * @param value the value
-     * @param field the field
-     * @param bean  the bean
+     * @param value              the value
+     * @param propertyDescriptor the property descriptor
+     * @param bean               the bean
      * @return the boolean
      * @throws IllegalAccessException the illegal access exception
      */
-    private Boolean bindStringField(String value, Field field, Object bean) throws IllegalAccessException {
+    private Boolean bindStringField(String value, PropertyDescriptor propertyDescriptor, Object bean) throws IllegalAccessException {
         try {
-            field.setAccessible(true);
-            field.set(bean, value);
-            field.setAccessible(false);
-        } catch (IllegalArgumentException e) {
+            propertyDescriptor.getWriteMethod().invoke(bean, value);
+        } catch (InvocationTargetException e) {
             log.error("Exception occurred when binding String field! Exception message: {}, value: {}, field: {}",
-                      e.getMessage(), value, field.getName());
+                      e.getMessage(), value, propertyDescriptor.getName());
             val formattedMessage = String.format("Invalid data of the row %d, col %d, must be string",
                                                  rowLocation.get(), columnLocation.get());
             setErrorMessage(formattedMessage);
@@ -1113,27 +1072,23 @@ public abstract class AbstractExcelImportController<ExcelImportBeanType> {
     }
 
     /**
-     * Bind LocalDateTime field boolean.
-     * <p>
-     * FIXME: Don't use field reflection
+     * Bind local date time field boolean.
      *
-     * @param value the value
-     * @param field the field
-     * @param bean  the bean
+     * @param value              the value
+     * @param propertyDescriptor the property descriptor
+     * @param bean               the bean
      * @return the boolean
      * @throws IllegalAccessException the illegal access exception
      */
-    private Boolean bindLocalDateTimeField(String value, Field field, Object bean) throws IllegalAccessException {
+    private Boolean bindLocalDateTimeField(String value, PropertyDescriptor propertyDescriptor, Object bean) throws IllegalAccessException {
         try {
             val date = value == null ? null : LocalDateTime.parse(value,
                                                                   DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-            field.setAccessible(true);
-            field.set(bean, date);
-            field.setAccessible(false);
-        } catch (DateTimeParseException e) {
+            propertyDescriptor.getWriteMethod().invoke(bean, date);
+        } catch (DateTimeParseException | InvocationTargetException e) {
             log.error(
                     "Exception occurred when binding LocalDateTime field! Exception message: {}, value: {}, field: {}",
-                    e.getMessage(), value, field.getName());
+                    e.getMessage(), value, propertyDescriptor.getName());
             val formattedMessage = String.format("Invalid data of the row %d, col %d, must be date",
                                                  rowLocation.get(), columnLocation.get());
             setErrorMessage(formattedMessage);
