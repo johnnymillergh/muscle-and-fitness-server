@@ -54,6 +54,26 @@ services:
     networks:
       muscle_and_fitness_network:
 
+  minio:
+    container_name: ${MINIO_CONTAINER_NAME}
+    image: minio/minio:${MINIO_TAG}
+    ports:
+      - "9900:9000"
+    restart: always
+    volumes:
+      - "~/docker-file-mapping/${MINIO_CONTAINER_NAME}/minio:/data"
+    environment:
+      MINIO_ROOT_USER: ${MAF_MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MAF_MINIO_ROOT_PASSWORD}
+    command: server /data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    networks:
+      muscle_and_fitness_network:
+
   rabbitmq:
     container_name: ${RABBITMQ_CONTAINER_NAME}
     hostname: ${RABBITMQ_CONTAINER_NAME}
