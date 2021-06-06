@@ -1,6 +1,7 @@
 package com.jmsoftware.maf.authcenter.user.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.jmsoftware.maf.authcenter.user.entity.GetUserStatusPayload;
 import com.jmsoftware.maf.authcenter.user.entity.UserPersistence;
 import com.jmsoftware.maf.common.domain.authcenter.user.*;
 import com.jmsoftware.maf.common.exception.SecurityException;
@@ -9,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * <h1>UserService</h1>
@@ -53,4 +55,12 @@ public interface UserService extends IService<UserPersistence> {
      * @throws SecurityException the security exception
      */
     boolean logout(HttpServletRequest request) throws SecurityException;
+
+    /**
+     * Gets user status.
+     *
+     * @param payload the payload
+     * @return the user status
+     */
+    String getUserStatus(@Valid @NotNull GetUserStatusPayload payload);
 }

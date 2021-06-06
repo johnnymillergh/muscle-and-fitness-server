@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jmsoftware.maf.authcenter.security.service.JwtService;
+import com.jmsoftware.maf.authcenter.user.entity.GetUserStatusPayload;
 import com.jmsoftware.maf.authcenter.user.entity.UserPersistence;
 import com.jmsoftware.maf.authcenter.user.mapper.UserMapper;
 import com.jmsoftware.maf.authcenter.user.service.UserService;
@@ -15,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * <h1>UserServiceImpl</h1>
@@ -44,7 +45,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserPersistence> im
     private final MessageSource messageSource;
 
     @Override
-    @Cacheable
     public GetUserByLoginTokenResponse getUserByLoginToken(@NotBlank String loginToken) {
         LambdaQueryWrapper<UserPersistence> wrapper = Wrappers.lambdaQuery();
         wrapper.and(queryWrapper -> queryWrapper.eq(UserPersistence::getUsername, loginToken)
@@ -67,7 +67,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserPersistence> im
         userPersistence.setUsername(payload.getUsername());
         userPersistence.setEmail(payload.getEmail());
         userPersistence.setPassword(bCryptPasswordEncoder.encode(payload.getPassword()));
-        userPersistence.setStatus(UserStatus.ENABLED.getStatus());
+        userPersistence.setStatus(UserStatus.ENABLED.getValue());
         this.save(userPersistence);
         log.warn("Saved user for signup. {}", userPersistence);
         val response = new SignupResponse();
@@ -97,5 +97,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserPersistence> im
     public boolean logout(HttpServletRequest request) throws SecurityException {
         jwtService.invalidateJwt(request);
         return true;
+    }
+
+    @Override
+    public String getUserStatus(@Valid @NotNull GetUserStatusPayload payload) {
+        return UserStatus.ofValue(payload.getStatus()).getDescription();
     }
 }

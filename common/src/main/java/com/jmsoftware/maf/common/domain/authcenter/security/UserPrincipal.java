@@ -162,6 +162,6 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return Objects.equals(this.status, UserStatus.ENABLED.getStatus());
+        return Objects.equals(this.status, UserStatus.ENABLED.getValue());
     }
 }

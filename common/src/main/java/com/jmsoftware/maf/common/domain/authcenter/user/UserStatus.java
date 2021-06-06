@@ -19,25 +19,25 @@ public enum UserStatus {
      */
     DISABLED((byte) 0, "Disabled user");
 
-    private final Byte status;
+    private final Byte value;
     private final String description;
 
-    UserStatus(Byte status, String description) {
-        this.status = status;
+    UserStatus(Byte value, String description) {
+        this.value = value;
         this.description = description;
     }
 
     /**
-     * Get user status enum by status value
+     * Get user value enum by value value
      *
-     * @param status status value
-     * @return user status enum
+     * @param value value value
+     * @return user value enum
      */
-    public static UserStatus getByStatus(Byte status) {
+    public static UserStatus ofValue(Byte value) {
         UserStatus result = UserStatus.DISABLED;
         UserStatus[] userStatuses = UserStatus.values();
         for (UserStatus userStatus : userStatuses) {
-            if (userStatus.status.equals(status)) {
+            if (userStatus.value.equals(value)) {
                 result = userStatus;
             }
         }

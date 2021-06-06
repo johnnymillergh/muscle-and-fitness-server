@@ -18,10 +18,10 @@ set -e
 readonly mavenActiveProfile="development-local"
 readonly javaParameter="-Xms256m -Xmx256m -Dfile.encoding=UTF-8 -Dspring.cloud.consul.host=localhost -Dspring.profiles.active=$mavenActiveProfile"
 readonly runServices=(
-  spring-boot-admin
-#  api-portal
+  auth-center
+  api-gateway
 )
-readonly skipGitPull=false
+readonly skipGitPull=true
 readonly skipBuild=false
 # Available options for `startMode`: "keep-previous", "overlap"
 readonly startMode="overlap"
