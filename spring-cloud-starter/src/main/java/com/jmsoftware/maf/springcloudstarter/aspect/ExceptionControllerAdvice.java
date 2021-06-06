@@ -22,6 +22,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolationException;
 import java.util.Objects;
 
 /**
@@ -44,7 +45,7 @@ public class ExceptionControllerAdvice {
      * @return custom exception info
      */
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(value = NoHandlerFoundException.class)
+    @ExceptionHandler(NoHandlerFoundException.class)
     public ResponseBodyBean<?> handleException(HttpServletRequest request, NoHandlerFoundException exception) {
         requestLog(request);
         //  ATTENTION: Use only ResponseBodyBean.ofStatus() in handleException() method and
@@ -55,7 +56,7 @@ public class ExceptionControllerAdvice {
     }
 
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
-    @ExceptionHandler(value = HttpRequestMethodNotSupportedException.class)
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseBodyBean<?> handleException(HttpServletRequest request,
                                                HttpRequestMethodNotSupportedException exception) {
         requestLog(request);
@@ -66,7 +67,7 @@ public class ExceptionControllerAdvice {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseBodyBean<?> handleException(HttpServletRequest request, MethodArgumentNotValidException exception) {
         requestLog(request);
         log.error("Exception occurred when validation on an argument annotated with fails. Exception message: {}",
@@ -76,7 +77,7 @@ public class ExceptionControllerAdvice {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseBodyBean<?> handleException(HttpServletRequest request,
                                                MethodArgumentTypeMismatchException exception) {
         requestLog(request);
@@ -86,14 +87,14 @@ public class ExceptionControllerAdvice {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(value = HttpMessageNotReadableException.class)
+    @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseBodyBean<?> handleException(HttpServletRequest request, HttpMessageNotReadableException exception) {
         requestLog(request);
         log.error("HttpMessageNotReadableException: {}", exception.getMessage());
         return ResponseBodyBean.ofStatus(HttpStatus.BAD_REQUEST, removeLineSeparator(exception.getMessage()));
     }
 
-    @ExceptionHandler(value = BaseException.class)
+    @ExceptionHandler(BaseException.class)
     public ResponseBodyBean<?> handleException(HttpServletRequest request, HttpServletResponse response,
                                                BaseException exception) {
         requestLog(request);
@@ -105,34 +106,51 @@ public class ExceptionControllerAdvice {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(value = BindException.class)
+    @ExceptionHandler(BindException.class)
     public ResponseBodyBean<?> handleException(HttpServletRequest request, BindException exception) {
         requestLog(request);
-        log.error("Exception message: {} ", exception.getMessage());
+        log.error("BindException message: {} ", exception.getMessage());
+        String message;
+        if (exception.hasFieldErrors()) {
+            val fieldError = exception.getFieldError();
+            message = String.format("Field [%s] has error: %s", Objects.requireNonNull(fieldError).getField(),
+                                    fieldError.getDefaultMessage());
+        } else {
+            val globalError = exception.getGlobalError();
+            message = String.format("Bind error: %s", Objects.requireNonNull(globalError).getDefaultMessage());
+        }
+        return ResponseBodyBean.ofStatus(HttpStatus.BAD_REQUEST, message);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseBodyBean<?> handleException(HttpServletRequest request, ConstraintViolationException exception) {
+        requestLog(request);
+        log.error("ConstraintViolationException message: {} ", exception.getMessage());
         return ResponseBodyBean.ofStatus(HttpStatus.BAD_REQUEST, removeLineSeparator(exception.getMessage()));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(value = IllegalArgumentException.class)
+    @ExceptionHandler(IllegalArgumentException.class)
     public ResponseBodyBean<?> handleException(HttpServletRequest request, IllegalArgumentException exception) {
         requestLog(request);
-        log.error("Exception message: {} ", exception.getMessage());
+        log.error("IllegalArgumentException message: {} ", exception.getMessage());
         return ResponseBodyBean.ofStatus(HttpStatus.BAD_REQUEST.value(), removeLineSeparator(exception.getMessage()),
                                          null);
     }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    @ExceptionHandler(value = BadCredentialsException.class)
+    @ExceptionHandler(BadCredentialsException.class)
     public ResponseBodyBean<?> handleException(HttpServletRequest request, BadCredentialsException exception) {
         requestLog(request);
         // IMPORTANT: org.springframework.security.authentication.BadCredentialsException only exists in the project
         // that depends on org.springframework.boot.spring-boot-starter-security
-        log.error("Exception message: {} ", exception.getMessage());
+        log.error("BadCredentialsException message: {} ", exception.getMessage());
         return ResponseBodyBean.ofStatus(HttpStatus.FORBIDDEN.value(), removeLineSeparator(exception.getMessage()),
                                          null);
     }
 
-    @ExceptionHandler(value = InternalAuthenticationServiceException.class)
+    @ExceptionHandler(InternalAuthenticationServiceException.class)
     public ResponseBodyBean<?> handleException(HttpServletRequest request, HttpServletResponse response,
                                                InternalAuthenticationServiceException exception) {
         requestLog(request);
@@ -149,7 +167,7 @@ public class ExceptionControllerAdvice {
                                          null);
     }
 
-    @ExceptionHandler(value = {Throwable.class})
+    @ExceptionHandler(Throwable.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseBodyBean<?> handleError(Throwable ex) {
         log.error("Internal server exception occurred! Exception message: {} ", ex.getMessage(), ex);

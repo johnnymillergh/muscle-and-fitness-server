@@ -1,8 +1,9 @@
-package com.jmsoftware.maf.springcloudstarter.annotation;
+package com.jmsoftware.maf.springcloudstarter.validation.annotation;
 
-import com.jmsoftware.maf.springcloudstarter.validation.EnumValueValidator;
+import com.jmsoftware.maf.springcloudstarter.validation.validator.EnumValueValidator;
 
 import javax.validation.Constraint;
+import javax.validation.Payload;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -26,11 +27,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface ValidEnumValue {
     String message() default "Invalid enumeration value";
 
+    Class<?>[] groups() default {};
+
+    Class<? extends Payload>[] payload() default {};
+
     Class<?> targetEnum() default Class.class;
 
     boolean ignoreNull() default false;
-
-    Class[] groups() default {};
-
-    Class[] payload() default {};
 }

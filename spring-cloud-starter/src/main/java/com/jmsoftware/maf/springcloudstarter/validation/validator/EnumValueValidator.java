@@ -1,7 +1,9 @@
-package com.jmsoftware.maf.springcloudstarter.validation;
+package com.jmsoftware.maf.springcloudstarter.validation.validator;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.jmsoftware.maf.springcloudstarter.annotation.ValidEnumValue;
+import cn.hutool.core.util.ReflectUtil;
+import com.jmsoftware.maf.common.bean.EnumerationBase;
+import com.jmsoftware.maf.springcloudstarter.validation.annotation.ValidEnumValue;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
@@ -21,7 +23,7 @@ import java.util.Objects;
  **/
 @Slf4j
 public class EnumValueValidator implements ConstraintValidator<ValidEnumValue, Number> {
-    private final static String METHOD_NAME = "getValue";
+    private String methodName;
     private ValidEnumValue validEnumValue;
 
     /**
@@ -31,6 +33,8 @@ public class EnumValueValidator implements ConstraintValidator<ValidEnumValue, N
     public void initialize(ValidEnumValue constraintAnnotation) {
         ConstraintValidator.super.initialize(constraintAnnotation);
         validEnumValue = constraintAnnotation;
+        final Method getValue = ReflectUtil.getMethodByName(EnumerationBase.class, "getValue");
+        methodName = getValue.getName();
     }
 
     /**
@@ -50,9 +54,9 @@ public class EnumValueValidator implements ConstraintValidator<ValidEnumValue, N
         val enumConstantArray = enumClass.getEnumConstants();
         Method method;
         try {
-            method = enumClass.getMethod(METHOD_NAME);
+            method = enumClass.getMethod(methodName);
         } catch (NoSuchMethodException | SecurityException e) {
-            log.warn("Did not find the method {} in the class {}", METHOD_NAME, enumClass.getName());
+            log.warn("Did not find the method {} in the class {}", methodName, enumClass.getName());
             return false;
         }
         var validResult = false;
