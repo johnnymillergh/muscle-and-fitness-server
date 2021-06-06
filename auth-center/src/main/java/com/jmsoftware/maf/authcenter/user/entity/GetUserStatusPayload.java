@@ -1,7 +1,8 @@
 package com.jmsoftware.maf.authcenter.user.entity;
 
 import com.jmsoftware.maf.common.domain.authcenter.user.UserStatus;
-import com.jmsoftware.maf.springcloudstarter.annotation.ValidEnumValue;
+import com.jmsoftware.maf.common.domain.authcenter.user.UserStatus2;
+import com.jmsoftware.maf.springcloudstarter.validation.annotation.ValidEnumValue;
 import lombok.Data;
 
 /**
@@ -16,4 +17,6 @@ import lombok.Data;
 public class GetUserStatusPayload {
     @ValidEnumValue(targetEnum = UserStatus.class)
     private Byte status;
+    @ValidEnumValue(targetEnum = UserStatus2.class)
+    private Byte status2;
 }

@@ -10,7 +10,7 @@ import lombok.Getter;
  * @date 2019-03-23 18:48
  **/
 @Getter
-public enum UserStatus implements EnumerationBase<Byte> {
+public enum UserStatus2 implements EnumerationBase<Byte> {
     /**
      * Enabled user
      */
@@ -23,7 +23,7 @@ public enum UserStatus implements EnumerationBase<Byte> {
     private final Byte value;
     private final String description;
 
-    UserStatus(Byte value, String description) {
+    UserStatus2(Byte value, String description) {
         this.value = value;
         this.description = description;
     }
@@ -34,10 +34,10 @@ public enum UserStatus implements EnumerationBase<Byte> {
      * @param value value value
      * @return user value enum
      */
-    public static UserStatus ofValue(Byte value) {
-        UserStatus result = UserStatus.DISABLED;
-        UserStatus[] userStatuses = UserStatus.values();
-        for (UserStatus userStatus : userStatuses) {
+    public static UserStatus2 ofValue(Byte value) {
+        UserStatus2 result = UserStatus2.DISABLED;
+        UserStatus2[] userStatuses = UserStatus2.values();
+        for (UserStatus2 userStatus : userStatuses) {
             if (userStatus.value.equals(value)) {
                 result = userStatus;
             }
