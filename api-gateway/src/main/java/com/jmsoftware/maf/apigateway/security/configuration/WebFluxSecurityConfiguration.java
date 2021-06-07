@@ -44,8 +44,8 @@ public class WebFluxSecurityConfiguration {
     SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http,
                                                 ServerAuthenticationEntryPoint serverAuthenticationEntryPoint,
                                                 ServerAccessDeniedHandler serverAccessDeniedHandler,
-                                                ReactiveAuthenticationManager reactiveAuthenticationManager,
                                                 ServerSecurityContextRepository serverSecurityContextRepository,
+                                                ReactiveAuthenticationManager reactiveAuthenticationManager,
                                                 ReactiveAuthorizationManager<AuthorizationContext> reactiveAuthorizationManager) {
         if (mafConfiguration.getWebSecurityDisabled()) {
             log.warn("Web security was disabled.");
@@ -66,8 +66,8 @@ public class WebFluxSecurityConfiguration {
                 .accessDeniedHandler(serverAccessDeniedHandler)
                 .and()
                 // Authentication
-                .authenticationManager(reactiveAuthenticationManager)
                 .securityContextRepository(serverSecurityContextRepository)
+                .authenticationManager(reactiveAuthenticationManager)
                 .authorizeExchange()
                 .pathMatchers(mafConfiguration.flattenIgnoredUrls()).permitAll()
                 .pathMatchers(HttpMethod.OPTIONS).permitAll()
