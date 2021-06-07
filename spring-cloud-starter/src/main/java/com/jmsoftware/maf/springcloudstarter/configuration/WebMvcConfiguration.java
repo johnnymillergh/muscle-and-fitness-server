@@ -27,6 +27,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
      * @param registry CORS registry
      */
     @Override
+    @SuppressWarnings("BroadCORSAllowOrigin")
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("*")

@@ -60,7 +60,8 @@ import java.util.List;
         WebSecurityConfiguration.class,
         RestTemplateConfiguration.class,
         AsyncConfiguration.class,
-        RabbitmqConfiguration.class
+        RabbitmqConfiguration.class,
+        MinioConfiguration.class
 })
 public class MafAutoConfiguration {
     @PostConstruct
