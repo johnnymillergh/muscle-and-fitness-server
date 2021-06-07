@@ -10,8 +10,8 @@ import java.lang.annotation.*;
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 5/28/2021 4:27 PM
  */
 @Documented
-@Target(value = {ElementType.FIELD})
-@Retention(value = RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface TreeElement {
     TreeElementType type() default TreeElementType.ID;
 }

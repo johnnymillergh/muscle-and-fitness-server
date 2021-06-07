@@ -1,11 +1,14 @@
 package com.jmsoftware.maf.springcloudstarter.aspect;
 
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.exception.BaseException;
 import com.jmsoftware.maf.springcloudstarter.util.RequestUtil;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.apache.ibatis.exceptions.PersistenceException;
+import org.mybatis.spring.MyBatisSystemException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -70,8 +73,7 @@ public class ExceptionControllerAdvice {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseBodyBean<?> handleException(HttpServletRequest request, MethodArgumentNotValidException exception) {
         requestLog(request);
-        log.error("Exception occurred when validation on an argument annotated with fails. Exception message: {}",
-                  exception.getMessage());
+        log.error("MethodArgumentNotValidException message: {}", exception.getMessage());
         return ResponseBodyBean.ofStatus(HttpStatus.BAD_REQUEST.value(), getFieldErrorMessageFromException(exception),
                                          null);
     }
@@ -165,6 +167,37 @@ public class ExceptionControllerAdvice {
         response.setStatus(HttpStatus.FORBIDDEN.value());
         return ResponseBodyBean.ofStatus(HttpStatus.FORBIDDEN.value(), removeLineSeparator(exception.getMessage()),
                                          null);
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(MyBatisSystemException.class)
+    public ResponseBodyBean<?> handleMyBatisSystemException(HttpServletRequest request,
+                                                            MyBatisSystemException exception) {
+        requestLog(request);
+        log.error("MyBatisSystemException message: {}", exception.getMessage());
+        return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR,
+                                         String.format("MyBatisSystemException message: %s",
+                                                       removeLineSeparator(exception.getMessage())));
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(MybatisPlusException.class)
+    public ResponseBodyBean<?> handleMybatisPlusException(HttpServletRequest request, MybatisPlusException exception) {
+        requestLog(request);
+        log.error("MybatisPlusException message: {}", exception.getMessage());
+        return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR,
+                                         String.format("MybatisPlusException message: %s",
+                                                       removeLineSeparator(exception.getMessage())));
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(PersistenceException.class)
+    public ResponseBodyBean<?> handlePersistenceException(HttpServletRequest request, PersistenceException exception) {
+        requestLog(request);
+        log.error("PersistenceException message: {}", exception.getMessage());
+        return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR,
+                                         String.format("PersistenceException message: %s",
+                                                       removeLineSeparator(exception.getMessage())));
     }
 
     @ExceptionHandler(Throwable.class)
