@@ -98,6 +98,10 @@ spring:
         min-idle: 0
 
 feign:
+  httpclient:
+    enabled: false
+  okhttp:
+    enabled: true
   client:
     config:
       default:
