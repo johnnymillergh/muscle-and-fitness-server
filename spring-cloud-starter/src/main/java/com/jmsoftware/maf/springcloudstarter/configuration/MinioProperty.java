@@ -23,6 +23,11 @@ public class MinioProperty {
      */
     public static final String PREFIX = "minio";
     /**
+     * The Enabled.
+     */
+    @NotNull
+    private Boolean enabled = Boolean.FALSE;
+    /**
      * The Endpoint.
      */
     @NotBlank

@@ -35,6 +35,7 @@ maf:
     swagger-disabled: false
 
 minio:
+  enabled: true
   endpoint: http://localhost
   port: 9900
   access-key: maf_minio_root_user
