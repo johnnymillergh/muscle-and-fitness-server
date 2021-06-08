@@ -18,12 +18,10 @@ spring:
     password: maf@rabbitmq
 
 sftp:
-  client:
-    configuration:
-      host: maf-atmoz-sftp-development-docker
-      port: 22
-      user: johnny
-      password: atmoz@sftp
+  host: maf-atmoz-sftp-development-docker
+  port: 22
+  user: johnny
+  password: atmoz@sftp
 
 maf:
   configuration:

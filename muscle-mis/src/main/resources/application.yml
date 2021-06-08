@@ -156,10 +156,9 @@ maf:
     included-package-for-http-api-scan: ${maf.project-property.base-package}
 
 sftp:
-  client:
-    configuration:
-      directory: upload
-      private-key:
-      private-key-pass-phrase:
-      session-cache-size: 20
-      session-wait-timeout: 15000
+  enabled: true
+  directory: upload
+  private-key:
+  private-key-pass-phrase:
+  session-cache-size: 20
+  session-wait-timeout: 15000

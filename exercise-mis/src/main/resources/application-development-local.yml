@@ -18,12 +18,10 @@ spring:
     password: maf@rabbitmq
 
 sftp:
-  client:
-    configuration:
-      host: localhost
-      port: 23
-      user: johnny
-      password: atmoz@sftp
+  host: localhost
+  port: 23
+  user: johnny
+  password: atmoz@sftp
 
 maf:
   configuration:

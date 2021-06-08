@@ -3,6 +3,7 @@ package com.jmsoftware.maf.springcloudstarter.sftp;
 import com.jcraft.jsch.ChannelSftp;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -27,6 +28,7 @@ import java.io.File;
 @Import({
         SftpClientConfiguration.class
 })
+@ConditionalOnProperty({"sftp.enabled"})
 public class SftpConfiguration {
     @Bean
     public SessionFactory<ChannelSftp.LsEntry> sftpSessionFactory(SftpClientConfiguration sftpClientConfiguration) {

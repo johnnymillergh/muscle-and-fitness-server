@@ -19,8 +19,17 @@ import javax.validation.constraints.NotNull;
 @Data
 @Component
 @Validated
-@ConfigurationProperties(prefix = "sftp.client.configuration")
+@ConfigurationProperties(prefix = SftpClientConfiguration.PREFIX)
 public class SftpClientConfiguration {
+    /**
+     * The constant PREFIX.
+     */
+    public static final String PREFIX = "sftp";
+    /**
+     * The Enabled.
+     */
+    @NotNull
+    private Boolean enabled = Boolean.FALSE;
     /**
      * SFTP server IP
      */
