@@ -1,10 +1,8 @@
 package com.jmsoftware.maf.apigateway.security.impl;
 
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
 import com.google.common.collect.Lists;
 import com.jmsoftware.maf.apigateway.remoteapi.AuthCenterRemoteApi;
-import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
 import com.jmsoftware.maf.common.domain.authcenter.permission.PermissionType;
@@ -22,11 +20,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.server.authorization.AuthorizationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -112,6 +108,10 @@ public class RbacReactiveAuthorizationManagerImpl implements ReactiveAuthorizati
                 if (checkRestfulAccess(buttonPermission, request)) {
                     log.info("Authorization success! Resource [{}] {} is accessible for user(username: {})",
                              request.getMethod(), request.getURI(), userPrincipal.getUsername());
+                    request
+                            .mutate()
+                            .headers(httpHeaders -> httpHeaders.set("X-Username", userPrincipal.getUsername()))
+                            .build();
                     return new AuthorizationDecision(true);
                 }
             }

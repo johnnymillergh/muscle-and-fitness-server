@@ -21,6 +21,8 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -101,6 +103,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserPersistence> im
 
     @Override
     public String getUserStatus(@Valid @NotNull GetUserStatusPayload payload) {
+        final ServletRequestAttributes servletRequestAttributes =
+                (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        log.info("getHeader: {}", servletRequestAttributes.getRequest().getHeader("X-Username"));
         return UserStatus.ofValue(payload.getStatus()).getDescription();
     }
 }
