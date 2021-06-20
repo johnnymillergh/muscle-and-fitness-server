@@ -176,12 +176,3 @@ maf:
       ttl: 3600000
 
 # Customize JWT configuration for development environment.
-
-
-sftp:
-  enabled: true
-  directory: upload
-  private-key:
-  private-key-pass-phrase:
-  session-cache-size: 20
-  session-wait-timeout: 15000
