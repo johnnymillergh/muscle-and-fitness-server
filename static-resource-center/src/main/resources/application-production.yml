@@ -1,0 +1,29 @@
+spring:
+  zipkin:
+    base-url: http://maf-zipkin-production:9411
+  devtools:
+    add-properties: false
+  datasource:
+    url: jdbc:mysql://maf-mysql-server-production:3306/muscle_and_fitness?useSSL=true&useUnicode=true
+    username: maf_mysql_rw
+    password: maf@mysql
+  redis:
+    host: maf-redis-production
+    port: 6379
+    password: maf@redis
+  rabbitmq:
+    host: maf-rabbitmq-production
+    port: 5672
+    username: maf_rabbitmq_su
+    password: maf@rabbitmq
+
+maf:
+  configuration:
+    swagger-disabled: true
+
+minio:
+  endpoint: http://maf-mimio-production
+  port: 9900
+  access-key: maf_minio_root_user
+  secret-key: jm@minio
+  bucket-name: maf

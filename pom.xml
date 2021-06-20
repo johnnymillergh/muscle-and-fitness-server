@@ -23,6 +23,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Infrastructure Service. Port range: [8760, n]. -->
+        <static-resource-center.port>8760</static-resource-center.port>
         <spring-boot-admin.port>8761</spring-boot-admin.port>
 
         <!-- Business Service. Port range: [8800, n]. -->
@@ -65,6 +66,7 @@
         <module>auth-center</module>
         <module>exercise-mis</module>
         <module>muscle-mis</module>
+        <module>static-resource-center</module>
     </modules>
 
     <parent>
@@ -128,6 +130,11 @@
             <dependency>
                 <groupId>com.jmsoftware.maf</groupId>
                 <artifactId>universal-ui</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jmsoftware.maf</groupId>
+                <artifactId>static-resource-center</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

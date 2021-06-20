@@ -1,0 +1,29 @@
+spring:
+  zipkin:
+    base-url: http://maf-zipkin-development-docker:9411
+  devtools:
+    add-properties: true
+  datasource:
+    url: jdbc:mysql://maf-mysql-server-development-docker:3306/muscle_and_fitness?useSSL=true&useUnicode=true
+    username: maf_mysql_rw
+    password: maf@mysql
+  redis:
+    host: maf-redis-development-docker
+    port: 6379
+    password: maf@redis
+  rabbitmq:
+    host: maf-rabbitmq-development-docker
+    port: 5672
+    username: maf_rabbitmq_su
+    password: maf@rabbitmq
+
+maf:
+  configuration:
+    swagger-disabled: false
+
+minio:
+  endpoint: http://maf-mimio-development-docker
+  port: 9900
+  access-key: maf_minio_root_user
+  secret-key: jm@minio
+  bucket-name: maf

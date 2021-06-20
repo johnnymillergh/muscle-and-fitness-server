@@ -1,0 +1,34 @@
+spring:
+  zipkin:
+    base-url: http://localhost:9411
+  devtools:
+    add-properties: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/muscle_and_fitness?useSSL=true&useUnicode=true
+    username: maf_mysql_rw
+    password: maf@mysql
+  redis:
+    host: localhost
+    port: 6379
+    password: maf@redis
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: maf_rabbitmq_su
+    password: maf@rabbitmq
+
+logging:
+  # Configure logging level for SFTP/JSCH
+  level:
+    com.jcraft.jsch: INFO
+
+maf:
+  configuration:
+    swagger-disabled: false
+
+minio:
+  endpoint: http://localhost
+  port: 9900
+  access-key: maf_minio_root_user
+  secret-key: jm@minio
+  bucket-name: maf
