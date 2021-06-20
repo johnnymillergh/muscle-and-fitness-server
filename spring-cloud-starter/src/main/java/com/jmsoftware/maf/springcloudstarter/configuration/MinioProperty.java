@@ -50,7 +50,7 @@ public class MinioProperty {
     /**
      * The Secure.
      */
-    private Boolean secure = Boolean.TRUE;
+    private Boolean secure = Boolean.FALSE;
     /**
      * The Bucket name.
      */

@@ -1,7 +1,6 @@
 package com.jmsoftware.maf.springcloudstarter.helper;
 
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.json.JSONUtil;
 import io.minio.*;
 import io.minio.http.Method;
 import io.minio.messages.Bucket;
@@ -61,32 +60,28 @@ public class MinioHelper {
     }
 
     @SneakyThrows
-    public boolean put(@NotBlank String bucketName, @NotBlank String objectName, @NotNull MultipartFile multipartFile) {
-        val objectWriteResponse = minioClient.putObject(
-                PutObjectArgs
-                        .builder().
-                        bucket(bucketName)
+    public ObjectWriteResponse put(@NotBlank String bucketName, @NotBlank String objectName,
+                                   @NotNull MultipartFile multipartFile) {
+        return minioClient.putObject(
+                PutObjectArgs.builder()
+                        .bucket(bucketName)
                         .object(objectName)
                         .stream(multipartFile.getInputStream(), multipartFile.getSize(), -1)
                         .contentType(multipartFile.getContentType())
                         .build());
-        log.info("Put multipart file: {}", JSONUtil.toJsonStr(objectWriteResponse));
-        return true;
     }
 
     @SneakyThrows
-    public boolean putObject(@NotBlank String bucketName, @NotBlank String objectName,
-                             @NotNull InputStream inputStream, @NotBlank String contentType) {
-        val objectWriteResponse = minioClient.putObject(
+    public ObjectWriteResponse putObject(@NotBlank String bucketName, @NotBlank String objectName,
+                                         @NotNull InputStream inputStream, @NotBlank String contentType) {
+        return minioClient.putObject(
                 PutObjectArgs
-                        .builder().
-                        bucket(bucketName)
+                        .builder()
+                        .bucket(bucketName)
                         .object(objectName)
                         .stream(inputStream, inputStream.available(), -1)
                         .contentType(contentType)
                         .build());
-        log.info("Put object: {}", JSONUtil.toJsonStr(objectWriteResponse));
-        return true;
     }
 
     @SneakyThrows
