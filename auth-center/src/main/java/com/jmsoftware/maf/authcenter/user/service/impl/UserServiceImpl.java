@@ -48,7 +48,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserPersistence> im
 
     @Override
     public GetUserByLoginTokenResponse getUserByLoginToken(@NotBlank String loginToken) {
-        LambdaQueryWrapper<UserPersistence> wrapper = Wrappers.lambdaQuery();
+        final LambdaQueryWrapper<UserPersistence> wrapper = Wrappers.lambdaQuery();
         wrapper.and(queryWrapper -> queryWrapper.eq(UserPersistence::getUsername, loginToken)
                 .or()
                 .eq(UserPersistence::getEmail, loginToken)
@@ -83,16 +83,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserPersistence> im
         if (ObjectUtil.isNull(user)) {
             throw new SecurityException(HttpStatus.UNAUTHORIZED);
         }
-        log.info("User: {}", user);
-        boolean matched = bCryptPasswordEncoder.matches(payload.getPassword(), user.getPassword());
-        if (matched) {
-            String jwt = jwtService.createJwt(payload.getRememberMe(), user.getId(), user.getUsername(), null, null);
-            val response = new LoginResponse();
-            response.setGreeting(messageSource.getMessage(("greeting"), null, LocaleContextHolder.getLocale()));
-            response.setJwt(jwt);
-            return response;
+        log.info("User login: {}", user);
+        val matched = bCryptPasswordEncoder.matches(payload.getPassword(), user.getPassword());
+        if (!matched) {
+            throw new SecurityException(HttpStatus.UNAUTHORIZED);
         }
-        throw new SecurityException(HttpStatus.UNAUTHORIZED);
+        val jwt = jwtService.createJwt(payload.getRememberMe(), user.getId(), user.getUsername(), null, null);
+        val response = new LoginResponse();
+        response.setGreeting(messageSource.getMessage(("greeting"), null, LocaleContextHolder.getLocale()));
+        response.setJwt(jwt);
+        return response;
     }
 
     @Override
