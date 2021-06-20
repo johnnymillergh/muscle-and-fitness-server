@@ -1,13 +1,14 @@
-package com.jmsoftware.maf.authcenter.upload.controller;
+package com.jmsoftware.maf.authcenter.write.controller;
 
-import com.jmsoftware.maf.authcenter.upload.service.UploadService;
+import com.jmsoftware.maf.authcenter.write.service.WriteResourceService;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.exception.BusinessException;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 /**
- * <h1>UploadController</h1>
+ * <h1>WriteResourceController</h1>
  * <p>
  * Change description here.
  *
@@ -24,13 +25,15 @@ import java.io.IOException;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/upload")
-public class UploadController {
-    private final UploadService uploadService;
+@Api(tags = {"Write resource API"})
+public class WriteResourceController {
+    private final WriteResourceService writeResourceService;
 
-    @PostMapping("/single")
+    @PostMapping("/upload/single")
     @SneakyThrows({IOException.class, BusinessException.class})
+    @ApiOperation(value = "Upload single resource", notes = "Upload single resource")
     public ResponseBodyBean<String> uploadSingleResource(@RequestParam("file") MultipartFile multipartFile) {
-        return ResponseBodyBean.ofSuccess(uploadService.uploadSingleResource(multipartFile), "Succeed to upload");
+        return ResponseBodyBean.ofSuccess(writeResourceService.uploadSingleResource(multipartFile),
+                                          "Succeed to upload");
     }
 }

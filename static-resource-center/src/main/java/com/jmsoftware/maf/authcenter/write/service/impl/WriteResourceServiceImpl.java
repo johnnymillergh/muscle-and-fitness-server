@@ -1,7 +1,7 @@
-package com.jmsoftware.maf.authcenter.upload.service.impl;
+package com.jmsoftware.maf.authcenter.write.service.impl;
 
 import cn.hutool.core.util.StrUtil;
-import com.jmsoftware.maf.authcenter.upload.service.UploadService;
+import com.jmsoftware.maf.authcenter.write.service.WriteResourceService;
 import com.jmsoftware.maf.common.exception.BusinessException;
 import com.jmsoftware.maf.springcloudstarter.helper.MinioHelper;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 import java.io.IOException;
 
 /**
- * <h1>UploadServiceImpl</h1>
+ * <h1>WriteResourceServiceImpl</h1>
  * <p>
  * Change description here.
  *
@@ -25,7 +25,7 @@ import java.io.IOException;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UploadServiceImpl implements UploadService {
+public class WriteResourceServiceImpl implements WriteResourceService {
     private final MinioHelper minioHelper;
 
     @Override

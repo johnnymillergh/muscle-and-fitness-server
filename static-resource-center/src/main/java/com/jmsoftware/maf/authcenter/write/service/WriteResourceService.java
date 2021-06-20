@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.authcenter.upload.service;
+package com.jmsoftware.maf.authcenter.write.service;
 
 import com.jmsoftware.maf.common.exception.BusinessException;
 import org.springframework.validation.annotation.Validated;
@@ -8,14 +8,14 @@ import javax.validation.constraints.NotNull;
 import java.io.IOException;
 
 /**
- * <h1>UploadService</h1>
+ * <h1>WriteResourceService</h1>
  * <p>
  * Change description here.
  *
  * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com, 6/20/21 2:19 PM
  **/
 @Validated
-public interface UploadService {
+public interface WriteResourceService {
     /**
      * Upload single resource string.
      *
