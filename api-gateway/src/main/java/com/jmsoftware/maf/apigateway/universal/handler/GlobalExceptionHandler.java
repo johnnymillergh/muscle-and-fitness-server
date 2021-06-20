@@ -82,8 +82,9 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
             try {
                 return objectMapper.readValue(exception.getResponseBodyAsString(), ResponseBodyBean.class);
             } catch (JsonProcessingException e) {
-                log.warn("Exception occurred when writing response", e);
-                return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+                log.warn("Exception occurred when writing response. Exception message: {}", e.getMessage());
+                return ResponseBodyBean.ofStatus(exception.getStatusCode(),
+                                                 exception.getResponseBodyAsString(StandardCharsets.UTF_8));
             }
         }
         response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);

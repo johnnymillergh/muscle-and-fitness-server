@@ -1,5 +1,6 @@
 package com.jmsoftware.maf.springcloudstarter.aspect;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
@@ -26,6 +27,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
+import java.lang.reflect.UndeclaredThrowableException;
 import java.util.Objects;
 
 /**
@@ -197,6 +199,20 @@ public class ExceptionControllerAdvice {
         log.error("PersistenceException message: {}", exception.getMessage());
         return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR,
                                          String.format("PersistenceException message: %s",
+                                                       removeLineSeparator(exception.getMessage())));
+    }
+
+    @ExceptionHandler(UndeclaredThrowableException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseBodyBean<?> handleError(UndeclaredThrowableException exception) {
+        log.error("Undeclared throwable exception occurred! Exception message: {} ", exception.getMessage(), exception);
+        if (ObjectUtil.isNotNull(exception.getCause()) && StrUtil.isNotEmpty(exception.getCause().getMessage())) {
+            return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR,
+                                             String.format("Exception message: %s",
+                                                           removeLineSeparator(exception.getCause().getMessage())));
+        }
+        return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR,
+                                         String.format("Exception message: %s",
                                                        removeLineSeparator(exception.getMessage())));
     }
 
