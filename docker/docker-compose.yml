@@ -231,8 +231,6 @@ services:
         condition: service_healthy
       redis:
         condition: service_started
-      atmoz-sftp:
-        condition: service_started
       consul-registry:
         condition: service_started
       rabbitmq:
@@ -264,11 +262,7 @@ services:
     hostname: ${API_GATEWAY_CONTAINER_NAME}
     image: ijohnnymiller/muscle-and-fitness-server.api-gateway:${MAF_TAG}
     depends_on:
-      mysql-server:
-        condition: service_healthy
       redis:
-        condition: service_started
-      atmoz-sftp:
         condition: service_started
       consul-registry:
         condition: service_started
@@ -324,8 +318,6 @@ services:
         condition: service_healthy
       redis:
         condition: service_started
-      atmoz-sftp:
-        condition: service_started
       consul-registry:
         condition: service_started
       rabbitmq:
@@ -353,8 +345,6 @@ services:
       mysql-server:
         condition: service_healthy
       redis:
-        condition: service_started
-      atmoz-sftp:
         condition: service_started
       consul-registry:
         condition: service_started
