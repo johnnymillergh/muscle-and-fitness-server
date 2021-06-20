@@ -12,7 +12,7 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 
 import javax.annotation.PostConstruct;
 
@@ -26,7 +26,7 @@ import javax.annotation.PostConstruct;
  **/
 @Slf4j
 @Configuration
-@EnableSwagger2
+@EnableSwagger2WebMvc
 @RequiredArgsConstructor
 public class Swagger2Configuration {
     private final MafConfiguration mafConfiguration;
