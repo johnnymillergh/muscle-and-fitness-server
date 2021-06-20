@@ -22,12 +22,6 @@ logging:
   level:
     com.jcraft.jsch: INFO
 
-sftp:
-  host: localhost
-  port: 23
-  user: johnny
-  password: atmoz@sftp
-
 maf:
   configuration:
     swagger-disabled: false
