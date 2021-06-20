@@ -86,11 +86,6 @@ maf:
         - "/auth-center/users/logout"
       get:
         - "/favicon.ico"
-        - "/auth/check-username-uniqueness"
-        - "/auth/check-email-uniqueness"
-        - "/auth/validate-username/**"
-        - "/user/get-avatar"
-        - "/common/get-jwt"
       pattern:
         - "/static/**"
         - "/actuator/**"
@@ -100,3 +95,4 @@ maf:
         - "/*/v2/api-docs/**"
         - "/webjars/**"
         - "/doc.html"
+        - "/static-resource-center/**"
