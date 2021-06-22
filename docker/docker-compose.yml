@@ -323,8 +323,6 @@ services:
       minio:
         condition: service_healthy
     restart: always
-    ports:
-      - "8760:8760"
     volumes:
       - "~/docker-file-mapping/${STATIC_RESOURCE_CENTER_CONTAINER_NAME}:/logs"
     environment:
