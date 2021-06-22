@@ -22,8 +22,8 @@ maf:
     swagger-disabled: true
 
 minio:
-  endpoint: http://maf-mimio-stage
-  port: 9900
+  endpoint: http://maf-minio-stage
+  port: 9000
   access-key: maf_minio_root_user
   secret-key: jm@minio
   bucket-name: maf
