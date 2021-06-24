@@ -6,10 +6,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.ResourceRegion;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -33,5 +36,12 @@ public class ReadResourceController {
     public ResponseEntity<Resource> getSingleResource(@PathVariable String bucket, @PathVariable String object,
                                                       @Valid GetSingleResourcePayload payload) {
         return readResourceService.getSingleResource(bucket, object, payload);
+    }
+
+    @GetMapping(value = "/partial/{bucket}/{object}", produces = "application/octet-stream")
+    @ApiOperation(value = "Get a partial resource", notes = "Get a partial resource")
+    public ResponseEntity<ResourceRegion> getPartialResource(@RequestHeader(value = HttpHeaders.RANGE) String rangeHeader,
+                                                             @PathVariable String bucket, @PathVariable String object) {
+        return readResourceService.getResourceRegion(rangeHeader, bucket, object);
     }
 }

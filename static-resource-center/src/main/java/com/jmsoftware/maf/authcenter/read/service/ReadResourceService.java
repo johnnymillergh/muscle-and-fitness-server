@@ -2,12 +2,14 @@ package com.jmsoftware.maf.authcenter.read.service;
 
 import com.jmsoftware.maf.authcenter.read.entity.GetSingleResourcePayload;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.ResourceRegion;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
 
 /**
  * <h1>ReadResourceService</h1>
@@ -19,6 +21,7 @@ import javax.validation.constraints.NotNull;
 @Validated
 public interface ReadResourceService {
     String BUCKET_OBJECT_NAME_REGEX = "^.+/.+$";
+    long CHUNK_SIZE = 1024 * 1024 * 1024 * 4L;
 
     /**
      * Gets single resource.
@@ -30,4 +33,14 @@ public interface ReadResourceService {
      */
     ResponseEntity<Resource> getSingleResource(@NotBlank String bucket, @NotBlank String object,
                                                @Valid @NotNull GetSingleResourcePayload payload);
+
+    /**
+     * Gets resource region.
+     *
+     * @param header the header
+     * @param bucket the bucket
+     * @param object the object
+     * @return the resource region
+     */
+    ResponseEntity<ResourceRegion> getResourceRegion(String header, String bucket, String object);
 }
