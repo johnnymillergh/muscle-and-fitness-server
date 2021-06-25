@@ -4,9 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!-- Sub-module Basics -->
-    <artifactId>muscle-mis</artifactId>
-    <name>Muscle and Fitness Server :: Muscle MIS</name>
-    <description>Muscle Management Information Service.</description>
+    <artifactId>maf-mis</artifactId>
+    <name>Muscle and Fitness Server :: Exercise MIS</name>
+    <description>Exercise Management Information Service.</description>
     <parent>
         <groupId>com.jmsoftware.maf</groupId>
         <artifactId>muscle-and-fitness-server</artifactId>
@@ -71,7 +71,7 @@
                             <jvmFlag>-Dfile.encoding=${project.build.sourceEncoding}</jvmFlag>
                         </jvmFlags>
                         <ports>
-                            <port>${muscle-mis.port}</port>
+                            <port>${maf-mis.port}</port>
                         </ports>
                         <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
                     </container>

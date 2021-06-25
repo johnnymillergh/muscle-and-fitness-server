@@ -1,5 +1,5 @@
 server:
-  port: @exercise-mis.port@
+  port: @maf-mis.port@
   tomcat:
     uri-encoding: @project.build.sourceEncoding@
   shutdown: GRACEFUL

@@ -28,7 +28,7 @@
 
         <!-- Business Service. Port range: [8800, n]. -->
         <auth-center.port>8800</auth-center.port>
-        <exercise-mis.port>8801</exercise-mis.port>
+        <maf-mis.port>8801</maf-mis.port>
         <muscle-mis.port>8802</muscle-mis.port>
 
         <!-- Gateway Service. Port range: [8080, 8080]. -->
@@ -65,8 +65,7 @@
         <module>spring-boot-admin</module>
         <module>api-gateway</module>
         <module>auth-center</module>
-        <module>exercise-mis</module>
-        <module>muscle-mis</module>
+        <module>maf-mis</module>
         <module>static-resource-center</module>
     </modules>
 
@@ -120,12 +119,7 @@
             </dependency>
             <dependency>
                 <groupId>com.jmsoftware.maf</groupId>
-                <artifactId>exercise-mis</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.jmsoftware.maf</groupId>
-                <artifactId>muscle-mis</artifactId>
+                <artifactId>maf-mis</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

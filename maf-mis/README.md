@@ -9,22 +9,22 @@
 [![GitHub repo size](https://img.shields.io/github/repo-size/johnnymillergh/muscle-and-fitness-server.svg)](https://github.com/johnnymillergh/muscle-and-fitness-server)
 [![Twitter](https://img.shields.io/twitter/url/https/github.com/johnnymillergh/muscle-and-fitness-server?style=social)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fjohnnymillergh%2Fmuscle-and-fitness-server)
 
-# Muscle and Fitness Server :: Muscle MIS
+# Muscle and Fitness Server :: Exercise MIS
 
-**Muscle and Fitness Server :: Muscle MIS** full name is Muscle Management Information Service, a sub module of Muscle and Fitness Server (M&F).
+**Muscle and Fitness Server :: Exercise MIS** full name is Exercise Management Information Service, a sub module of Muscle and Fitness Server (M&F).
 
-[Official Docker Image](https://hub.docker.com/r/ijohnnymiller/muscle-and-fitness-server.muscle-mis-prod)
+[Official Docker Image](https://hub.docker.com/r/ijohnnymiller/muslce-and-fitness-server.maf-mis-prod)
 
 ## Features
 
-Here is the highlights of **Muscle MIS**:
+Here is the highlights of **Exercise MIS**:
 
 1. Inherited from the most modern and newest Spring frameworks:
 
    `org.springframework.boot:spring-boot-starter-parent` - [![Spring Boot](https://maven-badges.herokuapp.com/maven-central/org.springframework.boot/spring-boot-starter-parent/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.springframework.boot/spring-boot-starter-parent/)
    `org.springframework.cloud:spring-cloud-dependencies` - [![Spring Cloud](https://maven-badges.herokuapp.com/maven-central/org.springframework.cloud/spring-cloud-dependencies/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.springframework.cloud/spring-cloud-dependencies/)
 
-2. Manage muscle information.
+2. Manage exercise information.
 
 ## Usage
 

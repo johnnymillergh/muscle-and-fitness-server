@@ -337,10 +337,10 @@ services:
     networks:
       muscle_and_fitness_network:
 
-  exercise-mis:
-    container_name: ${EXERCISE_MIS_CONTAINER_NAME}
-    hostname: ${EXERCISE_MIS_CONTAINER_NAME}
-    image: ijohnnymiller/muscle-and-fitness-server.exercise-mis:${MAF_TAG}
+  maf-mis:
+    container_name: ${MAF_MIS_CONTAINER_NAME}
+    hostname: ${MAF_MIS_CONTAINER_NAME}
+    image: ijohnnymiller/muscle-and-fitness-server.maf-mis:${MAF_TAG}
     depends_on:
       mysql-server:
         condition: service_healthy
@@ -352,7 +352,7 @@ services:
         condition: service_healthy
     restart: always
     volumes:
-      - "~/docker-file-mapping/${EXERCISE_MIS_CONTAINER_NAME}:/logs"
+      - "~/docker-file-mapping/${MAF_MIS_CONTAINER_NAME}:/logs"
     environment:
       JAVA_TOOL_OPTIONS: ${JAVA_TOOL_OPTIONS}
       TZ: ${MAF_TIMEZONE}
