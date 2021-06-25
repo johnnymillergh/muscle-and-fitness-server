@@ -37,11 +37,4 @@ public class ReadResourceController {
                                                       @Valid GetSingleResourcePayload payload) {
         return readResourceService.getSingleResource(bucket, object, payload);
     }
-
-    @GetMapping(value = "/partial/{bucket}/{object}", produces = "application/octet-stream")
-    @ApiOperation(value = "Get a partial resource", notes = "Get a partial resource")
-    public ResponseEntity<ResourceRegion> getPartialResource(@RequestHeader(value = HttpHeaders.RANGE) String rangeHeader,
-                                                             @PathVariable String bucket, @PathVariable String object) {
-        return readResourceService.getResourceRegion(rangeHeader, bucket, object);
-    }
 }

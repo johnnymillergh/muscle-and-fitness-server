@@ -138,7 +138,7 @@ public class MinioHelper {
     }
 
     @SneakyThrows
-    public InputStream getObject(@NotBlank String bucketName, @NotBlank String objectName) {
+    public GetObjectResponse getObject(@NotBlank String bucketName, @NotBlank String objectName) {
         if (!bucketExists(bucketName)) {
             return null;
         }
@@ -150,8 +150,8 @@ public class MinioHelper {
     }
 
     @SneakyThrows
-    public InputStream getObject(@NotBlank String bucketName, @NotBlank String objectName, @Min(0L) long offset,
-                                 @NotNull @Min(0L) Long length) {
+    public GetObjectResponse getObject(@NotBlank String bucketName, @NotBlank String objectName, @Min(0L) long offset,
+                                       @NotNull @Min(0L) Long length) {
         if (!bucketExists(bucketName)) {
             return null;
         }

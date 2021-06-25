@@ -33,14 +33,4 @@ public interface ReadResourceService {
      */
     ResponseEntity<Resource> getSingleResource(@NotBlank String bucket, @NotBlank String object,
                                                @Valid @NotNull GetSingleResourcePayload payload);
-
-    /**
-     * Gets resource region.
-     *
-     * @param header the header
-     * @param bucket the bucket
-     * @param object the object
-     * @return the resource region
-     */
-    ResponseEntity<ResourceRegion> getResourceRegion(String header, String bucket, String object);
 }
