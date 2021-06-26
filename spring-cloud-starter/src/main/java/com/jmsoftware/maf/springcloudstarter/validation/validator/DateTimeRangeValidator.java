@@ -23,6 +23,7 @@ import java.util.LinkedList;
  **/
 @Slf4j
 public class DateTimeRangeValidator implements ConstraintValidator<DateTimeRangeConstraints, Object> {
+    private static final int DEFAULT_HASH_MAP_CAPACITY = 8;
     public static final int MAX_GROUP_SIZE = 2;
 
     @Override
@@ -40,7 +41,7 @@ public class DateTimeRangeValidator implements ConstraintValidator<DateTimeRange
                      DateTimeRangeGroup.class.getSimpleName());
             return true;
         }
-        final HashMap<String, LinkedList<Field>> dateTimeRangeGroupMap = CollUtil.newHashMap(fields.length);
+        final HashMap<String, LinkedList<Field>> dateTimeRangeGroupMap = new HashMap<>(DEFAULT_HASH_MAP_CAPACITY);
         for (val field : annotatedFieldSet) {
             val annotation = field.getAnnotation(DateTimeRangeGroup.class);
             if (!dateTimeRangeGroupMap.containsKey(annotation.groupName())) {
@@ -48,7 +49,8 @@ public class DateTimeRangeValidator implements ConstraintValidator<DateTimeRange
             } else {
                 dateTimeRangeGroupMap.get(annotation.groupName()).add(field);
                 if (dateTimeRangeGroupMap.get(annotation.groupName()).size() > MAX_GROUP_SIZE) {
-                    log.error("The length of DateTimeRangeGroup({}) cannot exceed {}!", annotation.groupName(), MAX_GROUP_SIZE);
+                    log.error("The length of DateTimeRangeGroup({}) cannot exceed {}!", annotation.groupName(),
+                              MAX_GROUP_SIZE);
                     return false;
                 }
             }

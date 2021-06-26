@@ -2,6 +2,7 @@ package com.jmsoftware.maf.springcloudstarter.util;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
+import com.google.common.collect.Maps;
 import com.jmsoftware.maf.springcloudstarter.annotation.TreeElement;
 
 import java.beans.BeanInfo;
@@ -21,6 +22,7 @@ import java.util.Objects;
  *
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 5/28/2021 4:27 PM
  */
+@SuppressWarnings("unused")
 public class TreeUtil {
     /**
      * Convert List to Tree
@@ -37,16 +39,14 @@ public class TreeUtil {
             IntrospectionException, InvocationTargetException {
         // Root node collection
         List<T> rootList = new ArrayList<>();
-        HashMap<Object, List<T>> parentIdToTree = CollUtil.newHashMap(list.size());
+        HashMap<Object, List<T>> parentIdToTree = Maps.newHashMap();
         for (final T t : list) {
             Object value = getValue(t, TreeElementType.PARENT_ID);
             if (ObjectUtil.isNotNull(value)) {
                 if (ObjectUtil.isNotNull(parentIdToTree.get(value))) {
                     parentIdToTree.get(value).add(t);
                 } else {
-                    parentIdToTree.put(value, new ArrayList<>() {{
-                        this.add(t);
-                    }});
+                    parentIdToTree.put(value, CollUtil.newArrayList(t));
                 }
                 if (rootNode.equals(value)) {
                     rootList.add(t);
