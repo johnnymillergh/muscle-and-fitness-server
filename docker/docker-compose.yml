@@ -4,8 +4,8 @@ services:
   ################################################################################
   #                           Infrastructure Services                            #
   ################################################################################
-  mysql-server:
-    container_name: ${MYSQL_SERVER_CONTAINER_NAME}
+  mysql-server-master:
+    container_name: ${MYSQL_SERVER_MASTER_CONTAINER_NAME}
     image: mysql/mysql-server:${MYSQL_SERVER_TAG}
     environment:
       MYSQL_ROOT_HOST: "%"
@@ -18,9 +18,41 @@ services:
       - "3306:3306"
     restart: always
     volumes:
-      - "~/docker-file-mapping/${MYSQL_SERVER_CONTAINER_NAME}:/var/lib/mysql"
-      - ./script/mysql-init-script:/docker-entrypoint-initdb.d
-    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+      - "~/docker-file-mapping/${MYSQL_SERVER_MASTER_CONTAINER_NAME}:/var/lib/mysql"
+      - ./config/mysql-server/master/mysql-master.cnf:/etc/my.cnf
+      - ./script/mysql:/docker-entrypoint-initdb.d
+    command: >
+      bash -c "
+      chmod 644 /etc/my.cnf
+      && /entrypoint.sh mysqld
+      "
+    networks:
+      muscle_and_fitness_network:
+
+  mysql-server-slave:
+    container_name: ${MYSQL_SERVER_SLAVE_CONTAINER_NAME}
+    image: mysql/mysql-server:${MYSQL_SERVER_TAG}
+    depends_on:
+      mysql-server-master:
+        condition: service_healthy
+    environment:
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_ROOT_PASSWORD: ${MAF_MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MAF_MYSQL_DATABASE}
+      MYSQL_USER: ${MAF_MYSQL_USER}
+      MYSQL_PASSWORD: ${MAF_MYSQL_PASSWORD}
+    ports:
+      - "3307:3306"
+    restart: always
+    volumes:
+      - "~/docker-file-mapping/${MYSQL_SERVER_SLAVE_CONTAINER_NAME}:/var/lib/mysql"
+      - ./config/mysql-server/slave-1/mysql-slave.cnf:/etc/my.cnf
+      - ./script/mysql:/docker-entrypoint-initdb.d
+    command: >
+      bash -c "
+      chmod 644 /etc/my.cnf
+      && /entrypoint.sh mysqld
+      "
     networks:
       muscle_and_fitness_network:
 
@@ -67,7 +99,7 @@ services:
       MINIO_ROOT_PASSWORD: ${MAF_MINIO_ROOT_PASSWORD}
     command: server /data
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      test: [ "CMD", "curl", "-f", "http://localhost:9000/minio/health/live" ]
       interval: 30s
       timeout: 20s
       retries: 3
@@ -227,7 +259,7 @@ services:
     hostname: ${SPRING_BOOT_ADMIN_CONTAINER_NAME}
     image: ijohnnymiller/muscle-and-fitness-server.spring-boot-admin:${MAF_TAG}
     depends_on:
-      mysql-server:
+      mysql-server-master:
         condition: service_healthy
       redis:
         condition: service_started
@@ -342,7 +374,7 @@ services:
     hostname: ${MAF_MIS_CONTAINER_NAME}
     image: ijohnnymiller/muscle-and-fitness-server.maf-mis:${MAF_TAG}
     depends_on:
-      mysql-server:
+      mysql-server-master:
         condition: service_healthy
       redis:
         condition: service_started
@@ -358,34 +390,6 @@ services:
       TZ: ${MAF_TIMEZONE}
     healthcheck:
       test: "wget localhost:8801/actuator/health -q -O - > /dev/null 2>&1"
-      interval: 20s
-      timeout: 5s
-      retries: 5
-      start_period: 40s
-    networks:
-      muscle_and_fitness_network:
-
-  muscle-mis:
-    container_name: ${MUSCLE_MIS_CONTAINER_NAME}
-    hostname: ${MUSCLE_MIS_CONTAINER_NAME}
-    image: ijohnnymiller/muscle-and-fitness-server.muscle-mis:${MAF_TAG}
-    depends_on:
-      mysql-server:
-        condition: service_healthy
-      redis:
-        condition: service_started
-      consul-registry:
-        condition: service_started
-      rabbitmq:
-        condition: service_healthy
-    restart: always
-    volumes:
-      - "~/docker-file-mapping/${MUSCLE_MIS_CONTAINER_NAME}:/logs"
-    environment:
-      JAVA_TOOL_OPTIONS: ${JAVA_TOOL_OPTIONS}
-      TZ: ${MAF_TIMEZONE}
-    healthcheck:
-      test: "wget localhost:8802/actuator/health -q -O - > /dev/null 2>&1"
       interval: 20s
       timeout: 5s
       retries: 5
