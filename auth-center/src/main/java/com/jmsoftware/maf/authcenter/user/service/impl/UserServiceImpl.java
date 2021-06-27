@@ -2,13 +2,17 @@ package com.jmsoftware.maf.authcenter.user.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jmsoftware.maf.authcenter.security.service.JwtService;
+import com.jmsoftware.maf.authcenter.user.entity.GetUserPageListPayload;
 import com.jmsoftware.maf.authcenter.user.entity.GetUserStatusPayload;
 import com.jmsoftware.maf.authcenter.user.entity.persistence.User;
 import com.jmsoftware.maf.authcenter.user.mapper.UserMapper;
 import com.jmsoftware.maf.authcenter.user.service.UserService;
+import com.jmsoftware.maf.common.bean.PageResponseBodyBean;
 import com.jmsoftware.maf.common.domain.authcenter.user.*;
 import com.jmsoftware.maf.common.exception.SecurityException;
 import lombok.RequiredArgsConstructor;
@@ -106,5 +110,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         log.info("getHeader: {}", servletRequestAttributes.getRequest().getHeader("X-Username"));
         return UserStatus.ofValue(payload.getStatus()).getDescription();
+    }
+
+    @Override
+    public PageResponseBodyBean<User> getUserPageList(@Valid @NotNull GetUserPageListPayload payload) {
+        val page = new Page<User>(payload.getCurrentPage(), payload.getPageSize());
+        val queryWrapper = Wrappers.lambdaQuery(User.class);
+        if (StrUtil.isNotBlank(payload.getUsername())) {
+            queryWrapper.like(User::getUsername, payload.getUsername());
+        }
+        final var page1 = this.page(page, queryWrapper);
+        return PageResponseBodyBean.ofSuccess(page1.getRecords(), page1.getTotal());
     }
 }

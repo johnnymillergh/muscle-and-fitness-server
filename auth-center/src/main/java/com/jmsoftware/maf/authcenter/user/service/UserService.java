@@ -1,8 +1,10 @@
 package com.jmsoftware.maf.authcenter.user.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.jmsoftware.maf.authcenter.user.entity.GetUserPageListPayload;
 import com.jmsoftware.maf.authcenter.user.entity.GetUserStatusPayload;
 import com.jmsoftware.maf.authcenter.user.entity.persistence.User;
+import com.jmsoftware.maf.common.bean.PageResponseBodyBean;
 import com.jmsoftware.maf.common.domain.authcenter.user.*;
 import com.jmsoftware.maf.common.exception.SecurityException;
 import org.springframework.validation.annotation.Validated;
@@ -17,8 +19,7 @@ import javax.validation.constraints.NotNull;
  * <p>
  * Service of UserPersistence.(UserPersistence)
  *
- * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com
- * @date 5 /10/20 12:31 PM
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 5/10/20 12:31 PM
  */
 @Validated
 public interface UserService extends IService<User> {
@@ -63,4 +64,12 @@ public interface UserService extends IService<User> {
      * @return the user status
      */
     String getUserStatus(@Valid @NotNull GetUserStatusPayload payload);
+
+    /**
+     * Gets user page list.
+     *
+     * @param payload the payload
+     * @return the user page list
+     */
+    PageResponseBodyBean<User> getUserPageList(@Valid @NotNull GetUserPageListPayload payload);
 }

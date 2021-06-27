@@ -1,5 +1,6 @@
 package com.jmsoftware.maf.common.bean;
 
+import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
@@ -49,10 +50,26 @@ public class PaginationBase {
     @JsonIgnore
     private String orderByStatement;
 
+    @JsonIgnore
     public String getOrderByStatement() {
         if (!StrUtil.isBlank(orderBy)) {
             return String.format("%s %s %s", "ORDER BY", orderBy, orderRule);
         }
         return orderByStatement;
+    }
+
+    /**
+     * Has next page boolean.
+     *
+     * @param pageResponseBodyBean the page response body bean
+     * @return the boolean
+     * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 6/27/2021 4:37 PM
+     */
+    public boolean hasNextPage(@NotNull PageResponseBodyBean<?> pageResponseBodyBean) {
+        if (NumberUtil.compare(pageResponseBodyBean.getTotal(), (long) currentPage * pageSize) > 0) {
+            currentPage += 1;
+            return true;
+        }
+        return false;
     }
 }
