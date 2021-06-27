@@ -6,7 +6,6 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
@@ -17,7 +16,6 @@ import org.springframework.web.client.RestTemplate;
  * @author 钟俊（zhongjun）, email: zhongjun@toguide.cn, date: 1/29/2021 4:29 PM
  **/
 @Slf4j
-@Configuration
 public class RestTemplateConfiguration {
     @Bean
     @LoadBalanced

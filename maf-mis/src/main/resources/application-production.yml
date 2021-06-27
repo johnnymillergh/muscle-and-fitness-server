@@ -4,9 +4,18 @@ spring:
   devtools:
     add-properties: false
   datasource:
-    url: jdbc:mysql://maf-mysql-server-master-production:3306/muscle_and_fitness?useSSL=true&useUnicode=true
-    username: maf_mysql_rw
-    password: maf@mysql
+    dynamic:
+      datasource:
+        master:
+          url: jdbc:mysql://maf-mysql-server-master-production:3306/muscle_and_fitness?useSSL=true&useUnicode=true
+          username: maf_mysql_rw
+          password: maf@mysql
+          driver-class-name: com.mysql.cj.jdbc.Driver
+        slave1:
+          url: jdbc:mysql://maf-mysql-server-slave-production:3306/muscle_and_fitness?useSSL=true&useUnicode=true
+          username: maf_mysql_r
+          password: maf@mysql
+          driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
     host: maf-redis-production
     port: 6379

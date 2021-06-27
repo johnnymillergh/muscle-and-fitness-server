@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.info.BuildProperties;
-import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
 import javax.annotation.PostConstruct;
@@ -20,7 +19,6 @@ import javax.validation.constraints.NotBlank;
 @Data
 @Slf4j
 @Validated
-@Component
 @SuppressWarnings("jol")
 @ConfigurationProperties(prefix = "maf.project-property")
 public class MafProjectProperty {

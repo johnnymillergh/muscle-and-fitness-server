@@ -3,8 +3,8 @@ package com.jmsoftware.maf.springcloudstarter.redis;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.redis.connection.ReactiveRedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -23,11 +23,11 @@ import javax.annotation.PostConstruct;
  * @author 钟俊（zhongjun）, email: zhongjun@toguide.cn, date: 12/30/2020 1:08 PM
  **/
 @Slf4j
-@Configuration
 @RequiredArgsConstructor
 @Import({
         RedisCachingConfiguration.class
 })
+@ConditionalOnClass({RedisConnectionFactory.class})
 public class RedisConfiguration {
     private final ObjectMapper objectMapper;
 

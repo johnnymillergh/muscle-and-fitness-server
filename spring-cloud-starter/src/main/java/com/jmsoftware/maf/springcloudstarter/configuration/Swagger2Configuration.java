@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -25,7 +24,6 @@ import javax.annotation.PostConstruct;
  * @date 2019-02-07 16:15
  **/
 @Slf4j
-@Configuration
 @EnableSwagger2WebMvc
 @RequiredArgsConstructor
 public class Swagger2Configuration {

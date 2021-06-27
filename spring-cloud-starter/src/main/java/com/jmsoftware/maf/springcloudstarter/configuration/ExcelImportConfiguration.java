@@ -1,23 +1,14 @@
 package com.jmsoftware.maf.springcloudstarter.configuration;
 
-import cn.hutool.core.util.ObjectUtil;
-import com.google.common.collect.Lists;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
 import javax.annotation.PostConstruct;
-import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * <h1>CustomConfiguration</h1>
@@ -30,7 +21,6 @@ import java.util.List;
 @Data
 @Slf4j
 @Validated
-@Component
 @RefreshScope
 @ConfigurationProperties(prefix = "maf.configuration.excel")
 public class ExcelImportConfiguration {

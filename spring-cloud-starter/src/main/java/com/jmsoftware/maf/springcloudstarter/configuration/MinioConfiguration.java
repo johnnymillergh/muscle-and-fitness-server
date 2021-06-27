@@ -4,9 +4,7 @@ import com.jmsoftware.maf.springcloudstarter.helper.MinioHelper;
 import io.minio.MinioClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 /**
@@ -17,7 +15,6 @@ import org.springframework.context.annotation.Import;
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 6/7/21 9:58 PM
  **/
 @Slf4j
-@Configuration
 @Import({
         MinioProperty.class
 })

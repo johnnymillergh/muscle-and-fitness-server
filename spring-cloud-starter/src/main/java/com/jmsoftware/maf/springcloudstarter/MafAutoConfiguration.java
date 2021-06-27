@@ -1,6 +1,8 @@
 package com.jmsoftware.maf.springcloudstarter;
 
-import com.jmsoftware.maf.springcloudstarter.aspect.ExceptionControllerAdvice;
+import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
+import com.jmsoftware.maf.springcloudstarter.aspect.CommonExceptionControllerAdvice;
+import com.jmsoftware.maf.springcloudstarter.aspect.DatabaseExceptionControllerAdvice;
 import com.jmsoftware.maf.springcloudstarter.aspect.WebRequestLogAspect;
 import com.jmsoftware.maf.springcloudstarter.configuration.*;
 import com.jmsoftware.maf.springcloudstarter.controller.CommonController;
@@ -17,10 +19,9 @@ import com.jmsoftware.maf.springcloudstarter.service.CommonService;
 import com.jmsoftware.maf.springcloudstarter.service.impl.CommonServiceImpl;
 import com.jmsoftware.maf.springcloudstarter.sftp.SftpConfiguration;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
-import org.springframework.boot.autoconfigure.condition.SearchStrategy;
+import org.apache.ibatis.exceptions.PersistenceException;
+import org.mybatis.spring.MyBatisSystemException;
+import org.springframework.boot.autoconfigure.condition.*;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolver;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -71,9 +72,16 @@ public class MafAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public ExceptionControllerAdvice exceptionControllerAdvice() {
-        log.warn("Initial bean: '{}'", ExceptionControllerAdvice.class.getSimpleName());
-        return new ExceptionControllerAdvice();
+    public CommonExceptionControllerAdvice exceptionControllerAdvice() {
+        log.warn("Initial bean: '{}'", CommonExceptionControllerAdvice.class.getSimpleName());
+        return new CommonExceptionControllerAdvice();
+    }
+
+    @Bean
+    @ConditionalOnClass({MyBatisSystemException.class, MybatisPlusException.class, PersistenceException.class})
+    public DatabaseExceptionControllerAdvice databaseExceptionControllerAdvice() {
+        log.warn("Initial bean: '{}'", DatabaseExceptionControllerAdvice.class.getSimpleName());
+        return new DatabaseExceptionControllerAdvice();
     }
 
     @Bean

@@ -1,7 +1,6 @@
 package com.jmsoftware.maf.springcloudstarter.configuration;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -13,7 +12,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 1/23/20 9:02 AM
  **/
-@Configuration
 @RequiredArgsConstructor
 public class WebMvcConfiguration implements WebMvcConfigurer {
     /**
