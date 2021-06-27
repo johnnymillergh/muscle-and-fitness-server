@@ -11,6 +11,7 @@ import lombok.val;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.lang.reflect.Field;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -63,20 +64,30 @@ public class DateTimeRangeValidator implements ConstraintValidator<DateTimeRange
                 return false;
             }
             val dateTimeRangeGroup = fieldList.get(0).getAnnotation(DateTimeRangeGroup.class);
-            Date startTime = null, endTime = null;
+            Object startTime = null, endTime = null;
             switch (dateTimeRangeGroup.type()) {
                 case START_TIME:
-                    startTime = (Date) ReflectUtil.getFieldValue(value, fieldList.get(0));
-                    endTime = (Date) ReflectUtil.getFieldValue(value, fieldList.get(1));
+                    startTime = ReflectUtil.getFieldValue(value, fieldList.get(0));
+                    endTime = ReflectUtil.getFieldValue(value, fieldList.get(1));
                     break;
                 case END_TIME:
-                    startTime = (Date) ReflectUtil.getFieldValue(value, fieldList.get(1));
-                    endTime = (Date) ReflectUtil.getFieldValue(value, fieldList.get(0));
+                    startTime = ReflectUtil.getFieldValue(value, fieldList.get(1));
+                    endTime = ReflectUtil.getFieldValue(value, fieldList.get(0));
                     break;
                 default:
             }
-            if (ObjectUtil.isAllNotEmpty(startTime, endTime) && startTime.after(endTime)) {
-                return false;
+            if (ObjectUtil.hasNull(startTime, endTime)) {
+                return true;
+            }
+            if (startTime instanceof Date && endTime instanceof Date) {
+                if (((Date) startTime).after((Date) endTime)) {
+                    return false;
+                }
+            }
+            if (startTime instanceof LocalDateTime && endTime instanceof LocalDateTime) {
+                if (((LocalDateTime) startTime).isAfter((LocalDateTime) endTime)) {
+                    return false;
+                }
             }
         }
         return true;

@@ -2,7 +2,7 @@ package com.jmsoftware.maf.springcloudstarter.configuration;
 
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.StrUtil;
-import com.jmsoftware.maf.springcloudstarter.constant.UniversalDateTime;
+import com.jmsoftware.maf.common.constant.UniversalDateTime;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;

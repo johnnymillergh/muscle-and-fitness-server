@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.springcloudstarter.constant;
+package com.jmsoftware.maf.common.constant;
 
 /**
  * Description: UniversalDateTime, change description here.
