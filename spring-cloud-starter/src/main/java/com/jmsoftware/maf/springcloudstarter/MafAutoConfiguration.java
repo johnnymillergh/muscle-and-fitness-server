@@ -87,22 +87,19 @@ public class MafAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean
-    @ConditionalOnProperty(value = "maf.configuration.web-request-log-disabled", havingValue = "false")
+    @ConditionalOnProperty(value = "maf.configuration.web-request-log-enabled")
     public WebRequestLogAspect webRequestLogAspect() {
         log.warn("Initial bean: '{}'", WebRequestLogAspect.class.getSimpleName());
         return new WebRequestLogAspect();
     }
 
     @Bean
-    @ConditionalOnMissingBean
     public RedirectController redirectController() {
         log.warn("Initial bean: '{}'", RedirectController.class.getSimpleName());
         return new RedirectController();
     }
 
     @Bean
-    @ConditionalOnMissingBean
     public AccessLogFilter requestFilter(MafConfiguration mafConfiguration) {
         log.warn("Initial bean: '{}'", AccessLogFilter.class.getSimpleName());
         return new AccessLogFilter(mafConfiguration);

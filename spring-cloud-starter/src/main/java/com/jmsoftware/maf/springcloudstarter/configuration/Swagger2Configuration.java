@@ -59,7 +59,7 @@ public class Swagger2Configuration {
     public Docket docket(MafProjectProperty mafProjectProperty) {
         log.warn("Initial bean: '{}'", Docket.class.getSimpleName());
         return new Docket(DocumentationType.SWAGGER_2)
-                .enable(!mafConfiguration.getSwaggerDisabled())
+                .enable(mafConfiguration.getSwaggerEnabled())
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.basePackage(mafProjectProperty.getBasePackage()))

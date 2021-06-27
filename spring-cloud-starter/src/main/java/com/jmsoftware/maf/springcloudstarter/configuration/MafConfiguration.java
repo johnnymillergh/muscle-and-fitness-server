@@ -42,28 +42,28 @@ public class MafConfiguration {
     @Valid
     private IgnoredUrl ignoredUrl;
     /**
-     * <p>Web security feature switch. Default is false.</p>
+     * <p>Web security feature switch. Default is true.</p>
      * true - disable web security; false - enable web security.
      */
     @NotNull
-    private Boolean webSecurityDisabled = false;
+    private Boolean webSecurityEnabled = Boolean.TRUE;
     /**
-     * Web request log switch. Default is false.
+     * Web request log switch. Default is true.
      * <p>
      * true - disable web request log; false - enable web request log.
      */
     @NotNull
-    private Boolean webRequestLogDisabled = false;
+    private Boolean webRequestLogEnabled = Boolean.TRUE;
     /**
      * Included package for http api scan, could be base package
      */
     @NotBlank
     private String includedPackageForHttpApiScan;
     /**
-     * Swagger disabled. true: disabled; false: enabled.
+     * Swagger switch. true: enabled; false: disabled.
      */
     @NotNull
-    private Boolean swaggerDisabled = false;
+    private Boolean swaggerEnabled = Boolean.TRUE;
 
     /**
      * Flatten ignored urls string [ ].

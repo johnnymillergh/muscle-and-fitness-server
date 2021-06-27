@@ -28,4 +28,4 @@ spring:
 
 maf:
   configuration:
-    swagger-disabled: true
+    swagger-enabled: true

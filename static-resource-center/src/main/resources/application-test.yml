@@ -28,7 +28,7 @@ spring:
 
 maf:
   configuration:
-    swagger-disabled: false
+    swagger-enabled: false
 
 minio:
   endpoint: http://maf-minio-test

@@ -6,5 +6,5 @@ spring:
 
 maf:
   configuration:
-    swagger-disabled: false
+    swagger-enabled: false
 
