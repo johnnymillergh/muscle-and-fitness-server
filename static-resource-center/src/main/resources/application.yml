@@ -40,7 +40,6 @@ spring:
         ip-address: ${spring.cloud.client.ip-address}
         health-check-critical-timeout: 15s
   datasource:
-    name: muscle_and_fitness
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
