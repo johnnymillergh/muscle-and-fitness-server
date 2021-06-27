@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jmsoftware.maf.authcenter.permission.mapper.PermissionMapper">
-    <resultMap id="BaseResultMap" type="com.jmsoftware.maf.authcenter.permission.entity.PermissionPersistence">
+    <resultMap id="BaseResultMap" type="com.jmsoftware.maf.authcenter.permission.entity.persistence.Permission">
         <!--@mbg.generated-->
         <!--@Table permission-->
         <id column="id" jdbcType="BIGINT" property="id"/>
@@ -12,15 +12,17 @@
         <result column="method" jdbcType="OTHER" property="method"/>
         <result column="sort" jdbcType="INTEGER" property="sort"/>
         <result column="parent_id" jdbcType="BIGINT" property="parentId"/>
-        <result column="deleted" jdbcType="TINYINT" property="deleted"/>
+        <result column="created_by" jdbcType="BIGINT" property="createdBy"/>
         <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="modified_by" jdbcType="BIGINT" property="modifiedBy"/>
         <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
+        <result column="deleted" jdbcType="TINYINT" property="deleted"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        id, url, description, `type`, permission_expression, `method`, sort, parent_id, deleted,
-        created_time, modified_time
+        id, url, description, `type`, permission_expression, `method`, sort, parent_id,
+        created_by, created_time, modified_by, modified_time, deleted
     </sql>
 
     <select id="selectPermissionListByRoleIdList" resultMap="BaseResultMap">

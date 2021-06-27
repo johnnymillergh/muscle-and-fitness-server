@@ -1,6 +1,6 @@
-package com.jmsoftware.maf.exercisemis.exercise.service;
+package com.jmsoftware.maf.mafmis.exercise.service;
 
-import com.jmsoftware.maf.exercisemis.exercise.domain.ExercisePo;
+import com.jmsoftware.maf.mafmis.exercise.domain.ExercisePo;
 
 import java.util.List;
 

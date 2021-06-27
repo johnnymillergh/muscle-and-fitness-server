@@ -1,8 +1,8 @@
-package com.jmsoftware.maf.exercisemis.exercise.mapper;
+package com.jmsoftware.maf.mafmis.exercise.mapper;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.jmsoftware.maf.exercisemis.exercise.domain.ExercisePo;
+import com.jmsoftware.maf.mafmis.exercise.domain.ExercisePo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

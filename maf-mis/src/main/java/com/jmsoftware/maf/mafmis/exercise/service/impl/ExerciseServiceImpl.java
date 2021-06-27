@@ -1,11 +1,11 @@
-package com.jmsoftware.maf.exercisemis.exercise.service.impl;
+package com.jmsoftware.maf.mafmis.exercise.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jmsoftware.maf.common.exception.BusinessException;
-import com.jmsoftware.maf.exercisemis.exercise.domain.ExercisePo;
-import com.jmsoftware.maf.exercisemis.exercise.mapper.ExerciseMapper;
-import com.jmsoftware.maf.exercisemis.exercise.service.ExerciseService;
+import com.jmsoftware.maf.mafmis.exercise.domain.ExercisePo;
+import com.jmsoftware.maf.mafmis.exercise.mapper.ExerciseMapper;
+import com.jmsoftware.maf.mafmis.exercise.service.ExerciseService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;

@@ -1,10 +1,10 @@
-package com.jmsoftware.maf.exercisemis.exercise.controller;
+package com.jmsoftware.maf.mafmis.exercise.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
-import com.jmsoftware.maf.exercisemis.exercise.domain.ExercisePo;
-import com.jmsoftware.maf.exercisemis.exercise.domain.GetPageListPayload;
-import com.jmsoftware.maf.exercisemis.exercise.service.ExerciseService;
+import com.jmsoftware.maf.mafmis.exercise.domain.ExercisePo;
+import com.jmsoftware.maf.mafmis.exercise.domain.GetPageListPayload;
+import com.jmsoftware.maf.mafmis.exercise.service.ExerciseService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;

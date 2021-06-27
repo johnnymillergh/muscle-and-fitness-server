@@ -1,7 +1,7 @@
 package com.jmsoftware.maf.authcenter.user.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.jmsoftware.maf.authcenter.user.entity.UserPersistence;
+import com.jmsoftware.maf.authcenter.user.entity.persistence.User;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -13,5 +13,5 @@ import org.apache.ibatis.annotations.Mapper;
  * @date 5 /10/20 12:17 PM
  */
 @Mapper
-public interface UserMapper extends BaseMapper<UserPersistence> {
+public interface UserMapper extends BaseMapper<User> {
 }

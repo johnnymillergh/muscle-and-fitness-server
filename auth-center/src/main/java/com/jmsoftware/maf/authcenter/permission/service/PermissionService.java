@@ -2,7 +2,7 @@ package com.jmsoftware.maf.authcenter.permission.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jmsoftware.maf.authcenter.permission.entity.GetServicesInfoResponse;
-import com.jmsoftware.maf.authcenter.permission.entity.PermissionPersistence;
+import com.jmsoftware.maf.authcenter.permission.entity.persistence.Permission;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
 import com.jmsoftware.maf.common.domain.authcenter.permission.PermissionType;
@@ -22,7 +22,7 @@ import java.util.List;
  * @date 5 /11/20 8:34 AM
  */
 @Validated
-public interface PermissionService extends IService<PermissionPersistence> {
+public interface PermissionService extends IService<Permission> {
     /**
      * Gets permission list by role id list.
      *
@@ -38,8 +38,8 @@ public interface PermissionService extends IService<PermissionPersistence> {
      * @param permissionTypeList the permission type list
      * @return the permission list by role id list
      */
-    List<PermissionPersistence> getPermissionListByRoleIdList(@NotEmpty List<Long> roleIdList,
-                                                              @NotEmpty List<PermissionType> permissionTypeList);
+    List<Permission> getPermissionListByRoleIdList(@NotEmpty List<Long> roleIdList,
+                                                   @NotEmpty List<PermissionType> permissionTypeList);
 
     /**
      * Gets services info.

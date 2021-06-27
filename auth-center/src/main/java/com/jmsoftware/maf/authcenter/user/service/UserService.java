@@ -2,7 +2,7 @@ package com.jmsoftware.maf.authcenter.user.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jmsoftware.maf.authcenter.user.entity.GetUserStatusPayload;
-import com.jmsoftware.maf.authcenter.user.entity.UserPersistence;
+import com.jmsoftware.maf.authcenter.user.entity.persistence.User;
 import com.jmsoftware.maf.common.domain.authcenter.user.*;
 import com.jmsoftware.maf.common.exception.SecurityException;
 import org.springframework.validation.annotation.Validated;
@@ -21,7 +21,7 @@ import javax.validation.constraints.NotNull;
  * @date 5 /10/20 12:31 PM
  */
 @Validated
-public interface UserService extends IService<UserPersistence> {
+public interface UserService extends IService<User> {
     /**
      * Gets user by login token.
      *

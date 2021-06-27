@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jmsoftware.maf.authcenter.permission.configuration.PermissionConfiguration;
 import com.jmsoftware.maf.authcenter.permission.entity.GetServicesInfoResponse;
-import com.jmsoftware.maf.authcenter.permission.entity.PermissionPersistence;
+import com.jmsoftware.maf.authcenter.permission.entity.persistence.Permission;
 import com.jmsoftware.maf.authcenter.permission.mapper.PermissionMapper;
 import com.jmsoftware.maf.authcenter.permission.service.PermissionService;
 import com.jmsoftware.maf.authcenter.role.service.RoleService;
@@ -39,7 +39,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, PermissionPersistence> implements PermissionService {
+public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permission> implements PermissionService {
     private final RoleService roleService;
     private final DiscoveryClient discoveryClient;
     private final RestTemplate restTemplate;
@@ -70,8 +70,8 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     }
 
     @Override
-    public List<PermissionPersistence> getPermissionListByRoleIdList(@NotEmpty List<Long> roleIdList,
-                                                                     @NotEmpty List<PermissionType> permissionTypeList) {
+    public List<Permission> getPermissionListByRoleIdList(@NotEmpty List<Long> roleIdList,
+                                                          @NotEmpty List<PermissionType> permissionTypeList) {
         return this.getBaseMapper().selectPermissionListByRoleIdList(roleIdList, permissionTypeList);
     }
 

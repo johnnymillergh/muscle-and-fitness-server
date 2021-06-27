@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.exercisemis.exercise.domain;
+package com.jmsoftware.maf.mafmis.exercise.domain;
 
 import com.jmsoftware.maf.common.bean.PaginationBase;
 import lombok.Data;

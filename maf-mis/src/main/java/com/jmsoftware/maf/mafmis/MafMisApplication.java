@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.exercisemis;
+package com.jmsoftware.maf.mafmis;
 
 import com.jmsoftware.maf.springcloudstarter.helper.SpringBootStartupHelper;
 import lombok.extern.slf4j.Slf4j;

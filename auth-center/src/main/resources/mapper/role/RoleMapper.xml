@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jmsoftware.maf.authcenter.role.mapper.RoleMapper">
-    <resultMap id="BaseResultMap" type="com.jmsoftware.maf.authcenter.role.entity.RolePersistence">
+    <resultMap id="BaseResultMap" type="com.jmsoftware.maf.authcenter.role.entity.persistence.Role">
         <!--@mbg.generated-->
         <!--@Table `role`-->
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="description" jdbcType="VARCHAR" property="description"/>
-        <result column="deleted" jdbcType="TINYINT" property="deleted"/>
+        <result column="created_by" jdbcType="BIGINT" property="createdBy"/>
         <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="modified_by" jdbcType="BIGINT" property="modifiedBy"/>
         <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
+        <result column="deleted" jdbcType="TINYINT" property="deleted"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        id, `name`, description, deleted, created_time, modified_time
+        id, `name`, description, created_by, created_time, modified_by, modified_time, deleted
     </sql>
 
     <select id="selectRoleListByUserId" resultMap="BaseResultMap">

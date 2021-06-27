@@ -2,12 +2,11 @@ package com.jmsoftware.maf.authcenter.user.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jmsoftware.maf.authcenter.security.service.JwtService;
 import com.jmsoftware.maf.authcenter.user.entity.GetUserStatusPayload;
-import com.jmsoftware.maf.authcenter.user.entity.UserPersistence;
+import com.jmsoftware.maf.authcenter.user.entity.persistence.User;
 import com.jmsoftware.maf.authcenter.user.mapper.UserMapper;
 import com.jmsoftware.maf.authcenter.user.service.UserService;
 import com.jmsoftware.maf.common.domain.authcenter.user.*;
@@ -41,19 +40,19 @@ import javax.validation.constraints.NotNull;
 @Service
 @RequiredArgsConstructor
 @CacheConfig(cacheNames = "user-service-cache")
-public class UserServiceImpl extends ServiceImpl<UserMapper, UserPersistence> implements UserService {
+public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtService jwtService;
     private final MessageSource messageSource;
 
     @Override
     public GetUserByLoginTokenResponse getUserByLoginToken(@NotBlank String loginToken) {
-        final LambdaQueryWrapper<UserPersistence> wrapper = Wrappers.lambdaQuery();
-        wrapper.and(queryWrapper -> queryWrapper.eq(UserPersistence::getUsername, loginToken)
+        val wrapper = Wrappers.lambdaQuery(User.class);
+        wrapper.and(queryWrapper -> queryWrapper.eq(User::getUsername, loginToken)
                 .or()
-                .eq(UserPersistence::getEmail, loginToken)
+                .eq(User::getEmail, loginToken)
                 .or()
-                .eq(UserPersistence::getCellphone, loginToken));
+                .eq(User::getCellphone, loginToken));
         val userPersistence = this.getBaseMapper().selectOne(wrapper);
         if (ObjectUtil.isNull(userPersistence)) {
             return null;
@@ -65,15 +64,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserPersistence> im
 
     @Override
     public SignupResponse saveUserForSignup(@Valid SignupPayload payload) {
-        val userPersistence = new UserPersistence();
-        userPersistence.setUsername(payload.getUsername());
-        userPersistence.setEmail(payload.getEmail());
-        userPersistence.setPassword(bCryptPasswordEncoder.encode(payload.getPassword()));
-        userPersistence.setStatus(UserStatus.ENABLED.getValue());
-        this.save(userPersistence);
-        log.warn("Saved user for signup. {}", userPersistence);
+        val user = new User();
+        user.setUsername(payload.getUsername());
+        user.setEmail(payload.getEmail());
+        user.setPassword(bCryptPasswordEncoder.encode(payload.getPassword()));
+        user.setStatus(UserStatus.ENABLED.getValue());
+        this.save(user);
+        log.warn("Saved user for signup. {}", user);
         val response = new SignupResponse();
-        response.setUserId(userPersistence.getId());
+        response.setUserId(user.getId());
         return response;
     }
 

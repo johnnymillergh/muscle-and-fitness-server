@@ -6,7 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.jmsoftware.maf.authcenter.role.entity.RolePersistence;
+import com.jmsoftware.maf.authcenter.role.entity.persistence.Role;
 import com.jmsoftware.maf.authcenter.role.mapper.RoleMapper;
 import com.jmsoftware.maf.authcenter.role.service.RoleService;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdResponse;
@@ -31,11 +31,11 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
-public class RoleServiceImpl extends ServiceImpl<RoleMapper, RolePersistence> implements RoleService {
+public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
     private final MafConfiguration mafConfiguration;
 
     @Override
-    public GetRoleListByUserIdResponse getRoleList(Long userId) {
+    public GetRoleListByUserIdResponse getRoleList(@NotNull Long userId) {
         val roleList = this.getRoleListByUserId(userId);
         GetRoleListByUserIdResponse response = new GetRoleListByUserIdResponse();
         roleList.forEach(rolePersistence -> {
@@ -47,19 +47,19 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, RolePersistence> im
     }
 
     @Override
-    public List<RolePersistence> getRoleListByUserId(@NonNull Long userId) {
+    public List<Role> getRoleListByUserId(@NonNull Long userId) {
         return this.getBaseMapper().selectRoleListByUserId(userId);
     }
 
     @Override
     public boolean checkAdmin(@NotEmpty List<@NotNull Long> roleIdList) {
-        LambdaQueryWrapper<RolePersistence> wrapper = Wrappers.lambdaQuery();
-        wrapper.select(RolePersistence::getName)
-                .in(RolePersistence::getId, roleIdList);
+        final LambdaQueryWrapper<Role> wrapper = Wrappers.lambdaQuery();
+        wrapper.select(Role::getName)
+                .in(Role::getId, roleIdList);
         val rolePersistenceList = this.list(wrapper);
         val roleNameSet = rolePersistenceList
                 .stream()
-                .map(RolePersistence::getName)
+                .map(Role::getName)
                 .filter(roleName -> StrUtil.equals(mafConfiguration.getSuperUserRole(), roleName))
                 .collect(Collectors.toSet());
         // If roleNameSet is not empty (contains "admin")

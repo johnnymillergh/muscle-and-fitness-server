@@ -1,7 +1,7 @@
 package com.jmsoftware.maf.authcenter.role.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.jmsoftware.maf.authcenter.role.entity.RolePersistence;
+import com.jmsoftware.maf.authcenter.role.entity.persistence.Role;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -15,14 +15,14 @@ import java.util.List;
  * @date 2020 -05-10 22:39:48
  */
 @Mapper
-public interface RoleMapper extends BaseMapper<RolePersistence> {
+public interface RoleMapper extends BaseMapper<Role> {
     /**
      * Select role list by user id list.
      *
      * @param userId the user id
      * @return the list
      */
-    List<RolePersistence> selectRoleListByUserId(Long userId);
+    List<Role> selectRoleListByUserId(Long userId);
 
     /**
      * Select by id role persistence.
@@ -30,5 +30,5 @@ public interface RoleMapper extends BaseMapper<RolePersistence> {
      * @param roleName the role name
      * @return the role persistence
      */
-    RolePersistence selectByName(String roleName);
+    Role selectByName(String roleName);
 }
