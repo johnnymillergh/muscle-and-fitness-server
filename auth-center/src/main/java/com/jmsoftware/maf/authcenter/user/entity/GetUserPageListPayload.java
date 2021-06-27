@@ -4,6 +4,8 @@ import com.jmsoftware.maf.common.bean.PaginationBase;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.time.LocalDateTime;
+
 /**
  * Description: GetUserPageList, change description here.
  *
@@ -13,4 +15,6 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class GetUserPageListPayload extends PaginationBase {
     private String username;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
 }

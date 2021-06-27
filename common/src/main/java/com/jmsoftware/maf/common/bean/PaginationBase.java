@@ -25,14 +25,14 @@ public class PaginationBase {
      */
     @JsonIgnore
     @NotNull(message = "The current page is required!")
-    @Min(value = 1, message = "The current page is not less then 1!")
+    @Min(value = 1L, message = "The current page is not less then 1!")
     private Integer currentPage = 1;
     /**
      * The page size. Default: 10
      */
     @JsonIgnore
     @NotNull(message = "The page size is required！")
-    @Range(min = 10, max = 100, message = "The rage of page size: 10 <= page size <= 100!")
+    @Range(min = 10L, max = 100L, message = "The rage of page size: 10 <= page size <= 100!")
     private Integer pageSize = 10;
     /**
      * The order-by. (for table's field)

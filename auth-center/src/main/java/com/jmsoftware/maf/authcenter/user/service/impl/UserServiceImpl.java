@@ -114,6 +114,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public PageResponseBodyBean<User> getUserPageList(@Valid @NotNull GetUserPageListPayload payload) {
+        log.info("{}", payload);
         val page = new Page<User>(payload.getCurrentPage(), payload.getPageSize());
         val queryWrapper = Wrappers.lambdaQuery(User.class);
         if (StrUtil.isNotBlank(payload.getUsername())) {

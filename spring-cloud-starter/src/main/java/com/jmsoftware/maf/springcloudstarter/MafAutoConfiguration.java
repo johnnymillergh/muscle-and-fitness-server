@@ -63,7 +63,8 @@ import java.util.List;
         AsyncConfiguration.class,
         RabbitmqConfiguration.class,
         MinioConfiguration.class,
-        LocalDateTimeSerializerConfiguration.class
+        JacksonConfiguration.class,
+        TypeConversionConfiguration.class
 })
 public class MafAutoConfiguration {
     @PostConstruct
