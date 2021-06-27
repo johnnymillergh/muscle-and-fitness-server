@@ -3,6 +3,8 @@ package com.jmsoftware.maf.common.bean;
 import cn.hutool.json.JSON;
 import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONUtil;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.jmsoftware.maf.common.constant.UniversalDateTime;
 import com.jmsoftware.maf.common.exception.BaseException;
 import com.jmsoftware.maf.common.exception.BusinessException;
 import lombok.*;
@@ -30,9 +32,14 @@ public class ResponseBodyBean<ResponseBodyDataType> implements Serializable {
     private static final long serialVersionUID = 4645469240048361965L;
 
     /**
-     * The Timestamp.
+     * The Timestamp. Must be annotated by '@JsonFormat', otherwise will cause following error, cuz api-gateway does not
+     * know how to convert LocalDateTime.
+     * <p>
+     * Failed to deserialize java.time.LocalDateTime: (java.time.format.DateTimeParseException) Text '2021-06-27
+     * 23:08:46'
      */
     @Setter(AccessLevel.NONE)
+    @JsonFormat(pattern = UniversalDateTime.DATE_TIME_FORMAT)
     private final LocalDateTime timestamp = LocalDateTime.now();
     /**
      * Default status is 200 OK.
