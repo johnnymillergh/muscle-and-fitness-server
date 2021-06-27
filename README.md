@@ -26,35 +26,33 @@ Here is the highlights of **Muscle and Fitness Server**:
 
 2. [Spring Cloud](https://spring.io/projects/spring-cloud) Feature:
 
-   - Eureka - Service registration and discovery.
-
-   - Spring Boot Admin - Admin UI for administration of spring boot applications.
-
+   - Consul - Service registration and discovery.
+   - Spring Cloud Gateway - API Gateway on top of Spring WebFlux.  Provide a simple, yet effective way to route to APIs and provide cross cutting concerns to them such as: security, monitoring/metrics, and resiliency.
    - Spring Cloud OpenFeign - Declarative REST Client: Feign creates a dynamic implementation of an interface decorated with JAX-RS or Spring MVC annotations.
-
-   - Spring Cloud Gateway - provide a simple, yet effective way to route to APIs and provide cross cutting concerns to them such as: security, monitoring/metrics, and resiliency.
-
+   - Spring Boot Admin - Admin UI for administration of spring boot applications.
    - Zipkin - a distributed tracing system. It helps gather timing data needed to troubleshoot latency problems in service architectures.
 
-3. Docker support.
+3. MySQL cluster support. Dynamic SQL read-write isolation.
 
-4. Multi-environment support.
+4. Docker support.
 
-5. SFTP integration.
+5. Multi-environment support.
 
-6. API visualization. Enhanced Swagger API documentation.
+6. OSS service, based on Minio and SFTP integration.
 
-7. Log compression.
+7. API visualization. Enhanced Swagger API documentation.
 
-8. Request log.
+8. Log compression.
 
-9. Method Argument Validation Aspect.
+9. Request log.
 
-10. Docker container log persistence.
+10. Method Argument Validation Aspect.
 
-11. Startup statistics.
+11. Docker container log persistence.
 
-12. Customized startup banner.
+12. Startup statistics.
+
+13. Customized startup banner.
 
 ## Usage
 
@@ -146,5 +144,4 @@ Support this project by becoming a sponsor. Your logo will show up here with a l
 [Apache License](https://github.com/johnnymillergh/exrx-net-crawler-server/blob/master/LICENSE) © Johnny Miller
 
 2020 - Present
-
 
