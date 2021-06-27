@@ -54,8 +54,8 @@ public class MyBatisPlusConfiguration {
     @Order(1)
     public Interceptor mybatisPlusInterceptor(PaginationInnerInterceptor paginationInnerInterceptor,
                                               BlockAttackInnerInterceptor blockAttackInnerInterceptor) {
-        log.warn("Initial bean array: '{}'", MybatisPlusInterceptor.class.getSimpleName());
-        MybatisPlusInterceptor mybatisPlusInterceptor = new MybatisPlusInterceptor();
+        log.warn("Initial bean: '{}'", MybatisPlusInterceptor.class.getSimpleName());
+        val mybatisPlusInterceptor = new MybatisPlusInterceptor();
         mybatisPlusInterceptor.addInnerInterceptor(paginationInnerInterceptor);
         mybatisPlusInterceptor.addInnerInterceptor(blockAttackInnerInterceptor);
         return mybatisPlusInterceptor;
