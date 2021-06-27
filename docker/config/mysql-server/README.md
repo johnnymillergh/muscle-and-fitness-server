@@ -8,9 +8,9 @@ These files below are MySQL initialization scripts:
 
 ```
 script
-  mysql
-    init_user.sql
-    muscle_and_fitness.sql
+  mysql-server-master
+    1_init_user.sql
+    2_mysql_and_fitness_structure_and_data_20210627.sql
 ```
 
 ## Useful MySQL command

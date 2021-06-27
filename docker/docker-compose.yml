@@ -18,7 +18,7 @@ services:
     volumes:
       - "~/docker-file-mapping/${MYSQL_SERVER_MASTER_CONTAINER_NAME}:/var/lib/mysql"
       - ./config/mysql-server/master/mysql-master.cnf:/etc/my.cnf
-      - ./script/mysql:/docker-entrypoint-initdb.d
+      - ./script/mysql-server-master:/docker-entrypoint-initdb.d
     command: >
       bash -c "
       chmod 644 /etc/my.cnf
@@ -43,7 +43,7 @@ services:
     volumes:
       - "~/docker-file-mapping/${MYSQL_SERVER_SLAVE_CONTAINER_NAME}:/var/lib/mysql"
       - ./config/mysql-server/slave-1/mysql-slave.cnf:/etc/my.cnf
-      - ./script/mysql:/docker-entrypoint-initdb.d
+      - ./script/mysql-server-slave:/docker-entrypoint-initdb.d
     command: >
       bash -c "
       chmod 644 /etc/my.cnf
