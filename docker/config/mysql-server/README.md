@@ -9,7 +9,7 @@ These files below are MySQL initialization scripts:
 ```
 script
   mysql
-    init_replication_user.sql
+    init_user.sql
     muscle_and_fitness.sql
 ```
 
