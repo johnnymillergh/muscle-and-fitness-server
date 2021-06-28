@@ -34,4 +34,4 @@ sftp:
 
 maf:
   configuration:
-    swagger-enabled: false
+    swagger-enabled: true

@@ -3,8 +3,3 @@ spring:
     add-properties: true
   zipkin:
     base-url: http://maf-zipkin-development-docker:9411
-
-maf:
-  configuration:
-    swagger-enabled: false
-

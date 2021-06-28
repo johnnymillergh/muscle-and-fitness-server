@@ -28,7 +28,7 @@ spring:
 
 maf:
   configuration:
-    swagger-enabled: false
+    swagger-enabled: true
 
 minio:
   endpoint: http://maf-minio-development-docker

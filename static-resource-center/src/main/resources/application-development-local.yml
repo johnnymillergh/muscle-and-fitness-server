@@ -33,7 +33,7 @@ logging:
 
 maf:
   configuration:
-    swagger-enabled: false
+    swagger-enabled: true
 
 minio:
   endpoint: http://localhost

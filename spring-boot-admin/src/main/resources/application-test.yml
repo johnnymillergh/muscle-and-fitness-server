@@ -3,7 +3,3 @@ spring:
     add-properties: false
   zipkin:
     base-url: http://maf-zipkin-test:9411
-
-maf:
-  configuration:
-    swagger-enabled: false

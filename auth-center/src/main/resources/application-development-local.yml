@@ -34,4 +34,4 @@ logging:
 maf:
   configuration:
     web-request-log-enabled: true
-    swagger-enabled: false
+    swagger-enabled: true
