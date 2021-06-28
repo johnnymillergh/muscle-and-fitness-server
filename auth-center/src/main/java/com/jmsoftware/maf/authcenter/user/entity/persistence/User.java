@@ -1,12 +1,12 @@
 package com.jmsoftware.maf.authcenter.user.entity.persistence;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
 import java.util.Date;
+
+import static com.baomidou.mybatisplus.annotation.FieldFill.INSERT;
+import static com.baomidou.mybatisplus.annotation.FieldFill.UPDATE;
 
 /**
  * <h1>User</h1>
@@ -82,31 +82,31 @@ public class User {
     /**
      * Created by
      */
-    @TableField(value = COL_CREATED_BY)
+    @TableField(value = COL_CREATED_BY, fill = INSERT)
     private Long createdBy;
 
     /**
      * Created time
      */
-    @TableField(value = COL_CREATED_TIME)
+    @TableField(value = COL_CREATED_TIME, fill = INSERT)
     private Date createdTime;
 
     /**
      * Modified by
      */
-    @TableField(value = COL_MODIFIED_BY)
+    @TableField(value = COL_MODIFIED_BY, fill = UPDATE)
     private Long modifiedBy;
 
     /**
      * Modified time
      */
-    @TableField(value = COL_MODIFIED_TIME)
+    @TableField(value = COL_MODIFIED_TIME, fill = UPDATE)
     private Date modifiedTime;
 
     /**
      * Delete flag.
      */
-    @TableField(value = COL_DELETED)
+    @TableField(value = COL_DELETED, fill = INSERT)
     private Byte deleted;
 
     public static final String TABLE_NAME = "user";

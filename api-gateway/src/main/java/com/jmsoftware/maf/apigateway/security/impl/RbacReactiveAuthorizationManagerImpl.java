@@ -3,6 +3,7 @@ package com.jmsoftware.maf.apigateway.security.impl;
 import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.Lists;
 import com.jmsoftware.maf.apigateway.remoteapi.AuthCenterRemoteApi;
+import com.jmsoftware.maf.common.constant.MafHttpHeader;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
 import com.jmsoftware.maf.common.domain.authcenter.permission.PermissionType;
@@ -110,7 +111,8 @@ public class RbacReactiveAuthorizationManagerImpl implements ReactiveAuthorizati
                              request.getMethod(), request.getURI(), userPrincipal.getUsername());
                     request
                             .mutate()
-                            .headers(httpHeaders -> httpHeaders.set("X-Username", userPrincipal.getUsername()))
+                            .headers(httpHeaders -> httpHeaders.set(MafHttpHeader.X_USERNAME.getHeader(),
+                                                                    userPrincipal.getUsername()))
                             .build();
                     return new AuthorizationDecision(true);
                 }

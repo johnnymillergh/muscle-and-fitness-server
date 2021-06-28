@@ -4,6 +4,7 @@ import cn.hutool.json.JSONUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jmsoftware.maf.springcloudstarter.util.RequestUtil;
+import com.jmsoftware.maf.springcloudstarter.util.UsernameUtil;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.aspectj.lang.JoinPoint;
@@ -39,7 +40,8 @@ public class WebRequestLogAspect {
             "============ WEB REQUEST LOG AOP (@Before) ============" + LINE_SEPARATOR +
             "URL                : {}" + LINE_SEPARATOR +
             "HTTP Method        : {}" + LINE_SEPARATOR +
-            "Client IP:Port     : {}" + LINE_SEPARATOR +
+            "Client[IPv46:Port] : {}" + LINE_SEPARATOR +
+            "Username           : {}" + LINE_SEPARATOR +
             "Class Method       : {}#{}" + LINE_SEPARATOR +
             "Request Params     :{}{}";
     private final String afterTemplate = LINE_SEPARATOR +
@@ -65,11 +67,11 @@ public class WebRequestLogAspect {
      * pointcut expression examples</a>
      */
     @Pointcut("@annotation(org.springframework.web.bind.annotation.GetMapping)" +
-              " || @annotation(org.springframework.web.bind.annotation.PostMapping)" +
-              " || @annotation(org.springframework.web.bind.annotation.PutMapping)" +
-              " || @annotation(org.springframework.web.bind.annotation.DeleteMapping)" +
-              " || @annotation(org.springframework.web.bind.annotation.PatchMapping)" +
-              " || @annotation(org.springframework.web.bind.annotation.RequestMapping)")
+            " || @annotation(org.springframework.web.bind.annotation.PostMapping)" +
+            " || @annotation(org.springframework.web.bind.annotation.PutMapping)" +
+            " || @annotation(org.springframework.web.bind.annotation.DeleteMapping)" +
+            " || @annotation(org.springframework.web.bind.annotation.PatchMapping)" +
+            " || @annotation(org.springframework.web.bind.annotation.RequestMapping)")
     public void requestLogPointcut() {
     }
 
@@ -86,8 +88,9 @@ public class WebRequestLogAspect {
         assert attributes != null;
         val request = attributes.getRequest();
         log.info(beforeTemplate, request.getRequestURL().toString(), request.getMethod(),
-                 RequestUtil.getRequestIpAndPort(request), joinPoint.getSignature().getDeclaringTypeName(),
-                 joinPoint.getSignature().getName(), LINE_SEPARATOR, JSONUtil.toJsonPrettyStr(joinPoint.getArgs()));
+                 RequestUtil.getRequestIpAndPort(request), UsernameUtil.getCurrentUsername(),
+                 joinPoint.getSignature().getDeclaringTypeName(), joinPoint.getSignature().getName(), LINE_SEPARATOR,
+                 JSONUtil.toJsonPrettyStr(joinPoint.getArgs()));
     }
 
     /**

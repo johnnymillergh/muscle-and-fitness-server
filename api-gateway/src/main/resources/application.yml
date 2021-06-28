@@ -95,4 +95,4 @@ maf:
         - "/*/v2/api-docs/**"
         - "/webjars/**"
         - "/doc.html"
-        - "/static-resource-center/**"
+        - "/oss-center/**"

@@ -6,15 +6,16 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.jmsoftware.maf.common.bean.PageResponseBodyBean;
+import com.jmsoftware.maf.common.domain.authcenter.user.*;
+import com.jmsoftware.maf.common.exception.SecurityException;
 import com.jmsoftware.maf.authcenter.security.service.JwtService;
 import com.jmsoftware.maf.authcenter.user.entity.GetUserPageListPayload;
 import com.jmsoftware.maf.authcenter.user.entity.GetUserStatusPayload;
 import com.jmsoftware.maf.authcenter.user.entity.persistence.User;
 import com.jmsoftware.maf.authcenter.user.mapper.UserMapper;
 import com.jmsoftware.maf.authcenter.user.service.UserService;
-import com.jmsoftware.maf.common.bean.PageResponseBodyBean;
-import com.jmsoftware.maf.common.domain.authcenter.user.*;
-import com.jmsoftware.maf.common.exception.SecurityException;
+import com.jmsoftware.maf.springcloudstarter.util.UsernameUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -24,8 +25,6 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -106,9 +105,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public String getUserStatus(@Valid @NotNull GetUserStatusPayload payload) {
-        final ServletRequestAttributes servletRequestAttributes =
-                (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        log.info("getHeader: {}", servletRequestAttributes.getRequest().getHeader("X-Username"));
+        log.info("Current username: {}", UsernameUtil.getCurrentUsername());
         return UserStatus.ofValue(payload.getStatus()).getDescription();
     }
 
