@@ -9,7 +9,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.util.StopWatch;
 
 /**
- * <h1>StaticResourceCenterApplication</h1>
+ * <h1>OssCenterApplication</h1>
  * <p>
  * Change description here.
  *
@@ -19,17 +19,17 @@ import org.springframework.util.StopWatch;
 @EnableFeignClients
 @EnableDiscoveryClient
 @SpringBootApplication
-public class StaticResourceCenterApplication {
+public class OssCenterApplication {
     private static final StopWatch STOP_WATCH = new StopWatch();
     private static SpringBootStartupHelper springBootStartupHelper;
 
-    public StaticResourceCenterApplication(SpringBootStartupHelper springBootStartupHelper) {
-        StaticResourceCenterApplication.springBootStartupHelper = springBootStartupHelper;
+    public OssCenterApplication(SpringBootStartupHelper springBootStartupHelper) {
+        OssCenterApplication.springBootStartupHelper = springBootStartupHelper;
     }
 
     public static void main(String[] args) {
         STOP_WATCH.start();
-        SpringApplication.run(StaticResourceCenterApplication.class, args);
+        SpringApplication.run(OssCenterApplication.class, args);
         springBootStartupHelper.stop(STOP_WATCH);
     }
 }

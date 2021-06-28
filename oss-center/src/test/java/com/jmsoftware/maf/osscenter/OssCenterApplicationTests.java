@@ -6,13 +6,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 /**
- * Description: StaticResourceCenterApplicationTests.
+ * Description: OssCenterApplicationTests.
  *
  * @author 钟俊 (zhongjun), email: zhongjun@toguide.cn, date: 12/21/2020 3:08 PM
  */
 @Slf4j
 @SpringBootTest
-class StaticResourceCenterApplicationTests {
+class OssCenterApplicationTests {
 
     @Test
     @SneakyThrows
