@@ -23,7 +23,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Infrastructure Service. Port range: [8760, n]. -->
-        <static-resource-center.port>8760</static-resource-center.port>
+        <oss-center.port>8760</oss-center.port>
         <spring-boot-admin.port>8761</spring-boot-admin.port>
 
         <!-- Business Service. Port range: [8800, n]. -->
@@ -65,7 +65,7 @@
         <module>spring-boot-admin</module>
         <module>api-gateway</module>
         <module>auth-center</module>
-        <module>static-resource-center</module>
+        <module>oss-center</module>
         <module>maf-mis</module>
     </modules>
 
@@ -129,7 +129,7 @@
             </dependency>
             <dependency>
                 <groupId>com.jmsoftware.maf</groupId>
-                <artifactId>static-resource-center</artifactId>
+                <artifactId>oss-center</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
