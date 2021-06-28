@@ -1,20 +1,25 @@
 package com.jmsoftware.maf.authcenter.user.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.jmsoftware.maf.common.bean.PageResponseBodyBean;
-import com.jmsoftware.maf.common.domain.authcenter.user.*;
-import com.jmsoftware.maf.common.exception.SecurityException;
 import com.jmsoftware.maf.authcenter.security.service.JwtService;
 import com.jmsoftware.maf.authcenter.user.entity.GetUserPageListPayload;
 import com.jmsoftware.maf.authcenter.user.entity.GetUserStatusPayload;
+import com.jmsoftware.maf.authcenter.user.entity.constant.UserRedisKey;
 import com.jmsoftware.maf.authcenter.user.entity.persistence.User;
 import com.jmsoftware.maf.authcenter.user.mapper.UserMapper;
 import com.jmsoftware.maf.authcenter.user.service.UserService;
+import com.jmsoftware.maf.common.bean.PageResponseBodyBean;
+import com.jmsoftware.maf.common.domain.authcenter.user.*;
+import com.jmsoftware.maf.common.exception.SecurityException;
+import com.jmsoftware.maf.springcloudstarter.configuration.MafProjectProperty;
 import com.jmsoftware.maf.springcloudstarter.util.UsernameUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +27,7 @@ import lombok.val;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,6 +36,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <h1>UserServiceImpl</h1>
@@ -47,9 +54,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtService jwtService;
     private final MessageSource messageSource;
+    private final MafProjectProperty mafProjectProperty;
+    private final RedisTemplate<String, String> redisTemplate;
 
     @Override
     public GetUserByLoginTokenResponse getUserByLoginToken(@NotBlank String loginToken) {
+        val key = String.format(mafProjectProperty.getProjectParentArtifactId()
+                                        + UserRedisKey.GET_USER_BY_LOGIN_TOKEN.getKeyInfixFormat(), loginToken);
+        val hasKey = redisTemplate.hasKey(key);
+        if (BooleanUtil.isTrue(hasKey)) {
+            return JSONUtil.toBean(redisTemplate.opsForValue().get(key), GetUserByLoginTokenResponse.class);
+        }
         val wrapper = Wrappers.lambdaQuery(User.class);
         wrapper.and(queryWrapper -> queryWrapper.eq(User::getUsername, loginToken)
                 .or()
@@ -62,6 +77,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         val response = new GetUserByLoginTokenResponse();
         BeanUtil.copyProperties(userPersistence, response);
+        redisTemplate.opsForValue().set(key, JSONUtil.toJsonStr(response), RandomUtil.randomLong(1, 7), TimeUnit.DAYS);
         return response;
     }
 
