@@ -26,12 +26,6 @@ spring:
     username: maf_rabbitmq_su
     password: maf@rabbitmq
 
-sftp:
-  host: maf-atmoz-sftp-production
-  port: 22
-  user: johnny
-  password: atmoz@sftp
-
 maf:
   configuration:
     swagger-enabled: true

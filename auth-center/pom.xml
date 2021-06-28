@@ -85,6 +85,16 @@
         <dependency>
             <groupId>com.jmsoftware.maf</groupId>
             <artifactId>spring-cloud-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.integration</groupId>
+                    <artifactId>spring-integration-sftp</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>io.minio</groupId>
+                    <artifactId>minio</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- https://github.com/jwtk/jjwt -->

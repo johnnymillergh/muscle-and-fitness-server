@@ -173,5 +173,3 @@ maf:
     jwt:
       # an hour
       ttl: 3600000
-
-# Customize JWT configuration for development environment.
