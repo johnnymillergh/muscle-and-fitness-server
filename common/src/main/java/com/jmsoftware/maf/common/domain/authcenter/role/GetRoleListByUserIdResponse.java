@@ -2,6 +2,7 @@ package com.jmsoftware.maf.common.domain.authcenter.role;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,12 +15,7 @@ import java.util.List;
  * @date 5/10/20 10:55 PM
  **/
 @Data
-public class GetRoleListByUserIdResponse {
-    private final List<Role> roleList = new LinkedList<>();
-
-    @Data
-    public static class Role {
-        private Long id;
-        private String name;
-    }
+public class GetRoleListByUserIdResponse implements Serializable {
+    private static final long serialVersionUID = -8462678958191383914L;
+    private List<GetRoleListByUserIdSingleResponse> roleList;
 }

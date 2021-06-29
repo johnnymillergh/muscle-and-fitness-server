@@ -7,7 +7,7 @@ import com.jmsoftware.maf.common.constant.MafHttpHeader;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
 import com.jmsoftware.maf.common.domain.authcenter.permission.PermissionType;
-import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdResponse;
+import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdSingleResponse;
 import com.jmsoftware.maf.common.domain.authcenter.security.UserPrincipal;
 import com.jmsoftware.maf.common.exception.SecurityException;
 import lombok.RequiredArgsConstructor;
@@ -49,7 +49,7 @@ public class RbacReactiveAuthorizationManagerImpl implements ReactiveAuthorizati
      * @param userPrincipalMono the user principal mono
      * @return the flux
      */
-    private Flux<GetRoleListByUserIdResponse.Role> retrieveRoles(Mono<UserPrincipal> userPrincipalMono) {
+    private Flux<GetRoleListByUserIdSingleResponse> retrieveRoles(Mono<UserPrincipal> userPrincipalMono) {
         // Get role list by user ID, and then convert to Flux<?>
         return userPrincipalMono
                 .flatMap(userPrincipal -> authCenterRemoteApi.getRoleListByUserId(userPrincipal.getId()))
@@ -63,11 +63,11 @@ public class RbacReactiveAuthorizationManagerImpl implements ReactiveAuthorizati
      * @param roleFlux the role flux
      * @return the mono
      */
-    private Mono<List<Long>> mapRole(Flux<GetRoleListByUserIdResponse.Role> roleFlux) {
+    private Mono<List<Long>> mapRole(Flux<GetRoleListByUserIdSingleResponse> roleFlux) {
         return roleFlux
-                .map(GetRoleListByUserIdResponse.Role::getId)
+                .map(GetRoleListByUserIdSingleResponse::getId)
                 .collectList()
-                .switchIfEmpty(roleFlux.map(GetRoleListByUserIdResponse.Role::getId).collectList());
+                .switchIfEmpty(roleFlux.map(GetRoleListByUserIdSingleResponse::getId).collectList());
     }
 
     /**

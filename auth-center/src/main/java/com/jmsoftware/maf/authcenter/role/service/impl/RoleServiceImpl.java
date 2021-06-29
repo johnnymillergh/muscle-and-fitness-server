@@ -1,22 +1,24 @@
 package com.jmsoftware.maf.authcenter.role.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jmsoftware.maf.authcenter.role.entity.constant.RoleRedisKey;
 import com.jmsoftware.maf.authcenter.role.entity.persistence.Role;
 import com.jmsoftware.maf.authcenter.role.mapper.RoleMapper;
 import com.jmsoftware.maf.authcenter.role.service.RoleService;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdResponse;
+import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdSingleResponse;
 import com.jmsoftware.maf.springcloudstarter.configuration.MafConfiguration;
 import com.jmsoftware.maf.springcloudstarter.configuration.MafProjectProperty;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.val;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -41,28 +43,26 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     private final MafProjectProperty mafProjectProperty;
     private final MafConfiguration mafConfiguration;
     private final RedisTemplate<String, String> redisTemplate;
+    private final ObjectMapper objectMapper;
 
     @Override
+    @SneakyThrows({JsonProcessingException.class})
     public GetRoleListByUserIdResponse getRoleList(@NotNull Long userId) {
         val key = String.format(mafProjectProperty.getProjectParentArtifactId()
                                         + RoleRedisKey.GET_ROLE_LIST_BY_USER_ID.getKeyInfixFormat(), userId);
         val hasKey = redisTemplate.hasKey(key);
         if (BooleanUtil.isTrue(hasKey)) {
-            return JSONUtil.toBean(redisTemplate.opsForValue().get(key), GetRoleListByUserIdResponse.class);
+            return objectMapper.readValue(redisTemplate.opsForValue().get(key), GetRoleListByUserIdResponse.class);
         }
-        val roleList = this.getRoleListByUserId(userId);
-        GetRoleListByUserIdResponse response = new GetRoleListByUserIdResponse();
-        roleList.forEach(rolePersistence -> {
-            GetRoleListByUserIdResponse.Role role = new GetRoleListByUserIdResponse.Role();
-            BeanUtil.copyProperties(rolePersistence, role);
-            response.getRoleList().add(role);
-        });
-        redisTemplate.opsForValue().set(key, JSONUtil.toJsonStr(response), RandomUtil.randomLong(1, 7), TimeUnit.DAYS);
+        val response = new GetRoleListByUserIdResponse();
+        response.setRoleList(this.getRoleListByUserId(userId));
+        redisTemplate.opsForValue().set(key, objectMapper.writeValueAsString(response), RandomUtil.randomLong(1, 7),
+                                        TimeUnit.DAYS);
         return response;
     }
 
     @Override
-    public List<Role> getRoleListByUserId(@NonNull Long userId) {
+    public List<GetRoleListByUserIdSingleResponse> getRoleListByUserId(@NonNull Long userId) {
         return this.getBaseMapper().selectRoleListByUserId(userId);
     }
 

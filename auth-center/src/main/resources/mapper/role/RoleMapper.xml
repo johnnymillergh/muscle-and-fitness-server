@@ -19,12 +19,10 @@
         id, `name`, description, created_by, created_time, modified_by, modified_time, deleted
     </sql>
 
-    <select id="selectRoleListByUserId" resultMap="BaseResultMap">
-        SELECT role.id,
-               role.name,
-               role.description,
-               role.created_time,
-               role.modified_time
+    <select id="selectRoleListByUserId"
+            resultType="com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdSingleResponse">
+        SELECT role.id   AS id,
+               role.name AS name
         FROM role
                      LEFT JOIN user_role ON role.id = user_role.role_id
                      LEFT JOIN user ON user_role.user_id = user.id

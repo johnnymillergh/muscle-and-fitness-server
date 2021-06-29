@@ -3,6 +3,7 @@ package com.jmsoftware.maf.authcenter.role.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jmsoftware.maf.authcenter.role.entity.persistence.Role;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdResponse;
+import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdSingleResponse;
 import lombok.NonNull;
 import org.springframework.validation.annotation.Validated;
 
@@ -34,7 +35,7 @@ public interface RoleService extends IService<Role> {
      * @param userId the user id
      * @return the role list by user id
      */
-    List<Role> getRoleListByUserId(@NonNull Long userId);
+    List<GetRoleListByUserIdSingleResponse> getRoleListByUserId(@NonNull Long userId);
 
     /**
      * Check admin boolean.

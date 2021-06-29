@@ -5,7 +5,7 @@ import cn.hutool.json.JSONUtil;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
-import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdResponse;
+import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdSingleResponse;
 import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtResponse;
 import com.jmsoftware.maf.common.domain.authcenter.user.GetUserByLoginTokenResponse;
 import lombok.RequiredArgsConstructor;
@@ -62,7 +62,7 @@ public class AuthCenterRemoteApi {
      * @param userId the user id
      * @return the role list by user id
      */
-    public Mono<List<GetRoleListByUserIdResponse.Role>> getRoleListByUserId(@NotNull Long userId) {
+    public Mono<List<GetRoleListByUserIdSingleResponse>> getRoleListByUserId(@NotNull Long userId) {
         return webClientBuilder
                 .build()
                 .get()
@@ -71,7 +71,7 @@ public class AuthCenterRemoteApi {
                 .bodyToMono(ResponseBodyBean.class)
                 .map(ResponseBodyBean::getData)
                 .map(data -> JSONUtil.toList(JSONUtil.parseObj(data).getJSONArray("roleList"),
-                                         GetRoleListByUserIdResponse.Role.class));
+                                         GetRoleListByUserIdSingleResponse.class));
     }
 
     /**

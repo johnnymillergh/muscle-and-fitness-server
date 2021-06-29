@@ -2,6 +2,7 @@ package com.jmsoftware.maf.authcenter.role.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.jmsoftware.maf.authcenter.role.entity.persistence.Role;
+import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdSingleResponse;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public interface RoleMapper extends BaseMapper<Role> {
      * @param userId the user id
      * @return the list
      */
-    List<Role> selectRoleListByUserId(Long userId);
+    List<GetRoleListByUserIdSingleResponse> selectRoleListByUserId(Long userId);
 
     /**
      * Select by id role persistence.
