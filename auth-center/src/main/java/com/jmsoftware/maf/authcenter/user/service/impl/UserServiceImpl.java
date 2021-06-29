@@ -15,10 +15,12 @@ import com.jmsoftware.maf.authcenter.user.entity.GetUserStatusPayload;
 import com.jmsoftware.maf.authcenter.user.entity.constant.UserRedisKey;
 import com.jmsoftware.maf.authcenter.user.entity.persistence.User;
 import com.jmsoftware.maf.authcenter.user.mapper.UserMapper;
+import com.jmsoftware.maf.authcenter.user.service.UserRoleService;
 import com.jmsoftware.maf.authcenter.user.service.UserService;
 import com.jmsoftware.maf.common.bean.PageResponseBodyBean;
 import com.jmsoftware.maf.common.domain.authcenter.user.*;
 import com.jmsoftware.maf.common.exception.SecurityException;
+import com.jmsoftware.maf.springcloudstarter.configuration.MafConfiguration;
 import com.jmsoftware.maf.springcloudstarter.configuration.MafProjectProperty;
 import com.jmsoftware.maf.springcloudstarter.util.UsernameUtil;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +33,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -56,6 +59,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private final MessageSource messageSource;
     private final MafProjectProperty mafProjectProperty;
     private final RedisTemplate<String, String> redisTemplate;
+    private final UserRoleService userRoleService;
+    private final MafConfiguration mafConfiguration;
 
     @Override
     public GetUserByLoginTokenResponse getUserByLoginToken(@NotBlank String loginToken) {
@@ -82,6 +87,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    @Transactional(rollbackFor = Throwable.class)
     public SignupResponse saveUserForSignup(@Valid SignupPayload payload) {
         val user = new User();
         user.setUsername(payload.getUsername());
@@ -89,7 +95,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setPassword(bCryptPasswordEncoder.encode(payload.getPassword()));
         user.setStatus(UserStatus.ENABLED.getValue());
         this.save(user);
-        log.warn("Saved user for signup. {}", user);
+        log.warn("Saved user for signup, going to assign guest role to user. {}", user);
+        userRoleService.assignRoleByRoleName(user, mafConfiguration.getGuestUserRole());
         val response = new SignupResponse();
         response.setUserId(user.getId());
         return response;

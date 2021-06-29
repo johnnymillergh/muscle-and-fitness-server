@@ -30,12 +30,20 @@ import java.util.List;
 @ConfigurationProperties(prefix = "maf.configuration")
 public class MafConfiguration {
     /**
-     * <p>The username of super user who has no restriction to access any system&#39;s resources.</p>
-     * <p><strong>ATTENTION</strong>: The value of username of super user must be equal to the value that is
+     * <p>The role name of super user (admin) who has no restriction to access any system&#39;s resources.</p>
+     * <p><strong>ATTENTION</strong>: The value of role name of super user must be equal to the value that is
      * persistent in database.</p>
      */
     @NotBlank
     private String superUserRole = "admin";
+    /**
+     * <p>The role name of guest user (guest)  who has restrictions to access any system&#39;s resources. Assigning
+     * the guest role to new user by default.</p>
+     * <p><strong>ATTENTION</strong>: The value of role of guest user must be equal to the value that is
+     * persistent in database.</p>
+     */
+    @NotBlank
+    private String guestUserRole = "guest";
     /**
      * Ignore URLs, used by web access log filter and web security.
      */

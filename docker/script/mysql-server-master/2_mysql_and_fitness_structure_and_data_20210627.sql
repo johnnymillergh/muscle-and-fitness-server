@@ -397,7 +397,7 @@ CREATE TABLE `role` (
   `deleted` tinyint NOT NULL DEFAULT '0' COMMENT 'Deleted flag.',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Role.';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Role.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -406,7 +406,8 @@ CREATE TABLE `role` (
 
 LOCK TABLES `role` WRITE;
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
-INSERT INTO `role` VALUES (1,'admin','M&F system admin',1,'2020-05-09 16:18:51',NULL,'2020-05-09 16:18:45',0);
+INSERT INTO `role` VALUES (1,'admin','M&F system admin',1,'2020-05-09 16:18:51',NULL,NULL,0);
+INSERT INTO `role` VALUES (2,'guest','Guest for the system',1,'2020-05-09 16:18:51',NULL,NULL,0);
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -495,6 +496,7 @@ CREATE TABLE `user_role` (
 LOCK TABLES `user_role` WRITE;
 /*!40000 ALTER TABLE `user_role` DISABLE KEYS */;
 INSERT INTO `user_role` VALUES (1,1);
+INSERT INTO `user_role` VALUES (2,2);
 /*!40000 ALTER TABLE `user_role` ENABLE KEYS */;
 UNLOCK TABLES;
 SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
