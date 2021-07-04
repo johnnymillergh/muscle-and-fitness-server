@@ -1,12 +1,12 @@
 ${AnsiStyle.BOLD}${AnsiColor.BRIGHT_GREEN}
-    ______                    _              __  ____________
-   / ____/  _____  __________(_)_______     /  |/  /  _/ ___/
-  / __/ | |/_/ _ \/ ___/ ___/ / ___/ _ \   / /|_/ // / \__ \
- / /____>  </  __/ /  / /__/ (__  )  __/  / /  / // / ___/ /
-/_____/_/|_|\___/_/   \___/_/____/\___/  /_/  /_/___//____/
-${AnsiStyle.BOLD}Exercise MIS :: Powered by Spring Boot ::${spring-boot.formatted-version}
+    __  ______    ______   __  ____________
+   /  |/  /   |  / ____/  /  |/  /  _/ ___/
+  / /|_/ / /| | / /_     / /|_/ // / \__ \
+ / /  / / ___ |/ __/    / /  / // / ___/ /
+/_/  /_/_/  |_/_/      /_/  /_/___//____/
+${AnsiStyle.BOLD}MAF MIS :: Powered by Spring Boot ::${spring-boot.formatted-version}
 ${AnsiColor.CYAN}Author: Johnny Miller (锺俊), email: johnnysviva@outlook.com
-${AnsiStyle.NORMAL}${AnsiColor.MAGENTA}http://patorjk.com/software/taag/#p=display&f=Slant&t=Exercise%20MIS
+${AnsiStyle.NORMAL}${AnsiColor.MAGENTA}http://patorjk.com/software/taag/#p=display&f=Slant&t=MAF%20MIS
 ${AnsiColor.BRIGHT_BLACK}
 -------------------------------------------Font Info-------------------------------------------
 Slant by Glenn Chappell 3/93 -- based on Standard

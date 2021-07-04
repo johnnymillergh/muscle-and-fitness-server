@@ -5,7 +5,7 @@
 
     <!-- Sub-module Basics -->
     <artifactId>maf-mis</artifactId>
-    <name>Muscle and Fitness Server :: Exercise MIS</name>
+    <name>Muscle and Fitness Server :: MAF MIS</name>
     <description>Exercise Management Information Service.</description>
     <parent>
         <groupId>com.jmsoftware.maf</groupId>

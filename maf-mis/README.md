@@ -9,15 +9,15 @@
 [![GitHub repo size](https://img.shields.io/github/repo-size/johnnymillergh/muscle-and-fitness-server.svg)](https://github.com/johnnymillergh/muscle-and-fitness-server)
 [![Twitter](https://img.shields.io/twitter/url/https/github.com/johnnymillergh/muscle-and-fitness-server?style=social)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fjohnnymillergh%2Fmuscle-and-fitness-server)
 
-# Muscle and Fitness Server :: Exercise MIS
+# Muscle and Fitness Server :: MAF MIS
 
-**Muscle and Fitness Server :: Exercise MIS** full name is Exercise Management Information Service, a sub module of Muscle and Fitness Server (M&F).
+**Muscle and Fitness Server :: MAF MIS** full name is Exercise Management Information Service, a sub module of Muscle and Fitness Server (M&F).
 
 [Official Docker Image](https://hub.docker.com/r/ijohnnymiller/muslce-and-fitness-server.maf-mis-prod)
 
 ## Features
 
-Here is the highlights of **Exercise MIS**:
+Here is the highlights of **MAF MIS**:
 
 1. Inherited from the most modern and newest Spring frameworks:
 

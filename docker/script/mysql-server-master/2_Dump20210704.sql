@@ -397,7 +397,7 @@ CREATE TABLE `role` (
   `deleted` tinyint NOT NULL DEFAULT '0' COMMENT 'Deleted flag.',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Role.';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Role.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -406,7 +406,7 @@ CREATE TABLE `role` (
 
 LOCK TABLES `role` WRITE;
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
-INSERT INTO `role` VALUES (1,'admin','M&F system admin',1,'2020-05-09 16:18:51',NULL,'2020-05-09 16:18:45',0);
+INSERT INTO `role` VALUES (1,'admin','M&F system admin',1,'2020-05-09 16:18:51',1,'2020-05-09 16:18:45',0),(2,'guest','Guest for the system',1,'2021-06-29 11:37:33',NULL,NULL,0);
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -470,7 +470,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'ijohnnymiller','ijohnnymiller@icloud.com','13100959832','$2a$10$2wDrBjRykjsFoUZfKgogyOm0LxIg6EdH42uR3sQ8fHOQcKg5/Mvsm','Johnny Miller','1996-04-29','Cisgender Male','',1,1,'2020-05-09 16:26:23',NULL,'2020-05-09 15:13:19',0),(2,'test1','test1@email.com',NULL,'$2a$10$Ft5LsGrnMoW2DNeboV.QV.w9r.meesdzwEOw1WMMUn/6zH.R9IW/K',NULL,NULL,NULL,NULL,1,1,'2021-06-27 11:21:38',NULL,'2021-06-27 11:21:38',0);
+INSERT INTO `user` VALUES (1,'ijohnnymiller','ijohnnymiller@icloud.com','13100959832','$2a$10$2wDrBjRykjsFoUZfKgogyOm0LxIg6EdH42uR3sQ8fHOQcKg5/Mvsm','Johnny Miller','1996-04-29','Cisgender Male',NULL,1,1,'2020-05-09 16:26:23',NULL,'2020-05-09 15:13:19',0),(2,'test1','test1@email.com',NULL,'$2a$10$Ft5LsGrnMoW2DNeboV.QV.w9r.meesdzwEOw1WMMUn/6zH.R9IW/K',NULL,NULL,NULL,NULL,1,1,'2021-06-27 11:21:38',NULL,'2021-06-27 11:21:38',0);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -482,10 +482,11 @@ DROP TABLE IF EXISTS `user_role`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_role` (
-  `user_id` bigint NOT NULL COMMENT 'Primary key of user',
-  `role_id` bigint NOT NULL COMMENT 'Primary key of role',
-  PRIMARY KEY (`user_id`,`role_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='User-role Relation. Roles that users have.';
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'The primary key',
+  `user_id` bigint unsigned NOT NULL COMMENT 'The primary key of user',
+  `role_id` bigint unsigned NOT NULL COMMENT 'The primary key of role',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='User-role Relation. Roles that users have.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -494,7 +495,7 @@ CREATE TABLE `user_role` (
 
 LOCK TABLES `user_role` WRITE;
 /*!40000 ALTER TABLE `user_role` DISABLE KEYS */;
-INSERT INTO `user_role` VALUES (1,1);
+INSERT INTO `user_role` VALUES (1,1,1),(2,2,2);
 /*!40000 ALTER TABLE `user_role` ENABLE KEYS */;
 UNLOCK TABLES;
 SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
@@ -508,4 +509,4 @@ SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-06-27 14:30:48
+-- Dump completed on 2021-07-04 15:21:59

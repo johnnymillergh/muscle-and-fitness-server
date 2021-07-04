@@ -3,13 +3,14 @@
 <mapper namespace="com.jmsoftware.maf.authcenter.user.mapper.UserRoleMapper">
     <resultMap id="BaseResultMap" type="com.jmsoftware.maf.authcenter.user.entity.persistence.UserRole">
         <!--@mbg.generated-->
-        <!--@Table `user_role`-->
+        <!--@Table user_role-->
+        <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="user_id" jdbcType="BIGINT" property="userId"/>
         <result column="role_id" jdbcType="BIGINT" property="roleId"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        user_id, role_id
+        id, user_id, role_id
     </sql>
 </mapper>

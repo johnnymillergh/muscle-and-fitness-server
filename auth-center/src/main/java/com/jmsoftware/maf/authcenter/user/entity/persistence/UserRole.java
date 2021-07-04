@@ -1,6 +1,7 @@
 package com.jmsoftware.maf.authcenter.user.entity.persistence;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -14,18 +15,26 @@ import lombok.Data;
 @TableName(value = UserRole.TABLE_NAME)
 public class UserRole {
     /**
-     * Primary key of user
+     * The primary key
      */
-    @TableId(value = COL_USER_ID, type = IdType.AUTO)
+    @TableId(value = COL_ID, type = IdType.AUTO)
+    private Long id;
+
+    /**
+     * The primary key of user
+     */
+    @TableField(value = COL_USER_ID)
     private Long userId;
 
     /**
-     * Primary key of role
+     * The primary key of role
      */
-    @TableId(value = COL_ROLE_ID, type = IdType.AUTO)
+    @TableField(value = COL_ROLE_ID)
     private Long roleId;
 
     public static final String TABLE_NAME = "user_role";
+
+    public static final String COL_ID = "id";
 
     public static final String COL_USER_ID = "user_id";
 
