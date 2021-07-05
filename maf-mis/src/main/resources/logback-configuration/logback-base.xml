@@ -73,11 +73,11 @@
         </rollingPolicy>
     </appender>
 
-    <!-- LOGSTASH -->
+    <!-- LOGSTASH
     <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
         <destination>${LOGSTASH_HOST}:4560</destination>
         <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder">
             <customFields>{"appname": "${APPLICATION}"}</customFields>
         </encoder>
-    </appender>
+    </appender> -->
 </included>
