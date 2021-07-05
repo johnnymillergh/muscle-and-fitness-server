@@ -25,19 +25,19 @@
     </springProfile>
     <springProfile name="development-docker">
         <property name="ENVIRONMENT" value="development-docker"/>
-        <property name="LOGSTASH_HOST" value="maf-logstash-${ENVIRONMENT}"/>
+        <property name="LOGSTASH_HOST" value="maf-logstash"/>
     </springProfile>
     <springProfile name="test">
         <property name="ENVIRONMENT" value="test"/>
-        <property name="LOGSTASH_HOST" value="maf-logstash-${ENVIRONMENT}"/>
+        <property name="LOGSTASH_HOST" value="maf-logstash"/>
     </springProfile>
     <springProfile name="stage">
         <property name="ENVIRONMENT" value="stage"/>
-        <property name="LOGSTASH_HOST" value="maf-logstash-${ENVIRONMENT}"/>
+        <property name="LOGSTASH_HOST" value="maf-logstash"/>
     </springProfile>
     <springProfile name="production">
         <property name="ENVIRONMENT" value="production"/>
-        <property name="LOGSTASH_HOST" value="maf-logstash-${ENVIRONMENT}"/>
+        <property name="LOGSTASH_HOST" value="maf-logstash"/>
     </springProfile>
 
     <!-- CONSOLE Log Configuration -->

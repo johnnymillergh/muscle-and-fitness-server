@@ -205,23 +205,22 @@ services:
       - "9200:9200"
     restart: always
     volumes:
-      - "~/docker-file-mapping/${ELASTICSEARCH_CONTAINER_NAME}/plugins:/usr/share/elasticsearch/plugins"
+      # - "~/docker-file-mapping/${ELASTICSEARCH_CONTAINER_NAME}/plugins:/usr/share/elasticsearch/plugins"
       - "~/docker-file-mapping/${ELASTICSEARCH_CONTAINER_NAME}/data:/usr/share/elasticsearch/data"
     environment:
       cluster.name: elasticsearch
       discovery.type: single-node
-      ES_JAVA_OPTS: "-Xms256m -Xmx256m"
+      ES_JAVA_OPTS: "-Xms512m -Xmx1G"
       ELASTIC_PASSWORD: ${MAF_ELASTICSEARCH_PASSWORD}
       xpack.security.enabled: "true"
+      # Force publishing on the 'elk' overlay.
+      network.publish_host: _eth0_
     networks:
       muscle_and_fitness_network:
 
   logstash:
     container_name: ${LOGSTASH_CONTAINER_NAME}
     image: logstash:${LOGSTASH_TAG}
-    links:
-      # The Logstash configuration uses domain `es` to reach the elasticsearch service
-      - elasticsearch:es
     depends_on:
       elasticsearch:
         condition: service_started
@@ -230,7 +229,7 @@ services:
     restart: always
     volumes:
       - ./config/logstash/logstash-maf.conf:/usr/share/logstash/pipeline/logstash.conf
-      # - "~/docker-file-mapping/${LOGSTASH_CONTAINER_NAME}:/usr/share/logstash/config/logstash.yml"
+      - ./config/logstash/logstash-maf.yml:/usr/share/logstash/config/logstash.yml
     networks:
       muscle_and_fitness_network:
 
@@ -243,10 +242,8 @@ services:
     ports:
       - "5601:5601"
     restart: always
-    environment:
-      elasticsearch.hosts: "http://${ELASTICSEARCH_CONTAINER_NAME}:9200"
-      ELASTICSEARCH_USERNAME: elastic
-      ELASTICSEARCH_PASSWORD: ${MAF_ELASTICSEARCH_PASSWORD}
+    volumes:
+      - ./config/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
     networks:
       muscle_and_fitness_network:
 
@@ -338,8 +335,8 @@ services:
       muscle_and_fitness_network:
 
   oss-center:
-    container_name: ${STATIC_RESOURCE_CENTER_CONTAINER_NAME}
-    hostname: ${STATIC_RESOURCE_CENTER_CONTAINER_NAME}
+    container_name: ${OSS_CENTER_CONTAINER_NAME}
+    hostname: ${OSS_CENTER_CONTAINER_NAME}
     image: ijohnnymiller/muscle-and-fitness-server.oss-center:${MAF_TAG}
     depends_on:
       redis:
@@ -352,7 +349,7 @@ services:
         condition: service_healthy
     restart: always
     volumes:
-      - "~/docker-file-mapping/${STATIC_RESOURCE_CENTER_CONTAINER_NAME}:/logs"
+      - "~/docker-file-mapping/${OSS_CENTER_CONTAINER_NAME}:/logs"
     environment:
       JAVA_TOOL_OPTIONS: ${JAVA_TOOL_OPTIONS}
       TZ: ${MAF_TIMEZONE}

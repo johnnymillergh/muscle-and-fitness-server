@@ -1,27 +1,27 @@
 spring:
   zipkin:
-    base-url: http://maf-zipkin-development-docker:9411
+    base-url: http://maf-zipkin:9411
   devtools:
     add-properties: true
   datasource:
     dynamic:
       datasource:
         master:
-          url: jdbc:mysql://maf-mysql-server-master-development-docker:3306/muscle_and_fitness?useSSL=true&useUnicode=true
+          url: jdbc:mysql://maf-mysql-server-master:3306/muscle_and_fitness?useSSL=true&useUnicode=true
           username: maf_mysql_rw
           password: maf@mysql
           driver-class-name: com.mysql.cj.jdbc.Driver
         slave1:
-          url: jdbc:mysql://maf-mysql-server-slave-development-docker:3306/muscle_and_fitness?useSSL=true&useUnicode=true
+          url: jdbc:mysql://maf-mysql-server-slave:3306/muscle_and_fitness?useSSL=true&useUnicode=true
           username: maf_mysql_r
           password: maf@mysql
           driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
-    host: maf-redis-development-docker
+    host: maf-redis
     port: 6379
     password: maf@redis
   rabbitmq:
-    host: maf-rabbitmq-development-docker
+    host: maf-rabbitmq
     port: 5672
     username: maf_rabbitmq_su
     password: maf@rabbitmq

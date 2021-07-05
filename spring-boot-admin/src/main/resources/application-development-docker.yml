@@ -2,4 +2,4 @@ spring:
   devtools:
     add-properties: true
   zipkin:
-    base-url: http://maf-zipkin-development-docker:9411
+    base-url: http://maf-zipkin:9411

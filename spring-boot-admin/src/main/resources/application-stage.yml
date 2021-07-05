@@ -2,4 +2,4 @@ spring:
   devtools:
     add-properties: false
   zipkin:
-    base-url: http://maf-zipkin-stage:9411
+    base-url: http://maf-zipkin:9411

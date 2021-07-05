@@ -27,7 +27,7 @@ script
 
    ```mysql
    CHANGE MASTER TO 
-   MASTER_HOST='maf-mysql-server-master-development-docker',
+   MASTER_HOST='maf-mysql-server-master',
    MASTER_PORT=3306,
    MASTER_USER='replication_user',
    MASTER_PASSWORD='replication_password',
