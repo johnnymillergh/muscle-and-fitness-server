@@ -252,14 +252,8 @@ services:
     hostname: ${SPRING_BOOT_ADMIN_CONTAINER_NAME}
     image: ijohnnymiller/muscle-and-fitness-server.spring-boot-admin:${MAF_TAG}
     depends_on:
-      mysql-server-master:
-        condition: service_healthy
-      redis:
-        condition: service_started
       consul-registry:
         condition: service_started
-      rabbitmq:
-        condition: service_healthy
     ports:
       - "8761:8761"
     restart: always
@@ -287,9 +281,9 @@ services:
     hostname: ${API_GATEWAY_CONTAINER_NAME}
     image: ijohnnymiller/muscle-and-fitness-server.api-gateway:${MAF_TAG}
     depends_on:
-      redis:
-        condition: service_started
       consul-registry:
+        condition: service_started
+      redis:
         condition: service_started
     restart: always
     ports:
@@ -313,11 +307,15 @@ services:
     hostname: ${AUTH_CENTER_CONTAINER_NAME}
     image: ijohnnymiller/muscle-and-fitness-server.auth-center:${MAF_TAG}
     depends_on:
-      redis:
-        condition: service_started
       consul-registry:
         condition: service_started
+      redis:
+        condition: service_started
       rabbitmq:
+        condition: service_healthy
+      mysql-server-master:
+        condition: service_healthy
+      mysql-server-slave:
         condition: service_healthy
     restart: always
     volumes:
@@ -339,13 +337,17 @@ services:
     hostname: ${OSS_CENTER_CONTAINER_NAME}
     image: ijohnnymiller/muscle-and-fitness-server.oss-center:${MAF_TAG}
     depends_on:
-      redis:
-        condition: service_started
       consul-registry:
+        condition: service_started
+      redis:
         condition: service_started
       rabbitmq:
         condition: service_healthy
       minio:
+        condition: service_started
+      mysql-server-master:
+        condition: service_healthy
+      mysql-server-slave:
         condition: service_healthy
     restart: always
     volumes:
@@ -367,12 +369,14 @@ services:
     hostname: ${MAF_MIS_CONTAINER_NAME}
     image: ijohnnymiller/muscle-and-fitness-server.maf-mis:${MAF_TAG}
     depends_on:
-      mysql-server-master:
-        condition: service_healthy
-      redis:
-        condition: service_started
       consul-registry:
         condition: service_started
+      redis:
+        condition: service_started
+      mysql-server-master:
+        condition: service_healthy
+      mysql-server-slave:
+        condition: service_healthy
       rabbitmq:
         condition: service_healthy
     restart: always
