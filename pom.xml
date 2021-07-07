@@ -39,12 +39,12 @@
         <jib-maven-plugin.version>3.1.1</jib-maven-plugin.version>
         <spring-cloud.version>2020.0.3</spring-cloud.version>
         <spring-content.version>1.0.0.M5</spring-content.version>
-        <spring-boot-admin-starter-server.version>2.4.1</spring-boot-admin-starter-server.version>
-        <spring-boot-admin-starter-client.version>2.4.1</spring-boot-admin-starter-client.version>
+        <spring-boot-admin-starter-server.version>2.4.3</spring-boot-admin-starter-server.version>
+        <spring-boot-admin-starter-client.version>2.4.3</spring-boot-admin-starter-client.version>
         <druid-spring-boot-starter.version>1.2.6</druid-spring-boot-starter.version>
         <mybatis-plus-boot-starter.version>3.4.3.1</mybatis-plus-boot-starter.version>
         <dynamic-datasource-spring-boot-starter.version>3.4.0</dynamic-datasource-spring-boot-starter.version>
-        <hutool-all.version>5.7.2</hutool-all.version>
+        <hutool-all.version>5.7.3</hutool-all.version>
         <guava.version>30.0-jre</guava.version>
         <knife4j.version>2.0.8</knife4j.version>
         <jjwt.version>0.11.2</jjwt.version>
