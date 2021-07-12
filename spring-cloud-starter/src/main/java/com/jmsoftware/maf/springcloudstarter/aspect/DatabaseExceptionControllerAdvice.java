@@ -1,5 +1,6 @@
 package com.jmsoftware.maf.springcloudstarter.aspect;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
@@ -10,7 +11,10 @@ import org.apache.ibatis.exceptions.PersistenceException;
 import org.mybatis.spring.MyBatisSystemException;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
+import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -28,8 +32,16 @@ import java.util.Objects;
  **/
 @Slf4j
 @RestControllerAdvice
+@Order(DatabaseExceptionControllerAdvice.ORDER)
 @ConditionalOnClass({MyBatisSystemException.class, MybatisPlusException.class, PersistenceException.class})
 public class DatabaseExceptionControllerAdvice {
+    /**
+     * Before CommonExceptionControllerAdvice
+     *
+     * @see CommonExceptionControllerAdvice
+     */
+    public static final int ORDER = -1;
+
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(MyBatisSystemException.class)
     public ResponseBodyBean<?> handleMyBatisSystemException(HttpServletRequest request,
@@ -59,6 +71,21 @@ public class DatabaseExceptionControllerAdvice {
         return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR,
                                          String.format("PersistenceException message: %s",
                                                        removeLineSeparator(exception.getMessage())));
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(BadSqlGrammarException.class)
+    public ResponseBodyBean<?> handleBadSqlGrammarException(HttpServletRequest request,
+                                                            BadSqlGrammarException exception) {
+        requestLog(request);
+        log.error("BadSqlGrammarException message: {}", exception.getMessage());
+        var message = exception.getMessage();
+        if (ObjectUtil.isNotNull(exception.getCause()) && StrUtil.isNotBlank(exception.getCause().getMessage())) {
+            message = exception.getCause().getMessage();
+        }
+        return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR,
+                                         String.format("PersistenceException message: %s",
+                                                       removeLineSeparator(message)));
     }
 
     private void requestLog(HttpServletRequest request) {

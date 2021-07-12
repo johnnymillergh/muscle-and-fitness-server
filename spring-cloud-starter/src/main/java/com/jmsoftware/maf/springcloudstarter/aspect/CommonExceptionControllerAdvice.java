@@ -8,6 +8,8 @@ import com.jmsoftware.maf.springcloudstarter.util.RequestUtil;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -36,6 +38,7 @@ import java.util.Objects;
  * @date 2019-03-02 17:39
  **/
 @Slf4j
+@Order(0)
 @RestControllerAdvice
 public class CommonExceptionControllerAdvice {
     /**
