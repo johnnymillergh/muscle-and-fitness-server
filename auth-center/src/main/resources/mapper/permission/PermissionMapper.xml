@@ -34,13 +34,20 @@
         FROM permission
                      LEFT JOIN role_permission ON permission.id = role_permission.permission_id
                      LEFT JOIN role ON role.id = role_permission.role_id
-                WHERE role.id IN
-        <foreach item="item" collection="roleIdList" open="(" separator="," close=")">
-            #{item}
-        </foreach>
-        AND permission.type IN
-        <foreach item="item" collection="permissionTypeList" open="(" separator="," close=")">
-            #{item.type}
-        </foreach>
+        <where>
+            permission.deleted = 0
+            <if test="@cn.hutool.core.collection.CollUtil@isNotEmpty(roleIdList)">
+                AND role.id IN
+                <foreach item="item" collection="roleIdList" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="@cn.hutool.core.collection.CollUtil@isNotEmpty(permissionTypeList)">
+                AND permission.type IN
+                <foreach item="item" collection="permissionTypeList" open="(" separator="," close=")">
+                    #{item.type}
+                </foreach>
+            </if>
+        </where>
     </select>
 </mapper>

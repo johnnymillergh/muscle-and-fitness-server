@@ -8,6 +8,7 @@ import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 /**
  * <h1>PaginationBase</h1>
@@ -43,6 +44,7 @@ public class PaginationBase {
      * The order rule. Default: DESC
      */
     @JsonIgnore
+    @Pattern(regexp = "^(ASC|DESC)$")
     private String orderRule = "DESC";
     /**
      * The order-by statement needs to be joined.
@@ -53,7 +55,7 @@ public class PaginationBase {
     @JsonIgnore
     public String getOrderByStatement() {
         if (!StrUtil.isBlank(orderBy)) {
-            return String.format("%s %s %s", "ORDER BY", orderBy, orderRule);
+            return String.format("%s `%s` %s", "ORDER BY", orderBy, orderRule);
         }
         return orderByStatement;
     }

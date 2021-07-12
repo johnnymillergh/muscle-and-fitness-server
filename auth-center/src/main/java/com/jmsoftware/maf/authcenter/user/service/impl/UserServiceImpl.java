@@ -1,11 +1,13 @@
 package com.jmsoftware.maf.authcenter.user.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -140,7 +142,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (StrUtil.isNotBlank(payload.getUsername())) {
             queryWrapper.like(User::getUsername, payload.getUsername());
         }
-        final var page1 = this.page(page, queryWrapper);
-        return PageResponseBodyBean.ofSuccess(page1.getRecords(), page1.getTotal());
+        page.setOrders(ListUtil.of(OrderItem.desc(payload.getOrderBy())));
+        this.page(page, queryWrapper);
+        return PageResponseBodyBean.ofSuccess(page.getRecords(), page.getTotal());
     }
 }
