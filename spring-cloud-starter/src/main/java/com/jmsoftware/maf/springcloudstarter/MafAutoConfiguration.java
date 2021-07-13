@@ -14,6 +14,7 @@ import com.jmsoftware.maf.springcloudstarter.filter.AccessLogFilter;
 import com.jmsoftware.maf.springcloudstarter.helper.HttpApiScanHelper;
 import com.jmsoftware.maf.springcloudstarter.helper.IpHelper;
 import com.jmsoftware.maf.springcloudstarter.helper.SpringBootStartupHelper;
+import com.jmsoftware.maf.springcloudstarter.quartz.QuartzConfiguration;
 import com.jmsoftware.maf.springcloudstarter.redis.RedisConfiguration;
 import com.jmsoftware.maf.springcloudstarter.service.CommonService;
 import com.jmsoftware.maf.springcloudstarter.service.impl.CommonServiceImpl;
@@ -64,7 +65,8 @@ import java.util.List;
         RabbitmqConfiguration.class,
         MinioConfiguration.class,
         JacksonConfiguration.class,
-        TypeConversionConfiguration.class
+        TypeConversionConfiguration.class,
+        QuartzConfiguration.class
 })
 public class MafAutoConfiguration {
     @PostConstruct
