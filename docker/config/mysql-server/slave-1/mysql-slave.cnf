@@ -49,7 +49,4 @@ enforce_gtid_consistency=true
 read-only=ON
 skip-log-bin
 skip-log-slave-updates
-skip-slave-start
 replicate-ignore-db=mysql
-# 60 seconds, https://www.mayanpeng.cn/archives/77.html
-# master-connect-retry=60
