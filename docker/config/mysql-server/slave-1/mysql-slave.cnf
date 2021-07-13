@@ -52,4 +52,4 @@ skip-log-slave-updates
 skip-slave-start
 replicate-ignore-db=mysql
 # 60 seconds, https://www.mayanpeng.cn/archives/77.html
-master-connect-retry=60
+# master-connect-retry=60

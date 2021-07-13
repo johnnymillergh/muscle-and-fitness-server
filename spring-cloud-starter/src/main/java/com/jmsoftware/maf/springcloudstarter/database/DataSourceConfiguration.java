@@ -1,12 +1,15 @@
 package com.jmsoftware.maf.springcloudstarter.database;
 
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.quartz.QuartzDataSource;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
@@ -25,17 +28,26 @@ import java.util.HashMap;
 @ConditionalOnClass({MybatisPlusAutoConfiguration.class})
 @AutoConfigureBefore({MybatisPlusAutoConfiguration.class})
 public class DataSourceConfiguration {
-    @Bean
+    @Bean("masterDataSource")
     @ConfigurationProperties("spring.datasource.dynamic.datasource.master")
     public DataSource masterDataSource() {
         log.warn("Initial bean: masterDataSource");
         return DruidDataSourceBuilder.create().build();
     }
 
-    @Bean
+    @Bean("slave1DataSource")
     @ConfigurationProperties("spring.datasource.dynamic.datasource.slave1")
     public DataSource slave1DataSource() {
         log.warn("Initial bean: slave1DataSource");
+        return DruidDataSourceBuilder.create().build();
+    }
+
+    @Bean("quartzDataSource")
+    @QuartzDataSource
+    @ConfigurationProperties("spring.datasource.dynamic.datasource.quartz")
+    @ConditionalOnProperty(prefix = "spring.quartz", name = "job-store-type", havingValue = "jdbc")
+    public DataSource quartzDataSource() {
+        log.warn("Initial bean: quartzDataSource");
         return DruidDataSourceBuilder.create().build();
     }
 

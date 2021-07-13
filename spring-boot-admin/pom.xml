@@ -95,6 +95,10 @@
                     <artifactId>spring-boot-starter-amqp</artifactId>
                 </exclusion>
                 <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-quartz</artifactId>
+                </exclusion>
+                <exclusion>
                     <groupId>org.springframework.integration</groupId>
                     <artifactId>spring-integration-sftp</artifactId>
                 </exclusion>

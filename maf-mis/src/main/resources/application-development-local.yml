@@ -16,6 +16,11 @@ spring:
           username: maf_mysql_r
           password: maf@mysql
           driver-class-name: com.mysql.cj.jdbc.Driver
+        quartz:
+          url: jdbc:mysql://localhost:3306/QUARTZ_DB?useSSL=true&useUnicode=true
+          username: maf_mysql_rw
+          password: maf@mysql
+          driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
     host: localhost
     port: 6379

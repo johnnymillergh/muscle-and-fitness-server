@@ -95,6 +95,26 @@ spring:
         max-idle: 10
         max-wait: -1ms
         min-idle: 0
+  quartz:
+    job-store-type: JDBC
+    scheduler-name: ${spring.application.name}-scheduler
+    wait-for-jobs-to-complete-on-shutdown: true
+    jdbc:
+      initialize-schema: NEVER
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceId: AUTO
+          jobStore:
+            tablePrefix: QRTZ_
+            isClustered: true
+            clusterCheckinInterval: 3000
+            useProperties: false
+          threadPool:
+            threadCount: 15
+            threadPriority: 5
+            class: org.quartz.simpl.SimpleThreadPool
 
 feign:
   httpclient:

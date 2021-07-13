@@ -10,13 +10,14 @@ import org.springframework.http.HttpStatus;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static org.springframework.web.cors.CorsConfiguration.ALL;
+
 /**
  * <h1>ResponseUtil</h1>
  * <p>
  * Response util
  *
- * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com
- * @date 2/27/20 9:45 AM
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 2/27/20 9:45 AM
  **/
 @Slf4j
 @SuppressWarnings("unused")
@@ -86,8 +87,8 @@ public class ResponseUtil {
      */
     private static void standardizeHttpServletResponse(final HttpServletResponse response,
                                                        final HttpStatus httpStatus) {
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "*");
+        response.setHeader("Access-Control-Allow-Origin", ALL);
+        response.setHeader("Access-Control-Allow-Methods", ALL);
         response.setContentType("application/json;charset=UTF-8");
         response.setStatus(httpStatus.value());
     }
