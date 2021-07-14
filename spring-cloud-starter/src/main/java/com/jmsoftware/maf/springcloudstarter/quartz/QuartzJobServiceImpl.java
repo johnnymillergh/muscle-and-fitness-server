@@ -1,11 +1,16 @@
 package com.jmsoftware.maf.springcloudstarter.quartz;
 
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.quartz.*;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
 import java.util.Map;
+import java.util.function.UnaryOperator;
 
 /**
  * Description: QuartzJobServiceImpl, change description here.
@@ -16,128 +21,110 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 public class QuartzJobServiceImpl implements QuartzJobService {
+    public static final String JOB_DETAIL_POSTFIX = "-job-detail";
+    public static final String TRIGGER_POSTFIX = "-trigger";
+    private static final UnaryOperator<String> JOB_DETAIL_NAME_OPERATOR = jobName -> jobName + JOB_DETAIL_POSTFIX;
+    private static final UnaryOperator<String> TRIGGER_NAME_OPERATOR = jobName -> jobName + JOB_DETAIL_POSTFIX;
     private final SchedulerFactoryBean schedulerFactoryBean;
 
     @Override
+    @SneakyThrows
     public void addJob(String clazzName, String jobName, String groupName, String cronExp, Map<String, Object> param) {
-        try {
-            // 构建job信息
-            @SuppressWarnings("unchecked") Class<? extends Job> jobClass =
-                    (Class<? extends Job>) Class.forName(clazzName);
-            JobDetail jobDetail = JobBuilder.newJob(jobClass).withIdentity(jobName, groupName).build();
-            // 表达式调度构建器(即任务执行的时间)
-            CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExp);
-            // 按新的cronExpression表达式构建一个新的trigger
-            CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(jobName, groupName).withSchedule(
-                    scheduleBuilder).build();
-            // 获得JobDataMap，写入数据
-            if (param != null) {
-                trigger.getJobDataMap().putAll(param);
-            }
-            schedulerFactoryBean.getScheduler().scheduleJob(jobDetail, trigger);
-        } catch (Exception e) {
-            log.error("创建任务失败", e);
+        val jobDetailName = JOB_DETAIL_NAME_OPERATOR.apply(jobName);
+        // Build job
+        val jobClass = Class.forName(clazzName).asSubclass(Job.class);
+        val jobDetail = JobBuilder.newJob(jobClass).withIdentity(jobDetailName, groupName).build();
+        // Build cron-expression schedule
+        val scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExp);
+        val triggerName = jobName + TRIGGER_POSTFIX;
+        // Build trigger
+        val trigger = TriggerBuilder
+                .newTrigger()
+                .withIdentity(triggerName, groupName)
+                .withSchedule(scheduleBuilder)
+                .build();
+        if (ObjectUtil.isNotNull(param)) {
+            trigger.getJobDataMap().putAll(param);
         }
+        this.schedulerFactoryBean.getScheduler().scheduleJob(jobDetail, trigger);
+        log.info("Added job to scheduler. jobDetailName: {}, triggerName: {}", jobDetailName, triggerName);
     }
 
     @Override
+    @SneakyThrows
     public void pauseJob(String jobName, String groupName) {
-        try {
-            schedulerFactoryBean.getScheduler().pauseJob(JobKey.jobKey(jobName, groupName));
-        } catch (SchedulerException e) {
-            log.error("暂停任务失败", e);
-        }
+        val jobDetailName = JOB_DETAIL_NAME_OPERATOR.apply(jobName);
+        this.schedulerFactoryBean.getScheduler().pauseJob(JobKey.jobKey(jobDetailName, groupName));
+        log.info("Paused job. jobDetailName: {}", jobDetailName);
     }
 
     @Override
+    @SneakyThrows
     public void resumeJob(String jobName, String groupName) {
-        try {
-            schedulerFactoryBean.getScheduler().resumeJob(JobKey.jobKey(jobName, groupName));
-        } catch (SchedulerException e) {
-            log.error("恢复任务失败", e);
-        }
+        val jobDetailName = JOB_DETAIL_NAME_OPERATOR.apply(jobName);
+        this.schedulerFactoryBean.getScheduler().resumeJob(JobKey.jobKey(jobDetailName, groupName));
+        log.info("Resumed job. jobDetailName: {}", jobDetailName);
     }
 
     @Override
-    public void runOnce(String jobName, String groupName) {
-        try {
-            schedulerFactoryBean.getScheduler().triggerJob(JobKey.jobKey(jobName, groupName));
-        } catch (SchedulerException e) {
-            log.error("立即运行一次定时任务失败", e);
-        }
+    @SneakyThrows
+    public void runImmediately(String jobName, String groupName) {
+        val jobDetailName = JOB_DETAIL_NAME_OPERATOR.apply(jobName);
+        this.schedulerFactoryBean.getScheduler().triggerJob(JobKey.jobKey(jobDetailName, groupName));
+        log.info("Triggered the identified JobDetail (execute it now). jobDetailName: {}", jobDetailName);
     }
 
     @Override
+    @SneakyThrows
     public void updateJob(String jobName, String groupName, String cronExp, Map<String, Object> param) {
-        try {
-            TriggerKey triggerKey = TriggerKey.triggerKey(jobName, groupName);
-            CronTrigger trigger = (CronTrigger) schedulerFactoryBean.getScheduler().getTrigger(triggerKey);
-            if (cronExp != null) {
-                // 表达式调度构建器
-                CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExp);
-                // 按新的cronExpression表达式重新构建trigger
-                trigger = trigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(scheduleBuilder).build();
-            }
-            //修改map
-            if (param != null) {
-                trigger.getJobDataMap().putAll(param);
-            }
-            // 按新的trigger重新设置job执行
-            schedulerFactoryBean.getScheduler().rescheduleJob(triggerKey, trigger);
-        } catch (Exception e) {
-            log.error("更新任务失败", e);
+        val triggerName = TRIGGER_NAME_OPERATOR.apply(jobName);
+        val triggerKey = TriggerKey.triggerKey(triggerName, groupName);
+        var trigger = (CronTrigger) this.schedulerFactoryBean.getScheduler().getTrigger(triggerKey);
+        if (StrUtil.isNotBlank(cronExp)) {
+            val scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExp);
+            trigger = trigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(scheduleBuilder).build();
         }
+        if (ObjectUtil.isNotNull(param)) {
+            trigger.getJobDataMap().putAll(param);
+        }
+        this.schedulerFactoryBean.getScheduler().rescheduleJob(triggerKey, trigger);
+        log.info("Updated job. triggerName: {}", triggerName);
     }
 
     @Override
+    @SneakyThrows
     public void deleteJob(String jobName, String groupName) {
-        try {
-            //暂停、移除、删除
-            schedulerFactoryBean.getScheduler().pauseTrigger(TriggerKey.triggerKey(jobName, groupName));
-            schedulerFactoryBean.getScheduler().unscheduleJob(TriggerKey.triggerKey(jobName, groupName));
-            schedulerFactoryBean.getScheduler().deleteJob(JobKey.jobKey(jobName, groupName));
-        } catch (Exception e) {
-            log.error("删除任务失败", e);
-        }
+        val triggerName = TRIGGER_NAME_OPERATOR.apply(jobName);
+        // Pause, Remove the trigger and the job, and then delete the job.
+        this.schedulerFactoryBean.getScheduler().pauseTrigger(TriggerKey.triggerKey(jobName, groupName));
+        this.schedulerFactoryBean.getScheduler().unscheduleJob(TriggerKey.triggerKey(jobName, groupName));
+        this.schedulerFactoryBean.getScheduler().deleteJob(JobKey.jobKey(jobName, groupName));
+        log.info("Updated job. triggerName: {}", triggerName);
     }
 
     @Override
+    @SneakyThrows
     public void startAllJobs() {
-        try {
-            schedulerFactoryBean.start();
-        } catch (Exception e) {
-            log.error("开启所有的任务失败", e);
-        }
+        this.schedulerFactoryBean.start();
+        log.info("Started jobs.");
     }
 
     @Override
+    @SneakyThrows
     public void pauseAllJobs() {
-        try {
-            schedulerFactoryBean.getScheduler().pauseAll();
-        } catch (Exception e) {
-            log.error("暂停所有任务失败", e);
-        }
+        this.schedulerFactoryBean.getScheduler().pauseAll();
+        log.info("Paused all jobs.");
     }
 
     @Override
+    @SneakyThrows
     public void resumeAllJobs() {
-        try {
-            schedulerFactoryBean.getScheduler().resumeAll();
-        } catch (Exception e) {
-            log.error("恢复所有任务失败", e);
-        }
+        this.schedulerFactoryBean.getScheduler().resumeAll();
+        log.info("Resumed all jobs.");
     }
 
     @Override
     public void shutdownAllJobs() {
-        try {
-            if (!schedulerFactoryBean.getScheduler().isShutdown()) {
-                // 需谨慎操作关闭scheduler容器
-                // scheduler生命周期结束，无法再 start() 启动 scheduler
-                schedulerFactoryBean.getScheduler().shutdown(true);
-            }
-        } catch (Exception e) {
-            log.error("关闭所有的任务失败", e);
-        }
+        throw new IllegalCallerException("Not supported operation!");
     }
 }

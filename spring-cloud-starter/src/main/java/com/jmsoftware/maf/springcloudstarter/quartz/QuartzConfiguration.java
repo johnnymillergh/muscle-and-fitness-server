@@ -1,6 +1,7 @@
 package com.jmsoftware.maf.springcloudstarter.quartz;
 
 import com.jmsoftware.maf.springcloudstarter.configuration.MafProjectProperty;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.quartz.Scheduler;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,10 +19,12 @@ import java.util.Optional;
  *
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 7/13/2021 10:44 PM
  **/
+@Slf4j
 @ConditionalOnClass({Scheduler.class, SchedulerFactoryBean.class, PlatformTransactionManager.class})
 public class QuartzConfiguration {
     @Bean
     public GreetingQuartzJobBean greetingQuartzJobBean(MafProjectProperty mafProjectProperty) {
+        log.warn("Initial bean: '{}'", GreetingQuartzJobBean.class.getSimpleName());
         return new GreetingQuartzJobBean(mafProjectProperty);
     }
 
@@ -33,6 +36,7 @@ public class QuartzConfiguration {
         jobDetailFactoryBean.setJobClass(greetingQuartzJobBean.getClass());
         jobDetailFactoryBean.setDescription("Greeting job detail created by JobDetailFactoryBean");
         jobDetailFactoryBean.setDurability(true);
+        log.warn("Initial bean: '{}'", JobDetailFactoryBean.class.getSimpleName());
         return jobDetailFactoryBean;
     }
 
@@ -45,11 +49,13 @@ public class QuartzConfiguration {
         cronTriggerFactoryBean.setCronExpression("0 0/1 * 1/1 * ? *");
         val optionalJobDetail = Optional.ofNullable(jobDetailFactoryBean.getObject());
         optionalJobDetail.ifPresent(cronTriggerFactoryBean::setJobDetail);
+        log.warn("Initial bean: '{}'", CronTriggerFactoryBean.class.getSimpleName());
         return cronTriggerFactoryBean;
     }
 
     @Bean
     public QuartzJobService quartzJobService(SchedulerFactoryBean schedulerFactoryBean) {
+        log.warn("Initial bean: '{}'", QuartzJobServiceImpl.class.getSimpleName());
         return new QuartzJobServiceImpl(schedulerFactoryBean);
     }
 }

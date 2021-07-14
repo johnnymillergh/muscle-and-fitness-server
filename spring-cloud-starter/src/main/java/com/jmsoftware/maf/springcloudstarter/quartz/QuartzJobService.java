@@ -41,7 +41,7 @@ public interface QuartzJobService {
      * @param jobName   the job name
      * @param groupName the group name
      */
-    void runOnce(String jobName, String groupName);
+    void runImmediately(String jobName, String groupName);
 
     /**
      * 更新任务

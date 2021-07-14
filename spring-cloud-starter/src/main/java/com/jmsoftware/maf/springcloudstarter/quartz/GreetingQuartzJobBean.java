@@ -24,6 +24,6 @@ public class GreetingQuartzJobBean extends QuartzJobBean {
 
     @Override
     protected void executeInternal(@NonNull JobExecutionContext jobExecutionContext) {
-        log.info("Greeting from Quartz job, current service is: {}", mafProjectProperty.getProjectArtifactId());
+        log.info("Greeting from Quartz job, current service is: {}", this.mafProjectProperty.getProjectArtifactId());
     }
 }
