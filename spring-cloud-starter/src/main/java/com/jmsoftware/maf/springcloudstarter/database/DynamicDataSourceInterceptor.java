@@ -32,12 +32,6 @@ import java.util.Objects;
                 })
 })
 public class DynamicDataSourceInterceptor implements Interceptor {
-    /**
-     * The constant WRITE_OPERATION_SQL_REGEX. Preserved this constant for future use.
-     */
-    @SuppressWarnings("unused")
-    private static final String WRITE_OPERATION_SQL_REGEX = ".*INSERT.*|.*UPDATE.*|.*DELETE.*";
-
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
         // Check if the transaction synchronization is active. It it was, would use MASTER data source
@@ -68,8 +62,12 @@ public class DynamicDataSourceInterceptor implements Interceptor {
         }
         log.warn("SQL statement [{}], SqlCommandType： [{}], using 🐬 [{}] data source", mappedStatement.getId(),
                  mappedStatement.getSqlCommandType().name(), DataSourceContextHolder.get());
-        val result = invocation.proceed();
-        DataSourceContextHolder.clear();
+        Object result;
+        try {
+            result = invocation.proceed();
+        } finally {
+            DataSourceContextHolder.clear();
+        }
         return result;
     }
 

@@ -1,16 +1,13 @@
 package com.jmsoftware.maf.springcloudstarter.database;
 
-import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
-import com.baomidou.dynamic.datasource.annotation.DS;
+import com.baomidou.dynamic.datasource.DynamicRoutingDataSource;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.quartz.QuartzDataSource;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -28,45 +25,32 @@ import java.util.HashMap;
 @ConditionalOnClass({MybatisPlusAutoConfiguration.class})
 @AutoConfigureBefore({MybatisPlusAutoConfiguration.class})
 public class DataSourceConfiguration {
-    @Bean("masterDataSource")
-    @ConfigurationProperties("spring.datasource.dynamic.datasource.master")
-    public DataSource masterDataSource() {
-        log.warn("Initial bean: masterDataSource");
-        return DruidDataSourceBuilder.create().build();
-    }
-
-    @Bean("slave1DataSource")
-    @ConfigurationProperties("spring.datasource.dynamic.datasource.slave1")
-    public DataSource slave1DataSource() {
-        log.warn("Initial bean: slave1DataSource");
-        return DruidDataSourceBuilder.create().build();
-    }
-
-    @Bean("quartzDataSource")
     @QuartzDataSource
-    @ConfigurationProperties("spring.datasource.dynamic.datasource.quartz")
+    @Bean("quartzDataSource")
     @ConditionalOnProperty(prefix = "spring.quartz", name = "job-store-type", havingValue = "jdbc")
-    public DataSource quartzDataSource() {
+    public DataSource quartzDataSource(DynamicRoutingDataSource dynamicRoutingDataSource) {
         log.warn("Initial bean: quartzDataSource");
-        return DruidDataSourceBuilder.create().build();
+        return dynamicRoutingDataSource.getDataSource(DataSourceEnum.QUARTZ.getDataSourceName());
     }
 
     @Bean
     @Primary
-    public DynamicRoutingDataSource dynamicDataSource(@Qualifier("masterDataSource") DataSource masterDataSource,
-                                                      @Qualifier("slave1DataSource") DataSource slave1DataSource) {
-        log.warn("Loading masterDataSource and slave1DataSource as DynamicDataSource");
+    public ReadWriteIsolationDynamicRoutingDataSource dynamicDataSource(DynamicRoutingDataSource dynamicRoutingDataSource) {
         val targetDataSources = new HashMap<>(4);
-        targetDataSources.put(DataSourceTypeEnum.MASTER, masterDataSource);
-        targetDataSources.put(DataSourceTypeEnum.SLAVE1, slave1DataSource);
-        val dynamicDataSource = new DynamicRoutingDataSource();
-        dynamicDataSource.setDefaultTargetDataSource(masterDataSource);
+        targetDataSources.put(DataSourceEnum.MASTER,
+                              dynamicRoutingDataSource.getDataSource(DataSourceEnum.MASTER.getDataSourceName()));
+        targetDataSources.put(DataSourceEnum.SLAVE1,
+                              dynamicRoutingDataSource.getDataSource(DataSourceEnum.SLAVE1.getDataSourceName()));
+        val dynamicDataSource = new ReadWriteIsolationDynamicRoutingDataSource();
+        dynamicDataSource.setDefaultTargetDataSource(dynamicRoutingDataSource.getDataSource("master"));
         dynamicDataSource.setTargetDataSources(targetDataSources);
+        log.warn("Set 'masterDataSource' and 'slave1DataSource' as {}",
+                 ReadWriteIsolationDynamicRoutingDataSource.class.getSimpleName());
         return dynamicDataSource;
     }
 
     @Bean
-    public PlatformTransactionManager platformTransactionManager(DynamicRoutingDataSource dynamicRoutingDataSource) {
-        return new DataSourceTransactionManager(dynamicRoutingDataSource);
+    public PlatformTransactionManager platformTransactionManager(ReadWriteIsolationDynamicRoutingDataSource readWriteIsolationDynamicRoutingDataSource) {
+        return new DataSourceTransactionManager(readWriteIsolationDynamicRoutingDataSource);
     }
 }
