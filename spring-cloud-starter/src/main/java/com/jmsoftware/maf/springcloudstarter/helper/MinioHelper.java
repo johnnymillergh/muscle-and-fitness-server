@@ -4,7 +4,6 @@ import cn.hutool.core.util.ObjectUtil;
 import io.minio.*;
 import io.minio.http.Method;
 import io.minio.messages.Bucket;
-import io.minio.messages.DeleteError;
 import io.minio.messages.DeleteObject;
 import io.minio.messages.Item;
 import lombok.RequiredArgsConstructor;
@@ -45,24 +44,24 @@ public class MinioHelper {
 
     @SneakyThrows
     public boolean bucketExists(@NotBlank String bucketName) {
-        return minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());
+        return this.minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());
     }
 
     @SneakyThrows
+    @SuppressWarnings("UnusedReturnValue")
     public boolean makeBucket(@NotBlank String bucketName) {
-        val exists = bucketExists(bucketName);
-        if (exists) {
+        if (this.bucketExists(bucketName)) {
             log.warn("The bucket named '{}' exists", bucketName);
             return false;
         }
-        minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
+        this.minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
         return true;
     }
 
     @SneakyThrows
     public ObjectWriteResponse put(@NotBlank String bucketName, @NotBlank String objectName,
                                    @NotNull MultipartFile multipartFile) {
-        return minioClient.putObject(
+        return this.minioClient.putObject(
                 PutObjectArgs.builder()
                         .bucket(bucketName)
                         .object(objectName)
@@ -74,7 +73,7 @@ public class MinioHelper {
     @SneakyThrows
     public ObjectWriteResponse putObject(@NotBlank String bucketName, @NotBlank String objectName,
                                          @NotNull InputStream inputStream, @NotBlank String contentType) {
-        return minioClient.putObject(
+        return this.minioClient.putObject(
                 PutObjectArgs
                         .builder()
                         .bucket(bucketName)
@@ -86,43 +85,41 @@ public class MinioHelper {
 
     @SneakyThrows
     public List<String> listBucketNames() {
-        return listBuckets().stream().map(Bucket::name).collect(Collectors.toList());
+        return this.listBuckets().stream().map(Bucket::name).collect(Collectors.toList());
     }
 
     @SneakyThrows
     public List<Bucket> listBuckets() {
-        return minioClient.listBuckets();
+        return this.minioClient.listBuckets();
     }
 
     @SneakyThrows
     public boolean removeBucket(@NotBlank String bucketName) {
-        val exists = bucketExists(bucketName);
-        if (!exists) {
+        if (!this.bucketExists(bucketName)) {
             return false;
         }
-        Iterable<Result<Item>> myObjects = listObjects(bucketName);
-        for (Result<Item> result : myObjects) {
-            Item item = result.get();
+        val myObjects = this.listObjects(bucketName);
+        for (val result : myObjects) {
+            val item = result.get();
             // If item has files, fail to remove
             if (item.size() > 0) {
                 return false;
             }
         }
         // If bucket is empty, then it can be removed
-        minioClient.removeBucket(RemoveBucketArgs.builder().bucket(bucketName).build());
-        return !bucketExists(bucketName);
+        this.minioClient.removeBucket(RemoveBucketArgs.builder().bucket(bucketName).build());
+        return !this.bucketExists(bucketName);
     }
 
     @SneakyThrows
     public List<String> listObjectNames(@NotBlank String bucketName) {
-        List<String> listObjectNames = new LinkedList<>();
-        boolean exists = bucketExists(bucketName);
-        if (!exists) {
+        val listObjectNames = new LinkedList<String>();
+        if (!this.bucketExists(bucketName)) {
             return listObjectNames;
         }
-        Iterable<Result<Item>> myObjects = listObjects(bucketName);
-        for (Result<Item> result : myObjects) {
-            Item item = result.get();
+        val myObjects = this.listObjects(bucketName);
+        for (val result : myObjects) {
+            val item = result.get();
             listObjectNames.add(item.objectName());
         }
         return listObjectNames;
@@ -130,57 +127,56 @@ public class MinioHelper {
 
     @SneakyThrows
     public Iterable<Result<Item>> listObjects(@NotBlank String bucketName) {
-        boolean exists = bucketExists(bucketName);
-        if (exists) {
-            return minioClient.listObjects(ListObjectsArgs.builder().bucket(bucketName).build());
+        if (!this.bucketExists(bucketName)) {
+            return null;
         }
-        return null;
+        return this.minioClient.listObjects(ListObjectsArgs.builder().bucket(bucketName).build());
     }
 
     @SneakyThrows
     public GetObjectResponse getObject(@NotBlank String bucketName, @NotBlank String objectName) {
-        if (!bucketExists(bucketName)) {
+        if (!this.bucketExists(bucketName)) {
             return null;
         }
-        val statObjectResponse = statObject(bucketName, objectName);
+        val statObjectResponse = this.statObject(bucketName, objectName);
         if (ObjectUtil.isNull(statObjectResponse) || statObjectResponse.size() == 0) {
             return null;
         }
-        return minioClient.getObject(GetObjectArgs.builder().bucket(bucketName).object(objectName).build());
+        return this.minioClient.getObject(GetObjectArgs.builder().bucket(bucketName).object(objectName).build());
     }
 
     @SneakyThrows
     public GetObjectResponse getObject(@NotBlank String bucketName, @NotBlank String objectName, @Min(0L) long offset,
                                        @NotNull @Min(0L) Long length) {
-        if (!bucketExists(bucketName)) {
+        if (!this.bucketExists(bucketName)) {
             return null;
         }
-        val statObjectResponse = statObject(bucketName, objectName);
+        val statObjectResponse = this.statObject(bucketName, objectName);
         if (ObjectUtil.isNull(statObjectResponse) || statObjectResponse.size() == 0) {
             return null;
         }
-        return minioClient.getObject(
+        return this.minioClient.getObject(
                 GetObjectArgs.builder().bucket(bucketName).object(objectName).offset(offset).length(length).build());
     }
 
     @SneakyThrows
     public boolean removeObject(String bucketName, String objectName) {
-        if (!bucketExists(bucketName)) {
+        if (!this.bucketExists(bucketName)) {
             return false;
         }
-        minioClient.removeObject(RemoveObjectArgs.builder().bucket(bucketName).object(objectName).build());
+        this.minioClient.removeObject(RemoveObjectArgs.builder().bucket(bucketName).object(objectName).build());
         return true;
     }
 
     @SneakyThrows
     public List<String> removeObject(String bucketName, List<String> objectNames) {
-        final List<String> deleteErrorNameList = new LinkedList<>();
-        if (bucketExists(bucketName)) {
+        val deleteErrorNameList = new LinkedList<String>();
+        if (this.bucketExists(bucketName)) {
             val deleteObjectList = objectNames.stream().map(DeleteObject::new).collect(Collectors.toList());
-            Iterable<Result<DeleteError>> results = minioClient.removeObjects(
+            val results = this.minioClient.removeObjects(
                     RemoveObjectsArgs.builder().bucket(bucketName).objects(deleteObjectList).build());
-            for (Result<DeleteError> result : results) {
-                DeleteError error = result.get();
+            for (val result : results) {
+                val error = result.get();
                 deleteErrorNameList.add(error.objectName());
             }
         }
@@ -191,10 +187,10 @@ public class MinioHelper {
     public String getPresignedObjectUrl(@NotBlank String bucketName, @NotBlank String objectName,
                                         @NotNull Method method,
                                         @NotNull @Min(1L) @Max(DEFAULT_EXPIRY_TIME) Integer expiration) {
-        if (!bucketExists(bucketName)) {
+        if (!this.bucketExists(bucketName)) {
             return null;
         }
-        return minioClient.getPresignedObjectUrl(
+        return this.minioClient.getPresignedObjectUrl(
                 GetPresignedObjectUrlArgs
                         .builder()
                         .bucket(bucketName)
@@ -206,38 +202,18 @@ public class MinioHelper {
 
     @SneakyThrows
     public StatObjectResponse statObject(@NotBlank String bucketName, @NotBlank String objectName) {
-        boolean exists = bucketExists(bucketName);
-        if (!exists) {
+        if (!this.bucketExists(bucketName)) {
             return null;
         }
-        return minioClient.statObject(StatObjectArgs.builder().bucket(bucketName).object(objectName).build());
+        return this.minioClient.statObject(StatObjectArgs.builder().bucket(bucketName).object(objectName).build());
     }
 
     @SneakyThrows
     public String getPresignedObjectUrl(@NotBlank String bucketName, @NotBlank String objectName) {
-        if (!bucketExists(bucketName)) {
+        if (!this.bucketExists(bucketName)) {
             return null;
         }
-        return minioClient.getPresignedObjectUrl(
+        return this.minioClient.getPresignedObjectUrl(
                 GetPresignedObjectUrlArgs.builder().bucket(bucketName).object(objectName).build());
     }
-
-//    public void downloadFile(@NotBlank String bucketName, @NotBlank String fileName, String originalName,
-//                             @NotNull HttpServletResponse response) {
-//            InputStream file = minioClient.getObject(bucketName, fileName);
-//            String filename = new String(fileName.getBytes("ISO8859-1"), StandardCharsets.UTF_8);
-//            if (StringUtils.isNotEmpty(originalName)) {
-//                fileName = originalName;
-//            }
-//            response.setHeader("Content-Disposition", "attachment;filename=" + filename);
-//            ServletOutputStream servletOutputStream = response.getOutputStream();
-//            int len;
-//            byte[] buffer = new byte[1024];
-//            while ((len = file.read(buffer)) > 0) {
-//                servletOutputStream.write(buffer, 0, len);
-//            }
-//            servletOutputStream.flush();
-//            file.close();
-//            servletOutputStream.close();
-//    }
 }

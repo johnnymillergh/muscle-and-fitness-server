@@ -7,8 +7,11 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.quartz.*;
+import org.springframework.lang.Nullable;
+import org.springframework.scheduling.SchedulingException;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Map;
 import java.util.function.UnaryOperator;
 
@@ -24,19 +27,20 @@ public class QuartzJobServiceImpl implements QuartzJobService {
     public static final String JOB_DETAIL_POSTFIX = "-job-detail";
     public static final String TRIGGER_POSTFIX = "-trigger";
     private static final UnaryOperator<String> JOB_DETAIL_NAME_OPERATOR = jobName -> jobName + JOB_DETAIL_POSTFIX;
-    private static final UnaryOperator<String> TRIGGER_NAME_OPERATOR = jobName -> jobName + JOB_DETAIL_POSTFIX;
+    private static final UnaryOperator<String> TRIGGER_NAME_OPERATOR = jobName -> jobName + TRIGGER_POSTFIX;
     private final SchedulerFactoryBean schedulerFactoryBean;
 
     @Override
-    @SneakyThrows
-    public void addJob(String clazzName, String jobName, String groupName, String cronExp, Map<String, Object> param) {
+    @SneakyThrows({ClassNotFoundException.class, SchedulerException.class})
+    public void addJob(@NotBlank String clazzName, @NotBlank String jobName, @NotBlank String groupName,
+                       @NotBlank String cronExp, @Nullable Map<String, Object> param) {
         val jobDetailName = JOB_DETAIL_NAME_OPERATOR.apply(jobName);
         // Build job
         val jobClass = Class.forName(clazzName).asSubclass(Job.class);
         val jobDetail = JobBuilder.newJob(jobClass).withIdentity(jobDetailName, groupName).build();
         // Build cron-expression schedule
         val scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExp);
-        val triggerName = jobName + TRIGGER_POSTFIX;
+        val triggerName = TRIGGER_NAME_OPERATOR.apply(jobName);
         // Build trigger
         val trigger = TriggerBuilder
                 .newTrigger()
@@ -51,32 +55,33 @@ public class QuartzJobServiceImpl implements QuartzJobService {
     }
 
     @Override
-    @SneakyThrows
-    public void pauseJob(String jobName, String groupName) {
+    @SneakyThrows({SchedulerException.class})
+    public void pauseJob(@NotBlank String jobName, @NotBlank String groupName) {
         val jobDetailName = JOB_DETAIL_NAME_OPERATOR.apply(jobName);
         this.schedulerFactoryBean.getScheduler().pauseJob(JobKey.jobKey(jobDetailName, groupName));
         log.info("Paused job. jobDetailName: {}", jobDetailName);
     }
 
     @Override
-    @SneakyThrows
-    public void resumeJob(String jobName, String groupName) {
+    @SneakyThrows({SchedulerException.class})
+    public void resumeJob(@NotBlank String jobName, @NotBlank String groupName) {
         val jobDetailName = JOB_DETAIL_NAME_OPERATOR.apply(jobName);
         this.schedulerFactoryBean.getScheduler().resumeJob(JobKey.jobKey(jobDetailName, groupName));
         log.info("Resumed job. jobDetailName: {}", jobDetailName);
     }
 
     @Override
-    @SneakyThrows
-    public void runImmediately(String jobName, String groupName) {
+    @SneakyThrows({SchedulerException.class})
+    public void runImmediately(@NotBlank String jobName, @NotBlank String groupName) {
         val jobDetailName = JOB_DETAIL_NAME_OPERATOR.apply(jobName);
         this.schedulerFactoryBean.getScheduler().triggerJob(JobKey.jobKey(jobDetailName, groupName));
         log.info("Triggered the identified JobDetail (execute it now). jobDetailName: {}", jobDetailName);
     }
 
     @Override
-    @SneakyThrows
-    public void updateJob(String jobName, String groupName, String cronExp, Map<String, Object> param) {
+    @SneakyThrows({SchedulerException.class})
+    public void updateJob(@NotBlank String jobName, @NotBlank String groupName, @NotBlank String cronExp,
+                          @Nullable Map<String, Object> param) {
         val triggerName = TRIGGER_NAME_OPERATOR.apply(jobName);
         val triggerKey = TriggerKey.triggerKey(triggerName, groupName);
         var trigger = (CronTrigger) this.schedulerFactoryBean.getScheduler().getTrigger(triggerKey);
@@ -92,8 +97,8 @@ public class QuartzJobServiceImpl implements QuartzJobService {
     }
 
     @Override
-    @SneakyThrows
-    public void deleteJob(String jobName, String groupName) {
+    @SneakyThrows({SchedulerException.class})
+    public void deleteJob(@NotBlank String jobName, @NotBlank String groupName) {
         val triggerName = TRIGGER_NAME_OPERATOR.apply(jobName);
         // Pause, Remove the trigger and the job, and then delete the job.
         this.schedulerFactoryBean.getScheduler().pauseTrigger(TriggerKey.triggerKey(jobName, groupName));
@@ -103,21 +108,21 @@ public class QuartzJobServiceImpl implements QuartzJobService {
     }
 
     @Override
-    @SneakyThrows
+    @SneakyThrows({SchedulingException.class})
     public void startAllJobs() {
         this.schedulerFactoryBean.start();
         log.info("Started jobs.");
     }
 
     @Override
-    @SneakyThrows
+    @SneakyThrows({SchedulerException.class})
     public void pauseAllJobs() {
         this.schedulerFactoryBean.getScheduler().pauseAll();
         log.info("Paused all jobs.");
     }
 
     @Override
-    @SneakyThrows
+    @SneakyThrows({SchedulerException.class})
     public void resumeAllJobs() {
         this.schedulerFactoryBean.getScheduler().resumeAll();
         log.info("Resumed all jobs.");

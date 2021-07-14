@@ -1,5 +1,9 @@
 package com.jmsoftware.maf.springcloudstarter.quartz;
 
+import org.springframework.lang.Nullable;
+import org.springframework.validation.annotation.Validated;
+
+import javax.validation.constraints.NotBlank;
 import java.util.Map;
 
 /**
@@ -7,9 +11,10 @@ import java.util.Map;
  *
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 7/13/2021 10:17 PM
  */
+@Validated
 public interface QuartzJobService {
     /**
-     * 添加任务可以传参数
+     * Add job.
      *
      * @param clazzName the clazz name
      * @param jobName   the job name
@@ -17,67 +22,69 @@ public interface QuartzJobService {
      * @param cronExp   the cron exp
      * @param param     the param
      */
-    void addJob(String clazzName, String jobName, String groupName, String cronExp, Map<String, Object> param);
+    void addJob(@NotBlank String clazzName, @NotBlank String jobName, @NotBlank String groupName,
+                @NotBlank String cronExp, @Nullable Map<String, Object> param);
 
     /**
-     * 暂停任务
+     * Pause job.
      *
      * @param jobName   the job name
      * @param groupName the group name
      */
-    void pauseJob(String jobName, String groupName);
+    void pauseJob(@NotBlank String jobName, @NotBlank String groupName);
 
     /**
-     * 恢复任务
+     * Resume job.
      *
      * @param jobName   the job name
      * @param groupName the group name
      */
-    void resumeJob(String jobName, String groupName);
+    void resumeJob(@NotBlank String jobName, @NotBlank String groupName);
 
     /**
-     * 立即运行一次定时任务
+     * Run immediately.
      *
      * @param jobName   the job name
      * @param groupName the group name
      */
-    void runImmediately(String jobName, String groupName);
+    void runImmediately(@NotBlank String jobName, @NotBlank String groupName);
 
     /**
-     * 更新任务
+     * Update job.
      *
      * @param jobName   the job name
      * @param groupName the group name
      * @param cronExp   the cron exp
      * @param param     the param
      */
-    void updateJob(String jobName, String groupName, String cronExp, Map<String, Object> param);
+    void updateJob(@NotBlank String jobName, @NotBlank String groupName, @NotBlank String cronExp,
+                   @Nullable Map<String, Object> param);
 
     /**
-     * 删除任务
+     * Delete job.
      *
      * @param jobName   the job name
      * @param groupName the group name
      */
-    void deleteJob(String jobName, String groupName);
+    void deleteJob(@NotBlank String jobName, @NotBlank String groupName);
 
     /**
-     * 启动所有任务
+     * Start all jobs.
      */
     void startAllJobs();
 
     /**
-     * 暂停所有任务
+     * Pause all jobs.
      */
     void pauseAllJobs();
 
     /**
-     * 恢复所有任务
+     * Resume all jobs.
      */
     void resumeAllJobs();
 
     /**
-     * 关闭所有任务
+     * Shutdown all jobs.
      */
     void shutdownAllJobs();
 }

@@ -27,13 +27,13 @@ public class SpringBootStartupHelper {
     public void stop(@NonNull StopWatch stopWatch) {
         stopWatch.stop();
         log.info("🥳 Congratulations! 🎉");
-        log.info("🖥 {}@{} started!", mafProjectProperty.getProjectArtifactId(), mafProjectProperty.getVersion());
-        log.info("⚙️ Environment: {}", mafProjectProperty.getEnvironment());
+        log.info("🖥 {}@{} started!", this.mafProjectProperty.getProjectArtifactId(), this.mafProjectProperty.getVersion());
+        log.info("⚙️ Environment: {}", this.mafProjectProperty.getEnvironment());
         log.info("⏳ Deployment duration: {} seconds ({} ms)", stopWatch.getTotalTimeSeconds(),
                  stopWatch.getTotalTimeMillis());
         log.info("⏰ App started at {} (timezone - {})", Instant.now().atZone(ZoneId.of("UTC+8")), TimeZone.getDefault().getDisplayName());
         log.info("{}  App running at{}  - Local:   http://localhost:{}{}/{}  - Network: http://{}:{}{}/",
-                 LINE_SEPARATOR, LINE_SEPARATOR, ipHelper.getServerPort(), mafProjectProperty.getContextPath(),
-                 LINE_SEPARATOR, ipHelper.getPublicIp(), ipHelper.getServerPort(), mafProjectProperty.getContextPath());
+                 LINE_SEPARATOR, LINE_SEPARATOR, this.ipHelper.getServerPort(), this.mafProjectProperty.getContextPath(),
+                 LINE_SEPARATOR, this.ipHelper.getPublicIp(), this.ipHelper.getServerPort(), this.mafProjectProperty.getContextPath());
     }
 }

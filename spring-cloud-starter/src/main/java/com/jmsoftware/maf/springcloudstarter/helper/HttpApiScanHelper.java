@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
@@ -23,7 +22,6 @@ import java.util.Map;
 @Validated
 @RequiredArgsConstructor
 public class HttpApiScanHelper {
-    private final RequestMappingHandlerMapping requestMappingHandlerMapping;
     private static final String EXCLUDED_PACKAGE;
 
     static {
@@ -36,6 +34,8 @@ public class HttpApiScanHelper {
         log.warn("EXCLUDED_PACKAGE was generated dynamically. EXCLUDED_PACKAGE = {}", EXCLUDED_PACKAGE);
     }
 
+    private final RequestMappingHandlerMapping requestMappingHandlerMapping;
+
     /**
      * Scan map.
      *
@@ -44,7 +44,7 @@ public class HttpApiScanHelper {
      * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 12/25/2020 4:02 PM
      */
     public Map<RequestMappingInfo, HandlerMethod> scan(@NotBlank String includedPackage) {
-        Map<RequestMappingInfo, HandlerMethod> handlerMethods = requestMappingHandlerMapping.getHandlerMethods();
+        Map<RequestMappingInfo, HandlerMethod> handlerMethods = this.requestMappingHandlerMapping.getHandlerMethods();
         log.debug("Scanned request mapping info: {}", handlerMethods);
         val filteredHandlerMethods = new LinkedHashMap<RequestMappingInfo, HandlerMethod>();
         handlerMethods.forEach((requestMappingInfo, handlerMethod) -> {
@@ -52,7 +52,7 @@ public class HttpApiScanHelper {
             if (handlerMethod.toString().contains(includedPackage) &&
                     !handlerMethod.toString().contains(EXCLUDED_PACKAGE)) {
                 try {
-                    RequestMethod requestMethod = new ArrayList<>(
+                    val requestMethod = new ArrayList<>(
                             requestMappingInfo.getMethodsCondition().getMethods()).get(0);
                     log.debug("Request: [{}] {}, handler method: {}", requestMethod,
                               requestMappingInfo.getPatternsCondition(), handlerMethod);

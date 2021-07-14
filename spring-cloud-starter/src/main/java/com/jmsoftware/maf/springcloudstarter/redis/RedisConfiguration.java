@@ -55,7 +55,7 @@ public class RedisConfiguration {
 
         Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer =
                 new Jackson2JsonRedisSerializer<>(Object.class);
-        jackson2JsonRedisSerializer.setObjectMapper(objectMapper);
+        jackson2JsonRedisSerializer.setObjectMapper(this.objectMapper);
 
         // Set key serializers as StringRedisSerializer
         redisTemplate.setKeySerializer(new StringRedisSerializer());

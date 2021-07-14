@@ -29,7 +29,7 @@ public class CommonServiceImpl implements CommonService {
 
     @Override
     public JSON getApplicationInfo() {
-        return JSONUtil.parseObj(mafProjectProperty).set("greeting", greeting);
+        return JSONUtil.parseObj(this.mafProjectProperty).set("greeting", this.greeting);
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.jmsoftware.maf.springcloudstarter.redis;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
@@ -47,7 +48,7 @@ public class RedisCachingConfiguration extends CachingConfigurerSupport {
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(
                         new GenericJackson2JsonRedisSerializer()));
         return RedisCacheManager
-                .builder(redisConnectionFactory)
+                .builder(this.redisConnectionFactory)
                 .cacheDefaults(cacheConfiguration)
                 .build();
     }
@@ -56,7 +57,7 @@ public class RedisCachingConfiguration extends CachingConfigurerSupport {
     @Override
     public CacheResolver cacheResolver() {
         log.warn("Initial bean: '{}'", SimpleCacheResolver.class.getSimpleName());
-        return new SimpleCacheResolver(Objects.requireNonNull(cacheManager()));
+        return new SimpleCacheResolver(Objects.requireNonNull(this.cacheManager()));
     }
 
     @Bean
@@ -64,7 +65,7 @@ public class RedisCachingConfiguration extends CachingConfigurerSupport {
     public KeyGenerator keyGenerator() {
         log.warn("Initial bean: '{}'", KeyGenerator.class.getSimpleName());
         return (target, method, params) -> {
-            StringBuilder stringBuilder = new StringBuilder();
+            val stringBuilder = new StringBuilder();
             stringBuilder.append(target.getClass().getName()).append("#").append(method.getName());
             for (Object param : params) {
                 stringBuilder.append(":").append(param.toString());
