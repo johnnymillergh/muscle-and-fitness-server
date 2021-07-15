@@ -49,4 +49,7 @@ enforce_gtid_consistency=true
 read-only=ON
 skip-log-bin
 skip-log-slave-updates
+replicate-ignore-db=information_schema
 replicate-ignore-db=mysql
+replicate-ignore-db=performance_schema
+replicate-ignore-db=sys
