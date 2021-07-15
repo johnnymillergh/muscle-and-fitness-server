@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>UNSET</title>
-    <link rel="icon" href="icon/favicon.ico">
-    <link rel="stylesheet" href="styles/home.css">
+    <link href="icon/favicon.ico" rel="icon">
+    <link href="style/home.css" rel="stylesheet">
 </head>
 <body>
 <div id="app">
@@ -14,11 +14,11 @@
         <strong class="greeting-text">
             Welcome to <span class="server-name">{{ projectArtifactId }}@{{ version }}</span>!
         </strong>
-        <button class="go-to" @click="handleClickSwaggerApiDocumentation">Go to Swagger API Documentation</button>
-        <button class="go-to" @click="handleClickVideoDemo">Go to Video Demo</button>
+        <button @click="handleClickSwaggerApiDocumentation" class="go-to">Go to Swagger API Documentation</button>
+        <button @click="handleClickVideoDemo" class="go-to">Go to Video Demo</button>
         <span class="application-name">{{ applicationName }}</span>
-        <img class="social-image" src="image/muscle-and-fitness-server-social-image.png"
-             alt="Muscle And Fitness Server Social Image">
+        <img alt="Muscle And Fitness Server Social Image" class="social-image"
+             src="image/muscle-and-fitness-server-social-image.png">
     </div>
     <fieldset>
         <legend>Create New Person</legend>

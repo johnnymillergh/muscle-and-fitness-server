@@ -29,11 +29,13 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
      *
      * @param registry CORS registry
      */
+    @SuppressWarnings("BroadCORSAllowOrigin")
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         log.info("Configuring CORS allowedOrigins: {}, allowedMethods: {}, allowedHeaders: {}", ALL, ALL, ALL);
         registry.addMapping("/**")
-                .allowedOrigins(ALL)
+                .allowCredentials(true)
+                .allowedOriginPatterns(ALL)
                 .allowedMethods(ALL)
                 .allowedHeaders(ALL)
                 .maxAge(MAX_AGE_SECS);

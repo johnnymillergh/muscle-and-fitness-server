@@ -19,6 +19,7 @@ import com.jmsoftware.maf.springcloudstarter.redis.RedisConfiguration;
 import com.jmsoftware.maf.springcloudstarter.service.CommonService;
 import com.jmsoftware.maf.springcloudstarter.service.impl.CommonServiceImpl;
 import com.jmsoftware.maf.springcloudstarter.sftp.SftpConfiguration;
+import com.jmsoftware.maf.springcloudstarter.websocket.WebSocketConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.mybatis.spring.MyBatisSystemException;
@@ -66,7 +67,8 @@ import java.util.List;
         MinioConfiguration.class,
         JacksonConfiguration.class,
         TypeConversionConfiguration.class,
-        QuartzConfiguration.class
+        QuartzConfiguration.class,
+        WebSocketConfiguration.class
 })
 public class MafAutoConfiguration {
     @PostConstruct
