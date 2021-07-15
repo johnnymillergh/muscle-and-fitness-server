@@ -19,6 +19,9 @@ import static org.springframework.web.cors.CorsConfiguration.ALL;
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 7/15/2021 12:15 AM
  * @see
  * <a href='https://www.toptal.com/java/stomp-spring-boot-websocket'>Using Spring Boot for WebSocket Implementation with STOMP</a>
+ * @see <a href='http://jmesnil.net/stomp-websocket/doc/'>STOMP Over WebSocket</a>
+ * @see
+ * <a href='https://ordina-jworks.github.io/event-driven/2020/06/30/user-feedback-websockets.html'>ENABLING USER FEEDBACK WITH WEBSOCKETS ON RABBITMQ AND SPRING CLOUD</a>
  **/
 @Slf4j
 @EnableWebSocketMessageBroker
@@ -61,6 +64,7 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
         // will send it to the broker.
         registry.setApplicationDestinationPrefixes("/app");
 
+        // TODO: use RabbitMQ as broker instead of in-memory message broker
         // Use this for enabling a Full featured broker like RabbitMQ
         /*
         registry.enableStompBrokerRelay("/topic")
