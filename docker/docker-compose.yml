@@ -1,0 +1,401 @@
+version: "3.8"
+
+services:
+  ################################################################################
+  #                           Infrastructure Services                            #
+  ################################################################################
+  mysql-server-master:
+    container_name: ${MYSQL_SERVER_MASTER_CONTAINER_NAME}
+    image: mysql/mysql-server:${MYSQL_SERVER_TAG}
+    environment:
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_ROOT_PASSWORD: ${MAF_MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MAF_MYSQL_DATABASE}
+      TZ: ${MAF_TIMEZONE}
+    ports:
+      - "3306:3306"
+    restart: always
+    volumes:
+      - "~/docker-file-mapping/${MYSQL_SERVER_MASTER_CONTAINER_NAME}:/var/lib/mysql"
+      - ./config/mysql-server/master/mysql-master.cnf:/etc/my.cnf
+      - ./script/mysql-server-master:/docker-entrypoint-initdb.d
+    command: >
+      bash -c "
+      chmod 644 /etc/my.cnf
+      && /entrypoint.sh mysqld
+      "
+    networks:
+      muscle_and_fitness_network:
+
+  mysql-server-slave:
+    container_name: ${MYSQL_SERVER_SLAVE_CONTAINER_NAME}
+    image: mysql/mysql-server:${MYSQL_SERVER_TAG}
+    depends_on:
+      mysql-server-master:
+        condition: service_healthy
+    environment:
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_ROOT_PASSWORD: ${MAF_MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MAF_MYSQL_DATABASE}
+    ports:
+      - "3307:3306"
+    restart: always
+    volumes:
+      - "~/docker-file-mapping/${MYSQL_SERVER_SLAVE_CONTAINER_NAME}:/var/lib/mysql"
+      - ./config/mysql-server/slave-1/mysql-slave.cnf:/etc/my.cnf
+      - ./script/mysql-server-slave:/docker-entrypoint-initdb.d
+    command: >
+      bash -c "
+      chmod 644 /etc/my.cnf
+      && /entrypoint.sh mysqld
+      "
+    networks:
+      muscle_and_fitness_network:
+
+  redis:
+    container_name: ${REDIS_CONTAINER_NAME}
+    image: redis:${REDIS_TAG}
+    ports:
+      - "6379:6379"
+    restart: always
+    volumes:
+      - "~/docker-file-mapping/${REDIS_CONTAINER_NAME}:/data"
+      - ./config/redis/redis.conf:/usr/local/etc/redis/redis.conf
+    environment:
+      TZ: ${MAF_TIMEZONE}
+    command: "redis-server /usr/local/etc/redis/redis.conf"
+    networks:
+      muscle_and_fitness_network:
+
+  atmoz-sftp:
+    container_name: ${ATMOZ_SFTP_CONTAINER_NAME}
+    image: atmoz/sftp:${ATMOZ_SFTP_TAG}
+    ports:
+      # mapping local machine's port 23 to container port 22
+      - "23:22"
+    restart: always
+    volumes:
+      - "~/docker-file-mapping/${ATMOZ_SFTP_CONTAINER_NAME}:/home/johnny/upload"
+    environment:
+      TZ: ${MAF_TIMEZONE}
+    command: "johnny:atmoz@sftp:::upload"
+    networks:
+      muscle_and_fitness_network:
+
+  minio:
+    container_name: ${MINIO_CONTAINER_NAME}
+    image: minio/minio:${MINIO_TAG}
+    ports:
+      - "9900:9000"
+    restart: always
+    volumes:
+      - "~/docker-file-mapping/${MINIO_CONTAINER_NAME}/minio:/data"
+    environment:
+      MINIO_ROOT_USER: ${MAF_MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MAF_MINIO_ROOT_PASSWORD}
+    command: server /data
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9000/minio/health/live" ]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    networks:
+      muscle_and_fitness_network:
+
+  rabbitmq:
+    container_name: ${RABBITMQ_CONTAINER_NAME}
+    hostname: ${RABBITMQ_CONTAINER_NAME}
+    image: rabbitmq:${RABBITMQ_TAG}
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+      - "61613:61613"
+    restart: always
+    volumes:
+      - ./config/rabbitmq:/etc/rabbitmq
+      - ./plugin/rabbitmq/rabbitmq_delayed_message_exchange-3.8.9-0199d11c.ez:/plugins/rabbitmq_delayed_message_exchange-3.8.9-0199d11c.ez
+      - "~/docker-file-mapping/${RABBITMQ_CONTAINER_NAME}:/var/lib/rabbitmq"
+    environment:
+      RABBITMQ_DEFAULT_USER: ${MAF_RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${MAF_RABBITMQ_PASSWORD}
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    networks:
+      muscle_and_fitness_network:
+
+  zipkin-mysql:
+    container_name: ${ZIPKIN_MYSQL_CONTAINER_NAME}
+    image: openzipkin/zipkin-mysql:${ZIPKIN_MYSQL_TAG}
+    restart: always
+    networks:
+      muscle_and_fitness_network:
+
+  zipkin-dependencies:
+    container_name: ${ZIPKIN_DEPENDENCIES_CONTAINER_NAME}
+    image: openzipkin/zipkin-dependencies:${ZIPKIN_DEPENDENCIES_TAG}
+    entrypoint: crond -f
+    environment:
+      # Uncomment to see dependency processing logs
+      ZIPKIN_LOG_LEVEL: DEBUG
+      STORAGE_TYPE: mysql
+      MYSQL_HOST: ${ZIPKIN_MYSQL_CONTAINER_NAME}
+      MYSQL_USER: zipkin
+      MYSQL_PASS: zipkin
+    depends_on:
+      zipkin-mysql:
+        condition: service_healthy
+    restart: always
+    networks:
+      muscle_and_fitness_network:
+
+  zipkin:
+    container_name: ${ZIPKIN_CONTAINER_NAME}
+    image: openzipkin/zipkin:${ZIPKIN_TAG}
+    depends_on:
+      zipkin-mysql:
+        condition: service_healthy
+    # Environment settings are defined here https://github.com/openzipkin/zipkin/blob/master/zipkin-server/README.md#environment-variables
+    environment:
+      STORAGE_TYPE: mysql
+      # Point the zipkin at the storage backend
+      MYSQL_HOST: ${ZIPKIN_MYSQL_CONTAINER_NAME}
+      MYSQL_USER: zipkin
+      MYSQL_PASS: zipkin
+      # Uncomment to enable request logging (TRACE shows query values)
+      command: --logging.level.com.datastax.oss.driver.internal.core.tracker.RequestLogger=TRACE
+      JAVA_OPTS: -Xms128m -Xmx128m -XX:+ExitOnOutOfMemoryError
+      TZ: ${MAF_TIMEZONE}
+    # Uncomment to enable scribe
+    # - SCRIBE_ENABLED=true
+    # Uncomment to enable self-tracing
+    # - SELF_TRACING_ENABLED=true
+    # Uncomment to enable debug logging
+    # - JAVA_OPTS=-Dlogging.level.zipkin2=DEBUG
+    ports:
+      # Port used for the Zipkin UI and HTTP Api
+      - 9411:9411
+      # Uncomment if you set SCRIBE_ENABLED=true
+      # - 9410:9410
+    restart: always
+    networks:
+      muscle_and_fitness_network:
+
+  consul-registry:
+    container_name: ${CONSUL_REGISTRY_CONTAINER_NAME}
+    hostname: ${CONSUL_REGISTRY_CONTAINER_NAME}
+    image: consul:${CONSUL_TAG}
+    depends_on:
+      zipkin:
+        condition: service_healthy
+    ports:
+      - "8500:8500"
+    restart: always
+    volumes:
+      - "~/docker-file-mapping/${CONSUL_REGISTRY_CONTAINER_NAME}:/consul/data"
+    command: "agent -server -ui -disable-host-node-id -bootstrap-expect=1 -client=0.0.0.0"
+    networks:
+      muscle_and_fitness_network:
+
+  elasticsearch:
+    container_name: ${ELASTICSEARCH_CONTAINER_NAME}
+    image: elasticsearch:${ELASTICSEARCH_TAG}
+    ports:
+      - "9200:9200"
+    restart: always
+    volumes:
+      # - "~/docker-file-mapping/${ELASTICSEARCH_CONTAINER_NAME}/plugins:/usr/share/elasticsearch/plugins"
+      - "~/docker-file-mapping/${ELASTICSEARCH_CONTAINER_NAME}/data:/usr/share/elasticsearch/data"
+    environment:
+      cluster.name: elasticsearch
+      discovery.type: single-node
+      ES_JAVA_OPTS: "-Xms512m -Xmx1G"
+      ELASTIC_PASSWORD: ${MAF_ELASTICSEARCH_PASSWORD}
+      xpack.security.enabled: "true"
+      # Force publishing on the 'elk' overlay.
+      network.publish_host: _eth0_
+    networks:
+      muscle_and_fitness_network:
+
+  logstash:
+    container_name: ${LOGSTASH_CONTAINER_NAME}
+    image: logstash:${LOGSTASH_TAG}
+    depends_on:
+      elasticsearch:
+        condition: service_started
+    ports:
+      - "4560:4560"
+    restart: always
+    volumes:
+      - ./config/logstash/logstash-maf.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./config/logstash/logstash-maf.yml:/usr/share/logstash/config/logstash.yml
+    networks:
+      muscle_and_fitness_network:
+
+  kibana:
+    container_name: ${KIBANA_CONTAINER_NAME}
+    image: kibana:${KIBANA_TAG}
+    depends_on:
+      elasticsearch:
+        condition: service_started
+    ports:
+      - "5601:5601"
+    restart: always
+    volumes:
+      - ./config/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+    networks:
+      muscle_and_fitness_network:
+
+  spring-boot-admin:
+    container_name: ${SPRING_BOOT_ADMIN_CONTAINER_NAME}
+    hostname: ${SPRING_BOOT_ADMIN_CONTAINER_NAME}
+    image: ijohnnymiller/muscle-and-fitness-server.spring-boot-admin:${MAF_TAG}
+    depends_on:
+      consul-registry:
+        condition: service_started
+    ports:
+      - "8761:8761"
+    restart: always
+    volumes:
+      - "~/docker-file-mapping/${SPRING_BOOT_ADMIN_CONTAINER_NAME}:/logs"
+    environment:
+      JAVA_TOOL_OPTIONS: "${JAVA_TOOL_OPTIONS}"
+      TZ: ${MAF_TIMEZONE}
+    healthcheck:
+      test: "wget localhost:8761/actuator/health -q -O - > /dev/null 2>&1"
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+    networks:
+      muscle_and_fitness_network:
+
+  ################################################################################
+  #                     Microservice of Muscle and Fitness                       #
+  ################################################################################
+  #                              Business Service                                #
+  #------------------------------------------------------------------------------#
+  api-gateway:
+    container_name: ${API_GATEWAY_CONTAINER_NAME}
+    hostname: ${API_GATEWAY_CONTAINER_NAME}
+    image: ijohnnymiller/muscle-and-fitness-server.api-gateway:${MAF_TAG}
+    depends_on:
+      consul-registry:
+        condition: service_started
+      redis:
+        condition: service_started
+    restart: always
+    ports:
+      - "8080:8080"
+    volumes:
+      - "~/docker-file-mapping/${API_GATEWAY_CONTAINER_NAME}:/logs"
+    environment:
+      JAVA_TOOL_OPTIONS: ${JAVA_TOOL_OPTIONS}
+      TZ: ${MAF_TIMEZONE}
+    healthcheck:
+      test: "wget localhost:8080/actuator/health -q -O - > /dev/null 2>&1"
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+    networks:
+      muscle_and_fitness_network:
+
+  auth-center:
+    container_name: ${AUTH_CENTER_CONTAINER_NAME}
+    hostname: ${AUTH_CENTER_CONTAINER_NAME}
+    image: ijohnnymiller/muscle-and-fitness-server.auth-center:${MAF_TAG}
+    depends_on:
+      consul-registry:
+        condition: service_started
+      redis:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+      mysql-server-master:
+        condition: service_healthy
+      mysql-server-slave:
+        condition: service_healthy
+    restart: always
+    volumes:
+      - "~/docker-file-mapping/${AUTH_CENTER_CONTAINER_NAME}:/logs"
+    environment:
+      JAVA_TOOL_OPTIONS: ${JAVA_TOOL_OPTIONS}
+      TZ: ${MAF_TIMEZONE}
+    healthcheck:
+      test: "wget localhost:8800/actuator/health -q -O - > /dev/null 2>&1"
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+    networks:
+      muscle_and_fitness_network:
+
+  oss-center:
+    container_name: ${OSS_CENTER_CONTAINER_NAME}
+    hostname: ${OSS_CENTER_CONTAINER_NAME}
+    image: ijohnnymiller/muscle-and-fitness-server.oss-center:${MAF_TAG}
+    depends_on:
+      consul-registry:
+        condition: service_started
+      redis:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+      minio:
+        condition: service_started
+      mysql-server-master:
+        condition: service_healthy
+      mysql-server-slave:
+        condition: service_healthy
+    restart: always
+    volumes:
+      - "~/docker-file-mapping/${OSS_CENTER_CONTAINER_NAME}:/logs"
+    environment:
+      JAVA_TOOL_OPTIONS: ${JAVA_TOOL_OPTIONS}
+      TZ: ${MAF_TIMEZONE}
+    healthcheck:
+      test: "wget localhost:8760/actuator/health -q -O - > /dev/null 2>&1"
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+    networks:
+      muscle_and_fitness_network:
+
+  maf-mis:
+    container_name: ${MAF_MIS_CONTAINER_NAME}
+    hostname: ${MAF_MIS_CONTAINER_NAME}
+    image: ijohnnymiller/muscle-and-fitness-server.maf-mis:${MAF_TAG}
+    depends_on:
+      consul-registry:
+        condition: service_started
+      redis:
+        condition: service_started
+      mysql-server-master:
+        condition: service_healthy
+      mysql-server-slave:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    restart: always
+    volumes:
+      - "~/docker-file-mapping/${MAF_MIS_CONTAINER_NAME}:/logs"
+    environment:
+      JAVA_TOOL_OPTIONS: ${JAVA_TOOL_OPTIONS}
+      TZ: ${MAF_TIMEZONE}
+    healthcheck:
+      test: "wget localhost:8801/actuator/health -q -O - > /dev/null 2>&1"
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+    networks:
+      muscle_and_fitness_network:
+
+networks:
+  muscle_and_fitness_network:
+    ipam:
+      driver: default

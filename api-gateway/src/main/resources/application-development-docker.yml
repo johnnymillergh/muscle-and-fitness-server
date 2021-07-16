@@ -1,0 +1,9 @@
+spring:
+  zipkin:
+    base-url: http://maf-zipkin:9411
+  devtools:
+    add-properties: true
+  redis:
+    host: maf-redis
+    port: 6379
+    password: maf@redis

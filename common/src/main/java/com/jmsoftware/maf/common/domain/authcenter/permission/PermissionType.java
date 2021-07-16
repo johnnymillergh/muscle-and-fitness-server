@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
  * <h1>PermissionType</h1>
  * <p>Change description here</p>
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 2019-05-25 10:24
  **/
 @Slf4j
@@ -16,25 +16,25 @@ public enum PermissionType {
     /**
      * Controller
      */
-    CONTROLLER(0, "Controller"),
+    CONTROLLER((byte) 0, "Controller"),
     /**
      * Page
      */
-    PAGE(1, "Page"),
+    PAGE((byte) 1, "Page"),
     /**
      * Button
      */
-    BUTTON(2, "Button (API)");
+    BUTTON((byte) 2, "Button (API)");
 
-    private final Integer type;
+    private final Byte type;
     private final String description;
 
-    PermissionType(Integer type, String description) {
+    PermissionType(Byte type, String description) {
         this.type = type;
         this.description = description;
     }
 
-    public static PermissionType getByType(Integer type) {
+    public static PermissionType getByType(Byte type) {
         PermissionType permissionType = null;
         PermissionType[] values = PermissionType.values();
         for (PermissionType pt : values) {

@@ -26,35 +26,33 @@ Here is the highlights of **Muscle and Fitness Server**:
 
 2. [Spring Cloud](https://spring.io/projects/spring-cloud) Feature:
 
-   - Eureka - Service registration and discovery.
-
-   - Spring Boot Admin - Admin UI for administration of spring boot applications.
-
+   - Consul - Service registration and discovery.
+   - Spring Cloud Gateway - API Gateway on top of Spring WebFlux.  Provide a simple, yet effective way to route to APIs and provide cross cutting concerns to them such as: security, monitoring/metrics, and resiliency.
    - Spring Cloud OpenFeign - Declarative REST Client: Feign creates a dynamic implementation of an interface decorated with JAX-RS or Spring MVC annotations.
-
-   - Spring Cloud Gateway - provide a simple, yet effective way to route to APIs and provide cross cutting concerns to them such as: security, monitoring/metrics, and resiliency.
-
+   - Spring Boot Admin - Admin UI for administration of spring boot applications.
    - Zipkin - a distributed tracing system. It helps gather timing data needed to troubleshoot latency problems in service architectures.
 
-3. Docker support.
+3. MySQL cluster support. Dynamic SQL read-write isolation.
 
-4. Multi-environment support.
+4. Docker support.
 
-5. SFTP integration.
+5. Multi-environment support.
 
-6. API visualization. Enhanced Swagger API documentation.
+6. OSS service, based on Minio and SFTP integration.
 
-7. Log compression.
+7. API visualization. Enhanced Swagger API documentation.
 
-8. Request log.
+8. Log compression.
 
-9. Method Argument Validation Aspect.
+9. Request log.
 
-10. Docker container log persistence.
+10. Method Argument Validation Aspect.
 
-11. Startup statistics.
+11. Docker container log persistence.
 
-12. Customized startup banner.
+12. Startup statistics.
+
+13. Customized startup banner.
 
 ## Usage
 
@@ -67,6 +65,59 @@ Here is the highlights of **Muscle and Fitness Server**:
 2. Build with newest Intellij IDEA.
 
 3. Click the green triangle to Run.
+
+## Useful Commands
+
+### Maven
+
+1. Compile:
+
+   ```shell
+   $ mvn clean validate compile --batch-mode --show-version --quiet -f pom.xml
+   ```
+
+2. Package:
+
+   ```shell
+   $ mvn clean package --batch-mode --show-version --quiet -f pom.xml
+   ```
+
+3. Set Version:
+
+   ```sh
+   $ mvn versions:set -DgenerateBackupPoms=false -f pom.xml
+   ```
+
+4. Build Docker Images:
+
+   ```shell
+   $ mvn clean verify --batch-mode --show-version --quiet -f pom.xml
+   ```
+
+### Conventional Changelog CLI
+
+1. Install global dependencies (optional if installed):
+
+   ```
+   npm install -g conventional-changelog-cli
+   ```
+
+2. This will *not* overwrite any previous changelogs. The above generates a changelog based on commits since the last semver tag that matches the pattern of "Feature", "Fix", "Performance Improvement" or "Breaking Changes".
+
+   ```
+   conventional-changelog -p angular -i CHANGELOG.md -s
+   ```
+
+3. If this is your first time using this tool and you want to generate all previous changelogs, you could do:
+
+   ```
+   conventional-changelog -p angular -i CHANGELOG.md -s -r 0
+   ```
+
+## CI (Continuous Integration)
+
+- [Travis CI](https://travis-ci.com/github/johnnymillergh/media-streaming) is for publishing Docker Hub images of SNAPSHOT and RELEASE.
+- [GitHub Actions](https://github.com/johnnymillergh/media-streaming/actions) is for checking dependency updates and tests.
 
 ## Maintainers
 
@@ -93,5 +144,4 @@ Support this project by becoming a sponsor. Your logo will show up here with a l
 [Apache License](https://github.com/johnnymillergh/exrx-net-crawler-server/blob/master/LICENSE) © Johnny Miller
 
 2020 - Present
-
 

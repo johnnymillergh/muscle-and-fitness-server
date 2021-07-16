@@ -2,7 +2,7 @@
 ############################## auto-run ############################
 # Author: Johnny Miller, date: 7:31 AM, Dec. 5, 2020               #
 # Copyright (c) Johnny Miller                                      #
-# Capability: macOS Big Sur 11.0.1 (20B29)                         #
+# Capability: macOS Big Sur 11.2.1 (20D74)                         #
 # Purpose:                                                         #
 #   1. Integrate easy and simple deployment,                       #
 #   2. Reduce memory usage of IntelliJ IDEA to run services,       #
@@ -16,14 +16,12 @@ set -e
 
 ############### Configurable Environment Variables ################
 readonly mavenActiveProfile="development-local"
-readonly javaParameter="-Xms256m -Xmx256m -Dspring.profiles.active=$mavenActiveProfile"
-# The name of service `service-registry` is `service-registry`, also equal to the directory `service-registry`.
+readonly javaParameter="-Xms256m -Xmx256m -Dfile.encoding=UTF-8 -Dspring.cloud.consul.host=localhost -Dspring.profiles.active=$mavenActiveProfile"
 readonly runServices=(
-  service-registry
-  spring-boot-admin
-#  api-portal
+  auth-center
+  api-gateway
 )
-readonly skipGitPull=false
+readonly skipGitPull=true
 readonly skipBuild=false
 # Available options for `startMode`: "keep-previous", "overlap"
 readonly startMode="overlap"

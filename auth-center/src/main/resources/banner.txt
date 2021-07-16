@@ -4,8 +4,8 @@ ${AnsiStyle.BOLD}${AnsiColor.BRIGHT_GREEN}
   / /| |/ / / / __/ __ \   / /   / _ \/ __ \/ __/ _ \/ ___/
  / ___ / /_/ / /_/ / / /  / /___/  __/ / / / /_/  __/ /
 /_/  |_\__,_/\__/_/ /_/   \____/\___/_/ /_/\__/\___/_/
-${AnsiStyle.BOLD}Exercise MIS :: Powered by Spring Boot ::${spring-boot.formatted-version}
-${AnsiColor.CYAN}Author: Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+${AnsiStyle.BOLD}Auth Center :: Powered by Spring Boot ::${spring-boot.formatted-version}
+${AnsiColor.CYAN}Author: Johnny Miller (锺俊), email: johnnysviva@outlook.com
 ${AnsiStyle.NORMAL}${AnsiColor.MAGENTA}http://patorjk.com/software/taag/#p=display&f=Slant&t=Auth%20Center
 ${AnsiColor.BRIGHT_BLACK}
 -------------------------------------------Font Info-------------------------------------------

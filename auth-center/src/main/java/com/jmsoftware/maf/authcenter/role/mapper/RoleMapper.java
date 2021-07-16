@@ -1,8 +1,9 @@
 package com.jmsoftware.maf.authcenter.role.mapper;
 
-import com.jmsoftware.maf.authcenter.role.entity.RolePersistence;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.jmsoftware.maf.authcenter.role.entity.persistence.Role;
+import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdSingleResponse;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -11,65 +12,24 @@ import java.util.List;
  * <p>
  * Mapper of Role.(Role)
  *
- * @author Johnny Miller (鍾俊)
+ * @author Johnny Miller (锺俊)
  * @date 2020 -05-10 22:39:48
  */
 @Mapper
-public interface RoleMapper {
-    /**
-     * Query by id role.
-     *
-     * @param id the id
-     * @return the role
-     */
-    RolePersistence queryById(Long id);
-
-    /**
-     * Query all by limit list.
-     *
-     * @param offset the offset
-     * @param limit  the limit
-     * @return the list
-     */
-    List<RolePersistence> queryAllByLimit(@Param("offset") int offset, @Param("limit") int limit);
-
-    /**
-     * Query all list.
-     *
-     * @param rolePersistence the role
-     * @return the list
-     */
-    List<RolePersistence> queryAll(RolePersistence rolePersistence);
-
-    /**
-     * Insert int.
-     *
-     * @param rolePersistence the role
-     * @return the int
-     */
-    int insert(RolePersistence rolePersistence);
-
-    /**
-     * Update int.
-     *
-     * @param rolePersistence the role
-     * @return the int
-     */
-    int update(RolePersistence rolePersistence);
-
-    /**
-     * Delete by id int.
-     *
-     * @param id the id
-     * @return the int
-     */
-    int deleteById(Long id);
-
+public interface RoleMapper extends BaseMapper<Role> {
     /**
      * Select role list by user id list.
      *
      * @param userId the user id
      * @return the list
      */
-    List<RolePersistence> selectRoleListByUserId(Long userId);
+    List<GetRoleListByUserIdSingleResponse> selectRoleListByUserId(Long userId);
+
+    /**
+     * Select by id role persistence.
+     *
+     * @param roleName the role name
+     * @return the role persistence
+     */
+    Role selectByName(String roleName);
 }

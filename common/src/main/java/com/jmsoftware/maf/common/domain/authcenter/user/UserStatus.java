@@ -1,43 +1,44 @@
 package com.jmsoftware.maf.common.domain.authcenter.user;
 
+import com.jmsoftware.maf.common.bean.EnumerationBase;
 import lombok.Getter;
 
 /**
  * Description: UserStatus, change description here.
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
  * @date 2019-03-23 18:48
  **/
 @Getter
-public enum UserStatus {
+public enum UserStatus implements EnumerationBase<Byte> {
     /**
      * Enabled user
      */
-    ENABLED(1, "Enabled user"),
+    ENABLED((byte) 1, "Enabled user"),
     /**
      * Disabled user
      */
-    DISABLED(0, "Disabled user");
+    DISABLED((byte) 0, "Disabled user");
 
-    private final Integer status;
+    private final Byte value;
     private final String description;
 
-    UserStatus(Integer status, String description) {
-        this.status = status;
+    UserStatus(Byte value, String description) {
+        this.value = value;
         this.description = description;
     }
 
     /**
-     * Get user status enum by status value
+     * Get user value enum by value value
      *
-     * @param status status value
-     * @return user status enum
+     * @param value value value
+     * @return user value enum
      */
-    public static UserStatus getByStatus(Integer status) {
+    public static UserStatus ofValue(Byte value) {
         UserStatus result = UserStatus.DISABLED;
         UserStatus[] userStatuses = UserStatus.values();
         for (UserStatus userStatus : userStatuses) {
-            if (userStatus.status.equals(status)) {
+            if (userStatus.value.equals(value)) {
                 result = userStatus;
             }
         }

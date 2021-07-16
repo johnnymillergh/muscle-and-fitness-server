@@ -1,0 +1,99 @@
+server:
+  port: @api-gateway.port@
+  tomcat:
+    uri-encoding: @project.build.sourceEncoding@
+  shutdown: GRACEFUL
+  servlet:
+    context-path:
+
+spring:
+  profiles:
+    active: @env@
+  mvc:
+    throw-exception-if-no-handler-found: true
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Hong_Kong
+  cloud:
+    consul:
+      discovery:
+        register: true
+        instance-id: ${spring.application.name}-${spring.cloud.client.hostname}-${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
+        service-name: ${spring.application.name}
+        port: ${server.port}
+        prefer-ip-address: true
+        ip-address: ${spring.cloud.client.ip-address}
+        health-check-critical-timeout: 15s
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      # https://cloud.spring.io/spring-cloud-gateway/multi/multi__cors_configuration.html
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+  redis:
+    database: 0
+    timeout: 10000ms
+    client-type: LETTUCE
+    lettuce:
+      pool:
+        max-active: 20
+        max-idle: 10
+        max-wait: -1ms
+        min-idle: 0
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
+
+logging:
+  config: classpath:logback-configuration/logback-${spring.profiles.active}.xml
+
+maf:
+  project-property:
+    base-package: @project.groupId@
+    context-path: ${server.servlet.context-path}
+    group-id: @project.groupId@
+    project-parent-artifact-id: @project.parent.artifactId@
+    project-artifact-id: @project.artifactId@
+    version: @project.version@
+    description: @project.description@
+    jdk-version: @java.version@
+    environment: ${spring.profiles.active}
+    url: @project.url@
+    inception-year: @inceptionYear@
+    organization-name: @project.organization.name@
+    organization-url: @project.organization.url@
+    issue-management-system: @project.issueManagement.system@
+    issue-management-url: @project.issueManagement.url@
+    developer-name: @developerName@
+    developer-email: @developerEmail@
+    developer-url: @developerUrl@
+  configuration:
+    ignored-url:
+      post:
+        - "/auth-center/users/signup"
+        - "/auth-center/users/login"
+        - "/auth-center/users/logout"
+      get:
+        - "/favicon.ico"
+      pattern:
+        - "/static/**"
+        - "/*/static/**"
+        - "/actuator/**"
+        - "/*/druid/**"
+        - "/swagger-resources/**"
+        - "/v2/api-docs/**"
+        - "/*/v2/api-docs/**"
+        - "/*/webjars/**"
+        - "/doc.html"
+        - "/oss-center/**"

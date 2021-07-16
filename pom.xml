@@ -7,7 +7,7 @@
     <!-- Project Basics -->
     <groupId>com.jmsoftware.maf</groupId>
     <artifactId>muscle-and-fitness-server</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2-SNAPSHOT</version>
     <name>Muscle and Fitness Server</name>
     <description>Muscle and Fitness Server (M&amp;F, maf), a Spring Cloud microservice based, back-end server for
         managing data of muscle and fitness.
@@ -15,7 +15,7 @@
     <packaging>pom</packaging>
     <properties>
         <!-- Developer Information -->
-        <developerName>Johnny Miller (鍾俊)</developerName>
+        <developerName>Johnny Miller (锺俊)</developerName>
         <developerEmail>johnnysviva@outlook.com</developerEmail>
         <developerUrl>https://www.linkedin.com/in/ijohnnymiller</developerUrl>
 
@@ -23,44 +23,56 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Infrastructure Service. Port range: [8760, n]. -->
-        <service-registry.port>8760</service-registry.port>
+        <oss-center.port>8760</oss-center.port>
         <spring-boot-admin.port>8761</spring-boot-admin.port>
-        <api-portal.port>8762</api-portal.port>
 
         <!-- Business Service. Port range: [8800, n]. -->
         <auth-center.port>8800</auth-center.port>
-        <exercise-mis.port>8801</exercise-mis.port>
-        <muscle-mis.port>8802</muscle-mis.port>
+        <maf-mis.port>8801</maf-mis.port>
 
         <!-- Gateway Service. Port range: [8080, 8080]. -->
-        <gateway.port>8080</gateway.port>
+        <api-gateway.port>8080</api-gateway.port>
 
         <!-- Version Definitions. -->
         <java.version>11</java.version>
-        <spring-cloud.version>Hoxton.SR4</spring-cloud.version>
+        <adoptopenjdk11.tag>x86_64-alpine-jre-11.0.10_9</adoptopenjdk11.tag>
+        <jib-maven-plugin.version>3.1.1</jib-maven-plugin.version>
+        <spring-cloud.version>2020.0.3</spring-cloud.version>
         <spring-content.version>1.0.0.M5</spring-content.version>
-        <spring-boot-admin.version>2.2.2</spring-boot-admin.version>
-        <knife4j.version>2.0.2</knife4j.version>
+        <spring-boot-admin-starter-server.version>2.4.3</spring-boot-admin-starter-server.version>
+        <spring-boot-admin-starter-client.version>2.4.3</spring-boot-admin-starter-client.version>
+        <druid-spring-boot-starter.version>1.2.6</druid-spring-boot-starter.version>
+        <mybatis-plus-boot-starter.version>3.4.3.1</mybatis-plus-boot-starter.version>
+        <dynamic-datasource-spring-boot-starter.version>3.4.0</dynamic-datasource-spring-boot-starter.version>
+        <hutool-all.version>5.7.3</hutool-all.version>
+        <guava.version>30.0-jre</guava.version>
+        <knife4j.version>2.0.8</knife4j.version>
+        <jjwt.version>0.11.2</jjwt.version>
+        <java-faker.version>1.0.2</java-faker.version>
+        <easyexcel.version>2.2.6</easyexcel.version>
+        <poi.version>5.0.0</poi.version>
+        <logstash-logback-encoder.version>6.6</logstash-logback-encoder.version>
+        <minio.version>8.2.2</minio.version>
+        <apache-tika.version>1.26</apache-tika.version>
     </properties>
 
     <!-- The modules (sometimes called subprojects) to build as a part of this project. -->
     <modules>
         <module>common</module>
-        <module>muscle-and-fitness-server-spring-boot-starter</module>
-        <module>muscle-and-fitness-server-reactive-spring-boot-starter</module>
-        <module>service-registry</module>
+        <module>universal-ui</module>
+        <module>spring-cloud-starter</module>
+        <module>reactive-spring-cloud-starter</module>
         <module>spring-boot-admin</module>
-        <module>gateway</module>
-        <module>api-portal</module>
+        <module>api-gateway</module>
         <module>auth-center</module>
-        <module>exercise-mis</module>
-        <module>muscle-mis</module>
+        <module>oss-center</module>
+        <module>maf-mis</module>
     </modules>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.7.RELEASE</version>
+        <version>2.4.6</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -82,17 +94,12 @@
             </dependency>
             <dependency>
                 <groupId>com.jmsoftware.maf</groupId>
-                <artifactId>muscle-and-fitness-server-spring-boot-starter</artifactId>
+                <artifactId>spring-cloud-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.jmsoftware.maf</groupId>
-                <artifactId>muscle-and-fitness-server-reactive-spring-boot-starter</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.jmsoftware.maf</groupId>
-                <artifactId>service-registry</artifactId>
+                <artifactId>reactive-spring-cloud-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -107,22 +114,22 @@
             </dependency>
             <dependency>
                 <groupId>com.jmsoftware.maf</groupId>
-                <artifactId>api-portal</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.jmsoftware.maf</groupId>
                 <artifactId>auth-center</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.jmsoftware.maf</groupId>
-                <artifactId>exercise-mis</artifactId>
+                <artifactId>maf-mis</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.jmsoftware.maf</groupId>
-                <artifactId>muscle-mis</artifactId>
+                <artifactId>universal-ui</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jmsoftware.maf</groupId>
+                <artifactId>oss-center</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
@@ -143,7 +150,7 @@
     </organization>
     <developers>
         <developer>
-            <name>Johnny Miller (鍾俊)</name>
+            <name>Johnny Miller (锺俊)</name>
             <email>johnnysviva@outlook.com</email>
             <url>https://www.linkedin.com/in/ijohnnymiller</url>
             <organization>JM Software, Inc.</organization>
@@ -152,16 +159,50 @@
         </developer>
     </developers>
 
-    <!-- VCS Settings -->
     <issueManagement>
         <system>GitHub</system>
         <url>https://github.com/johnnymillergh/muscle-and-fitness-server/issues</url>
     </issueManagement>
 
-    <!-- Build Settings -->
     <build>
         <!-- set the name of .jar file -->
         <finalName>${project.artifactId}-${project.version}</finalName>
+        <resources>
+            <resource>
+                <directory>${basedir}/src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>**/application*.yml</include>
+                    <include>**/application*.yaml</include>
+                    <include>**/application*.properties</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>${basedir}/src/main/resources</directory>
+                <excludes>
+                    <exclude>**/application*.yml</exclude>
+                    <exclude>**/application*.yaml</exclude>
+                    <exclude>**/application*.properties</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <filtering>true</filtering>
+                <directory>${basedir}/src/main/resources</directory>
+                <includes>
+                    <include>**/bootstrap*.yml</include>
+                    <include>**/bootstrap*.yaml</include>
+                    <include>**/bootstrap*.properties</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>${basedir}/src/main/resources</directory>
+                <excludes>
+                    <exclude>**/bootstrap*.yml</exclude>
+                    <exclude>**/bootstrap*.yaml</exclude>
+                    <exclude>**/bootstrap*.properties</exclude>
+                </excludes>
+            </resource>
+        </resources>
 
         <plugins>
             <!-- The Versions Plugin updates the versions of components in the POM. -->
@@ -222,89 +263,32 @@
     </profiles>
 
     <!-- Global Dependencies -->
+    <!-- [CAUTION]: All the dependencies are in parent pom should be utilization dependency. -->
     <dependencies>
-        <!-- Spring Frameworks -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webflux</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-validation</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
-
-        <!-- Test -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.junit.vintage</groupId>
-                    <artifactId>junit-vintage-engine</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>io.projectreactor</groupId>
-            <artifactId>reactor-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- Tool -->
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>29.0-jre</version>
-        </dependency>
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-all</artifactId>
-            <version>5.3.4</version>
-        </dependency>
-
-        <!-- Brings the popular ruby faker gem to Java https://github.com/DiUS/java-faker -->
-        <dependency>
-            <groupId>com.github.javafaker</groupId>
-            <artifactId>javafaker</artifactId>
-            <version>1.0.2</version>
-        </dependency>
-
-        <!-- Other -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
-        </dependency>
+        <!-- Java Enhancement -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
 
-        <!-- Swagger: JSON API documentation for spring based applications -->
+        <!-- Tool -->
         <dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-micro-spring-boot-starter</artifactId>
-            <version>${knife4j.version}</version>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>${hutool-all.version}</version>
+        </dependency>
+
+        <!-- Brings the popular ruby faker gem to Java https://github.com/DiUS/java-faker -->
+        <dependency>
+            <groupId>com.github.javafaker</groupId>
+            <artifactId>javafaker</artifactId>
+            <version>${java-faker.version}</version>
         </dependency>
     </dependencies>
 </project>

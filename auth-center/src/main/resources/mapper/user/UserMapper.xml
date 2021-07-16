@@ -1,196 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jmsoftware.maf.authcenter.user.mapper.UserMapper">
-    <resultMap type="com.jmsoftware.maf.authcenter.user.entity.UserPersistence" id="UserMap">
-        <result property="id" column="id" jdbcType="INTEGER"/>
-        <result property="username" column="username" jdbcType="VARCHAR"/>
-        <result property="email" column="email" jdbcType="VARCHAR"/>
-        <result property="cellphone" column="cellphone" jdbcType="VARCHAR"/>
-        <result property="password" column="password" jdbcType="VARCHAR"/>
-        <result property="fullName" column="full_name" jdbcType="VARCHAR"/>
-        <result property="birthday" column="birthday" jdbcType="OTHER"/>
-        <result property="gender" column="gender" jdbcType="VARCHAR"/>
-        <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
-        <result property="status" column="status" jdbcType="INTEGER"/>
-        <result property="createdTime" column="created_time" jdbcType="TIMESTAMP"/>
-        <result property="modifiedTime" column="modified_time" jdbcType="TIMESTAMP"/>
+    <resultMap id="BaseResultMap" type="com.jmsoftware.maf.authcenter.user.entity.persistence.User">
+        <!--@mbg.generated-->
+        <!--@Table `user`-->
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="cellphone" jdbcType="VARCHAR" property="cellphone"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="full_name" jdbcType="VARCHAR" property="fullName"/>
+        <result column="birthday" jdbcType="DATE" property="birthday"/>
+        <result column="gender" jdbcType="OTHER" property="gender"/>
+        <result column="avatar" jdbcType="VARCHAR" property="avatar"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="created_by" jdbcType="BIGINT" property="createdBy"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="modified_by" jdbcType="BIGINT" property="modifiedBy"/>
+        <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
+        <result column="deleted" jdbcType="TINYINT" property="deleted"/>
     </resultMap>
 
-    <select id="selectById" resultMap="UserMap">
-        SELECT id,
-               username,
-               email,
-               cellphone,
-               password,
-               full_name,
-               birthday,
-               gender,
-               avatar,
-               status,
-               created_time,
-               modified_time
-        FROM user
-        WHERE id = #{id}
-    </select>
-
-    <select id="selectAllByLimit" resultMap="UserMap">
-        SELECT id,
-               username,
-               email,
-               cellphone,
-               password,
-               full_name,
-               birthday,
-               gender,
-               avatar,
-               status,
-               created_time,
-               modified_time
-        FROM user
-        LIMIT #{offset}, #{limit}
-    </select>
-
-    <select id="selectAll" resultMap="UserMap">
-        SELECT id,
-               username,
-               email,
-               cellphone,
-               password,
-               full_name,
-               birthday,
-               gender,
-               avatar,
-               status,
-               created_time,
-               modified_time
-        FROM user
-        <where>
-            <if test="id != null">
-                AND id = #{id}
-            </if>
-            <if test="username != null and username != ''">
-                AND username = #{username}
-            </if>
-            <if test="email != null and email != ''">
-                AND email = #{email}
-            </if>
-            <if test="cellphone != null and cellphone != ''">
-                AND cellphone = #{cellphone}
-            </if>
-            <if test="password != null and password != ''">
-                AND password = #{password}
-            </if>
-            <if test="fullName != null and fullName != ''">
-                AND full_name = #{fullName}
-            </if>
-            <if test="birthday != null">
-                AND birthday = #{birthday}
-            </if>
-            <if test="gender != null and gender != ''">
-                AND gender = #{gender}
-            </if>
-            <if test="avatar != null and avatar != ''">
-                AND avatar = #{avatar}
-            </if>
-            <if test="status != null">
-                AND status = #{status}
-            </if>
-            <if test="createdTime != null">
-                AND created_time = #{createdTime}
-            </if>
-            <if test="modifiedTime != null">
-                AND modified_time = #{modifiedTime}
-            </if>
-        </where>
-    </select>
-
-    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        INSERT INTO user(username,
-                         email,
-                         cellphone,
-                         password,
-                         full_name,
-                         birthday,
-                         gender,
-                         avatar,
-                         status,
-                         created_time,
-                         modified_time)
-        VALUES (#{username},
-                #{email},
-                #{cellphone},
-                #{password},
-                #{fullName},
-                #{birthday},
-                #{gender},
-                #{avatar},
-                #{status},
-                #{createdTime},
-                #{modifiedTime})
-    </insert>
-
-    <update id="update">
-        UPDATE user
-        <set>
-            <if test="username != null and username != ''">
-                username = #{username},
-            </if>
-            <if test="email != null and email != ''">
-                email = #{email},
-            </if>
-            <if test="cellphone != null and cellphone != ''">
-                cellphone = #{cellphone},
-            </if>
-            <if test="password != null and password != ''">
-                password = #{password},
-            </if>
-            <if test="fullName != null and fullName != ''">
-                full_name = #{fullName},
-            </if>
-            <if test="birthday != null">
-                birthday = #{birthday},
-            </if>
-            <if test="gender != null and gender != ''">
-                gender = #{gender},
-            </if>
-            <if test="avatar != null and avatar != ''">
-                avatar = #{avatar},
-            </if>
-            <if test="status != null">
-                status = #{status},
-            </if>
-            <if test="createdTime != null">
-                created_time = #{createdTime},
-            </if>
-            <if test="modifiedTime != null">
-                modified_time = #{modifiedTime},
-            </if>
-        </set>
-        WHERE id = #{id}
-    </update>
-
-    <delete id="deleteById">
-        DELETE FROM user WHERE id = #{id}
-    </delete>
-
-    <select id="selectUserByUsernameOrEmail" resultMap="UserMap">
-        SELECT id,
-               username,
-               email,
-               cellphone,
-               password,
-               full_name,
-               birthday,
-               gender,
-               created_time,
-               modified_time,
-               status
-        FROM user
-        <where>
-            <if test="_parameter != null and _parameter != ''">
-                (username = #{username} OR email = #{email} OR cellphone = #{cellphone})
-            </if>
-            AND status = 1
-        </where>
-    </select>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, username, email, cellphone, `password`, full_name, birthday, gender, avatar,
+        `status`, created_by, created_time, modified_by, modified_time, deleted
+    </sql>
 </mapper>
