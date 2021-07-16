@@ -34,7 +34,7 @@ function connect(event) {
 
 function onConnected() {
     // Subscribe to the Public Topic
-    stompClient.subscribe('/topic/public/broadcast', onMessageReceived);
+    stompClient.subscribe('/topic/public-broadcast', onMessageReceived);
 
     // Tell your username to the server
     // stompClient.send(`/app/join/${username}`, {},)

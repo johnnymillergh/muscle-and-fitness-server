@@ -21,7 +21,14 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class ChatRoomServiceImpl implements ChatRoomService {
-    public static final String BROADCAST_CHANNEL = "/topic/public/broadcast";
+    /**
+     * <p> &quot;&#39;/public/broadcast&#39; is not a valid topic destination\n&quot;</p>
+     * <p>RabbitMQ does not support &quot;/&quot; as a separator.</p>
+     *
+     * @see
+     * <a href='https://github.com/spring-guides/gs-messaging-stomp-websocket/issues/35#issuecomment-295789752'>Stomp client fails to connect to a dynamic controller destination that has a @DestinationVariable when I switch to use a StompBrokerRelay but it works with SimpleBroker</a>
+     */
+    public static final String BROADCAST_CHANNEL = "/topic/public-broadcast";
     private final SimpMessagingTemplate simpMessagingTemplate;
     private final ObjectMapper objectMapper;
 
