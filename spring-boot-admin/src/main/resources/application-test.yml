@@ -1,4 +1,5 @@
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://172.16.2.20:8760/eureka/
+spring:
+  devtools:
+    add-properties: false
+  zipkin:
+    base-url: http://maf-zipkin:9411

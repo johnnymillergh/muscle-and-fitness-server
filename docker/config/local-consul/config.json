@@ -1,0 +1,16 @@
+{
+  "data_dir": "./opt/consul",
+  "log_level": "INFO",
+  "node_name": "local-consul",
+  "server": true,
+  "ports": {
+    "http": 8500,
+    "server": 8300
+  },
+  "bind_addr": "0.0.0.0",
+  "client_addr": "127.0.0.1",
+  "bootstrap_expect": 1,
+  "ui_config": {
+      "enabled": true
+  }
+}

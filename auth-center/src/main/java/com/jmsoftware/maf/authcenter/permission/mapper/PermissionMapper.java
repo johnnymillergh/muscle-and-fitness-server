@@ -1,6 +1,8 @@
 package com.jmsoftware.maf.authcenter.permission.mapper;
 
-import com.jmsoftware.maf.authcenter.permission.entity.PermissionPersistence;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.jmsoftware.maf.authcenter.permission.entity.persistence.Permission;
+import com.jmsoftware.maf.common.domain.authcenter.permission.PermissionType;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -11,73 +13,18 @@ import java.util.List;
  * <p>
  * Mapper of Permission.(Permission)
  *
- * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com
  * @date 5 /11/20 8:34 AM
  */
 @Mapper
-public interface PermissionMapper {
-    /**
-     * Query by id permission persistence.
-     *
-     * @param id the id
-     * @return the permission persistence
-     */
-    PermissionPersistence queryById(Long id);
-
-    /**
-     * Query all by limit list.
-     *
-     * @param offset the offset
-     * @param limit  the limit
-     * @return the list
-     */
-    List<PermissionPersistence> queryAllByLimit(@Param("offset") int offset, @Param("limit") int limit);
-
-    /**
-     * Query all list.
-     *
-     * @param permissionPersistence the permission persistence
-     * @return the list
-     */
-    List<PermissionPersistence> queryAll(PermissionPersistence permissionPersistence);
-
-    /**
-     * Insert int.
-     *
-     * @param permissionPersistence the permission persistence
-     * @return the int
-     */
-    int insert(PermissionPersistence permissionPersistence);
-
-    /**
-     * Update int.
-     *
-     * @param permissionPersistence the permission persistence
-     * @return the int
-     */
-    int update(PermissionPersistence permissionPersistence);
-
-    /**
-     * Delete by id int.
-     *
-     * @param id the id
-     * @return the int
-     */
-    int deleteById(Long id);
-
+public interface PermissionMapper extends BaseMapper<Permission> {
     /**
      * Select permission list by role id list list.
      *
-     * @param roleIdList the role id list
+     * @param roleIdList         the role id list
+     * @param permissionTypeList the permission type list
      * @return the list
      */
-    List<PermissionPersistence> selectPermissionListByRoleIdList(List<Long> roleIdList);
-
-    /**
-     * Select permission list by user id list.
-     *
-     * @param userId the user id
-     * @return the list
-     */
-    List<PermissionPersistence> selectPermissionListByUserId(Long userId);
+    List<Permission> selectPermissionListByRoleIdList(@Param("roleIdList") List<Long> roleIdList,
+                                                      @Param("permissionTypeList") List<PermissionType> permissionTypeList);
 }

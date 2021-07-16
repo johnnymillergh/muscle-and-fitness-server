@@ -16,8 +16,10 @@ chcp 65001
 @REM #################### Configurable Environment Variables ###################
 SET skipGitPull=true
 SET skipMavenBuild=true
+SET minimalJavaMajorVersion=11
+SET javaExe=C:\Users\Johnny\.sdkman\candidates\java\11.0.10.hs-adpt\bin\java.exe
 SET mavenActiveProfile="development-local"
-SET javaParameter=-Dfile.encoding=UTF-8 -Xms256m -Xmx256m
+SET javaParameter=-Xms256m -Xmx256m -Dfile.encoding=UTF-8 -Dspring.cloud.consul.host=localhost
 
 GOTO:MAIN
 
@@ -55,6 +57,22 @@ EXIT /B 0
 
 @REM ############################ Custom Functions #############################
 
+@REM Check Java major version
+:checkJavaMajorVersion
+CALL :logWarn "Start to Check Java major version…"
+%javaExe% -version 1>nul 2>nul || (
+  CALL :logError "Java is not installed!"
+  EXIT /B 2
+)
+for /f tokens^=2-6^ delims^=.-_+^" %%j in ('%javaExe% -fullversion 2^>^&1') do set "currentJavaMajorVersion=%%j"
+CALL :logWarn "Got current Java major version number: %currentJavaMajorVersion%"
+if %currentJavaMajorVersion% LSS %minimalJavaMajorVersion% (
+  CALL :logError "Current Java version is too low, at least OpenJDK %minimalJavaMajorVersion% is needed"
+  EXIT /B 1
+)
+CALL :logInfo "Passed Java major version cheking"
+EXIT /B 0
+
 @REM Pull the latest code of current branch from Git.
 :gitPull
     git pull
@@ -76,7 +94,7 @@ EXIT /B 0
         CALL :gitPull
     )
     CALL :logInfo "[PRE-BUILD] Java Version Information"
-    CALL java -version
+    CALL %javaExe% -version
     CALL :logInfo "[PRE-BUILD] Maven Version Information"
     CALL mvn -v
     CALL :logInfo "[PRE-BUILD] Current directory:"
@@ -113,7 +131,7 @@ EXIT /B 0
     )
     CALL :logWarn "[RUN] Found JAR: %jarFileName%"
     CALL :setTerminalTitle %jarFileName%
-    SET runJarCommand=java %javaParameter% -Dspring.profiles.active=%mavenActiveProfile% -jar target\%jarFileName%
+    SET runJarCommand=%javaExe% %javaParameter% -Dspring.profiles.active=%mavenActiveProfile% -jar target\%jarFileName%
     CALL :logWarn "[RUN] Execute command: %runJarCommand%"
     CALL %runJarCommand%
 EXIT /B 0
@@ -121,6 +139,14 @@ EXIT /B 0
 @REM ############################# MAIN Procedures #############################
 :MAIN
 cls
+
+@REM Check Java major version
+CALL :checkJavaMajorVersion
+if %ERRORLEVEL% NEQ 0 (
+    CALL :logError "Failed to check Java major version!"
+    EXIT /B %ERRORLEVEL%
+)
+
 @REM Pre-build phrase (Display version, Git pull)
 CALL :executePreBuildPhase
 if %ERRORLEVEL% NEQ 0 (

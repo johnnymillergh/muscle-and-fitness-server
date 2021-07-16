@@ -1,14 +1,16 @@
 package com.jmsoftware.maf.authcenter.permission.service;
 
-import com.jmsoftware.maf.authcenter.permission.entity.PermissionPersistence;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.jmsoftware.maf.authcenter.permission.entity.GetServicesInfoResponse;
+import com.jmsoftware.maf.authcenter.permission.entity.persistence.Permission;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
-import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByUserIdPayload;
-import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByUserIdResponse;
-import lombok.NonNull;
+import com.jmsoftware.maf.common.domain.authcenter.permission.PermissionType;
+import com.jmsoftware.maf.common.exception.BusinessException;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 /**
@@ -16,52 +18,11 @@ import java.util.List;
  * <p>
  * Service of Permission.(Permission)
  *
- * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com
  * @date 5 /11/20 8:34 AM
  */
 @Validated
-public interface PermissionService {
-    /**
-     * Query by ID
-     *
-     * @param id the primary key ID
-     * @return the entity
-     */
-    PermissionPersistence queryById(Long id);
-
-    /**
-     * Query all by limit
-     *
-     * @param offset the offset
-     * @param limit  the limit
-     * @return the entity list
-     */
-    List<PermissionPersistence> queryAllByLimit(int offset, int limit);
-
-    /**
-     * Insert
-     *
-     * @param permissionPersistence the entity
-     * @return the entity
-     */
-    PermissionPersistence insert(PermissionPersistence permissionPersistence);
-
-    /**
-     * Update
-     *
-     * @param permissionPersistence the entity
-     * @return the entity
-     */
-    PermissionPersistence update(PermissionPersistence permissionPersistence);
-
-    /**
-     * Delete by ID
-     *
-     * @param id the primary key ID
-     * @return the boolean
-     */
-    boolean deleteById(Long id);
-
+public interface PermissionService extends IService<Permission> {
     /**
      * Gets permission list by role id list.
      *
@@ -73,24 +34,18 @@ public interface PermissionService {
     /**
      * Gets permission list by role id list.
      *
-     * @param roleIdList the role id list
+     * @param roleIdList         the role id list
+     * @param permissionTypeList the permission type list
      * @return the permission list by role id list
      */
-    List<PermissionPersistence> getPermissionListByRoleIdList(@NonNull List<Long> roleIdList);
+    List<Permission> getPermissionListByRoleIdList(@NotEmpty List<Long> roleIdList,
+                                                   @NotEmpty List<PermissionType> permissionTypeList);
 
     /**
-     * Gets permission list by user id.
+     * Gets services info.
      *
-     * @param payload the payload
-     * @return the permission list by user id
+     * @return the services info
+     * @throws BusinessException the business exception
      */
-    GetPermissionListByUserIdResponse getPermissionListByUserId(@Valid GetPermissionListByUserIdPayload payload);
-
-    /**
-     * Gets permission list by user id.
-     *
-     * @param userId the user id
-     * @return the permission list by user id
-     */
-    List<PermissionPersistence> getPermissionListByUserId(@NonNull Long userId);
+    GetServicesInfoResponse getServicesInfo() throws BusinessException;
 }
