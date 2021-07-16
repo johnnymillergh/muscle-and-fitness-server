@@ -28,16 +28,16 @@ import static org.springframework.web.cors.CorsConfiguration.ALL;
 @ConditionalOnClass({ServerEndpointExporter.class})
 public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer {
     @Bean
-    public ServerEndpointExporter serverEndpointExporter() {
-        log.warn("Initial bean: '{}'", ServerEndpointExporter.class.getSimpleName());
-        return new ServerEndpointExporter();
+    public ChatRoomController greetingController(ChatRoomService chatRoomService) {
+        log.warn("Initial bean: '{}'", ChatRoomController.class.getSimpleName());
+        return new ChatRoomController(chatRoomService);
     }
 
     @Bean
-    public GreetingController greetingController(SimpMessagingTemplate simpMessagingTemplate,
-                                                 ObjectMapper objectMapper) {
-        log.warn("Initial bean: '{}'", GreetingController.class.getSimpleName());
-        return new GreetingController(simpMessagingTemplate, objectMapper);
+    public ChatRoomService chatRoomService(SimpMessagingTemplate simpMessagingTemplate,
+                                           ObjectMapper objectMapper) {
+        log.warn("Initial bean: '{}'", ChatRoomService.class.getSimpleName());
+        return new ChatRoomServiceImpl(simpMessagingTemplate, objectMapper);
     }
 
     @Override
