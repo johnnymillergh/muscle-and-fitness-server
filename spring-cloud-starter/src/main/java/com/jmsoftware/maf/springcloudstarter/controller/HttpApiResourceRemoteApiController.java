@@ -12,7 +12,10 @@ import lombok.val;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Description: HttpApiResourceRemoteApiController, change description here.
@@ -29,7 +32,7 @@ public class HttpApiResourceRemoteApiController {
     @GetMapping("/http-api-resources")
     @ApiOperation(value = "Get HTTP API resources", notes = "Get HTTP API resources (Remote)")
     public ResponseBodyBean<HttpApiResourcesResponse> getHttpApiResource() {
-        val handlerMethodMap = httpApiScanHelper.scan(mafConfiguration.getIncludedPackageForHttpApiScan());
+        val handlerMethodMap = this.httpApiScanHelper.scan(this.mafConfiguration.getIncludedPackageForHttpApiScan());
         HttpApiResourcesResponse response = new HttpApiResourcesResponse();
         handlerMethodMap.forEach((requestMappingInfo, handlerMethod) -> {
             val requestMethod = Optional.ofNullable(

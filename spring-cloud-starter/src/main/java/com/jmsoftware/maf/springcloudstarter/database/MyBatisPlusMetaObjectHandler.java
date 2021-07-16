@@ -5,7 +5,6 @@ import com.jmsoftware.maf.common.domain.DeletedField;
 import com.jmsoftware.maf.springcloudstarter.util.UsernameUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
@@ -19,28 +18,27 @@ import java.time.LocalDateTime;
  * @date 2019-05-02 11:57
  **/
 @Slf4j
-@Component
 public class MyBatisPlusMetaObjectHandler implements MetaObjectHandler {
     /**
      * The Java persistence object field name: createdBy
      */
-    public final String CREATED_BY_FIELD_NAME = "createdBy";
+    public static final String CREATED_BY_FIELD_NAME = "createdBy";
     /**
      * The Java persistence object field name: createdTime
      */
-    public final String CREATED_TIME_FIELD_NAME = "createdTime";
+    public static final String CREATED_TIME_FIELD_NAME = "createdTime";
     /**
      * The Java persistence object field name: modifiedBy
      */
-    public final String MODIFIED_BY_FIELD_NAME = "modifiedBy";
+    public static final String MODIFIED_BY_FIELD_NAME = "modifiedBy";
     /**
      * The Java persistence object field name: modifiedTime
      */
-    public final String MODIFIED_TIME_FIELD_NAME = "modifiedTime";
+    public static final String MODIFIED_TIME_FIELD_NAME = "modifiedTime";
     /**
      * The Java persistence object field name: deleted
      */
-    public final String DELETED_FIELD_NAME = "deleted";
+    public static final String DELETED_FIELD_NAME = "deleted";
 
     /**
      * {@inheritDoc}

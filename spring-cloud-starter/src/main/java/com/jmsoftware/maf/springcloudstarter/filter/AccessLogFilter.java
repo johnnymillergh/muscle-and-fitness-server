@@ -33,8 +33,8 @@ public class AccessLogFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws IOException, ServletException {
         // Ignore URL
-        for (String ignoredUrl : mafConfiguration.flattenIgnoredUrls()) {
-            if (antPathMatcher.match(ignoredUrl, request.getRequestURI())) {
+        for (String ignoredUrl : this.mafConfiguration.flattenIgnoredUrls()) {
+            if (this.antPathMatcher.match(ignoredUrl, request.getRequestURI())) {
                 filterChain.doFilter(request, response);
                 return;
             }

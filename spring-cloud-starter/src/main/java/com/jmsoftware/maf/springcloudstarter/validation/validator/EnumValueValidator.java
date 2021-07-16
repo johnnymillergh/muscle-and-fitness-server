@@ -32,9 +32,9 @@ public class EnumValueValidator implements ConstraintValidator<ValidEnumValue, N
     @Override
     public void initialize(ValidEnumValue constraintAnnotation) {
         ConstraintValidator.super.initialize(constraintAnnotation);
-        validEnumValue = constraintAnnotation;
+        this.validEnumValue = constraintAnnotation;
         final Method getValue = ReflectUtil.getMethodByName(EnumerationBase.class, "getValue");
-        methodName = getValue.getName();
+        this.methodName = getValue.getName();
     }
 
     /**
@@ -42,8 +42,8 @@ public class EnumValueValidator implements ConstraintValidator<ValidEnumValue, N
      */
     @Override
     public boolean isValid(Number value, ConstraintValidatorContext context) {
-        val enumClass = validEnumValue.targetEnum();
-        val ignoreNull = validEnumValue.ignoreNull();
+        val enumClass = this.validEnumValue.targetEnum();
+        val ignoreNull = this.validEnumValue.ignoreNull();
         if (!enumClass.isEnum()) {
             log.warn("The given target enum class is not enum! {}", enumClass.getName());
             return false;
@@ -54,9 +54,9 @@ public class EnumValueValidator implements ConstraintValidator<ValidEnumValue, N
         val enumConstantArray = enumClass.getEnumConstants();
         Method method;
         try {
-            method = enumClass.getMethod(methodName);
+            method = enumClass.getMethod(this.methodName);
         } catch (NoSuchMethodException | SecurityException e) {
-            log.warn("Did not find the method {} in the class {}", methodName, enumClass.getName());
+            log.warn("Did not find the method {} in the class {}", this.methodName, enumClass.getName());
             return false;
         }
         var validResult = false;

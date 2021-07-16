@@ -6,22 +6,17 @@ import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.springcloudstarter.util.RequestUtil;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.mybatis.spring.MyBatisSystemException;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
-import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.BadSqlGrammarException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Objects;
 
 /**
  * <h1>DatabaseExceptionControllerAdvice</h1>
@@ -46,38 +41,38 @@ public class DatabaseExceptionControllerAdvice {
     @ExceptionHandler(MyBatisSystemException.class)
     public ResponseBodyBean<?> handleMyBatisSystemException(HttpServletRequest request,
                                                             MyBatisSystemException exception) {
-        requestLog(request);
+        this.requestLog(request);
         log.error("MyBatisSystemException message: {}", exception.getMessage());
         return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR,
                                          String.format("MyBatisSystemException message: %s",
-                                                       removeLineSeparator(exception.getMessage())));
+                                                       this.removeLineSeparator(exception.getMessage())));
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(MybatisPlusException.class)
     public ResponseBodyBean<?> handleMybatisPlusException(HttpServletRequest request, MybatisPlusException exception) {
-        requestLog(request);
+        this.requestLog(request);
         log.error("MybatisPlusException message: {}", exception.getMessage());
         return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR,
                                          String.format("MybatisPlusException message: %s",
-                                                       removeLineSeparator(exception.getMessage())));
+                                                       this.removeLineSeparator(exception.getMessage())));
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(PersistenceException.class)
     public ResponseBodyBean<?> handlePersistenceException(HttpServletRequest request, PersistenceException exception) {
-        requestLog(request);
+        this.requestLog(request);
         log.error("PersistenceException message: {}", exception.getMessage());
         return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR,
                                          String.format("PersistenceException message: %s",
-                                                       removeLineSeparator(exception.getMessage())));
+                                                       this.removeLineSeparator(exception.getMessage())));
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(BadSqlGrammarException.class)
     public ResponseBodyBean<?> handleBadSqlGrammarException(HttpServletRequest request,
                                                             BadSqlGrammarException exception) {
-        requestLog(request);
+        this.requestLog(request);
         log.error("BadSqlGrammarException message: {}", exception.getMessage());
         var message = exception.getMessage();
         if (ObjectUtil.isNotNull(exception.getCause()) && StrUtil.isNotBlank(exception.getCause().getMessage())) {
@@ -85,36 +80,12 @@ public class DatabaseExceptionControllerAdvice {
         }
         return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR,
                                          String.format("PersistenceException message: %s",
-                                                       removeLineSeparator(message)));
+                                                       this.removeLineSeparator(message)));
     }
 
     private void requestLog(HttpServletRequest request) {
         log.error("Exception occurred when [{}] requested access. Request URL: [{}] {}",
                   RequestUtil.getRequestIpAndPort(request), request.getMethod(), request.getRequestURL());
-    }
-
-    /**
-     * Get field error message from exception. If two or more fields do not pass Spring Validation check, then will
-     * return the 1st error message of the error field.
-     *
-     * @param exception MethodArgumentNotValidException
-     * @return field error message
-     */
-    private String getFieldErrorMessageFromException(MethodArgumentNotValidException exception) {
-        try {
-            val firstErrorField =
-                    (DefaultMessageSourceResolvable) Objects.requireNonNull(exception.getBindingResult()
-                                                                                    .getAllErrors()
-                                                                                    .get(0)
-                                                                                    .getArguments())[0];
-            val firstErrorFieldName = firstErrorField.getDefaultMessage();
-            val firstErrorFieldMessage = exception.getBindingResult().getAllErrors().get(0).getDefaultMessage();
-            return String.format("%s %s", firstErrorFieldName, firstErrorFieldMessage);
-        } catch (Exception e) {
-            log.error("Exception occurred when get field error message from exception. Exception message: {}",
-                      e.getMessage(), e);
-            return HttpStatus.BAD_REQUEST.getReasonPhrase();
-        }
     }
 
     /**

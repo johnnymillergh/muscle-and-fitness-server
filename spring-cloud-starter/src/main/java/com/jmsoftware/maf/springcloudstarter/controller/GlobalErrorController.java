@@ -35,8 +35,8 @@ public class GlobalErrorController extends BasicErrorController {
 
     @Override
     public ResponseEntity<Map<String, Object>> error(HttpServletRequest request) {
-        val httpStatus = getStatus(request);
-        val body = getErrorAttributes(request, ErrorAttributeOptions.defaults());
+        val httpStatus = this.getStatus(request);
+        val body = this.getErrorAttributes(request, ErrorAttributeOptions.defaults());
         body.put("message", httpStatus.getReasonPhrase());
         val optionalTrace = Optional.ofNullable(body.get("trace"));
         optionalTrace.ifPresent(trace -> {
@@ -45,7 +45,7 @@ public class GlobalErrorController extends BasicErrorController {
             val joinedMessage = String.format("%s %s", message, firstLineOfTrace);
             body.put("message", joinedMessage);
             body.put("trace",
-                     String.format("Trace has been simplified by %s. Refer to 'message'", getClass().getName()));
+                     String.format("Trace has been simplified by %s. Refer to 'message'", this.getClass().getName()));
         });
         log.error("Captured HTTP request error. Response body = {}", body);
         return new ResponseEntity<>(body, httpStatus);

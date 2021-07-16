@@ -24,25 +24,18 @@ import java.util.LinkedList;
  **/
 @Slf4j
 public class DateTimeRangeValidator implements ConstraintValidator<DateTimeRangeConstraints, Object> {
-    private static final int DEFAULT_HASH_MAP_CAPACITY = 8;
     public static final int MAX_GROUP_SIZE = 2;
+    private static final int DEFAULT_HASH_MAP_CAPACITY = 8;
 
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext context) {
-        val fields = value.getClass().getDeclaredFields();
-        final HashSet<Field> annotatedFieldSet = CollUtil.newHashSet();
-        for (val field : fields) {
-            val annotation = field.getAnnotation(DateTimeRangeGroup.class);
-            if (ObjectUtil.isNotNull(annotation)) {
-                annotatedFieldSet.add(field);
-            }
-        }
+        final HashSet<Field> annotatedFieldSet = this.getAnnotatedFieldSet(value);
         if (CollUtil.isEmpty(annotatedFieldSet)) {
             log.warn("There is not fields annotated by {} in the class({})", value.getClass().getName(),
                      DateTimeRangeGroup.class.getSimpleName());
             return true;
         }
-        final HashMap<String, LinkedList<Field>> dateTimeRangeGroupMap = new HashMap<>(DEFAULT_HASH_MAP_CAPACITY);
+        val dateTimeRangeGroupMap = new HashMap<String, LinkedList<Field>>(DEFAULT_HASH_MAP_CAPACITY);
         for (val field : annotatedFieldSet) {
             val annotation = field.getAnnotation(DateTimeRangeGroup.class);
             if (!dateTimeRangeGroupMap.containsKey(annotation.groupName())) {
@@ -56,6 +49,22 @@ public class DateTimeRangeValidator implements ConstraintValidator<DateTimeRange
                 }
             }
         }
+        return this.validate(value, dateTimeRangeGroupMap);
+    }
+
+    private HashSet<Field> getAnnotatedFieldSet(Object value) {
+        val fields = value.getClass().getDeclaredFields();
+        final HashSet<Field> annotatedFieldSet = CollUtil.newHashSet();
+        for (val field : fields) {
+            val annotation = field.getAnnotation(DateTimeRangeGroup.class);
+            if (ObjectUtil.isNotNull(annotation)) {
+                annotatedFieldSet.add(field);
+            }
+        }
+        return annotatedFieldSet;
+    }
+
+    private boolean validate(Object value, HashMap<String, LinkedList<Field>> dateTimeRangeGroupMap) {
         for (val entry : dateTimeRangeGroupMap.entrySet()) {
             val groupName = entry.getKey();
             val fieldList = entry.getValue();
@@ -64,7 +73,8 @@ public class DateTimeRangeValidator implements ConstraintValidator<DateTimeRange
                 return false;
             }
             val dateTimeRangeGroup = fieldList.get(0).getAnnotation(DateTimeRangeGroup.class);
-            Object startTime = null, endTime = null;
+            Object startTime = null;
+            Object endTime = null;
             switch (dateTimeRangeGroup.type()) {
                 case START_TIME:
                     startTime = ReflectUtil.getFieldValue(value, fieldList.get(0));
@@ -79,15 +89,13 @@ public class DateTimeRangeValidator implements ConstraintValidator<DateTimeRange
             if (ObjectUtil.hasNull(startTime, endTime)) {
                 return true;
             }
-            if (startTime instanceof Date && endTime instanceof Date) {
-                if (((Date) startTime).after((Date) endTime)) {
-                    return false;
-                }
+            if (startTime instanceof Date && endTime instanceof Date
+                    && ((Date) startTime).after((Date) endTime)) {
+                return false;
             }
-            if (startTime instanceof LocalDateTime && endTime instanceof LocalDateTime) {
-                if (((LocalDateTime) startTime).isAfter((LocalDateTime) endTime)) {
-                    return false;
-                }
+            if (startTime instanceof LocalDateTime && endTime instanceof LocalDateTime
+                    && ((LocalDateTime) startTime).isAfter((LocalDateTime) endTime)) {
+                return false;
             }
         }
         return true;

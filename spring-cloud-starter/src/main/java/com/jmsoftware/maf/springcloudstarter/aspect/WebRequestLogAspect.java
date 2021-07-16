@@ -35,8 +35,7 @@ import java.time.Instant;
 public class WebRequestLogAspect {
     private static final int MAX_LENGTH_OF_JSON_STRING = 500;
     private static final String LINE_SEPARATOR = System.lineSeparator();
-    private final ObjectMapper mapper = new ObjectMapper();
-    private final String beforeTemplate = LINE_SEPARATOR +
+    private static final String BEFORE_TEMPLATE = LINE_SEPARATOR +
             "============ WEB REQUEST LOG AOP (@Before) ============" + LINE_SEPARATOR +
             "URL                : {}" + LINE_SEPARATOR +
             "HTTP Method        : {}" + LINE_SEPARATOR +
@@ -44,19 +43,20 @@ public class WebRequestLogAspect {
             "Username           : {}" + LINE_SEPARATOR +
             "Class Method       : {}#{}" + LINE_SEPARATOR +
             "Request Params     :{}{}";
-    private final String afterTemplate = LINE_SEPARATOR +
+    private static final String AFTER_TEMPLATE = LINE_SEPARATOR +
             "============ WEB REQUEST LOG AOP (@After) =============";
-    private final String aroundTemplateForJson = LINE_SEPARATOR +
+    private static final String AROUND_TEMPLATE_FOR_JSON = LINE_SEPARATOR +
             "Response           :{}{}";
-    private final String aroundTemplateForNonJson = LINE_SEPARATOR +
+    private static final String AROUND_TEMPLATE_FOR_NON_JSON = LINE_SEPARATOR +
             "Response (non-JSON): {}";
-    private final String aroundTemplateEnd = LINE_SEPARATOR +
+    private static final String AROUND_TEMPLATE_END = LINE_SEPARATOR +
             "Elapsed time       : {} ({} ms)" + LINE_SEPARATOR +
             "============ WEB REQUEST LOG AOP (@Around) ============";
-    private final String afterThrowingTemplate = LINE_SEPARATOR +
+    private static final String AFTER_THROWING_TEMPLATE = LINE_SEPARATOR +
             "Signature          : {}" + LINE_SEPARATOR +
             "Exception          : {}, message: {}" + LINE_SEPARATOR +
             "======== WEB REQUEST LOG AOP (@AfterThrowing) =========";
+    private final ObjectMapper mapper = new ObjectMapper();
 
     /**
      * Define pointcut. Pointcut is a predicate or expression that matches join points. In WebRequestLogAspect, we need
@@ -73,6 +73,7 @@ public class WebRequestLogAspect {
             " || @annotation(org.springframework.web.bind.annotation.PatchMapping)" +
             " || @annotation(org.springframework.web.bind.annotation.RequestMapping)")
     public void requestLogPointcut() {
+        // Do nothing
     }
 
     /**
@@ -87,7 +88,7 @@ public class WebRequestLogAspect {
         val attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         assert attributes != null;
         val request = attributes.getRequest();
-        log.info(beforeTemplate, request.getRequestURL().toString(), request.getMethod(),
+        log.info(BEFORE_TEMPLATE, request.getRequestURL().toString(), request.getMethod(),
                  RequestUtil.getRequestIpAndPort(request), UsernameUtil.getCurrentUsername(),
                  joinPoint.getSignature().getDeclaringTypeName(), joinPoint.getSignature().getName(), LINE_SEPARATOR,
                  JSONUtil.toJsonPrettyStr(joinPoint.getArgs()));
@@ -98,7 +99,7 @@ public class WebRequestLogAspect {
      */
     @After("requestLogPointcut()")
     public void afterHandleRequest() {
-        log.info(afterTemplate);
+        log.info(AFTER_TEMPLATE);
     }
 
     /**
@@ -115,18 +116,18 @@ public class WebRequestLogAspect {
         val result = proceedingJoinPoint.proceed();
         val duration = Duration.between(startInstant, Instant.now());
         try {
-            var formattedJsonString = JSONUtil.formatJsonStr(mapper.writeValueAsString(result));
+            var formattedJsonString = JSONUtil.formatJsonStr(this.mapper.writeValueAsString(result));
             if (formattedJsonString.length() > MAX_LENGTH_OF_JSON_STRING) {
                 val substring = formattedJsonString.substring(0, MAX_LENGTH_OF_JSON_STRING - 1);
                 formattedJsonString =
                         String.format("%s… [The length(%d) of JSON string is larger than the maximum(%d)]", substring,
                                       formattedJsonString.length(), MAX_LENGTH_OF_JSON_STRING);
             }
-            log.info(aroundTemplateForJson, LINE_SEPARATOR, formattedJsonString);
+            log.info(AROUND_TEMPLATE_FOR_JSON, LINE_SEPARATOR, formattedJsonString);
         } catch (JsonProcessingException e) {
-            log.info(aroundTemplateForNonJson, result);
+            log.info(AROUND_TEMPLATE_FOR_NON_JSON, result);
         }
-        log.info(aroundTemplateEnd, duration, duration.toMillis());
+        log.info(AROUND_TEMPLATE_END, duration, duration.toMillis());
         return result;
     }
 
@@ -139,6 +140,6 @@ public class WebRequestLogAspect {
      */
     @AfterThrowing(pointcut = "requestLogPointcut()", throwing = "e")
     public void afterThrowingException(JoinPoint joinPoint, Exception e) {
-        log.error(afterThrowingTemplate, joinPoint.getSignature().toShortString(), e.toString(), e.getMessage());
+        log.error(AFTER_THROWING_TEMPLATE, joinPoint.getSignature().toShortString(), e.toString(), e.getMessage());
     }
 }

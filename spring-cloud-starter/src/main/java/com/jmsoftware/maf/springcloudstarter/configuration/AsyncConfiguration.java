@@ -16,12 +16,15 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 @EnableAsync
 @RequiredArgsConstructor
 public class AsyncConfiguration {
+    private final MafProjectProperty mafProjectProperty;
+
     @Bean
     public AsyncTaskExecutor asyncTaskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(Runtime.getRuntime().availableProcessors() * 2);
         executor.setMaxPoolSize(100);
         executor.setBeanName("spring-boot-starter-thread-pool-task-executor");
+        executor.setThreadNamePrefix(this.mafProjectProperty.getProjectArtifactId());
         // Specify the RejectedExecutionHandler to use for the ExecutorService.
         // Default is the ExecutorService's default abort policy.
         executor.setRejectedExecutionHandler((runnable, executor1) -> {
