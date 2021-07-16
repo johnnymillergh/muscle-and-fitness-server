@@ -44,18 +44,18 @@ public class MafConfiguration {
     @Valid
     private IgnoredUrl ignoredUrl;
     /**
-     * <p>Web security feature switch. Default is false.</p>
+     * <p>Web security feature switch. Default is TRUE.</p>
      * true - disable web security; false - enable web security.
      */
     @NotNull
-    private Boolean webSecurityDisabled = false;
+    private Boolean webSecurityEnabled = Boolean.TRUE;
     /**
-     * Web request log switch. Default is false.
+     * Web request log switch. Default is TRUE.
      * <p>
      * true - disable web request log; false - enable web request log.
      */
     @NotNull
-    private Boolean webRequestLogDisabled = false;
+    private Boolean webRequestLogEnabled = Boolean.TRUE;
 
     /**
      * Flatten ignored urls string [ ].
@@ -63,19 +63,19 @@ public class MafConfiguration {
      * @return the string [ ]
      */
     public String[] flattenIgnoredUrls() {
-        if (ObjectUtil.isNull(ignoredUrl)) {
+        if (ObjectUtil.isNull(this.ignoredUrl)) {
             return new String[0];
         }
         val flattenIgnoredUrls = new ArrayList<String>();
-        flattenIgnoredUrls.addAll(ignoredUrl.getGet());
-        flattenIgnoredUrls.addAll(ignoredUrl.getPost());
-        flattenIgnoredUrls.addAll(ignoredUrl.getDelete());
-        flattenIgnoredUrls.addAll(ignoredUrl.getPut());
-        flattenIgnoredUrls.addAll(ignoredUrl.getHead());
-        flattenIgnoredUrls.addAll(ignoredUrl.getPatch());
-        flattenIgnoredUrls.addAll(ignoredUrl.getOptions());
-        flattenIgnoredUrls.addAll(ignoredUrl.getTrace());
-        flattenIgnoredUrls.addAll(ignoredUrl.getPattern());
+        flattenIgnoredUrls.addAll(this.ignoredUrl.getGet());
+        flattenIgnoredUrls.addAll(this.ignoredUrl.getPost());
+        flattenIgnoredUrls.addAll(this.ignoredUrl.getDelete());
+        flattenIgnoredUrls.addAll(this.ignoredUrl.getPut());
+        flattenIgnoredUrls.addAll(this.ignoredUrl.getHead());
+        flattenIgnoredUrls.addAll(this.ignoredUrl.getPatch());
+        flattenIgnoredUrls.addAll(this.ignoredUrl.getOptions());
+        flattenIgnoredUrls.addAll(this.ignoredUrl.getTrace());
+        flattenIgnoredUrls.addAll(this.ignoredUrl.getPattern());
         return flattenIgnoredUrls.toArray(new String[0]);
     }
 
@@ -93,54 +93,51 @@ public class MafConfiguration {
      **/
     @Data
     public static class IgnoredUrl {
-        private interface Constant {
-            String URL_REGEXP = "^(/.+)+$";
-        }
-
+        private static final String URL_REGEXP = "^/.{1,50}$";
         /**
          * Ignored URL pattern.
          */
         @Valid
-        private List<@Pattern(regexp = IgnoredUrl.Constant.URL_REGEXP) String> pattern = Lists.newArrayList();
+        private List<@Pattern(regexp = URL_REGEXP) String> pattern = Lists.newArrayList();
         /**
          * Ignored GET request.
          */
         @Valid
-        private List<@Pattern(regexp = IgnoredUrl.Constant.URL_REGEXP) String> get = Lists.newArrayList();
+        private List<@Pattern(regexp = URL_REGEXP) String> get = Lists.newArrayList();
         /**
          * Ignored POST request.
          */
         @Valid
-        private List<@Pattern(regexp = IgnoredUrl.Constant.URL_REGEXP) String> post = Lists.newArrayList();
+        private List<@Pattern(regexp = URL_REGEXP) String> post = Lists.newArrayList();
         /**
          * Ignored DELETE request.
          */
         @Valid
-        private List<@Pattern(regexp = IgnoredUrl.Constant.URL_REGEXP) String> delete = Lists.newArrayList();
+        private List<@Pattern(regexp = URL_REGEXP) String> delete = Lists.newArrayList();
         /**
          * Ignored PUT request.
          */
         @Valid
-        private List<@Pattern(regexp = IgnoredUrl.Constant.URL_REGEXP) String> put = Lists.newArrayList();
+        private List<@Pattern(regexp = URL_REGEXP) String> put = Lists.newArrayList();
         /**
          * Ignored HEAD request.
          */
         @Valid
-        private List<@Pattern(regexp = IgnoredUrl.Constant.URL_REGEXP) String> head = Lists.newArrayList();
+        private List<@Pattern(regexp = URL_REGEXP) String> head = Lists.newArrayList();
         /**
          * Ignored PATCH request.
          */
         @Valid
-        private List<@Pattern(regexp = IgnoredUrl.Constant.URL_REGEXP) String> patch = Lists.newArrayList();
+        private List<@Pattern(regexp = URL_REGEXP) String> patch = Lists.newArrayList();
         /**
          * Ignored OPTIONS request.
          */
         @Valid
-        private List<@Pattern(regexp = IgnoredUrl.Constant.URL_REGEXP) String> options = Lists.newArrayList();
+        private List<@Pattern(regexp = URL_REGEXP) String> options = Lists.newArrayList();
         /**
          * Ignored TRACE request.
          */
         @Valid
-        private List<@Pattern(regexp = IgnoredUrl.Constant.URL_REGEXP) String> trace = Lists.newArrayList();
+        private List<@Pattern(regexp = URL_REGEXP) String> trace = Lists.newArrayList();
     }
 }

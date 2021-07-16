@@ -67,6 +67,6 @@ const vm = new Vue({
         }
     },
     mounted: async function () {
-        this.getAppInfo();
+        await this.getAppInfo();
     }
 });

@@ -1,5 +1,6 @@
 package com.jmsoftware.maf.apigateway.security.configuration;
 
+import cn.hutool.core.util.BooleanUtil;
 import com.google.common.collect.Lists;
 import com.jmsoftware.maf.apigateway.remoteapi.AuthCenterRemoteApi;
 import com.jmsoftware.maf.apigateway.security.impl.*;
@@ -47,7 +48,7 @@ public class WebFluxSecurityConfiguration {
                                                 ServerSecurityContextRepository serverSecurityContextRepository,
                                                 ReactiveAuthenticationManager reactiveAuthenticationManager,
                                                 ReactiveAuthorizationManager<AuthorizationContext> reactiveAuthorizationManager) {
-        if (mafConfiguration.getWebSecurityDisabled()) {
+        if (BooleanUtil.isFalse(this.mafConfiguration.getWebSecurityEnabled())) {
             log.warn("Web security was disabled.");
             return http
                     .cors().disable()
@@ -55,7 +56,7 @@ public class WebFluxSecurityConfiguration {
                     .build();
         }
         log.warn("Spring Security will ignore following URLs: {}",
-                 Lists.newArrayList(mafConfiguration.flattenIgnoredUrls()));
+                 Lists.newArrayList(this.mafConfiguration.flattenIgnoredUrls()));
         return http
                 .cors().disable()
                 .csrf().disable()
@@ -69,7 +70,7 @@ public class WebFluxSecurityConfiguration {
                 .securityContextRepository(serverSecurityContextRepository)
                 .authenticationManager(reactiveAuthenticationManager)
                 .authorizeExchange()
-                .pathMatchers(mafConfiguration.flattenIgnoredUrls()).permitAll()
+                .pathMatchers(this.mafConfiguration.flattenIgnoredUrls()).permitAll()
                 .pathMatchers(HttpMethod.OPTIONS).permitAll()
                 // Authorization
                 .anyExchange().access(reactiveAuthorizationManager)
@@ -94,17 +95,17 @@ public class WebFluxSecurityConfiguration {
 
     @Bean
     public ServerSecurityContextRepository serverSecurityContextRepository(ReactiveAuthenticationManager reactiveAuthenticationManager) {
-        return new JwtReactiveServerSecurityContextRepositoryImpl(mafConfiguration, reactiveAuthenticationManager,
-                                                                  authCenterRemoteApi);
+        return new JwtReactiveServerSecurityContextRepositoryImpl(this.mafConfiguration, reactiveAuthenticationManager,
+                                                                  this.authCenterRemoteApi);
     }
 
     @Bean
     public ReactiveAuthenticationManager reactiveAuthenticationManager() {
-        return new JwtReactiveAuthenticationManagerImpl(authCenterRemoteApi);
+        return new JwtReactiveAuthenticationManagerImpl(this.authCenterRemoteApi);
     }
 
     @Bean
     public ReactiveAuthorizationManager<AuthorizationContext> reactiveAuthorizationManager() {
-        return new RbacReactiveAuthorizationManagerImpl(authCenterRemoteApi);
+        return new RbacReactiveAuthorizationManagerImpl(this.authCenterRemoteApi);
     }
 }

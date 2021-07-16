@@ -7,3 +7,7 @@ spring:
     host: localhost
     port: 6379
     password: maf@redis
+
+maf:
+  configuration:
+    web-security-enabled: false

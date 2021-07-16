@@ -8,6 +8,6 @@ maf:
         - "api-gateway"
         - "spring-boot-admin"
     redis-rate-limiter:
-      replenish-rate: 1
+      replenish-rate: 10
       burst-capacity: 1
       requested-tokens: 1

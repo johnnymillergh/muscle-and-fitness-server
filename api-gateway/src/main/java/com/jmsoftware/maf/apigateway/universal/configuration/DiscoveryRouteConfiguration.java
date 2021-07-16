@@ -7,9 +7,9 @@ import lombok.val;
 import org.springframework.cloud.gateway.discovery.DiscoveryLocatorProperties;
 import org.springframework.cloud.gateway.filter.FilterDefinition;
 import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
-import org.springframework.cloud.gateway.filter.ratelimit.RedisRateLimiter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.PostConstruct;
@@ -23,35 +23,55 @@ import javax.annotation.PostConstruct;
 @Configuration
 @RequiredArgsConstructor
 public class DiscoveryRouteConfiguration {
-    public final String FILTER_NAME = "RequestRateLimiter";
-    public final String REPLENISH_RATE_KEY = "redis-rate-limiter.replenishRate";
-    public final String BURST_CAPACITY_KEY = "redis-rate-limiter.burstCapacity";
-    public final String REQUESTED_TOKENS_KEY = "redis-rate-limiter.requestedTokens";
+    public static final String REQUEST_RATE_LIMITER_FILTER_NAME = "RequestRateLimiter";
+    /**
+     * The <code>redis-rate-limiter.replenishRate</code> property is how many requests per second you want a user to
+     * be allowed to do, without any dropped requests. This is the rate at which the token bucket is filled.
+     */
+    public static final String REPLENISH_RATE_KEY = "redis-rate-limiter.replenishRate";
+    /**
+     * The <code>redis-rate-limiter.burstCapacity</code> property is the maximum number of requests a user is allowed
+     * to do in a single second. This is the number of tokens the token bucket can hold. Setting this value to zero
+     * blocks all requests.
+     */
+    public static final String BURST_CAPACITY_KEY = "redis-rate-limiter.burstCapacity";
+    /**
+     * The <code>redis-rate-limiter.requestedTokens</code> property is how many tokens a request costs. This is the
+     * number of tokens taken from the bucket for each request and defaults to <code>1</code>.
+     */
+    public static final String REQUESTED_TOKENS_KEY = "redis-rate-limiter.requestedTokens";
     private final DiscoveryLocatorProperties discoveryLocatorProperties;
     private final RedisRateLimiterConfiguration redisRateLimiterConfiguration;
 
     /**
-     * Post construct.
+     * Configure
+     * <a href='https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/#the-redis-ratelimiter'>The Redis <code>RateLimiter</code></a>.
+     * <p>
+     * The algorithm used is the <a href='https://en.wikipedia.org/wiki/Token_bucket'>Token Bucket Algorithm</a>.
+     * <p>
+     * Rate limits bellow <code>1 request/s</code> are accomplished by setting <code>replenishRate</code> to the
+     * wanted number of requests, <code>requestedTokens</code> to the timespan in seconds and
+     * <code>burstCapacity</code> to the product of <code>replenishRate</code> and <code>requestedTokens</code>, e.g.
+     * setting <code>replenishRate=1</code>, <code>requestedTokens=60</code> and <code>burstCapacity=60</code> will
+     * result in a limit of <code>1 request/min</code>.
      *
      * @see
-     * <a href='https://docs.spring.io/spring-cloud-gateway/docs/3.0.1/reference/html/#the-redis-ratelimiter'>The Redis RateLimiter</a>
+     * <a href='https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/#the-redis-ratelimiter'>The Redis RateLimiter</a>
      */
     @PostConstruct
     void postConstruct() {
         val filter = new FilterDefinition();
-        filter.setName(FILTER_NAME);
-        // Setting replenishRate=1, requestedTokens=1 and burstCapacity=1
-        // will result in a limit of 1 request per 1 second.
-        // setting replenishRate=1, requestedTokens=60 and burstCapacity=60 will result in a limit of 1 request/min.
-        filter.addArg(REPLENISH_RATE_KEY, redisRateLimiterConfiguration.getReplenishRate());
-        filter.addArg(BURST_CAPACITY_KEY, redisRateLimiterConfiguration.getBurstCapacity());
-        filter.addArg(REQUESTED_TOKENS_KEY, redisRateLimiterConfiguration.getRequestedTokens());
-        discoveryLocatorProperties.getFilters().add(filter);
-        log.info("Added filter[{}] for discovery services, filters: {}", RedisRateLimiter.class.getSimpleName(),
-                 discoveryLocatorProperties.getFilters());
+        filter.setName(REQUEST_RATE_LIMITER_FILTER_NAME);
+        filter.addArg(REPLENISH_RATE_KEY, this.redisRateLimiterConfiguration.getReplenishRate());
+        filter.addArg(BURST_CAPACITY_KEY, this.redisRateLimiterConfiguration.getBurstCapacity());
+        filter.addArg(REQUESTED_TOKENS_KEY, this.redisRateLimiterConfiguration.getRequestedTokens());
+        this.discoveryLocatorProperties.getFilters().add(filter);
+        log.info("Added filter [{}] for discovery services, filters: {}", REQUEST_RATE_LIMITER_FILTER_NAME,
+                 this.discoveryLocatorProperties.getFilters());
     }
 
     @Bean
+    @Primary
     public KeyResolver ipKeyResolver() {
         return exchange -> {
             val remoteAddress = exchange.getRequest().getRemoteAddress();

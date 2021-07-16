@@ -52,7 +52,7 @@ public class RbacReactiveAuthorizationManagerImpl implements ReactiveAuthorizati
     private Flux<GetRoleListByUserIdSingleResponse> retrieveRoles(Mono<UserPrincipal> userPrincipalMono) {
         // Get role list by user ID, and then convert to Flux<?>
         return userPrincipalMono
-                .flatMap(userPrincipal -> authCenterRemoteApi.getRoleListByUserId(userPrincipal.getId()))
+                .flatMap(userPrincipal -> this.authCenterRemoteApi.getRoleListByUserId(userPrincipal.getId()))
                 .flatMapMany(Flux::fromIterable)
                 .switchIfEmpty(Flux.error(new SecurityException(HttpStatus.UNAUTHORIZED, "Roles not assigned!")));
     }
@@ -84,7 +84,7 @@ public class RbacReactiveAuthorizationManagerImpl implements ReactiveAuthorizati
                     val payload = new GetPermissionListByRoleIdListPayload();
                     payload.setRoleIdList(roleIdList);
                     payload.setPermissionTypeList(Lists.newArrayList(PermissionType.BUTTON));
-                    return authCenterRemoteApi.getPermissionListByRoleIdList(payload);
+                    return this.authCenterRemoteApi.getPermissionListByRoleIdList(payload);
                 })
                 .switchIfEmpty(Mono.error(new SecurityException(HttpStatus.FORBIDDEN, "Permission not found!")));
     }
@@ -105,8 +105,8 @@ public class RbacReactiveAuthorizationManagerImpl implements ReactiveAuthorizati
                     .filter(permission -> StrUtil.isNotBlank(permission.getMethod()))
                     .collect(Collectors.toList());
             val userPrincipal = mapper.getT2();
-            for (val buttonPermission : buttonPermissionList) {
-                if (checkRestfulAccess(buttonPermission, request)) {
+            for (var buttonPermission : buttonPermissionList) {
+                if (this.checkRestfulAccess(buttonPermission, request)) {
                     log.info("Authorization success! Resource [{}] {} is accessible for user(username: {})",
                              request.getMethod(), request.getURI(), userPrincipal.getUsername());
                     request
@@ -137,7 +137,7 @@ public class RbacReactiveAuthorizationManagerImpl implements ReactiveAuthorizati
      */
     private boolean checkRestfulAccess(GetPermissionListByRoleIdListResponse.Permission buttonPermission,
                                        ServerHttpRequest request) {
-        val urlMatched = antPathMatcher.match(buttonPermission.getUrl(), request.getURI().getPath());
+        val urlMatched = this.antPathMatcher.match(buttonPermission.getUrl(), request.getURI().getPath());
         // "*" is for super user. Super user's permission is like URL: "/**", method: "*"
         val allMethods = StrUtil.equals(buttonPermission.getMethod(), "*");
         if (allMethods) {
