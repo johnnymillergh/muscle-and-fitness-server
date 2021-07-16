@@ -28,31 +28,41 @@ Here is the highlights of **Muscle and Fitness Server**:
 
    - Consul - Service registration and discovery.
    - Spring Cloud Gateway - API Gateway on top of Spring WebFlux.  Provide a simple, yet effective way to route to APIs and provide cross cutting concerns to them such as: security, monitoring/metrics, and resiliency.
-   - Spring Cloud OpenFeign - Declarative REST Client: Feign creates a dynamic implementation of an interface decorated with JAX-RS or Spring MVC annotations.
+   - Spring Cloud OpenFeign - Declarative REST Client: Feign creates a dynamic implementation of an interface decorated with JAX-RS or Spring MVC annotations. Enhanced connection by Okhttp 3.
    - Spring Boot Admin - Admin UI for administration of spring boot applications.
    - Zipkin - a distributed tracing system. It helps gather timing data needed to troubleshoot latency problems in service architectures.
 
-3. MySQL cluster support. Dynamic SQL read-write isolation.
+3. Secured API. RBAC control by API gateway and Auth Center. JWT authentication, and RBAC authorization.
 
-4. Docker support.
+4. Higher-level packaging other libraries: `Spring Cloud Starter`, auto configuration for Spring Cloud services.
 
-5. Multi-environment support.
+5. MySQL cluster support. Multi data source. Dynamic SQL read-write isolation. MyBatis-Plus is the integrated ORM library.
 
-6. OSS service, based on Minio and SFTP integration.
+6. Redis 6.x support.
 
-7. API visualization. Enhanced Swagger API documentation.
+7. Docker, Rancher Kubernetes support. Google JIB for building Docker container images.
 
-8. Log compression.
+8. OSS service, based on Minio and SFTP integration.
 
-9. Request log.
+9. STOMP over WebSocket (SockJS), real time messaging, based on RabbitMQ STOMP message broker.
 
-10. Method Argument Validation Aspect.
+10. Quartz support. Distributed job scheduling, based on JDBC.
 
-11. Docker container log persistence.
+11. Multi-environment support.
 
-12. Startup statistics.
+12. API visualization. Enhanced Swagger API documentation.
 
-13. Customized startup banner.
+13. Log compression. ELK log aggregation.
+
+14. Request log.
+
+15. Method Argument Validation Aspect.
+
+16. Docker container log persistence.
+
+17. Startup statistics.
+
+18. Customized startup banner.
 
 ## Usage
 

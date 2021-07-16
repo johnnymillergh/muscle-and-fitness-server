@@ -7,7 +7,7 @@
     <!-- Project Basics -->
     <groupId>com.jmsoftware.maf</groupId>
     <artifactId>muscle-and-fitness-server</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.2</version>
     <name>Muscle and Fitness Server</name>
     <description>Muscle and Fitness Server (M&amp;F, maf), a Spring Cloud microservice based, back-end server for
         managing data of muscle and fitness.
