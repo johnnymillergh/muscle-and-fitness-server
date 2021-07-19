@@ -16,11 +16,11 @@ public enum DataSourceEnum {
     /**
      * Master
      */
-    MASTER("master"),
+    MASTER_1("master_1"),
     /**
      * Slave 1
      */
-    SLAVE1("slave1"),
+    SLAVE_1("slave_1"),
     /**
      * Quartz
      */

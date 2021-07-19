@@ -52,6 +52,7 @@ import java.util.List;
 @EnableConfigurationProperties({
         MafConfiguration.class,
         MafProjectProperty.class,
+        JwtConfiguration.class,
         ExcelImportConfiguration.class
 })
 @Import({
@@ -155,11 +156,5 @@ public class MafAutoConfiguration {
     public CommonController commonController(CommonService commonService) {
         log.warn("Initial bean: '{}'", CommonController.class.getSimpleName());
         return new CommonController(commonService);
-    }
-
-    @Bean
-    public JwtConfiguration jwtConfiguration(MafProjectProperty mafProjectProperty) {
-        log.warn("Initial bean: '{}'", JwtConfiguration.class.getSimpleName());
-        return new JwtConfiguration(mafProjectProperty);
     }
 }

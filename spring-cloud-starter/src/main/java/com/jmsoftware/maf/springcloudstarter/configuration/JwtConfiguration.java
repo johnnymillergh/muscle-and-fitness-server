@@ -32,16 +32,6 @@ public class JwtConfiguration {
      */
     @Setter(AccessLevel.NONE)
     private String jwtRedisKeyPrefix;
-
-    public JwtConfiguration(MafProjectProperty mafProjectProperty) {
-        this.signingKey = String.format("%s@%s", mafProjectProperty.getProjectParentArtifactId(),
-                                        mafProjectProperty.getVersion());
-        log.info("Initiated JWT signing key: {}. The specified key byte array is {} bits", this.signingKey,
-                 this.signingKey.getBytes(StandardCharsets.UTF_8).length * 8);
-        jwtRedisKeyPrefix = String.format("%s:jwt:", mafProjectProperty.getProjectParentArtifactId());
-        log.warn("Initiated 'jwtRedisKeyPrefix': {}", jwtRedisKeyPrefix);
-    }
-
     /**
      * JWT signing key. Pattern: [project-parent-artifact-id]@[version]
      */
@@ -57,4 +47,12 @@ public class JwtConfiguration {
      */
     @NotNull
     private Long ttlForRememberMe = 7 * 86400000L;
+    public JwtConfiguration(MafProjectProperty mafProjectProperty) {
+        this.signingKey = String.format("%s:%s@%s", mafProjectProperty.getProjectParentArtifactId(),
+                                        mafProjectProperty.getProjectArtifactId(), mafProjectProperty.getVersion());
+        log.info("Initiated JWT signing key: {}. The specified key byte array is {} bits", this.signingKey,
+                 this.signingKey.getBytes(StandardCharsets.UTF_8).length * 8);
+        this.jwtRedisKeyPrefix = String.format("%s:jwt:", mafProjectProperty.getProjectParentArtifactId());
+        log.warn("Initiated 'jwtRedisKeyPrefix': {}", this.jwtRedisKeyPrefix);
+    }
 }
