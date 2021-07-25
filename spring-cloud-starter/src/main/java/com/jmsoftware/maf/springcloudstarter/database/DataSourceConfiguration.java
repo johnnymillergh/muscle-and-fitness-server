@@ -4,18 +4,16 @@ import cn.hutool.db.ds.DataSourceWrapper;
 import com.alibaba.druid.util.JdbcUtils;
 import com.baomidou.dynamic.datasource.DynamicRoutingDataSource;
 import com.baomidou.dynamic.datasource.plugin.MasterSlaveAutoRoutingPlugin;
-import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DynamicDataSourceAutoConfiguration;
 import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DynamicDataSourceProperties;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.quartz.QuartzDataSource;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.autoconfigure.quartz.QuartzTransactionManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -30,17 +28,7 @@ import javax.sql.DataSource;
  **/
 @Slf4j
 @ConditionalOnClass({MybatisPlusAutoConfiguration.class})
-@EnableConfigurationProperties(DynamicDataSourceProperties.class)
-@AutoConfigureBefore({DynamicDataSourceAutoConfiguration.class})
 public class DataSourceConfiguration {
-    @Bean
-    @QuartzDataSource
-    @ConditionalOnProperty(prefix = "spring.quartz", name = "job-store-type", havingValue = "jdbc")
-    public DataSource quartzDataSource(DynamicRoutingDataSource dynamicRoutingDataSource) {
-        log.info("Getting quartzDataSource from 'DynamicRoutingDataSource'");
-        return dynamicRoutingDataSource.getDataSource(DataSourceEnum.QUARTZ.getDataSourceName());
-    }
-
     /**
      * Primary data source. Had to configure DynamicRoutingDataSource as primary. Otherwise
      * MasterSlaveAutoRoutingPlugin will not be able to be injected datasource correctly.
@@ -59,13 +47,36 @@ public class DataSourceConfiguration {
                 .get(dynamicDataSourceProperties.getPrimary())
                 .getUrl();
         val driverClassName = JdbcUtils.getDriverClassName(jdbcUrl);
-        log.info("Wrapping 'DynamicRoutingDataSource' as 'primaryDataSource', jdbcUrl: {}, driverClassName: {}",
-                 jdbcUrl, driverClassName);
-        return DataSourceWrapper.wrap(dynamicRoutingDataSource, driverClassName);
+        val wrappedDataSource = DataSourceWrapper.wrap(dynamicRoutingDataSource, driverClassName);
+        log.info("Wrapping 'DynamicRoutingDataSource' as 'primaryDataSource', jdbcUrl: {}, driverClassName: {}, " +
+                         "wrappedDataSource: {}", jdbcUrl, driverClassName, wrappedDataSource);
+        return wrappedDataSource;
     }
 
     @Bean
-    public PlatformTransactionManager platformTransactionManager(@Qualifier("primaryDataSource") DataSource primaryDataSource) {
+    @QuartzDataSource
+    @ConditionalOnProperty(prefix = "spring.quartz", name = "job-store-type", havingValue = "jdbc")
+    public DataSource quartzDataSource(DynamicRoutingDataSource dynamicRoutingDataSource) {
+        val quartzDataSource = dynamicRoutingDataSource.getDataSource(DataSourceEnum.QUARTZ.getDataSourceName());
+        log.info("Setting up quartzDataSource from 'DynamicRoutingDataSource', quartzDataSource: {}",
+                 quartzDataSource.hashCode());
+        return quartzDataSource;
+    }
+
+    @Bean
+    @Primary
+    public PlatformTransactionManager primaryPlatformTransactionManager(@Qualifier("primaryDataSource") DataSource primaryDataSource) {
+        log.info("Setting up the central interface in Spring's imperative transaction infrastructure " +
+                         "'PlatformTransactionManager'. primaryDataSource: {}", primaryDataSource);
         return new DataSourceTransactionManager(primaryDataSource);
+    }
+
+    @Bean
+    @QuartzTransactionManager
+    @ConditionalOnProperty(prefix = "spring.quartz", name = "job-store-type", havingValue = "jdbc")
+    public PlatformTransactionManager quartzPlatformTransactionManager(@Qualifier("quartzDataSource") DataSource quartzDataSource) {
+        log.info("Setting up the central interface in Spring's imperative transaction infrastructure " +
+                         "'PlatformTransactionManager'. quartzDataSource: {}", quartzDataSource.hashCode());
+        return new DataSourceTransactionManager(quartzDataSource);
     }
 }
