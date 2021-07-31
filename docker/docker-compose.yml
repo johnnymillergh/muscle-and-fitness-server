@@ -82,7 +82,7 @@ services:
       muscle_and_fitness_network:
 
   redis-commander:
-    container_name: redis-commander
+    container_name: ${REDIS_COMMANDER_CONTAINER_NAME}
     hostname: redis-commander
     image: rediscommander/redis-commander:latest
     restart: always
