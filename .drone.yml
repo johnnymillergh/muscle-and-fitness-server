@@ -6,4 +6,4 @@ steps:
   - name: install
     image: maven:3-jdk-11
     commands:
-      - mvnw clean install --batch-mode --show-version --quiet -DskipTests=true -Dmaven.javadoc.skip=true
+      - mvn clean install --batch-mode --show-version --quiet -DskipTests=true -Dmaven.javadoc.skip=true
