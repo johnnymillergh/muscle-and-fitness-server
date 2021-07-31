@@ -47,7 +47,7 @@ public class UserRemoteApiController {
     }
 
     @GetMapping("/users/status")
-    @ApiOperation(value = "Retrieve user page list", notes = "Retrieve user page list")
+    @ApiOperation(value = "Retrieve user status", notes = "Retrieve user status")
     public ResponseBodyBean<String> getUserStatus(@Valid GetUserStatusPayload payload) {
         return ResponseBodyBean.ofSuccess(this.userService.getUserStatus(payload), "Correct enum value");
     }
