@@ -2,12 +2,12 @@ package com.jmsoftware.maf.reactivespringcloudstarter;
 
 import com.jmsoftware.maf.reactivespringcloudstarter.configuration.MafConfiguration;
 import com.jmsoftware.maf.reactivespringcloudstarter.configuration.MafProjectProperty;
-import com.jmsoftware.maf.reactivespringcloudstarter.configuration.RedisConfiguration;
 import com.jmsoftware.maf.reactivespringcloudstarter.configuration.WebFluxConfiguration;
 import com.jmsoftware.maf.reactivespringcloudstarter.controller.CommonController;
 import com.jmsoftware.maf.reactivespringcloudstarter.filter.AccessLogFilter;
 import com.jmsoftware.maf.reactivespringcloudstarter.helper.IpHelper;
 import com.jmsoftware.maf.reactivespringcloudstarter.helper.SpringBootStartupHelper;
+import com.jmsoftware.maf.reactivespringcloudstarter.redis.RedisConfiguration;
 import com.jmsoftware.maf.reactivespringcloudstarter.service.CommonService;
 import com.jmsoftware.maf.reactivespringcloudstarter.service.impl.CommonServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -32,28 +32,19 @@ import javax.annotation.PostConstruct;
 @Configuration
 @RequiredArgsConstructor
 @AutoConfigureOrder(Integer.MIN_VALUE)
-@EnableConfigurationProperties(MafConfiguration.class)
+@EnableConfigurationProperties({
+        MafConfiguration.class,
+        MafProjectProperty.class
+})
 @Import({
-        RedisConfiguration.class
+        RedisConfiguration.class,
+        WebFluxConfiguration.class
 })
 public class MafReactiveAutoConfiguration {
     @PostConstruct
     public void postConstruct() {
         log.warn("Post construction of [{}] is done. About to inject beans. Auto configure order: {}",
-                 getClass().getSimpleName(), Integer.MIN_VALUE);
-    }
-
-    @Bean
-    public WebFluxConfiguration webFluxConfiguration() {
-        log.warn("Initial bean: '{}'", WebFluxConfiguration.class.getSimpleName());
-        return new WebFluxConfiguration();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public MafConfiguration mafConfiguration() {
-        log.warn("Initial bean: '{}'", MafConfiguration.class.getSimpleName());
-        return new MafConfiguration();
+                 this.getClass().getSimpleName(), Integer.MIN_VALUE);
     }
 
     @Bean
@@ -61,12 +52,6 @@ public class MafReactiveAutoConfiguration {
     public AccessLogFilter requestFilter(MafConfiguration mafConfiguration) {
         log.warn("Initial bean: '{}'", AccessLogFilter.class.getSimpleName());
         return new AccessLogFilter(mafConfiguration);
-    }
-
-    @Bean
-    public MafProjectProperty mafProjectProperty() {
-        log.warn("Initial bean: '{}'", MafProjectProperty.class.getSimpleName());
-        return new MafProjectProperty();
     }
 
     @Bean

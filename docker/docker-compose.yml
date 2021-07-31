@@ -31,8 +31,7 @@ services:
     container_name: ${MYSQL_SERVER_SLAVE_CONTAINER_NAME}
     image: mysql/mysql-server:${MYSQL_SERVER_TAG}
     depends_on:
-      mysql-server-master:
-        condition: service_healthy
+      - mysql-server-master
     environment:
       MYSQL_ROOT_HOST: "%"
       MYSQL_ROOT_PASSWORD: ${MAF_MYSQL_ROOT_PASSWORD}
@@ -52,18 +51,45 @@ services:
     networks:
       muscle_and_fitness_network:
 
-  redis:
-    container_name: ${REDIS_CONTAINER_NAME}
+  redis-master:
+    container_name: ${REDIS_MASTER_CONTAINER_NAME}
     image: redis:${REDIS_TAG}
     ports:
       - "6379:6379"
     restart: always
     volumes:
-      - "~/docker-file-mapping/${REDIS_CONTAINER_NAME}:/data"
-      - ./config/redis/redis.conf:/usr/local/etc/redis/redis.conf
+      - "~/docker-file-mapping/${REDIS_MASTER_CONTAINER_NAME}:/data"
+      - ./config/redis/master/redis.conf:/usr/local/etc/redis/redis.conf
     environment:
       TZ: ${MAF_TIMEZONE}
     command: "redis-server /usr/local/etc/redis/redis.conf"
+    networks:
+      muscle_and_fitness_network:
+
+  redis-slave-1:
+    container_name: ${REDIS_SLAVE_1_CONTAINER_NAME}
+    image: redis:${REDIS_TAG}
+    ports:
+      - "6380:6379"
+    restart: always
+    volumes:
+      # - "~/docker-file-mapping/${REDIS_SLAVE_1_CONTAINER_NAME}:/data"
+      - ./config/redis/slave-1/redis.conf:/usr/local/etc/redis/redis.conf
+    environment:
+      TZ: ${MAF_TIMEZONE}
+    command: "redis-server /usr/local/etc/redis/redis.conf"
+    networks:
+      muscle_and_fitness_network:
+
+  redis-commander:
+    container_name: redis-commander
+    hostname: redis-commander
+    image: rediscommander/redis-commander:latest
+    restart: always
+    environment:
+      - REDIS_HOSTS=master:${REDIS_MASTER_CONTAINER_NAME}:6379:0:maf@redis,slave-1:${REDIS_SLAVE_1_CONTAINER_NAME}:6379:0:maf@redis
+    ports:
+      - "8081:8081"
     networks:
       muscle_and_fitness_network:
 
@@ -145,8 +171,7 @@ services:
       MYSQL_USER: zipkin
       MYSQL_PASS: zipkin
     depends_on:
-      zipkin-mysql:
-        condition: service_healthy
+      - zipkin-mysql
     restart: always
     networks:
       muscle_and_fitness_network:
@@ -155,8 +180,7 @@ services:
     container_name: ${ZIPKIN_CONTAINER_NAME}
     image: openzipkin/zipkin:${ZIPKIN_TAG}
     depends_on:
-      zipkin-mysql:
-        condition: service_healthy
+      - zipkin-mysql
     # Environment settings are defined here https://github.com/openzipkin/zipkin/blob/master/zipkin-server/README.md#environment-variables
     environment:
       STORAGE_TYPE: mysql
@@ -187,9 +211,6 @@ services:
     container_name: ${CONSUL_REGISTRY_CONTAINER_NAME}
     hostname: ${CONSUL_REGISTRY_CONTAINER_NAME}
     image: consul:${CONSUL_TAG}
-    depends_on:
-      zipkin:
-        condition: service_healthy
     ports:
       - "8500:8500"
     restart: always
@@ -223,8 +244,7 @@ services:
     container_name: ${LOGSTASH_CONTAINER_NAME}
     image: logstash:${LOGSTASH_TAG}
     depends_on:
-      elasticsearch:
-        condition: service_started
+      - elasticsearch
     ports:
       - "4560:4560"
     restart: always
@@ -238,8 +258,7 @@ services:
     container_name: ${KIBANA_CONTAINER_NAME}
     image: kibana:${KIBANA_TAG}
     depends_on:
-      elasticsearch:
-        condition: service_started
+      - elasticsearch
     ports:
       - "5601:5601"
     restart: always
@@ -253,8 +272,7 @@ services:
     hostname: ${SPRING_BOOT_ADMIN_CONTAINER_NAME}
     image: ijohnnymiller/muscle-and-fitness-server.spring-boot-admin:${MAF_TAG}
     depends_on:
-      consul-registry:
-        condition: service_started
+      - consul-registry
     ports:
       - "8761:8761"
     restart: always
@@ -282,10 +300,7 @@ services:
     hostname: ${API_GATEWAY_CONTAINER_NAME}
     image: ijohnnymiller/muscle-and-fitness-server.api-gateway:${MAF_TAG}
     depends_on:
-      consul-registry:
-        condition: service_started
-      redis:
-        condition: service_started
+      - consul-registry
     restart: always
     ports:
       - "8080:8080"
@@ -308,16 +323,9 @@ services:
     hostname: ${AUTH_CENTER_CONTAINER_NAME}
     image: ijohnnymiller/muscle-and-fitness-server.auth-center:${MAF_TAG}
     depends_on:
-      consul-registry:
-        condition: service_started
-      redis:
-        condition: service_started
-      rabbitmq:
-        condition: service_healthy
-      mysql-server-master:
-        condition: service_healthy
-      mysql-server-slave:
-        condition: service_healthy
+      - consul-registry
+      - rabbitmq
+      - mysql-server-slave
     restart: always
     volumes:
       - "~/docker-file-mapping/${AUTH_CENTER_CONTAINER_NAME}:/logs"
@@ -338,18 +346,10 @@ services:
     hostname: ${OSS_CENTER_CONTAINER_NAME}
     image: ijohnnymiller/muscle-and-fitness-server.oss-center:${MAF_TAG}
     depends_on:
-      consul-registry:
-        condition: service_started
-      redis:
-        condition: service_started
-      rabbitmq:
-        condition: service_healthy
-      minio:
-        condition: service_started
-      mysql-server-master:
-        condition: service_healthy
-      mysql-server-slave:
-        condition: service_healthy
+      - consul-registry
+      - rabbitmq
+      - minio
+      - mysql-server-slave
     restart: always
     volumes:
       - "~/docker-file-mapping/${OSS_CENTER_CONTAINER_NAME}:/logs"
@@ -370,16 +370,9 @@ services:
     hostname: ${MAF_MIS_CONTAINER_NAME}
     image: ijohnnymiller/muscle-and-fitness-server.maf-mis:${MAF_TAG}
     depends_on:
-      consul-registry:
-        condition: service_started
-      redis:
-        condition: service_started
-      mysql-server-master:
-        condition: service_healthy
-      mysql-server-slave:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
+      - consul-registry
+      - mysql-server-slave
+      - rabbitmq
     restart: always
     volumes:
       - "~/docker-file-mapping/${MAF_MIS_CONTAINER_NAME}:/logs"

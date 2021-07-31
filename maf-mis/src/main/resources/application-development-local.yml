@@ -21,15 +21,21 @@ spring:
           username: maf_mysql_rw
           password: maf@mysql
           driver-class-name: com.mysql.cj.jdbc.Driver
-  redis:
-    host: localhost
-    port: 6379
-    password: maf@redis
   rabbitmq:
     host: localhost
     port: 5672
     username: maf_rabbitmq_su
     password: maf@rabbitmq
+
+redis:
+  master:
+    host: localhost
+    port: 6379
+    password: maf@redis
+  slaves:
+    - host: localhost
+      port: 6380
+      password: maf@redis
 
 maf:
   configuration:
