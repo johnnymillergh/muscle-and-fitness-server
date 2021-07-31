@@ -62,7 +62,8 @@ public class RedisConfiguration {
         val lettuceClientConfiguration = LettuceClientConfiguration.builder()
                 .readFrom(ReadFrom.REPLICA_PREFERRED)
                 .build();
-        log.warn("Initial bean: '{}'", LettuceConnectionFactory.class.getSimpleName());
+        log.warn("Initial bean: '{}' for Redis Master/Replica configuration",
+                 LettuceConnectionFactory.class.getSimpleName());
         return new LettuceConnectionFactory(redisStaticMasterReplicaConfiguration, lettuceClientConfiguration);
     }
 
