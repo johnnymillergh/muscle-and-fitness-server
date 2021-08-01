@@ -3,7 +3,13 @@ spring:
     base-url: http://maf-zipkin:9411
   devtools:
     add-properties: true
-  redis:
-    host: maf-redis
+
+redis:
+  master:
+    host: maf-redis-master
     port: 6379
     password: maf@redis
+  slaves:
+    - host: maf-redis-slave-1
+      port: 6379
+      password: maf@redis

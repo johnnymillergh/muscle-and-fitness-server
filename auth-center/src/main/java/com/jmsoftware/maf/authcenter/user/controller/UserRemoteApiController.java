@@ -1,6 +1,7 @@
 package com.jmsoftware.maf.authcenter.user.controller;
 
 import com.jmsoftware.maf.authcenter.user.entity.GetUserPageListPayload;
+import com.jmsoftware.maf.authcenter.user.entity.GetUserStatusPayload;
 import com.jmsoftware.maf.authcenter.user.entity.persistence.User;
 import com.jmsoftware.maf.authcenter.user.service.UserService;
 import com.jmsoftware.maf.common.bean.PageResponseBodyBean;
@@ -36,11 +37,18 @@ public class UserRemoteApiController {
     @GetMapping("/users/{loginToken}")
     @ApiOperation(value = "Get user by login token", notes = "Get user by login token (Remote)")
     public ResponseBodyBean<GetUserByLoginTokenResponse> getUserByLoginToken(@PathVariable String loginToken) {
-        return ResponseBodyBean.ofSuccess(userService.getUserByLoginToken(loginToken));
+        return ResponseBodyBean.ofSuccess(this.userService.getUserByLoginToken(loginToken));
     }
 
     @GetMapping("/users")
+    @ApiOperation(value = "Retrieve user page list", notes = "Retrieve user page list")
     public PageResponseBodyBean<User> getUserPageList(@Valid GetUserPageListPayload payload) {
-        return userService.getUserPageList(payload);
+        return this.userService.getUserPageList(payload);
+    }
+
+    @GetMapping("/users/status")
+    @ApiOperation(value = "Retrieve user status", notes = "Retrieve user status")
+    public ResponseBodyBean<String> getUserStatus(@Valid GetUserStatusPayload payload) {
+        return ResponseBodyBean.ofSuccess(this.userService.getUserStatus(payload), "Correct enum value");
     }
 }

@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.springcloudstarter.redis;
+package com.jmsoftware.maf.reactivespringcloudstarter.redis;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +16,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 
+import javax.annotation.PostConstruct;
 import java.util.Objects;
 
 import static org.springframework.data.redis.cache.RedisCacheConfiguration.defaultCacheConfig;
@@ -34,6 +35,11 @@ import static org.springframework.data.redis.cache.RedisCacheConfiguration.defau
 @ConditionalOnClass({RedisConnectionFactory.class})
 public class RedisCachingConfiguration extends CachingConfigurerSupport {
     private final RedisConnectionFactory redisConnectionFactory;
+
+    @PostConstruct
+    private void postConstruct() {
+        log.warn("Initial bean: '{}'", RedisCachingConfiguration.class.getSimpleName());
+    }
 
     @Bean
     @Override

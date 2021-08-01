@@ -38,7 +38,7 @@ Here is the highlights of **Muscle and Fitness Server**:
 
 5. MySQL cluster support. Multi data source. Dynamic SQL read-write isolation. MyBatis-Plus is the integrated ORM library.
 
-6. Redis 6.x support.
+6. Redis 6.x support. Master-slave replication. Redis cluster
 
 7. Docker, Rancher Kubernetes support. Google JIB for building Docker container images.
 

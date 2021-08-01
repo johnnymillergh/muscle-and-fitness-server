@@ -1,7 +1,6 @@
-package com.jmsoftware.maf.springcloudstarter.redis;
+package com.jmsoftware.maf.reactivespringcloudstarter.redis;
 
 import cn.hutool.core.collection.CollUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.lettuce.core.ReadFrom;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,16 +16,14 @@ import org.springframework.data.redis.connection.RedisStaticMasterReplicaConfigu
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
  * Description: RedisConfiguration, change description here.
  *
- * @author 钟俊（zhongjun）, email: zhongjun@toguide.cn, date: 12/30/2020 1:08 PM
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 7/31/2021 1:08 PM
  **/
 @Slf4j
 @RequiredArgsConstructor
@@ -39,7 +36,6 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @ConditionalOnClass({RedisConnectionFactory.class})
 public class RedisConfiguration {
     private final RedisMasterSlaveReplicationProperties redisMasterSlaveReplicationProperties;
-    private final ObjectMapper objectMapper;
 
 
     /**
@@ -69,35 +65,6 @@ public class RedisConfiguration {
         log.warn("Initial bean: '{}' for Redis Master/Replica configuration",
                  LettuceConnectionFactory.class.getSimpleName());
         return new LettuceConnectionFactory(redisStaticMasterReplicaConfiguration, lettuceClientConfiguration);
-    }
-
-    /**
-     * RedisTemplate uses JDK byte code serialization (byte[]), which is not that readable and friendly to
-     * human reading.
-     * <p>
-     * In order to replace that, we have to <b>customize</b> RedisTemplate.
-     *
-     * @param redisConnectionFactory the redis connection factory
-     * @return RedisTemplate redis template
-     * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 12/30/2020 1:18 PM
-     */
-    @Bean
-    public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        log.warn("Initial bean: '{}'", RedisTemplate.class.getSimpleName());
-
-        RedisTemplate<Object, Object> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(redisConnectionFactory);
-
-        Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer =
-                new Jackson2JsonRedisSerializer<>(Object.class);
-        jackson2JsonRedisSerializer.setObjectMapper(this.objectMapper);
-
-        // Set key serializers as StringRedisSerializer
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        // Use Jackson2JsonRedisSerialize to replace default JDK serialization
-        redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
-        redisTemplate.afterPropertiesSet();
-        return redisTemplate;
     }
 
     /**

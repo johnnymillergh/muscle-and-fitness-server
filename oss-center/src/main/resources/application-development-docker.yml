@@ -21,19 +21,21 @@ spring:
           username: maf_mysql_rw
           password: maf@mysql
           driver-class-name: com.mysql.cj.jdbc.Driver
-  redis:
-    host: maf-redis
-    port: 6379
-    password: maf@redis
   rabbitmq:
     host: maf-rabbitmq
     port: 5672
     username: maf_rabbitmq_su
     password: maf@rabbitmq
 
-maf:
-  configuration:
-    swagger-enabled: true
+redis:
+  master:
+    host: maf-redis-master
+    port: 6379
+    password: maf@redis
+  slaves:
+    - host: maf-redis-slave-1
+      port: 6379
+      password: maf@redis
 
 minio:
   endpoint: http://maf-minio
