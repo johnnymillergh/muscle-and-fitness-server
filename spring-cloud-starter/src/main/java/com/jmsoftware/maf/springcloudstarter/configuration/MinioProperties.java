@@ -16,8 +16,8 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 @Validated
-@ConfigurationProperties(prefix = MinioProperty.PREFIX)
-public class MinioProperty {
+@ConfigurationProperties(prefix = MinioProperties.PREFIX)
+public class MinioProperties {
     /**
      * The constant PREFIX.
      */

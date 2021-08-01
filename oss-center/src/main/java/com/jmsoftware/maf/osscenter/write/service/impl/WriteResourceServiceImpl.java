@@ -1,8 +1,8 @@
 package com.jmsoftware.maf.osscenter.write.service.impl;
 
 import cn.hutool.core.util.StrUtil;
-import com.jmsoftware.maf.osscenter.write.service.WriteResourceService;
 import com.jmsoftware.maf.common.exception.BusinessException;
+import com.jmsoftware.maf.osscenter.write.service.WriteResourceService;
 import com.jmsoftware.maf.springcloudstarter.helper.MinioHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,9 +38,11 @@ public class WriteResourceServiceImpl implements WriteResourceService {
         }
         val mediaType = MediaType.parse(detectedMediaType);
         val mediaBaseType = mediaType.getType();
-        minioHelper.makeBucket(mediaBaseType);
-        final var put = minioHelper.put(mediaBaseType, multipartFile.getOriginalFilename(), multipartFile);
-        log.info("Uploaded single resource: {}/{}", put.bucket(), put.object());
-        return String.format("%s/%s", put.bucket(), put.object());
+        val bucketMade = this.minioHelper.makeBucket(mediaBaseType);
+        val objectWriteResponse = this.minioHelper.put(mediaBaseType, multipartFile.getOriginalFilename(),
+                                                       multipartFile);
+        log.info("Uploaded single resource: {}/{}. bucketMade: {}", objectWriteResponse.bucket(),
+                 objectWriteResponse.object(), bucketMade);
+        return String.format("%s/%s", objectWriteResponse.bucket(), objectWriteResponse.object());
     }
 }
