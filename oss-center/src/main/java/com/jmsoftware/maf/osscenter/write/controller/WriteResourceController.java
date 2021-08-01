@@ -1,8 +1,8 @@
 package com.jmsoftware.maf.osscenter.write.controller;
 
-import com.jmsoftware.maf.osscenter.write.service.WriteResourceService;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
-import com.jmsoftware.maf.common.exception.BusinessException;
+import com.jmsoftware.maf.common.exception.BizException;
+import com.jmsoftware.maf.osscenter.write.service.WriteResourceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -30,10 +30,10 @@ public class WriteResourceController {
     private final WriteResourceService writeResourceService;
 
     @PostMapping("/upload/single")
-    @SneakyThrows({IOException.class, BusinessException.class})
+    @SneakyThrows({IOException.class, BizException.class})
     @ApiOperation(value = "Upload single resource", notes = "Upload single resource")
     public ResponseBodyBean<String> uploadSingleResource(@RequestParam("file") MultipartFile multipartFile) {
-        return ResponseBodyBean.ofSuccess(writeResourceService.uploadSingleResource(multipartFile),
+        return ResponseBodyBean.ofSuccess(this.writeResourceService.uploadSingleResource(multipartFile),
                                           "Succeed to upload");
     }
 }

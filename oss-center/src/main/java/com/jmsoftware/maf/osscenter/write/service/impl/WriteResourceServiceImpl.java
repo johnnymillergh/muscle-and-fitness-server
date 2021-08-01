@@ -1,7 +1,7 @@
 package com.jmsoftware.maf.osscenter.write.service.impl;
 
 import cn.hutool.core.util.StrUtil;
-import com.jmsoftware.maf.common.exception.BusinessException;
+import com.jmsoftware.maf.common.exception.BizException;
 import com.jmsoftware.maf.osscenter.write.service.WriteResourceService;
 import com.jmsoftware.maf.springcloudstarter.helper.MinioHelper;
 import lombok.RequiredArgsConstructor;
@@ -29,12 +29,12 @@ public class WriteResourceServiceImpl implements WriteResourceService {
     private final MinioHelper minioHelper;
 
     @Override
-    public String uploadSingleResource(@NotNull MultipartFile multipartFile) throws IOException, BusinessException {
+    public String uploadSingleResource(@NotNull MultipartFile multipartFile) throws IOException, BizException {
         val tika = new Tika();
         val detectedMediaType = tika.detect(multipartFile.getInputStream());
         log.info("Detected media type: {}", detectedMediaType);
         if (StrUtil.isBlank(detectedMediaType)) {
-            throw new BusinessException("Media extension detection failed!");
+            throw new BizException("Media extension detection failed!");
         }
         val mediaType = MediaType.parse(detectedMediaType);
         val mediaBaseType = mediaType.getType();

@@ -2,7 +2,6 @@ package com.jmsoftware.maf.common.exception;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 /**
@@ -14,19 +13,18 @@ import org.springframework.http.HttpStatus;
  * @date 2019-03-23 16:23
  **/
 @Data
-@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class BaseException extends Exception {
     private static final long serialVersionUID = 5049763892480652887L;
 
     /**
-     * Code is REQUIRED. Default code is 464.
+     * Code is REQUIRED. Default code is 500 (Internal Server Error).
      */
     private Integer code = HttpStatus.INTERNAL_SERVER_ERROR.value();
     /**
      * Message is REQUIRED. Default message is: Error. A generic status for an error in the server itself.
      */
-    private String message;
+    private String message = HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase();
     private Object data;
 
     public BaseException(HttpStatus httpStatus) {

@@ -3,7 +3,7 @@ package com.jmsoftware.maf.authcenter.permission.controller;
 import com.jmsoftware.maf.authcenter.permission.entity.GetServicesInfoResponse;
 import com.jmsoftware.maf.authcenter.permission.service.PermissionService;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
-import com.jmsoftware.maf.common.exception.BusinessException;
+import com.jmsoftware.maf.common.exception.BizException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +36,7 @@ public class PermissionController {
      */
     @GetMapping("/permissions/services-info")
     @ApiOperation(value = "Get services info", notes = "Get services info")
-    public ResponseBodyBean<GetServicesInfoResponse> getServicesInfo() throws BusinessException {
-        return ResponseBodyBean.ofSuccess(permissionService.getServicesInfo());
+    public ResponseBodyBean<GetServicesInfoResponse> getServicesInfo() throws BizException {
+        return ResponseBodyBean.ofSuccess(this.permissionService.getServicesInfo());
     }
 }
