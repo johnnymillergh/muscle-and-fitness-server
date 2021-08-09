@@ -118,7 +118,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         val jwt = this.jwtService.createJwt(payload.getRememberMe(), user.getId(), user.getUsername(), null, null);
         val response = new LoginResponse();
-        response.setGreeting(this.messageSource.getMessage(("greeting"), null, LocaleContextHolder.getLocale()));
+        response.setGreeting(this.messageSource.getMessage("greeting", null, LocaleContextHolder.getLocale()));
         response.setJwt(jwt);
         return response;
     }
