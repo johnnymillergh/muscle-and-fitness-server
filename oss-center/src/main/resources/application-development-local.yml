@@ -34,7 +34,7 @@ redis:
     password: maf@redis
   slaves:
     - host: localhost
-      port: 6280
+      port: 6380
       password: maf@redis
 
 logging:
