@@ -15,6 +15,11 @@
 
     <!-- Scoped Dependencies Management -->
     <dependencies>
+        <dependency>
+            <groupId>com.jmsoftware.maf</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
+
         <!-- Spring Boot Dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -48,6 +53,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis-reactive</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -71,11 +77,6 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-sleuth-zipkin</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.jmsoftware.maf</groupId>
-            <artifactId>common</artifactId>
         </dependency>
 
         <dependency>
