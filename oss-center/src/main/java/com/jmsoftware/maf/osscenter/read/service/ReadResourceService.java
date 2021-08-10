@@ -3,6 +3,7 @@ package com.jmsoftware.maf.osscenter.read.service;
 import com.jmsoftware.maf.osscenter.read.entity.GetSingleResourcePayload;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
@@ -27,8 +28,10 @@ public interface ReadResourceService {
      * @param bucket  the bucket
      * @param object  the object
      * @param payload the payload
+     * @param range
      * @return the single resource
      */
     ResponseEntity<Resource> getSingleResource(@NotBlank String bucket, @NotBlank String object,
-                                               @Valid @NotNull GetSingleResourcePayload payload);
+                                               @Valid @NotNull GetSingleResourcePayload payload,
+                                               @Nullable String range);
 }

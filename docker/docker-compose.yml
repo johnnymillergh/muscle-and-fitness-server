@@ -69,6 +69,8 @@ services:
   redis-slave-1:
     container_name: ${REDIS_SLAVE_1_CONTAINER_NAME}
     image: redis:${REDIS_TAG}
+    depends_on:
+      - redis-master
     ports:
       - "6380:6379"
     restart: always
