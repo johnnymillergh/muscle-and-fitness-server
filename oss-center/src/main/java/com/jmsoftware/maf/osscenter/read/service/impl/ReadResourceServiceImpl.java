@@ -1,8 +1,6 @@
 package com.jmsoftware.maf.osscenter.read.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.BooleanUtil;
-import com.jmsoftware.maf.osscenter.read.entity.GetSingleResourcePayload;
 import com.jmsoftware.maf.osscenter.read.service.ReadResourceService;
 import com.jmsoftware.maf.springcloudstarter.helper.MinioHelper;
 import io.minio.StatObjectResponse;
@@ -14,11 +12,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.*;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
-import org.springframework.util.unit.DataSize;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -32,15 +27,11 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ReadResourceServiceImpl implements ReadResourceService {
-    private static final DataSize SMALL_DATA_SIZE = DataSize.ofMegabytes(1);
-    private static final DataSize MEDIUM_DATA_SIZE = DataSize.ofMegabytes(4);
-    private static final DataSize LARGE_DATA_SIZE = DataSize.ofMegabytes(8);
     private final MinioHelper minioHelper;
 
     @Override
-    public ResponseEntity<Resource> getSingleResource(@NotBlank String bucket, @NotBlank String object,
-                                                      @Valid @NotNull GetSingleResourcePayload payload,
-                                                      @Nullable String range) {
+    public ResponseEntity<Resource> streamSingleResource(@NotBlank String bucket, @NotBlank String object,
+                                                         @Nullable String range) {
         StatObjectResponse statObjectResponse;
         try {
             statObjectResponse = this.minioHelper.statObject(bucket, object);
@@ -50,13 +41,8 @@ public class ReadResourceServiceImpl implements ReadResourceService {
         }
         val httpRanges = HttpRange.parseRanges(range);
         if (CollUtil.isEmpty(httpRanges)) {
-            val bodyBuilder = ResponseEntity.ok();
-            if (BooleanUtil.isTrue(payload.getDownloadable())) {
-                bodyBuilder.header(HttpHeaders.CONTENT_DISPOSITION,
-                                   ContentDisposition.builder("attachment").filename(object).build().toString());
-            }
-            val getObjectResponse = this.minioHelper.getObject(bucket, object, 0, MEDIUM_DATA_SIZE.toBytes());
-            return bodyBuilder
+            val getObjectResponse = this.minioHelper.getObject(bucket, object, 0, MEDIUM_CHUNK_SIZE.toBytes());
+            return ResponseEntity.ok()
                     .header(HttpHeaders.ACCEPT_RANGES, "bytes")
                     .contentLength(statObjectResponse.size())
                     .contentType(MediaType.parseMediaType(statObjectResponse.contentType()))
@@ -65,14 +51,34 @@ public class ReadResourceServiceImpl implements ReadResourceService {
         return this.getResourceRegion(bucket, object, statObjectResponse, httpRanges);
     }
 
+    @Override
+    public ResponseEntity<Resource> downloadSingleResource(String bucket, String object) {
+        StatObjectResponse statObjectResponse;
+        try {
+            statObjectResponse = this.minioHelper.statObject(bucket, object);
+        } catch (Exception e) {
+            log.error("Exception occurred when looking for object. Exception message: {}", e.getMessage());
+            return ResponseEntity.notFound().build();
+        }
+        val bodyBuilder = ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        ContentDisposition.builder("attachment").filename(object).build().toString());
+        val getObjectResponse = this.minioHelper.getObject(bucket, object);
+        return bodyBuilder
+                .header(HttpHeaders.ACCEPT_RANGES, "bytes")
+                .contentLength(statObjectResponse.size())
+                .contentType(MediaType.parseMediaType(statObjectResponse.contentType()))
+                .body(new InputStreamResource(getObjectResponse));
+    }
+
     private ResponseEntity<Resource> getResourceRegion(String bucket, String object,
                                                        StatObjectResponse statObjectResponse,
                                                        List<HttpRange> httpRanges) {
         val bodyBuilder = ResponseEntity.status(HttpStatus.PARTIAL_CONTENT);
         val getObjectResponse = this.minioHelper.getObject(bucket, object, httpRanges.get(0).getRangeStart(0),
-                                                           MEDIUM_DATA_SIZE.toBytes());
+                                                           MEDIUM_CHUNK_SIZE.toBytes());
         val start = httpRanges.get(0).getRangeStart(0);
-        var end = start + MEDIUM_DATA_SIZE.toBytes() - 1;
+        var end = start + MEDIUM_CHUNK_SIZE.toBytes() - 1;
         val resourceLength = statObjectResponse.size();
         end = Math.min(end, resourceLength - 1);
         val rangeLength = end - start + 1;

@@ -7,6 +7,7 @@ import com.jmsoftware.maf.common.exception.BaseException;
 import com.jmsoftware.maf.springcloudstarter.util.RequestUtil;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.apache.catalina.connector.ClientAbortException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -163,11 +164,18 @@ public class CommonExceptionControllerAdvice {
             val exceptionCause = (BaseException) exception.getCause();
             val code = exceptionCause.getCode();
             response.setStatus(code);
-            return ResponseBodyBean.ofStatus(HttpStatus.valueOf(code), this.removeLineSeparator(exception.getMessage()));
+            return ResponseBodyBean.ofStatus(HttpStatus.valueOf(code),
+                                             this.removeLineSeparator(exception.getMessage()));
         }
         response.setStatus(HttpStatus.FORBIDDEN.value());
         return ResponseBodyBean.ofStatus(HttpStatus.FORBIDDEN.value(), this.removeLineSeparator(exception.getMessage()),
                                          null);
+    }
+
+    @ExceptionHandler(ClientAbortException.class)
+    public void handleException(HttpServletRequest request, ClientAbortException exception) {
+        this.requestLog(request);
+        log.error("An abort of a request by a remote client. Exception message: {} ", exception.getMessage());
     }
 
     @ExceptionHandler(UndeclaredThrowableException.class)
@@ -177,7 +185,8 @@ public class CommonExceptionControllerAdvice {
         if (ObjectUtil.isNotNull(exception.getCause()) && StrUtil.isNotEmpty(exception.getCause().getMessage())) {
             return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR,
                                              String.format("Exception message: %s",
-                                                           this.removeLineSeparator(exception.getCause().getMessage())));
+                                                           this.removeLineSeparator(
+                                                                   exception.getCause().getMessage())));
         }
         return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR,
                                          String.format("Exception message: %s",
