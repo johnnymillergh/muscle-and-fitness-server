@@ -36,6 +36,8 @@ public class ReadResourceServiceImpl implements ReadResourceService {
      * TODO: consider to refactor this code by StreamingResponseBody
      *
      * @see StreamingResponseBody
+     * @see
+     * <a href='https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#mvc-ann-async-http-streaming'>HTTP Streaming</a>
      */
     @Override
     public ResponseEntity<Resource> streamSingleResource(@NotBlank String bucket, @NotBlank String object,
