@@ -12,6 +12,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.*;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import javax.validation.constraints.NotBlank;
 import java.util.List;
@@ -29,6 +30,13 @@ import java.util.List;
 public class ReadResourceServiceImpl implements ReadResourceService {
     private final MinioHelper minioHelper;
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * TODO: consider to refactor this code by StreamingResponseBody
+     *
+     * @see StreamingResponseBody
+     */
     @Override
     public ResponseEntity<Resource> streamSingleResource(@NotBlank String bucket, @NotBlank String object,
                                                          @Nullable String range) {
