@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 /**
  * <h1>ReadResourceController</h1>
@@ -32,6 +33,15 @@ public class ReadResourceController {
     public ResponseEntity<Resource> streamSingleResource(@PathVariable String bucket, @PathVariable String object,
                                                          @RequestHeader(name = HttpHeaders.RANGE, required = false) String range) {
         return this.readResourceService.streamSingleResource(bucket, object, range);
+    }
+
+    @GetMapping("/async/stream/{bucket}/{object}")
+    @ApiOperation(value = "Stream single resource", notes = "Stream single resource")
+    public ResponseEntity<StreamingResponseBody> asyncStreamSingleResource(@PathVariable String bucket,
+                                                                           @PathVariable String object,
+                                                                           @RequestHeader(name = HttpHeaders.RANGE,
+                                                                                   required = false) String range) {
+        return this.readResourceService.asyncStreamSingleResource(bucket, object, range);
     }
 
     @GetMapping("/download/{bucket}/{object}")

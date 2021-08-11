@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.util.unit.DataSize;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import javax.validation.constraints.NotBlank;
 
@@ -32,6 +33,17 @@ public interface ReadResourceService {
      */
     ResponseEntity<Resource> streamSingleResource(@NotBlank String bucket, @NotBlank String object,
                                                   @Nullable String range);
+
+    /**
+     * Async stream single resource response entity.
+     *
+     * @param bucket the bucket
+     * @param object the object
+     * @param range  the range
+     * @return the response entity
+     */
+    ResponseEntity<StreamingResponseBody> asyncStreamSingleResource(@NotBlank String bucket, @NotBlank String object,
+                                                                    @Nullable String range);
 
     /**
      * Download single resource response entity.

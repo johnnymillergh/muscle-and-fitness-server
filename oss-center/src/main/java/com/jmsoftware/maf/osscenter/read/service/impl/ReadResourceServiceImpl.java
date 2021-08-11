@@ -1,6 +1,7 @@
 package com.jmsoftware.maf.osscenter.read.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.io.IoUtil;
 import com.jmsoftware.maf.osscenter.read.service.ReadResourceService;
 import com.jmsoftware.maf.springcloudstarter.helper.MinioHelper;
 import io.minio.StatObjectResponse;
@@ -30,15 +31,6 @@ import java.util.List;
 public class ReadResourceServiceImpl implements ReadResourceService {
     private final MinioHelper minioHelper;
 
-    /**
-     * {@inheritDoc}
-     * <p>
-     * TODO: consider to refactor this code by StreamingResponseBody
-     *
-     * @see StreamingResponseBody
-     * @see
-     * <a href='https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#mvc-ann-async-http-streaming'>HTTP Streaming</a>
-     */
     @Override
     public ResponseEntity<Resource> streamSingleResource(@NotBlank String bucket, @NotBlank String object,
                                                          @Nullable String range) {
@@ -62,6 +54,32 @@ public class ReadResourceServiceImpl implements ReadResourceService {
     }
 
     @Override
+    public ResponseEntity<StreamingResponseBody> asyncStreamSingleResource(@NotBlank String bucket,
+                                                                           @NotBlank String object,
+                                                                           @Nullable String range) {
+        StatObjectResponse statObjectResponse;
+        try {
+            statObjectResponse = this.minioHelper.statObject(bucket, object);
+        } catch (Exception e) {
+            log.error("Exception occurred when looking for object. Exception message: {}", e.getMessage());
+            return ResponseEntity.notFound().build();
+        }
+        val httpRanges = HttpRange.parseRanges(range);
+        if (CollUtil.isEmpty(httpRanges)) {
+            val getObjectResponse = this.minioHelper.getObject(bucket, object, 0, MEDIUM_CHUNK_SIZE.toBytes());
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.ACCEPT_RANGES, "bytes")
+                    .contentLength(statObjectResponse.size())
+                    .contentType(MediaType.parseMediaType(statObjectResponse.contentType()))
+                    .body(outputStream -> {
+                        IoUtil.copy(getObjectResponse, outputStream);
+                        IoUtil.close(getObjectResponse);
+                    });
+        }
+        return this.asyncGetResourceRegion(bucket, object, statObjectResponse, httpRanges);
+    }
+
+    @Override
     public ResponseEntity<Resource> downloadSingleResource(String bucket, String object) {
         StatObjectResponse statObjectResponse;
         try {
@@ -80,6 +98,7 @@ public class ReadResourceServiceImpl implements ReadResourceService {
                 .body(new InputStreamResource(getObjectResponse));
     }
 
+    @SuppressWarnings("DuplicatedCode")
     private ResponseEntity<Resource> getResourceRegion(String bucket, String object,
                                                        StatObjectResponse statObjectResponse,
                                                        List<HttpRange> httpRanges) {
@@ -96,5 +115,27 @@ public class ReadResourceServiceImpl implements ReadResourceService {
                 .contentLength(rangeLength)
                 .contentType(MediaType.parseMediaType(statObjectResponse.contentType()))
                 .body(new InputStreamResource(getObjectResponse));
+    }
+
+    @SuppressWarnings("DuplicatedCode")
+    private ResponseEntity<StreamingResponseBody> asyncGetResourceRegion(String bucket, String object,
+                                                                         StatObjectResponse statObjectResponse,
+                                                                         List<HttpRange> httpRanges) {
+        val getObjectResponse = this.minioHelper.getObject(bucket, object, httpRanges.get(0).getRangeStart(0),
+                                                           MEDIUM_CHUNK_SIZE.toBytes());
+        val start = httpRanges.get(0).getRangeStart(0);
+        var end = start + MEDIUM_CHUNK_SIZE.toBytes() - 1;
+        val resourceLength = statObjectResponse.size();
+        end = Math.min(end, resourceLength - 1);
+        val rangeLength = end - start + 1;
+        return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)
+                .header(HttpHeaders.ACCEPT_RANGES, "bytes")
+                .header(HttpHeaders.CONTENT_RANGE, String.format("bytes %d-%d/%d", start, end, resourceLength))
+                .contentLength(rangeLength)
+                .contentType(MediaType.parseMediaType(statObjectResponse.contentType()))
+                .body(outputStream -> {
+                    IoUtil.copy(getObjectResponse, outputStream);
+                    IoUtil.close(getObjectResponse);
+                });
     }
 }
