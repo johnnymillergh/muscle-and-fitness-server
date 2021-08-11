@@ -1,6 +1,6 @@
 package com.jmsoftware.maf.osscenter.write.service;
 
-import com.jmsoftware.maf.common.exception.BusinessException;
+import com.jmsoftware.maf.common.exception.BizException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,8 +21,8 @@ public interface WriteResourceService {
      *
      * @param multipartFile the multipart file
      * @return the string
-     * @throws IOException       the io exception
-     * @throws BusinessException the business exception
+     * @throws IOException  the io exception
+     * @throws BizException the business exception
      */
-    String uploadSingleResource(@NotNull MultipartFile multipartFile) throws IOException, BusinessException;
+    String uploadSingleResource(@NotNull MultipartFile multipartFile) throws IOException, BizException;
 }

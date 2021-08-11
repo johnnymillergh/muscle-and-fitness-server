@@ -2,7 +2,7 @@ package com.jmsoftware.maf.mafmis.exercise.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.jmsoftware.maf.common.exception.BusinessException;
+import com.jmsoftware.maf.common.exception.BizException;
 import com.jmsoftware.maf.mafmis.exercise.domain.ExercisePo;
 import com.jmsoftware.maf.mafmis.exercise.mapper.ExerciseMapper;
 import com.jmsoftware.maf.mafmis.exercise.service.ExerciseService;
@@ -31,33 +31,33 @@ public class ExerciseServiceImpl implements ExerciseService {
     @SneakyThrows
     public ExercisePo queryById(Long id) {
         if (ObjectUtil.isNull(id)) {
-            throw new BusinessException("Cannot execute the query! Cause: the ID is null.");
+            throw new BizException("Cannot execute the query! Cause: the ID is null.");
         }
-        return exerciseMapper.selectById(id);
+        return this.exerciseMapper.selectById(id);
     }
 
     @Override
     public List<ExercisePo> getPageList(ExercisePo exercisePo) {
         var page = new Page<ExercisePo>(exercisePo.getCurrentPage(), exercisePo.getPageSize());
-        exerciseMapper.selectAll(exercisePo, page);
+        this.exerciseMapper.selectAll(exercisePo, page);
         log.info("Total pages: {}", page.getPages());
         return page.getRecords();
     }
 
     @Override
     public ExercisePo insert(ExercisePo exercisePo) {
-        exerciseMapper.insert(exercisePo);
+        this.exerciseMapper.insert(exercisePo);
         return exercisePo;
     }
 
     @Override
     public ExercisePo update(ExercisePo exercisePo) {
-        exerciseMapper.update(exercisePo);
+        this.exerciseMapper.update(exercisePo);
         return this.queryById(exercisePo.getId());
     }
 
     @Override
     public boolean deleteById(Long id) {
-        return exerciseMapper.deleteById(id) > 0;
+        return this.exerciseMapper.deleteById(id) > 0;
     }
 }

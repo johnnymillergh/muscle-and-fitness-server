@@ -14,6 +14,9 @@ import org.apache.poi.ss.util.CellRangeAddress;
  */
 @SuppressWarnings({"AlibabaRemoveCommentedCode", "unused"})
 public class PoiUtil {
+    private PoiUtil() {
+    }
+
     /**
      * Copy cell style.
      *

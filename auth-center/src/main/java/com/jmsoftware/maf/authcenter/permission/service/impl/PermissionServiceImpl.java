@@ -15,7 +15,7 @@ import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListB
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
 import com.jmsoftware.maf.common.domain.authcenter.permission.PermissionType;
 import com.jmsoftware.maf.common.domain.springbootstarter.HttpApiResourcesResponse;
-import com.jmsoftware.maf.common.exception.BusinessException;
+import com.jmsoftware.maf.common.exception.BizException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -47,7 +47,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
 
     @Override
     public GetPermissionListByRoleIdListResponse getPermissionListByRoleIdList(@Valid GetPermissionListByRoleIdListPayload payload) {
-        val adminRole = roleService.checkAdmin(payload.getRoleIdList());
+        val adminRole = this.roleService.checkAdmin(payload.getRoleIdList());
         val response = new GetPermissionListByRoleIdListResponse();
         if (adminRole) {
             log.warn("Admin role checked. The role can access any resources");
@@ -76,22 +76,22 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     }
 
     @Override
-    public GetServicesInfoResponse getServicesInfo() throws BusinessException {
-        val serviceIdList = discoveryClient.getServices();
+    public GetServicesInfoResponse getServicesInfo() throws BizException {
+        val serviceIdList = this.discoveryClient.getServices();
         log.info("Getting service info from Service ID list: {}", serviceIdList);
         val response = new GetServicesInfoResponse();
         val mapper = new ObjectMapper();
-        log.info("Ignored service ID: {}", permissionConfiguration.getIgnoredServiceIds());
+        log.info("Ignored service ID: {}", this.permissionConfiguration.getIgnoredServiceIds());
         for (String serviceId : serviceIdList) {
-            if (CollUtil.contains(permissionConfiguration.getIgnoredServiceIds(), serviceId)) {
+            if (CollUtil.contains(this.permissionConfiguration.getIgnoredServiceIds(), serviceId)) {
                 log.warn("Ignored service ID: {}", serviceId);
                 continue;
             }
-            ResponseBodyBean<?> responseBodyBean = Optional.ofNullable(restTemplate.getForObject(
-                    String.format("http://%s/http-api-resources", serviceId), ResponseBodyBean.class))
-                    .orElseThrow(() -> new BusinessException("Internal service mustn't respond null"));
+            ResponseBodyBean<?> responseBodyBean = Optional.ofNullable(this.restTemplate.getForObject(
+                            String.format("http://%s/http-api-resources", serviceId), ResponseBodyBean.class))
+                    .orElseThrow(() -> new BizException("Internal service mustn't respond null"));
             val data = Optional.of(responseBodyBean.getData())
-                    .orElseThrow(() -> new BusinessException("HttpApiResourcesResponse mustn't be null"));
+                    .orElseThrow(() -> new BizException("HttpApiResourcesResponse mustn't be null"));
             val httpApiResourcesResponse = mapper.convertValue(data, HttpApiResourcesResponse.class);
             val serviceInfo = new GetServicesInfoResponse.ServiceInfo();
             serviceInfo.setServiceId(serviceId);

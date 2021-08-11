@@ -1,21 +1,18 @@
 package com.jmsoftware.maf.common.bean;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.json.JSON;
 import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.google.common.collect.Lists;
 import com.jmsoftware.maf.common.constant.UniversalDateTime;
 import com.jmsoftware.maf.common.exception.BaseException;
-import com.jmsoftware.maf.common.exception.BusinessException;
+import com.jmsoftware.maf.common.exception.BizException;
 import lombok.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -236,10 +233,10 @@ public class PageResponseBodyBean<ResponseBodyDataType> implements Serializable 
      * @param <ResponseBodyDataType> the response body data type
      * @param message                message to be responded.
      * @return response body
-     * @throws BusinessException the business exception
+     * @throws BizException the business exception
      */
-    public static <ResponseBodyDataType> PageResponseBodyBean<ResponseBodyDataType> ofFailure(@NonNull final String message) throws BusinessException {
-        throw new BusinessException(message);
+    public static <ResponseBodyDataType> PageResponseBodyBean<ResponseBodyDataType> ofFailure(@NonNull final String message) throws BizException {
+        throw new BizException(message);
     }
 
     /**
@@ -248,10 +245,10 @@ public class PageResponseBodyBean<ResponseBodyDataType> implements Serializable 
      * @param <ResponseBodyDataType> the response body data type
      * @param data                   data to be responded
      * @return response body
-     * @throws BusinessException the business exception
+     * @throws BizException the business exception
      */
-    public static <ResponseBodyDataType> PageResponseBodyBean<ResponseBodyDataType> ofFailure(final Collection<ResponseBodyDataType> data) throws BusinessException {
-        throw new BusinessException(data);
+    public static <ResponseBodyDataType> PageResponseBodyBean<ResponseBodyDataType> ofFailure(final Collection<ResponseBodyDataType> data) throws BizException {
+        throw new BizException(data);
     }
 
     /**
@@ -261,11 +258,11 @@ public class PageResponseBodyBean<ResponseBodyDataType> implements Serializable 
      * @param data                   data to be responded
      * @param message                message to be responded
      * @return response body
-     * @throws BusinessException the business exception
+     * @throws BizException the business exception
      */
     public static <ResponseBodyDataType> PageResponseBodyBean<ResponseBodyDataType> ofFailure(final Collection<ResponseBodyDataType> data,
-                                                                                              @NonNull final String message) throws BusinessException {
-        throw new BusinessException(data, message);
+                                                                                              @NonNull final String message) throws BizException {
+        throw new BizException(data, message);
     }
 
     /**

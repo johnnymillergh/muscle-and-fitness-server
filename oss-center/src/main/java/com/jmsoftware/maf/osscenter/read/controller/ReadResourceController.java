@@ -1,18 +1,18 @@
 package com.jmsoftware.maf.osscenter.read.controller;
 
-import com.jmsoftware.maf.osscenter.read.entity.GetSingleResourcePayload;
 import com.jmsoftware.maf.osscenter.read.service.ReadResourceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 /**
  * <h1>ReadResourceController</h1>
@@ -28,10 +28,25 @@ import javax.validation.Valid;
 public class ReadResourceController {
     private final ReadResourceService readResourceService;
 
-    @GetMapping("/{bucket}/{object}")
-    @ApiOperation(value = "Get single resource", notes = "Get or download single resource")
-    public ResponseEntity<Resource> getSingleResource(@PathVariable String bucket, @PathVariable String object,
-                                                      @Valid GetSingleResourcePayload payload) {
-        return readResourceService.getSingleResource(bucket, object, payload);
+    @GetMapping("/stream/{bucket}/{object}")
+    @ApiOperation(value = "Stream single resource", notes = "Stream single resource")
+    public ResponseEntity<Resource> streamSingleResource(@PathVariable String bucket, @PathVariable String object,
+                                                         @RequestHeader(name = HttpHeaders.RANGE, required = false) String range) {
+        return this.readResourceService.streamSingleResource(bucket, object, range);
+    }
+
+    @GetMapping("/async/stream/{bucket}/{object}")
+    @ApiOperation(value = "Stream single resource", notes = "Stream single resource")
+    public ResponseEntity<StreamingResponseBody> asyncStreamSingleResource(@PathVariable String bucket,
+                                                                           @PathVariable String object,
+                                                                           @RequestHeader(name = HttpHeaders.RANGE,
+                                                                                   required = false) String range) {
+        return this.readResourceService.asyncStreamSingleResource(bucket, object, range);
+    }
+
+    @GetMapping("/download/{bucket}/{object}")
+    @ApiOperation(value = "Download single resource", notes = "Download single resource")
+    public ResponseEntity<Resource> downloadSingleResource(@PathVariable String bucket, @PathVariable String object) {
+        return this.readResourceService.downloadSingleResource(bucket, object);
     }
 }

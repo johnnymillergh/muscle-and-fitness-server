@@ -1,13 +1,13 @@
 package com.jmsoftware.maf.osscenter.read.service;
 
-import com.jmsoftware.maf.osscenter.read.entity.GetSingleResourcePayload;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
+import org.springframework.util.unit.DataSize;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 /**
  * <h1>ReadResourceService</h1>
@@ -19,16 +19,38 @@ import javax.validation.constraints.NotNull;
 @Validated
 public interface ReadResourceService {
     String BUCKET_OBJECT_NAME_REGEX = "^.+/.+$";
-    long CHUNK_SIZE = 1024 * 1024 * 1024 * 4L;
+    DataSize SMALL_CHUNK_SIZE = DataSize.ofMegabytes(1);
+    DataSize MEDIUM_CHUNK_SIZE = DataSize.ofMegabytes(4);
+    DataSize LARGE_CHUNK_SIZE = DataSize.ofMegabytes(8);
 
     /**
-     * Gets single resource.
+     * Stream single resource.
      *
-     * @param bucket  the bucket
-     * @param object  the object
-     * @param payload the payload
+     * @param bucket the bucket
+     * @param object the object
+     * @param range  the range
      * @return the single resource
      */
-    ResponseEntity<Resource> getSingleResource(@NotBlank String bucket, @NotBlank String object,
-                                               @Valid @NotNull GetSingleResourcePayload payload);
+    ResponseEntity<Resource> streamSingleResource(@NotBlank String bucket, @NotBlank String object,
+                                                  @Nullable String range);
+
+    /**
+     * Async stream single resource response entity.
+     *
+     * @param bucket the bucket
+     * @param object the object
+     * @param range  the range
+     * @return the response entity
+     */
+    ResponseEntity<StreamingResponseBody> asyncStreamSingleResource(@NotBlank String bucket, @NotBlank String object,
+                                                                    @Nullable String range);
+
+    /**
+     * Download single resource response entity.
+     *
+     * @param bucket the bucket
+     * @param object the object
+     * @return the response entity
+     */
+    ResponseEntity<Resource> downloadSingleResource(@NotBlank String bucket, @NotBlank String object);
 }

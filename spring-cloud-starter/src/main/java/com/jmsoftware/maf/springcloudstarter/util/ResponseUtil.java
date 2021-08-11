@@ -24,6 +24,9 @@ import static org.springframework.web.cors.CorsConfiguration.ALL;
 public class ResponseUtil {
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
+    private ResponseUtil() {
+    }
+
     /**
      * Write data JSON to response.
      *

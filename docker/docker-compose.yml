@@ -17,7 +17,7 @@ services:
     restart: always
     volumes:
       - "~/docker-file-mapping/${MYSQL_SERVER_MASTER_CONTAINER_NAME}:/var/lib/mysql"
-      - ./config/mysql-server/master/mysql-master.cnf:/etc/my.cnf
+      - ./configuration/mysql-server/master/mysql-master.cnf:/etc/my.cnf
       - ./script/mysql-server-master:/docker-entrypoint-initdb.d
     command: >
       bash -c "
@@ -41,7 +41,7 @@ services:
     restart: always
     volumes:
       - "~/docker-file-mapping/${MYSQL_SERVER_SLAVE_CONTAINER_NAME}:/var/lib/mysql"
-      - ./config/mysql-server/slave-1/mysql-slave.cnf:/etc/my.cnf
+      - ./configuration/mysql-server/slave-1/mysql-slave.cnf:/etc/my.cnf
       - ./script/mysql-server-slave:/docker-entrypoint-initdb.d
     command: >
       bash -c "
@@ -59,7 +59,7 @@ services:
     restart: always
     volumes:
       - "~/docker-file-mapping/${REDIS_MASTER_CONTAINER_NAME}:/data"
-      - ./config/redis/master/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./configuration/redis/master/redis.conf:/usr/local/etc/redis/redis.conf
     environment:
       TZ: ${MAF_TIMEZONE}
     command: "redis-server /usr/local/etc/redis/redis.conf"
@@ -69,12 +69,14 @@ services:
   redis-slave-1:
     container_name: ${REDIS_SLAVE_1_CONTAINER_NAME}
     image: redis:${REDIS_TAG}
+    depends_on:
+      - redis-master
     ports:
       - "6380:6379"
     restart: always
     volumes:
       # - "~/docker-file-mapping/${REDIS_SLAVE_1_CONTAINER_NAME}:/data"
-      - ./config/redis/slave-1/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./configuration/redis/slave-1/redis.conf:/usr/local/etc/redis/redis.conf
     environment:
       TZ: ${MAF_TIMEZONE}
     command: "redis-server /usr/local/etc/redis/redis.conf"
@@ -138,7 +140,7 @@ services:
       - "61613:61613"
     restart: always
     volumes:
-      - ./config/rabbitmq:/etc/rabbitmq
+      - ./configuration/rabbitmq:/etc/rabbitmq
       - ./plugin/rabbitmq/rabbitmq_delayed_message_exchange-3.8.9-0199d11c.ez:/plugins/rabbitmq_delayed_message_exchange-3.8.9-0199d11c.ez
       - "~/docker-file-mapping/${RABBITMQ_CONTAINER_NAME}:/var/lib/rabbitmq"
     environment:
@@ -249,8 +251,8 @@ services:
       - "4560:4560"
     restart: always
     volumes:
-      - ./config/logstash/logstash-maf.conf:/usr/share/logstash/pipeline/logstash.conf
-      - ./config/logstash/logstash-maf.yml:/usr/share/logstash/config/logstash.yml
+      - ./configuration/logstash/logstash-maf.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./configuration/logstash/logstash-maf.yml:/usr/share/logstash/configuration/logstash.yml
     networks:
       muscle_and_fitness_network:
 
@@ -263,7 +265,7 @@ services:
       - "5601:5601"
     restart: always
     volumes:
-      - ./config/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+      - ./configuration/kibana/kibana.yml:/usr/share/kibana/configuration/kibana.yml
     networks:
       muscle_and_fitness_network:
 
