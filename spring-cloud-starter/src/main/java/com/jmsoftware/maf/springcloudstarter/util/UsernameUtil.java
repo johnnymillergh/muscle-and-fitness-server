@@ -10,6 +10,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 6/28/2021 1:40 PM
  **/
 public class UsernameUtil {
+    private UsernameUtil() {
+    }
+
     public static String getCurrentUsername() {
         final ServletRequestAttributes servletRequestAttributes =
                 (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();

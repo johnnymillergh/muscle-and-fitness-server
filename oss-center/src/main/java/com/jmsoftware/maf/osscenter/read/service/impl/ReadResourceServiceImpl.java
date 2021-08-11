@@ -68,12 +68,11 @@ public class ReadResourceServiceImpl implements ReadResourceService {
             log.error("Exception occurred when looking for object. Exception message: {}", e.getMessage());
             return ResponseEntity.notFound().build();
         }
-        val bodyBuilder = ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION,
-                        ContentDisposition.builder("attachment").filename(object).build().toString());
         val getObjectResponse = this.minioHelper.getObject(bucket, object);
-        return bodyBuilder
+        return ResponseEntity.ok()
                 .header(HttpHeaders.ACCEPT_RANGES, "bytes")
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        ContentDisposition.builder("attachment").filename(object).build().toString())
                 .contentLength(statObjectResponse.size())
                 .contentType(MediaType.parseMediaType(statObjectResponse.contentType()))
                 .body(new InputStreamResource(getObjectResponse));
@@ -82,7 +81,6 @@ public class ReadResourceServiceImpl implements ReadResourceService {
     private ResponseEntity<Resource> getResourceRegion(String bucket, String object,
                                                        StatObjectResponse statObjectResponse,
                                                        List<HttpRange> httpRanges) {
-        val bodyBuilder = ResponseEntity.status(HttpStatus.PARTIAL_CONTENT);
         val getObjectResponse = this.minioHelper.getObject(bucket, object, httpRanges.get(0).getRangeStart(0),
                                                            MEDIUM_CHUNK_SIZE.toBytes());
         val start = httpRanges.get(0).getRangeStart(0);
@@ -90,7 +88,7 @@ public class ReadResourceServiceImpl implements ReadResourceService {
         val resourceLength = statObjectResponse.size();
         end = Math.min(end, resourceLength - 1);
         val rangeLength = end - start + 1;
-        return bodyBuilder
+        return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)
                 .header(HttpHeaders.ACCEPT_RANGES, "bytes")
                 .header(HttpHeaders.CONTENT_RANGE, String.format("bytes %d-%d/%d", start, end, resourceLength))
                 .contentLength(rangeLength)
