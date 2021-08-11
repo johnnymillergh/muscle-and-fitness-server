@@ -29,7 +29,7 @@ public class DateTimeRangeValidator implements ConstraintValidator<DateTimeRange
 
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext context) {
-        final HashSet<Field> annotatedFieldSet = this.getAnnotatedFieldSet(value);
+        val annotatedFieldSet = this.getAnnotatedFieldSet(value);
         if (CollUtil.isEmpty(annotatedFieldSet)) {
             log.warn("There is not fields annotated by {} in the class({})", value.getClass().getName(),
                      DateTimeRangeGroup.class.getSimpleName());
