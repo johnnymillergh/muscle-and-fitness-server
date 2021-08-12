@@ -45,7 +45,7 @@ Here is the highlights of **Muscle and Fitness Server**:
 
 7. Docker, Rancher Kubernetes support. Google JIB for building Docker container images.
 
-8. OSS service, based on [Minio](https://min.io/) and SFTP integration. [Progressive Download](https://www.nginx.com/resources/glossary/progressive-download/) resources. The media player will play back that content using sequential byte-range requests. Refers to [a request for partial content](https://developer.mozilla.org/en-US/docs/Web/HTTP/Range_requests) (HTTP 206). This type of request is typically used to retrieve a large asset in smaller segments. This technique is employed by HTTP Progressive Download to avoid long buffering times.
+8. OSS service, based on [Minio](https://min.io/) and SFTP integration. Asynchronous [Progressive Download](https://www.nginx.com/resources/glossary/progressive-download/) resources. The media player will play back that content using sequential byte-range requests. Refers to [a request for partial content](https://developer.mozilla.org/en-US/docs/Web/HTTP/Range_requests) (HTTP 206). This type of request is typically used to retrieve a large asset in smaller segments. This technique is employed by HTTP Progressive Download to avoid long buffering times.
 
 9. [STOMP over WebSocket](https://www.toptal.com/java/stomp-spring-boot-websocket) (SockJS), real time messaging, based on [RabbitMQ STOMP](https://www.rabbitmq.com/stomp.html) message broker.
 
