@@ -1,6 +1,8 @@
 package com.jmsoftware.maf.osscenter.write.controller;
 
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
+import com.jmsoftware.maf.osscenter.write.entity.MergeResourceChunkPayload;
+import com.jmsoftware.maf.osscenter.write.entity.ObjectResponse;
 import com.jmsoftware.maf.osscenter.write.service.WriteResourceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -10,6 +12,8 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.Valid;
 
 /**
  * <h1>WriteResourceController</h1>
@@ -28,7 +32,7 @@ public class WriteResourceController {
 
     @PostMapping("/upload/single")
     @ApiOperation(value = "Upload single resource", notes = "Upload single resource")
-    public ResponseBodyBean<String> uploadSingleResource(@RequestParam("file") MultipartFile multipartFile) {
+    public ResponseBodyBean<ObjectResponse> uploadSingleResource(@RequestParam("file") MultipartFile multipartFile) {
         return ResponseBodyBean.ofSuccess(this.writeResourceService.uploadSingleResource(multipartFile),
                                           this.messageSource.getMessage("uploaded", null,
                                                                         LocaleContextHolder.getLocale()));
@@ -36,14 +40,14 @@ public class WriteResourceController {
 
     @PostMapping("/upload/chunk/{chunkNumber}")
     @ApiOperation(value = "Upload chunk of resource", notes = "Upload chunk of resource")
-    public ResponseBodyBean<String> uploadResourceChunk(@RequestParam("file") MultipartFile multipartFile,
-                                                        @PathVariable Integer chunkNumber) {
+    public ResponseBodyBean<ObjectResponse> uploadResourceChunk(@RequestParam("file") MultipartFile multipartFile,
+                                                                @PathVariable Integer chunkNumber) {
         return ResponseBodyBean.ofSuccess(this.writeResourceService.uploadResourceChunk(multipartFile, chunkNumber));
     }
 
     @PutMapping("/merge/chunk")
     @ApiOperation(value = "Merge chunk of resource", notes = "Merge chunk of resource")
-    public ResponseBodyBean<String> mergeResourceChunk() {
-        return ResponseBodyBean.ofSuccess();
+    public ResponseBodyBean<ObjectResponse> mergeResourceChunk(@Valid @RequestBody MergeResourceChunkPayload payload) {
+        return ResponseBodyBean.ofSuccess(this.writeResourceService.mergeResourceChunk(payload));
     }
 }

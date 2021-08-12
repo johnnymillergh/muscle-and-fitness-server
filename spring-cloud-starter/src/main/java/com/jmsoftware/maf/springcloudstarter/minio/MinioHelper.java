@@ -10,17 +10,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -215,5 +214,15 @@ public class MinioHelper {
         }
         return this.minioClient.getPresignedObjectUrl(
                 GetPresignedObjectUrlArgs.builder().bucket(bucket).object(object).build());
+    }
+
+    @SneakyThrows
+    public ObjectWriteResponse composeObject(@NotBlank String bucket, @NotBlank String object,
+                                             @NotEmpty List<ComposeSource> sources,@Nullable Map<String, String> headers) {
+        if (!this.bucketExists(bucket)) {
+            return null;
+        }
+        return this.minioClient.composeObject(
+                ComposeObjectArgs.builder().bucket(bucket).object(object).sources(sources).headers(headers).build());
     }
 }
