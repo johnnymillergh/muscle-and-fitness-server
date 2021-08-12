@@ -159,7 +159,7 @@ public class MinioHelper {
     }
 
     @SneakyThrows
-    public boolean removeObject(String bucket, String object) {
+    public boolean removeObjects(String bucket, String object) {
         if (!this.bucketExists(bucket)) {
             return false;
         }
@@ -168,7 +168,7 @@ public class MinioHelper {
     }
 
     @SneakyThrows
-    public List<String> removeObject(String bucket, List<String> objects) {
+    public List<String> removeObjects(String bucket, List<String> objects) {
         val deleteErrorNameList = new LinkedList<String>();
         if (this.bucketExists(bucket)) {
             val deleteObjectList = objects.stream().map(DeleteObject::new).collect(Collectors.toList());

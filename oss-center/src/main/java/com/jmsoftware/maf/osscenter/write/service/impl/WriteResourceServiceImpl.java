@@ -125,6 +125,8 @@ public class WriteResourceServiceImpl implements WriteResourceService {
         objectResponse.setObject(objectWriteResponse.object());
         objectResponse.setEtag(objectWriteResponse.etag());
         log.info("Merged resource chunks. {}", objectResponse);
+        val errorObjectList = this.minioHelper.removeObjects(payload.getBucket(), payload.getObjectList());
+        log.warn("Removed unnecessary objects. errorObjectList: {}", errorObjectList);
         return objectResponse;
     }
 
