@@ -1,11 +1,10 @@
 package com.jmsoftware.maf.osscenter.write.service;
 
-import com.jmsoftware.maf.common.exception.BizException;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
-import java.io.IOException;
 
 /**
  * <h1>WriteResourceService</h1>
@@ -16,13 +15,23 @@ import java.io.IOException;
  **/
 @Validated
 public interface WriteResourceService {
+    long MAX_CHUNK_NUMBER = 999;
+
     /**
      * Upload single resource string.
      *
      * @param multipartFile the multipart file
      * @return the string
-     * @throws IOException  the io exception
-     * @throws BizException the business exception
      */
-    String uploadSingleResource(@NotNull MultipartFile multipartFile) throws IOException, BizException;
+    String uploadSingleResource(@NotNull MultipartFile multipartFile);
+
+    /**
+     * Upload resource chunk string.
+     *
+     * @param multipartFile the multipart file
+     * @param chunkNumber   the chunk number
+     * @return the string
+     */
+    String uploadResourceChunk(@NotNull MultipartFile multipartFile,
+                               @NotNull @Range(max = MAX_CHUNK_NUMBER) Integer chunkNumber);
 }
