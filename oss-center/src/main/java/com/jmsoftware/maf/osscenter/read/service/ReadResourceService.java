@@ -1,6 +1,5 @@
 package com.jmsoftware.maf.osscenter.read.service;
 
-import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.util.unit.DataSize;
@@ -24,17 +23,6 @@ public interface ReadResourceService {
     DataSize LARGE_CHUNK_SIZE = DataSize.ofMegabytes(8);
 
     /**
-     * Stream single resource.
-     *
-     * @param bucket the bucket
-     * @param object the object
-     * @param range  the range
-     * @return the single resource
-     */
-    ResponseEntity<Resource> streamSingleResource(@NotBlank String bucket, @NotBlank String object,
-                                                  @Nullable String range);
-
-    /**
      * Async stream single resource response entity.
      *
      * @param bucket the bucket
@@ -46,11 +34,11 @@ public interface ReadResourceService {
                                                                     @Nullable String range);
 
     /**
-     * Download single resource response entity.
+     * Async download single resource response entity.
      *
      * @param bucket the bucket
      * @param object the object
      * @return the response entity
      */
-    ResponseEntity<Resource> downloadSingleResource(@NotBlank String bucket, @NotBlank String object);
+    ResponseEntity<StreamingResponseBody> asyncDownloadSingleResource(@NotBlank String bucket, @NotBlank String object);
 }

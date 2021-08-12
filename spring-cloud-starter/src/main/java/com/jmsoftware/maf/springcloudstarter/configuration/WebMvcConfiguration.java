@@ -2,8 +2,14 @@ package com.jmsoftware.maf.springcloudstarter.configuration;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.task.AsyncTaskExecutor;
+import org.springframework.scheduling.annotation.AsyncConfigurer;
+import org.springframework.web.context.request.async.CallableProcessingInterceptor;
+import org.springframework.web.servlet.config.annotation.AsyncSupportConfigurer;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.Objects;
 
 import static org.springframework.web.cors.CorsConfiguration.ALL;
 
@@ -23,6 +29,8 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
      * can be cached by clients. By default this is set to 1800 seconds (30 minutes).
      */
     private static final long MAX_AGE_SECS = 3600;
+    private final AsyncConfigurer asyncConfigurer;
+    private final CallableProcessingInterceptor callableProcessingInterceptor;
 
     /**
      * Configure cross origin requests processing.
@@ -39,5 +47,12 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
                 .allowedMethods(ALL)
                 .allowedHeaders(ALL)
                 .maxAge(MAX_AGE_SECS);
+    }
+
+    @Override
+    public void configureAsyncSupport(AsyncSupportConfigurer configurer) {
+        configurer.setDefaultTimeout(360000)
+                .setTaskExecutor((AsyncTaskExecutor) Objects.requireNonNull(this.asyncConfigurer.getAsyncExecutor()))
+                .registerCallableInterceptors(this.callableProcessingInterceptor);
     }
 }
