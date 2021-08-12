@@ -41,8 +41,10 @@ public class WriteResourceController {
     @PostMapping("/upload/chunk/{chunkNumber}")
     @ApiOperation(value = "Upload chunk of resource", notes = "Upload chunk of resource")
     public ResponseBodyBean<ObjectResponse> uploadResourceChunk(@RequestParam("file") MultipartFile multipartFile,
+                                                                @RequestParam(required = false) String bucket,
                                                                 @PathVariable Integer chunkNumber) {
-        return ResponseBodyBean.ofSuccess(this.writeResourceService.uploadResourceChunk(multipartFile, chunkNumber));
+        return ResponseBodyBean.ofSuccess(
+                this.writeResourceService.uploadResourceChunk(multipartFile, bucket, chunkNumber));
     }
 
     @PutMapping("/merge/chunk")

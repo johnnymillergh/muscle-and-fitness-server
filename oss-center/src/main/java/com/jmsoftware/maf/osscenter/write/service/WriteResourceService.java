@@ -3,6 +3,7 @@ package com.jmsoftware.maf.osscenter.write.service;
 import com.jmsoftware.maf.osscenter.write.entity.MergeResourceChunkPayload;
 import com.jmsoftware.maf.osscenter.write.entity.ObjectResponse;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.lang.Nullable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,10 +33,12 @@ public interface WriteResourceService {
      * Upload resource chunk string.
      *
      * @param multipartFile the multipart file
+     * @param bucket        the bucket
      * @param chunkNumber   the chunk number
      * @return the string
      */
     ObjectResponse uploadResourceChunk(@NotNull MultipartFile multipartFile,
+                                       @Nullable String bucket,
                                        @NotNull @Range(max = MAX_CHUNK_NUMBER) Integer chunkNumber);
 
     /**
