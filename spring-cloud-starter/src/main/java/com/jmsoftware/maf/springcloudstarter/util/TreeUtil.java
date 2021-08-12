@@ -24,6 +24,9 @@ import java.util.Objects;
  */
 @SuppressWarnings("unused")
 public class TreeUtil {
+    private TreeUtil() {
+    }
+
     /**
      * Convert List to Tree
      *

@@ -66,11 +66,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public GetUserByLoginTokenResponse getUserByLoginToken(@NotBlank String loginToken) {
-        val key = String.format(mafProjectProperty.getProjectParentArtifactId()
-                                        + UserRedisKey.GET_USER_BY_LOGIN_TOKEN.getKeyInfixFormat(), loginToken);
-        val hasKey = redisTemplate.hasKey(key);
+        val key = String.format(String.format("%s%s", this.mafProjectProperty.getProjectParentArtifactId(),
+                                              UserRedisKey.GET_USER_BY_LOGIN_TOKEN.getKeyInfixFormat()), loginToken);
+        val hasKey = this.redisTemplate.hasKey(key);
         if (BooleanUtil.isTrue(hasKey)) {
-            return JSONUtil.toBean(redisTemplate.opsForValue().get(key), GetUserByLoginTokenResponse.class);
+            return JSONUtil.toBean(this.redisTemplate.opsForValue().get(key), GetUserByLoginTokenResponse.class);
         }
         val wrapper = Wrappers.lambdaQuery(User.class);
         wrapper.and(queryWrapper -> queryWrapper.eq(User::getUsername, loginToken)
@@ -84,7 +84,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         val response = new GetUserByLoginTokenResponse();
         BeanUtil.copyProperties(userPersistence, response);
-        redisTemplate.opsForValue().set(key, JSONUtil.toJsonStr(response), RandomUtil.randomLong(1, 7), TimeUnit.DAYS);
+        this.redisTemplate.opsForValue().set(key, JSONUtil.toJsonStr(response), RandomUtil.randomLong(1, 7),
+                                             TimeUnit.DAYS);
         return response;
     }
 
@@ -94,11 +95,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         val user = new User();
         user.setUsername(payload.getUsername());
         user.setEmail(payload.getEmail());
-        user.setPassword(bCryptPasswordEncoder.encode(payload.getPassword()));
+        user.setPassword(this.bCryptPasswordEncoder.encode(payload.getPassword()));
         user.setStatus(UserStatus.ENABLED.getValue());
         this.save(user);
         log.warn("Saved user for signup, going to assign guest role to user. {}", user);
-        userRoleService.assignRoleByRoleName(user, mafConfiguration.getGuestUserRole());
+        this.userRoleService.assignRoleByRoleName(user, this.mafConfiguration.getGuestUserRole());
         val response = new SignupResponse();
         response.setUserId(user.getId());
         return response;
@@ -111,20 +112,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new SecurityException(HttpStatus.UNAUTHORIZED);
         }
         log.info("User login: {}", user);
-        val matched = bCryptPasswordEncoder.matches(payload.getPassword(), user.getPassword());
+        val matched = this.bCryptPasswordEncoder.matches(payload.getPassword(), user.getPassword());
         if (!matched) {
             throw new SecurityException(HttpStatus.UNAUTHORIZED);
         }
-        val jwt = jwtService.createJwt(payload.getRememberMe(), user.getId(), user.getUsername(), null, null);
+        val jwt = this.jwtService.createJwt(payload.getRememberMe(), user.getId(), user.getUsername(), null, null);
         val response = new LoginResponse();
-        response.setGreeting(messageSource.getMessage(("greeting"), null, LocaleContextHolder.getLocale()));
+        response.setGreeting(this.messageSource.getMessage("greeting", null, LocaleContextHolder.getLocale()));
         response.setJwt(jwt);
         return response;
     }
 
     @Override
     public boolean logout(HttpServletRequest request) throws SecurityException {
-        jwtService.invalidateJwt(request);
+        this.jwtService.invalidateJwt(request);
         return true;
     }
 

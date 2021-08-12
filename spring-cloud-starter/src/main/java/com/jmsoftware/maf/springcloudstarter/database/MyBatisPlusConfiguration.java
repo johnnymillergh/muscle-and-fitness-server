@@ -1,5 +1,6 @@
 package com.jmsoftware.maf.springcloudstarter.database;
 
+import com.baomidou.dynamic.datasource.plugin.MasterSlaveAutoRoutingPlugin;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
@@ -63,9 +64,9 @@ public class MyBatisPlusConfiguration {
 
     @Bean
     @Order(2)
-    public Interceptor dynamicDataSourceInterceptor() {
-        log.warn("Initial bean: '{}'", DynamicDataSourceInterceptor.class.getSimpleName());
-        return new DynamicDataSourceInterceptor();
+    public Interceptor masterSlaveAutoRoutingPlugin() {
+        log.warn("Initial bean: '{}'", MasterSlaveAutoRoutingPlugin.class.getSimpleName());
+        return new MasterSlaveAutoRoutingPlugin();
     }
 
     @Bean

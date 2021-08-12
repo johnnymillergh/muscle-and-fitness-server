@@ -3,7 +3,7 @@ package com.jmsoftware.maf.apigateway.security.impl;
 import cn.hutool.core.util.StrUtil;
 import com.jmsoftware.maf.apigateway.remoteapi.AuthCenterRemoteApi;
 import com.jmsoftware.maf.common.domain.authcenter.security.UserPrincipal;
-import com.jmsoftware.maf.common.exception.BusinessException;
+import com.jmsoftware.maf.common.exception.BizException;
 import com.jmsoftware.maf.common.exception.SecurityException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -57,8 +57,8 @@ public class JwtReactiveAuthenticationManagerImpl implements ReactiveAuthenticat
             return Mono.error(
                     new SecurityException(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED, "Username mustn't be blank"));
         }
-        return authCenterRemoteApi.getUserByLoginToken(username)
-                .switchIfEmpty(Mono.error(new BusinessException("Authentication failure! Cause: User not found")))
+        return this.authCenterRemoteApi.getUserByLoginToken(username)
+                .switchIfEmpty(Mono.error(new BizException("Authentication failure! Cause: User not found")))
                 .map(data -> {
                     log.info("Authentication success! Found {}", data);
                     return UserPrincipal.create(data, null, null);

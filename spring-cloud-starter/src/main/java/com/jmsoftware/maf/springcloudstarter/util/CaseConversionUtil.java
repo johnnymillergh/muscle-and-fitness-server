@@ -1,6 +1,6 @@
 package com.jmsoftware.maf.springcloudstarter.util;
 
-import java.util.Random;
+import java.security.SecureRandom;
 import java.util.regex.Pattern;
 
 /**
@@ -17,6 +17,9 @@ import java.util.regex.Pattern;
  */
 @SuppressWarnings("unused")
 public class CaseConversionUtil {
+    private CaseConversionUtil() {
+    }
+
     /**
      * Filter non-alphabet and non-number string.
      *
@@ -167,7 +170,7 @@ public class CaseConversionUtil {
         int numOfFollowingUppercase = 0;
         int numOfFollowingLowercase = 0;
         boolean doCapitalLetter;
-        Random randomizer = new Random();
+        SecureRandom randomizer = new SecureRandom();
         for (char c : lowerCaseValue.toCharArray()) {
             if (Character.isAlphabetic(c)) {
                 if (numOfFollowingUppercase < 2) {

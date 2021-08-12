@@ -19,7 +19,7 @@ SET skipMavenBuild=true
 SET minimalJavaMajorVersion=11
 SET javaExe=C:\Users\Johnny\.sdkman\candidates\java\11.0.10.hs-adpt\bin\java.exe
 SET mavenActiveProfile="development-local"
-SET javaParameter=-Xms256m -Xmx256m -Dfile.encoding=UTF-8 -Dspring.cloud.consul.host=localhost
+SET javaParameter=-Xms256m -Xmx256m -Dfile.encoding=UTF-8 -Dspring.cloud.consul.host=localhost -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:2345
 
 GOTO:MAIN
 

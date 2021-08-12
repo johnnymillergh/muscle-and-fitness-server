@@ -1,13 +1,9 @@
----
 kind: pipeline
-type: exec
+type: docker
 name: default
 
-platform:
-  os: linux
-  arch: amd64
-
 steps:
-  - name: greeting
+  - name: install
+    image: maven:3-jdk-11
     commands:
-      - echo HELLO WORLD! Drone on Docker
+      - mvn clean compile --batch-mode --show-version -DskipTests=true -Dmaven.javadoc.skip=true

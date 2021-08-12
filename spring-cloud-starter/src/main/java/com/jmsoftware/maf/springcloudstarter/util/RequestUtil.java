@@ -16,6 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 public class RequestUtil {
     private static final String UNKNOWN = "unknown";
 
+    private RequestUtil() {
+    }
+
     /**
      * Get request user's IP and port information. If the request is through reverse proxy, this method will not work
      * out.

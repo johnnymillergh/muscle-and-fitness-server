@@ -26,41 +26,47 @@ Here is the highlights of **Muscle and Fitness Server**:
 
 2. [Spring Cloud](https://spring.io/projects/spring-cloud) Feature:
 
-   - Consul - Service registration and discovery.
-   - Spring Cloud Gateway - API Gateway on top of Spring WebFlux.  Provide a simple, yet effective way to route to APIs and provide cross cutting concerns to them such as: security, monitoring/metrics, and resiliency.
-   - Spring Cloud OpenFeign - Declarative REST Client: Feign creates a dynamic implementation of an interface decorated with JAX-RS or Spring MVC annotations. Enhanced connection by Okhttp 3.
-   - Spring Boot Admin - Admin UI for administration of spring boot applications.
-   - Zipkin - a distributed tracing system. It helps gather timing data needed to troubleshoot latency problems in service architectures.
+   - [Consul](https://www.consul.io/) - Service registration and discovery.
+   - [Spring Cloud Gateway](https://spring.io/projects/spring-cloud-gateway) - API Gateway on top of Spring WebFlux.  Provide a simple, yet effective way to route to APIs and provide cross cutting concerns to them such as: security, monitoring/metrics, and resiliency.
+   - [Spring Cloud OpenFeign](https://spring.io/projects/spring-cloud-openfeign) - Declarative REST Client: Feign creates a dynamic implementation of an interface decorated with JAX-RS or Spring MVC annotations. Enhanced connection by Okhttp 3.
+   - [Spring Boot Admin](https://codecentric.github.io/spring-boot-admin/current/) - Admin UI for administration of spring boot applications.
+   - [Zipkin](https://zipkin.io/) - a distributed tracing system. It helps gather timing data needed to troubleshoot latency problems in service architectures.
 
-3. Secured API. RBAC control by API gateway and Auth Center. JWT authentication, and RBAC authorization.
+3. Customized Spring Cloud Starter for traditional Spring MVC and Reactive Spring WebFlux microservice. Encapsulated a bunch of libraries and dependencies. Developer can import those dependencies by demand.
 
-4. Higher-level packaging other libraries: `Spring Cloud Starter`, auto configuration for Spring Cloud services.
+   - For Spring MVC, [spring-cloud-starter](https://github.com/johnnymillergh/muscle-and-fitness-server/tree/master/spring-cloud-starter)
+   - For Spring WebFlux, [reactive-spring-cloud-starter](https://github.com/johnnymillergh/muscle-and-fitness-server/tree/master/reactive-spring-cloud-starter)
 
-5. MySQL cluster support. Multi data source. Dynamic SQL read-write isolation. MyBatis-Plus is the integrated ORM library.
+4. Secured API. [RBAC](https://en.wikipedia.org/wiki/Role-based_access_control) by API gateway and Auth Center. JWT authentication, and RBAC authorization.
 
-6. Redis 6.x support.
+5. [MySQL Replication for High Availability](https://severalnines.com/resources/database-management-tutorials/mysql-replication-high-availability-tutorial). Multi data source. Dynamic SQL read-write isolation. MyBatis-Plus is the integrated ORM library.
+
+6. Redis 6.x support. [Master-slave replication for high availability](https://redis.io/topics/replication). Redis cluster
 
 7. Docker, Rancher Kubernetes support. Google JIB for building Docker container images.
 
-8. OSS service, based on Minio and SFTP integration.
+8. OSS service, based on [Minio](https://min.io/) and SFTP integration. Asynchronous [Progressive Download](https://www.nginx.com/resources/glossary/progressive-download/) resources. The media player will play back that content using sequential byte-range requests. Refers to [a request for partial content](https://developer.mozilla.org/en-US/docs/Web/HTTP/Range_requests) (HTTP 206). This type of request is typically used to retrieve a large asset in smaller segments. This technique is employed by HTTP Progressive Download to avoid long buffering times.
 
-9. STOMP over WebSocket (SockJS), real time messaging, based on RabbitMQ STOMP message broker.
+9. [STOMP over WebSocket](https://www.toptal.com/java/stomp-spring-boot-websocket) (SockJS), real time messaging, based on [RabbitMQ STOMP](https://www.rabbitmq.com/stomp.html) message broker.
 
-10. Quartz support. Distributed job scheduling, based on JDBC.
+10. [Quartz](http://www.quartz-scheduler.org/) support. Distributed job scheduling, based on JDBC.
 
 11. Multi-environment support.
 
-12. API visualization. Enhanced Swagger API documentation.
+12. [Knife4j](https://doc.xiaominfo.com/) API visualization. Enhanced Swagger API documentation.
 
-13. Log compression. ELK log aggregation.
+13. Log compression. [ELK](https://www.elastic.co/what-is/elk-stack) log aggregation.
 
-14. Request log.
+14. AOP based request log, configurable for turning on or off.
 
-15. Method Argument Validation Aspect.
+15. Customized method argument validation.
 
-16. Docker container log persistence.
+    - [Date time range validator](https://github.com/johnnymillergh/muscle-and-fitness-server/blob/master/spring-cloud-starter/src/main/java/com/jmsoftware/maf/springcloudstarter/validation/validator/DateTimeRangeValidator.java)
+    - [Enum value validator](https://github.com/johnnymillergh/muscle-and-fitness-server/blob/master/spring-cloud-starter/src/main/java/com/jmsoftware/maf/springcloudstarter/validation/validator/EnumValueValidator.java)
 
-17. Startup statistics.
+16. Docker container log persistence. Size and time based rolling policy.
+
+17. [Startup and deployment statistics](https://github.com/johnnymillergh/muscle-and-fitness-server/blob/master/spring-cloud-starter/src/main/java/com/jmsoftware/maf/springcloudstarter/helper/SpringBootStartupHelper.java).
 
 18. Customized startup banner.
 

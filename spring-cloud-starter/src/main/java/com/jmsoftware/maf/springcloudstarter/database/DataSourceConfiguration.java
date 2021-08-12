@@ -1,20 +1,25 @@
 package com.jmsoftware.maf.springcloudstarter.database;
 
+import cn.hutool.db.ds.DataSourceWrapper;
+import com.alibaba.druid.util.JdbcUtils;
 import com.baomidou.dynamic.datasource.DynamicRoutingDataSource;
+import com.baomidou.dynamic.datasource.plugin.MasterSlaveAutoRoutingPlugin;
+import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DynamicDataSourceProperties;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.quartz.QuartzDataSource;
+import org.springframework.boot.autoconfigure.quartz.QuartzTransactionManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
-import java.util.HashMap;
 
 /**
  * Description: DataSourceConfiguration, change description here.
@@ -23,34 +28,55 @@ import java.util.HashMap;
  **/
 @Slf4j
 @ConditionalOnClass({MybatisPlusAutoConfiguration.class})
-@AutoConfigureBefore({MybatisPlusAutoConfiguration.class})
 public class DataSourceConfiguration {
+    /**
+     * Primary data source. Had to configure DynamicRoutingDataSource as primary. Otherwise
+     * MasterSlaveAutoRoutingPlugin will not be able to be injected datasource correctly.
+     *
+     * @param dynamicRoutingDataSource the dynamic routing data source
+     * @return the data source
+     * @see MasterSlaveAutoRoutingPlugin
+     */
+    @Bean
+    @Primary
+    @SneakyThrows
+    public DataSource primaryDataSource(DynamicRoutingDataSource dynamicRoutingDataSource,
+                                        DynamicDataSourceProperties dynamicDataSourceProperties) {
+        val jdbcUrl = dynamicDataSourceProperties
+                .getDatasource()
+                .get(dynamicDataSourceProperties.getPrimary())
+                .getUrl();
+        val driverClassName = JdbcUtils.getDriverClassName(jdbcUrl);
+        val wrappedDataSource = DataSourceWrapper.wrap(dynamicRoutingDataSource, driverClassName);
+        log.info("Wrapping 'DynamicRoutingDataSource' as 'primaryDataSource', jdbcUrl: {}, driverClassName: {}, " +
+                         "wrappedDataSource: {}", jdbcUrl, driverClassName, wrappedDataSource);
+        return wrappedDataSource;
+    }
+
+    @Bean
     @QuartzDataSource
-    @Bean("quartzDataSource")
     @ConditionalOnProperty(prefix = "spring.quartz", name = "job-store-type", havingValue = "jdbc")
     public DataSource quartzDataSource(DynamicRoutingDataSource dynamicRoutingDataSource) {
-        log.warn("Initial bean: quartzDataSource");
-        return dynamicRoutingDataSource.getDataSource(DataSourceEnum.QUARTZ.getDataSourceName());
+        val quartzDataSource = dynamicRoutingDataSource.getDataSource(DataSourceEnum.QUARTZ.getDataSourceName());
+        log.info("Setting up quartzDataSource from 'DynamicRoutingDataSource', quartzDataSource: {}",
+                 quartzDataSource.hashCode());
+        return quartzDataSource;
     }
 
     @Bean
     @Primary
-    public ReadWriteIsolationDynamicRoutingDataSource dynamicDataSource(DynamicRoutingDataSource dynamicRoutingDataSource) {
-        val targetDataSources = new HashMap<>(4);
-        targetDataSources.put(DataSourceEnum.MASTER,
-                              dynamicRoutingDataSource.getDataSource(DataSourceEnum.MASTER.getDataSourceName()));
-        targetDataSources.put(DataSourceEnum.SLAVE1,
-                              dynamicRoutingDataSource.getDataSource(DataSourceEnum.SLAVE1.getDataSourceName()));
-        val dynamicDataSource = new ReadWriteIsolationDynamicRoutingDataSource();
-        dynamicDataSource.setDefaultTargetDataSource(dynamicRoutingDataSource.getDataSource("master"));
-        dynamicDataSource.setTargetDataSources(targetDataSources);
-        log.warn("Set 'masterDataSource' and 'slave1DataSource' as {}",
-                 ReadWriteIsolationDynamicRoutingDataSource.class.getSimpleName());
-        return dynamicDataSource;
+    public PlatformTransactionManager primaryPlatformTransactionManager(@Qualifier("primaryDataSource") DataSource primaryDataSource) {
+        log.info("Setting up the central interface in Spring's imperative transaction infrastructure " +
+                         "'PlatformTransactionManager'. primaryDataSource: {}", primaryDataSource);
+        return new DataSourceTransactionManager(primaryDataSource);
     }
 
     @Bean
-    public PlatformTransactionManager platformTransactionManager(ReadWriteIsolationDynamicRoutingDataSource readWriteIsolationDynamicRoutingDataSource) {
-        return new DataSourceTransactionManager(readWriteIsolationDynamicRoutingDataSource);
+    @QuartzTransactionManager
+    @ConditionalOnProperty(prefix = "spring.quartz", name = "job-store-type", havingValue = "jdbc")
+    public PlatformTransactionManager quartzPlatformTransactionManager(@Qualifier("quartzDataSource") DataSource quartzDataSource) {
+        log.info("Setting up the central interface in Spring's imperative transaction infrastructure " +
+                         "'PlatformTransactionManager'. quartzDataSource: {}", quartzDataSource.hashCode());
+        return new DataSourceTransactionManager(quartzDataSource);
     }
 }

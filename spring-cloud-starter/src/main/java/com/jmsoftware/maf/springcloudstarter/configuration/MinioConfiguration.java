@@ -4,8 +4,8 @@ import com.jmsoftware.maf.springcloudstarter.helper.MinioHelper;
 import io.minio.MinioClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
 
 /**
  * <h1>MinioConfiguration</h1>
@@ -15,18 +15,18 @@ import org.springframework.context.annotation.Import;
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 6/7/21 9:58 PM
  **/
 @Slf4j
-@Import({
-        MinioProperty.class
+@EnableConfigurationProperties({
+        MinioProperties.class
 })
 @ConditionalOnProperty({"minio.enabled"})
 public class MinioConfiguration {
     @Bean
-    public MinioClient minioClient(MinioProperty minioProperty) {
+    public MinioClient minioClient(MinioProperties minioProperties) {
         log.warn("Initial bean: '{}'", MinioClient.class.getSimpleName());
         return MinioClient.builder()
-                .endpoint(minioProperty.getEndpoint(), minioProperty.getPort(),
-                          minioProperty.getSecure())
-                .credentials(minioProperty.getAccessKey(), minioProperty.getSecretKey())
+                .endpoint(minioProperties.getEndpoint(), minioProperties.getPort(),
+                          minioProperties.getSecure())
+                .credentials(minioProperties.getAccessKey(), minioProperties.getSecretKey())
                 .build();
     }
 

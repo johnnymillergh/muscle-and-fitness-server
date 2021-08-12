@@ -1,0 +1,101 @@
+version: "3.8"
+
+services:
+
+  redis-node-1:
+    container_name: ${REDIS_NODE_1_CONTAINER_NAME}
+    image:
+      bitnami/redis-cluster:${REDIS_CLUSTER_TAG}
+    ports:
+      - "6379:6379"
+    restart: always
+    #    volumes:
+    #      - "~/docker-file-mapping/${REDIS_NODE_1_CONTAINER_NAME}:/bitnami/redis/data"
+    environment:
+      - 'REDIS_PASSWORD=maf@redis'
+      - 'REDIS_NODES=${REDIS_NODE_1_CONTAINER_NAME} ${REDIS_NODE_2_CONTAINER_NAME} ${REDIS_NODE_3_CONTAINER_NAME} ${REDIS_NODE_4_CONTAINER_NAME} ${REDIS_NODE_5_CONTAINER_NAME} ${REDIS_NODE_6_CONTAINER_NAME}'
+      - 'TZ=${MAF_TIMEZONE}'
+    networks:
+      muscle_and_fitness_network:
+
+  redis-node-2:
+    container_name: ${REDIS_NODE_2_CONTAINER_NAME}
+    image: bitnami/redis-cluster:${REDIS_CLUSTER_TAG}
+    ports:
+      - "6380:6379"
+    restart: always
+    #    volumes:
+    #      - "~/docker-file-mapping/${REDIS_NODE_2_CONTAINER_NAME}:/bitnami/redis/data"
+    environment:
+      - 'REDIS_PASSWORD=maf@redis'
+      - 'REDIS_NODES=${REDIS_NODE_1_CONTAINER_NAME} ${REDIS_NODE_2_CONTAINER_NAME} ${REDIS_NODE_3_CONTAINER_NAME} ${REDIS_NODE_4_CONTAINER_NAME} ${REDIS_NODE_5_CONTAINER_NAME} ${REDIS_NODE_6_CONTAINER_NAME}'
+      - 'TZ=${MAF_TIMEZONE}'
+    networks:
+      muscle_and_fitness_network:
+
+  redis-node-3:
+    container_name: ${REDIS_NODE_3_CONTAINER_NAME}
+    image: bitnami/redis-cluster:${REDIS_CLUSTER_TAG}
+    ports:
+      - "6381:6379"
+    restart: always
+    #    volumes:
+    #      - "~/docker-file-mapping/${REDIS_NODE_3_CONTAINER_NAME}:/bitnami/redis/data"
+    environment:
+      - 'REDIS_PASSWORD=maf@redis'
+      - 'REDIS_NODES=${REDIS_NODE_1_CONTAINER_NAME} ${REDIS_NODE_2_CONTAINER_NAME} ${REDIS_NODE_3_CONTAINER_NAME} ${REDIS_NODE_4_CONTAINER_NAME} ${REDIS_NODE_5_CONTAINER_NAME} ${REDIS_NODE_6_CONTAINER_NAME}'
+      - 'TZ=${MAF_TIMEZONE}'
+    networks:
+      muscle_and_fitness_network:
+
+  redis-node-4:
+    container_name: ${REDIS_NODE_4_CONTAINER_NAME}
+    image: bitnami/redis-cluster:${REDIS_CLUSTER_TAG}
+    ports:
+      - "6382:6379"
+    restart: always
+    #    volumes:
+    #      - "~/docker-file-mapping/${REDIS_NODE_4_CONTAINER_NAME}:/bitnami/redis/data"
+    environment:
+      - 'REDIS_PASSWORD=maf@redis'
+      - 'REDIS_NODES=${REDIS_NODE_1_CONTAINER_NAME} ${REDIS_NODE_2_CONTAINER_NAME} ${REDIS_NODE_3_CONTAINER_NAME} ${REDIS_NODE_4_CONTAINER_NAME} ${REDIS_NODE_5_CONTAINER_NAME} ${REDIS_NODE_6_CONTAINER_NAME}'
+      - 'TZ=${MAF_TIMEZONE}'
+    networks:
+      muscle_and_fitness_network:
+
+  redis-node-5:
+    container_name: ${REDIS_NODE_5_CONTAINER_NAME}
+    image: bitnami/redis-cluster:${REDIS_CLUSTER_TAG}
+    ports:
+      - "6383:6379"
+    restart: always
+    #    volumes:
+    #      - "~/docker-file-mapping/${REDIS_NODE_5_CONTAINER_NAME}:/bitnami/redis/data"
+    environment:
+      - 'REDIS_PASSWORD=maf@redis'
+      - 'REDIS_NODES=${REDIS_NODE_1_CONTAINER_NAME} ${REDIS_NODE_2_CONTAINER_NAME} ${REDIS_NODE_3_CONTAINER_NAME} ${REDIS_NODE_4_CONTAINER_NAME} ${REDIS_NODE_5_CONTAINER_NAME} ${REDIS_NODE_6_CONTAINER_NAME}'
+      - 'TZ=${MAF_TIMEZONE}'
+    networks:
+      muscle_and_fitness_network:
+
+  redis-node-6:
+    container_name: ${REDIS_NODE_6_CONTAINER_NAME}
+    image: bitnami/redis-cluster:${REDIS_CLUSTER_TAG}
+    ports:
+      - "6384:6379"
+    #    volumes:
+    #      - "~/docker-file-mapping/${REDIS_NODE_6_CONTAINER_NAME}:/bitnami/redis/data"
+    depends_on:
+      - redis-node-1
+      - redis-node-2
+      - redis-node-3
+      - redis-node-4
+      - redis-node-5
+    environment:
+      - 'REDIS_PASSWORD=maf@redis'
+      - 'REDISCLI_AUTH=maf@redis'
+      - 'REDIS_CLUSTER_REPLICAS=1'
+      - 'REDIS_NODES=${REDIS_NODE_1_CONTAINER_NAME} ${REDIS_NODE_2_CONTAINER_NAME} ${REDIS_NODE_3_CONTAINER_NAME} ${REDIS_NODE_4_CONTAINER_NAME} ${REDIS_NODE_5_CONTAINER_NAME} ${REDIS_NODE_6_CONTAINER_NAME}'
+      - 'REDIS_CLUSTER_CREATOR=yes'
+    networks:
+      muscle_and_fitness_network:

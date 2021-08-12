@@ -22,11 +22,12 @@ import javax.validation.constraints.NotNull;
 @Slf4j
 @Validated
 @RefreshScope
-@ConfigurationProperties(prefix = "maf.configuration.excel")
+@ConfigurationProperties(prefix = ExcelImportConfiguration.PREFIX)
 public class ExcelImportConfiguration {
+    public static final String PREFIX = "maf.configuration.excel";
     @Min(2)
     @NotNull
-    private Integer maximumRowCount;
+    private Integer maximumRowCount = 2;
 
     @PostConstruct
     private void postConstruct() {

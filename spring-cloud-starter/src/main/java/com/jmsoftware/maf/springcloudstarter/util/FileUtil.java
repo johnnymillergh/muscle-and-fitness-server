@@ -24,6 +24,9 @@ import java.util.UUID;
 @Slf4j
 @SuppressWarnings("unused")
 public class FileUtil {
+    private FileUtil() {
+    }
+
     /**
      * Convert multipart file to file
      *

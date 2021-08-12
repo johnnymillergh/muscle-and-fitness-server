@@ -6,12 +6,12 @@ spring:
   datasource:
     dynamic:
       datasource:
-        master:
+        master_1:
           url: jdbc:mysql://localhost:3306/muscle_and_fitness?useSSL=true&useUnicode=true
           username: maf_mysql_rw
           password: maf@mysql
           driver-class-name: com.mysql.cj.jdbc.Driver
-        slave1:
+        slave_1:
           url: jdbc:mysql://localhost:3307/muscle_and_fitness?useSSL=true&useUnicode=true
           username: maf_mysql_r
           password: maf@mysql
@@ -21,15 +21,21 @@ spring:
           username: maf_mysql_rw
           password: maf@mysql
           driver-class-name: com.mysql.cj.jdbc.Driver
-  redis:
-    host: localhost
-    port: 6379
-    password: maf@redis
   rabbitmq:
     host: localhost
     port: 5672
     username: maf_rabbitmq_su
     password: maf@rabbitmq
+
+redis:
+  master:
+    host: localhost
+    port: 6379
+    password: maf@redis
+  slaves:
+    - host: localhost
+      port: 6380
+      password: maf@redis
 
 maf:
   configuration:

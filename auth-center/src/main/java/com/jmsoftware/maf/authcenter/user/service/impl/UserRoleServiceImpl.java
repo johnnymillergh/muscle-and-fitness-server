@@ -8,7 +8,7 @@ import com.jmsoftware.maf.authcenter.user.entity.persistence.User;
 import com.jmsoftware.maf.authcenter.user.entity.persistence.UserRole;
 import com.jmsoftware.maf.authcenter.user.mapper.UserRoleMapper;
 import com.jmsoftware.maf.authcenter.user.service.UserRoleService;
-import com.jmsoftware.maf.common.exception.BusinessException;
+import com.jmsoftware.maf.common.exception.BizException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -31,19 +31,19 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
     private final RoleService roleService;
 
     @Override
-    @SneakyThrows({BusinessException.class})
+    @SneakyThrows({BizException.class})
     public void assignRoleByRoleName(@NonNull User user, @NotBlank String roleName) {
         val queryWrapper = Wrappers.lambdaQuery(Role.class);
         queryWrapper.select(Role::getId)
                 .eq(Role::getName, roleName);
-        val role = Optional.ofNullable(roleService.getOne(queryWrapper))
-                .orElseThrow(() -> new BusinessException(""));
+        val role = Optional.ofNullable(this.roleService.getOne(queryWrapper))
+                .orElseThrow(() -> new BizException(""));
         val userRole = new UserRole();
         userRole.setUserId(user.getId());
         userRole.setRoleId(role.getId());
         val saved = this.save(userRole);
         if (!saved) {
-            throw new BusinessException(String.format("Cannot assign role (%s) to user (%s)", roleName, user.getUsername()));
+            throw new BizException(String.format("Cannot assign role (%s) to user (%s)", roleName, user.getUsername()));
         }
     }
 }
