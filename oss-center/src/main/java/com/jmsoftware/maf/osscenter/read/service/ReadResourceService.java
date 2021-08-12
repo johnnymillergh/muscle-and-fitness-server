@@ -1,6 +1,5 @@
 package com.jmsoftware.maf.osscenter.read.service;
 
-import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.util.unit.DataSize;
@@ -42,28 +41,4 @@ public interface ReadResourceService {
      * @return the response entity
      */
     ResponseEntity<StreamingResponseBody> asyncDownloadSingleResource(@NotBlank String bucket, @NotBlank String object);
-
-    /**
-     * Stream single resource.
-     *
-     * @param bucket the bucket
-     * @param object the object
-     * @param range  the range
-     * @return the single resource
-     * @deprecated since it's not async method, will be deleted in the future.
-     */
-    @Deprecated(forRemoval = true)
-    ResponseEntity<Resource> streamSingleResource(@NotBlank String bucket, @NotBlank String object,
-                                                  @Nullable String range);
-
-    /**
-     * Download single resource response entity.
-     *
-     * @param bucket the bucket
-     * @param object the object
-     * @return the response entity
-     * @deprecated since it's not async method, will be deleted in the future.
-     */
-    @Deprecated(forRemoval = true)
-    ResponseEntity<Resource> downloadSingleResource(@NotBlank String bucket, @NotBlank String object);
 }
