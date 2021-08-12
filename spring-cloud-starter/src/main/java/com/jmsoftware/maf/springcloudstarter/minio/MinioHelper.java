@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.springcloudstarter.helper;
+package com.jmsoftware.maf.springcloudstarter.minio;
 
 import cn.hutool.core.util.ObjectUtil;
 import io.minio.*;

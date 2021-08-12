@@ -3,7 +3,7 @@ package com.jmsoftware.maf.osscenter.write.service.impl;
 import cn.hutool.core.util.StrUtil;
 import com.jmsoftware.maf.common.exception.BizException;
 import com.jmsoftware.maf.osscenter.write.service.WriteResourceService;
-import com.jmsoftware.maf.springcloudstarter.helper.MinioHelper;
+import com.jmsoftware.maf.springcloudstarter.minio.MinioHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;

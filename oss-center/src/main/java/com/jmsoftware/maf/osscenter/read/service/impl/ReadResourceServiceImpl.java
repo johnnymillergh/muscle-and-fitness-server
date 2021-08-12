@@ -3,7 +3,7 @@ package com.jmsoftware.maf.osscenter.read.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.IoUtil;
 import com.jmsoftware.maf.osscenter.read.service.ReadResourceService;
-import com.jmsoftware.maf.springcloudstarter.helper.MinioHelper;
+import com.jmsoftware.maf.springcloudstarter.minio.MinioHelper;
 import io.minio.StatObjectResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
