@@ -4,7 +4,6 @@ import com.jmsoftware.maf.osscenter.read.service.ReadResourceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -30,13 +29,6 @@ public class ReadResourceController {
 
     @GetMapping("/stream/{bucket}/{object}")
     @ApiOperation(value = "Stream single resource", notes = "Stream single resource")
-    public ResponseEntity<Resource> streamSingleResource(@PathVariable String bucket, @PathVariable String object,
-                                                         @RequestHeader(name = HttpHeaders.RANGE, required = false) String range) {
-        return this.readResourceService.streamSingleResource(bucket, object, range);
-    }
-
-    @GetMapping("/async/stream/{bucket}/{object}")
-    @ApiOperation(value = "Stream single resource", notes = "Stream single resource")
     public ResponseEntity<StreamingResponseBody> asyncStreamSingleResource(@PathVariable String bucket,
                                                                            @PathVariable String object,
                                                                            @RequestHeader(name = HttpHeaders.RANGE,
@@ -46,7 +38,8 @@ public class ReadResourceController {
 
     @GetMapping("/download/{bucket}/{object}")
     @ApiOperation(value = "Download single resource", notes = "Download single resource")
-    public ResponseEntity<Resource> downloadSingleResource(@PathVariable String bucket, @PathVariable String object) {
-        return this.readResourceService.downloadSingleResource(bucket, object);
+    public ResponseEntity<StreamingResponseBody> downloadSingleResource(@PathVariable String bucket,
+                                                                        @PathVariable String object) {
+        return this.readResourceService.asyncDownloadSingleResource(bucket, object);
     }
 }

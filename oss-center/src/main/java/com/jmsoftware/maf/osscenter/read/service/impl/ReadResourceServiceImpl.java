@@ -32,28 +32,6 @@ public class ReadResourceServiceImpl implements ReadResourceService {
     private final MinioHelper minioHelper;
 
     @Override
-    public ResponseEntity<Resource> streamSingleResource(@NotBlank String bucket, @NotBlank String object,
-                                                         @Nullable String range) {
-        StatObjectResponse statObjectResponse;
-        try {
-            statObjectResponse = this.minioHelper.statObject(bucket, object);
-        } catch (Exception e) {
-            log.error("Exception occurred when looking for object. Exception message: {}", e.getMessage());
-            return ResponseEntity.notFound().build();
-        }
-        val httpRanges = HttpRange.parseRanges(range);
-        if (CollUtil.isEmpty(httpRanges)) {
-            val getObjectResponse = this.minioHelper.getObject(bucket, object, 0, MEDIUM_CHUNK_SIZE.toBytes());
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.ACCEPT_RANGES, "bytes")
-                    .contentLength(statObjectResponse.size())
-                    .contentType(MediaType.parseMediaType(statObjectResponse.contentType()))
-                    .body(new InputStreamResource(getObjectResponse));
-        }
-        return this.getResourceRegion(bucket, object, statObjectResponse, httpRanges);
-    }
-
-    @Override
     public ResponseEntity<StreamingResponseBody> asyncStreamSingleResource(@NotBlank String bucket,
                                                                            @NotBlank String object,
                                                                            @Nullable String range) {
@@ -80,7 +58,9 @@ public class ReadResourceServiceImpl implements ReadResourceService {
     }
 
     @Override
-    public ResponseEntity<Resource> downloadSingleResource(String bucket, String object) {
+    @SuppressWarnings("DuplicatedCode")
+    public ResponseEntity<StreamingResponseBody> asyncDownloadSingleResource(@NotBlank String bucket,
+                                                                             @NotBlank String object) {
         StatObjectResponse statObjectResponse;
         try {
             statObjectResponse = this.minioHelper.statObject(bucket, object);
@@ -95,24 +75,50 @@ public class ReadResourceServiceImpl implements ReadResourceService {
                         ContentDisposition.builder("attachment").filename(object).build().toString())
                 .contentLength(statObjectResponse.size())
                 .contentType(MediaType.parseMediaType(statObjectResponse.contentType()))
-                .body(new InputStreamResource(getObjectResponse));
+                .body((outputStream -> {
+                    IoUtil.copy(getObjectResponse, outputStream);
+                    IoUtil.close(getObjectResponse);
+                }));
     }
 
+    @Override
+    public ResponseEntity<Resource> streamSingleResource(@NotBlank String bucket, @NotBlank String object,
+                                                         @Nullable String range) {
+        StatObjectResponse statObjectResponse;
+        try {
+            statObjectResponse = this.minioHelper.statObject(bucket, object);
+        } catch (Exception e) {
+            log.error("Exception occurred when looking for object. Exception message: {}", e.getMessage());
+            return ResponseEntity.notFound().build();
+        }
+        val httpRanges = HttpRange.parseRanges(range);
+        if (CollUtil.isEmpty(httpRanges)) {
+            val getObjectResponse = this.minioHelper.getObject(bucket, object, 0, MEDIUM_CHUNK_SIZE.toBytes());
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.ACCEPT_RANGES, "bytes")
+                    .contentLength(statObjectResponse.size())
+                    .contentType(MediaType.parseMediaType(statObjectResponse.contentType()))
+                    .body(new InputStreamResource(getObjectResponse));
+        }
+        return this.getResourceRegion(bucket, object, statObjectResponse, httpRanges);
+    }
+
+    @Override
     @SuppressWarnings("DuplicatedCode")
-    private ResponseEntity<Resource> getResourceRegion(String bucket, String object,
-                                                       StatObjectResponse statObjectResponse,
-                                                       List<HttpRange> httpRanges) {
-        val getObjectResponse = this.minioHelper.getObject(bucket, object, httpRanges.get(0).getRangeStart(0),
-                                                           MEDIUM_CHUNK_SIZE.toBytes());
-        val start = httpRanges.get(0).getRangeStart(0);
-        var end = start + MEDIUM_CHUNK_SIZE.toBytes() - 1;
-        val resourceLength = statObjectResponse.size();
-        end = Math.min(end, resourceLength - 1);
-        val rangeLength = end - start + 1;
-        return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)
+    public ResponseEntity<Resource> downloadSingleResource(String bucket, String object) {
+        StatObjectResponse statObjectResponse;
+        try {
+            statObjectResponse = this.minioHelper.statObject(bucket, object);
+        } catch (Exception e) {
+            log.error("Exception occurred when looking for object. Exception message: {}", e.getMessage());
+            return ResponseEntity.notFound().build();
+        }
+        val getObjectResponse = this.minioHelper.getObject(bucket, object);
+        return ResponseEntity.ok()
                 .header(HttpHeaders.ACCEPT_RANGES, "bytes")
-                .header(HttpHeaders.CONTENT_RANGE, String.format("bytes %d-%d/%d", start, end, resourceLength))
-                .contentLength(rangeLength)
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        ContentDisposition.builder("attachment").filename(object).build().toString())
+                .contentLength(statObjectResponse.size())
                 .contentType(MediaType.parseMediaType(statObjectResponse.contentType()))
                 .body(new InputStreamResource(getObjectResponse));
     }
@@ -137,5 +143,35 @@ public class ReadResourceServiceImpl implements ReadResourceService {
                     IoUtil.copy(getObjectResponse, outputStream);
                     IoUtil.close(getObjectResponse);
                 });
+    }
+
+    /**
+     * Gets resource region.
+     *
+     * @param bucket             the bucket
+     * @param object             the object
+     * @param statObjectResponse the stat object response
+     * @param httpRanges         the http ranges
+     * @return the resource region
+     * @deprecated since it's not async method, will be deleted in the future.
+     */
+    @Deprecated(forRemoval = true)
+    @SuppressWarnings("DuplicatedCode")
+    private ResponseEntity<Resource> getResourceRegion(String bucket, String object,
+                                                       StatObjectResponse statObjectResponse,
+                                                       List<HttpRange> httpRanges) {
+        val getObjectResponse = this.minioHelper.getObject(bucket, object, httpRanges.get(0).getRangeStart(0),
+                                                           MEDIUM_CHUNK_SIZE.toBytes());
+        val start = httpRanges.get(0).getRangeStart(0);
+        var end = start + MEDIUM_CHUNK_SIZE.toBytes() - 1;
+        val resourceLength = statObjectResponse.size();
+        end = Math.min(end, resourceLength - 1);
+        val rangeLength = end - start + 1;
+        return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)
+                .header(HttpHeaders.ACCEPT_RANGES, "bytes")
+                .header(HttpHeaders.CONTENT_RANGE, String.format("bytes %d-%d/%d", start, end, resourceLength))
+                .contentLength(rangeLength)
+                .contentType(MediaType.parseMediaType(statObjectResponse.contentType()))
+                .body(new InputStreamResource(getObjectResponse));
     }
 }
