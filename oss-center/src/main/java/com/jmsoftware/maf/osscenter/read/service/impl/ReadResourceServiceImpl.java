@@ -2,6 +2,7 @@ package com.jmsoftware.maf.osscenter.read.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.IoUtil;
+import com.jmsoftware.maf.osscenter.read.entity.SerializableStatObjectResponse;
 import com.jmsoftware.maf.osscenter.read.service.ReadResourceService;
 import com.jmsoftware.maf.springcloudstarter.minio.MinioHelper;
 import io.minio.StatObjectResponse;
@@ -77,6 +78,11 @@ public class ReadResourceServiceImpl implements ReadResourceService {
                     IoUtil.copy(getObjectResponse, outputStream);
                     IoUtil.close(getObjectResponse);
                 }));
+    }
+
+    @Override
+    public SerializableStatObjectResponse stateObject(@NotBlank String bucket, @NotBlank String object) {
+        return SerializableStatObjectResponse.build(this.minioHelper.statObject(bucket, object));
     }
 
     @SuppressWarnings("DuplicatedCode")

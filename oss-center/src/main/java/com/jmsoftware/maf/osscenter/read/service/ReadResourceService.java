@@ -1,5 +1,6 @@
 package com.jmsoftware.maf.osscenter.read.service;
 
+import com.jmsoftware.maf.osscenter.read.entity.SerializableStatObjectResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.util.unit.DataSize;
@@ -41,4 +42,13 @@ public interface ReadResourceService {
      * @return the response entity
      */
     ResponseEntity<StreamingResponseBody> asyncDownloadSingleResource(@NotBlank String bucket, @NotBlank String object);
+
+    /**
+     * Gets resource information.
+     *
+     * @param bucket the bucket
+     * @param object the object
+     * @return the resource detail
+     */
+    SerializableStatObjectResponse stateObject(@NotBlank String bucket, @NotBlank String object);
 }

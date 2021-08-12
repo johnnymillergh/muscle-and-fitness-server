@@ -1,5 +1,7 @@
 package com.jmsoftware.maf.osscenter.read.controller;
 
+import com.jmsoftware.maf.common.bean.ResponseBodyBean;
+import com.jmsoftware.maf.osscenter.read.entity.SerializableStatObjectResponse;
 import com.jmsoftware.maf.osscenter.read.service.ReadResourceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -41,5 +43,12 @@ public class ReadResourceController {
     public ResponseEntity<StreamingResponseBody> downloadSingleResource(@PathVariable String bucket,
                                                                         @PathVariable String object) {
         return this.readResourceService.asyncDownloadSingleResource(bucket, object);
+    }
+
+    @GetMapping("/stat/{bucket}/{object}")
+    @ApiOperation(value = "Get the information of single resource", notes = "Get the information of single resource")
+    public ResponseBodyBean<SerializableStatObjectResponse> statSingleResource(@PathVariable String bucket,
+                                                                               @PathVariable String object) {
+        return ResponseBodyBean.ofSuccess(this.readResourceService.stateObject(bucket, object));
     }
 }
