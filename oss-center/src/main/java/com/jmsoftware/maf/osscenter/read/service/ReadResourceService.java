@@ -19,6 +19,7 @@ import javax.validation.constraints.NotBlank;
 @Validated
 public interface ReadResourceService {
     String BUCKET_OBJECT_NAME_REGEX = "^.+/.+$";
+    DataSize TINY_CHUNK_SIZE = DataSize.ofBytes(512);
     DataSize SMALL_CHUNK_SIZE = DataSize.ofMegabytes(1);
     DataSize MEDIUM_CHUNK_SIZE = DataSize.ofMegabytes(4);
     DataSize LARGE_CHUNK_SIZE = DataSize.ofMegabytes(8);

@@ -43,7 +43,7 @@ public class ReadResourceServiceImpl implements ReadResourceService {
         }
         val httpRanges = HttpRange.parseRanges(range);
         if (CollUtil.isEmpty(httpRanges)) {
-            val getObjectResponse = this.minioHelper.getObject(bucket, object, 0, MEDIUM_CHUNK_SIZE.toBytes());
+            val getObjectResponse = this.minioHelper.getObject(bucket, object, 0, TINY_CHUNK_SIZE.toBytes());
             return ResponseEntity.ok()
                     .header(HttpHeaders.ACCEPT_RANGES, "bytes")
                     .contentLength(statObjectResponse.size())
@@ -90,9 +90,9 @@ public class ReadResourceServiceImpl implements ReadResourceService {
                                                                          StatObjectResponse statObjectResponse,
                                                                          List<HttpRange> httpRanges) {
         val getObjectResponse = this.minioHelper.getObject(bucket, object, httpRanges.get(0).getRangeStart(0),
-                                                           MEDIUM_CHUNK_SIZE.toBytes());
+                                                           LARGE_CHUNK_SIZE.toBytes());
         val start = httpRanges.get(0).getRangeStart(0);
-        var end = start + MEDIUM_CHUNK_SIZE.toBytes() - 1;
+        var end = start + LARGE_CHUNK_SIZE.toBytes() - 1;
         val resourceLength = statObjectResponse.size();
         end = Math.min(end, resourceLength - 1);
         val rangeLength = end - start + 1;
