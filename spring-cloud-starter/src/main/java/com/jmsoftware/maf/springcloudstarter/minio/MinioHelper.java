@@ -218,7 +218,8 @@ public class MinioHelper {
 
     @SneakyThrows
     public ObjectWriteResponse composeObject(@NotBlank String bucket, @NotBlank String object,
-                                             @NotEmpty List<ComposeSource> sources,@Nullable Map<String, String> headers) {
+                                             @NotEmpty List<ComposeSource> sources,
+                                             @Nullable Map<String, String> headers) {
         if (!this.bucketExists(bucket)) {
             return null;
         }
