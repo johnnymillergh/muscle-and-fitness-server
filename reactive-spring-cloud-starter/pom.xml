@@ -19,6 +19,10 @@
             <groupId>com.jmsoftware.maf</groupId>
             <artifactId>common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.jmsoftware.maf</groupId>
+            <artifactId>universal-ui</artifactId>
+        </dependency>
 
         <!-- Spring Boot Dependencies -->
         <dependency>

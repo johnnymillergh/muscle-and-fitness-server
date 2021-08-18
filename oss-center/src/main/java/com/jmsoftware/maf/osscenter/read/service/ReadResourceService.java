@@ -1,5 +1,6 @@
 package com.jmsoftware.maf.osscenter.read.service;
 
+import com.jmsoftware.maf.osscenter.read.entity.SerializableStatObjectResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.util.unit.DataSize;
@@ -18,6 +19,7 @@ import javax.validation.constraints.NotBlank;
 @Validated
 public interface ReadResourceService {
     String BUCKET_OBJECT_NAME_REGEX = "^.+/.+$";
+    DataSize TINY_CHUNK_SIZE = DataSize.ofBytes(512);
     DataSize SMALL_CHUNK_SIZE = DataSize.ofMegabytes(1);
     DataSize MEDIUM_CHUNK_SIZE = DataSize.ofMegabytes(4);
     DataSize LARGE_CHUNK_SIZE = DataSize.ofMegabytes(8);
@@ -41,4 +43,13 @@ public interface ReadResourceService {
      * @return the response entity
      */
     ResponseEntity<StreamingResponseBody> asyncDownloadSingleResource(@NotBlank String bucket, @NotBlank String object);
+
+    /**
+     * Gets resource information.
+     *
+     * @param bucket the bucket
+     * @param object the object
+     * @return the resource detail
+     */
+    SerializableStatObjectResponse stateObject(@NotBlank String bucket, @NotBlank String object);
 }

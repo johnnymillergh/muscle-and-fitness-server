@@ -33,7 +33,7 @@ public class RedirectController {
     @ApiOperation(value = "/home", notes = "Home page")
     public void handleHomeRequest(HttpServletResponse response) throws IOException {
         // Redirect to home page
-        response.sendRedirect("static/home.html");
+        response.sendRedirect("static/home/index.html");
     }
 
     @GetMapping("/doc")
@@ -47,6 +47,6 @@ public class RedirectController {
     @ApiOperation(value = "/webjars/bycdao-ui/images/api.ico", notes = "Favicon redirection")
     public void handleFaviconRequest(HttpServletResponse response) throws IOException {
         // Redirect to a customized favicon
-        response.sendRedirect("/static/icon/favicon.ico");
+        response.sendRedirect("/static/asset/favicon.ico");
     }
 }

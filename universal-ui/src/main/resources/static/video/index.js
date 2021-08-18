@@ -6,8 +6,7 @@ const vm = new Vue({
         videoSource: ''
     },
     async mounted() {
-        const currentUrl = window.location.href;
-        const split = currentUrl.split('/');
+        const split = window.location.href.split('/');
         this.videoSource = `${split[0]}//${split[2]}/${split[3]}/test-table/demo-video`;
         const baseUrl = `${split[0]}//${split[2]}`;
         const response = await fetch(`${baseUrl}/common/app-info`);
