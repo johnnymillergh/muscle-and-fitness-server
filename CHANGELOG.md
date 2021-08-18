@@ -1,3 +1,23 @@
+# [0.0.4](https://github.com/johnnymillergh/muscle-and-fitness-server/compare/0.0.3...0.0.4)  (2021-08-18)
+
+
+### Features
+
+* **$OSS:** get information of an object ([3663f06](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/3663f06912efda4edb04e410ac7bb272c9818582))
+* **$OSS:** new API to merge resource chunk ([74e56d5](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/74e56d55cad9fea83484551a031b5a84db204ffe))
+* **$OSS:** new API to upload resource chunk ([314b713](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/314b713b1f5d8c34eb5378300a120239d3725e56))
+* **$OSS:** remove merged chunk ([10c65f5](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/10c65f51915981c61027556dc9010db45b5ce997))
+* **$UI:** add large file upload demo page ([8d51be4](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/8d51be47552413d60ccd9c45bee6f0d313ec6daf))
+
+
+### Performance Improvements
+
+* **$OSS:** enhance file merge process by detecting content type ([47ad2d4](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/47ad2d44185b977546c32798384df5d54ce56881))
+* **$OSS:** reduce data chunk size ([5498716](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/5498716a961c67348054762a15f373008d8c3f0b))
+* **$OSS:** refine process of uploading chunk ([b3c2529](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/b3c25298c9755f0c44a492544515f4495e2fd119))
+
+
+
 # [0.0.3](https://github.com/johnnymillergh/muscle-and-fitness-server/compare/0.0.2...0.0.3) (2021-08-12)
 
 ### Features
