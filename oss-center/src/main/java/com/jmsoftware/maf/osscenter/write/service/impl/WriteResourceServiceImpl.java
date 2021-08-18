@@ -3,25 +3,27 @@ package com.jmsoftware.maf.osscenter.write.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
+import com.jmsoftware.maf.osscenter.read.service.ReadResourceService;
 import com.jmsoftware.maf.osscenter.write.entity.MergeResourceChunkPayload;
 import com.jmsoftware.maf.osscenter.write.entity.ObjectResponse;
+import com.jmsoftware.maf.osscenter.write.entity.UploadResourceChunkPayload;
 import com.jmsoftware.maf.osscenter.write.service.WriteResourceService;
 import com.jmsoftware.maf.springcloudstarter.minio.MinioHelper;
 import io.minio.ComposeSource;
+import lombok.Cleanup;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.tika.Tika;
 import org.apache.tika.mime.MediaType;
-import org.hibernate.validator.constraints.Range;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -85,19 +87,19 @@ public class WriteResourceServiceImpl implements WriteResourceService {
     @Override
     @SneakyThrows
     public ObjectResponse uploadResourceChunk(@NotNull MultipartFile multipartFile,
-                                              @Nullable String bucket,
-                                              @NotNull @Range(max = MAX_CHUNK_NUMBER) Integer chunkNumber) {
+                                              @Valid @NotNull UploadResourceChunkPayload payload) {
         if (StrUtil.isBlank(multipartFile.getOriginalFilename())) {
             throw new IllegalArgumentException("File name required");
         }
         MediaType mediaType = null;
-        if (StrUtil.isBlank(bucket)) {
+        if (StrUtil.isBlank(payload.getBucket())) {
             mediaType = this.parseMediaType(multipartFile);
         }
         // bucketName is either mediaType of given 'bucket'
-        val bucketName = StrUtil.isBlank(bucket) ? Objects.requireNonNull(mediaType).getType() : bucket;
-        val orderedFilename = String.format("%s.chunk%s", multipartFile.getOriginalFilename(),
-                                            NumberUtil.decimalFormat("000", chunkNumber));
+        val bucketName = StrUtil.isBlank(payload.getBucket()) ?
+                Objects.requireNonNull(mediaType).getType() : payload.getBucket();
+        val orderedFilename = String.format("%s.chunk%s", payload.getFilename(),
+                                            NumberUtil.decimalFormat("000", payload.getChunkNumber()));
         val objectResponse = new ObjectResponse();
         objectResponse.setBucket(bucketName);
         objectResponse.setObject(orderedFilename);
@@ -109,16 +111,20 @@ public class WriteResourceServiceImpl implements WriteResourceService {
     }
 
     @Override
+    @SneakyThrows
     public ObjectResponse mergeResourceChunk(@Valid @NotNull MergeResourceChunkPayload payload) {
         val objectName = this.validateObject(payload.getObjectList());
         val sources = payload.getObjectList()
                 .stream()
                 .map(object -> ComposeSource.builder().bucket(payload.getBucket()).object(object).build())
                 .collect(Collectors.toList());
-        val statObjectResponse = this.minioHelper.statObject(payload.getBucket(),
-                                                             CollUtil.getFirst(payload.getObjectList()));
+        @Cleanup val firstChunk = this.minioHelper.getObject(payload.getBucket(),
+                                                             CollUtil.getFirst(payload.getObjectList()),
+                                                             0,
+                                                             ReadResourceService.TINY_CHUNK_SIZE.toBytes());
+        val mediaType = this.parseMediaType(firstChunk);
         val headers = new HashMap<String, String>(4);
-        headers.put("Content-Type", statObjectResponse.contentType());
+        headers.put("Content-Type", mediaType.toString());
         val objectWriteResponse = this.minioHelper.composeObject(payload.getBucket(), objectName, sources, headers);
         val objectResponse = new ObjectResponse();
         objectResponse.setBucket(objectWriteResponse.bucket());
@@ -145,6 +151,16 @@ public class WriteResourceServiceImpl implements WriteResourceService {
     private MediaType parseMediaType(MultipartFile multipartFile) throws IOException {
         val tika = new Tika();
         val detectedMediaType = tika.detect(multipartFile.getInputStream());
+        log.info("Detected media type: {}", detectedMediaType);
+        if (StrUtil.isBlank(detectedMediaType)) {
+            throw new IllegalStateException("Media extension detection failed!");
+        }
+        return MediaType.parse(detectedMediaType);
+    }
+
+    private MediaType parseMediaType(InputStream inputStream) throws IOException {
+        val tika = new Tika();
+        val detectedMediaType = tika.detect(inputStream);
         log.info("Detected media type: {}", detectedMediaType);
         if (StrUtil.isBlank(detectedMediaType)) {
             throw new IllegalStateException("Media extension detection failed!");

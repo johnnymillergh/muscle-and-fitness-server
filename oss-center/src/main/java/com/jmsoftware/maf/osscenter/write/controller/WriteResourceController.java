@@ -3,6 +3,7 @@ package com.jmsoftware.maf.osscenter.write.controller;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.osscenter.write.entity.MergeResourceChunkPayload;
 import com.jmsoftware.maf.osscenter.write.entity.ObjectResponse;
+import com.jmsoftware.maf.osscenter.write.entity.UploadResourceChunkPayload;
 import com.jmsoftware.maf.osscenter.write.service.WriteResourceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -38,13 +39,11 @@ public class WriteResourceController {
                                                                         LocaleContextHolder.getLocale()));
     }
 
-    @PostMapping("/upload/chunk/{chunkNumber}")
+    @PostMapping("/upload/chunk")
     @ApiOperation(value = "Upload chunk of resource", notes = "Upload chunk of resource")
     public ResponseBodyBean<ObjectResponse> uploadResourceChunk(@RequestParam("file") MultipartFile multipartFile,
-                                                                @RequestParam(required = false) String bucket,
-                                                                @PathVariable Integer chunkNumber) {
-        return ResponseBodyBean.ofSuccess(
-                this.writeResourceService.uploadResourceChunk(multipartFile, bucket, chunkNumber));
+                                                                @Valid UploadResourceChunkPayload payload) {
+        return ResponseBodyBean.ofSuccess(this.writeResourceService.uploadResourceChunk(multipartFile, payload));
     }
 
     @PutMapping("/merge/chunk")
