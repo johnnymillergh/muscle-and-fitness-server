@@ -1,8 +1,8 @@
-package com.jmsoftware.maf.springcloudstarter.configuration;
+package com.jmsoftware.maf.springcloudstarter.minio;
 
-import com.jmsoftware.maf.springcloudstarter.helper.MinioHelper;
 import io.minio.MinioClient;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Bean;
 @EnableConfigurationProperties({
         MinioProperties.class
 })
+@ConditionalOnClass({MinioClient.class})
 @ConditionalOnProperty({"minio.enabled"})
 public class MinioConfiguration {
     @Bean

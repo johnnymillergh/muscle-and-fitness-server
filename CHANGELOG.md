@@ -1,42 +1,46 @@
+# [0.0.4](https://github.com/johnnymillergh/muscle-and-fitness-server/compare/0.0.3...0.0.4)  (2021-08-18)
+
+
+### Features
+
+* **$OSS:** get information of an object ([3663f06](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/3663f06912efda4edb04e410ac7bb272c9818582))
+* **$OSS:** new API to merge resource chunk ([74e56d5](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/74e56d55cad9fea83484551a031b5a84db204ffe))
+* **$OSS:** new API to upload resource chunk ([314b713](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/314b713b1f5d8c34eb5378300a120239d3725e56))
+* **$OSS:** remove merged chunk ([10c65f5](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/10c65f51915981c61027556dc9010db45b5ce997))
+* **$UI:** add large file upload demo page ([8d51be4](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/8d51be47552413d60ccd9c45bee6f0d313ec6daf))
+
+
+### Performance Improvements
+
+* **$OSS:** enhance file merge process by detecting content type ([47ad2d4](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/47ad2d44185b977546c32798384df5d54ce56881))
+* **$OSS:** reduce data chunk size ([5498716](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/5498716a961c67348054762a15f373008d8c3f0b))
+* **$OSS:** refine process of uploading chunk ([b3c2529](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/b3c25298c9755f0c44a492544515f4495e2fd119))
+
+
+
 # [0.0.3](https://github.com/johnnymillergh/muscle-and-fitness-server/compare/0.0.2...0.0.3) (2021-08-12)
 
 ### Features
 
-* **$OSS:** support download
-  resource ([131d49f](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/131d49f44bd52171d6b07d2b7e656dcb8ab1fc1e))
-* **$POM:** integrate Alibaba
-  p3c-pmd ([896fb2e](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/896fb2e9473ab067a0c2c9417ae214cd8f43102d))
+* **$OSS:** support download resource ([131d49f](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/131d49f44bd52171d6b07d2b7e656dcb8ab1fc1e))
+* **$POM:** integrate Alibaba p3c-pmd ([896fb2e](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/896fb2e9473ab067a0c2c9417ae214cd8f43102d))
 
 ### Performance Improvements
 
-* **$Async:** configure async thread pool for
-  request ([64d7776](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/64d777647bbcdc1f74ca773d716a7db435b4676c))
-* **$i18n:** update multi lingual message for uploading
-  resources ([053fc0e](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/053fc0e98b41d8f651336979d7e230510071e3b4))
-* **$Minio:** correct Minio
-  properties ([1dd7929](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/1dd7929577a399168e909bc4d499a67f41f4979e))
-* **$MyBatisPlus:** add Quartz transaction
-  manager ([a0ea964](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/a0ea9644926fa1ab3400250e679ab0e1969ff8ff))
-* **$MyBatisPlus:** data source loading
-  improvements ([254674b](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/254674bb4060d4169e0a80ffa2b3519f6439df87))
-* **$OSS:** fully support async stream and download
-  resources ([decb5a1](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/decb5a1af537d533d8ecf8795ad6cbb25860fd2d))
-* **$OSS:** support async
-  stream ([f413484](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/f413484566d407249f5d0ec8ee8d6b8cba0de456))
-* **$OSS:** support streaming partial
-  content ([beaa80d](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/beaa80d0a0af95d566fa6fe81082e60d6c97bae8))
-* **$POM:** refine dependency
-  scope ([e36092b](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/e36092b9808d47d223aebd42d23a8b2bfca6f2e7))
-* **$POM:** refine dependency scope for reactive
-  starter ([ac8222e](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/ac8222e6f18e0af675d6c67061ee6bf2bda7fcf6))
-* **$POM:** update
-  dependencies ([5ab6190](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/5ab6190aef1c633719fe061ea2ce73be5953429c))
-* **$POM:** update Hutool version to
-  5.7.7 ([adcc201](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/adcc201419a16884a12169e9676c6446c75655a4))
-* **$Redis:** support Redis master-slave
-  replication ([d414b02](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/d414b02b6dcb558cf7e12485b545dbd632458786))
-* **$Redis:** update version
-  6.2.5-alpine ([560fb9b](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/560fb9bdeb989ef62d44a927d6d8919a3458b668))
+* **$Async:** configure async thread pool for request ([64d7776](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/64d777647bbcdc1f74ca773d716a7db435b4676c))
+* **$i18n:** update multi lingual message for uploading resources ([053fc0e](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/053fc0e98b41d8f651336979d7e230510071e3b4))
+* **$Minio:** correct Minio properties ([1dd7929](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/1dd7929577a399168e909bc4d499a67f41f4979e))
+* **$MyBatisPlus:** add Quartz transaction manager ([a0ea964](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/a0ea9644926fa1ab3400250e679ab0e1969ff8ff))
+* **$MyBatisPlus:** data source loading improvements ([254674b](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/254674bb4060d4169e0a80ffa2b3519f6439df87))
+* **$OSS:** fully support async stream and download resources ([decb5a1](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/decb5a1af537d533d8ecf8795ad6cbb25860fd2d))
+* **$OSS:** support async stream ([f413484](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/f413484566d407249f5d0ec8ee8d6b8cba0de456))
+* **$OSS:** support streaming partial content ([beaa80d](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/beaa80d0a0af95d566fa6fe81082e60d6c97bae8))
+* **$POM:** refine dependency scope ([e36092b](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/e36092b9808d47d223aebd42d23a8b2bfca6f2e7))
+* **$POM:** refine dependency scope for reactive starter ([ac8222e](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/ac8222e6f18e0af675d6c67061ee6bf2bda7fcf6))
+* **$POM:** update dependencies ([5ab6190](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/5ab6190aef1c633719fe061ea2ce73be5953429c))
+* **$POM:** update Hutool version to 5.7.7 ([adcc201](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/adcc201419a16884a12169e9676c6446c75655a4))
+* **$Redis:** support Redis master-slave replication ([d414b02](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/d414b02b6dcb558cf7e12485b545dbd632458786))
+* **$Redis:** update version 6.2.5-alpine ([560fb9b](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/560fb9bdeb989ef62d44a927d6d8919a3458b668))
 
 ### BREAKING CHANGES
 
@@ -50,10 +54,8 @@
 
 ### Bug Fixes
 
-* **$auth-center:** read nested JSON object as Java
-  object ([af101b2](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/af101b201c43c3d4df7891c46e6d3fd2381443ab))
-* **$MyBatis:** correct interceptors
-  order ([3647951](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/3647951d4019220e181b4281d86e4af2907b961f))
+* **$auth-center:** read nested JSON object as Java object ([af101b2](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/af101b201c43c3d4df7891c46e6d3fd2381443ab))
+* **$MyBatis:** correct interceptors order ([3647951](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/3647951d4019220e181b4281d86e4af2907b961f))
 * **$POM:** add test dependency ([401587d](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/401587df23c74e3b245fb7e9cecce666612db93d))
 
 ### Build System
@@ -64,16 +66,13 @@
 ### Code Refactoring
 
 * **$Docker:** abstract Docker environment variables and common constants ([8cc6a36](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/8cc6a36a80f49d090fe669f086fbd99c928ad55f))
-* **$muscle-and-fitness-server:** enhance validation - @NotEmpty ->
-  @NotBlank ([b4150f1](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/b4150f1c42d9a2ca36eb9dca36456d5154aef07c))
+* **$muscle-and-fitness-server:** enhance validation - @NotEmpty -> @NotBlank ([b4150f1](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/b4150f1c42d9a2ca36eb9dca36456d5154aef07c))
 * **$service-registry:** remove module `service-registry` ([61bc7cb](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/61bc7cb0301f7c20f28b11ecde85ada7ab36a56c))
-* **$Starter:** rename `spring-boot`
-  to `spring-cloud` ([2529e45](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/2529e450061eff00b883d5a0544792f818489f63))
+* **$Starter:** rename `spring-boot` to `spring-cloud` ([2529e45](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/2529e450061eff00b883d5a0544792f818489f63))
 
 ### Features
 
-* **$api-gateway:** set HTTP header "
-  X-Username" ([d83fe38](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/d83fe38b968c2d9987466b9df8996778064943ef))
+* **$api-gateway:** set HTTP header " X-Username" ([d83fe38](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/d83fe38b968c2d9987466b9df8996778064943ef))
 * **$api-gateway:** support request rate limit ([c0dc896](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/c0dc896603ea484de269555dad869558fedf8e3c))
 * **$APIGateway:** add global exception handler ([7bb6ffa](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/7bb6ffad68fad643ec1f506f49859e2fdecb7601))
 * **$AuthCenter:** access other service by RestTemplate ([f8df08c](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/f8df08c53fec6380fc1457ce01c2b225adfc6eb0))
@@ -127,12 +126,10 @@
 * **$DataSource:** reduce instances of data source ([581ac97](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/581ac97cb2f4fcd1c6f0e87dd6c56c309c9967d8))
 * **$Docker:** update container dependencies ([aca40f6](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/aca40f68da38392e7442aca559b957c3a6225a1e))
 * **$ELK:** disable ELK ([ecdb3e2](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/ecdb3e20d59f77a260bcfa0e3f9547e49125728d))
-* **$Excel:** make `maximumRowCount`
-  configurable ([8865ead](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/8865ead8266c0f356d71ad7fa7cba67e000b19d2))
+* **$Excel:** make `maximumRowCount` configurable ([8865ead](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/8865ead8266c0f356d71ad7fa7cba67e000b19d2))
 * **$Java:** migrate java.util.Date to java.time.LocalDateTime ([a354070](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/a3540706839b6f1d84ed6fed29d569b3626e970f))
 * **$Knife4j:** roll back to 2.0.8 ([3c0ce61](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/3c0ce61247e189de4ef6a21307098cb79a74ccf6))
-* **$maf-mis:** merge micro services as '
-  maf-mis' ([7d7284c](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/7d7284cd2498ce80fe26d4a8b31f35c807944701))
+* **$maf-mis:** merge micro services as ' maf-mis' ([7d7284c](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/7d7284cd2498ce80fe26d4a8b31f35c807944701))
 * **$MySQL:** Docker supports MySQL cluster based on binary log ([bab526a](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/bab526ab552fb9018b3dd3bd9c2f2dce6f7b5e1a))
 * **$MySQL:** MySQL connection retry ([b076feb](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/b076febb0291e9061dd27cb4eb2c5337c66c1e91))
 * **$MySQL:** reduce unnecessary replicate db ([3976af1](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/3976af1bd4dc43b45d0f102f9113d4043298a0d5))
@@ -160,8 +157,7 @@
 * **$ApiGateway:** enhance global exception handler ([0d3f265](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/0d3f265c58f9b7ed51d3c0ab324338925727e0bc))
 * **$ApiGateway:** handle service not available exception ([235bcb8](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/235bcb8c9c51ba4f28d002512a58b5b1722f4e63))
 * **$ApiGateway:** remove JJWT dependencies ([50c0597](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/50c05973c42b7daba898bbfd00347bd081a64673))
-* **$ApiGateway:** rename module `Gateway`
-  to `API Gateway` ([c367ca3](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/c367ca3f8920c7586d219744eecc6dd052cb5a77))
+* **$ApiGateway:** rename module `Gateway` to `API Gateway` ([c367ca3](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/c367ca3f8920c7586d219744eecc6dd052cb5a77))
 * **$ApiGateway:** shorten module name ([9d7e759](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/9d7e759d514f627264616063745863476ded2f25))
 * **$ApiGateway:** use lombok val annotation ([aec0662](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/aec0662ddd1297aee880fad12d5bb9f3690f2471))
 * **$APIGateway:** handle WebClientResponseException ([8c4cd5a](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/8c4cd5af945391d049a79b4d2605b884dc5cfd8a))
@@ -212,17 +208,14 @@
 * **$POI:** update Druid version to 1.2.5 ([1c1a033](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/1c1a03311d8dd6d9eb796f929ecf2493a239763a))
 * **$POM:** flatten parent dependencies ([e69537a](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/e69537a83c9f610d39e0d2e0d124dc7e0a115465))
 * **$POM:** refine dependency structure ([d82c393](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/d82c393f4161e3b1266d1b586a572fdee2c54a4b))
-* **$POM:** update cn.hutool:hutool-all:
-  5.5.7 ([e7f2193](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/e7f2193e76cc15b986692114dddbad935c3f7e1b))
+* **$POM:** update cn.hutool:hutool-all: 5.5.7 ([e7f2193](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/e7f2193e76cc15b986692114dddbad935c3f7e1b))
 * **$POM:** update Hutool version to 5.5.8 ([7288bc2](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/7288bc2ce02ba658db96bcdb7104f4ec2df7cef0))
 * **$POM:** update hutool-all to 5.5.4 ([e38a37c](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/e38a37c69b48a4495f1855753571dfe5c77ad0ff))
-* **$POM:** update mybatis-plus version to 3.4.2 ([1eeefcc](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/1eeefcc9b77a3be09528b4caf34c4ce77a3ac110))
-  , closes [/github.com/baomidou/mybatis-plus/blob/3.0/CHANGELOG.md#v342-20210115](https://github.com//github.com/baomidou/mybatis-plus/blob/3.0/CHANGELOG.md/issues/v342-20210115)
+* **$POM:** update mybatis-plus version to 3.4.2 ([1eeefcc](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/1eeefcc9b77a3be09528b4caf34c4ce77a3ac110)) , closes [/github.com/baomidou/mybatis-plus/blob/3.0/CHANGELOG.md#v342-20210115](https://github.com//github.com/baomidou/mybatis-plus/blob/3.0/CHANGELOG.md/issues/v342-20210115)
 * **$POM:** update Spring Boot version to 2.3.8.RELEASE ([bc21a41](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/bc21a41db86e2d4af0d79616c4bc2fc1e13f59c2))
 * **$POM:** update Spring Boot version to 2.4.3 ([b955e61](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/b955e61fbd7fdc6e47946ca1c1de3498846efbec))
 * **$POM:** update Spring Cloud to Hoxton.SR9 ([9ab311b](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/9ab311ba65b3babe18e464e39e65c0269d55d124))
-* **$RabbitMQ:** add RabbitMQ health check; set container dependencies ([660bf49](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/660bf49ba8a1d0de4f1ada270fb763e28e99890f))
-  , closes [/devops.stackexchange.com/questions/12092/docker-compose-healthcheck-for-rabbitmq/12200#12200](https://github.com//devops.stackexchange.com/questions/12092/docker-compose-healthcheck-for-rabbitmq/12200/issues/12200)
+* **$RabbitMQ:** add RabbitMQ health check; set container dependencies ([660bf49](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/660bf49ba8a1d0de4f1ada270fb763e28e99890f)) , closes [/devops.stackexchange.com/questions/12092/docker-compose-healthcheck-for-rabbitmq/12200#12200](https://github.com//devops.stackexchange.com/questions/12092/docker-compose-healthcheck-for-rabbitmq/12200/issues/12200)
 * **$RabbitMQ:** make JSON message converter as default ([1b9bb6d](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/1b9bb6ded2005837fe8727eababb36be6ab5175f))
 * **$ReactiveStarter:** abstract access log filter ([d29ba21](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/d29ba212a57e21b6c9f56731e3860b3915296015))
 * **$ReactiveStarter:** abstract beans ([8d1f040](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/8d1f040b937fd7b16ad415815d23b8cb74ad6127))
@@ -251,10 +244,8 @@
 * **$Starter:** reduce unnecessary access log ([7e8a816](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/7e8a816575c3348d6ecdd91612521b7abb270785))
 * **$Starter:** refine dependencies ([bd1e5b3](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/bd1e5b38fbf4180e567add86b7b5d2890464608e))
 * **$Starter:** refine error message ([753946c](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/753946cbd6680ac035edaadcaf0cb81b4af88b4f))
-* **$Starter:** simplify internationalization (
-  i18n) ([b42bc7b](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/b42bc7b3812db702dd0d5315ac09e909cfa5bb4a))
-* **$Starter:** support internationalization (
-  i18n) ([1c8b38b](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/1c8b38bff6765f8206c1e3a3bf4725f9f9bec01b))
+* **$Starter:** simplify internationalization ( i18n) ([b42bc7b](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/b42bc7b3812db702dd0d5315ac09e909cfa5bb4a))
+* **$Starter:** support internationalization ( i18n) ([1c8b38b](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/1c8b38bff6765f8206c1e3a3bf4725f9f9bec01b))
 * **$Starter:** use lettuce for Redis ([c40c304](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/c40c3042f3bd0e0788159c9cdde681c81b9ef562))
 * **$Swagger:** correct Swagger switch logic ([e72e8de](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/e72e8def0ac935a5ec5cd85cfb75958fbbe2fb83))
 * **$Swagger:** support service filter ([f07e0de](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/f07e0de75020d2a5437932aa62257bcdaf9d2cf2))
@@ -320,8 +311,7 @@
 * **$Authorization:** enhanced authorization flow - check HTTP method
 * **$Starter:** rename MAF Spring Boot Starter package name; set bean injection order
 * **$ApiGateway:** abandon custom HttpStatus, use unified Spring Web HttpStatus
-* **$ApiGateway:** remove module `API Portal`; rename module `Gateway` to
-  `API Gateway`
+* **$ApiGateway:** remove module `API Portal`; rename module `Gateway` to `API Gateway`
 * **$ReactiveStarter:** abstract access log filter
 * **$Starter:** reduce unnecessary access log
 * **$Gateway:** implement non-block authorization
@@ -337,8 +327,7 @@
 * **$Docker:** use 20-bit block private network 172.16.1.0/24 ([44a7450](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/44a7450f5df5fb31110b832995779411bf965b87))
 * **$DockerHub:** change DockerHub repository name ([b6067aa](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/b6067aa3967e047ab013b8bec4fc278e222fe43f))
 * **$Eureka:** simplify Eureka configuration ([b74c761](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/b74c7617c731d0e2bd91bd789a69d13b4ac5cf59))
-* **$Shell:**
-  add `auto-run-mac.sh` ([5e401d7](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/5e401d790b04b2db740a2513496eb2518dd89c16))
+* **$Shell:** add `auto-run-mac.sh` ([5e401d7](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/5e401d790b04b2db740a2513496eb2518dd89c16))
 
 ### Code Refactoring
 

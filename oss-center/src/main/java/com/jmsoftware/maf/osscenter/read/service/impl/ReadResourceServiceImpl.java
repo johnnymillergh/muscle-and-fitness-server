@@ -2,8 +2,9 @@ package com.jmsoftware.maf.osscenter.read.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.IoUtil;
+import com.jmsoftware.maf.osscenter.read.entity.SerializableStatObjectResponse;
 import com.jmsoftware.maf.osscenter.read.service.ReadResourceService;
-import com.jmsoftware.maf.springcloudstarter.helper.MinioHelper;
+import com.jmsoftware.maf.springcloudstarter.minio.MinioHelper;
 import io.minio.StatObjectResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +43,7 @@ public class ReadResourceServiceImpl implements ReadResourceService {
         }
         val httpRanges = HttpRange.parseRanges(range);
         if (CollUtil.isEmpty(httpRanges)) {
-            val getObjectResponse = this.minioHelper.getObject(bucket, object, 0, MEDIUM_CHUNK_SIZE.toBytes());
+            val getObjectResponse = this.minioHelper.getObject(bucket, object, 0, TINY_CHUNK_SIZE.toBytes());
             return ResponseEntity.ok()
                     .header(HttpHeaders.ACCEPT_RANGES, "bytes")
                     .contentLength(statObjectResponse.size())
@@ -79,14 +80,19 @@ public class ReadResourceServiceImpl implements ReadResourceService {
                 }));
     }
 
+    @Override
+    public SerializableStatObjectResponse stateObject(@NotBlank String bucket, @NotBlank String object) {
+        return SerializableStatObjectResponse.build(this.minioHelper.statObject(bucket, object));
+    }
+
     @SuppressWarnings("DuplicatedCode")
     private ResponseEntity<StreamingResponseBody> asyncGetResourceRegion(String bucket, String object,
                                                                          StatObjectResponse statObjectResponse,
                                                                          List<HttpRange> httpRanges) {
         val getObjectResponse = this.minioHelper.getObject(bucket, object, httpRanges.get(0).getRangeStart(0),
-                                                           MEDIUM_CHUNK_SIZE.toBytes());
+                                                           LARGE_CHUNK_SIZE.toBytes());
         val start = httpRanges.get(0).getRangeStart(0);
-        var end = start + MEDIUM_CHUNK_SIZE.toBytes() - 1;
+        var end = start + LARGE_CHUNK_SIZE.toBytes() - 1;
         val resourceLength = statObjectResponse.size();
         end = Math.min(end, resourceLength - 1);
         val rangeLength = end - start + 1;

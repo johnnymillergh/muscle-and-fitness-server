@@ -1,11 +1,13 @@
 package com.jmsoftware.maf.osscenter.write.service;
 
-import com.jmsoftware.maf.common.exception.BizException;
+import com.jmsoftware.maf.osscenter.write.entity.MergeResourceChunkPayload;
+import com.jmsoftware.maf.osscenter.write.entity.ObjectResponse;
+import com.jmsoftware.maf.osscenter.write.entity.UploadResourceChunkPayload;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.io.IOException;
 
 /**
  * <h1>WriteResourceService</h1>
@@ -16,13 +18,31 @@ import java.io.IOException;
  **/
 @Validated
 public interface WriteResourceService {
+    long MAX_CHUNK_NUMBER = 999;
+
     /**
      * Upload single resource string.
      *
      * @param multipartFile the multipart file
      * @return the string
-     * @throws IOException  the io exception
-     * @throws BizException the business exception
      */
-    String uploadSingleResource(@NotNull MultipartFile multipartFile) throws IOException, BizException;
+    ObjectResponse uploadSingleResource(@NotNull MultipartFile multipartFile);
+
+    /**
+     * Upload resource chunk string.
+     *
+     * @param multipartFile the multipart file
+     * @param payload       the payload
+     * @return the string
+     */
+    ObjectResponse uploadResourceChunk(@NotNull MultipartFile multipartFile,
+                                       @Valid @NotNull UploadResourceChunkPayload payload);
+
+    /**
+     * Merge resource chunk string.
+     *
+     * @param payload the payload
+     * @return the string
+     */
+    ObjectResponse mergeResourceChunk(@Valid @NotNull MergeResourceChunkPayload payload);
 }

@@ -10,7 +10,7 @@
     <parent>
         <groupId>com.jmsoftware.maf</groupId>
         <artifactId>muscle-and-fitness-server</artifactId>
-        <version>0.0.3</version>
+        <version>0.0.4</version>
     </parent>
 
     <!-- Scoped Dependencies Management -->
@@ -18,6 +18,10 @@
         <dependency>
             <groupId>com.jmsoftware.maf</groupId>
             <artifactId>common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jmsoftware.maf</groupId>
+            <artifactId>universal-ui</artifactId>
         </dependency>
 
         <!-- Spring Boot Dependencies -->

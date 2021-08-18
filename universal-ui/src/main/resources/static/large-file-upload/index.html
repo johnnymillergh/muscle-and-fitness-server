@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Large File Upload Demo</title>
+    <link href="../asset/favicon.ico" rel="icon">
+    <link href="index.css" rel="stylesheet">
+    <link href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" rel="stylesheet">
+</head>
+<body>
+<div id="app">
+    <div class="wrapper">
+        <div class="container">
+            <h1>Upload a file</h1>
+            <div class="upload-container">
+                <div class="border-container">
+                    <div class="icons fa-4x">
+                        <i class="fas fa-file-image" data-fa-transform="shrink-3 down-2 left-6 rotate--45"></i>
+                        <i class="fas fa-file-alt" data-fa-transform="shrink-2 up-4"></i>
+                        <i class="fas fa-file-pdf" data-fa-transform="shrink-3 down-2 right-6 rotate-45"></i>
+                    </div>
+                    <input @change="onFilePicked" id="file-input" type="file">
+                    <p>Drag and drop files here, or <a href="#" id="file-browser">browse</a> your computer.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="https://use.fontawesome.com/releases/v5.0.10/js/all.js"></script>
+<script src="index.js"></script>
+</html>

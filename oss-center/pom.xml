@@ -6,11 +6,11 @@
     <!-- Sub-module Basics -->
     <artifactId>oss-center</artifactId>
     <name>Muscle and Fitness Server :: OSS Center</name>
-    <description>Object Storage Service (OOS) Center for M&amp;F.</description>
+    <description>Object Storage Service (OSS) Center for M&amp;F.</description>
     <parent>
         <groupId>com.jmsoftware.maf</groupId>
         <artifactId>muscle-and-fitness-server</artifactId>
-        <version>0.0.3</version>
+        <version>0.0.4</version>
     </parent>
 
     <!-- Build Settings -->
@@ -33,7 +33,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.14.0</version>
+                <version>${maven-pmd-plugin.version}</version>
                 <configuration>
                     <sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
                     <targetJdk>${java.version}</targetJdk>

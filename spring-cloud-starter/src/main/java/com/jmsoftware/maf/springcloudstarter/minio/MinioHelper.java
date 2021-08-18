@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.springcloudstarter.helper;
+package com.jmsoftware.maf.springcloudstarter.minio;
 
 import cn.hutool.core.util.ObjectUtil;
 import io.minio.*;
@@ -10,17 +10,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -43,41 +42,41 @@ public class MinioHelper {
     private final MinioClient minioClient;
 
     @SneakyThrows
-    public boolean bucketExists(@NotBlank String bucketName) {
-        return this.minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());
+    public boolean bucketExists(@NotBlank String bucket) {
+        return this.minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucket).build());
     }
 
     @SneakyThrows
     @SuppressWarnings("UnusedReturnValue")
-    public boolean makeBucket(@NotBlank String bucketName) {
-        if (this.bucketExists(bucketName)) {
-            log.warn("The bucket named '{}' exists", bucketName);
+    public boolean makeBucket(@NotBlank String bucket) {
+        if (this.bucketExists(bucket)) {
+            log.warn("The bucket named '{}' exists", bucket);
             return false;
         }
-        this.minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
+        this.minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucket).build());
         return true;
     }
 
     @SneakyThrows
-    public ObjectWriteResponse put(@NotBlank String bucketName, @NotBlank String objectName,
+    public ObjectWriteResponse put(@NotBlank String bucket, @NotBlank String object,
                                    @NotNull MultipartFile multipartFile) {
         return this.minioClient.putObject(
                 PutObjectArgs.builder()
-                        .bucket(bucketName)
-                        .object(objectName)
+                        .bucket(bucket)
+                        .object(object)
                         .stream(multipartFile.getInputStream(), multipartFile.getSize(), -1)
                         .contentType(multipartFile.getContentType())
                         .build());
     }
 
     @SneakyThrows
-    public ObjectWriteResponse putObject(@NotBlank String bucketName, @NotBlank String objectName,
+    public ObjectWriteResponse putObject(@NotBlank String bucket, @NotBlank String object,
                                          @NotNull InputStream inputStream, @NotBlank String contentType) {
         return this.minioClient.putObject(
                 PutObjectArgs
                         .builder()
-                        .bucket(bucketName)
-                        .object(objectName)
+                        .bucket(bucket)
+                        .object(object)
                         .stream(inputStream, inputStream.available(), -1)
                         .contentType(contentType)
                         .build());
@@ -94,11 +93,11 @@ public class MinioHelper {
     }
 
     @SneakyThrows
-    public boolean removeBucket(@NotBlank String bucketName) {
-        if (!this.bucketExists(bucketName)) {
+    public boolean removeBucket(@NotBlank String bucket) {
+        if (!this.bucketExists(bucket)) {
             return false;
         }
-        val myObjects = this.listObjects(bucketName);
+        val myObjects = this.listObjects(bucket);
         for (val result : myObjects) {
             val item = result.get();
             // If item has files, fail to remove
@@ -107,17 +106,17 @@ public class MinioHelper {
             }
         }
         // If bucket is empty, then it can be removed
-        this.minioClient.removeBucket(RemoveBucketArgs.builder().bucket(bucketName).build());
-        return !this.bucketExists(bucketName);
+        this.minioClient.removeBucket(RemoveBucketArgs.builder().bucket(bucket).build());
+        return !this.bucketExists(bucket);
     }
 
     @SneakyThrows
-    public List<String> listObjectNames(@NotBlank String bucketName) {
+    public List<String> listObjectNames(@NotBlank String bucket) {
         val listObjectNames = new LinkedList<String>();
-        if (!this.bucketExists(bucketName)) {
+        if (!this.bucketExists(bucket)) {
             return listObjectNames;
         }
-        val myObjects = this.listObjects(bucketName);
+        val myObjects = this.listObjects(bucket);
         for (val result : myObjects) {
             val item = result.get();
             listObjectNames.add(item.objectName());
@@ -126,55 +125,55 @@ public class MinioHelper {
     }
 
     @SneakyThrows
-    public Iterable<Result<Item>> listObjects(@NotBlank String bucketName) {
-        if (!this.bucketExists(bucketName)) {
+    public Iterable<Result<Item>> listObjects(@NotBlank String bucket) {
+        if (!this.bucketExists(bucket)) {
             return null;
         }
-        return this.minioClient.listObjects(ListObjectsArgs.builder().bucket(bucketName).build());
+        return this.minioClient.listObjects(ListObjectsArgs.builder().bucket(bucket).build());
     }
 
     @SneakyThrows
-    public GetObjectResponse getObject(@NotBlank String bucketName, @NotBlank String objectName) {
-        if (!this.bucketExists(bucketName)) {
+    public GetObjectResponse getObject(@NotBlank String bucket, @NotBlank String object) {
+        if (!this.bucketExists(bucket)) {
             return null;
         }
-        val statObjectResponse = this.statObject(bucketName, objectName);
+        val statObjectResponse = this.statObject(bucket, object);
         if (ObjectUtil.isNull(statObjectResponse) || statObjectResponse.size() == 0) {
             return null;
         }
-        return this.minioClient.getObject(GetObjectArgs.builder().bucket(bucketName).object(objectName).build());
+        return this.minioClient.getObject(GetObjectArgs.builder().bucket(bucket).object(object).build());
     }
 
     @SneakyThrows
-    public GetObjectResponse getObject(@NotBlank String bucketName, @NotBlank String objectName, @Min(0L) long offset,
+    public GetObjectResponse getObject(@NotBlank String bucket, @NotBlank String object, @Min(0L) long offset,
                                        @NotNull @Min(0L) Long length) {
-        if (!this.bucketExists(bucketName)) {
+        if (!this.bucketExists(bucket)) {
             return null;
         }
-        val statObjectResponse = this.statObject(bucketName, objectName);
+        val statObjectResponse = this.statObject(bucket, object);
         if (ObjectUtil.isNull(statObjectResponse) || statObjectResponse.size() == 0) {
             return null;
         }
         return this.minioClient.getObject(
-                GetObjectArgs.builder().bucket(bucketName).object(objectName).offset(offset).length(length).build());
+                GetObjectArgs.builder().bucket(bucket).object(object).offset(offset).length(length).build());
     }
 
     @SneakyThrows
-    public boolean removeObject(String bucketName, String objectName) {
-        if (!this.bucketExists(bucketName)) {
+    public boolean removeObjects(String bucket, String object) {
+        if (!this.bucketExists(bucket)) {
             return false;
         }
-        this.minioClient.removeObject(RemoveObjectArgs.builder().bucket(bucketName).object(objectName).build());
+        this.minioClient.removeObject(RemoveObjectArgs.builder().bucket(bucket).object(object).build());
         return true;
     }
 
     @SneakyThrows
-    public List<String> removeObject(String bucketName, List<String> objectNames) {
+    public List<String> removeObjects(String bucket, List<String> objects) {
         val deleteErrorNameList = new LinkedList<String>();
-        if (this.bucketExists(bucketName)) {
-            val deleteObjectList = objectNames.stream().map(DeleteObject::new).collect(Collectors.toList());
+        if (this.bucketExists(bucket)) {
+            val deleteObjectList = objects.stream().map(DeleteObject::new).collect(Collectors.toList());
             val results = this.minioClient.removeObjects(
-                    RemoveObjectsArgs.builder().bucket(bucketName).objects(deleteObjectList).build());
+                    RemoveObjectsArgs.builder().bucket(bucket).objects(deleteObjectList).build());
             for (val result : results) {
                 val error = result.get();
                 deleteErrorNameList.add(error.objectName());
@@ -184,36 +183,47 @@ public class MinioHelper {
     }
 
     @SneakyThrows
-    public String getPresignedObjectUrl(@NotBlank String bucketName, @NotBlank String objectName,
+    public String getPresignedObjectUrl(@NotBlank String bucket, @NotBlank String object,
                                         @NotNull Method method,
                                         @NotNull @Min(1L) @Max(DEFAULT_EXPIRY_TIME) Integer expiration) {
-        if (!this.bucketExists(bucketName)) {
+        if (!this.bucketExists(bucket)) {
             return null;
         }
         return this.minioClient.getPresignedObjectUrl(
                 GetPresignedObjectUrlArgs
                         .builder()
-                        .bucket(bucketName)
-                        .object(objectName)
+                        .bucket(bucket)
+                        .object(object)
                         .method(method)
                         .expiry(expiration)
                         .build());
     }
 
     @SneakyThrows
-    public StatObjectResponse statObject(@NotBlank String bucketName, @NotBlank String objectName) {
-        if (!this.bucketExists(bucketName)) {
+    public StatObjectResponse statObject(@NotBlank String bucket, @NotBlank String object) {
+        if (!this.bucketExists(bucket)) {
             return null;
         }
-        return this.minioClient.statObject(StatObjectArgs.builder().bucket(bucketName).object(objectName).build());
+        return this.minioClient.statObject(StatObjectArgs.builder().bucket(bucket).object(object).build());
     }
 
     @SneakyThrows
-    public String getPresignedObjectUrl(@NotBlank String bucketName, @NotBlank String objectName) {
-        if (!this.bucketExists(bucketName)) {
+    public String getPresignedObjectUrl(@NotBlank String bucket, @NotBlank String object) {
+        if (!this.bucketExists(bucket)) {
             return null;
         }
         return this.minioClient.getPresignedObjectUrl(
-                GetPresignedObjectUrlArgs.builder().bucket(bucketName).object(objectName).build());
+                GetPresignedObjectUrlArgs.builder().bucket(bucket).object(object).build());
+    }
+
+    @SneakyThrows
+    public ObjectWriteResponse composeObject(@NotBlank String bucket, @NotBlank String object,
+                                             @NotEmpty List<ComposeSource> sources,
+                                             @Nullable Map<String, String> headers) {
+        if (!this.bucketExists(bucket)) {
+            return null;
+        }
+        return this.minioClient.composeObject(
+                ComposeObjectArgs.builder().bucket(bucket).object(object).sources(sources).headers(headers).build());
     }
 }

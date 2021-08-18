@@ -7,7 +7,7 @@
     <!-- Project Basics -->
     <groupId>com.jmsoftware.maf</groupId>
     <artifactId>muscle-and-fitness-server</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
     <name>Muscle and Fitness Server</name>
     <description>Muscle and Fitness Server (M&amp;F, maf), a Spring Cloud microservice based, back-end server for
         managing data of muscle and fitness.
@@ -37,6 +37,7 @@
         <java.version>11</java.version>
         <adoptopenjdk11.tag>x86_64-alpine-jre-11.0.10_9</adoptopenjdk11.tag>
         <jib-maven-plugin.version>3.1.1</jib-maven-plugin.version>
+        <maven-pmd-plugin.version>3.14.0</maven-pmd-plugin.version>
         <spring-cloud.version>2020.0.3</spring-cloud.version>
         <spring-content.version>1.0.0.M5</spring-content.version>
         <spring-boot-admin-starter-server.version>2.4.3</spring-boot-admin-starter-server.version>

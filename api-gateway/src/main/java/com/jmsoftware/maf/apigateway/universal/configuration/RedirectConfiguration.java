@@ -48,7 +48,7 @@ public class RedirectConfiguration {
     public RouterFunction<ServerResponse> favicon() {
         return route(GET("/favicon.ico"), request -> {
             log.info("Redirect to favicon.");
-            return ServerResponse.temporaryRedirect(URI.create("/static/icon/favicon.ico")).build();
+            return ServerResponse.temporaryRedirect(URI.create("/static/asset/favicon.ico")).build();
         });
     }
 }

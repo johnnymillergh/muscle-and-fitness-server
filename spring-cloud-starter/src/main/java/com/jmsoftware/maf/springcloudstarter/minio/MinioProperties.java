@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.springcloudstarter.configuration;
+package com.jmsoftware.maf.springcloudstarter.minio;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
