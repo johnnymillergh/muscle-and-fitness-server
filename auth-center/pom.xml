@@ -233,5 +233,13 @@
             <version>${poi.version}</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- OSS Dependencies -->
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+            <version>${minio.version}</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 </project>

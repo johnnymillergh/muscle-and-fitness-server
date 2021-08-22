@@ -45,3 +45,10 @@ logging:
 maf:
   configuration:
     swagger-enabled: true
+
+minio:
+  endpoint: http://localhost
+  port: 9900
+  access-key: maf_minio_root_user
+  secret-key: jm@minio
+  bucket-name: maf

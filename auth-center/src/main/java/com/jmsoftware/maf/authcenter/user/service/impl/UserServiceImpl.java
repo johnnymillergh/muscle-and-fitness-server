@@ -24,7 +24,7 @@ import com.jmsoftware.maf.common.domain.authcenter.user.*;
 import com.jmsoftware.maf.common.exception.SecurityException;
 import com.jmsoftware.maf.springcloudstarter.configuration.MafConfiguration;
 import com.jmsoftware.maf.springcloudstarter.configuration.MafProjectProperty;
-import com.jmsoftware.maf.springcloudstarter.util.UsernameUtil;
+import com.jmsoftware.maf.springcloudstarter.util.UserUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -131,7 +131,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public String getUserStatus(@Valid @NotNull GetUserStatusPayload payload) {
-        log.info("Current username: {}", UsernameUtil.getCurrentUsername());
+        log.info("Current username: {}", UserUtil.getCurrentUsername());
         return UserStatus.ofValue(payload.getStatus()).getDescription();
     }
 

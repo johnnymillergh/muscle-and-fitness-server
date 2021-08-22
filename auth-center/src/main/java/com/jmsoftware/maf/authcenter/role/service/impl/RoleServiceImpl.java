@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.validation.ValidationUtil;
 import cn.hutool.poi.excel.ExcelWriter;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -23,6 +24,7 @@ import com.jmsoftware.maf.springcloudstarter.configuration.MafProjectProperty;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ContentDisposition;
@@ -31,6 +33,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.lang.reflect.Field;
@@ -46,10 +49,10 @@ import java.util.stream.Collectors;
  * @author Johnny Miller (锺俊)
  * @date 2020-05-10 22:39:50
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
-    private static final String ROLE_TEMPLATE_EXCEL = "role-stat.xlsx";
     private final MafProjectProperty mafProjectProperty;
     private final MafConfiguration mafConfiguration;
     private final RedisTemplate<String, String> redisTemplate;
@@ -115,5 +118,26 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
                 .header(HttpHeaders.CONTENT_DISPOSITION,
                         ContentDisposition.builder("attachment").filename(ROLE_TEMPLATE_EXCEL).build().toString())
                 .body(outputStream -> excelWriter.flush(outputStream, true));
+    }
+
+    @Override
+    public boolean validateBeforeAddToBeanList(List<RoleExcelImport> beanList, RoleExcelImport bean, int index) {
+        val beanValidationResult = ValidationUtil.warpValidate(bean);
+        if (!beanValidationResult.isSuccess()) {
+            log.warn("Validation failed! beanList: {}, bean: {}, index: {}", beanList, bean, index);
+            val firstErrorMessage = CollUtil.getFirst(beanValidationResult.getErrorMessages());
+            throw new IllegalArgumentException(
+                    String.format("%s %s", firstErrorMessage.getPropertyName(), firstErrorMessage.getMessage()));
+        }
+        return true;
+    }
+
+    @Override
+    public void save(@NotEmpty List<@Valid RoleExcelImport> beanList) {
+        val roleList = beanList.stream().map(RoleExcelImport::transformTo).collect(Collectors.toList());
+        val saved = this.saveBatch(roleList);
+        if (!saved) {
+            log.error("Cannot save batch role list. {}", roleList);
+        }
     }
 }

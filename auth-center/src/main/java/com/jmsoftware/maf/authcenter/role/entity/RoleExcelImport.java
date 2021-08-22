@@ -39,4 +39,17 @@ public class RoleExcelImport {
         roleExcelImport.setDescription(role.getDescription());
         return roleExcelImport;
     }
+
+    /**
+     * Transform by role.
+     *
+     * @param roleExcelImport the role excel import
+     * @return the role excel import
+     */
+    public static Role transformTo(RoleExcelImport roleExcelImport) {
+        val role = new Role();
+        role.setName(roleExcelImport.getName());
+        role.setDescription(roleExcelImport.getDescription());
+        return role;
+    }
 }

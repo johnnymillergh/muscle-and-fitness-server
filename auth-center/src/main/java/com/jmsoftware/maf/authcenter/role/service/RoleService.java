@@ -1,6 +1,7 @@
 package com.jmsoftware.maf.authcenter.role.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.jmsoftware.maf.authcenter.role.entity.RoleExcelImport;
 import com.jmsoftware.maf.authcenter.role.entity.persistence.Role;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdResponse;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdSingleResponse;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -23,6 +25,8 @@ import java.util.List;
  */
 @Validated
 public interface RoleService extends IService<Role> {
+    String ROLE_TEMPLATE_EXCEL = "role-stat.xlsx";
+
     /**
      * Gets role list by user id.
      *
@@ -53,4 +57,21 @@ public interface RoleService extends IService<Role> {
      * @return the response entity
      */
     ResponseEntity<StreamingResponseBody> downloadRoleStat();
+
+    /**
+     * Validate before add to bean list boolean.
+     *
+     * @param beanList the bean list
+     * @param bean     the bean
+     * @param index    the index
+     * @return the boolean
+     */
+    boolean validateBeforeAddToBeanList(List<RoleExcelImport> beanList, RoleExcelImport bean, int index);
+
+    /**
+     * Save.
+     *
+     * @param beanList the bean list
+     */
+    void save(@NotEmpty List<@Valid RoleExcelImport> beanList);
 }
