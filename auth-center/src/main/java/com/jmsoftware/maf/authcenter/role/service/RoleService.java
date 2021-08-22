@@ -5,7 +5,9 @@ import com.jmsoftware.maf.authcenter.role.entity.persistence.Role;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdResponse;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdSingleResponse;
 import lombok.NonNull;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -44,4 +46,11 @@ public interface RoleService extends IService<Role> {
      * @return the boolean
      */
     boolean checkAdmin(@NotEmpty List<@NotNull Long> roleIdList);
+
+    /**
+     * Download role stat response entity.
+     *
+     * @return the response entity
+     */
+    ResponseEntity<StreamingResponseBody> downloadRoleStat();
 }
