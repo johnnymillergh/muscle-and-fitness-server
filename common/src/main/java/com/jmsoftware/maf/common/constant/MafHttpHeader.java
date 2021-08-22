@@ -10,9 +10,14 @@ import lombok.Getter;
 @Getter
 public enum MafHttpHeader {
     /**
+     * X-Id
+     */
+    X_ID("X-Id"),
+    /**
      * X-Username
      */
-    X_USERNAME("X-Username");
+    X_USERNAME("X-Username"),
+    ;
 
     private final String header;
 

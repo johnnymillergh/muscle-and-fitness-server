@@ -4,7 +4,7 @@ import cn.hutool.json.JSONUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jmsoftware.maf.springcloudstarter.util.RequestUtil;
-import com.jmsoftware.maf.springcloudstarter.util.UsernameUtil;
+import com.jmsoftware.maf.springcloudstarter.util.UserUtil;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.aspectj.lang.JoinPoint;
@@ -89,7 +89,7 @@ public class WebRequestLogAspect {
         assert attributes != null;
         val request = attributes.getRequest();
         log.info(BEFORE_TEMPLATE, request.getRequestURL().toString(), request.getMethod(),
-                 RequestUtil.getRequestIpAndPort(request), UsernameUtil.getCurrentUsername(),
+                 RequestUtil.getRequestIpAndPort(request), UserUtil.getCurrentUsername(),
                  joinPoint.getSignature().getDeclaringTypeName(), joinPoint.getSignature().getName(), LINE_SEPARATOR,
                  JSONUtil.toJsonPrettyStr(joinPoint.getArgs()));
     }
