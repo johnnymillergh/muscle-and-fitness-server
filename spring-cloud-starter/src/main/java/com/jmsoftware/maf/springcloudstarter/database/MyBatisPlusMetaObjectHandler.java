@@ -46,18 +46,26 @@ public class MyBatisPlusMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
         // 严格填充,只针对非主键的字段,只有该表注解了fill 并且 字段名和字段属性 能匹配到才会进行填充(null 值不填充)
-        log.info("Starting to insert fill metaObject: {}", metaObject.getOriginalObject());
+        if (log.isDebugEnabled()) {
+            log.debug("Starting to insert fill metaObject: {}", metaObject.getOriginalObject());
+        }
         this.strictInsertFill(metaObject, CREATED_BY_FIELD_NAME, Long.class, UserUtil.getCurrentId())
                 .strictInsertFill(metaObject, CREATED_TIME_FIELD_NAME, LocalDateTime.class, LocalDateTime.now())
                 .strictInsertFill(metaObject, DELETED_FIELD_NAME, Byte.class, DeletedField.NOT_DELETED.getValue());
-        log.info("Finished to insert fill metaObject: {}", metaObject.getOriginalObject());
+        if (log.isDebugEnabled()) {
+            log.debug("Finished to insert fill metaObject: {}", metaObject.getOriginalObject());
+        }
     }
 
     @Override
     public void updateFill(MetaObject metaObject) {
-        log.info("Starting to update fill metaObject: {}", metaObject.getOriginalObject());
+        if (log.isDebugEnabled()) {
+            log.debug("Starting to update fill metaObject: {}", metaObject.getOriginalObject());
+        }
         this.strictUpdateFill(metaObject, MODIFIED_BY_FIELD_NAME, Long.class, UserUtil.getCurrentId())
                 .strictUpdateFill(metaObject, MODIFIED_TIME_FIELD_NAME, LocalDateTime.class, LocalDateTime.now());
-        log.info("Finished to update fill metaObject: {}", metaObject.getOriginalObject());
+        if (log.isDebugEnabled()) {
+            log.debug("Finished to update fill metaObject: {}", metaObject.getOriginalObject());
+        }
     }
 }

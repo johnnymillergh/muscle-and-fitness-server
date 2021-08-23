@@ -31,6 +31,7 @@ import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import javax.validation.Valid;
@@ -133,6 +134,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
 
     @Override
+    @Transactional(rollbackFor = Throwable.class)
     public void save(@NotEmpty List<@Valid RoleExcelImport> beanList) {
         val roleList = beanList.stream().map(RoleExcelImport::transformTo).collect(Collectors.toList());
         val saved = this.saveBatch(roleList);
