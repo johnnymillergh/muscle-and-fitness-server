@@ -122,7 +122,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
 
     @Override
-    public boolean validateBeforeAddToBeanList(List<RoleExcelImport> beanList, RoleExcelImport bean, int index) {
+    public boolean validateBeforeAddToBeanList(List<RoleExcelImport> beanList, RoleExcelImport bean, int index) throws IllegalArgumentException {
         val beanValidationResult = ValidationUtil.warpValidate(bean);
         if (!beanValidationResult.isSuccess()) {
             log.warn("Validation failed! beanList: {}, bean: {}, index: {}", beanList, bean, index);

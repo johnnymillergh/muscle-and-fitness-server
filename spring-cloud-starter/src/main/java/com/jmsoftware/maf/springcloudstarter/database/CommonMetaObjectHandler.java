@@ -1,5 +1,6 @@
 package com.jmsoftware.maf.springcloudstarter.database;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.jmsoftware.maf.common.domain.DeletedField;
 import com.jmsoftware.maf.springcloudstarter.util.UserUtil;
@@ -9,16 +10,26 @@ import org.apache.ibatis.reflection.MetaObject;
 import java.time.LocalDateTime;
 
 /**
- * <h1>MyBatisPlusConfiguration</h1>
- * <p>
- * Change description here.
- * <p>
+ * <h1>CommonMetaObjectHandler</h1>
+ * <p><strong>CommonMetaObjectHandler</strong> will inject these fields automatically when executing <strong>INSERT</strong> or
+ * <strong>UPDATE</strong>.</p>
+ * <p>This class is cooperating with the annotation <code>@TableField</code>. So the persistence Java class must be
+ * annotated by <code>@TableField(value = COL_CREATED_BY, fill = INSERT)</code> or <code>@TableField(value =
+ * COL_MODIFIED_BY, fill = UPDATE)</code>.</p>
+ * <figure><table>
+ * <thead>
+ * <tr><th>MySQL Field Name</th><th>Field Name Java</th></tr></thead>
+ * <tbody><tr><td>created_by</td><td>createdBy</td></tr><tr><td>created_time</td><td>createdTime</td></tr><tr><td
+ * >modified_by</td><td>modifiedBy</td></tr><tr><td>modified_time</td><td>modifiedTime</td></tr><tr><td>deleted</td
+ * ><td>deleted</td></tr></tbody>
+ * </table></figure>
+ * <p>&nbsp;</p>
  *
- * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
- * @date 2019-05-02 11:57
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 8/23/2021 10:43 AM
+ * @see TableField
  **/
 @Slf4j
-public class MyBatisPlusMetaObjectHandler implements MetaObjectHandler {
+public class CommonMetaObjectHandler implements MetaObjectHandler {
     /**
      * The Java persistence object field name: createdBy
      */
