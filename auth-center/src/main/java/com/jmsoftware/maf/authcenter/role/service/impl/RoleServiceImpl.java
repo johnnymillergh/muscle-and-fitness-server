@@ -5,36 +5,32 @@ import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.validation.ValidationUtil;
-import cn.hutool.poi.excel.ExcelWriter;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jmsoftware.maf.authcenter.role.entity.RoleExcelImport;
+import com.jmsoftware.maf.authcenter.role.entity.RoleExcelBean;
 import com.jmsoftware.maf.authcenter.role.entity.constant.RoleRedisKey;
 import com.jmsoftware.maf.authcenter.role.entity.persistence.Role;
 import com.jmsoftware.maf.authcenter.role.mapper.RoleMapper;
 import com.jmsoftware.maf.authcenter.role.service.RoleService;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdResponse;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdSingleResponse;
-import com.jmsoftware.maf.springcloudstarter.annotation.ExcelColumn;
 import com.jmsoftware.maf.springcloudstarter.configuration.MafConfiguration;
 import com.jmsoftware.maf.springcloudstarter.configuration.MafProjectProperty;
-import lombok.*;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.ContentDisposition;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.lang.reflect.Field;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -95,31 +91,18 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
 
     @Override
-    public ResponseEntity<StreamingResponseBody> downloadRoleStat() {
+    public List<RoleExcelBean> getListForExporting() {
         val rolePage = new Page<Role>(1, 500);
         this.page(rolePage);
-        val roleExcelImportList = rolePage
+        return rolePage
                 .getRecords()
                 .stream()
-                .map(RoleExcelImport::transformBy)
+                .map(RoleExcelBean::transformBy)
                 .collect(Collectors.toList());
-        @Cleanup val excelWriter = new ExcelWriter(true);
-        Field[] declaredFields = RoleExcelImport.class.getDeclaredFields();
-        for (Field declaredField : declaredFields) {
-            ExcelColumn annotation = declaredField.getAnnotation(ExcelColumn.class);
-            excelWriter.addHeaderAlias(declaredField.getName(), annotation.name());
-        }
-        excelWriter.write(roleExcelImportList);
-        excelWriter.setFreezePane(1);
-        excelWriter.autoSizeColumnAll();
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION,
-                        ContentDisposition.builder("attachment").filename(ROLE_TEMPLATE_EXCEL).build().toString())
-                .body(outputStream -> excelWriter.flush(outputStream, true));
     }
 
     @Override
-    public void validateBeforeAddToBeanList(List<RoleExcelImport> beanList, RoleExcelImport bean, int index) throws IllegalArgumentException {
+    public void validateBeforeAddToBeanList(List<RoleExcelBean> beanList, RoleExcelBean bean, int index) throws IllegalArgumentException {
         val beanValidationResult = ValidationUtil.warpValidate(bean);
         if (!beanValidationResult.isSuccess()) {
             log.warn("Validation failed! beanList: {}, bean: {}, index: {}", beanList, bean, index);
@@ -131,8 +114,8 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Override
     @Transactional(rollbackFor = Throwable.class)
-    public void save(@NotEmpty List<@Valid RoleExcelImport> beanList) {
-        val roleList = beanList.stream().map(RoleExcelImport::transformTo).collect(Collectors.toList());
+    public void save(@NotEmpty List<@Valid RoleExcelBean> beanList) {
+        val roleList = beanList.stream().map(RoleExcelBean::transformTo).collect(Collectors.toList());
         val saved = this.saveBatch(roleList);
         if (!saved) {
             log.error("Cannot save batch role list. {}", roleList);

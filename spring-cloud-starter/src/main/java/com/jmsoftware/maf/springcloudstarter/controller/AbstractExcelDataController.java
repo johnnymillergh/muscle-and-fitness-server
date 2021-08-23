@@ -1,14 +1,18 @@
 package com.jmsoftware.maf.springcloudstarter.controller;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.poi.excel.ExcelReader;
+import cn.hutool.poi.excel.ExcelWriter;
 import cn.hutool.poi.excel.WorkbookUtil;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.jmsoftware.maf.common.bean.ExcelImportResult;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.springcloudstarter.annotation.ExcelColumn;
 import com.jmsoftware.maf.springcloudstarter.configuration.ExcelImportConfiguration;
 import com.jmsoftware.maf.springcloudstarter.minio.MinioHelper;
+import com.jmsoftware.maf.springcloudstarter.util.CaseConversionUtil;
 import io.swagger.annotations.ApiOperation;
 import lombok.Cleanup;
 import lombok.NonNull;
@@ -16,26 +20,31 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import javax.annotation.Resource;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
+import java.util.Map;
 
 /**
- * <h1>AbstractExcelImportController</h1>
+ * <h1>AbstractExcelDataController</h1>
  * <p>Abstract controller for excel data import.</p>
  * <h2>Features</h2>
  * <ol>
  * <li>Row validation. If not valid, will generate error message at the last cell.</li>
- * <li>Generalization support. <code>AbstractExcelImportController&lt;ExcelImportBeanType&gt;</code></li>
+ * <li>Generalization support. <code>AbstractExcelDataController&lt;ExcelImportBeanType&gt;</code></li>
  * <li>Using annotation <code>@ExcelColumn</code> for fields can be generating Excel easier than ever.</li>
  * <li>Support partial data import.</li>
  *
@@ -78,7 +87,7 @@ import java.util.List;
  */
 @Slf4j
 @SuppressWarnings({"unused"})
-public abstract class AbstractExcelImportController<T> {
+public abstract class AbstractExcelDataController<T> {
     protected final ThreadLocal<List<T>> beanList = ThreadLocal.withInitial(() -> null);
     protected final ThreadLocal<Workbook> workbook = ThreadLocal.withInitial(() -> null);
     protected final ThreadLocal<String> excelFilePath = ThreadLocal.withInitial(() -> null);
@@ -86,6 +95,25 @@ public abstract class AbstractExcelImportController<T> {
     protected final ThreadLocal<List<String>> errorMessageList = ThreadLocal.withInitial(Lists::newLinkedList);
     protected final ThreadLocal<List<String>> returnMessageList = ThreadLocal.withInitial(Lists::newLinkedList);
     protected final ThreadLocal<String> fileName = ThreadLocal.withInitial(() -> null);
+
+    /**
+     * <figure><table>
+     * <thead>
+     * <tr><th>Key</th><th>Value</th></tr></thead>
+     * <tbody><tr><td>Excel Column Name</td><td>excelColumnName</td></tr><tr><td>Title
+     * Name</td><td>titleName</td></tr></tbody>
+     * </table></figure>
+     */
+    protected final Map<String, String> importingFieldAliasMap = Maps.newHashMap();
+    /**
+     * <figure><table>
+     * <thead>
+     * <tr><th>Key</th><th>Value</th></tr></thead>
+     * <tbody><tr><td>excelColumnName</td><td>Excel Column Name</td></tr><tr><td>titleName</td><td>Title
+     * Name</td></tr></tbody>
+     * </table></figure>
+     */
+    protected final Map<String, String> exportingFieldAliasMap = Maps.newHashMap();
 
     @Resource
     protected ExcelImportConfiguration excelImportConfiguration;
@@ -95,17 +123,11 @@ public abstract class AbstractExcelImportController<T> {
      * Deny all data when data validation fails. Default value is true.
      */
     private boolean denyAll = true;
-    /**
-     * The class of ExcelImportBeanType
-     */
-    private Class<T> bindClass;
-    /**
-     * The field names arrays of the ExcelImportBeanType
-     */
+    private Class<T> beanClass;
     private String[] fieldNameArray;
 
     /**
-     * <p>Constructor of AbstractExcelImportController</p>
+     * <p>Constructor of AbstractExcelDataController</p>
      * <ol>
      * <li><p>Init context</p>
      * </li>
@@ -115,7 +137,7 @@ public abstract class AbstractExcelImportController<T> {
      * </li>
      * </ol>
      */
-    protected AbstractExcelImportController() {
+    protected AbstractExcelDataController() {
         this.initContext();
     }
 
@@ -129,26 +151,32 @@ public abstract class AbstractExcelImportController<T> {
      * </ol>
      */
     protected void initContext() {
-        this.bindClass = this.getGenericClass();
-        val declaredFields = this.bindClass.getDeclaredFields();
+        this.beanClass = this.getGenericClass();
+        val declaredFields = this.beanClass.getDeclaredFields();
         val fieldNames = new String[declaredFields.length];
         for (var index = 0; index < declaredFields.length; index++) {
             val declaredField = declaredFields[index];
             fieldNames[index] = declaredField.getName();
+            final ExcelColumn excelColumn = declaredField.getAnnotation(ExcelColumn.class);
+            var columnName = excelColumn.name();
+            if (StrUtil.isBlank(columnName)) {
+                columnName = CaseConversionUtil.convertToStartCase(StrUtil.toSymbolCase(declaredField.getName(), ' '));
+            }
+            this.importingFieldAliasMap.put(columnName, declaredField.getName());
+            this.exportingFieldAliasMap.put(declaredField.getName(), columnName);
         }
-        log.info("Generated {} field name array by reflection, fieldNames: {}", this.bindClass.getSimpleName(),
-                 fieldNames);
         this.fieldNameArray = fieldNames;
+        log.info("Generated {} field name array by reflection, fieldNames: {}", this.beanClass.getSimpleName(),
+                 this.fieldNameArray);
     }
 
     /**
      * Init locale context.
      */
     private void initLocaleContext() {
-        this.beanList.set(Lists.newLinkedList());
+        this.exceptionOccurred.set(false);
         this.errorMessageList.set(Lists.newLinkedList());
         this.returnMessageList.set(Lists.newLinkedList());
-        this.exceptionOccurred.set(false);
     }
 
     /**
@@ -209,36 +237,71 @@ public abstract class AbstractExcelImportController<T> {
     }
 
     /**
+     * Gets template file name.
+     *
+     * @return the template file name
+     */
+    protected abstract String getTemplateFileName();
+
+    /**
+     * Gets list for exporting.
+     *
+     * @return the list for exporting
+     */
+    protected abstract List<T> getListForExporting();
+
+    @GetMapping("/stat/excel-template")
+    @ApiOperation(value = "Download template excel file", notes = "Download template excel file")
+    public ResponseEntity<StreamingResponseBody> downloadRoleStat() {
+        @Cleanup val excelWriter = new ExcelWriter(true);
+        excelWriter.setHeaderAlias(this.exportingFieldAliasMap);
+        excelWriter.write(this.getListForExporting());
+        excelWriter.setFreezePane(1);
+        excelWriter.autoSizeColumnAll();
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        ContentDisposition.builder("attachment").filename(
+                                this.getTemplateFileName()).build().toString())
+                .body(outputStream -> excelWriter.flush(outputStream, true));
+    }
+
+    /**
      * Upload excel file. Any exceptions happened in any lifecycle will not interrupt the whole process.
      *
      * @param multipartFile the multipart file
      * @return the response body bean
      */
-    @PostMapping(value = "/upload")
+    @PostMapping(value = "/upload/excel")
     @ApiOperation(value = "Upload Excel file", notes = "Upload and import excel data")
     public ResponseBodyBean<ExcelImportResult> upload(@RequestParam("file") MultipartFile multipartFile) {
         this.beforeExecute();
         this.initLocaleContext();
-        try {
-            this.setReturnMessageList("Starting - Read Excel file…");
-            this.workbook.set(this.readFile(multipartFile));
-            this.setReturnMessageList("Finished - Read Excel file");
-        } catch (IOException e) {
-            log.error("Exception occurred when reading Excel file!", e);
-            this.setErrorMessage(
-                    String.format("Exception occurred when reading Excel file! Exception message: %s", e.getMessage()));
-        }
-        try {
-            this.setReturnMessageList("Starting - Validate and bind data…");
-            this.bindData(this.workbook.get());
-            this.setReturnMessageList("Finished - Validate and bind data");
-        } catch (Exception e) {
-            log.error("Exception occurred when validating and binding data!", e);
-            this.setErrorMessage(
-                    String.format("Exception occurred when validating and binding data! Exception message: %s",
-                                  e.getMessage()));
-        }
+        this.readMultipartFile(multipartFile);
+        this.bindData();
         this.beforeDatabaseOperation(this.beanList.get());
+        this.exeDatabaseOperation();
+        this.handlePreviousException();
+        val excelImportResult = this.buildResult();
+        this.afterExecute();
+        this.destroyLocaleContext();
+        return ResponseBodyBean.ofSuccess(excelImportResult);
+    }
+
+    private ExcelImportResult buildResult() {
+        val excelImportResult = new ExcelImportResult();
+        excelImportResult.setMessageList(this.returnMessageList.get());
+        excelImportResult.setExcelFilePath(this.excelFilePath.get());
+        return excelImportResult;
+    }
+
+    private void handlePreviousException() {
+        if (Boolean.TRUE.equals(this.exceptionOccurred.get())) {
+            this.onExceptionOccurred();
+            this.uploadWorkbook();
+        }
+    }
+
+    private void exeDatabaseOperation() {
         // if no error message (errorMessageList if empty) or not denyAll, then execute DB operation
         if (CollectionUtil.isEmpty(this.errorMessageList.get()) || !this.denyAll) {
             if (CollectionUtil.isNotEmpty(this.beanList.get())) {
@@ -262,16 +325,31 @@ public abstract class AbstractExcelImportController<T> {
         } else {
             this.setReturnMessageList("[Warning] Found not valid data. Data import all failed!");
         }
-        if (Boolean.TRUE.equals(this.exceptionOccurred.get())) {
-            this.onExceptionOccurred();
-            this.uploadWorkbook();
+    }
+
+    private void bindData() {
+        try {
+            this.setReturnMessageList("Starting - Validate and bind data…");
+            this.bindData(this.workbook.get());
+            this.setReturnMessageList("Finished - Validate and bind data");
+        } catch (Exception e) {
+            log.error("Exception occurred when validating and binding data!", e);
+            this.setErrorMessage(
+                    String.format("Exception occurred when validating and binding data! Exception message: %s",
+                                  e.getMessage()));
         }
-        val excelImportResult = new ExcelImportResult();
-        excelImportResult.setMessageList(this.returnMessageList.get());
-        excelImportResult.setExcelFilePath(this.excelFilePath.get());
-        this.afterExecute();
-        this.destroyLocaleContext();
-        return ResponseBodyBean.ofSuccess(excelImportResult);
+    }
+
+    private void readMultipartFile(MultipartFile multipartFile) {
+        try {
+            this.setReturnMessageList("Starting - Read Excel file…");
+            this.workbook.set(this.readFile(multipartFile));
+            this.setReturnMessageList("Finished - Read Excel file");
+        } catch (IOException e) {
+            log.error("Exception occurred when reading Excel file!", e);
+            this.setErrorMessage(
+                    String.format("Exception occurred when reading Excel file! Exception message: %s", e.getMessage()));
+        }
     }
 
     /**
@@ -346,12 +424,9 @@ public abstract class AbstractExcelImportController<T> {
         for (int index = 0; index < workbook.getNumberOfSheets(); index++) {
             val sheet = workbook.getSheetAt(index);
             val excelReader = new ExcelReader(workbook, index);
-            Field[] declaredFields = this.bindClass.getDeclaredFields();
-            for (Field declaredField : declaredFields) {
-                ExcelColumn annotation = declaredField.getAnnotation(ExcelColumn.class);
-                excelReader.addHeaderAlias(annotation.name(), declaredField.getName());
-            }
-            this.beanList.set(excelReader.readAll(this.bindClass));
+            excelReader.setHeaderAlias(this.importingFieldAliasMap);
+            this.beanList.set(excelReader.readAll(this.beanClass));
+            // The reason why validating bean by row is to generate error message behind the last column
             for (var beanIndex = 0; beanIndex < this.beanList.get().size(); beanIndex++) {
                 this.validateBeanByRow(index, beanIndex);
             }

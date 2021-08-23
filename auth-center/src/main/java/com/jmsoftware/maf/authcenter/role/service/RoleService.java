@@ -1,14 +1,12 @@
 package com.jmsoftware.maf.authcenter.role.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.jmsoftware.maf.authcenter.role.entity.RoleExcelImport;
+import com.jmsoftware.maf.authcenter.role.entity.RoleExcelBean;
 import com.jmsoftware.maf.authcenter.role.entity.persistence.Role;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdResponse;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdSingleResponse;
 import lombok.NonNull;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
@@ -52,11 +50,11 @@ public interface RoleService extends IService<Role> {
     boolean checkAdmin(@NotEmpty List<@NotNull Long> roleIdList);
 
     /**
-     * Download role stat response entity.
+     * Gets list for exporting.
      *
-     * @return the response entity
+     * @return the list for exporting
      */
-    ResponseEntity<StreamingResponseBody> downloadRoleStat();
+    List<RoleExcelBean> getListForExporting();
 
     /**
      * Validate before add to bean list boolean.
@@ -66,12 +64,12 @@ public interface RoleService extends IService<Role> {
      * @param index    the index
      * @throws IllegalArgumentException the illegal argument exception
      */
-    void validateBeforeAddToBeanList(List<RoleExcelImport> beanList, RoleExcelImport bean, int index) throws IllegalArgumentException;
+    void validateBeforeAddToBeanList(List<RoleExcelBean> beanList, RoleExcelBean bean, int index) throws IllegalArgumentException;
 
     /**
      * Save.
      *
      * @param beanList the bean list
      */
-    void save(@NotEmpty List<@Valid RoleExcelImport> beanList);
+    void save(@NotEmpty List<@Valid RoleExcelBean> beanList);
 }

@@ -8,12 +8,12 @@ import lombok.val;
 import javax.validation.constraints.NotBlank;
 
 /**
- * Description: RoleExcelImport, change description here.
+ * Description: RoleExcelBean, change description here.
  *
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 8/22/2021 10:52 AM
  **/
 @Data
-public class RoleExcelImport {
+public class RoleExcelBean {
     /**
      * Role name
      */
@@ -33,8 +33,8 @@ public class RoleExcelImport {
      * @param role the role
      * @return the role excel import
      */
-    public static RoleExcelImport transformBy(Role role) {
-        val roleExcelImport = new RoleExcelImport();
+    public static RoleExcelBean transformBy(Role role) {
+        val roleExcelImport = new RoleExcelBean();
         roleExcelImport.setName(role.getName());
         roleExcelImport.setDescription(role.getDescription());
         return roleExcelImport;
@@ -43,13 +43,13 @@ public class RoleExcelImport {
     /**
      * Transform by role.
      *
-     * @param roleExcelImport the role excel import
+     * @param roleExcelBean the role excel import
      * @return the role excel import
      */
-    public static Role transformTo(RoleExcelImport roleExcelImport) {
+    public static Role transformTo(RoleExcelBean roleExcelBean) {
         val role = new Role();
-        role.setName(roleExcelImport.getName());
-        role.setDescription(roleExcelImport.getDescription());
+        role.setName(roleExcelBean.getName());
+        role.setDescription(roleExcelBean.getDescription());
         return role;
     }
 }
