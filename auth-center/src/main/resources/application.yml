@@ -157,9 +157,6 @@ mybatis-plus:
 
 logging:
   config: classpath:logback-configuration/logback-${spring.profiles.active}.xml
-  level:
-    # Configure logging level for SFTP/JSCH
-    com.jcraft.jsch: INFO
 
 maf:
   project-property:

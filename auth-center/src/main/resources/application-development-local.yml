@@ -37,10 +37,10 @@ redis:
       port: 6380
       password: maf@redis
 
-    # Configure logging level for the environment
 logging:
   level:
-    com.baomidou: INFO
+    com.baomidou: DEBUG
+    com.jmsoftware: DEBUG
 
 maf:
   configuration:
