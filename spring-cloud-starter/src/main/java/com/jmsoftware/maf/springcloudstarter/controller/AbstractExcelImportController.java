@@ -182,10 +182,9 @@ public abstract class AbstractExcelImportController<T> {
      * @param beanList the bean list that contains validated bean
      * @param bean     the bean that needs to be validated
      * @param index    the index that is the reference to the row number of the Excel file
-     * @return the boolean
      * @throws IllegalArgumentException the illegal argument exception
      */
-    protected abstract boolean validateBeforeAddToBeanList(List<T> beanList, T bean, int index) throws IllegalArgumentException;
+    protected abstract void validateBeforeAddToBeanList(List<T> beanList, T bean, int index) throws IllegalArgumentException;
 
     /**
      * Before database operation.
@@ -350,7 +349,7 @@ public abstract class AbstractExcelImportController<T> {
             Field[] declaredFields = this.bindClass.getDeclaredFields();
             for (Field declaredField : declaredFields) {
                 ExcelColumn annotation = declaredField.getAnnotation(ExcelColumn.class);
-                excelReader.addHeaderAlias(annotation.description(), declaredField.getName());
+                excelReader.addHeaderAlias(annotation.name(), declaredField.getName());
             }
             this.beanList.set(excelReader.readAll(this.bindClass));
             for (var beanIndex = 0; beanIndex < this.beanList.get().size(); beanIndex++) {

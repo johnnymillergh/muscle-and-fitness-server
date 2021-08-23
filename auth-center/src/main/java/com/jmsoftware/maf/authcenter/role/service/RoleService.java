@@ -64,10 +64,9 @@ public interface RoleService extends IService<Role> {
      * @param beanList the bean list
      * @param bean     the bean
      * @param index    the index
-     * @return the boolean
      * @throws IllegalArgumentException the illegal argument exception
      */
-    boolean validateBeforeAddToBeanList(List<RoleExcelImport> beanList, RoleExcelImport bean, int index) throws IllegalArgumentException;
+    void validateBeforeAddToBeanList(List<RoleExcelImport> beanList, RoleExcelImport bean, int index) throws IllegalArgumentException;
 
     /**
      * Save.

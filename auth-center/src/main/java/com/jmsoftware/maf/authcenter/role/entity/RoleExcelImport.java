@@ -18,13 +18,13 @@ public class RoleExcelImport {
      * Role name
      */
     @NotBlank
-    @ExcelColumn(description = "Name")
+    @ExcelColumn(name = "Name")
     private String name;
     /**
      * Role description
      */
     @NotBlank
-    @ExcelColumn(description = "Description")
+    @ExcelColumn(name = "Description")
     private String description;
 
     /**

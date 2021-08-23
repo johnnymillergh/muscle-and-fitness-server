@@ -49,7 +49,7 @@ public class RoleController extends AbstractExcelImportController<RoleExcelImpor
     }
 
     @Override
-    protected boolean validateBeforeAddToBeanList(List<RoleExcelImport> beanList, RoleExcelImport bean, int index) throws IllegalArgumentException {
-        return this.roleService.validateBeforeAddToBeanList(beanList, bean, index);
+    protected void validateBeforeAddToBeanList(List<RoleExcelImport> beanList, RoleExcelImport bean, int index) throws IllegalArgumentException {
+        this.roleService.validateBeforeAddToBeanList(beanList, bean, index);
     }
 }

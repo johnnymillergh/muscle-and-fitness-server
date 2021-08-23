@@ -107,7 +107,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         Field[] declaredFields = RoleExcelImport.class.getDeclaredFields();
         for (Field declaredField : declaredFields) {
             ExcelColumn annotation = declaredField.getAnnotation(ExcelColumn.class);
-            excelWriter.addHeaderAlias(declaredField.getName(), annotation.description());
+            excelWriter.addHeaderAlias(declaredField.getName(), annotation.name());
         }
         excelWriter.write(roleExcelImportList);
         excelWriter.setFreezePane(1);
@@ -119,7 +119,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
 
     @Override
-    public boolean validateBeforeAddToBeanList(List<RoleExcelImport> beanList, RoleExcelImport bean, int index) throws IllegalArgumentException {
+    public void validateBeforeAddToBeanList(List<RoleExcelImport> beanList, RoleExcelImport bean, int index) throws IllegalArgumentException {
         val beanValidationResult = ValidationUtil.warpValidate(bean);
         if (!beanValidationResult.isSuccess()) {
             log.warn("Validation failed! beanList: {}, bean: {}, index: {}", beanList, bean, index);
@@ -127,7 +127,6 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             throw new IllegalArgumentException(
                     String.format("%s %s", firstErrorMessage.getPropertyName(), firstErrorMessage.getMessage()));
         }
-        return true;
     }
 
     @Override
