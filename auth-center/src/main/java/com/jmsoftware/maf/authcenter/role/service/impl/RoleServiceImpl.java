@@ -21,11 +21,8 @@ import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdSingl
 import com.jmsoftware.maf.springcloudstarter.annotation.ExcelColumn;
 import com.jmsoftware.maf.springcloudstarter.configuration.MafConfiguration;
 import com.jmsoftware.maf.springcloudstarter.configuration.MafProjectProperty;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
@@ -106,7 +103,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
                 .stream()
                 .map(RoleExcelImport::transformBy)
                 .collect(Collectors.toList());
-        val excelWriter = new ExcelWriter(true);
+        @Cleanup val excelWriter = new ExcelWriter(true);
         Field[] declaredFields = RoleExcelImport.class.getDeclaredFields();
         for (Field declaredField : declaredFields) {
             ExcelColumn annotation = declaredField.getAnnotation(ExcelColumn.class);
