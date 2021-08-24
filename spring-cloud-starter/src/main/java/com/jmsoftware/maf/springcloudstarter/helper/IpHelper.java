@@ -43,7 +43,7 @@ public class IpHelper implements ApplicationListener<WebServerInitializedEvent> 
     public String getPublicIp() {
         val jointProfiles = String.join(",", this.environment.getActiveProfiles());
         if (StrUtil.containsIgnoreCase(jointProfiles, DEVELOPMENT_ENVIRONMENT)) {
-            log.debug("Current active profiles for environment contains: {}. U", DEVELOPMENT_ENVIRONMENT);
+            log.debug("Current active profiles for environment contains: {}", DEVELOPMENT_ENVIRONMENT);
             return this.getInternetIp();
         }
         // An API provided by https://whatismyipaddress.com/api
