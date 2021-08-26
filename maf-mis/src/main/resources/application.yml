@@ -46,9 +46,7 @@ spring:
     dynamic:
       primary: master_1
       druid:
-        initial-size: 5
-        max-active: 20
-        min-idle: 2
+        # connection pool size will be determined by DruidDataSourceCreatorPostProcessor.java
         max-wait: 60000
         min-evictable-idle-time-millis: 600000
         max-evictable-idle-time-millis: 900000
