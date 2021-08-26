@@ -1,4 +1,30 @@
-# [0.0.4](https://github.com/johnnymillergh/muscle-and-fitness-server/compare/0.0.3...0.0.4)  (2021-08-18)
+# [0.0.5](https://github.com/johnnymillergh/muscle-and-fitness-server/compare/0.0.4...0.0.5) (2021-08-26)
+
+
+### Features
+
+* **$auth-center:** download and export role info ([b6640ce](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/b6640cec6d45e826bb536e9293ca6cfaa790bb6c))
+* **$auth-center:** import role data from Excel ([3468082](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/3468082f45d9d2dc7c18fb39f90fa7a13f9dbde4))
+
+
+### Performance Improvements
+
+* **$api-gateway:** parse user's ID from JWT ([a70434f](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/a70434f3ad98932b457be926571202c968b438f0))
+* **$Druid:** dynamic connection pool size ([ea37259](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/ea372596670366db47aec8439c1b12487e68ed30))
+* **$Druid:** set connection pool size equal to 2*processors ([a654323](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/a654323b432cc1f7858a8bc07b568f2719642e4f))
+* **$OSS:** transform IO by NIO ([bce0cf4](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/bce0cf4df5fa607996c8ef16808021f4ce635655))
+* **$starter:** refine Excel data abstract class ([9d5de27](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/9d5de27077fba78014c458ebb4fa30b8c422a5b6))
+* **$starter:** simplify AbstractExcelImportController.java ([651615c](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/651615c08c0e07aff27bf955ce3956794602b933))
+
+
+### BREAKING CHANGES
+
+* **$Druid:** set connection pool size equal to 2*processors
+* **$Druid:** dynamic connection pool size, set by CPU core count
+
+
+
+# [0.0.4](https://github.com/johnnymillergh/muscle-and-fitness-server/compare/0.0.3...0.0.4) (2021-08-18)
 
 
 ### Features
