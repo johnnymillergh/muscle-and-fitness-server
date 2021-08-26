@@ -39,9 +39,9 @@ Here is the highlights of **Muscle and Fitness Server**:
 
 4. Secured API. [RBAC](https://en.wikipedia.org/wiki/Role-based_access_control) by API gateway and Auth Center. JWT authentication, and RBAC authorization.
 
-5. [MySQL Replication for High Availability](https://severalnines.com/resources/database-management-tutorials/mysql-replication-high-availability-tutorial). Multi data source. [Dynamic SQL read-write isolation](https://baomidou.com/guide/dynamic-datasource.html). MyBatis-Plus is the integrated ORM library.
+5. [MySQL Replication for High Availability](https://severalnines.com/resources/database-management-tutorials/mysql-replication-high-availability-tutorial). Multi data source. [Dynamic SQL read-write isolation](https://baomidou.com/guide/dynamic-datasource.html). [MyBatis-Plus](https://github.com/baomidou/mybatis-plus) is the integrated ORM library. [Druid](https://github.com/alibaba/druid) is the database connection pool. Dynamically enhance connection pool size by CPU count (logical processor count). Read more at [How to Find the Optimal Database Connection Pool Size](https://wiki.postgresql.org/wiki/Number_Of_Database_Connections#How_to_Find_the_Optimal_Database_Connection_Pool_Size), [Sizing the Connection Pool](https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-usagenotes-j2ee-concepts-connection-pooling.html#idm46216069663472).
 
-6. Redis 6.x support. [Master-slave replication for high availability](https://redis.io/topics/replication). Redis cluster
+6. Redis 6.x support. [Master-slave replication for high availability](https://redis.io/topics/replication). Redis cluster.
 
 7. Docker, Rancher Kubernetes support. Google JIB for building Docker container images.
 
