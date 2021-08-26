@@ -11,7 +11,7 @@
     <parent>
         <artifactId>muscle-and-fitness-server</artifactId>
         <groupId>com.jmsoftware.maf</groupId>
-        <version>0.0.4</version>
+        <version>0.0.5</version>
     </parent>
 
     <build>

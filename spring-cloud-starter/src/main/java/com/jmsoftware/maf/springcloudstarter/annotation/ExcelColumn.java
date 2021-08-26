@@ -14,11 +14,11 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ExcelColumn {
     /**
-     * Description string.
+     * Column name.
      *
      * @return the string
      */
-    String description() default "";
+    String name() default "Default Column Name";
 
     /**
      * Cell type cell type.

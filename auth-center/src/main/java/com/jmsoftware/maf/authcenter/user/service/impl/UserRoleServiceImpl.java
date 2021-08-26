@@ -37,7 +37,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
         queryWrapper.select(Role::getId)
                 .eq(Role::getName, roleName);
         val role = Optional.ofNullable(this.roleService.getOne(queryWrapper))
-                .orElseThrow(() -> new BizException(""));
+                .orElseThrow(() -> new BizException("Cannot find the role: " + roleName));
         val userRole = new UserRole();
         userRole.setUserId(user.getId());
         userRole.setRoleId(role.getId());

@@ -111,8 +111,10 @@ public class RbacReactiveAuthorizationManagerImpl implements ReactiveAuthorizati
                              request.getMethod(), request.getURI(), userPrincipal.getUsername());
                     request
                             .mutate()
-                            .headers(httpHeaders -> httpHeaders.set(MafHttpHeader.X_USERNAME.getHeader(),
-                                                                    userPrincipal.getUsername()))
+                            .headers(httpHeaders -> {
+                                httpHeaders.set(MafHttpHeader.X_ID.getHeader(), String.valueOf(userPrincipal.getId()));
+                                httpHeaders.set(MafHttpHeader.X_USERNAME.getHeader(), userPrincipal.getUsername());
+                            })
                             .build();
                     return new AuthorizationDecision(true);
                 }

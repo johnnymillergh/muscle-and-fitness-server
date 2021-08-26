@@ -14,11 +14,6 @@ redis:
       port: 6380
       password: maf@redis
 
-logging:
-  # Configure logging level for SFTP/JSCH
-  level:
-    com.jcraft.jsch: INFO
-
 maf:
   configuration:
     swagger-enabled: true
