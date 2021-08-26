@@ -29,6 +29,12 @@ import javax.sql.DataSource;
 @Slf4j
 @ConditionalOnClass({MybatisPlusAutoConfiguration.class})
 public class DataSourceConfiguration {
+    @Bean
+    public DruidDataSourceCreatorPostProcessor druidDataSourceCreatorPostProcessor() {
+        log.warn("Initial bean: '{}'", DruidDataSourceCreatorPostProcessor.class.getSimpleName());
+        return new DruidDataSourceCreatorPostProcessor();
+    }
+
     /**
      * Primary data source. Had to configure DynamicRoutingDataSource as primary. Otherwise
      * MasterSlaveAutoRoutingPlugin will not be able to be injected datasource correctly.

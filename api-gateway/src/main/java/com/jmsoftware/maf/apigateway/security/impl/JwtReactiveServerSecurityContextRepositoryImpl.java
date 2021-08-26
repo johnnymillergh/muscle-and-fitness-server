@@ -45,8 +45,8 @@ public class JwtReactiveServerSecurityContextRepositoryImpl implements ServerSec
     public Mono<SecurityContext> load(ServerWebExchange exchange) {
         val request = exchange.getRequest();
         // Ignore allowed URL
-        for (var ignoredUrl : mafConfiguration.flattenIgnoredUrls()) {
-            if (antPathMatcher.match(ignoredUrl, request.getURI().getPath())) {
+        for (var ignoredUrl : this.mafConfiguration.flattenIgnoredUrls()) {
+            if (this.antPathMatcher.match(ignoredUrl, request.getURI().getPath())) {
                 return Mono.empty();
             }
         }
@@ -56,10 +56,11 @@ public class JwtReactiveServerSecurityContextRepositoryImpl implements ServerSec
                      HttpHeaders.AUTHORIZATION, request.getMethod(), request.getURI());
             return Mono.error(new SecurityException(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED, "JWT Required"));
         }
-        return authCenterRemoteApi.parse(authorization)
+        return this.authCenterRemoteApi.parse(authorization)
                 .map(parseJwtResponse -> {
                     log.info("parseJwtResponse: {}", parseJwtResponse);
                     val userPrincipal = UserPrincipal.createByUsername(parseJwtResponse.getUsername());
+                    userPrincipal.setId(parseJwtResponse.getId());
                     val authentication = new UsernamePasswordAuthenticationToken(userPrincipal, null);
                     log.warn("About to authenticate… Authentication is created. {}", authentication);
                     return authentication;

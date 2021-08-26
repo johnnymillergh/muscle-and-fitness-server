@@ -2,6 +2,7 @@ package com.jmsoftware.maf.osscenter.read.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.io.NioUtil;
 import com.jmsoftware.maf.osscenter.read.entity.SerializableStatObjectResponse;
 import com.jmsoftware.maf.osscenter.read.service.ReadResourceService;
 import com.jmsoftware.maf.springcloudstarter.minio.MinioHelper;
@@ -49,7 +50,7 @@ public class ReadResourceServiceImpl implements ReadResourceService {
                     .contentLength(statObjectResponse.size())
                     .contentType(MediaType.parseMediaType(statObjectResponse.contentType()))
                     .body(outputStream -> {
-                        IoUtil.copy(getObjectResponse, outputStream);
+                        NioUtil.copyByNIO(getObjectResponse, outputStream, NioUtil.DEFAULT_BUFFER_SIZE, null);
                         IoUtil.close(getObjectResponse);
                     });
         }
@@ -75,7 +76,7 @@ public class ReadResourceServiceImpl implements ReadResourceService {
                 .contentLength(statObjectResponse.size())
                 .contentType(MediaType.parseMediaType(statObjectResponse.contentType()))
                 .body((outputStream -> {
-                    IoUtil.copy(getObjectResponse, outputStream);
+                    NioUtil.copyByNIO(getObjectResponse, outputStream, NioUtil.DEFAULT_LARGE_BUFFER_SIZE, null);
                     IoUtil.close(getObjectResponse);
                 }));
     }
@@ -102,7 +103,7 @@ public class ReadResourceServiceImpl implements ReadResourceService {
                 .contentLength(rangeLength)
                 .contentType(MediaType.parseMediaType(statObjectResponse.contentType()))
                 .body(outputStream -> {
-                    IoUtil.copy(getObjectResponse, outputStream);
+                    NioUtil.copyByNIO(getObjectResponse, outputStream, NioUtil.DEFAULT_LARGE_BUFFER_SIZE, null);
                     IoUtil.close(getObjectResponse);
                 });
     }

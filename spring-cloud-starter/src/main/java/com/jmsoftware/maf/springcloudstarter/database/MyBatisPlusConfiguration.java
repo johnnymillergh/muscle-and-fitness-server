@@ -70,8 +70,8 @@ public class MyBatisPlusConfiguration {
     }
 
     @Bean
-    public MyBatisPlusMetaObjectHandler myBatisPlusConfiguration() {
-        log.warn("Initial bean: '{}'", MyBatisPlusMetaObjectHandler.class.getSimpleName());
-        return new MyBatisPlusMetaObjectHandler();
+    public CommonMetaObjectHandler myBatisPlusConfiguration() {
+        log.warn("Initial bean: '{}'", CommonMetaObjectHandler.class.getSimpleName());
+        return new CommonMetaObjectHandler();
     }
 }

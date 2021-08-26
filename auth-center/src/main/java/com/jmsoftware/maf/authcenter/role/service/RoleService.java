@@ -1,12 +1,14 @@
 package com.jmsoftware.maf.authcenter.role.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.jmsoftware.maf.authcenter.role.entity.RoleExcelBean;
 import com.jmsoftware.maf.authcenter.role.entity.persistence.Role;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdResponse;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdSingleResponse;
 import lombok.NonNull;
 import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -21,6 +23,8 @@ import java.util.List;
  */
 @Validated
 public interface RoleService extends IService<Role> {
+    String ROLE_TEMPLATE_EXCEL = "role-stat.xlsx";
+
     /**
      * Gets role list by user id.
      *
@@ -44,4 +48,28 @@ public interface RoleService extends IService<Role> {
      * @return the boolean
      */
     boolean checkAdmin(@NotEmpty List<@NotNull Long> roleIdList);
+
+    /**
+     * Gets list for exporting.
+     *
+     * @return the list for exporting
+     */
+    List<RoleExcelBean> getListForExporting();
+
+    /**
+     * Validate before add to bean list boolean.
+     *
+     * @param beanList the bean list
+     * @param bean     the bean
+     * @param index    the index
+     * @throws IllegalArgumentException the illegal argument exception
+     */
+    void validateBeforeAddToBeanList(List<RoleExcelBean> beanList, RoleExcelBean bean, int index) throws IllegalArgumentException;
+
+    /**
+     * Save.
+     *
+     * @param beanList the bean list
+     */
+    void save(@NotEmpty List<@Valid RoleExcelBean> beanList);
 }

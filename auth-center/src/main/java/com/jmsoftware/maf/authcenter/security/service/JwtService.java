@@ -1,5 +1,6 @@
 package com.jmsoftware.maf.authcenter.security.service;
 
+import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtResponse;
 import com.jmsoftware.maf.common.exception.SecurityException;
 import io.jsonwebtoken.Claims;
 import org.springframework.security.core.Authentication;
@@ -83,4 +84,12 @@ public interface JwtService {
      * @return the jwt from request
      */
     String getJwtFromRequest(HttpServletRequest request);
+
+    /**
+     * Parse parse jwt response.
+     *
+     * @param request the request
+     * @return the parse jwt response
+     */
+    ParseJwtResponse parse(HttpServletRequest request);
 }

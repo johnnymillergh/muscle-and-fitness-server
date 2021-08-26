@@ -2,6 +2,7 @@ package com.jmsoftware.maf.osscenter;
 
 import com.jmsoftware.maf.springcloudstarter.helper.SpringBootStartupHelper;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -20,16 +21,11 @@ import org.springframework.util.StopWatch;
 @EnableDiscoveryClient
 @SpringBootApplication
 public class OssCenterApplication {
-    private static final StopWatch STOP_WATCH = new StopWatch();
-    private static SpringBootStartupHelper springBootStartupHelper;
-
-    public OssCenterApplication(SpringBootStartupHelper springBootStartupHelper) {
-        OssCenterApplication.springBootStartupHelper = springBootStartupHelper;
-    }
-
     public static void main(String[] args) {
-        STOP_WATCH.start();
-        SpringApplication.run(OssCenterApplication.class, args);
-        springBootStartupHelper.stop(STOP_WATCH);
+        val stopWatch = new StopWatch();
+        stopWatch.start();
+        val configurableApplicationContext = SpringApplication.run(OssCenterApplication.class, args);
+        val springBootStartupHelper = configurableApplicationContext.getBean(SpringBootStartupHelper.class);
+        springBootStartupHelper.stop(stopWatch);
     }
 }
