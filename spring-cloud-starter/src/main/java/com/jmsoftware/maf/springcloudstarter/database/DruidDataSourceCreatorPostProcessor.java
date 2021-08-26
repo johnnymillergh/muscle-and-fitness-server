@@ -1,10 +1,15 @@
 package com.jmsoftware.maf.springcloudstarter.database;
 
 import com.baomidou.dynamic.datasource.creator.DruidDataSourceCreator;
+import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DynamicDataSourceProperties;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
@@ -14,12 +19,16 @@ import org.springframework.lang.Nullable;
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 8/25/2021 11:27 AM
  **/
 @Slf4j
-public class DruidDataSourceCreatorPostProcessor implements BeanPostProcessor {
+@RequiredArgsConstructor
+public class DruidDataSourceCreatorPostProcessor implements BeanPostProcessor, DisposableBean {
+    private final ApplicationContext applicationContext;
+    private final DynamicDataSourceProperties dynamicDataSourceProperties;
+
     @Nullable
     @Override
-    public Object postProcessAfterInitialization(@NonNull Object bean, @NonNull String beanName) throws BeansException {
+    public Object postProcessBeforeInitialization(@NonNull Object bean, @NonNull String beanName) throws BeansException {
         if (bean instanceof DruidDataSourceCreator) {
-            this.postProcessDynamicDataSourceProperties((DruidDataSourceCreator) bean);
+            this.enhanceConnectionPoolSize();
         }
         return bean;
     }
@@ -44,22 +53,29 @@ public class DruidDataSourceCreatorPostProcessor implements BeanPostProcessor {
      * connections you enable in your connection pool. That way there are always a few slots available for direct
      * connections for system maintenance and monitoring.</p>
      *
-     * @param bean the bean
      * @see
      * <a href='https://wiki.postgresql.org/wiki/Number_Of_Database_Connections#How_to_Find_the_Optimal_Database_Connection_Pool_Size'>How to Find the Optimal Database Connection Pool Size</a>
      * @see
      * <a href='https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-usagenotes-j2ee-concepts-connection-pooling.html#idm46216069663472'>Sizing the Connection Pool</a>
      */
-    private void postProcessDynamicDataSourceProperties(DruidDataSourceCreator bean) {
+    private void enhanceConnectionPoolSize() {
         val cpuCoreCount = Runtime.getRuntime().availableProcessors();
         val minConnectionPoolSize = cpuCoreCount * 2 + 1;
         val maxConnectionPoolSize = cpuCoreCount * 3;
-        bean.getGConfig()
+        this.dynamicDataSourceProperties.getDruid()
                 .setInitialSize(minConnectionPoolSize)
                 .setMinIdle(minConnectionPoolSize)
                 .setMaxActive(maxConnectionPoolSize);
         log.warn("Druid connection pool enhanced by current cpuCoreCount: {}, initial size: {}, min idle: {}" +
                          ", max active: {}",
                  cpuCoreCount, minConnectionPoolSize, minConnectionPoolSize, maxConnectionPoolSize);
+        val defaultListableBeanFactory =
+                (DefaultListableBeanFactory) this.applicationContext.getAutowireCapableBeanFactory();
+        defaultListableBeanFactory.destroyBean(this);
+    }
+
+    @Override
+    public void destroy() {
+        log.warn("Destroyed bean {}", this.getClass().getSimpleName());
     }
 }

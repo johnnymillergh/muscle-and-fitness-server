@@ -14,6 +14,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.quartz.QuartzDataSource;
 import org.springframework.boot.autoconfigure.quartz.QuartzTransactionManager;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -30,9 +31,9 @@ import javax.sql.DataSource;
 @ConditionalOnClass({MybatisPlusAutoConfiguration.class})
 public class DataSourceConfiguration {
     @Bean
-    public DruidDataSourceCreatorPostProcessor druidDataSourceCreatorPostProcessor() {
+    public DruidDataSourceCreatorPostProcessor druidDataSourceCreatorPostProcessor(ApplicationContext applicationContext, DynamicDataSourceProperties dynamicDataSourceProperties) {
         log.warn("Initial bean: '{}'", DruidDataSourceCreatorPostProcessor.class.getSimpleName());
-        return new DruidDataSourceCreatorPostProcessor();
+        return new DruidDataSourceCreatorPostProcessor(applicationContext, dynamicDataSourceProperties);
     }
 
     /**
