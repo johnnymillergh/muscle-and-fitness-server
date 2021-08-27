@@ -14,7 +14,15 @@ import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 /**
- * Description: DruidDataSourceCreatorPostProcessor, change description here.
+ * <p>DruidDataSourceCreatorPostProcessor is to enhance Druid connection pool by CPU core count.</p>
+ * <p><a href='https://en.wikipedia.org/wiki/Hyper-threading#Overview'>Hyper-threading</a>
+ * works by duplicating certain sections of the processor—those that store the
+ * <a href='https://en.wikipedia.org/wiki/Architectural_state'>architectural state</a>
+ * —but not duplicating the main <a href='https://en.wikipedia.org/wiki/Execution_unit'>execution resources</a>
+ * . This allows a hyper-threading processor to appear as the usual &quot;physical&quot; processor and an extra
+ * &quot;<a href='https://en.wikipedia.org/wiki/Virtualization'>logical</a>
+ * &quot; processor to the host operating system (HTT-unaware operating systems see two &quot;physical&quot;
+ * processors), allowing the operating system to schedule two threads or processes simultaneously and appropriately.</p>
  *
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 8/25/2021 11:27 AM
  **/
