@@ -16,6 +16,7 @@ import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -62,9 +63,9 @@ public class MafReactiveAutoConfiguration {
 
     @Bean
     public SpringBootStartupHelper springBootStartupHelper(MafProjectProperty mafProjectProperty,
-                                                           IpHelper ipHelper) {
+                                                           IpHelper ipHelper, ApplicationContext applicationContext) {
         log.warn("Initial bean: '{}'", SpringBootStartupHelper.class.getSimpleName());
-        return new SpringBootStartupHelper(mafProjectProperty, ipHelper);
+        return new SpringBootStartupHelper(mafProjectProperty, ipHelper, applicationContext);
     }
 
     @Bean

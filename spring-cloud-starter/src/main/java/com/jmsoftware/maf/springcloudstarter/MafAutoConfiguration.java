@@ -31,6 +31,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -119,9 +120,9 @@ public class MafAutoConfiguration {
 
     @Bean
     public SpringBootStartupHelper springBootStartupHelper(MafProjectProperty mafProjectProperty,
-                                                           IpHelper ipHelper) {
+                                                           IpHelper ipHelper, ApplicationContext applicationContext) {
         log.warn("Initial bean: '{}'", SpringBootStartupHelper.class.getSimpleName());
-        return new SpringBootStartupHelper(mafProjectProperty, ipHelper);
+        return new SpringBootStartupHelper(mafProjectProperty, ipHelper, applicationContext);
     }
 
     @Bean
