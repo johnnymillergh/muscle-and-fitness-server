@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.jmsoftware.maf.common.constant.UniversalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
@@ -20,23 +21,22 @@ import java.time.format.DateTimeFormatter;
  **/
 @RequiredArgsConstructor
 public class JacksonConfiguration {
-    public static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
     private final JacksonProperties jacksonProperties;
 
     @Bean
     public LocalDateTimeSerializer localDateTimeSerializer() {
-        var pattern = DEFAULT_DATE_FORMAT;
-        if (StrUtil.isNotBlank(jacksonProperties.getDateFormat())) {
-            pattern = jacksonProperties.getDateFormat();
+        var pattern = UniversalDateTime.DATE_TIME_FORMAT;
+        if (StrUtil.isNotBlank(this.jacksonProperties.getDateFormat())) {
+            pattern = this.jacksonProperties.getDateFormat();
         }
         return new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(pattern));
     }
 
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer(LocalDateTimeSerializer localDateTimeSerializer) {
-        var pattern = DEFAULT_DATE_FORMAT;
-        if (StrUtil.isNotBlank(jacksonProperties.getDateFormat())) {
-            pattern = jacksonProperties.getDateFormat();
+        var pattern = UniversalDateTime.DATE_TIME_FORMAT;
+        if (StrUtil.isNotBlank(this.jacksonProperties.getDateFormat())) {
+            pattern = this.jacksonProperties.getDateFormat();
         }
         val localDateTimeDeserializer = new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(pattern));
         return jackson2ObjectMapperBuilder -> jackson2ObjectMapperBuilder

@@ -31,10 +31,12 @@ import org.springframework.lang.Nullable;
 public class DruidDataSourceCreatorPostProcessor implements BeanPostProcessor, DisposableBean {
     private final ApplicationContext applicationContext;
     private final DynamicDataSourceProperties dynamicDataSourceProperties;
+    private int initializedBeanCounter = 0;
 
     @Nullable
     @Override
     public Object postProcessBeforeInitialization(@NonNull Object bean, @NonNull String beanName) throws BeansException {
+        this.initializedBeanCounter++;
         if (bean instanceof DruidDataSourceCreator) {
             this.enhanceConnectionPoolSize();
         }
@@ -67,6 +69,8 @@ public class DruidDataSourceCreatorPostProcessor implements BeanPostProcessor, D
      * <a href='https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-usagenotes-j2ee-concepts-connection-pooling.html#idm46216069663472'>Sizing the Connection Pool</a>
      */
     private void enhanceConnectionPoolSize() {
+        log.info("Spring initialized {} beans previously, beanDefinitionCount: {}", this.initializedBeanCounter,
+                 this.applicationContext.getBeanDefinitionCount());
         val cpuCoreCount = Runtime.getRuntime().availableProcessors();
         val minConnectionPoolSize = cpuCoreCount * 2 + 1;
         val maxConnectionPoolSize = cpuCoreCount * 3;
