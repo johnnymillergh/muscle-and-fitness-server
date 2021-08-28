@@ -250,14 +250,23 @@ public abstract class AbstractExcelDataController<T> {
      */
     protected abstract List<T> getListForExporting();
 
+    /**
+     * Before download to configure ExcelWriter. Such as hiding column.
+     *
+     * @param excelWriter the excel writer
+     */
+    protected void beforeDownload(ExcelWriter excelWriter) {
+    }
+
     @GetMapping("/stat/excel-template")
     @ApiOperation(value = "Download template excel file", notes = "Download template excel file")
-    public ResponseEntity<StreamingResponseBody> downloadRoleStat() {
-        @Cleanup val excelWriter = new ExcelWriter(true);
+    public ResponseEntity<StreamingResponseBody> downloadExcelTemplate() {
+        val excelWriter = new ExcelWriter(true);
         excelWriter.setHeaderAlias(this.exportingFieldAliasMap);
         excelWriter.write(this.getListForExporting());
         excelWriter.setFreezePane(1);
         excelWriter.autoSizeColumnAll();
+        this.beforeDownload(excelWriter);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION,
                         ContentDisposition.builder("attachment").filename(
