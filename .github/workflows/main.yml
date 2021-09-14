@@ -12,7 +12,7 @@ on:
       - '**.md'
 
 jobs:
-  build:
+  build-docker-image:
     runs-on: ubuntu-latest
     env:
       DOCKER_HUB_USERNAME: ${{secrets.DOCKER_HUB_USERNAME}}
