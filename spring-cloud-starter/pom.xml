@@ -149,6 +149,16 @@
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>${druid-spring-boot-starter.version}</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.sun</groupId>
+                    <artifactId>tools</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.sun</groupId>
+                    <artifactId>jconsole</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- Swagger: JSON API documentation for Spring Cloud based applications (w/o web UI) -->
