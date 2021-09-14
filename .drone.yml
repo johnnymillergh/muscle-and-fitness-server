@@ -1,9 +1,0 @@
-kind: pipeline
-type: docker
-name: default
-
-steps:
-  - name: install
-    image: maven:3-jdk-11
-    commands:
-      - mvn clean compile --batch-mode --show-version -DskipTests=true -Dmaven.javadoc.skip=true
