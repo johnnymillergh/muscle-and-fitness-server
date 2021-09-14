@@ -14,6 +14,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      DOCKER_HUB_USERNAME: ${{secrets.DOCKER_HUB_USERNAME}}
+      DOCKER_HUB_PASSWORD: ${{secrets.DOCKER_HUB_PASSWORD}}
     steps:
       - uses: actions/checkout@v2
       - name: Set up AdoptOpenJDK
@@ -21,8 +24,10 @@ jobs:
         with:
           java-version: '11.0.10'
           distribution: 'adopt-hotspot'
+      - name: Grant execute permission for mvnw
+        run: chmod +x mvnw
       - name: Build with Maven
-        run: mvn clean validate compile --batch-mode --show-version --quiet -DskipTests=true -f pom.xml
+        run: ./mvnw install -B -V -DskipTests=true -Dmaven.javadoc.skip=true -Djib.to.auth.username=$DOCKER_HUB_USERNAME -Djib.to.auth.password=$DOCKER_HUB_PASSWORD
 
   check-version:
     runs-on: ubuntu-latest
