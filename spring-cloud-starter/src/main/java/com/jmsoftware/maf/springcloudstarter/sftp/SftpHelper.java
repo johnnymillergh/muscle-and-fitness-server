@@ -10,7 +10,6 @@ import org.springframework.integration.file.support.FileExistsMode;
 import org.springframework.integration.sftp.session.SftpRemoteFileTemplate;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
-import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,7 +31,6 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 @Slf4j
 @Validated
-@Component
 @RequiredArgsConstructor
 @SuppressWarnings("unused")
 public class SftpHelper {
@@ -49,7 +47,7 @@ public class SftpHelper {
      */
     public List<String> listFiles(@NotBlank String fullPath) {
         log.info("Listing files, full path: {}", fullPath);
-        return sftpRemoteFileTemplate.execute(session -> {
+        return this.sftpRemoteFileTemplate.execute(session -> {
             var strings = new String[0];
             try {
                 strings = session.listNames(fullPath);
@@ -68,7 +66,7 @@ public class SftpHelper {
      */
     public boolean exist(@NotBlank String fileFullPath) {
         log.info("Checking whether file exists in SFTP server, file full path: {}", fileFullPath);
-        return sftpRemoteFileTemplate.execute(session -> session.exists(fileFullPath));
+        return this.sftpRemoteFileTemplate.execute(session -> session.exists(fileFullPath));
     }
 
     /**
@@ -79,7 +77,7 @@ public class SftpHelper {
      * @throws IllegalArgumentException when file does not exist
      */
     public Long getFileSize(@NotBlank String fileFullPath) throws IllegalArgumentException {
-        if (!exist(fileFullPath)) {
+        if (!this.exist(fileFullPath)) {
             throw new IllegalArgumentException(
                     "Cannot get file size from SFTP server. Caused by: file does not exist, full path: " + fileFullPath);
         }
@@ -88,7 +86,7 @@ public class SftpHelper {
         String listPath = fileFullPath.substring(0, fileFullPath.lastIndexOf(fileName) - 1);
         log.info("Retrieve file size from SFTP server, full path: {}", fileFullPath);
         final Long[] fileSize = new Long[1];
-        sftpRemoteFileTemplate.execute(session -> {
+        this.sftpRemoteFileTemplate.execute(session -> {
             ChannelSftp.LsEntry[] lsEntries = session.list(listPath);
             for (ChannelSftp.LsEntry lsEntry : lsEntries) {
                 if (lsEntry.getFilename().equals(fileName)) {
@@ -109,8 +107,8 @@ public class SftpHelper {
     public String upload(@Valid SftpUploadFile sftpUploadFile) {
         log.info("Uploading single file to SFTP server. SftpUploadFile: {}", sftpUploadFile);
         Message<File> message = MessageBuilder.withPayload(sftpUploadFile.getFileToBeUploaded()).build();
-        return sftpRemoteFileTemplate.send(message, sftpUploadFile.getSubDirectory(),
-                                           sftpUploadFile.getFileExistsMode());
+        return this.sftpRemoteFileTemplate.send(message, sftpUploadFile.getSubDirectory(),
+                                                sftpUploadFile.getFileExistsMode());
     }
 
     /**
@@ -152,7 +150,7 @@ public class SftpHelper {
     public BufferedInputStream read(@NotBlank String fileFullPath) throws NotFoundException {
         log.info("Read file from SFTP server, file full path: {}", fileFullPath);
         val inputStream = new AtomicReference<InputStream>();
-        val got = sftpRemoteFileTemplate.get(fileFullPath, inputStream::set);
+        val got = this.sftpRemoteFileTemplate.get(fileFullPath, inputStream::set);
         if (!got) {
             val errorMessage = String.format("Cannot find the file! fileFullPath: %s", fileFullPath);
             log.error(errorMessage);
@@ -169,6 +167,6 @@ public class SftpHelper {
      */
     public boolean delete(@NotBlank String fileFullPath) {
         log.warn("Deleting SFTP server's file by file full path: {}", fileFullPath);
-        return sftpRemoteFileTemplate.remove(fileFullPath);
+        return this.sftpRemoteFileTemplate.remove(fileFullPath);
     }
 }

@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.context.WebServerInitializedEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Component;
 
 import java.net.*;
 import java.util.Enumeration;
@@ -22,7 +21,6 @@ import java.util.Enumeration;
  **/
 @Slf4j
 @Getter
-@Component
 @RequiredArgsConstructor
 public class IpHelper implements ApplicationListener<WebServerInitializedEvent> {
     private static final String DEVELOPMENT_ENVIRONMENT = "development";

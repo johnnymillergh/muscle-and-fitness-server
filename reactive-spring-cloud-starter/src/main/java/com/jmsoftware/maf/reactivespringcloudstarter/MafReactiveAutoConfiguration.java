@@ -2,6 +2,7 @@ package com.jmsoftware.maf.reactivespringcloudstarter;
 
 import com.jmsoftware.maf.reactivespringcloudstarter.configuration.MafConfiguration;
 import com.jmsoftware.maf.reactivespringcloudstarter.configuration.MafProjectProperty;
+import com.jmsoftware.maf.reactivespringcloudstarter.configuration.WebClientConfiguration;
 import com.jmsoftware.maf.reactivespringcloudstarter.configuration.WebFluxConfiguration;
 import com.jmsoftware.maf.reactivespringcloudstarter.controller.CommonController;
 import com.jmsoftware.maf.reactivespringcloudstarter.filter.AccessLogFilter;
@@ -15,12 +16,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import javax.annotation.PostConstruct;
 
@@ -39,7 +38,8 @@ import javax.annotation.PostConstruct;
 })
 @Import({
         RedisConfiguration.class,
-        WebFluxConfiguration.class
+        WebFluxConfiguration.class,
+        WebClientConfiguration.class
 })
 public class MafReactiveAutoConfiguration {
     @PostConstruct
@@ -78,12 +78,5 @@ public class MafReactiveAutoConfiguration {
     public CommonController commonController(CommonService commonService) {
         log.warn("Initial bean: '{}'", CommonController.class.getSimpleName());
         return new CommonController(commonService);
-    }
-
-    @Bean
-    @LoadBalanced
-    public WebClient.Builder loadBalancedWebClientBuilder() {
-        log.warn("Initial bean: '{}'", WebClient.Builder.class.getSimpleName());
-        return WebClient.builder();
     }
 }

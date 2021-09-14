@@ -6,7 +6,6 @@ import lombok.val;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.integration.sftp.session.SftpRemoteFileTemplate;
-import org.springframework.stereotype.Component;
 
 /**
  * <h1>SftpSubDirectoryRunner</h1>
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Component;
  * @see SftpSubDirectory
  **/
 @Slf4j
-@Component
 @RequiredArgsConstructor
 public class SftpSubDirectoryRunner implements ApplicationRunner {
     private final SftpRemoteFileTemplate sftpRemoteFileTemplate;
@@ -26,21 +24,21 @@ public class SftpSubDirectoryRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        sftpRemoteFileTemplate.setAutoCreateDirectory(true);
-        sftpRemoteFileTemplate.execute(session -> {
-            if (!session.exists(sftpClientConfiguration.getDirectory())) {
-                log.info("Make directories for SFTP server. Directory: {}", sftpClientConfiguration.getDirectory());
-                session.mkdir(sftpClientConfiguration.getDirectory());
+        this.sftpRemoteFileTemplate.setAutoCreateDirectory(true);
+        this.sftpRemoteFileTemplate.execute(session -> {
+            if (!session.exists(this.sftpClientConfiguration.getDirectory())) {
+                log.info("Make directories for SFTP server. Directory: {}", this.sftpClientConfiguration.getDirectory());
+                session.mkdir(this.sftpClientConfiguration.getDirectory());
             } else {
-                log.info("SFTP server remote directory exists: {}", sftpClientConfiguration.getDirectory());
+                log.info("SFTP server remote directory exists: {}", this.sftpClientConfiguration.getDirectory());
             }
             return null;
         });
 
         log.info("Staring to initial SFTP server sub-directory.");
-        sftpRemoteFileTemplate.execute(session -> {
+        this.sftpRemoteFileTemplate.execute(session -> {
             for (val sftpSubDirectory : SftpSubDirectory.values()) {
-                val fullPath = sftpClientConfiguration.getDirectory() + sftpSubDirectory.getSubDirectory();
+                val fullPath = this.sftpClientConfiguration.getDirectory() + sftpSubDirectory.getSubDirectory();
                 if (!session.exists(fullPath)) {
                     log.info("SFTP server sub-directory does not exist. Creating sub-directory: {}", fullPath);
                     session.mkdir(fullPath);

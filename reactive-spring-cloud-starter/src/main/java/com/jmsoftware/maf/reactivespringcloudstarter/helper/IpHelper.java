@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.boot.web.context.WebServerInitializedEvent;
 import org.springframework.context.ApplicationListener;
-import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -27,7 +26,6 @@ import java.util.Enumeration;
  **/
 @Slf4j
 @Getter
-@Component
 @RequiredArgsConstructor
 public class IpHelper implements ApplicationListener<WebServerInitializedEvent> {
     private static final String DEVELOPMENT_ENVIRONMENT = "development";
@@ -52,7 +50,7 @@ public class IpHelper implements ApplicationListener<WebServerInitializedEvent> 
      * @date 2019-05-03 16:05
      */
     public String getBaseUrl() {
-        return "http://" + this.getPublicIp() + ":" + serverPort + mafProjectProperty.getContextPath();
+        return "http://" + this.getPublicIp() + ":" + this.serverPort + this.mafProjectProperty.getContextPath();
     }
 
     /**
@@ -61,7 +59,7 @@ public class IpHelper implements ApplicationListener<WebServerInitializedEvent> 
      * @return public IP
      */
     public String getPublicIp() {
-        if (mafProjectProperty.getEnvironment().contains(DEVELOPMENT_ENVIRONMENT)) {
+        if (this.mafProjectProperty.getEnvironment().contains(DEVELOPMENT_ENVIRONMENT)) {
             return this.getInternetIp();
         }
         try {

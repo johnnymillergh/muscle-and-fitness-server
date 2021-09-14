@@ -57,6 +57,8 @@ management:
 
 logging:
   config: classpath:logback-configuration/logback-${spring.profiles.active}.xml
+  level:
+    org.springframework.cloud.client.loadbalancer.reactive: DEBUG
 
 maf:
   project-property:

@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.expression.common.LiteralExpression;
 import org.springframework.integration.annotation.ServiceActivator;
@@ -24,7 +23,6 @@ import java.io.File;
  * @author 钟俊（zhongjun）, email: zhongjun@toguide.cn, date: 1/29/2021 2:09 PM
  **/
 @Slf4j
-@Configuration
 @Import({
         SftpClientConfiguration.class
 })

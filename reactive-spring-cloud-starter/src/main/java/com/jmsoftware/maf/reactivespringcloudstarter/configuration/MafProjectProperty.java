@@ -2,7 +2,6 @@ package com.jmsoftware.maf.reactivespringcloudstarter.configuration;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotBlank;
@@ -16,7 +15,6 @@ import javax.validation.constraints.NotBlank;
  */
 @Data
 @Validated
-@Component
 @SuppressWarnings("jol")
 @ConfigurationProperties(prefix = "maf.project-property")
 public class MafProjectProperty {

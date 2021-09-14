@@ -2,7 +2,6 @@ package com.jmsoftware.maf.reactivespringcloudstarter.redis;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
@@ -16,7 +15,6 @@ import java.util.List;
  * <a href='https://docs.spring.io/spring-data/redis/docs/current/reference/html/#redis:write-to-master-read-from-replica'>Spring Data Redis - Write to Master, Read from Replica</a>
  **/
 @Data
-@Configuration
 @ConfigurationProperties(prefix = "redis")
 public class RedisMasterSlaveReplicationProperties {
     private RedisInstance master;

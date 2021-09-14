@@ -9,7 +9,6 @@ import lombok.val;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 
 import java.time.Instant;
@@ -22,7 +21,6 @@ import java.util.TimeZone;
  * @author 钟俊（zhongjun）, email: zhongjun@toguide.cn, date: 2/10/2021 10:07 AM
  **/
 @Slf4j
-@Component
 @RequiredArgsConstructor
 public class SpringBootStartupHelper implements DisposableBean {
     private static final String LINE_SEPARATOR = System.lineSeparator();

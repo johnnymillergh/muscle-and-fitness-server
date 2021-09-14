@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
@@ -21,7 +20,6 @@ import reactor.core.publisher.Mono;
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 12/24/2020 10:56 AM
  **/
 @Slf4j
-@Component
 @RequiredArgsConstructor
 public class AccessLogFilter implements WebFilter, Ordered {
     private final MafConfiguration mafConfiguration;
@@ -31,8 +29,8 @@ public class AccessLogFilter implements WebFilter, Ordered {
     @SuppressWarnings("NullableProblems")
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
-        for (String ignoredUrl : mafConfiguration.flattenIgnoredUrls()) {
-            if (antPathMatcher.match(ignoredUrl, request.getURI().getPath())) {
+        for (String ignoredUrl : this.mafConfiguration.flattenIgnoredUrls()) {
+            if (this.antPathMatcher.match(ignoredUrl, request.getURI().getPath())) {
                 return chain.filter(exchange);
             }
         }
