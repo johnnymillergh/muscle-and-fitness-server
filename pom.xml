@@ -53,7 +53,7 @@
         <easyexcel.version>2.2.6</easyexcel.version>
         <poi.version>5.0.0</poi.version>
         <logstash-logback-encoder.version>6.6</logstash-logback-encoder.version>
-        <minio.version>8.3.0</minio.version>
+        <minio.version>8.2.2</minio.version>
         <apache-tika.version>2.1.0</apache-tika.version>
     </properties>
 
