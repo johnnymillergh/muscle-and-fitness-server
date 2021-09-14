@@ -21,8 +21,8 @@ jobs:
         with:
           java-version: '11.0.10'
           distribution: 'adopt-hotspot'
-      - name: Build and Test with Maven
-        run: mvn clean compile --batch-mode --show-version -DskipTests=true
+      - name: Build with Maven
+        run: mvn clean validate compile --batch-mode --show-version --quiet -DskipTests=true -f pom.xml
 
   check-version:
     runs-on: ubuntu-latest
