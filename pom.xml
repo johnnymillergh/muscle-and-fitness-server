@@ -45,7 +45,7 @@
         <druid-spring-boot-starter.version>1.2.6</druid-spring-boot-starter.version>
         <mybatis-plus-boot-starter.version>3.4.3.3</mybatis-plus-boot-starter.version>
         <dynamic-datasource-spring-boot-starter.version>3.4.1</dynamic-datasource-spring-boot-starter.version>
-        <hutool-all.version>5.7.11</hutool-all.version>
+        <hutool-all.version>5.7.12</hutool-all.version>
         <guava.version>30.1.1-jre</guava.version>
         <knife4j.version>2.0.9</knife4j.version>
         <jjwt.version>0.11.2</jjwt.version>
@@ -53,8 +53,8 @@
         <easyexcel.version>2.2.6</easyexcel.version>
         <poi.version>5.0.0</poi.version>
         <logstash-logback-encoder.version>6.6</logstash-logback-encoder.version>
-        <minio.version>8.2.2</minio.version>
-        <apache-tika.version>2.0.0</apache-tika.version>
+        <minio.version>8.3.0</minio.version>
+        <apache-tika.version>2.1.0</apache-tika.version>
     </properties>
 
     <!-- The modules (sometimes called subprojects) to build as a part of this project. -->
