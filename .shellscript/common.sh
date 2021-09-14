@@ -10,22 +10,22 @@ function now() {
   echo "$nowVariable"
 }
 
-function printTrace() {
+function logTrace() {
   echo -e "$(now) TRACE --- $1"
   return 0
 }
 
-function printInfo() {
+function logInfo() {
   echo -e "$(now)  \e[32mINFO --- $1\e[0m"
   return 0
 }
 
-function printWarn() {
+function logWarn() {
   echo -e "$(now)  \e[33mWARN --- $1\e[0m"
   return 0
 }
 
-function printError() {
+function logError() {
   echo -e "$(now) \e[31mERROR --- $1\e[0m"
   return 0
 }

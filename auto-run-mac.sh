@@ -210,7 +210,7 @@ function killJavaProgram() {
   # https://www.tutorialkart.com/bash-shell-scripting/bash-split-string/
   # IFS=' ' # space is set as delimiter
   # "$(jps -l | grep "$1")" is read into an array as tokens separated by IFS
-  read -ra jpsArray <<< "$(jps -l | grep "$1")"
+  read -ra jpsArray <<<"$(jps -l | grep "$1")"
   # Access the first element of array
   kill "${jpsArray[0]}"
   killResult=$?
@@ -232,7 +232,7 @@ function iterativelyRunJavaServices() {
       # If exception happens when executing previous command, then set 0 to isRunning
       isRunning=0
     }
-    logInfo "[RUN] ### $(( index + 1 )). $serviceName, startMode: $startMode, isRunning: $isRunning"
+    logInfo "[RUN] ### $((index + 1)). $serviceName, startMode: $startMode, isRunning: $isRunning"
     case $startMode in
     "keep-previous")
       if [ "$isRunning" == "1" ]; then
