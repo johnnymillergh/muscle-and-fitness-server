@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.springcloudstarter.controller;
+package com.jmsoftware.maf.springcloudstarter.poi;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
@@ -11,7 +11,6 @@ import com.jmsoftware.maf.common.bean.ExcelImportResult;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.springcloudstarter.annotation.ExcelColumn;
 import com.jmsoftware.maf.springcloudstarter.configuration.ExcelImportConfiguration;
-import com.jmsoftware.maf.springcloudstarter.minio.MinioHelper;
 import com.jmsoftware.maf.springcloudstarter.util.CaseConversionUtil;
 import io.swagger.annotations.ApiOperation;
 import lombok.Cleanup;
@@ -20,16 +19,17 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.unit.DataSize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
-import javax.annotation.Resource;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -115,10 +115,10 @@ public abstract class AbstractExcelDataController<T> {
      */
     protected final Map<String, String> exportingFieldAliasMap = Maps.newHashMap();
 
-    @Resource
+    @Autowired
     protected ExcelImportConfiguration excelImportConfiguration;
-    @Resource
-    protected MinioHelper minioHelper;
+    @Autowired
+    protected OssUploader ossUploader;
     /**
      * Deny all data when data validation fails. Default value is true.
      */
@@ -226,9 +226,8 @@ public abstract class AbstractExcelDataController<T> {
      * Execute database operation.
      *
      * @param beanList the bean list that can be used for DB operations
-     * @throws Exception the exception
      */
-    protected abstract void executeDatabaseOperation(List<T> beanList) throws Exception;
+    protected abstract void executeDatabaseOperation(List<T> beanList);
 
     /**
      * After execute. Delete file.
@@ -337,8 +336,8 @@ public abstract class AbstractExcelDataController<T> {
     }
 
     private void bindData() {
+        this.setReturnMessageList("Starting - Validate and bind data…");
         try {
-            this.setReturnMessageList("Starting - Validate and bind data…");
             this.bindData(this.workbook.get());
             this.setReturnMessageList("Finished - Validate and bind data");
         } catch (Exception e) {
@@ -407,13 +406,13 @@ public abstract class AbstractExcelDataController<T> {
 
     @SneakyThrows
     private void uploadWorkbook() {
-        @Cleanup val outputStream = new ByteArrayOutputStream();
+        // FIXME: might cause OOM
+        @Cleanup val outputStream = new ByteArrayOutputStream((int) DataSize.ofBytes(512).toBytes());
         this.workbook.get().write(outputStream);
-        final var bufferedInputStream = new BufferedInputStream(new ByteArrayInputStream(outputStream.toByteArray()));
-        this.minioHelper.makeBucket("temp");
-        this.minioHelper.putObject("temp", this.fileName.get(), bufferedInputStream,
-                                   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        this.excelFilePath.set("temp/temp.xlsx");
+        @Cleanup val inputStream = new BufferedInputStream(new ByteArrayInputStream(outputStream.toByteArray()));
+        val filePath = this.ossUploader.upload(this.getTemplateFileName(), inputStream);
+        log.info("Uploaded excel with exception message. filePath: {}", filePath);
+        this.excelFilePath.set(filePath);
     }
 
     /**
@@ -426,10 +425,9 @@ public abstract class AbstractExcelDataController<T> {
      * </ul>
      *
      * @param workbook the workbook
-     * @throws Exception the exception
      */
     @SuppressWarnings("RedundantThrows")
-    private void bindData(Workbook workbook) throws Exception {
+    private void bindData(Workbook workbook) {
         for (int index = 0; index < workbook.getNumberOfSheets(); index++) {
             val sheet = workbook.getSheetAt(index);
             val excelReader = new ExcelReader(workbook, index);
@@ -461,7 +459,7 @@ public abstract class AbstractExcelDataController<T> {
     /**
      * Sets deny all. When exception occurred, deny all data or not
      *
-     * @param denyAll the deny all
+     * @param denyAll true is deny all or vice versa
      */
     public void setDenyAll(Boolean denyAll) {
         this.denyAll = denyAll;

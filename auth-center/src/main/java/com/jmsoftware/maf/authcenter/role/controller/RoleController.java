@@ -2,7 +2,7 @@ package com.jmsoftware.maf.authcenter.role.controller;
 
 import com.jmsoftware.maf.authcenter.role.entity.RoleExcelBean;
 import com.jmsoftware.maf.authcenter.role.service.RoleService;
-import com.jmsoftware.maf.springcloudstarter.controller.AbstractExcelDataController;
+import com.jmsoftware.maf.springcloudstarter.poi.AbstractExcelDataController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;

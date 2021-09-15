@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.osscenter.write.entity;
+package com.jmsoftware.maf.common.domain.osscenter.write;
 
 import lombok.Data;
 
