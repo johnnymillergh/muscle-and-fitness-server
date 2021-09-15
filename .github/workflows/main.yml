@@ -27,7 +27,7 @@ jobs:
       - name: Grant execute permission for mvnw
         run: chmod +x mvnw
       - name: Build with Maven
-        run: ./mvnw clean install -V -DskipTests=true -Dmaven.javadoc.skip=true -Djib.to.auth.username=$DOCKER_HUB_USERNAME -Djib.to.auth.password=$DOCKER_HUB_PASSWO
+        run: ./mvnw clean install -V -q -DskipTests=true -Dmaven.javadoc.skip=true -Djib.to.auth.username=$DOCKER_HUB_USERNAME -Djib.to.auth.password=$DOCKER_HUB_PASSWO
 
   check-version:
     runs-on: ubuntu-latest
