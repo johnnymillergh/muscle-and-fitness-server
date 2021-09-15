@@ -35,6 +35,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -94,6 +95,9 @@ public abstract class AbstractExcelDataController<T> {
     protected final ThreadLocal<Boolean> exceptionOccurred = ThreadLocal.withInitial(() -> false);
     protected final ThreadLocal<List<String>> errorMessageList = ThreadLocal.withInitial(Lists::newLinkedList);
     protected final ThreadLocal<List<String>> returnMessageList = ThreadLocal.withInitial(Lists::newLinkedList);
+    /**
+     * `fileName` stores the name to upload the workbook when exception occurred
+     */
     protected final ThreadLocal<String> fileName = ThreadLocal.withInitial(() -> null);
 
     /**
@@ -177,6 +181,7 @@ public abstract class AbstractExcelDataController<T> {
         this.exceptionOccurred.set(false);
         this.errorMessageList.set(Lists.newLinkedList());
         this.returnMessageList.set(Lists.newLinkedList());
+        log.debug("Initialized locale context: {}", this.threadLocalToString());
     }
 
     /**
@@ -191,6 +196,19 @@ public abstract class AbstractExcelDataController<T> {
         this.errorMessageList.remove();
         this.returnMessageList.remove();
         this.fileName.remove();
+        log.debug("Destroyed locale context and invalidate thread local variables: {}", this.threadLocalToString());
+    }
+
+    private String threadLocalToString() {
+        val map = new LinkedHashMap<String, Object>();
+        map.put("beanList", this.beanList.get());
+        map.put("workbook", this.workbook.get());
+        map.put("excelFilePath", this.excelFilePath.get());
+        map.put("exceptionOccurred", this.exceptionOccurred.get());
+        map.put("errorMessageList", this.errorMessageList.get());
+        map.put("returnMessageList", this.returnMessageList.get());
+        map.put("fileName", this.fileName.get());
+        return map.toString();
     }
 
     /**
