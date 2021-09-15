@@ -41,6 +41,7 @@
         -->
         <adoptopenjdk11.tag>jre-11.0.10_9</adoptopenjdk11.tag>
         <jib-maven-plugin.version>3.1.4</jib-maven-plugin.version>
+        <jib-spring-boot-extension-maven.version>0.1.0</jib-spring-boot-extension-maven.version>
         <maven-pmd-plugin.version>3.14.0</maven-pmd-plugin.version>
         <spring-cloud.version>2020.0.3</spring-cloud.version>
         <spring-content.version>1.0.0.M5</spring-content.version>
