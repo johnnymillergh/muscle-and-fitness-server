@@ -2,7 +2,7 @@ package com.jmsoftware.maf.apigateway.security.impl;
 
 import cn.hutool.core.util.StrUtil;
 import com.jmsoftware.maf.apigateway.remoteapi.AuthCenterRemoteApi;
-import com.jmsoftware.maf.apigateway.security.configuration.JwtConfiguration;
+import com.jmsoftware.maf.reactivespringcloudstarter.configuration.JwtConfiguration;
 import com.jmsoftware.maf.common.domain.authcenter.security.UserPrincipal;
 import com.jmsoftware.maf.common.exception.SecurityException;
 import com.jmsoftware.maf.reactivespringcloudstarter.configuration.MafConfiguration;

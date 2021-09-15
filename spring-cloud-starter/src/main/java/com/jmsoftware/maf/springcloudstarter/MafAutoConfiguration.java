@@ -33,7 +33,6 @@ import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 import org.springframework.integration.annotation.IntegrationComponentScan;
@@ -48,7 +47,6 @@ import java.util.List;
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 10/19/2020 2:51 PM
  **/
 @Slf4j
-@Configuration
 @IntegrationComponentScan
 @ConditionalOnWebApplication
 @EnableConfigurationProperties({

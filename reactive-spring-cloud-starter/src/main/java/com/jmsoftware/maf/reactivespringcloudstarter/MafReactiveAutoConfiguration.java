@@ -1,9 +1,6 @@
 package com.jmsoftware.maf.reactivespringcloudstarter;
 
-import com.jmsoftware.maf.reactivespringcloudstarter.configuration.MafConfiguration;
-import com.jmsoftware.maf.reactivespringcloudstarter.configuration.MafProjectProperty;
-import com.jmsoftware.maf.reactivespringcloudstarter.configuration.WebClientConfiguration;
-import com.jmsoftware.maf.reactivespringcloudstarter.configuration.WebFluxConfiguration;
+import com.jmsoftware.maf.reactivespringcloudstarter.configuration.*;
 import com.jmsoftware.maf.reactivespringcloudstarter.controller.CommonController;
 import com.jmsoftware.maf.reactivespringcloudstarter.filter.AccessLogFilter;
 import com.jmsoftware.maf.reactivespringcloudstarter.helper.IpHelper;
@@ -11,14 +8,11 @@ import com.jmsoftware.maf.reactivespringcloudstarter.helper.SpringBootStartupHel
 import com.jmsoftware.maf.reactivespringcloudstarter.redis.RedisConfiguration;
 import com.jmsoftware.maf.reactivespringcloudstarter.service.CommonService;
 import com.jmsoftware.maf.reactivespringcloudstarter.service.impl.CommonServiceImpl;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import javax.annotation.PostConstruct;
@@ -29,12 +23,11 @@ import javax.annotation.PostConstruct;
  * @author 钟俊（zhongjun）, email: zhongjun@toguide.cn, date: 12/22/2020 2:41 PM
  **/
 @Slf4j
-@Configuration
-@RequiredArgsConstructor
 @AutoConfigureOrder(Integer.MIN_VALUE)
 @EnableConfigurationProperties({
         MafConfiguration.class,
-        MafProjectProperty.class
+        MafProjectProperty.class,
+        JwtConfiguration.class
 })
 @Import({
         RedisConfiguration.class,
@@ -49,7 +42,6 @@ public class MafReactiveAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean
     public AccessLogFilter requestFilter(MafConfiguration mafConfiguration) {
         log.warn("Initial bean: '{}'", AccessLogFilter.class.getSimpleName());
         return new AccessLogFilter(mafConfiguration);
