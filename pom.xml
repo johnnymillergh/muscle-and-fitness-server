@@ -284,12 +284,5 @@
             <artifactId>hutool-all</artifactId>
             <version>${hutool-all.version}</version>
         </dependency>
-
-        <!-- Brings the popular ruby faker gem to Java https://github.com/DiUS/java-faker -->
-        <dependency>
-            <groupId>com.github.javafaker</groupId>
-            <artifactId>javafaker</artifactId>
-            <version>${java-faker.version}</version>
-        </dependency>
     </dependencies>
 </project>

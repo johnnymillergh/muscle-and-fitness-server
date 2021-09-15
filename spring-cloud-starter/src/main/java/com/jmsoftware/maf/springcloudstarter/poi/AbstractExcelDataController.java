@@ -410,7 +410,7 @@ public abstract class AbstractExcelDataController<T> {
         @Cleanup val outputStream = new ByteArrayOutputStream((int) DataSize.ofBytes(512).toBytes());
         this.workbook.get().write(outputStream);
         @Cleanup val inputStream = new BufferedInputStream(new ByteArrayInputStream(outputStream.toByteArray()));
-        val filePath = this.ossUploader.upload(this.getTemplateFileName(), inputStream);
+        val filePath = this.ossUploader.upload(this.fileName.get(), inputStream);
         log.info("Uploaded excel with exception message. filePath: {}", filePath);
         this.excelFilePath.set(filePath);
     }

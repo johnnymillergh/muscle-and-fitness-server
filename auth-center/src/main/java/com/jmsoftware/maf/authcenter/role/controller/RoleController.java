@@ -35,7 +35,7 @@ public class RoleController extends AbstractExcelDataController<RoleExcelBean> {
     }
 
     @Override
-    protected void executeDatabaseOperation(List<RoleExcelBean> beanList) throws Exception {
+    protected void executeDatabaseOperation(List<RoleExcelBean> beanList) {
         log.info("ExecuteDatabaseOperation: {}", beanList);
         this.roleService.save(beanList);
     }

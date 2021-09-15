@@ -191,6 +191,3 @@ maf:
     jwt:
       # an hour
       ttl: 3600000
-
-minio:
-  enabled: true

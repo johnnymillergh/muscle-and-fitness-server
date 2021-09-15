@@ -1,5 +1,7 @@
 package com.jmsoftware.maf.springcloudstarter.poi;
 
+import lombok.NonNull;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -18,5 +20,5 @@ public interface OssUploader {
      * @return the string
      * @throws IOException the io exception
      */
-    String upload(String name, InputStream inputStream) throws IOException;
+    String upload(@NonNull String name, @NonNull InputStream inputStream) throws IOException;
 }
