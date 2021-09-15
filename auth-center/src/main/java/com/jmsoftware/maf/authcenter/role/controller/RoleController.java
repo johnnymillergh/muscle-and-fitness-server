@@ -3,6 +3,7 @@ package com.jmsoftware.maf.authcenter.role.controller;
 import com.jmsoftware.maf.authcenter.role.entity.RoleExcelBean;
 import com.jmsoftware.maf.authcenter.role.service.RoleService;
 import com.jmsoftware.maf.springcloudstarter.poi.AbstractExcelDataController;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@Api(tags = {"Role API"})
 @RequestMapping("/roles")
 public class RoleController extends AbstractExcelDataController<RoleExcelBean> {
     private final RoleService roleService;
