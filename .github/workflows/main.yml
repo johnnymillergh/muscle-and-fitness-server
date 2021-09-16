@@ -22,7 +22,7 @@ jobs:
       - name: Set up AdoptOpenJDK
         uses: actions/setup-java@v2.3.0
         with:
-          java-version: '11.0.10'
+          java-version: '11.0.11'
           distribution: 'adopt-hotspot'
       - name: Grant execute permission for mvnw
         run: chmod +x mvnw
