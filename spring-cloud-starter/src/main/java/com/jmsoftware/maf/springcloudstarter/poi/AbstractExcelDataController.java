@@ -10,7 +10,6 @@ import com.google.common.collect.Maps;
 import com.jmsoftware.maf.common.bean.ExcelImportResult;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.springcloudstarter.annotation.ExcelColumn;
-import com.jmsoftware.maf.springcloudstarter.configuration.ExcelImportConfiguration;
 import com.jmsoftware.maf.springcloudstarter.util.CaseConversionUtil;
 import io.swagger.annotations.ApiOperation;
 import lombok.Cleanup;

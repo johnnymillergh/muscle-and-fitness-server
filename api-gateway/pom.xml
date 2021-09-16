@@ -100,7 +100,7 @@
                 </executions>
                 <configuration>
                     <from>
-                        <!-- https://hub.docker.com/r/adoptopenjdk/openjdk11/tags?page=1&ordering=last_updated&name=alpine-jre-11 -->
+                        <!-- Don't use alpine or slim version, https://hub.docker.com/r/adoptopenjdk/openjdk11/tags?page=1&ordering=last_updated&name=jre-11 -->
                         <image>adoptopenjdk/openjdk11:${adoptopenjdk11.tag}</image>
                     </from>
                     <to>

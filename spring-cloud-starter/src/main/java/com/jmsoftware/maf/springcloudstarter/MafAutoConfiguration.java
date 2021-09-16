@@ -15,6 +15,7 @@ import com.jmsoftware.maf.springcloudstarter.helper.HttpApiScanHelper;
 import com.jmsoftware.maf.springcloudstarter.helper.IpHelper;
 import com.jmsoftware.maf.springcloudstarter.helper.SpringBootStartupHelper;
 import com.jmsoftware.maf.springcloudstarter.minio.MinioConfiguration;
+import com.jmsoftware.maf.springcloudstarter.poi.ExcelImportConfiguration;
 import com.jmsoftware.maf.springcloudstarter.quartz.QuartzConfiguration;
 import com.jmsoftware.maf.springcloudstarter.redis.RedisConfiguration;
 import com.jmsoftware.maf.springcloudstarter.service.CommonService;
