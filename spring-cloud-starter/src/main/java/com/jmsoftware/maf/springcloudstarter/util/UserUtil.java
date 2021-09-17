@@ -17,22 +17,38 @@ public class UserUtil {
     private UserUtil() {
     }
 
+    /**
+     * Gets current username. Never throw exceptions.
+     *
+     * @return the current id; null if the current request is ignored by api-gateway
+     * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 9/17/21 7:58 AM
+     */
     public static String getCurrentUsername() {
         val servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        return servletRequestAttributes.getRequest().getHeader(MafHttpHeader.X_USERNAME.getHeader());
+        val request = servletRequestAttributes.getRequest();
+        val currentUsername = request.getHeader(MafHttpHeader.X_USERNAME.getHeader());
+        if (StrUtil.isBlank(currentUsername)) {
+            log.warn("Found blank {} in the header of current request [{}] {}", MafHttpHeader.X_USERNAME,
+                     request.getMethod(), request.getRequestURI());
+            return null;
+        }
+        return currentUsername;
     }
 
     /**
-     * Gets current id.
+     * Gets current user's id. Never throw exceptions.
      *
-     * @return the current id
-     * @throws IllegalArgumentException if X-ID is blank in HTTP header
+     * @return the current id; null if the current request is ignored by api-gateway
+     * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 9/17/21 7:58 AM
      */
     public static Long getCurrentId() {
         val servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        val xid = servletRequestAttributes.getRequest().getHeader(MafHttpHeader.X_ID.getHeader());
+        val request = servletRequestAttributes.getRequest();
+        val xid = request.getHeader(MafHttpHeader.X_ID.getHeader());
         if (StrUtil.isBlank(xid)) {
-            throw new IllegalArgumentException("Invalid X-ID");
+            log.warn("Found blank {} in the header of current request [{}] {}", MafHttpHeader.X_ID, request.getMethod(),
+                     request.getRequestURI());
+            return null;
         }
         return Long.valueOf(xid);
     }

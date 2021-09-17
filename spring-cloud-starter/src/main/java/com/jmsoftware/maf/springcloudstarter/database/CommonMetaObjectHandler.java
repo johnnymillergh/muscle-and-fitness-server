@@ -1,17 +1,20 @@
 package com.jmsoftware.maf.springcloudstarter.database;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.jmsoftware.maf.common.domain.DeletedField;
 import com.jmsoftware.maf.springcloudstarter.util.UserUtil;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.apache.ibatis.reflection.MetaObject;
 
 import java.time.LocalDateTime;
 
 /**
  * <h1>CommonMetaObjectHandler</h1>
- * <p><strong>CommonMetaObjectHandler</strong> will inject these fields automatically when executing <strong>INSERT</strong> or
+ * <p><strong>CommonMetaObjectHandler</strong> will inject these fields automatically when executing
+ * <strong>INSERT</strong> or
  * <strong>UPDATE</strong>.</p>
  * <p>This class is cooperating with the annotation <code>@TableField</code>. So the persistence Java class must be
  * annotated by <code>@TableField(value = COL_CREATED_BY, fill = INSERT)</code> or <code>@TableField(value =
@@ -60,8 +63,15 @@ public class CommonMetaObjectHandler implements MetaObjectHandler {
         if (log.isDebugEnabled()) {
             log.debug("Starting to insert fill metaObject: {}", metaObject.getOriginalObject());
         }
-        this.strictInsertFill(metaObject, CREATED_BY_FIELD_NAME, Long.class, UserUtil.getCurrentId())
-                .strictInsertFill(metaObject, CREATED_TIME_FIELD_NAME, LocalDateTime.class, LocalDateTime.now())
+        val currentId = UserUtil.getCurrentId();
+        if (ObjectUtil.isNull(currentId)) {
+            log.warn(
+                    "Current user's ID is null, which may cause the record in database is incorrect. This will happen" +
+                            " when the request is ignored by gateway. Field: {}", CREATED_BY_FIELD_NAME);
+        } else {
+            this.strictInsertFill(metaObject, CREATED_BY_FIELD_NAME, Long.class, currentId);
+        }
+        this.strictInsertFill(metaObject, CREATED_TIME_FIELD_NAME, LocalDateTime.class, LocalDateTime.now())
                 .strictInsertFill(metaObject, DELETED_FIELD_NAME, Byte.class, DeletedField.NOT_DELETED.getValue());
         if (log.isDebugEnabled()) {
             log.debug("Finished to insert fill metaObject: {}", metaObject.getOriginalObject());
@@ -73,8 +83,15 @@ public class CommonMetaObjectHandler implements MetaObjectHandler {
         if (log.isDebugEnabled()) {
             log.debug("Starting to update fill metaObject: {}", metaObject.getOriginalObject());
         }
-        this.strictUpdateFill(metaObject, MODIFIED_BY_FIELD_NAME, Long.class, UserUtil.getCurrentId())
-                .strictUpdateFill(metaObject, MODIFIED_TIME_FIELD_NAME, LocalDateTime.class, LocalDateTime.now());
+        val currentId = UserUtil.getCurrentId();
+        if (ObjectUtil.isNull(currentId)) {
+            log.warn(
+                    "Current user's ID is null, which may cause the record in database is incorrect. This will happen" +
+                            " when the request is ignored by gateway. Field: {}", MODIFIED_BY_FIELD_NAME);
+        } else {
+            this.strictUpdateFill(metaObject, MODIFIED_BY_FIELD_NAME, Long.class, currentId);
+        }
+        this.strictUpdateFill(metaObject, MODIFIED_TIME_FIELD_NAME, LocalDateTime.class, LocalDateTime.now());
         if (log.isDebugEnabled()) {
             log.debug("Finished to update fill metaObject: {}", metaObject.getOriginalObject());
         }
