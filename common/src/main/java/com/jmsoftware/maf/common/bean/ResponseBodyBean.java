@@ -39,7 +39,7 @@ public class ResponseBodyBean<T> implements Serializable {
     /**
      * Default status is 200 OK.
      */
-    private Integer status = HttpStatus.OK.value();
+    private int status = HttpStatus.OK.value();
     /**
      * The Message. Default: 200 OK.
      */
@@ -48,6 +48,9 @@ public class ResponseBodyBean<T> implements Serializable {
      * The Data.
      */
     private T data;
+
+    private ResponseBodyBean() {
+    }
 
     /**
      * <p>Respond to client with IUniversalStatus (status may be OK or other).</p>
@@ -112,7 +115,7 @@ public class ResponseBodyBean<T> implements Serializable {
      * @param data    data to be responded
      * @return response body for ExceptionControllerAdvice
      */
-    public static <T> ResponseBodyBean<T> ofStatus(@NonNull final Integer status, @NonNull final String message,
+    public static <T> ResponseBodyBean<T> ofStatus(final int status, @NonNull final String message,
                                                    @Nullable final T data) {
         ResponseBodyBean<T> responseBodyBean = new ResponseBodyBean<>();
         responseBodyBean.setStatus(status);
@@ -132,7 +135,7 @@ public class ResponseBodyBean<T> implements Serializable {
      * @param data    data to be responded
      * @return response body
      */
-    public static <T> ResponseBodyBean<T> setResponse(@NonNull final Integer status, @NonNull final String message,
+    public static <T> ResponseBodyBean<T> setResponse(final int status, @NonNull final String message,
                                                       @Nullable final T data)
             throws BaseException {
         if (!HttpStatus.valueOf(status).is2xxSuccessful()) {
@@ -276,7 +279,7 @@ public class ResponseBodyBean<T> implements Serializable {
      * @return the json
      * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 12/22/2020 10:16 AM
      */
-    public static JSON of(@NonNull String message, @Nullable Object data, @NonNull Integer status) {
+    public static JSON of(@NonNull String message, @Nullable Object data, int status) {
         val responseBodyBean = ResponseBodyBean.ofStatus(status, message, data);
         val config = new JSONConfig();
         config.setIgnoreNullValue(false).setDateFormat(UniversalDateTime.DATE_TIME_FORMAT);
