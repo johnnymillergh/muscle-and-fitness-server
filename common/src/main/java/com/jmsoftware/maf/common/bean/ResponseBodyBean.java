@@ -3,7 +3,6 @@ package com.jmsoftware.maf.common.bean;
 import cn.hutool.json.JSON;
 import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONUtil;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jmsoftware.maf.common.constant.UniversalDateTime;
 import com.jmsoftware.maf.common.exception.BaseException;
 import com.jmsoftware.maf.common.exception.BizException;
@@ -26,9 +25,6 @@ import java.time.LocalDateTime;
 @Data
 @SuppressWarnings("unused")
 public class ResponseBodyBean<T> implements Serializable {
-    /**
-     * The constant serialVersionUID.
-     */
     private static final long serialVersionUID = 4645469240048361965L;
 
     /**
@@ -39,7 +35,6 @@ public class ResponseBodyBean<T> implements Serializable {
      * 23:08:46'
      */
     @Setter(AccessLevel.NONE)
-    @JsonFormat(pattern = UniversalDateTime.DATE_TIME_FORMAT)
     private final LocalDateTime timestamp = LocalDateTime.now();
     /**
      * Default status is 200 OK.
@@ -97,7 +92,7 @@ public class ResponseBodyBean<T> implements Serializable {
      * @param data   data to be responded to client
      * @return response body for ExceptionControllerAdvice
      */
-    public static <T> ResponseBodyBean<T> ofStatus(@NonNull final HttpStatus status, final T data) {
+    public static <T> ResponseBodyBean<T> ofStatus(@NonNull final HttpStatus status, @Nullable final T data) {
         ResponseBodyBean<T> responseBodyBean = new ResponseBodyBean<>();
         responseBodyBean.setStatus(status.value());
         responseBodyBean.setMessage(status.getReasonPhrase());
@@ -118,7 +113,7 @@ public class ResponseBodyBean<T> implements Serializable {
      * @return response body for ExceptionControllerAdvice
      */
     public static <T> ResponseBodyBean<T> ofStatus(@NonNull final Integer status, @NonNull final String message,
-                                                   final T data) {
+                                                   @Nullable final T data) {
         ResponseBodyBean<T> responseBodyBean = new ResponseBodyBean<>();
         responseBodyBean.setStatus(status);
         responseBodyBean.setMessage(message);
@@ -138,7 +133,7 @@ public class ResponseBodyBean<T> implements Serializable {
      * @return response body
      */
     public static <T> ResponseBodyBean<T> setResponse(@NonNull final Integer status, @NonNull final String message,
-                                                      final T data)
+                                                      @Nullable final T data)
             throws BaseException {
         if (!HttpStatus.valueOf(status).is2xxSuccessful()) {
             throw new BaseException(status, message, data);
@@ -167,7 +162,7 @@ public class ResponseBodyBean<T> implements Serializable {
      * @param data data to be responded to client.
      * @return response body
      */
-    public static <T> ResponseBodyBean<T> ofSuccess(final T data) {
+    public static <T> ResponseBodyBean<T> ofSuccess(@Nullable final T data) {
         ResponseBodyBean<T> responseBodyBean = new ResponseBodyBean<>();
         responseBodyBean.setData(data);
         return responseBodyBean;
@@ -194,7 +189,7 @@ public class ResponseBodyBean<T> implements Serializable {
      * @param message message to be responded
      * @return response body
      */
-    public static <T> ResponseBodyBean<T> ofSuccess(final T data,
+    public static <T> ResponseBodyBean<T> ofSuccess(@Nullable final T data,
                                                     @NonNull final String message) {
         ResponseBodyBean<T> responseBodyBean = new ResponseBodyBean<>();
         responseBodyBean.setMessage(message);
@@ -284,7 +279,7 @@ public class ResponseBodyBean<T> implements Serializable {
     public static JSON of(@NonNull String message, @Nullable Object data, @NonNull Integer status) {
         val responseBodyBean = ResponseBodyBean.ofStatus(status, message, data);
         val config = new JSONConfig();
-        config.setIgnoreNullValue(false).setDateFormat("yyyy-MM-dd HH:mm:ss");
+        config.setIgnoreNullValue(false).setDateFormat(UniversalDateTime.DATE_TIME_FORMAT);
         return JSONUtil.parse(responseBodyBean, config);
     }
 }

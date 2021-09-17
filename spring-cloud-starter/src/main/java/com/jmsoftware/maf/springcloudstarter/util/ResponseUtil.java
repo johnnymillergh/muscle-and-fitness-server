@@ -3,9 +3,12 @@ package com.jmsoftware.maf.springcloudstarter.util;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.exception.BaseException;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.Nullable;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -21,11 +24,9 @@ import static org.springframework.web.cors.CorsConfiguration.ALL;
  **/
 @Slf4j
 @SuppressWarnings("unused")
+@RequiredArgsConstructor
 public class ResponseUtil {
-    private static final ObjectMapper MAPPER = new ObjectMapper();
-
-    private ResponseUtil() {
-    }
+    private final ObjectMapper objectMapper;
 
     /**
      * Write data JSON to response.
@@ -34,12 +35,13 @@ public class ResponseUtil {
      * @param httpStatus HTTP status
      * @param data       Data
      */
-    public static void renderJson(final HttpServletResponse response, final HttpStatus httpStatus, final Object data) {
-        standardizeHttpServletResponse(response, httpStatus);
+    public void renderJson(@NonNull HttpServletResponse response, @NonNull HttpStatus httpStatus,
+                           @Nullable Object data) {
+        this.standardizeHttpServletResponse(response, httpStatus);
         val responseBodyBean = ResponseBodyBean.ofStatus(httpStatus.value(),
                                                          httpStatus.getReasonPhrase(), data);
         try {
-            response.getWriter().write(MAPPER.writeValueAsString(responseBodyBean));
+            response.getWriter().write(this.objectMapper.writeValueAsString(responseBodyBean));
         } catch (IOException e) {
             log.error("Error occurred when responding a data JSON.", e);
         }
@@ -52,12 +54,12 @@ public class ResponseUtil {
      * @param httpStatus the http status
      * @param message    the message
      */
-    public static void renderJson(final HttpServletResponse response, final HttpStatus httpStatus,
-                                  final String message) {
-        standardizeHttpServletResponse(response, httpStatus);
+    public void renderJson(@NonNull HttpServletResponse response, @NonNull HttpStatus httpStatus,
+                           @NonNull String message) {
+        this.standardizeHttpServletResponse(response, httpStatus);
         val responseBodyBean = ResponseBodyBean.ofStatus(httpStatus.value(), message, null);
         try {
-            response.getWriter().write(MAPPER.writeValueAsString(responseBodyBean));
+            response.getWriter().write(this.objectMapper.writeValueAsString(responseBodyBean));
         } catch (IOException e) {
             log.error("Error occurred when responding a data JSON.", e);
         }
@@ -69,14 +71,14 @@ public class ResponseUtil {
      * @param response  Response
      * @param exception Exception
      */
-    public static void renderJson(final HttpServletResponse response, final BaseException exception) {
+    public void renderJson(@NonNull HttpServletResponse response, @NonNull BaseException exception) {
         val httpStatus = HttpStatus.valueOf(exception.getCode());
-        standardizeHttpServletResponse(response, httpStatus);
+        this.standardizeHttpServletResponse(response, httpStatus);
         val responseBodyBean = ResponseBodyBean.ofStatus(exception.getCode(),
                                                          exception.getMessage(),
                                                          exception.getData());
         try {
-            response.getWriter().write(MAPPER.writeValueAsString(responseBodyBean));
+            response.getWriter().write(this.objectMapper.writeValueAsString(responseBodyBean));
         } catch (IOException e) {
             log.error("Error occurred when responding an exception JSON.", e);
         }
@@ -88,8 +90,7 @@ public class ResponseUtil {
      * @param response   the response
      * @param httpStatus the http status
      */
-    private static void standardizeHttpServletResponse(final HttpServletResponse response,
-                                                       final HttpStatus httpStatus) {
+    private void standardizeHttpServletResponse(HttpServletResponse response, HttpStatus httpStatus) {
         response.setHeader("Access-Control-Allow-Origin", ALL);
         response.setHeader("Access-Control-Allow-Methods", ALL);
         response.setContentType("application/json;charset=UTF-8");
