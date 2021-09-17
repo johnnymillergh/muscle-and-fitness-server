@@ -1,6 +1,7 @@
 package com.jmsoftware.maf.apigateway.security.impl;
 
 import com.jmsoftware.maf.reactivespringcloudstarter.util.ResponseUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -16,11 +17,14 @@ import reactor.core.publisher.Mono;
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 12/29/2020 9:56 AM
  **/
 @Slf4j
+@RequiredArgsConstructor
 public class GatewayServerAccessDeniedHandlerImpl implements ServerAccessDeniedHandler {
+    private final ResponseUtil responseUtil;
+
     @Override
     public Mono<Void> handle(ServerWebExchange exchange, AccessDeniedException denied) {
         log.error("Access denied! Exception message: {}. Request URL: [{}] {}", denied.getMessage(),
                   exchange.getRequest().getMethod(), exchange.getRequest().getURI());
-        return ResponseUtil.renderJson(exchange, HttpStatus.FORBIDDEN, denied.getMessage(), null);
+        return this.responseUtil.renderJson(exchange, HttpStatus.FORBIDDEN, denied.getMessage(), null);
     }
 }

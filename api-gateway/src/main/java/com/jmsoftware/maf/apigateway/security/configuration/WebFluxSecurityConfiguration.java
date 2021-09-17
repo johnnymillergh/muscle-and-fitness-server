@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.jmsoftware.maf.apigateway.remoteapi.AuthCenterRemoteApi;
 import com.jmsoftware.maf.apigateway.security.impl.*;
 import com.jmsoftware.maf.reactivespringcloudstarter.configuration.MafConfiguration;
+import com.jmsoftware.maf.reactivespringcloudstarter.util.ResponseUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -79,13 +80,13 @@ public class WebFluxSecurityConfiguration {
     }
 
     @Bean
-    public ServerAuthenticationEntryPoint serverAuthenticationEntryPoint() {
-        return new ServerAuthenticationEntryPointImpl();
+    public ServerAuthenticationEntryPoint serverAuthenticationEntryPoint(ResponseUtil responseUtil) {
+        return new ServerAuthenticationEntryPointImpl(responseUtil);
     }
 
     @Bean
-    public ServerAccessDeniedHandler serverAccessDeniedHandler() {
-        return new GatewayServerAccessDeniedHandlerImpl();
+    public ServerAccessDeniedHandler serverAccessDeniedHandler(ResponseUtil responseUtil) {
+        return new GatewayServerAccessDeniedHandlerImpl(responseUtil);
     }
 
     @Bean

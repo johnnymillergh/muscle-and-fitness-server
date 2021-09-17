@@ -1,5 +1,6 @@
 package com.jmsoftware.maf.reactivespringcloudstarter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jmsoftware.maf.reactivespringcloudstarter.configuration.*;
 import com.jmsoftware.maf.reactivespringcloudstarter.controller.CommonController;
 import com.jmsoftware.maf.reactivespringcloudstarter.filter.AccessLogFilter;
@@ -8,6 +9,7 @@ import com.jmsoftware.maf.reactivespringcloudstarter.helper.SpringBootStartupHel
 import com.jmsoftware.maf.reactivespringcloudstarter.redis.RedisConfiguration;
 import com.jmsoftware.maf.reactivespringcloudstarter.service.CommonService;
 import com.jmsoftware.maf.reactivespringcloudstarter.service.impl.CommonServiceImpl;
+import com.jmsoftware.maf.reactivespringcloudstarter.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -71,5 +73,11 @@ public class MafReactiveAutoConfiguration {
     public CommonController commonController(CommonService commonService) {
         log.warn("Initial bean: '{}'", CommonController.class.getSimpleName());
         return new CommonController(commonService);
+    }
+
+    @Bean
+    public ResponseUtil responseUtil(ObjectMapper objectMapper) {
+        log.warn("Initial bean: '{}'", ResponseUtil.class.getSimpleName());
+        return new ResponseUtil(objectMapper);
     }
 }
