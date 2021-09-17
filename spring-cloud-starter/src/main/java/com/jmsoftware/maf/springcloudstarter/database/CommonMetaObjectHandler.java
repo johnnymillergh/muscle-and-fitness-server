@@ -67,6 +67,7 @@ public class CommonMetaObjectHandler implements MetaObjectHandler {
             log.warn(
                     "Current user's ID is null, which may cause the record in database is incorrect. This will happen" +
                             " when the request is ignored by gateway. Field: {}", CREATED_BY_FIELD_NAME);
+            this.strictInsertFill(metaObject, CREATED_BY_FIELD_NAME, Long.class, 1L);
         } else {
             this.strictInsertFill(metaObject, CREATED_BY_FIELD_NAME, Long.class, currentId);
         }
@@ -87,6 +88,7 @@ public class CommonMetaObjectHandler implements MetaObjectHandler {
             log.warn(
                     "Current user's ID is null, which may cause the record in database is incorrect. This will happen" +
                             " when the request is ignored by gateway. Field: {}", MODIFIED_BY_FIELD_NAME);
+            this.strictUpdateFill(metaObject, CREATED_BY_FIELD_NAME, Long.class, 1L);
         } else {
             this.strictUpdateFill(metaObject, MODIFIED_BY_FIELD_NAME, Long.class, currentId);
         }
