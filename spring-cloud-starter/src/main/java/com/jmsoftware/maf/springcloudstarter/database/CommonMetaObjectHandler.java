@@ -14,8 +14,7 @@ import java.time.LocalDateTime;
 /**
  * <h1>CommonMetaObjectHandler</h1>
  * <p><strong>CommonMetaObjectHandler</strong> will inject these fields automatically when executing
- * <strong>INSERT</strong> or
- * <strong>UPDATE</strong>.</p>
+ * <strong>INSERT</strong> or <strong>UPDATE</strong>.</p>
  * <p>This class is cooperating with the annotation <code>@TableField</code>. So the persistence Java class must be
  * annotated by <code>@TableField(value = COL_CREATED_BY, fill = INSERT)</code> or <code>@TableField(value =
  * COL_MODIFIED_BY, fill = UPDATE)</code>.</p>
