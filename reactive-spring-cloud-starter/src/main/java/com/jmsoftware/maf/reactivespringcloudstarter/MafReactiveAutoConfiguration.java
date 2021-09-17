@@ -32,7 +32,8 @@ import javax.annotation.PostConstruct;
 @Import({
         RedisConfiguration.class,
         WebFluxConfiguration.class,
-        WebClientConfiguration.class
+        WebClientConfiguration.class,
+        JacksonConfiguration.class
 })
 public class MafReactiveAutoConfiguration {
     @PostConstruct
