@@ -142,8 +142,8 @@ services:
     restart: always
     volumes:
       - ./configuration/rabbitmq:/etc/rabbitmq
-      - ./plugin/rabbitmq/rabbitmq_delayed_message_exchange-3.8.9-0199d11c.ez:/plugins/rabbitmq_delayed_message_exchange-3.8.9-0199d11c.ez
-      - "~/docker-file-mapping/${RABBITMQ_CONTAINER_NAME}:/var/lib/rabbitmq"
+      - ./plugin/rabbitmq/rabbitmq_delayed_message_exchange-3.9.0.ez:/plugins/rabbitmq_delayed_message_exchange-3.9.0.ez
+      - ~/docker-file-mapping/${RABBITMQ_CONTAINER_NAME}:/var/lib/rabbitmq
     environment:
       RABBITMQ_DEFAULT_USER: ${MAF_RABBITMQ_USER}
       RABBITMQ_DEFAULT_PASS: ${MAF_RABBITMQ_PASSWORD}
