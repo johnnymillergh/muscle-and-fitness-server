@@ -14,13 +14,13 @@ import lombok.ToString;
 @RequiredArgsConstructor
 public enum DataSourceEnum {
     /**
-     * Master
+     * Main
      */
-    MASTER_1("master_1"),
+    MAIN_1("source_1"),
     /**
-     * Slave 1
+     * Replica 1
      */
-    SLAVE_1("slave_1"),
+    REPLICA_1("replica_1"),
     /**
      * Quartz
      */

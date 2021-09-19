@@ -42,7 +42,7 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     dynamic:
-      primary: master_1
+      primary: source_1
       druid:
         # connection pool size will be determined by DruidDataSourceCreatorPostProcessor.java
         max-wait: 60000

@@ -4,8 +4,8 @@ services:
   ################################################################################
   #                           Infrastructure Services                            #
   ################################################################################
-  mysql-server-master:
-    container_name: ${MYSQL_SERVER_MASTER_CONTAINER_NAME}
+  mysql-server-source:
+    container_name: ${MYSQL_SERVER_SOURCE_CONTAINER_NAME}
     image: mysql/mysql-server:${MYSQL_SERVER_TAG}
     environment:
       MYSQL_ROOT_HOST: "%"
@@ -16,9 +16,9 @@ services:
       - "3306:3306"
     restart: always
     volumes:
-      - "~/docker-file-mapping/${MYSQL_SERVER_MASTER_CONTAINER_NAME}:/var/lib/mysql"
-      - ./configuration/mysql-server/master/mysql-master.cnf:/etc/my.cnf
-      - ./script/mysql-server-master:/docker-entrypoint-initdb.d
+      - ~/docker-file-mapping/${MYSQL_SERVER_SOURCE_CONTAINER_NAME}:/var/lib/mysql
+      - ./configuration/mysql-server/source/mysql.cnf:/etc/my.cnf
+      - ./script/mysql-server-source:/docker-entrypoint-initdb.d
     command: >
       bash -c "
       chmod 644 /etc/my.cnf
@@ -27,22 +27,23 @@ services:
     networks:
       muscle_and_fitness_network:
 
-  mysql-server-slave:
-    container_name: ${MYSQL_SERVER_SLAVE_CONTAINER_NAME}
+  mysql-server-replica-1:
+    container_name: ${MYSQL_SERVER_REPLICA_1_CONTAINER_NAME}
     image: mysql/mysql-server:${MYSQL_SERVER_TAG}
     depends_on:
-      - mysql-server-master
+      - mysql-server-source
     environment:
       MYSQL_ROOT_HOST: "%"
       MYSQL_ROOT_PASSWORD: ${MAF_MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MAF_MYSQL_DATABASE}
+      TZ: ${MAF_TIMEZONE}
     ports:
       - "3307:3306"
     restart: always
     volumes:
-      - "~/docker-file-mapping/${MYSQL_SERVER_SLAVE_CONTAINER_NAME}:/var/lib/mysql"
-      - ./configuration/mysql-server/slave-1/mysql-slave.cnf:/etc/my.cnf
-      - ./script/mysql-server-slave:/docker-entrypoint-initdb.d
+      - ~/docker-file-mapping/${MYSQL_SERVER_REPLICA_1_CONTAINER_NAME}:/var/lib/mysql
+      - ./configuration/mysql-server/replica-1/mysql.cnf:/etc/my.cnf
+      - ./script/mysql-server-replica-1:/docker-entrypoint-initdb.d
     command: >
       bash -c "
       chmod 644 /etc/my.cnf
@@ -327,7 +328,7 @@ services:
     image: ijohnnymiller/muscle-and-fitness-server.auth-center:${MAF_TAG}
     depends_on:
       - consul-registry
-      - mysql-server-slave
+      - mysql-server-replica-1
       - redis-slave-1
       - rabbitmq
     restart: always
@@ -353,7 +354,7 @@ services:
       - consul-registry
       - rabbitmq
       - minio
-      - mysql-server-slave
+      - mysql-server-replica-1
       - redis-slave-1
     restart: always
     volumes:
@@ -376,7 +377,7 @@ services:
     image: ijohnnymiller/muscle-and-fitness-server.maf-mis:${MAF_TAG}
     depends_on:
       - consul-registry
-      - mysql-server-slave
+      - mysql-server-replica-1
       - redis-slave-1
       - rabbitmq
     restart: always
