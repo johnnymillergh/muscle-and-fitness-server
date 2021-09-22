@@ -112,10 +112,6 @@ spring:
             isClustered: true
             clusterCheckinInterval: 3000
             useProperties: false
-          threadPool:
-            threadCount: 15
-            threadPriority: 5
-            class: org.quartz.simpl.SimpleThreadPool
 
 feign:
   httpclient:
