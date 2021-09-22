@@ -7,6 +7,8 @@ logs/
 .DS_Store
 HELP.md
 nohup.out
+*.log
+*.gz
 
 ### STS ###
 .apt_generated

@@ -55,20 +55,22 @@ Here is the highlights of **Muscle and Fitness Server**:
 
 12. [Knife4j](https://doc.xiaominfo.com/) API visualization. Enhanced Swagger API documentation.
 
-13. Log compression. [ELK](https://www.elastic.co/what-is/elk-stack) log aggregation.
+13. [Async log output](https://examples.javacodegeeks.com/enterprise-java/logback/logback-ayncappender-example/). Log file compressed by standard GNU zip ([gzip](https://en.wikipedia.org/wiki/Gzip)) compression algorithm. [ELK](https://www.elastic.co/what-is/elk-stack) log aggregation.
 
-14. AOP based request log, configurable for turning on or off.
+14. JVM log configuration for JVM garbage collection.
 
-15. Customized method argument validation.
+15. AOP based request log, configurable for turning on or off.
+
+16. Customized method argument validation.
 
     - [Date time range validator](https://github.com/johnnymillergh/muscle-and-fitness-server/blob/master/spring-cloud-starter/src/main/java/com/jmsoftware/maf/springcloudstarter/validation/validator/DateTimeRangeValidator.java)
     - [Enum value validator](https://github.com/johnnymillergh/muscle-and-fitness-server/blob/master/spring-cloud-starter/src/main/java/com/jmsoftware/maf/springcloudstarter/validation/validator/EnumValueValidator.java)
 
-16. Docker container log persistence. Size and time based rolling policy.
+17. Docker container log persistence. Size and time based rolling policy.
 
-17. [Startup and deployment statistics](https://github.com/johnnymillergh/muscle-and-fitness-server/blob/master/spring-cloud-starter/src/main/java/com/jmsoftware/maf/springcloudstarter/helper/SpringBootStartupHelper.java).
+18. [Startup and deployment statistics](https://github.com/johnnymillergh/muscle-and-fitness-server/blob/master/spring-cloud-starter/src/main/java/com/jmsoftware/maf/springcloudstarter/helper/SpringBootStartupHelper.java).
 
-18. Customized startup banner.
+19. Customized startup banner.
 
 ## Usage
 
