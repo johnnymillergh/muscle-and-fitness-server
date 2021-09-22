@@ -48,6 +48,19 @@
         </encoder>
     </appender>
 
+    <!-- https://examples.javacodegeeks.com/enterprise-java/logback/logback-ayncappender-example/ -->
+    <appender name="ASYNC_CONSOLE" class="ch.qos.logback.classic.AsyncAppender">
+        <!-- default 20, means drop lower event when has 20% capacity remaining -->
+        <discardingThreshold>0</discardingThreshold>
+        <appender-ref ref="CONSOLE"/>
+        <!-- default 256 -->
+        <queueSize>256</queueSize>
+        <!-- default false -->
+        <includeCallerData>false</includeCallerData>
+        <!-- default false, set to true to cause the Appender not block the application and just drop the messages -->
+        <neverBlock>true</neverBlock>
+    </appender>
+
     <!-- FILE Log Configuration -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
@@ -72,6 +85,18 @@
             <maxHistory>7</maxHistory>
             <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
+    </appender>
+
+    <appender name="ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
+        <!-- default 20, means drop lower event when has 20% capacity remaining -->
+        <discardingThreshold>0</discardingThreshold>
+        <appender-ref ref="FILE"/>
+        <!-- default 256 -->
+        <queueSize>256</queueSize>
+        <!-- default false -->
+        <includeCallerData>false</includeCallerData>
+        <!-- default false, set to true to cause the Appender not block the application and just drop the messages -->
+        <neverBlock>false</neverBlock>
     </appender>
 
     <!-- LOGSTASH -->
