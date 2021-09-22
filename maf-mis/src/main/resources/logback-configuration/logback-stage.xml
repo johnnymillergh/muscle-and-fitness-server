@@ -6,6 +6,6 @@
     <root level="INFO">
         <appender-ref ref="ASYNC_CONSOLE"/>
         <appender-ref ref="ASYNC_FILE"/>
-        <appender-ref ref="LOGSTASH"/>
+        <appender-ref ref="ASYNC_LOGSTASH"/>
     </root>
 </configuration>

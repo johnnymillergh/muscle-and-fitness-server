@@ -8,7 +8,6 @@ import lombok.val;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Description: OssConfiguration, change description here.
@@ -24,9 +23,9 @@ public class OssConfiguration {
     @Bean
     public OssUploader ossUploader() {
         return (name, inputStream) -> {
-            MultipartFile file = new MockMultipartFile(name, name, null, inputStream);
-            val response = this.ossCenterRemoteApi.uploadSingleResource(file);
-            log.info("Called {} to upload file. {}", OssCenterRemoteApi.SERVICE_NAME, response);
+            val multipartFile = new MockMultipartFile(name, name, null, inputStream);
+            val response = this.ossCenterRemoteApi.uploadSingleResource(multipartFile);
+            log.info("Called {} to upload multipartFile. {}", OssCenterRemoteApi.SERVICE_NAME, response);
             return String.format("%s/%s", response.getData().getBucket(), response.getData().getObject());
         };
     }
