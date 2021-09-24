@@ -20,7 +20,6 @@ import com.jmsoftware.maf.springcloudstarter.quartz.QuartzConfiguration;
 import com.jmsoftware.maf.springcloudstarter.redis.RedisConfiguration;
 import com.jmsoftware.maf.springcloudstarter.service.CommonService;
 import com.jmsoftware.maf.springcloudstarter.service.impl.CommonServiceImpl;
-import com.jmsoftware.maf.springcloudstarter.sftp.SftpConfiguration;
 import com.jmsoftware.maf.springcloudstarter.websocket.WebSocketConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.exceptions.PersistenceException;
@@ -61,7 +60,6 @@ import java.util.List;
         MyBatisPlusConfiguration.class,
         RedisConfiguration.class,
         Swagger2Configuration.class,
-        SftpConfiguration.class,
         WebSecurityConfiguration.class,
         RestTemplateConfiguration.class,
         AsyncConfiguration.class,
