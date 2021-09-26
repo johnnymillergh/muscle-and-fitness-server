@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 /**
- * Description: GreetingBean, change description here.
+ * Description: GreetingBean, demo for dynamic Quartz job, which is configured in the table `quartz_job_configuration`.
  *
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 7/13/2021 10:16 PM
  * @see

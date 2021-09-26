@@ -49,7 +49,8 @@ Here is the highlights of **Muscle and Fitness Server**:
 
 9. [STOMP over WebSocket](https://www.toptal.com/java/stomp-spring-boot-websocket) (SockJS), real time messaging, based on [RabbitMQ STOMP](https://www.rabbitmq.com/stomp.html) message broker.
 
-10. [Quartz](http://www.quartz-scheduler.org/) support. Distributed job scheduling, based on JDBC.
+10. [Quartz](http://www.quartz-scheduler.org/) support. Distributed job scheduling, based on JDBC. Dynamic Quartz job configuration, served by served by database configuration
+    table `quartz_job_configuration`. Reduce lots of Quartz job and trigger boilerplate codes.
 
 11. Multi-environment support.
 
