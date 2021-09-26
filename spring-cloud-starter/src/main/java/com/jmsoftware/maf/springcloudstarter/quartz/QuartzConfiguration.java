@@ -1,22 +1,22 @@
 package com.jmsoftware.maf.springcloudstarter.quartz;
 
 import com.jmsoftware.maf.springcloudstarter.configuration.MafProjectProperty;
+import com.jmsoftware.maf.springcloudstarter.quartz.service.QuartzJobConfigurationService;
+import com.jmsoftware.maf.springcloudstarter.quartz.service.impl.QuartzJobConfigurationServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.quartz.Scheduler;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.quartz.QuartzProperties;
 import org.springframework.boot.autoconfigure.quartz.SchedulerFactoryBeanCustomizer;
 import org.springframework.context.annotation.Bean;
-import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
-import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.Properties;
+
+import static org.springframework.scheduling.quartz.SchedulerFactoryBean.PROP_THREAD_COUNT;
 
 /**
  * Description: QuartzConfiguration, change description here.
@@ -26,14 +26,12 @@ import java.util.Properties;
 @Slf4j
 @ConditionalOnClass({Scheduler.class, SchedulerFactoryBean.class, PlatformTransactionManager.class})
 public class QuartzConfiguration {
-    private static final String THREAD_COUNT = "org.quartz.threadPool.threadCount";
-
     @Bean
     public SchedulerFactoryBeanCustomizer threadPoolCustomizer(QuartzProperties quartzProperties) {
         return schedulerFactoryBean -> {
             val cpuCoreCount = Runtime.getRuntime().availableProcessors();
             val threadCount = String.valueOf(cpuCoreCount * 2);
-            quartzProperties.getProperties().put(THREAD_COUNT, threadCount);
+            quartzProperties.getProperties().put(PROP_THREAD_COUNT, threadCount);
             log.warn("Quartz thread pool enhanced by current cpuCoreCount: {}, threadCount: {}", cpuCoreCount,
                      threadCount);
             schedulerFactoryBean.setQuartzProperties(this.asProperties(quartzProperties.getProperties()));
@@ -47,39 +45,15 @@ public class QuartzConfiguration {
     }
 
     @Bean
-    public GreetingQuartzJobBean greetingQuartzJobBean(MafProjectProperty mafProjectProperty) {
-        log.warn("Initial bean: '{}'", GreetingQuartzJobBean.class.getSimpleName());
-        return new GreetingQuartzJobBean(mafProjectProperty);
-    }
-
-    @Bean("greetingQuartzJobDetailFactoryBean")
-    public JobDetailFactoryBean greetingQuartzJobDetailFactoryBean(GreetingQuartzJobBean greetingQuartzJobBean) {
-        val jobDetailFactoryBean = new JobDetailFactoryBean();
-        jobDetailFactoryBean.setName("greeting-job-detail");
-        jobDetailFactoryBean.setGroup("default");
-        jobDetailFactoryBean.setJobClass(greetingQuartzJobBean.getClass());
-        jobDetailFactoryBean.setDescription("Greeting job detail created by JobDetailFactoryBean");
-        jobDetailFactoryBean.setDurability(true);
-        log.warn("Initial bean: '{}'", JobDetailFactoryBean.class.getSimpleName());
-        return jobDetailFactoryBean;
-    }
-
-    @Bean("greetingQuartzJobCronTriggerFactoryBean")
-    public CronTriggerFactoryBean greetingQuartzJobCronTriggerFactoryBean(
-            @Qualifier("greetingQuartzJobDetailFactoryBean") JobDetailFactoryBean jobDetailFactoryBean) {
-        val cronTriggerFactoryBean = new CronTriggerFactoryBean();
-        cronTriggerFactoryBean.setName("greeting-cron-trigger");
-        cronTriggerFactoryBean.setGroup("default");
-        cronTriggerFactoryBean.setCronExpression("0 0/1 * 1/1 * ? *");
-        val optionalJobDetail = Optional.ofNullable(jobDetailFactoryBean.getObject());
-        optionalJobDetail.ifPresent(cronTriggerFactoryBean::setJobDetail);
-        log.warn("Initial bean: '{}'", CronTriggerFactoryBean.class.getSimpleName());
-        return cronTriggerFactoryBean;
+    public GreetingBean greetingBean(MafProjectProperty mafProjectProperty) {
+        log.warn("Initial bean: '{}'", GreetingBean.class.getSimpleName());
+        return new GreetingBean(mafProjectProperty);
     }
 
     @Bean
-    public QuartzJobService quartzJobService(SchedulerFactoryBean schedulerFactoryBean) {
-        log.warn("Initial bean: '{}'", QuartzJobServiceImpl.class.getSimpleName());
-        return new QuartzJobServiceImpl(schedulerFactoryBean);
+    public QuartzJobConfigurationService quartzJobConfigurationService(SchedulerFactoryBean schedulerFactoryBean,
+                                                                       MafProjectProperty mafProjectProperty) {
+        log.warn("Initial bean: '{}'", QuartzJobConfigurationServiceImpl.class.getSimpleName());
+        return new QuartzJobConfigurationServiceImpl(schedulerFactoryBean, mafProjectProperty);
     }
 }

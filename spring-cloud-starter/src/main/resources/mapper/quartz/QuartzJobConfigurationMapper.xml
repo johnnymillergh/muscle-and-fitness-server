@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jmsoftware.maf.springcloudstarter.quartz.mapper.QuartzJobConfigurationMapper">
+    <resultMap id="BaseResultMap"
+               type="com.jmsoftware.maf.springcloudstarter.quartz.entity.persistence.QuartzJobConfiguration">
+        <!--@mbg.generated-->
+        <!--@Table quartz_job_configuration-->
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="group" jdbcType="VARCHAR" property="group"/>
+        <result column="service_name" jdbcType="VARCHAR" property="serviceName"/>
+        <result column="invoke_target" jdbcType="VARCHAR" property="invokeTarget"/>
+        <result column="cron_expression" jdbcType="VARCHAR" property="cronExpression"/>
+        <result column="misfire_policy" jdbcType="TINYINT" property="misfirePolicy"/>
+        <result column="concurrent" jdbcType="TINYINT" property="concurrent"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="created_by" jdbcType="BIGINT" property="createdBy"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="modified_by" jdbcType="BIGINT" property="modifiedBy"/>
+        <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
+        <result column="deleted" jdbcType="TINYINT" property="deleted"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, `name`, `group`, service_name, invoke_target, cron_expression, misfire_policy, concurrent,
+        description, `status`, created_by, created_time, modified_by, modified_time, deleted
+    </sql>
+</mapper>

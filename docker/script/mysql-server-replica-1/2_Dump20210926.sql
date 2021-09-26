@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 8.0.25, for macos11 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.26, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: muscle_and_fitness
 -- ------------------------------------------------------
@@ -31,7 +31,7 @@ CREATE TABLE `body_part` (
   `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
   `modified_by` bigint unsigned DEFAULT NULL COMMENT 'Modified by',
   `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
-  `deleted` tinyint NOT NULL DEFAULT '0' COMMENT 'Deleted',
+  `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT 'Deleted',
   PRIMARY KEY (`id`),
   UNIQUE KEY `body_part_name_uindex` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Human Body Part.';
@@ -61,7 +61,7 @@ CREATE TABLE `equipment` (
   `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
   `modified_by` bigint unsigned DEFAULT NULL COMMENT 'Modified by',
   `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
-  `deleted` tinyint NOT NULL DEFAULT '0' COMMENT 'Deleted',
+  `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT 'Deleted',
   PRIMARY KEY (`id`),
   UNIQUE KEY `equipment_name_uindex` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Exercise Equipment.';
@@ -93,7 +93,7 @@ CREATE TABLE `exercise` (
   `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
   `modified_by` bigint unsigned DEFAULT NULL COMMENT 'Modified by',
   `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
-  `deleted` tinyint NOT NULL DEFAULT '0' COMMENT 'Deleted',
+  `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT 'Deleted',
   PRIMARY KEY (`id`),
   UNIQUE KEY `exercise_name_uindex` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1692 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Exercise.\n\nhttps://exrx.net/Lists/Directory';
@@ -124,7 +124,7 @@ CREATE TABLE `exercise_classification` (
   `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
   `modified_by` bigint unsigned DEFAULT NULL COMMENT 'Modified by',
   `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
-  `deleted` tinyint NOT NULL DEFAULT '0' COMMENT 'Deleted',
+  `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT 'Deleted',
   PRIMARY KEY (`id`),
   UNIQUE KEY `exercise_classification_name_uindex` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Exercise Classification.\n\nhttps://exrx.net/WeightTraining/Glossary';
@@ -155,7 +155,7 @@ CREATE TABLE `exercise_comment` (
   `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
   `modified_by` bigint unsigned DEFAULT NULL COMMENT 'Modified by',
   `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
-  `deleted` tinyint NOT NULL DEFAULT '0' COMMENT 'Deleted',
+  `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT 'Deleted',
   PRIMARY KEY (`id`),
   UNIQUE KEY `exercise_comment_exercise_id_uindex` (`exercise_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1347 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Exercise Comment.\n\nRelationship:\nOne exercise to one comment.\n\nIf the exercise doen''t have comment,\nthen this table will still store the comment record for it,\nlike { id: 1, exercise_id: 1, comment: ''NONE'' }.';
@@ -239,7 +239,7 @@ CREATE TABLE `kinesiology_glossary` (
   `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
   `modified_by` bigint unsigned DEFAULT NULL COMMENT 'Modified by',
   `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
-  `deleted` tinyint NOT NULL DEFAULT '0' COMMENT 'Deleted',
+  `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT 'Deleted',
   PRIMARY KEY (`id`),
   UNIQUE KEY `kinesiology_glossary_name_uindex` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Kinesiology Glossary.\n\nhttps://exrx.net/Kinesiology/Glossary';
@@ -271,7 +271,7 @@ CREATE TABLE `muscle` (
   `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
   `modified_by` bigint unsigned DEFAULT NULL COMMENT 'Modified by',
   `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
-  `deleted` tinyint NOT NULL DEFAULT '0' COMMENT 'Deleted',
+  `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT 'Deleted',
   PRIMARY KEY (`id`),
   UNIQUE KEY `muscle_name_uindex` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Muscle.\n\nhttps://exrx.net/Lists/Muscle';
@@ -303,7 +303,7 @@ CREATE TABLE `muscle_image` (
   `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
   `modified_by` bigint unsigned DEFAULT NULL COMMENT 'Modified by',
   `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
-  `deleted` tinyint NOT NULL DEFAULT '0' COMMENT 'Deleted',
+  `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT 'Deleted',
   PRIMARY KEY (`id`),
   UNIQUE KEY `muscle_image_image_path_uindex` (`image_path`)
 ) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Muscle Image.\n\nThe relationship:\nOne muscle to one or more muscle image.';
@@ -339,7 +339,7 @@ CREATE TABLE `permission` (
   `created_time` datetime NOT NULL COMMENT 'Created time',
   `modified_by` bigint unsigned DEFAULT NULL COMMENT 'Modified by',
   `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
-  `deleted` tinyint NOT NULL DEFAULT '0' COMMENT 'Deleted flag',
+  `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT 'Deleted',
   PRIMARY KEY (`id`),
   UNIQUE KEY `permission_expression_UNIQUE` (`permission_expression`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Permission.';
@@ -352,6 +352,43 @@ CREATE TABLE `permission` (
 LOCK TABLES `permission` WRITE;
 /*!40000 ALTER TABLE `permission` DISABLE KEYS */;
 /*!40000 ALTER TABLE `permission` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `quartz_job_configuration`
+--
+
+DROP TABLE IF EXISTS `quartz_job_configuration`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `quartz_job_configuration` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'The primary key ID',
+  `name` varchar(50) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Name of job',
+  `group` varchar(200) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Group of job',
+  `service_name` varchar(50) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Service name, equal to artifact-id',
+  `invoke_target` varchar(500) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'Invoke target',
+  `cron_expression` varchar(50) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Cron Expressions',
+  `misfire_policy` tinyint NOT NULL COMMENT 'Trigger''s misfire policy',
+  `concurrent` tinyint unsigned NOT NULL DEFAULT '0' COMMENT 'Concurrent. true(1): is concurrent, false(0): not concurrent',
+  `description` varchar(1000) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'Description',
+  `status` tinyint NOT NULL COMMENT 'Status',
+  `created_by` bigint unsigned NOT NULL COMMENT 'Created by',
+  `created_time` datetime NOT NULL COMMENT 'Craeted time',
+  `modified_by` bigint unsigned DEFAULT NULL COMMENT 'Modified by',
+  `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
+  `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT 'Deleted',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Quartz Job Configuration';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `quartz_job_configuration`
+--
+
+LOCK TABLES `quartz_job_configuration` WRITE;
+/*!40000 ALTER TABLE `quartz_job_configuration` DISABLE KEYS */;
+INSERT INTO `quartz_job_configuration` VALUES (1,'greeting-schedule-job','auth-center-default-group','auth-center','greetingBean.hello()','0 0/1 * 1/1 * ? *',0,0,'Greeting task. It\'s a demo Quartz schedule job.',0,1,'2021-09-26 00:20:37',NULL,NULL,0),(2,'greeting-schedule-job','maf-mis-default-group','maf-mis','greetingBean.hello()','0 0/1 * 1/1 * ? *',0,0,'Greeting task. It\'s a demo Quartz schedule job.',0,1,'2021-09-26 00:20:37',NULL,NULL,0);
+/*!40000 ALTER TABLE `quartz_job_configuration` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -394,7 +431,7 @@ CREATE TABLE `role` (
   `created_time` datetime NOT NULL COMMENT 'Created time',
   `modified_by` bigint unsigned DEFAULT NULL COMMENT 'Modified by',
   `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
-  `deleted` tinyint NOT NULL DEFAULT '0' COMMENT 'Deleted flag.',
+  `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT 'Deleted',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Role.';
@@ -455,7 +492,7 @@ CREATE TABLE `user` (
   `created_time` datetime NOT NULL COMMENT 'Created time',
   `modified_by` bigint unsigned DEFAULT NULL COMMENT 'Modified by',
   `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
-  `deleted` tinyint NOT NULL DEFAULT '0' COMMENT 'Delete flag.',
+  `deleted` tinyint unsigned NOT NULL DEFAULT '0' COMMENT 'Deleted',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email_UNIQUE` (`email`),
   UNIQUE KEY `username_UNIQUE` (`username`),
@@ -509,4 +546,4 @@ SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-09-19 15:30:35
+-- Dump completed on 2021-09-26 10:48:15

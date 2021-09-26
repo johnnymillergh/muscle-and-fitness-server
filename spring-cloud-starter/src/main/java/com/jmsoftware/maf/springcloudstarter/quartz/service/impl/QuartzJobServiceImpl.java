@@ -1,7 +1,8 @@
-package com.jmsoftware.maf.springcloudstarter.quartz;
+package com.jmsoftware.maf.springcloudstarter.quartz.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import com.jmsoftware.maf.springcloudstarter.quartz.service.QuartzJobService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;

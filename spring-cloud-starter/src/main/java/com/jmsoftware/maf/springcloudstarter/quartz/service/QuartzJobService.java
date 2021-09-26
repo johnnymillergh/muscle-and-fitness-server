@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.springcloudstarter.quartz;
+package com.jmsoftware.maf.springcloudstarter.quartz.service;
 
 import org.springframework.lang.Nullable;
 import org.springframework.validation.annotation.Validated;
