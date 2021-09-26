@@ -1,6 +1,7 @@
 package com.jmsoftware.maf.springcloudstarter.database;
 
 import com.baomidou.dynamic.datasource.plugin.MasterSlaveAutoRoutingPlugin;
+import com.baomidou.dynamic.datasource.support.DdConstants;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
@@ -9,6 +10,7 @@ import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerIntercept
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.ibatis.plugin.Interceptor;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,11 +25,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  **/
 @Slf4j
 @Configuration
+@EnableTransactionManagement
 @Import({
         DataSourceConfiguration.class
 })
+@MapperScan("com.jmsoftware.maf.springcloudstarter.*.mapper")
 @ConditionalOnClass({MybatisPlusAutoConfiguration.class})
-@EnableTransactionManagement
 public class MyBatisPlusConfiguration {
     @Bean
     public PaginationInnerInterceptor paginationInnerInterceptor() {
@@ -62,6 +65,13 @@ public class MyBatisPlusConfiguration {
         return mybatisPlusInterceptor;
     }
 
+    /**
+     * Register master-slave auto routing plugin interceptor. Mybatis-Plus doesn't support non-master-slave
+     * datasource yet.
+     *
+     * @return the interceptor
+     * @see DdConstants
+     */
     @Bean
     @Order(2)
     public Interceptor masterSlaveAutoRoutingPlugin() {
