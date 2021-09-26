@@ -1,7 +1,7 @@
 package com.jmsoftware.maf.authcenter.role.entity;
 
 import com.jmsoftware.maf.authcenter.role.entity.persistence.Role;
-import com.jmsoftware.maf.springcloudstarter.annotation.ExcelColumn;
+import com.jmsoftware.maf.springcloudstarter.poi.ExcelColumn;
 import lombok.Data;
 import lombok.val;
 

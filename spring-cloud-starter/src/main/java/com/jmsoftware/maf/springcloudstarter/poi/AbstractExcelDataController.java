@@ -1,6 +1,6 @@
 package com.jmsoftware.maf.springcloudstarter.poi;
 
-import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelWriter;
@@ -9,7 +9,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.jmsoftware.maf.common.bean.ExcelImportResult;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
-import com.jmsoftware.maf.springcloudstarter.annotation.ExcelColumn;
 import com.jmsoftware.maf.springcloudstarter.util.CaseConversionUtil;
 import io.swagger.annotations.ApiOperation;
 import lombok.Cleanup;
@@ -160,7 +159,7 @@ public abstract class AbstractExcelDataController<T> {
         for (var index = 0; index < declaredFields.length; index++) {
             val declaredField = declaredFields[index];
             fieldNames[index] = declaredField.getName();
-            final ExcelColumn excelColumn = declaredField.getAnnotation(ExcelColumn.class);
+            val excelColumn = declaredField.getAnnotation(ExcelColumn.class);
             var columnName = excelColumn.name();
             if (StrUtil.isBlank(columnName)) {
                 columnName = CaseConversionUtil.convertToStartCase(StrUtil.toSymbolCase(declaredField.getName(), ' '));
@@ -328,8 +327,8 @@ public abstract class AbstractExcelDataController<T> {
 
     private void exeDatabaseOperation() {
         // if no error message (errorMessageList if empty) or not denyAll, then execute DB operation
-        if (CollectionUtil.isEmpty(this.errorMessageList.get()) || !this.denyAll) {
-            if (CollectionUtil.isNotEmpty(this.beanList.get())) {
+        if (CollUtil.isEmpty(this.errorMessageList.get()) || !this.denyAll) {
+            if (CollUtil.isNotEmpty(this.beanList.get())) {
                 this.setReturnMessageList("Starting - Import data…");
                 try {
                     this.executeDatabaseOperation(this.beanList.get());
@@ -445,7 +444,7 @@ public abstract class AbstractExcelDataController<T> {
      */
     @SuppressWarnings("RedundantThrows")
     private void bindData(Workbook workbook) {
-        for (int index = 0; index < workbook.getNumberOfSheets(); index++) {
+        for (var index = 0; index < workbook.getNumberOfSheets(); index++) {
             val sheet = workbook.getSheetAt(index);
             val excelReader = new ExcelReader(workbook, index);
             excelReader.setHeaderAlias(this.importingFieldAliasMap);
