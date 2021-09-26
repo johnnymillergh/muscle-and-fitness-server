@@ -30,7 +30,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
         DataSourceConfiguration.class
 })
 @MapperScan("com.jmsoftware.maf.springcloudstarter.*.mapper")
-@ConditionalOnClass({MybatisPlusAutoConfiguration.class})
+@ConditionalOnClass({MybatisPlusAutoConfiguration.class, MasterSlaveAutoRoutingPlugin.class})
 public class MyBatisPlusConfiguration {
     @Bean
     public PaginationInnerInterceptor paginationInnerInterceptor() {

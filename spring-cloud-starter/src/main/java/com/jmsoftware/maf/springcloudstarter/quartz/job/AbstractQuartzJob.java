@@ -5,7 +5,6 @@ import com.jmsoftware.maf.springcloudstarter.quartz.entity.persistence.QuartzJob
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import static com.jmsoftware.maf.springcloudstarter.quartz.constant.ScheduleConstant.QUARTZ_JOB_CONFIGURATION;
@@ -16,11 +15,11 @@ import static com.jmsoftware.maf.springcloudstarter.quartz.constant.ScheduleCons
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 9/24/2021 3:51 PM
  */
 @Slf4j
-public abstract class AbstractQuartzJob extends QuartzJobBean {
+abstract class AbstractQuartzJob extends QuartzJobBean {
     private static final String QUARTZ_JOB_CONFIGURATION_CLASS = QuartzJobConfiguration.class.getSimpleName();
 
     @Override
-    protected final void executeInternal(JobExecutionContext context) throws JobExecutionException {
+    protected final void executeInternal(JobExecutionContext context) {
         val sourceQuartzJobConfiguration = context.getMergedJobDataMap().get(QUARTZ_JOB_CONFIGURATION);
         if (!(QUARTZ_JOB_CONFIGURATION_CLASS.equals(sourceQuartzJobConfiguration.getClass().getSimpleName()))) {
             throw new IllegalArgumentException(
