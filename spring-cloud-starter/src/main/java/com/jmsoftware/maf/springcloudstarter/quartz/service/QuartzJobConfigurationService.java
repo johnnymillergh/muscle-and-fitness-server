@@ -1,8 +1,13 @@
 package com.jmsoftware.maf.springcloudstarter.quartz.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.jmsoftware.maf.common.bean.PageResponseBodyBean;
+import com.jmsoftware.maf.springcloudstarter.quartz.entity.GetQuartzJobConfigurationPageListItem;
+import com.jmsoftware.maf.springcloudstarter.quartz.entity.GetQuartzJobConfigurationPageListPayload;
 import com.jmsoftware.maf.springcloudstarter.quartz.entity.persistence.QuartzJobConfiguration;
 import org.springframework.validation.annotation.Validated;
+
+import javax.validation.Valid;
 
 /**
  * Description: QuartzJobConfigurationService
@@ -11,4 +16,13 @@ import org.springframework.validation.annotation.Validated;
  */
 @Validated
 public interface QuartzJobConfigurationService extends IService<QuartzJobConfiguration> {
+    /**
+     * Gets page list.
+     *
+     * @param payload the payload
+     * @return the page list
+     */
+    PageResponseBodyBean<GetQuartzJobConfigurationPageListItem> getPageList(
+            @Valid GetQuartzJobConfigurationPageListPayload payload
+    );
 }

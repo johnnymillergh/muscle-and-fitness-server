@@ -1,6 +1,7 @@
 package com.jmsoftware.maf.springcloudstarter.quartz;
 
 import com.jmsoftware.maf.springcloudstarter.configuration.MafProjectProperty;
+import com.jmsoftware.maf.springcloudstarter.quartz.controller.QuartzJobConfigurationController;
 import com.jmsoftware.maf.springcloudstarter.quartz.service.QuartzJobConfigurationService;
 import com.jmsoftware.maf.springcloudstarter.quartz.service.impl.QuartzJobConfigurationServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -48,6 +49,14 @@ public class QuartzConfiguration {
     public GreetingBean greetingBean(MafProjectProperty mafProjectProperty) {
         log.warn("Initial bean: '{}'", GreetingBean.class.getSimpleName());
         return new GreetingBean(mafProjectProperty);
+    }
+
+    @Bean
+    public QuartzJobConfigurationController quartzJobConfigurationController(
+            QuartzJobConfigurationService quartzJobConfigurationService
+    ) {
+        log.warn("Initial bean: '{}'", QuartzJobConfigurationController.class.getSimpleName());
+        return new QuartzJobConfigurationController(quartzJobConfigurationService);
     }
 
     @Bean

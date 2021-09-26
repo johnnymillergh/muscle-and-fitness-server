@@ -1,8 +1,12 @@
 package com.jmsoftware.maf.springcloudstarter.quartz.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.jmsoftware.maf.common.bean.PageResponseBodyBean;
 import com.jmsoftware.maf.springcloudstarter.configuration.MafProjectProperty;
+import com.jmsoftware.maf.springcloudstarter.quartz.entity.GetQuartzJobConfigurationPageListItem;
+import com.jmsoftware.maf.springcloudstarter.quartz.entity.GetQuartzJobConfigurationPageListPayload;
 import com.jmsoftware.maf.springcloudstarter.quartz.entity.persistence.QuartzJobConfiguration;
 import com.jmsoftware.maf.springcloudstarter.quartz.mapper.QuartzJobConfigurationMapper;
 import com.jmsoftware.maf.springcloudstarter.quartz.service.QuartzJobConfigurationService;
@@ -15,6 +19,7 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -53,5 +58,14 @@ public class QuartzJobConfigurationServiceImpl
         queryWrapper.eq(QuartzJobConfiguration::getServiceName, this.mafProjectProperty.getProjectArtifactId())
                 .orderByAsc(QuartzJobConfiguration::getId);
         return this.list(queryWrapper);
+    }
+
+    @Override
+    public PageResponseBodyBean<GetQuartzJobConfigurationPageListItem> getPageList(
+            @Valid GetQuartzJobConfigurationPageListPayload payload
+    ) {
+        val page = new Page<GetQuartzJobConfigurationPageListItem>(payload.getCurrentPage(), payload.getPageSize());
+        this.getBaseMapper().selectPageList(page, payload);
+        return PageResponseBodyBean.ofSuccess(page.getRecords(), page.getTotal());
     }
 }

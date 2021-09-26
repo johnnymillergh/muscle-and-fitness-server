@@ -3,8 +3,6 @@ package com.jmsoftware.maf.common.bean;
 import cn.hutool.json.JSON;
 import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONUtil;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.jmsoftware.maf.common.constant.UniversalDateTime;
 import com.jmsoftware.maf.common.exception.BaseException;
 import com.jmsoftware.maf.common.exception.BizException;
 import lombok.*;
@@ -13,20 +11,20 @@ import org.springframework.lang.Nullable;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * <h1>PageResponseBodyBean</h1>
  * <p>
  * Page Response body bean.
  *
- * @param <ResponseBodyDataType> the response body data type
+ * @param <T> the response body data type
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 6/27/2021 4:24 PM
  */
 @Data
 @SuppressWarnings("unused")
-public class PageResponseBodyBean<ResponseBodyDataType> implements Serializable {
+public class PageResponseBodyBean<T> implements Serializable {
     /**
      * The constant serialVersionUID.
      */
@@ -40,7 +38,6 @@ public class PageResponseBodyBean<ResponseBodyDataType> implements Serializable 
      * 23:08:46'
      */
     @Setter(AccessLevel.NONE)
-    @JsonFormat(pattern = UniversalDateTime.DATE_TIME_FORMAT)
     final LocalDateTime timestamp = LocalDateTime.now();
     /**
      * Default status is 200 OK.
@@ -53,7 +50,7 @@ public class PageResponseBodyBean<ResponseBodyDataType> implements Serializable 
     /**
      * The List.
      */
-    private Collection<ResponseBodyDataType> list =  Collections.emptyList();
+    private List<T> list = Collections.emptyList();
     /**
      * The Total.
      */
@@ -65,12 +62,12 @@ public class PageResponseBodyBean<ResponseBodyDataType> implements Serializable 
      * <p>This method CANNOT be used by controller or service or other class, only provided for Exception controller
      * .</p>
      *
-     * @param <ResponseBodyDataType> the type parameter
-     * @param status                 IUniversalStatus
+     * @param <T>    the type parameter
+     * @param status IUniversalStatus
      * @return response body for ExceptionControllerAdvice javax.servlet.http.HttpServletResponse, Exception)
      */
-    public static <ResponseBodyDataType> PageResponseBodyBean<ResponseBodyDataType> ofStatus(@NonNull final HttpStatus status) {
-        PageResponseBodyBean<ResponseBodyDataType> responseBodyBean = new PageResponseBodyBean<>();
+    public static <T> PageResponseBodyBean<T> ofStatus(@NonNull final HttpStatus status) {
+        PageResponseBodyBean<T> responseBodyBean = new PageResponseBodyBean<>();
         responseBodyBean.setStatus(status.value());
         responseBodyBean.setMessage(status.getReasonPhrase());
         return responseBodyBean;
@@ -79,14 +76,14 @@ public class PageResponseBodyBean<ResponseBodyDataType> implements Serializable 
     /**
      * Of status response body bean.
      *
-     * @param <ResponseBodyDataType> the type parameter
-     * @param status                 the status
-     * @param message                the message
+     * @param <T>     the type parameter
+     * @param status  the status
+     * @param message the message
      * @return the response body bean
      */
-    public static <ResponseBodyDataType> PageResponseBodyBean<ResponseBodyDataType> ofStatus(@NonNull final HttpStatus status,
-                                                                                             @NonNull final String message) {
-        PageResponseBodyBean<ResponseBodyDataType> responseBodyBean = new PageResponseBodyBean<>();
+    public static <T> PageResponseBodyBean<T> ofStatus(@NonNull final HttpStatus status,
+                                                       @NonNull final String message) {
+        PageResponseBodyBean<T> responseBodyBean = new PageResponseBodyBean<>();
         responseBodyBean.setStatus(status.value());
         responseBodyBean.setMessage(message);
         return responseBodyBean;
@@ -98,16 +95,16 @@ public class PageResponseBodyBean<ResponseBodyDataType> implements Serializable 
      * <p>This method CANNOT be used by controller or service or other class, only provided for Exception controller
      * .</p>
      *
-     * @param <ResponseBodyDataType> the response body data type
-     * @param status                 IUniversalStatus
-     * @param data                   data to be responded to client
-     * @param total                  the total
+     * @param <T>    the response body data type
+     * @param status IUniversalStatus
+     * @param data   data to be responded to client
+     * @param total  the total
      * @return response body for ExceptionControllerAdvice
      */
-    public static <ResponseBodyDataType> PageResponseBodyBean<ResponseBodyDataType> ofStatus(@NonNull final HttpStatus status,
-                                                                                             final Collection<ResponseBodyDataType> data,
-                                                                                             final long total) {
-        PageResponseBodyBean<ResponseBodyDataType> responseBodyBean = new PageResponseBodyBean<>();
+    public static <T> PageResponseBodyBean<T> ofStatus(@NonNull final HttpStatus status,
+                                                       final List<T> data,
+                                                       final long total) {
+        PageResponseBodyBean<T> responseBodyBean = new PageResponseBodyBean<>();
         responseBodyBean.setStatus(status.value());
         responseBodyBean.setMessage(status.getReasonPhrase());
         responseBodyBean.setList(data);
@@ -121,18 +118,18 @@ public class PageResponseBodyBean<ResponseBodyDataType> implements Serializable 
      * <p>This method CANNOT be used by controller or service or other class, only provided for Exception controller
      * .</p>
      *
-     * @param <ResponseBodyDataType> the response body data type
-     * @param status                 status code
-     * @param message                message to be responded
-     * @param data                   data to be responded
-     * @param total                  the total
+     * @param <T>     the response body data type
+     * @param status  status code
+     * @param message message to be responded
+     * @param data    data to be responded
+     * @param total   the total
      * @return response body for ExceptionControllerAdvice
      */
-    public static <ResponseBodyDataType> PageResponseBodyBean<ResponseBodyDataType> ofStatus(@NonNull final Integer status,
-                                                                                             @NonNull final String message,
-                                                                                             final Collection<ResponseBodyDataType> data,
-                                                                                             final long total) {
-        PageResponseBodyBean<ResponseBodyDataType> responseBodyBean = new PageResponseBodyBean<>();
+    public static <T> PageResponseBodyBean<T> ofStatus(@NonNull final Integer status,
+                                                       @NonNull final String message,
+                                                       final List<T> data,
+                                                       final long total) {
+        PageResponseBodyBean<T> responseBodyBean = new PageResponseBodyBean<>();
         responseBodyBean.setStatus(status);
         responseBodyBean.setMessage(message);
         responseBodyBean.setList(data);
@@ -145,23 +142,23 @@ public class PageResponseBodyBean<ResponseBodyDataType> implements Serializable 
      * <p><strong>ATTENTION:</strong></p>
      * <p>This method CANNOT be used in ExceptionControllerAdvice.</p>
      *
-     * @param <ResponseBodyDataType> the response body data type
-     * @param status                 status code
-     * @param message                message to be responded
-     * @param data                   data to be responded
-     * @param total                  the total
+     * @param <T>     the response body data type
+     * @param status  status code
+     * @param message message to be responded
+     * @param data    data to be responded
+     * @param total   the total
      * @return response body
      * @throws BaseException the base exception
      */
-    public static <ResponseBodyDataType> PageResponseBodyBean<ResponseBodyDataType> setResponse(@NonNull final Integer status,
-                                                                                                @NonNull final String message,
-                                                                                                final Collection<ResponseBodyDataType> data,
-                                                                                                final long total)
+    public static <T> PageResponseBodyBean<T> setResponse(@NonNull final Integer status,
+                                                          @NonNull final String message,
+                                                          final List<T> data,
+                                                          final long total)
             throws BaseException {
         if (!HttpStatus.valueOf(status).is2xxSuccessful()) {
             throw new BaseException(status, message, data);
         }
-        PageResponseBodyBean<ResponseBodyDataType> responseBodyBean = new PageResponseBodyBean<>();
+        PageResponseBodyBean<T> responseBodyBean = new PageResponseBodyBean<>();
         responseBodyBean.setStatus(status);
         responseBodyBean.setMessage(message);
         responseBodyBean.setList(data);
@@ -172,24 +169,24 @@ public class PageResponseBodyBean<ResponseBodyDataType> implements Serializable 
     /**
      * Respond null data, and status is OK.
      *
-     * @param <ResponseBodyDataType> the response body data type
+     * @param <T> the response body data type
      * @return response body
      */
-    public static <ResponseBodyDataType> PageResponseBodyBean<ResponseBodyDataType> ofSuccess() {
+    public static <T> PageResponseBodyBean<T> ofSuccess() {
         return new PageResponseBodyBean<>();
     }
 
     /**
      * Respond data and status is OK.
      *
-     * @param <ResponseBodyDataType> the response body data type
-     * @param data                   data to be responded to client.
-     * @param total                  the total
+     * @param <T>   the response body data type
+     * @param data  data to be responded to client.
+     * @param total the total
      * @return response body
      */
-    public static <ResponseBodyDataType> PageResponseBodyBean<ResponseBodyDataType> ofSuccess(final Collection<ResponseBodyDataType> data,
-                                                                                              final long total) {
-        PageResponseBodyBean<ResponseBodyDataType> responseBodyBean = new PageResponseBodyBean<>();
+    public static <T> PageResponseBodyBean<T> ofSuccess(final List<T> data,
+                                                        final long total) {
+        PageResponseBodyBean<T> responseBodyBean = new PageResponseBodyBean<>();
         responseBodyBean.setList(data);
         responseBodyBean.setTotal(total);
         return responseBodyBean;
@@ -198,12 +195,12 @@ public class PageResponseBodyBean<ResponseBodyDataType> implements Serializable 
     /**
      * Respond a message and status is OK.
      *
-     * @param <ResponseBodyDataType> the response body data type
-     * @param message                message to be responded
+     * @param <T>     the response body data type
+     * @param message message to be responded
      * @return response body
      */
-    public static <ResponseBodyDataType> PageResponseBodyBean<ResponseBodyDataType> ofSuccess(@NonNull final String message) {
-        PageResponseBodyBean<ResponseBodyDataType> responseBodyBean = new PageResponseBodyBean<>();
+    public static <T> PageResponseBodyBean<T> ofSuccess(@NonNull final String message) {
+        PageResponseBodyBean<T> responseBodyBean = new PageResponseBodyBean<>();
         responseBodyBean.setMessage(message);
         return responseBodyBean;
     }
@@ -211,16 +208,16 @@ public class PageResponseBodyBean<ResponseBodyDataType> implements Serializable 
     /**
      * Respond data, message and status is OK.
      *
-     * @param <ResponseBodyDataType> the response body data type
-     * @param data                   data to be responded
-     * @param message                message to be responded
-     * @param total                  the total
+     * @param <T>     the response body data type
+     * @param data    data to be responded
+     * @param message message to be responded
+     * @param total   the total
      * @return response body
      */
-    public static <ResponseBodyDataType> PageResponseBodyBean<ResponseBodyDataType> ofSuccess(final Collection<ResponseBodyDataType> data,
-                                                                                              @NonNull final String message,
-                                                                                              final long total) {
-        PageResponseBodyBean<ResponseBodyDataType> responseBodyBean = new PageResponseBodyBean<>();
+    public static <T> PageResponseBodyBean<T> ofSuccess(final List<T> data,
+                                                        @NonNull final String message,
+                                                        final long total) {
+        PageResponseBodyBean<T> responseBodyBean = new PageResponseBodyBean<>();
         responseBodyBean.setMessage(message);
         responseBodyBean.setList(data);
         responseBodyBean.setTotal(total);
@@ -230,49 +227,49 @@ public class PageResponseBodyBean<ResponseBodyDataType> implements Serializable 
     /**
      * Respond a message and status is FAILURE(464).
      *
-     * @param <ResponseBodyDataType> the response body data type
-     * @param message                message to be responded.
+     * @param <T>     the response body data type
+     * @param message message to be responded.
      * @return response body
      * @throws BizException the business exception
      */
-    public static <ResponseBodyDataType> PageResponseBodyBean<ResponseBodyDataType> ofFailure(@NonNull final String message) throws BizException {
+    public static <T> PageResponseBodyBean<T> ofFailure(@NonNull final String message) throws BizException {
         throw new BizException(message);
     }
 
     /**
      * Respond a message and status is FAILURE(464).
      *
-     * @param <ResponseBodyDataType> the response body data type
-     * @param data                   data to be responded
+     * @param <T>  the response body data type
+     * @param data data to be responded
      * @return response body
      * @throws BizException the business exception
      */
-    public static <ResponseBodyDataType> PageResponseBodyBean<ResponseBodyDataType> ofFailure(final Collection<ResponseBodyDataType> data) throws BizException {
+    public static <T> PageResponseBodyBean<T> ofFailure(final List<T> data) throws BizException {
         throw new BizException(data);
     }
 
     /**
      * Respond data and message, and status if FAILURE(464).
      *
-     * @param <ResponseBodyDataType> the response body data type
-     * @param data                   data to be responded
-     * @param message                message to be responded
+     * @param <T>     the response body data type
+     * @param data    data to be responded
+     * @param message message to be responded
      * @return response body
      * @throws BizException the business exception
      */
-    public static <ResponseBodyDataType> PageResponseBodyBean<ResponseBodyDataType> ofFailure(final Collection<ResponseBodyDataType> data,
-                                                                                              @NonNull final String message) throws BizException {
+    public static <T> PageResponseBodyBean<T> ofFailure(final List<T> data,
+                                                        @NonNull final String message) throws BizException {
         throw new BizException(data, message);
     }
 
     /**
      * Respond an ERROR(500).
      *
-     * @param <ResponseBodyDataType> the response body data type
+     * @param <T> the response body data type
      * @return response body
      * @throws BaseException the base exception
      */
-    public static <ResponseBodyDataType> PageResponseBodyBean<ResponseBodyDataType> ofError() throws BaseException {
+    public static <T> PageResponseBodyBean<T> ofError() throws BaseException {
         return setResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
                            null, 0);
     }
@@ -280,12 +277,12 @@ public class PageResponseBodyBean<ResponseBodyDataType> implements Serializable 
     /**
      * Respond a custom error.
      *
-     * @param <ResponseBodyDataType> the response body data type
-     * @param status                 Error status, not OK(200)
+     * @param <T>    the response body data type
+     * @param status Error status, not OK(200)
      * @return response body
      * @throws BaseException the base exception
      */
-    public static <ResponseBodyDataType> PageResponseBodyBean<ResponseBodyDataType> ofError(@NonNull final HttpStatus status)
+    public static <T> PageResponseBodyBean<T> ofError(@NonNull final HttpStatus status)
             throws BaseException {
         return setResponse(status.value(), status.getReasonPhrase(), null, 0);
     }
@@ -293,13 +290,13 @@ public class PageResponseBodyBean<ResponseBodyDataType> implements Serializable 
     /**
      * Response an exception.
      *
-     * @param <ResponseBodyDataType> the response body data type
-     * @param <BaseThrowable>        Sub class of {@link BaseException}
-     * @param throwable              exception
+     * @param <T>       the response body data type
+     * @param <B>       Subclass of {@link BaseException}
+     * @param throwable exception
      * @return the response body bean
      * @throws BaseException the base exception
      */
-    public static <ResponseBodyDataType, BaseThrowable extends BaseException> PageResponseBodyBean<ResponseBodyDataType> ofException(@NonNull final BaseThrowable throwable)
+    public static <T, B extends BaseException> PageResponseBodyBean<T> ofException(@NonNull final B throwable)
             throws BaseException {
         throw throwable;
     }
@@ -307,17 +304,17 @@ public class PageResponseBodyBean<ResponseBodyDataType> implements Serializable 
     /**
      * Of json.
      *
-     * @param <ResponseBodyDataType> the type parameter
-     * @param message                the message
-     * @param data                   the data
-     * @param total                  the total
-     * @param status                 the status
+     * @param <T>     the type parameter
+     * @param message the message
+     * @param data    the data
+     * @param total   the total
+     * @param status  the status
      * @return the json
      * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 12/22/2020 10:16 AM
      */
-    public static <ResponseBodyDataType> JSON of(@NonNull String message,
-                                                 @Nullable Collection<ResponseBodyDataType> data,
-                                                 long total, @NonNull Integer status) {
+    public static <T> JSON of(@NonNull String message,
+                              @Nullable List<T> data,
+                              long total, @NonNull Integer status) {
         val responseBodyBean = PageResponseBodyBean.ofStatus(status, message, data, total);
         val config = new JSONConfig();
         config.setIgnoreNullValue(false).setDateFormat("yyyy-MM-dd HH:mm:ss");
