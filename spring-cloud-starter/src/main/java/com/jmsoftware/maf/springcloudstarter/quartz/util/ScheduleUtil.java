@@ -7,6 +7,7 @@ import com.jmsoftware.maf.springcloudstarter.quartz.constant.QuartzJobStatus;
 import com.jmsoftware.maf.springcloudstarter.quartz.entity.persistence.QuartzJobConfiguration;
 import com.jmsoftware.maf.springcloudstarter.quartz.job.QuartzDisallowConcurrentExecution;
 import com.jmsoftware.maf.springcloudstarter.quartz.job.QuartzJobExecution;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.quartz.*;
@@ -39,7 +40,7 @@ public class ScheduleUtil {
      * @param quartzJobConfiguration the sys job
      * @return the quartz job class
      */
-    private static Class<? extends Job> getQuartzJobClass(QuartzJobConfiguration quartzJobConfiguration) {
+    private static Class<? extends Job> getQuartzJobClass(@NonNull QuartzJobConfiguration quartzJobConfiguration) {
         val concurrent = Concurrent.CONCURRENT.getValue().equals(quartzJobConfiguration.getConcurrent());
         return concurrent ? QuartzJobExecution.class : QuartzDisallowConcurrentExecution.class;
     }
@@ -51,7 +52,7 @@ public class ScheduleUtil {
      * @param jobGroup the job group
      * @return the job key
      */
-    public static JobKey getJobKey(Long jobId, String jobGroup, String serviceName) {
+    public static JobKey getJobKey(@NonNull Long jobId, @NonNull String jobGroup, @NonNull String serviceName) {
         return JobKey.jobKey(JOB_DETAIL_NAME_OPERATOR.apply(jobId, serviceName), jobGroup);
     }
 
@@ -62,7 +63,7 @@ public class ScheduleUtil {
      * @param jobGroup the job group
      * @return the trigger key
      */
-    public static TriggerKey getTriggerKey(Long jobId, String jobGroup, String serviceName) {
+    public static TriggerKey getTriggerKey(@NonNull Long jobId, @NonNull String jobGroup, @NonNull String serviceName) {
         return TriggerKey.triggerKey(TRIGGER_NAME_OPERATOR.apply(jobId, serviceName), jobGroup);
     }
 
@@ -73,9 +74,11 @@ public class ScheduleUtil {
      * @param quartzJobConfiguration the quartz job configuration
      * @throws SchedulerException the scheduler exception
      */
-    public static JobDetail createScheduleJob(Scheduler scheduler,
-                                              QuartzJobConfiguration quartzJobConfiguration,
-                                              String serviceName) throws SchedulerException {
+    public static JobDetail createScheduleJob(
+            @NonNull Scheduler scheduler,
+            @NonNull QuartzJobConfiguration quartzJobConfiguration,
+            @NonNull String serviceName
+    ) throws SchedulerException {
         if (!StrUtil.equals(quartzJobConfiguration.getServiceName(), serviceName)) {
             log.warn("The service name is not equal to quartzJobConfiguration's serviceName. serviceName: {}, {}",
                      serviceName, quartzJobConfiguration);
@@ -87,6 +90,7 @@ public class ScheduleUtil {
         val jobDetail = JobBuilder
                 .newJob(jobClass)
                 .withIdentity(getJobKey(jobId, jobGroup, serviceName))
+                .withDescription(quartzJobConfiguration.getDescription())
                 .build();
         jobDetail.getJobDataMap().put(QUARTZ_JOB_CONFIGURATION, quartzJobConfiguration);
         val cronScheduleBuilder = handleCronScheduleMisfirePolicy(
@@ -111,28 +115,30 @@ public class ScheduleUtil {
     /**
      * Handle cron schedule misfire policy cron schedule builder.
      *
-     * @param job the job
-     * @param cb  the cb
+     * @param quartzJobConfiguration the quartz job configuration
+     * @param cronScheduleBuilder    the cron schedule builder
      * @return the cron schedule builder
      */
-    public static CronScheduleBuilder handleCronScheduleMisfirePolicy(QuartzJobConfiguration job,
-                                                                      CronScheduleBuilder cb) {
+    public static CronScheduleBuilder handleCronScheduleMisfirePolicy(
+            @NonNull QuartzJobConfiguration quartzJobConfiguration,
+            @NonNull CronScheduleBuilder cronScheduleBuilder
+    ) {
         val misfirePolicy = Optional
-                .ofNullable(MisfirePolicy.getByValue(job.getMisfirePolicy()))
+                .ofNullable(MisfirePolicy.getByValue(quartzJobConfiguration.getMisfirePolicy()))
                 .orElseThrow();
         switch (misfirePolicy) {
             case MISFIRE_INSTRUCTION_SMART_POLICY:
-                return cb;
+                return cronScheduleBuilder;
             case MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY:
-                return cb.withMisfireHandlingInstructionIgnoreMisfires();
+                return cronScheduleBuilder.withMisfireHandlingInstructionIgnoreMisfires();
             case MISFIRE_INSTRUCTION_FIRE_ONCE_NOW:
-                return cb.withMisfireHandlingInstructionFireAndProceed();
+                return cronScheduleBuilder.withMisfireHandlingInstructionFireAndProceed();
             case MISFIRE_INSTRUCTION_DO_NOTHING:
-                return cb.withMisfireHandlingInstructionDoNothing();
+                return cronScheduleBuilder.withMisfireHandlingInstructionDoNothing();
             default:
                 throw new IllegalArgumentException(
                         String.format("The task misfire policy '%s' cannot be used in cron schedule tasks",
-                                      job.getMisfirePolicy()));
+                                      quartzJobConfiguration.getMisfirePolicy()));
         }
     }
 }
