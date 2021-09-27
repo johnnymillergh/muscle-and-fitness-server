@@ -36,7 +36,7 @@ public class QuartzJobConfigurationController extends AbstractExcelDataControlle
     private final QuartzJobConfigurationService service;
 
     @GetMapping("/quartz-job-configurations")
-    @ApiOperation(value = "/quartz-job-configurations", notes = "Retrieve Quartz job configuration page list")
+    @ApiOperation(value = "Retrieve Quartz job configuration", notes = "Retrieve Quartz job configuration page list")
     public PageResponseBodyBean<GetQuartzJobConfigurationPageListItem> getPageList(
             @Valid GetQuartzJobConfigurationPageListPayload payload
     ) {
