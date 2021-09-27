@@ -1,6 +1,7 @@
 package com.jmsoftware.maf.springcloudstarter.poi;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelWriter;
@@ -160,7 +161,7 @@ public abstract class AbstractExcelDataController<T> {
             val declaredField = declaredFields[index];
             fieldNames[index] = declaredField.getName();
             val excelColumn = declaredField.getAnnotation(ExcelColumn.class);
-            var columnName = excelColumn.name();
+            var columnName = ObjectUtil.isNotNull(excelColumn) ? excelColumn.name() : null;
             if (StrUtil.isBlank(columnName)) {
                 columnName = CaseConversionUtil.convertToStartCase(StrUtil.toSymbolCase(declaredField.getName(), ' '));
             }
