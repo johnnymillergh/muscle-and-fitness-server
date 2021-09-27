@@ -107,7 +107,7 @@ public abstract class AbstractExcelDataController<T> {
      * Name</td><td>titleName</td></tr></tbody>
      * </table></figure>
      */
-    protected final Map<String, String> importingFieldAliasMap = Maps.newHashMap();
+    protected final Map<String, String> importingFieldAliasMap = Maps.newLinkedHashMap();
     /**
      * <figure><table>
      * <thead>
@@ -116,7 +116,7 @@ public abstract class AbstractExcelDataController<T> {
      * Name</td></tr></tbody>
      * </table></figure>
      */
-    protected final Map<String, String> exportingFieldAliasMap = Maps.newHashMap();
+    protected final Map<String, String> exportingFieldAliasMap = Maps.newLinkedHashMap();
 
     @Autowired
     protected ExcelImportConfiguration excelImportConfiguration;

@@ -3,6 +3,8 @@ package com.jmsoftware.maf.common.bean;
 import cn.hutool.json.JSON;
 import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONUtil;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.jmsoftware.maf.common.constant.UniversalDateTime;
 import com.jmsoftware.maf.common.exception.BaseException;
 import com.jmsoftware.maf.common.exception.BizException;
 import lombok.*;
@@ -38,6 +40,7 @@ public class PageResponseBodyBean<T> implements Serializable {
      * 23:08:46'
      */
     @Setter(AccessLevel.NONE)
+    @JsonFormat(pattern = UniversalDateTime.DATE_TIME_FORMAT)
     final LocalDateTime timestamp = LocalDateTime.now();
     /**
      * Default status is 200 OK.
