@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Description: QuartzJobConfigurationServiceImpl
@@ -40,20 +41,17 @@ public class QuartzJobConfigurationServiceImpl
     public void initQuartzJob() throws SchedulerException {
         val scheduler = this.schedulerFactoryBean.getScheduler();
         scheduler.clear();
-        val jobList = this.getQuartzJobConfigurationForService();
+        val jobList = this.getQuartzJobConfigurationForInitialization();
         for (val quartzJobConfiguration : jobList) {
-            val jobDetail = ScheduleUtil.createScheduleJob(
+            Optional.ofNullable(ScheduleUtil.createScheduleJob(
                     scheduler,
                     quartzJobConfiguration,
                     this.mafProjectProperty.getProjectArtifactId()
-            );
-            if (jobDetail != null) {
-                log.info("Created schedule job. JobKey: {}", jobDetail.getKey());
-            }
+            )).ifPresent(jobDetail -> log.info("Created schedule job. JobKey: {}", jobDetail.getKey()));
         }
     }
 
-    private List<QuartzJobConfiguration> getQuartzJobConfigurationForService() {
+    private List<QuartzJobConfiguration> getQuartzJobConfigurationForInitialization() {
         val queryWrapper = Wrappers.lambdaQuery(QuartzJobConfiguration.class);
         queryWrapper.eq(QuartzJobConfiguration::getServiceName, this.mafProjectProperty.getProjectArtifactId())
                 .orderByAsc(QuartzJobConfiguration::getId);
