@@ -4,9 +4,12 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jmsoftware.maf.springcloudstarter.quartz.entity.GetQuartzJobConfigurationPageListItem;
 import com.jmsoftware.maf.springcloudstarter.quartz.entity.GetQuartzJobConfigurationPageListPayload;
+import com.jmsoftware.maf.springcloudstarter.quartz.entity.QuartzJobConfigurationExcel;
 import com.jmsoftware.maf.springcloudstarter.quartz.entity.persistence.QuartzJobConfiguration;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * Description: QuartzJobConfigurationMapper
@@ -26,4 +29,12 @@ public interface QuartzJobConfigurationMapper extends BaseMapper<QuartzJobConfig
             Page<GetQuartzJobConfigurationPageListItem> page,
             @Param("payload") GetQuartzJobConfigurationPageListPayload payload
     );
+
+    /**
+     * Select list for exporting list.
+     *
+     * @param serviceName the service name
+     * @return the list
+     */
+    List<QuartzJobConfigurationExcel> selectListForExporting(String serviceName);
 }

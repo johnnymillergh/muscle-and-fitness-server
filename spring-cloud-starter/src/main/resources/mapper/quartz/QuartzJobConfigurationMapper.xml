@@ -50,8 +50,31 @@
         <where>
             qjc.deleted = 0
             <if test="@cn.hutool.core.util.StrUtil@isNotBlank(payload.serviceName)">
-                AND qjc.service_name LIKE concat('%', #{payload.serviceName}, '%')
+                AND qjc.service_name LIKE CONCAT('%', #{payload.serviceName}, '%')
             </if>
         </where>
+    </select>
+
+    <select id="selectListForExporting"
+            resultType="com.jmsoftware.maf.springcloudstarter.quartz.entity.QuartzJobConfigurationExcel">
+        SELECT qjc.id              AS id,
+               qjc.name            AS name,
+               qjc.`group`         AS `group`,
+               qjc.service_name    AS serviceName,
+               qjc.invoke_target   AS invokeTarget,
+               qjc.cron_expression AS cronExpression,
+               qjc.misfire_policy  AS misfirePolicy,
+               qjc.concurrent      AS concurrent,
+               qjc.description     AS description,
+               qjc.status          AS status,
+               createdBy.username  AS createdBy,
+               qjc.created_time    AS createdTime,
+               modifiedBy.username AS modifiedBy,
+               qjc.modified_time   AS modified_time
+        FROM quartz_job_configuration qjc
+                     LEFT JOIN user createdBy ON createdBy.id = qjc.created_by
+                     LEFT JOIN user modifiedBy ON modifiedBy.id = qjc.modified_by
+        WHERE qjc.deleted = 0
+          AND qjc.service_name = #{serviceName}
     </select>
 </mapper>
