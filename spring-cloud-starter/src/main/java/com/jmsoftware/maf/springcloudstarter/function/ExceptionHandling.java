@@ -15,8 +15,18 @@ import java.util.function.Function;
  * @see <a href='https://juejin.cn/post/6892298625058078727#heading-4'>Java 函数式编程最佳实践 - 赋予函数处理异常的能力</a>
  **/
 public class ExceptionHandling {
-    public static <T, R> R computeAndDealException(ThrowExceptionFunction<T, R> function, T t,
-                                                   Function<Exception, R> handlingFunc) {
+    /**
+     * Compute and deal exception r.
+     *
+     * @param <T>          the type parameter
+     * @param <R>          the type parameter
+     * @param function     the function
+     * @param t            the t
+     * @param handlingFunc the handling func
+     * @return the r
+     */
+    public static <T, R> R computeAndHandleException(ThrowExceptionFunction<T, R> function, T t,
+                                                     Function<Exception, R> handlingFunc) {
         try {
             return function.apply(t);
         } catch (Exception e) {
@@ -24,8 +34,20 @@ public class ExceptionHandling {
         }
     }
 
-    public static <T, U, R> R computeAndDealException(ThrowExceptionBiFunction<T, U, R> function, T t, U u,
-                                                      Function<Exception, R> handlingFunc) {
+    /**
+     * Compute and handle exception r.
+     *
+     * @param <T>          the type parameter
+     * @param <U>          the type parameter
+     * @param <R>          the type parameter
+     * @param function     the function
+     * @param t            the t
+     * @param u            the u
+     * @param handlingFunc the handling func
+     * @return the r
+     */
+    public static <T, U, R> R computeAndHandleException(ThrowExceptionBiFunction<T, U, R> function, T t, U u,
+                                                        Function<Exception, R> handlingFunc) {
         try {
             return function.apply(t, u);
         } catch (Exception e) {
@@ -33,8 +55,16 @@ public class ExceptionHandling {
         }
     }
 
-    public static <R> R computeAndDealException(ThrowExceptionSupplier<R> supplier,
-                                                Function<Exception, R> handlingFunc) {
+    /**
+     * Compute and handle exception r.
+     *
+     * @param <R>          the type parameter
+     * @param supplier     the supplier
+     * @param handlingFunc the handling func
+     * @return the r
+     */
+    public static <R> R computeAndHandleException(ThrowExceptionSupplier<R> supplier,
+                                                  Function<Exception, R> handlingFunc) {
         try {
             return supplier.get();
         } catch (Exception e) {

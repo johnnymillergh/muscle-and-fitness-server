@@ -18,6 +18,16 @@ import static com.jmsoftware.maf.common.constant.UniversalDateTime.DATE_TIME_FOR
  **/
 @Slf4j
 public class FunctionLog {
+    /**
+     * Log function r.
+     *
+     * @param <T>      the type parameter
+     * @param <R>      the type parameter
+     * @param function the function
+     * @param t        the t
+     * @param tag      the tag
+     * @return the r
+     */
     public static <T, R> R logFunction(Function<T, R> function, T t, String tag) {
         long startTime = System.currentTimeMillis();
         log.info("[{}], parameter = {}, requestTime = {}", tag, t.toString(),

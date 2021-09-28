@@ -12,6 +12,16 @@ import com.jmsoftware.maf.springcloudstarter.function.functionalinterface.ThrowE
  * @see <a href='https://juejin.cn/post/6892298625058078727#heading-3'>Java 函数式编程最佳实践 - 赋予函数报错返回默认值能力</a>
  **/
 public class ExceptionReturnDefault {
+    /**
+     * Compute or get default r.
+     *
+     * @param <T>      the type parameter
+     * @param <R>      the type parameter
+     * @param function the function
+     * @param t        the t
+     * @param r        the r
+     * @return the r
+     */
     public static <T, R> R computeOrGetDefault(ThrowExceptionFunction<T, R> function, T t, R r) {
         try {
             return function.apply(t);
@@ -20,6 +30,14 @@ public class ExceptionReturnDefault {
         }
     }
 
+    /**
+     * Compute or get default r.
+     *
+     * @param <R>      the type parameter
+     * @param supplier the supplier
+     * @param r        the r
+     * @return the r
+     */
     public static <R> R computeOrGetDefault(ThrowExceptionSupplier<R> supplier, R r) {
         try {
             return supplier.get();

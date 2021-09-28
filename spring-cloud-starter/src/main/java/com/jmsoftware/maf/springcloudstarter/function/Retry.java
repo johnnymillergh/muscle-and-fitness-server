@@ -11,8 +11,14 @@ import com.jmsoftware.maf.springcloudstarter.function.functionalinterface.ThrowE
  *
  * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com, 9/28/21 8:27 AM
  * @see <a href='https://juejin.cn/post/6892298625058078727#heading-1'>Java 函数式编程最佳实践 - 赋予方法重试能力</a>
- */
+ **/
 public class Retry {
+    /**
+     * Retry function.
+     *
+     * @param runnable the runnable
+     * @param time     the time
+     */
     public static void retryFunction(ThrowExceptionRunnable runnable, int time) {
         while (true) {
             try {
@@ -27,6 +33,16 @@ public class Retry {
         }
     }
 
+    /**
+     * Retry function r.
+     *
+     * @param <T>      the type parameter
+     * @param <R>      the type parameter
+     * @param function the function
+     * @param t        the t
+     * @param time     the time
+     * @return the r
+     */
     public static <T, R> R retryFunction(ThrowExceptionFunction<T, R> function, T t, int time) {
         while (true) {
             try {
@@ -40,6 +56,18 @@ public class Retry {
         }
     }
 
+    /**
+     * Retry function r.
+     *
+     * @param <T>      the type parameter
+     * @param <U>      the type parameter
+     * @param <R>      the type parameter
+     * @param function the function
+     * @param t        the t
+     * @param u        the u
+     * @param time     the time
+     * @return the r
+     */
     public static <T, U, R> R retryFunction(ThrowExceptionBiFunction<T, U, R> function, T t, U u, int time) {
         while (true) {
             try {
