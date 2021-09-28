@@ -18,6 +18,7 @@ public class Retry {
      *
      * @param runnable the runnable
      * @param time     the time
+     * @see com.jmsoftware.maf.springcloudstarter.FunctionalInterfaceTests#tesRetryFunction()
      */
     public static void retryFunction(ThrowExceptionRunnable runnable, int time) {
         while (true) {

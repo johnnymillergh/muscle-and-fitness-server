@@ -1,7 +1,10 @@
 package com.jmsoftware.maf.springcloudstarter.function;
 
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.function.Function;
@@ -27,14 +30,16 @@ public class FunctionLog {
      * @param t        the t
      * @param tag      the tag
      * @return the r
+     * @see com.jmsoftware.maf.springcloudstarter.FunctionalInterfaceTests#testLogFunction()
      */
     public static <T, R> R logFunction(Function<T, R> function, T t, String tag) {
-        long startTime = System.currentTimeMillis();
         log.info("[{}], parameter = {}, requestTime = {}", tag, t.toString(),
                  LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
+        val start = Instant.now();
         R apply = function.apply(t);
-        long endTime = System.currentTimeMillis();
-        log.info("[{}], return = {}, elapsed time = {} ms", tag, apply.toString(), endTime - startTime);
+        val end = Instant.now();
+        log.info("[{}], return = {}, elapsed time = {} ms", tag, apply.toString(),
+                 Duration.between(start, end).toMillis());
         return apply;
     }
 }

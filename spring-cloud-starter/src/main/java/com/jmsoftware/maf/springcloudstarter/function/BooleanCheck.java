@@ -22,6 +22,7 @@ public class BooleanCheck {
      * @param aBoolean the aBoolean
      * @param after    the after
      * @return the throw exception function
+     * @see com.jmsoftware.maf.springcloudstarter.FunctionalInterfaceTests#testRequireTrue()
      */
     public static OrElseThrowExceptionFunction requireTrue(Boolean aBoolean, Consumer<Boolean> after) {
         if (nonNull(after)) {

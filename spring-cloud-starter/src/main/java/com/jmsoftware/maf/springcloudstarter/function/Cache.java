@@ -21,6 +21,7 @@ public class Cache {
      * @param t        the t
      * @param cache    the cache
      * @return the r
+     * @see com.jmsoftware.maf.springcloudstarter.FunctionalInterfaceTests#testCacheFunction()
      */
     public static <T, R> R cacheFunction(Function<T, R> function, T t, Map<T, R> cache) {
         R r = cache.get(t);

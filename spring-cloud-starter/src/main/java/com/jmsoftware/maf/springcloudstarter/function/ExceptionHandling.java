@@ -24,6 +24,7 @@ public class ExceptionHandling {
      * @param t            the t
      * @param handlingFunc the handling func
      * @return the r
+     * @see com.jmsoftware.maf.springcloudstarter.FunctionalInterfaceTests#testComputeAndHandleException()
      */
     public static <T, R> R computeAndHandleException(ThrowExceptionFunction<T, R> function, T t,
                                                      Function<Exception, R> handlingFunc) {

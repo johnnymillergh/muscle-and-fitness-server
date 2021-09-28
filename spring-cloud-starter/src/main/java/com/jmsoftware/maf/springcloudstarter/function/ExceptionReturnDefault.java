@@ -21,6 +21,7 @@ public class ExceptionReturnDefault {
      * @param t        the t
      * @param r        the r
      * @return the r
+     * @see com.jmsoftware.maf.springcloudstarter.FunctionalInterfaceTests#testComputeOrGetDefault()
      */
     public static <T, R> R computeOrGetDefault(ThrowExceptionFunction<T, R> function, T t, R r) {
         try {
