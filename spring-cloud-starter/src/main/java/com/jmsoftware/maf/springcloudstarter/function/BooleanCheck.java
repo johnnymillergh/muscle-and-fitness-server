@@ -8,11 +8,11 @@ import java.util.function.Supplier;
 import static java.util.Objects.nonNull;
 
 /**
- * Description: BooleanCheckUtil, change description here.
+ * Description: BooleanCheck, change description here.
  *
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 9/27/2021 12:03 PM
  **/
-public class BooleanCheckUtil {
+public class BooleanCheck {
     /**
      * Require true or else throw exception.
      *

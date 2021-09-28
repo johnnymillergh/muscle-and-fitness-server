@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.jmsoftware.maf.springcloudstarter.function.BooleanCheckUtil.requireTrue;
+import static com.jmsoftware.maf.springcloudstarter.function.BooleanCheck.requireTrue;
 
 /**
  * Description: QuartzJobConfigurationServiceImpl
