@@ -28,6 +28,8 @@ jobs:
         run: chmod +x mvnw
       - name: Build with Maven
         run: ./mvnw clean install -V -q -DskipTests=true -Dmaven.javadoc.skip=true -Djib.to.auth.username=$DOCKER_HUB_USERNAME -Djib.to.auth.password=$DOCKER_HUB_PASSWORD
+      - name: Display built artifacts
+        run: ls -R -l | grep -i ".jar$"
 
   check-version:
     runs-on: ubuntu-latest
