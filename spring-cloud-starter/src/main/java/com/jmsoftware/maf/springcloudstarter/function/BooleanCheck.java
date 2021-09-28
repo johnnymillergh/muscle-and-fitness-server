@@ -1,9 +1,9 @@
 package com.jmsoftware.maf.springcloudstarter.function;
 
 import cn.hutool.core.util.BooleanUtil;
+import com.jmsoftware.maf.springcloudstarter.function.functionalinterface.OrElseThrowExceptionFunction;
 
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 import static java.util.Objects.nonNull;
 
@@ -13,6 +13,9 @@ import static java.util.Objects.nonNull;
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 9/27/2021 12:03 PM
  **/
 public class BooleanCheck {
+    private BooleanCheck() {
+    }
+
     /**
      * Require true or else throw exception.
      *
@@ -20,7 +23,7 @@ public class BooleanCheck {
      * @param after    the after
      * @return the throw exception function
      */
-    public static ThrowExceptionFunction requireTrue(Boolean aBoolean, Consumer<Boolean> after) {
+    public static OrElseThrowExceptionFunction requireTrue(Boolean aBoolean, Consumer<Boolean> after) {
         if (nonNull(after)) {
             after.accept(aBoolean);
         }
@@ -29,16 +32,5 @@ public class BooleanCheck {
                 throw exceptionSupplier.get();
             }
         };
-    }
-
-    @FunctionalInterface
-    public interface ThrowExceptionFunction {
-        /**
-         * Or else throw.
-         *
-         * @param exceptionSupplier the exception supplier
-         * @throws Throwable the throwable
-         */
-        void orElseThrow(Supplier<? extends Throwable> exceptionSupplier) throws Throwable;
     }
 }
