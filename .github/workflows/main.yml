@@ -31,7 +31,7 @@ jobs:
       - name: Display built artifacts
         run: |
           dir
-          ls -R -l | grep -i ".jar$"
+          ls -R -l -h | grep -i ".jar$"
 
   check-version:
     runs-on: ubuntu-latest
