@@ -46,6 +46,7 @@
         <maven-pmd-plugin.version>3.14.0</maven-pmd-plugin.version>
         <p3c-pmd.version>2.1.1</p3c-pmd.version>
         <spring-cloud.version>2020.0.4</spring-cloud.version>
+        <functionaljava.version>4.8.1</functionaljava.version>
         <spring-content.version>1.0.0.M5</spring-content.version>
         <spring-boot-admin-starter-server.version>2.5.1</spring-boot-admin-starter-server.version>
         <spring-boot-admin-starter-client.version>2.5.1</spring-boot-admin-starter-client.version>
@@ -290,6 +291,27 @@
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
             <version>${hutool-all.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.functionaljava</groupId>
+            <artifactId>functionaljava</artifactId>
+            <version>${functionaljava.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.functionaljava</groupId>
+            <artifactId>functionaljava-java8</artifactId>
+            <version>${functionaljava.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.functionaljava</groupId>
+            <artifactId>functionaljava-quickcheck</artifactId>
+            <version>${functionaljava.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.functionaljava</groupId>
+            <artifactId>functionaljava-java-core</artifactId>
+            <version>${functionaljava.version}</version>
         </dependency>
     </dependencies>
 </project>
