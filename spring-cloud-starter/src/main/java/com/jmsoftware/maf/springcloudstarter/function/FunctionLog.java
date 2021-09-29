@@ -21,6 +21,9 @@ import static com.jmsoftware.maf.common.constant.UniversalDateTime.DATE_TIME_FOR
  **/
 @Slf4j
 public class FunctionLog {
+    private FunctionLog() {
+    }
+
     /**
      * Log function r.
      *

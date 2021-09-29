@@ -12,6 +12,9 @@ import com.jmsoftware.maf.springcloudstarter.function.functionalinterface.ThrowE
  * @see <a href='https://juejin.cn/post/6892298625058078727#heading-3'>Java 函数式编程最佳实践 - 赋予函数报错返回默认值能力</a>
  **/
 public class ExceptionReturnDefault {
+    private ExceptionReturnDefault() {
+    }
+
     /**
      * Compute or get default r.
      *

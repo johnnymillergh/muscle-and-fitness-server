@@ -15,6 +15,9 @@ import java.util.function.Function;
  * @see <a href='https://juejin.cn/post/6892298625058078727#heading-4'>Java 函数式编程最佳实践 - 赋予函数处理异常的能力</a>
  **/
 public class ExceptionHandling {
+    private ExceptionHandling() {
+    }
+
     /**
      * Compute and deal exception r.
      *

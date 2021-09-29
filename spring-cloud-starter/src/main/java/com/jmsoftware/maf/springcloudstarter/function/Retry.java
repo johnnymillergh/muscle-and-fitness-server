@@ -13,6 +13,9 @@ import com.jmsoftware.maf.springcloudstarter.function.functionalinterface.ThrowE
  * @see <a href='https://juejin.cn/post/6892298625058078727#heading-1'>Java 函数式编程最佳实践 - 赋予方法重试能力</a>
  **/
 public class Retry {
+    private Retry() {
+    }
+
     /**
      * Retry function.
      *

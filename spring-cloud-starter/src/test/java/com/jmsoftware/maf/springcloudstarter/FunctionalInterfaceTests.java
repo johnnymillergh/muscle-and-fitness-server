@@ -1,9 +1,11 @@
 package com.jmsoftware.maf.springcloudstarter;
 
 import cn.hutool.core.util.StrUtil;
+import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Maps;
 import com.jmsoftware.maf.springcloudstarter.function.functionalinterface.ThrowExceptionFunction;
 import com.jmsoftware.maf.springcloudstarter.function.functionalinterface.ThrowExceptionRunnable;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.junit.jupiter.api.Assertions;
@@ -19,6 +21,7 @@ import static com.jmsoftware.maf.springcloudstarter.function.ExceptionHandling.c
 import static com.jmsoftware.maf.springcloudstarter.function.ExceptionReturnDefault.computeOrGetDefault;
 import static com.jmsoftware.maf.springcloudstarter.function.FunctionLog.logFunction;
 import static com.jmsoftware.maf.springcloudstarter.function.Retry.retryFunction;
+import static fj.Show.anyShow;
 
 /**
  * FunctionalInterfaceTests
@@ -47,6 +50,7 @@ class FunctionalInterfaceTests {
      * Test cache function.
      */
     @Test
+    @SneakyThrows
     void testCacheFunction() {
         val cacheMap = Maps.<String, String>newHashMap();
         cacheMap.put("key1", "1");
@@ -62,6 +66,27 @@ class FunctionalInterfaceTests {
         Assertions.assertEquals("2", result2);
         Assertions.assertEquals("3", result3);
         Assertions.assertEquals(3, cacheMap.size());
+
+        val guavaCache = CacheBuilder
+                .newBuilder()
+                .maximumSize(2)
+                .expireAfterWrite(Duration.ofSeconds(3))
+                .<String, String>removalListener(notification -> log.info("Removed cache: {}", notification))
+                .build();
+        guavaCache.put("key4", "4");
+        guavaCache.put("key5", "5");
+        val result4 = cacheFunction(stringProcess, "key4", guavaCache);
+        val result5 = cacheFunction(stringProcess, "key5", guavaCache);
+        val result6 = cacheFunction(stringProcess, "key6", guavaCache);
+        anyShow().print("Before cache invalidated: ");
+        anyShow().println(guavaCache.asMap().entrySet());
+        Assertions.assertEquals("4", result4);
+        Assertions.assertEquals("5", result5);
+        Assertions.assertEquals("6", result6);
+        Thread.sleep(Duration.ofSeconds(4).toMillis());
+        Assertions.assertNull(guavaCache.getIfPresent("key5"), "The value of Guava cache map is supposed to be null");
+        anyShow().print("After cache invalidated: ");
+        anyShow().println(guavaCache.asMap().entrySet());
     }
 
     @Test
