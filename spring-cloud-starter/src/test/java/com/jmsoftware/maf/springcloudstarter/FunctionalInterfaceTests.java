@@ -15,6 +15,7 @@ import java.time.Duration;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
+import static com.jmsoftware.maf.springcloudstarter.function.BooleanCheck.requireAllTrue;
 import static com.jmsoftware.maf.springcloudstarter.function.BooleanCheck.requireTrue;
 import static com.jmsoftware.maf.springcloudstarter.function.Cache.cacheFunction;
 import static com.jmsoftware.maf.springcloudstarter.function.ExceptionHandling.computeAndHandleException;
@@ -42,6 +43,13 @@ class FunctionalInterfaceTests {
                 IllegalArgumentException.class,
                 () -> requireTrue(1 != 1, anotherBoolean -> log.info("aBoolean = {}", anotherBoolean))
                         .orElseThrow(() -> new IllegalArgumentException("aBoolean is expected to be true")),
+                "requireTrue doesn't throws exception"
+        );
+
+        Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> requireAllTrue(1 != 1, 2 == 2, 3 == 3)
+                        .orElseThrow(() -> new IllegalArgumentException("Boolean array is expected to be all true")),
                 "requireTrue doesn't throws exception"
         );
     }

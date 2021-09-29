@@ -24,13 +24,30 @@ public class BooleanCheck {
      * @return the throw exception function
      * @see com.jmsoftware.maf.springcloudstarter.FunctionalInterfaceTests#testRequireTrue()
      */
-    public static OrElseThrowExceptionFunction requireTrue(Boolean aBoolean, Consumer<Boolean> after) {
+    public static OrElseThrowExceptionFunction requireTrue(boolean aBoolean, Consumer<Boolean> after) {
         if (nonNull(after)) {
             after.accept(aBoolean);
         }
         return exceptionSupplier -> {
             if (BooleanUtil.isFalse(aBoolean)) {
                 throw exceptionSupplier.get();
+            }
+        };
+    }
+
+    /**
+     * Require all true or else throw exception function.
+     *
+     * @param booleans the booleans
+     * @return the or else throw exception function
+     * @see com.jmsoftware.maf.springcloudstarter.FunctionalInterfaceTests#testRequireTrue()
+     */
+    public static OrElseThrowExceptionFunction requireAllTrue(boolean... booleans) {
+        return exceptionSupplier -> {
+            for (boolean aBoolean : booleans) {
+                if (BooleanUtil.isFalse(aBoolean)) {
+                    throw exceptionSupplier.get();
+                }
             }
         };
     }
