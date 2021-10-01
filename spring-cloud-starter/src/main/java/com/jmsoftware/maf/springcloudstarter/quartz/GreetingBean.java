@@ -23,6 +23,7 @@ public class GreetingBean {
     private final MafProjectProperty mafProjectProperty;
 
     @QuartzSchedulable
+    @SuppressWarnings("unused")
     public void hello() {
         log.info("Greeting from Quartz job, current service is: {}", this.mafProjectProperty.getProjectArtifactId());
     }

@@ -1,6 +1,10 @@
 package com.jmsoftware.maf.springcloudstarter.quartz.entity;
 
+import com.jmsoftware.maf.springcloudstarter.quartz.constant.Concurrent;
+import com.jmsoftware.maf.springcloudstarter.quartz.constant.MisfirePolicy;
+import com.jmsoftware.maf.springcloudstarter.quartz.constant.QuartzJobStatus;
 import com.jmsoftware.maf.springcloudstarter.quartz.entity.persistence.QuartzJobConfiguration;
+import com.jmsoftware.maf.springcloudstarter.validation.annotation.ValidEnumValue;
 import lombok.Data;
 import lombok.val;
 import org.hibernate.validator.constraints.Length;
@@ -30,13 +34,16 @@ public class CreateOrModifyQuartzJobConfigurationPayload {
     @Length(max = 50)
     private String cronExpression;
     @NotNull
+    @ValidEnumValue(targetEnum = MisfirePolicy.class)
     private Byte misfirePolicy;
     @NotNull
+    @ValidEnumValue(targetEnum = Concurrent.class)
     private Byte concurrent;
     @NotBlank
     @Length(max = 1000)
     private String description;
     @NotNull
+    @ValidEnumValue(targetEnum = QuartzJobStatus.class)
     private Byte status;
 
     public QuartzJobConfiguration asQuartzJobConfiguration() {
