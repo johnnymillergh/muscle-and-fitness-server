@@ -42,10 +42,19 @@ public class QuartzJobConfigurationController extends AbstractExcelDataControlle
 
     @PostMapping("/quartz-job-configurations")
     @ApiOperation(value = "Create Quartz job configuration", notes = "Create Quartz job configuration")
-    public ResponseBodyBean<CreateQuartzJobConfigurationResponse> create(
-            @Valid @RequestBody CreateQuartzJobConfigurationPayload payload
+    public ResponseBodyBean<CreateOrModifyQuartzJobConfigurationResponse> create(
+            @Valid @RequestBody CreateOrModifyQuartzJobConfigurationPayload payload
     ) {
         return ResponseBodyBean.ofSuccess(this.service.create(payload));
+    }
+
+    @PutMapping("/quartz-job-configurations/{id}")
+    @ApiOperation(value = "Modify Quartz job configuration", notes = "Modify Quartz job configuration")
+    public ResponseBodyBean<CreateOrModifyQuartzJobConfigurationResponse> modify(
+            @PathVariable Long id,
+            @Valid @RequestBody CreateOrModifyQuartzJobConfigurationPayload payload
+    ) {
+        return ResponseBodyBean.ofSuccess(this.service.modify(id, payload));
     }
 
     @Override

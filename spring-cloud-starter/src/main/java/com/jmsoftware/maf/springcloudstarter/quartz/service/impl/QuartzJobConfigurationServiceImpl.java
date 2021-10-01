@@ -112,16 +112,35 @@ public class QuartzJobConfigurationServiceImpl
 
     @Override
     @SneakyThrows
-    public CreateQuartzJobConfigurationResponse create(@Valid @NotNull CreateQuartzJobConfigurationPayload payload) {
+    public CreateOrModifyQuartzJobConfigurationResponse create(
+            @Valid @NotNull CreateOrModifyQuartzJobConfigurationPayload payload
+    ) {
+        this.validateCronExpression(payload.getCronExpression());
         val quartzJobConfiguration = payload.asQuartzJobConfiguration();
-        val cronExpression = quartzJobConfiguration.getCronExpression();
+        quartzJobConfiguration.setServiceName(this.mafProjectProperty.getProjectArtifactId());
+        requireTrue(this.save(quartzJobConfiguration), saved -> log.info("Quartz job configuration saved: {}", saved))
+                .orElseThrow(() -> new IllegalStateException("Failed to save quartz job configuration"));
+        return new CreateOrModifyQuartzJobConfigurationResponse(quartzJobConfiguration.getId());
+    }
+
+    private void validateCronExpression(String cronExpression) throws Throwable {
         requireTrue(
                 CronUtil.isValid(cronExpression),
                 valid -> log.warn("Cron validation: {}, expression: {}", valid, cronExpression)
         ).orElseThrow(() -> new IllegalArgumentException(format("Cron({}) invalid", cronExpression)));
-        quartzJobConfiguration.setServiceName(this.mafProjectProperty.getProjectArtifactId());
-        requireTrue(this.save(quartzJobConfiguration), saved -> log.info("Quartz job configuration saved: {}", saved))
-                .orElseThrow(() -> new IllegalStateException("Failed to save quartz job configuration"));
-        return new CreateQuartzJobConfigurationResponse(quartzJobConfiguration.getId());
+    }
+
+    @Override
+    @SneakyThrows
+    public CreateOrModifyQuartzJobConfigurationResponse modify(@NotNull Long id,
+                                                               @Valid @NotNull CreateOrModifyQuartzJobConfigurationPayload payload) {
+        this.validateCronExpression(payload.getCronExpression());
+        val quartzJobConfiguration = payload.asQuartzJobConfiguration();
+        quartzJobConfiguration.setId(id);
+        requireTrue(
+                this.updateById(quartzJobConfiguration),
+                updated -> log.warn("Quartz job configuration updated: {}", updated)
+        ).orElseThrow(() -> new IllegalStateException("Failed to update quartz job configuration"));
+        return new CreateOrModifyQuartzJobConfigurationResponse(id);
     }
 }

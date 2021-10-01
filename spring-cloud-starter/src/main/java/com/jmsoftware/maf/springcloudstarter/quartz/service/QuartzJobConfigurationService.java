@@ -15,7 +15,7 @@ import java.util.List;
  * Description: QuartzJobConfigurationService
  *
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 9/23/2021 8:23 AM
- */
+ **/
 @Validated
 public interface QuartzJobConfigurationService extends IService<QuartzJobConfiguration> {
     String TEMPLATE_EXCEL = "quartz-job-configuration-stat.xlsx";
@@ -60,5 +60,15 @@ public interface QuartzJobConfigurationService extends IService<QuartzJobConfigu
      * @param payload the payload
      * @return the create quartz job configuration response
      */
-    CreateQuartzJobConfigurationResponse create(@Valid @NotNull CreateQuartzJobConfigurationPayload payload);
+    CreateOrModifyQuartzJobConfigurationResponse create(@Valid @NotNull CreateOrModifyQuartzJobConfigurationPayload payload);
+
+    /**
+     * Modify modify quartz job configuration response.
+     *
+     * @param id      the id
+     * @param payload the payload
+     * @return the modify quartz job configuration response
+     */
+    CreateOrModifyQuartzJobConfigurationResponse modify(@NotNull Long id,
+                                                        @Valid @NotNull CreateOrModifyQuartzJobConfigurationPayload payload);
 }

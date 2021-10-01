@@ -9,14 +9,14 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
- * <h1>CreateQuartzJobConfigurationPayload</h1>
+ * <h1>CreateOrModifyQuartzJobConfigurationPayload</h1>
  * <p>
  * Change description here.
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com, 10/1/21 10:29 PM
+ * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com, 10/1/21 11:43 PM
  **/
 @Data
-public class CreateQuartzJobConfigurationPayload {
+public class CreateOrModifyQuartzJobConfigurationPayload {
     @NotBlank
     @Length(max = 50)
     private String name;
@@ -40,15 +40,15 @@ public class CreateQuartzJobConfigurationPayload {
     private Byte status;
 
     public QuartzJobConfiguration asQuartzJobConfiguration() {
-        val quartzJobConfiguration = new QuartzJobConfiguration();
-        quartzJobConfiguration.setName(this.name);
-        quartzJobConfiguration.setGroup(this.group);
-        quartzJobConfiguration.setInvokeTarget(this.invokeTarget);
-        quartzJobConfiguration.setCronExpression(this.cronExpression);
-        quartzJobConfiguration.setMisfirePolicy(this.misfirePolicy);
-        quartzJobConfiguration.setConcurrent(this.concurrent);
-        quartzJobConfiguration.setDescription(this.description);
-        quartzJobConfiguration.setStatus(this.status);
-        return quartzJobConfiguration;
+        val result = new QuartzJobConfiguration();
+        result.setName(this.name);
+        result.setGroup(this.group);
+        result.setInvokeTarget(this.invokeTarget);
+        result.setCronExpression(this.cronExpression);
+        result.setMisfirePolicy(this.misfirePolicy);
+        result.setConcurrent(this.concurrent);
+        result.setDescription(this.description);
+        result.setStatus(this.status);
+        return result;
     }
 }
