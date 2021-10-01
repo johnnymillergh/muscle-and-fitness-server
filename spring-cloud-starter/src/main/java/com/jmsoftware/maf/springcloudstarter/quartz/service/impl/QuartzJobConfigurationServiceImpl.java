@@ -8,7 +8,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jmsoftware.maf.common.bean.PageResponseBodyBean;
 import com.jmsoftware.maf.springcloudstarter.configuration.MafProjectProperty;
-import com.jmsoftware.maf.springcloudstarter.quartz.entity.*;
+import com.jmsoftware.maf.springcloudstarter.quartz.entity.CreateOrModifyQuartzJobConfigurationPayload;
+import com.jmsoftware.maf.springcloudstarter.quartz.entity.GetQuartzJobConfigurationPageListItem;
+import com.jmsoftware.maf.springcloudstarter.quartz.entity.GetQuartzJobConfigurationPageListPayload;
+import com.jmsoftware.maf.springcloudstarter.quartz.entity.QuartzJobConfigurationExcel;
 import com.jmsoftware.maf.springcloudstarter.quartz.entity.persistence.QuartzJobConfiguration;
 import com.jmsoftware.maf.springcloudstarter.quartz.mapper.QuartzJobConfigurationMapper;
 import com.jmsoftware.maf.springcloudstarter.quartz.service.QuartzJobConfigurationService;
@@ -117,7 +120,7 @@ public class QuartzJobConfigurationServiceImpl
 
     @Override
     @SneakyThrows
-    public CreateOrModifyQuartzJobConfigurationResponse create(
+    public Long create(
             @Valid @NotNull CreateOrModifyQuartzJobConfigurationPayload payload
     ) {
         this.validateCronExpression(payload.getCronExpression());
@@ -125,7 +128,7 @@ public class QuartzJobConfigurationServiceImpl
         quartzJobConfiguration.setServiceName(this.mafProjectProperty.getProjectArtifactId());
         requireTrue(this.save(quartzJobConfiguration), saved -> log.info("Quartz job configuration saved: {}", saved))
                 .orElseThrow(() -> new IllegalStateException("Failed to save quartz job configuration"));
-        return new CreateOrModifyQuartzJobConfigurationResponse(quartzJobConfiguration.getId());
+        return quartzJobConfiguration.getId();
     }
 
     private void validateCronExpression(String cronExpression) throws Throwable {
@@ -137,7 +140,7 @@ public class QuartzJobConfigurationServiceImpl
 
     @Override
     @SneakyThrows
-    public CreateOrModifyQuartzJobConfigurationResponse modify(
+    public Long modify(
             @NotNull Long id,
             @Valid @NotNull CreateOrModifyQuartzJobConfigurationPayload payload
     ) {
@@ -148,12 +151,12 @@ public class QuartzJobConfigurationServiceImpl
                 this.updateById(quartzJobConfiguration),
                 updated -> log.warn("Quartz job configuration updated: {}", updated)
         ).orElseThrow(() -> new IllegalStateException("Failed to update quartz job configuration"));
-        return new CreateOrModifyQuartzJobConfigurationResponse(id);
+        return id;
     }
 
     @Override
     @SneakyThrows
-    public CreateOrModifyQuartzJobConfigurationResponse patch(
+    public Long patch(
             @NotNull Long id,
             @NotBlank String property,
             @NotNull CreateOrModifyQuartzJobConfigurationPayload payload
@@ -163,21 +166,21 @@ public class QuartzJobConfigurationServiceImpl
         val validationResult = ValidationUtil.warpValidateProperty(payload, property);
         requireTrue(
                 validationResult.isSuccess(),
-                valid -> log.warn("Quartz job configuration updated: {}", valid)
+                valid -> log.warn("Quartz job configuration patched: {}", valid)
         ).orElseThrow(() -> new IllegalStateException(format("{} invalid", property)));
         val quartzJobConfiguration = new QuartzJobConfiguration();
         ReflectUtil.setFieldValue(quartzJobConfiguration, property, value);
         quartzJobConfiguration.setId(id);
         requireTrue(
                 this.updateById(quartzJobConfiguration),
-                updated -> log.warn("Quartz job configuration updated: {}", updated)
+                updated -> log.warn("Quartz job configuration patched: {}", updated)
         ).orElseThrow(() -> new IllegalStateException(format("Failed to patch {}", property)));
-        return new CreateOrModifyQuartzJobConfigurationResponse(id);
+        return id;
     }
 
     @Override
     @SneakyThrows
-    public RunImmediatelyResponse runImmediately(@NotNull Long id) {
+    public Long runImmediately(@NotNull Long id) {
         val quartzJobConfiguration = this.getById(id);
         requireNonNull(quartzJobConfiguration, format("Quartz job(id:{}) must not be null", id));
         val scheduler = this.schedulerFactoryBean.getScheduler();
@@ -191,6 +194,25 @@ public class QuartzJobConfigurationServiceImpl
                 jobDataMap
         );
         log.warn("Triggered Quartz job successfully, {}", quartzJobConfiguration);
-        return new RunImmediatelyResponse(id);
+        return id;
+    }
+
+    @Override
+    @SneakyThrows
+    @Transactional(rollbackFor = Throwable.class)
+    public Long delete(@NotNull Long id, @NotBlank String group) {
+        requireTrue(
+                this.removeById(id),
+                deleted -> log.warn("Quartz job configuration deleted: {}", deleted)
+        ).orElseThrow(() -> new IllegalStateException(format("Failed to delete Quartz job configuration")));
+        val scheduler = this.schedulerFactoryBean.getScheduler();
+        val deletedJob = scheduler.deleteJob(
+                ScheduleUtil.getJobKey(id, group, this.mafProjectProperty.getProjectArtifactId())
+        );
+        requireTrue(
+                deletedJob,
+                deletedJob1 -> log.warn("Scheduler deleted job and related triggers: {}", deletedJob1)
+        ).orElseThrow(() -> new IllegalStateException("Failed to delete job by scheduler"));
+        return id;
     }
 }

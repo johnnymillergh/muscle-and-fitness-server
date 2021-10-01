@@ -3,7 +3,10 @@ package com.jmsoftware.maf.springcloudstarter.quartz.controller;
 import com.jmsoftware.maf.common.bean.PageResponseBodyBean;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.springcloudstarter.poi.AbstractExcelDataController;
-import com.jmsoftware.maf.springcloudstarter.quartz.entity.*;
+import com.jmsoftware.maf.springcloudstarter.quartz.entity.CreateOrModifyQuartzJobConfigurationPayload;
+import com.jmsoftware.maf.springcloudstarter.quartz.entity.GetQuartzJobConfigurationPageListItem;
+import com.jmsoftware.maf.springcloudstarter.quartz.entity.GetQuartzJobConfigurationPageListPayload;
+import com.jmsoftware.maf.springcloudstarter.quartz.entity.QuartzJobConfigurationExcel;
 import com.jmsoftware.maf.springcloudstarter.quartz.service.QuartzJobConfigurationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -42,7 +45,7 @@ public class QuartzJobConfigurationController extends AbstractExcelDataControlle
 
     @PostMapping("/quartz-job-configurations")
     @ApiOperation(value = "Create Quartz job configuration", notes = "Create Quartz job configuration")
-    public ResponseBodyBean<CreateOrModifyQuartzJobConfigurationResponse> create(
+    public ResponseBodyBean<Long> create(
             @Valid @RequestBody CreateOrModifyQuartzJobConfigurationPayload payload
     ) {
         return ResponseBodyBean.ofSuccess(this.service.create(payload));
@@ -50,7 +53,7 @@ public class QuartzJobConfigurationController extends AbstractExcelDataControlle
 
     @PutMapping("/quartz-job-configurations/{id}")
     @ApiOperation(value = "Modify Quartz job configuration", notes = "Modify Quartz job configuration")
-    public ResponseBodyBean<CreateOrModifyQuartzJobConfigurationResponse> modify(
+    public ResponseBodyBean<Long> modify(
             @PathVariable Long id,
             @Valid @RequestBody CreateOrModifyQuartzJobConfigurationPayload payload
     ) {
@@ -59,7 +62,7 @@ public class QuartzJobConfigurationController extends AbstractExcelDataControlle
 
     @PatchMapping("/quartz-job-configurations/{id}/{property}")
     @ApiOperation(value = "Patch Quartz job configuration", notes = "Patch Quartz job configuration")
-    public ResponseBodyBean<CreateOrModifyQuartzJobConfigurationResponse> patch(
+    public ResponseBodyBean<Long> patch(
             @PathVariable Long id,
             @PathVariable String property,
             @RequestBody CreateOrModifyQuartzJobConfigurationPayload payload
@@ -69,8 +72,14 @@ public class QuartzJobConfigurationController extends AbstractExcelDataControlle
 
     @PostMapping("/quartz-job-configurations/{id}/run-immediately")
     @ApiOperation(value = "Run Quartz job immediately", notes = "Run Quartz job immediately")
-    public ResponseBodyBean<RunImmediatelyResponse> runImmediately(@PathVariable Long id) {
+    public ResponseBodyBean<Long> runImmediately(@PathVariable Long id) {
         return ResponseBodyBean.ofSuccess(this.service.runImmediately(id));
+    }
+
+    @DeleteMapping("/quartz-job-configurations/{id}/{group}")
+    @ApiOperation(value = "Delete Quartz job configuration", notes = "Delete Quartz job configuration")
+    public ResponseBodyBean<Long> delete(@PathVariable Long id, @PathVariable String group) {
+        return ResponseBodyBean.ofSuccess(this.service.delete(id, group));
     }
 
     @Override

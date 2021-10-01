@@ -2,7 +2,10 @@ package com.jmsoftware.maf.springcloudstarter.quartz.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jmsoftware.maf.common.bean.PageResponseBodyBean;
-import com.jmsoftware.maf.springcloudstarter.quartz.entity.*;
+import com.jmsoftware.maf.springcloudstarter.quartz.entity.CreateOrModifyQuartzJobConfigurationPayload;
+import com.jmsoftware.maf.springcloudstarter.quartz.entity.GetQuartzJobConfigurationPageListItem;
+import com.jmsoftware.maf.springcloudstarter.quartz.entity.GetQuartzJobConfigurationPageListPayload;
+import com.jmsoftware.maf.springcloudstarter.quartz.entity.QuartzJobConfigurationExcel;
 import com.jmsoftware.maf.springcloudstarter.quartz.entity.persistence.QuartzJobConfiguration;
 import org.springframework.validation.annotation.Validated;
 
@@ -59,18 +62,18 @@ public interface QuartzJobConfigurationService extends IService<QuartzJobConfigu
      * Create create quartz job configuration response.
      *
      * @param payload the payload
-     * @return the create quartz job configuration response
+     * @return the quartz job configuration id
      */
-    CreateOrModifyQuartzJobConfigurationResponse create(@Valid @NotNull CreateOrModifyQuartzJobConfigurationPayload payload);
+    Long create(@Valid @NotNull CreateOrModifyQuartzJobConfigurationPayload payload);
 
     /**
      * Modify modify quartz job configuration response.
      *
      * @param id      the id
      * @param payload the payload
-     * @return the modify quartz job configuration response
+     * @return the quartz job configuration id
      */
-    CreateOrModifyQuartzJobConfigurationResponse modify(
+    Long modify(
             @NotNull Long id,
             @Valid @NotNull CreateOrModifyQuartzJobConfigurationPayload payload);
 
@@ -78,11 +81,11 @@ public interface QuartzJobConfigurationService extends IService<QuartzJobConfigu
      * Patch create or modify quartz job configuration response.
      *
      * @param id       the id
-     * @param property
+     * @param property the property
      * @param payload  the payload
-     * @return the create or modify quartz job configuration response
+     * @return the quartz job configuration id
      */
-    CreateOrModifyQuartzJobConfigurationResponse patch(
+    Long patch(
             @NotNull Long id,
             @NotBlank String property,
             @NotNull CreateOrModifyQuartzJobConfigurationPayload payload);
@@ -91,7 +94,16 @@ public interface QuartzJobConfigurationService extends IService<QuartzJobConfigu
      * Run immediately.
      *
      * @param id the id
-     * @return the run immediately response
+     * @return the quartz job configuration id
      */
-    RunImmediatelyResponse runImmediately(@NotNull Long id);
+    Long runImmediately(@NotNull Long id);
+
+    /**
+     * Delete quartz job long.
+     *
+     * @param id    the id
+     * @param group the group
+     * @return the long
+     */
+    Long delete(@NotNull Long id, @NotBlank String group);
 }
