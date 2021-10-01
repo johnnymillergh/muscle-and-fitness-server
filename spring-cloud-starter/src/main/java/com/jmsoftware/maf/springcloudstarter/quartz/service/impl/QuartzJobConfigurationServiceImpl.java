@@ -1,6 +1,7 @@
 package com.jmsoftware.maf.springcloudstarter.quartz.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.extra.validation.ValidationUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -32,6 +34,7 @@ import java.util.stream.Collectors;
 
 import static cn.hutool.core.text.CharSequenceUtil.format;
 import static com.jmsoftware.maf.springcloudstarter.function.BooleanCheck.requireTrue;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Description: QuartzJobConfigurationServiceImpl
@@ -132,8 +135,10 @@ public class QuartzJobConfigurationServiceImpl
 
     @Override
     @SneakyThrows
-    public CreateOrModifyQuartzJobConfigurationResponse modify(@NotNull Long id,
-                                                               @Valid @NotNull CreateOrModifyQuartzJobConfigurationPayload payload) {
+    public CreateOrModifyQuartzJobConfigurationResponse modify(
+            @NotNull Long id,
+            @Valid @NotNull CreateOrModifyQuartzJobConfigurationPayload payload
+    ) {
         this.validateCronExpression(payload.getCronExpression());
         val quartzJobConfiguration = payload.asQuartzJobConfiguration();
         quartzJobConfiguration.setId(id);
@@ -141,6 +146,30 @@ public class QuartzJobConfigurationServiceImpl
                 this.updateById(quartzJobConfiguration),
                 updated -> log.warn("Quartz job configuration updated: {}", updated)
         ).orElseThrow(() -> new IllegalStateException("Failed to update quartz job configuration"));
+        return new CreateOrModifyQuartzJobConfigurationResponse(id);
+    }
+
+    @Override
+    @SneakyThrows
+    public CreateOrModifyQuartzJobConfigurationResponse patch(
+            @NotNull Long id,
+            @NotBlank String property,
+            @NotNull CreateOrModifyQuartzJobConfigurationPayload payload
+    ) {
+        val value = ReflectUtil.getFieldValue(payload, property);
+        requireNonNull(value, format("Property's value({}) must not be null", property));
+        val validationResult = ValidationUtil.warpValidateProperty(payload, property);
+        requireTrue(
+                validationResult.isSuccess(),
+                valid -> log.warn("Quartz job configuration updated: {}", valid)
+        ).orElseThrow(() -> new IllegalStateException(format("{} invalid", property)));
+        val quartzJobConfiguration = new QuartzJobConfiguration();
+        ReflectUtil.setFieldValue(quartzJobConfiguration, property, value);
+        quartzJobConfiguration.setId(id);
+        requireTrue(
+                this.updateById(quartzJobConfiguration),
+                updated -> log.warn("Quartz job configuration updated: {}", updated)
+        ).orElseThrow(() -> new IllegalStateException(format("Failed to patch {}", property)));
         return new CreateOrModifyQuartzJobConfigurationResponse(id);
     }
 }

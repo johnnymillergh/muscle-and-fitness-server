@@ -7,6 +7,7 @@ import com.jmsoftware.maf.springcloudstarter.quartz.entity.persistence.QuartzJob
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -69,6 +70,20 @@ public interface QuartzJobConfigurationService extends IService<QuartzJobConfigu
      * @param payload the payload
      * @return the modify quartz job configuration response
      */
-    CreateOrModifyQuartzJobConfigurationResponse modify(@NotNull Long id,
-                                                        @Valid @NotNull CreateOrModifyQuartzJobConfigurationPayload payload);
+    CreateOrModifyQuartzJobConfigurationResponse modify(
+            @NotNull Long id,
+            @Valid @NotNull CreateOrModifyQuartzJobConfigurationPayload payload);
+
+    /**
+     * Patch create or modify quartz job configuration response.
+     *
+     * @param id       the id
+     * @param property
+     * @param payload  the payload
+     * @return the create or modify quartz job configuration response
+     */
+    CreateOrModifyQuartzJobConfigurationResponse patch(
+            @NotNull Long id,
+            @NotBlank String property,
+            @NotNull CreateOrModifyQuartzJobConfigurationPayload payload);
 }

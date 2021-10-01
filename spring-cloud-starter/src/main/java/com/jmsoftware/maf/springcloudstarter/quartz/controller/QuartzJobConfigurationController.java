@@ -57,6 +57,16 @@ public class QuartzJobConfigurationController extends AbstractExcelDataControlle
         return ResponseBodyBean.ofSuccess(this.service.modify(id, payload));
     }
 
+    @PatchMapping("/quartz-job-configurations/{id}/{property}")
+    @ApiOperation(value = "Patch Quartz job configuration", notes = "Patch Quartz job configuration")
+    public ResponseBodyBean<CreateOrModifyQuartzJobConfigurationResponse> patch(
+            @PathVariable Long id,
+            @PathVariable String property,
+            @RequestBody CreateOrModifyQuartzJobConfigurationPayload payload
+    ) {
+        return ResponseBodyBean.ofSuccess(this.service.patch(id, property, payload));
+    }
+
     @Override
     protected void onExceptionOccurred() {
         log.error("Exception occurred when uploading excel. Excel class: {}", QuartzJobConfigurationExcel.class);
