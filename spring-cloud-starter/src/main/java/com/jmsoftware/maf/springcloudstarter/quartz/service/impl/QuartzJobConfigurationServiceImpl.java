@@ -7,12 +7,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jmsoftware.maf.common.bean.PageResponseBodyBean;
 import com.jmsoftware.maf.springcloudstarter.configuration.MafProjectProperty;
-import com.jmsoftware.maf.springcloudstarter.quartz.entity.GetQuartzJobConfigurationPageListItem;
-import com.jmsoftware.maf.springcloudstarter.quartz.entity.GetQuartzJobConfigurationPageListPayload;
-import com.jmsoftware.maf.springcloudstarter.quartz.entity.QuartzJobConfigurationExcel;
+import com.jmsoftware.maf.springcloudstarter.quartz.entity.*;
 import com.jmsoftware.maf.springcloudstarter.quartz.entity.persistence.QuartzJobConfiguration;
 import com.jmsoftware.maf.springcloudstarter.quartz.mapper.QuartzJobConfigurationMapper;
 import com.jmsoftware.maf.springcloudstarter.quartz.service.QuartzJobConfigurationService;
+import com.jmsoftware.maf.springcloudstarter.quartz.util.CronUtil;
 import com.jmsoftware.maf.springcloudstarter.quartz.util.ScheduleUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -26,10 +25,12 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static cn.hutool.core.text.CharSequenceUtil.format;
 import static com.jmsoftware.maf.springcloudstarter.function.BooleanCheck.requireTrue;
 
 /**
@@ -107,5 +108,20 @@ public class QuartzJobConfigurationServiceImpl
     @Override
     public List<QuartzJobConfigurationExcel> getListForExporting() {
         return this.getBaseMapper().selectListForExporting(this.mafProjectProperty.getProjectArtifactId());
+    }
+
+    @Override
+    @SneakyThrows
+    public CreateQuartzJobConfigurationResponse create(@Valid @NotNull CreateQuartzJobConfigurationPayload payload) {
+        val quartzJobConfiguration = payload.asQuartzJobConfiguration();
+        val cronExpression = quartzJobConfiguration.getCronExpression();
+        requireTrue(
+                CronUtil.isValid(cronExpression),
+                valid -> log.warn("Cron validation: {}, expression: {}", valid, cronExpression)
+        ).orElseThrow(() -> new IllegalArgumentException(format("Cron({}) invalid", cronExpression)));
+        quartzJobConfiguration.setServiceName(this.mafProjectProperty.getProjectArtifactId());
+        requireTrue(this.save(quartzJobConfiguration), saved -> log.info("Quartz job configuration saved: {}", saved))
+                .orElseThrow(() -> new IllegalStateException("Failed to save quartz job configuration"));
+        return new CreateQuartzJobConfigurationResponse(quartzJobConfiguration.getId());
     }
 }

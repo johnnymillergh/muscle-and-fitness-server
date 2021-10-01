@@ -26,13 +26,13 @@ public class CommonController {
     @GetMapping("/app-info")
     @ApiOperation(value = "/app-info", notes = "Retrieve application information")
     public ResponseBodyBean<JSON> applicationInformation() {
-        return ResponseBodyBean.ofSuccess(commonService.getApplicationInfo(), "Succeed to retrieve app info.");
+        return ResponseBodyBean.ofSuccess(this.commonService.getApplicationInfo(), "Succeed to retrieve app info.");
     }
 
     @PostMapping("/validation-test")
     @ApiOperation(value = "/validation-test", notes = "Validation of request payload test")
     public ResponseBodyBean<String> validationTest(@RequestBody ValidationTestPayload payload) {
-        commonService.validateObject(payload);
+        this.commonService.validateObject(payload);
         return ResponseBodyBean.ofSuccess(payload.getName(), "validationTest()");
     }
 }

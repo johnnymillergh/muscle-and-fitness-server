@@ -1,19 +1,16 @@
 package com.jmsoftware.maf.springcloudstarter.quartz.controller;
 
 import com.jmsoftware.maf.common.bean.PageResponseBodyBean;
+import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.springcloudstarter.poi.AbstractExcelDataController;
-import com.jmsoftware.maf.springcloudstarter.quartz.entity.GetQuartzJobConfigurationPageListItem;
-import com.jmsoftware.maf.springcloudstarter.quartz.entity.GetQuartzJobConfigurationPageListPayload;
-import com.jmsoftware.maf.springcloudstarter.quartz.entity.QuartzJobConfigurationExcel;
+import com.jmsoftware.maf.springcloudstarter.quartz.entity.*;
 import com.jmsoftware.maf.springcloudstarter.quartz.service.QuartzJobConfigurationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.Instant;
@@ -41,6 +38,14 @@ public class QuartzJobConfigurationController extends AbstractExcelDataControlle
             @Valid GetQuartzJobConfigurationPageListPayload payload
     ) {
         return this.service.getPageList(payload);
+    }
+
+    @PostMapping("/quartz-job-configurations")
+    @ApiOperation(value = "Create Quartz job configuration", notes = "Create Quartz job configuration")
+    public ResponseBodyBean<CreateQuartzJobConfigurationResponse> create(
+            @Valid @RequestBody CreateQuartzJobConfigurationPayload payload
+    ) {
+        return ResponseBodyBean.ofSuccess(this.service.create(payload));
     }
 
     @Override

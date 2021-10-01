@@ -31,6 +31,6 @@ public class PermissionRemoteApiController {
     @GetMapping("/permissions")
     @ApiOperation(value = "Get permission list by role id list", notes = "Get permission list by role id list (remote)")
     public ResponseBodyBean<GetPermissionListByRoleIdListResponse> getPermissionListByRoleIdList(@Valid GetPermissionListByRoleIdListPayload payload) {
-        return ResponseBodyBean.ofSuccess(permissionService.getPermissionListByRoleIdList(payload));
+        return ResponseBodyBean.ofSuccess(this.permissionService.getPermissionListByRoleIdList(payload));
     }
 }

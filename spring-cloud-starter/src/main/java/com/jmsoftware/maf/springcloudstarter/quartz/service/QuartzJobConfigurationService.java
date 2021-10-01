@@ -2,14 +2,13 @@ package com.jmsoftware.maf.springcloudstarter.quartz.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jmsoftware.maf.common.bean.PageResponseBodyBean;
-import com.jmsoftware.maf.springcloudstarter.quartz.entity.GetQuartzJobConfigurationPageListItem;
-import com.jmsoftware.maf.springcloudstarter.quartz.entity.GetQuartzJobConfigurationPageListPayload;
-import com.jmsoftware.maf.springcloudstarter.quartz.entity.QuartzJobConfigurationExcel;
+import com.jmsoftware.maf.springcloudstarter.quartz.entity.*;
 import com.jmsoftware.maf.springcloudstarter.quartz.entity.persistence.QuartzJobConfiguration;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -54,4 +53,12 @@ public interface QuartzJobConfigurationService extends IService<QuartzJobConfigu
      * @return the list for exporting
      */
     List<QuartzJobConfigurationExcel> getListForExporting();
+
+    /**
+     * Create create quartz job configuration response.
+     *
+     * @param payload the payload
+     * @return the create quartz job configuration response
+     */
+    CreateQuartzJobConfigurationResponse create(@Valid @NotNull CreateQuartzJobConfigurationPayload payload);
 }

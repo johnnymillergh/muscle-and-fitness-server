@@ -180,7 +180,7 @@ public class ResponseBodyBean<T> implements Serializable {
      * @param message message to be responded
      * @return response body
      */
-    public static <T> ResponseBodyBean<T> ofSuccess(@NonNull final String message) {
+    public static <T> ResponseBodyBean<T> ofSuccessMessage(@NonNull final String message) {
         ResponseBodyBean<T> responseBodyBean = new ResponseBodyBean<>();
         responseBodyBean.setMessage(message);
         return responseBodyBean;
@@ -209,7 +209,7 @@ public class ResponseBodyBean<T> implements Serializable {
      * @param message message to be responded.
      * @return response body
      */
-    public static <T> ResponseBodyBean<T> ofFailure(@NonNull final String message) throws BizException {
+    public static <T> ResponseBodyBean<T> ofFailureMessage(@NonNull final String message) throws BizException {
         throw new BizException(message);
     }
 

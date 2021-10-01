@@ -8,6 +8,7 @@ import com.jmsoftware.maf.mafmis.exercise.service.ExerciseService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,14 +34,14 @@ public class ExerciseController {
     @GetMapping("/get-by-id")
     @ApiOperation(value = "/get-by-id", notes = "Retrieve exercise by id")
     public ResponseBodyBean<ExercisePo> selectOne(Long id) {
-        return ResponseBodyBean.ofSuccess(exerciseService.queryById(id));
+        return ResponseBodyBean.ofSuccess(this.exerciseService.queryById(id));
     }
 
     @GetMapping("/get-page-list")
     @ApiOperation(value = "/get-page-list", notes = "Retrieve page list")
     public ResponseBodyBean<List<ExercisePo>> getPageList(@Valid GetPageListPayload payload) {
-        var exercisePo = new ExercisePo();
+        val exercisePo = new ExercisePo();
         BeanUtil.copyProperties(payload, exercisePo);
-        return ResponseBodyBean.ofSuccess(exerciseService.getPageList(exercisePo));
+        return ResponseBodyBean.ofSuccess(this.exerciseService.getPageList(exercisePo));
     }
 }
