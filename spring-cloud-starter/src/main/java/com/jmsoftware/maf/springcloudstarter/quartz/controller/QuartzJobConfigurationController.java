@@ -67,6 +67,12 @@ public class QuartzJobConfigurationController extends AbstractExcelDataControlle
         return ResponseBodyBean.ofSuccess(this.service.patch(id, property, payload));
     }
 
+    @PostMapping("/quartz-job-configurations/{id}/run-immediately")
+    @ApiOperation(value = "Run Quartz job immediately", notes = "Run Quartz job immediately")
+    public ResponseBodyBean<RunImmediatelyResponse> runImmediately(@PathVariable Long id) {
+        return ResponseBodyBean.ofSuccess(this.service.runImmediately(id));
+    }
+
     @Override
     protected void onExceptionOccurred() {
         log.error("Exception occurred when uploading excel. Excel class: {}", QuartzJobConfigurationExcel.class);

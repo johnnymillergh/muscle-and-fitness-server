@@ -86,4 +86,12 @@ public interface QuartzJobConfigurationService extends IService<QuartzJobConfigu
             @NotNull Long id,
             @NotBlank String property,
             @NotNull CreateOrModifyQuartzJobConfigurationPayload payload);
+
+    /**
+     * Run immediately.
+     *
+     * @param id the id
+     * @return the run immediately response
+     */
+    RunImmediatelyResponse runImmediately(@NotNull Long id);
 }

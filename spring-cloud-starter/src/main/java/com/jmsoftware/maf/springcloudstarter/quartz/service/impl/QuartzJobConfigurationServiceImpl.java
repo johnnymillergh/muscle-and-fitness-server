@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.quartz.JobDataMap;
 import org.quartz.SchedulerException;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,7 @@ import java.util.stream.Collectors;
 
 import static cn.hutool.core.text.CharSequenceUtil.format;
 import static com.jmsoftware.maf.springcloudstarter.function.BooleanCheck.requireTrue;
+import static com.jmsoftware.maf.springcloudstarter.quartz.constant.ScheduleConstant.QUARTZ_JOB_CONFIGURATION;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -171,5 +173,24 @@ public class QuartzJobConfigurationServiceImpl
                 updated -> log.warn("Quartz job configuration updated: {}", updated)
         ).orElseThrow(() -> new IllegalStateException(format("Failed to patch {}", property)));
         return new CreateOrModifyQuartzJobConfigurationResponse(id);
+    }
+
+    @Override
+    @SneakyThrows
+    public RunImmediatelyResponse runImmediately(@NotNull Long id) {
+        val quartzJobConfiguration = this.getById(id);
+        requireNonNull(quartzJobConfiguration, format("Quartz job(id:{}) must not be null", id));
+        val scheduler = this.schedulerFactoryBean.getScheduler();
+        val jobDataMap = new JobDataMap();
+        jobDataMap.put(QUARTZ_JOB_CONFIGURATION, quartzJobConfiguration);
+        scheduler.triggerJob(
+                ScheduleUtil.getJobKey(
+                        quartzJobConfiguration.getId(),
+                        quartzJobConfiguration.getGroup(),
+                        this.mafProjectProperty.getProjectArtifactId()),
+                jobDataMap
+        );
+        log.warn("Triggered Quartz job successfully, {}", quartzJobConfiguration);
+        return new RunImmediatelyResponse(id);
     }
 }
