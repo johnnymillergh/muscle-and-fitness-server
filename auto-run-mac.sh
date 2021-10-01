@@ -18,8 +18,9 @@ set -e
 readonly mavenActiveProfile="development-local"
 readonly javaParameter="-Xms256m -Xmx256m -Dfile.encoding=UTF-8 -Dspring.cloud.consul.host=localhost -Dspring.profiles.active=$mavenActiveProfile"
 readonly runServices=(
-  auth-center
   api-gateway
+  spring-boot-admin
+  oss-center
 )
 readonly skipGitPull=true
 readonly skipBuild=false
@@ -172,7 +173,7 @@ function executePreBuildPhase() {
 function executeBuildPhase() {
   logInfo "[BUILD] Maven is staring to build"
   if [ "$skipBuild" = false ]; then
-    mvn clean package --batch-mode --show-version -Dmaven.javadoc.skip=true -DskipTests=true -P $mavenActiveProfile
+    mvn clean package --show-version -Dmaven.javadoc.skip=true -DskipTests=true -P $mavenActiveProfile
     buildCommandResult=$?
     # After the command that might error, instead of || exit 1...
     if [ "$buildCommandResult" -ne 0 ]; then
