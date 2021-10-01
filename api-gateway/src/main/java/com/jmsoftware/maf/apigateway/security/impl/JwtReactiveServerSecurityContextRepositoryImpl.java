@@ -2,9 +2,9 @@ package com.jmsoftware.maf.apigateway.security.impl;
 
 import cn.hutool.core.util.StrUtil;
 import com.jmsoftware.maf.apigateway.remoteapi.AuthCenterRemoteApi;
-import com.jmsoftware.maf.reactivespringcloudstarter.configuration.JwtConfiguration;
 import com.jmsoftware.maf.common.domain.authcenter.security.UserPrincipal;
 import com.jmsoftware.maf.common.exception.SecurityException;
+import com.jmsoftware.maf.reactivespringcloudstarter.configuration.JwtConfiguration;
 import com.jmsoftware.maf.reactivespringcloudstarter.configuration.MafConfiguration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +45,7 @@ public class JwtReactiveServerSecurityContextRepositoryImpl implements ServerSec
     public Mono<SecurityContext> load(ServerWebExchange exchange) {
         val request = exchange.getRequest();
         // Ignore allowed URL
-        for (var ignoredUrl : this.mafConfiguration.flattenIgnoredUrls()) {
+        for (val ignoredUrl : this.mafConfiguration.flattenIgnoredUrls()) {
             if (this.antPathMatcher.match(ignoredUrl, request.getURI().getPath())) {
                 return Mono.empty();
             }
