@@ -1,6 +1,6 @@
 package com.jmsoftware.maf.springcloudstarter.filter;
 
-import com.jmsoftware.maf.springcloudstarter.configuration.MafConfiguration;
+import com.jmsoftware.maf.springcloudstarter.property.MafConfigurationProperties;
 import com.jmsoftware.maf.springcloudstarter.util.RequestUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class AccessLogFilter extends OncePerRequestFilter {
-    private final MafConfiguration mafConfiguration;
+    private final MafConfigurationProperties mafConfigurationProperties;
     private final AntPathMatcher antPathMatcher = new AntPathMatcher();
 
     @Override
@@ -33,7 +33,7 @@ public class AccessLogFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws IOException, ServletException {
         // Ignore URL
-        for (String ignoredUrl : this.mafConfiguration.flattenIgnoredUrls()) {
+        for (String ignoredUrl : this.mafConfigurationProperties.flattenIgnoredUrls()) {
             if (this.antPathMatcher.match(ignoredUrl, request.getRequestURI())) {
                 filterChain.doFilter(request, response);
                 return;

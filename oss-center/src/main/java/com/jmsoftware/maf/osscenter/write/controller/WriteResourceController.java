@@ -1,8 +1,8 @@
 package com.jmsoftware.maf.osscenter.write.controller;
 
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
+import com.jmsoftware.maf.common.domain.osscenter.write.ObjectResponse;
 import com.jmsoftware.maf.osscenter.write.entity.MergeResourceChunkPayload;
-import com.jmsoftware.maf.osscenter.write.entity.ObjectResponse;
 import com.jmsoftware.maf.osscenter.write.entity.UploadResourceChunkPayload;
 import com.jmsoftware.maf.osscenter.write.service.WriteResourceService;
 import io.swagger.annotations.Api;
@@ -33,7 +33,7 @@ public class WriteResourceController {
 
     @PostMapping("/upload/single")
     @ApiOperation(value = "Upload single resource", notes = "Upload single resource")
-    public ResponseBodyBean<ObjectResponse> uploadSingleResource(@RequestParam("file") MultipartFile multipartFile) {
+    public ResponseBodyBean<ObjectResponse> uploadSingleResource(@RequestPart("file") MultipartFile multipartFile) {
         return ResponseBodyBean.ofSuccess(this.writeResourceService.uploadSingleResource(multipartFile),
                                           this.messageSource.getMessage("uploaded", null,
                                                                         LocaleContextHolder.getLocale()));
@@ -41,7 +41,7 @@ public class WriteResourceController {
 
     @PostMapping("/upload/chunk")
     @ApiOperation(value = "Upload chunk of resource", notes = "Upload chunk of resource")
-    public ResponseBodyBean<ObjectResponse> uploadResourceChunk(@RequestParam("file") MultipartFile multipartFile,
+    public ResponseBodyBean<ObjectResponse> uploadResourceChunk(@RequestPart("file") MultipartFile multipartFile,
                                                                 @Valid UploadResourceChunkPayload payload) {
         return ResponseBodyBean.ofSuccess(this.writeResourceService.uploadResourceChunk(multipartFile, payload));
     }

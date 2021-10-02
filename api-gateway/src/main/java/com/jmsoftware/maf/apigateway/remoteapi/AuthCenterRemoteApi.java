@@ -37,7 +37,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AuthCenterRemoteApi {
     private static final String SERVICE_NAME = "auth-center";
-    private final WebClient.Builder webClientBuilder;
+    private final WebClient webClient;
 
     /**
      * Gets user by login token.
@@ -46,8 +46,7 @@ public class AuthCenterRemoteApi {
      * @return the user by login token
      */
     public Mono<GetUserByLoginTokenResponse> getUserByLoginToken(@PathVariable String loginToken) {
-        return webClientBuilder
-                .build()
+        return this.webClient
                 .get()
                 .uri(String.format("http://%s/user-remote-api/users/{loginToken}", SERVICE_NAME), loginToken)
                 .retrieve()
@@ -63,15 +62,14 @@ public class AuthCenterRemoteApi {
      * @return the role list by user id
      */
     public Mono<List<GetRoleListByUserIdSingleResponse>> getRoleListByUserId(@NotNull Long userId) {
-        return webClientBuilder
-                .build()
+        return this.webClient
                 .get()
                 .uri(String.format("http://%s/role-remote-api/roles/{userId}", SERVICE_NAME), userId)
                 .retrieve()
                 .bodyToMono(ResponseBodyBean.class)
                 .map(ResponseBodyBean::getData)
                 .map(data -> JSONUtil.toList(JSONUtil.parseObj(data).getJSONArray("roleList"),
-                                         GetRoleListByUserIdSingleResponse.class));
+                                             GetRoleListByUserIdSingleResponse.class));
     }
 
     /**
@@ -81,8 +79,7 @@ public class AuthCenterRemoteApi {
      * @return the response body bean
      */
     public Mono<List<GetPermissionListByRoleIdListResponse.Permission>> getPermissionListByRoleIdList(@Valid GetPermissionListByRoleIdListPayload payload) {
-        return webClientBuilder
-                .build()
+        return this.webClient
                 .get()
                 .uri(uriBuilder -> uriBuilder
                         .host("auth-center")
@@ -105,8 +102,7 @@ public class AuthCenterRemoteApi {
      */
     @GetMapping("/jwt-remote-api/parse")
     public Mono<ParseJwtResponse> parse(@NotBlank String authorization) {
-        return webClientBuilder
-                .build()
+        return this.webClient
                 .get()
                 .uri("http://auth-center/jwt-remote-api/parse")
                 .headers(httpHeaders -> httpHeaders.set(HttpHeaders.AUTHORIZATION, authorization))

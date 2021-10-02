@@ -4,7 +4,8 @@ import cn.hutool.core.util.BooleanUtil;
 import com.google.common.collect.Lists;
 import com.jmsoftware.maf.apigateway.remoteapi.AuthCenterRemoteApi;
 import com.jmsoftware.maf.apigateway.security.impl.*;
-import com.jmsoftware.maf.reactivespringcloudstarter.configuration.MafConfiguration;
+import com.jmsoftware.maf.reactivespringcloudstarter.property.MafConfigurationProperties;
+import com.jmsoftware.maf.reactivespringcloudstarter.util.ResponseUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -38,7 +39,7 @@ import org.springframework.security.web.server.context.ServerSecurityContextRepo
 @EnableWebFluxSecurity
 @RequiredArgsConstructor
 public class WebFluxSecurityConfiguration {
-    private final MafConfiguration mafConfiguration;
+    private final MafConfigurationProperties mafConfigurationProperties;
     private final AuthCenterRemoteApi authCenterRemoteApi;
 
     @Bean
@@ -48,7 +49,7 @@ public class WebFluxSecurityConfiguration {
                                                 ServerSecurityContextRepository serverSecurityContextRepository,
                                                 ReactiveAuthenticationManager reactiveAuthenticationManager,
                                                 ReactiveAuthorizationManager<AuthorizationContext> reactiveAuthorizationManager) {
-        if (BooleanUtil.isFalse(this.mafConfiguration.getWebSecurityEnabled())) {
+        if (BooleanUtil.isFalse(this.mafConfigurationProperties.getWebSecurityEnabled())) {
             log.warn("Web security was disabled.");
             return http
                     .cors().disable()
@@ -56,7 +57,7 @@ public class WebFluxSecurityConfiguration {
                     .build();
         }
         log.warn("Spring Security will ignore following URLs: {}",
-                 Lists.newArrayList(this.mafConfiguration.flattenIgnoredUrls()));
+                 Lists.newArrayList(this.mafConfigurationProperties.flattenIgnoredUrls()));
         return http
                 .cors().disable()
                 .csrf().disable()
@@ -70,7 +71,7 @@ public class WebFluxSecurityConfiguration {
                 .securityContextRepository(serverSecurityContextRepository)
                 .authenticationManager(reactiveAuthenticationManager)
                 .authorizeExchange()
-                .pathMatchers(this.mafConfiguration.flattenIgnoredUrls()).permitAll()
+                .pathMatchers(this.mafConfigurationProperties.flattenIgnoredUrls()).permitAll()
                 .pathMatchers(HttpMethod.OPTIONS).permitAll()
                 // Authorization
                 .anyExchange().access(reactiveAuthorizationManager)
@@ -79,13 +80,13 @@ public class WebFluxSecurityConfiguration {
     }
 
     @Bean
-    public ServerAuthenticationEntryPoint serverAuthenticationEntryPoint() {
-        return new ServerAuthenticationEntryPointImpl();
+    public ServerAuthenticationEntryPoint serverAuthenticationEntryPoint(ResponseUtil responseUtil) {
+        return new ServerAuthenticationEntryPointImpl(responseUtil);
     }
 
     @Bean
-    public ServerAccessDeniedHandler serverAccessDeniedHandler() {
-        return new GatewayServerAccessDeniedHandlerImpl();
+    public ServerAccessDeniedHandler serverAccessDeniedHandler(ResponseUtil responseUtil) {
+        return new GatewayServerAccessDeniedHandlerImpl(responseUtil);
     }
 
     @Bean
@@ -95,7 +96,7 @@ public class WebFluxSecurityConfiguration {
 
     @Bean
     public ServerSecurityContextRepository serverSecurityContextRepository(ReactiveAuthenticationManager reactiveAuthenticationManager) {
-        return new JwtReactiveServerSecurityContextRepositoryImpl(this.mafConfiguration, reactiveAuthenticationManager,
+        return new JwtReactiveServerSecurityContextRepositoryImpl(this.mafConfigurationProperties, reactiveAuthenticationManager,
                                                                   this.authCenterRemoteApi);
     }
 

@@ -1,7 +1,7 @@
 package com.jmsoftware.maf.osscenter.write.service;
 
+import com.jmsoftware.maf.common.domain.osscenter.write.ObjectResponse;
 import com.jmsoftware.maf.osscenter.write.entity.MergeResourceChunkPayload;
-import com.jmsoftware.maf.osscenter.write.entity.ObjectResponse;
 import com.jmsoftware.maf.osscenter.write.entity.UploadResourceChunkPayload;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;

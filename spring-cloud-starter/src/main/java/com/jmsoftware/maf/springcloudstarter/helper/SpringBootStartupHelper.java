@@ -1,10 +1,14 @@
 package com.jmsoftware.maf.springcloudstarter.helper;
 
-import com.jmsoftware.maf.springcloudstarter.configuration.MafProjectProperty;
+import cn.hutool.core.lang.Console;
+import com.jmsoftware.maf.springcloudstarter.property.MafProjectProperties;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
+import lombok.val;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.util.StopWatch;
 
 import java.time.Instant;
@@ -17,23 +21,34 @@ import java.util.TimeZone;
  * @author 钟俊（zhongjun）, email: zhongjun@toguide.cn, date: 2/10/2021 10:07 AM
  **/
 @Slf4j
-@Component
 @RequiredArgsConstructor
-public class SpringBootStartupHelper {
+public class SpringBootStartupHelper implements DisposableBean {
     private static final String LINE_SEPARATOR = System.lineSeparator();
-    private final MafProjectProperty mafProjectProperty;
+    private final MafProjectProperties mafProjectProperties;
     private final IpHelper ipHelper;
+    private final ApplicationContext applicationContext;
 
     public void stop(@NonNull StopWatch stopWatch) {
         stopWatch.stop();
-        log.info("🥳 Congratulations! 🎉");
-        log.info("🖥 {}@{} started!", this.mafProjectProperty.getProjectArtifactId(), this.mafProjectProperty.getVersion());
-        log.info("⚙️ Environment: {}", this.mafProjectProperty.getEnvironment());
-        log.info("⏳ Deployment duration: {} seconds ({} ms)", stopWatch.getTotalTimeSeconds(),
+        Console.log("🥳 Congratulations! 🎉");
+        Console.log("🖥 {}@{} started!", this.mafProjectProperties.getProjectArtifactId(),
+                 this.mafProjectProperties.getVersion());
+        Console.log("⚙️ Environment: {}", this.mafProjectProperties.getEnvironment());
+        Console.log("⏳ Deployment duration: {} seconds ({} ms)", stopWatch.getTotalTimeSeconds(),
                  stopWatch.getTotalTimeMillis());
-        log.info("⏰ App started at {} (timezone - {})", Instant.now().atZone(ZoneId.of("UTC+8")), TimeZone.getDefault().getDisplayName());
-        log.info("{}  App running at{}  - Local:   http://localhost:{}{}/{}  - Network: http://{}:{}{}/",
-                 LINE_SEPARATOR, LINE_SEPARATOR, this.ipHelper.getServerPort(), this.mafProjectProperty.getContextPath(),
-                 LINE_SEPARATOR, this.ipHelper.getPublicIp(), this.ipHelper.getServerPort(), this.mafProjectProperty.getContextPath());
+        Console.log("⏰ App started at {} (timezone - {})", Instant.now().atZone(ZoneId.of("UTC+8")),
+                 TimeZone.getDefault().getDisplayName());
+        Console.error("  App running at{}  - Local:   http://localhost:{}{}/{}  - Network: http://{}:{}{}/",
+                      LINE_SEPARATOR, this.ipHelper.getServerPort(), this.mafProjectProperties.getContextPath(),
+                      LINE_SEPARATOR, this.ipHelper.getPublicIp(), this.ipHelper.getServerPort(),
+                      this.mafProjectProperties.getContextPath());
+        val defaultListableBeanFactory =
+                (DefaultListableBeanFactory) this.applicationContext.getAutowireCapableBeanFactory();
+        defaultListableBeanFactory.destroyBean(this);
+    }
+
+    @Override
+    public void destroy() {
+        log.warn("Destroyed bean: {}", this.getClass().getSimpleName());
     }
 }

@@ -2,6 +2,7 @@ package com.jmsoftware.maf.reactivespringcloudstarter.util;
 
 
 import cn.hutool.core.util.ObjectUtil;
+import lombok.val;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 
 /**
@@ -23,9 +24,9 @@ public class RequestUtil {
      * @date 2/15/20 9:52 PM
      */
     public static String getRequesterIpAndPort(ServerHttpRequest request) {
-        var requestRemoteAddress = request.getRemoteAddress();
+        val requestRemoteAddress = request.getRemoteAddress();
         if (ObjectUtil.isNotNull(requestRemoteAddress)) {
-            return requestRemoteAddress.toString().substring(1);
+            return requestRemoteAddress.toString();
         }
         return "Unknown Requester";
     }

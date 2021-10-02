@@ -37,38 +37,46 @@ Here is the highlights of **Muscle and Fitness Server**:
    - For Spring MVC, [spring-cloud-starter](https://github.com/johnnymillergh/muscle-and-fitness-server/tree/master/spring-cloud-starter)
    - For Spring WebFlux, [reactive-spring-cloud-starter](https://github.com/johnnymillergh/muscle-and-fitness-server/tree/master/reactive-spring-cloud-starter)
 
-4. Secured API. [RBAC](https://en.wikipedia.org/wiki/Role-based_access_control) by API gateway and Auth Center. JWT authentication, and RBAC authorization.
+4. PMD code quality check for each every CI (during Maven verify phase), with [Alibaba-p3c](https://github.com/alibaba/p3c) rulesets.
 
-5. [MySQL Replication for High Availability](https://severalnines.com/resources/database-management-tutorials/mysql-replication-high-availability-tutorial). Multi data source. [Dynamic SQL read-write isolation](https://baomidou.com/guide/dynamic-datasource.html). [MyBatis-Plus](https://github.com/baomidou/mybatis-plus) is the integrated ORM library. [Druid](https://github.com/alibaba/druid) is the database connection pool. Dynamically enhance connection pool size by CPU count (logical processor count). Read more at [How to Find the Optimal Database Connection Pool Size](https://wiki.postgresql.org/wiki/Number_Of_Database_Connections#How_to_Find_the_Optimal_Database_Connection_Pool_Size), [Sizing the Connection Pool](https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-usagenotes-j2ee-concepts-connection-pooling.html#idm46216069663472).
+5. Advocate 𝛌 Java Functional Programming, provide developers with powerful and useful functions to make Java more sweeter.
 
-6. Redis 6.x support. [Master-slave replication for high availability](https://redis.io/topics/replication). Redis cluster.
+6. Secured API. [RBAC](https://en.wikipedia.org/wiki/Role-based_access_control) by API gateway and Auth Center. JWT authentication, and RBAC authorization.
 
-7. Docker, Rancher Kubernetes support. Google JIB for building Docker container images.
+7. [MySQL Replication for High Availability](https://severalnines.com/resources/database-management-tutorials/mysql-replication-high-availability-tutorial). Multi data source. [Dynamic SQL read-write isolation](https://baomidou.com/guide/dynamic-datasource.html). [MyBatis-Plus](https://github.com/baomidou/mybatis-plus) is the integrated ORM library. [Druid](https://github.com/alibaba/druid) is the database connection pool. Dynamically enhance connection pool size by CPU count (logical processor count). Read more at [How to Find the Optimal Database Connection Pool Size](https://wiki.postgresql.org/wiki/Number_Of_Database_Connections#How_to_Find_the_Optimal_Database_Connection_Pool_Size), [Sizing the Connection Pool](https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-usagenotes-j2ee-concepts-connection-pooling.html#idm46216069663472).
 
-8. OSS service, based on [Minio](https://min.io/) and SFTP integration. Asynchronous [Progressive Download](https://www.nginx.com/resources/glossary/progressive-download/) resources. Chunked resource upload. The media player will play back that content using sequential byte-range requests. Refers to [a request for partial content](https://developer.mozilla.org/en-US/docs/Web/HTTP/Range_requests) (HTTP 206). This type of request is typically used to retrieve a large asset in smaller segments. This technique is employed by HTTP Progressive Download to avoid long buffering times.
+8. Redis 6.x support. [Master-slave replication for high availability](https://redis.io/topics/replication). Redis cluster.
 
-9. [STOMP over WebSocket](https://www.toptal.com/java/stomp-spring-boot-websocket) (SockJS), real time messaging, based on [RabbitMQ STOMP](https://www.rabbitmq.com/stomp.html) message broker.
+9. Docker, [Rancher](https://github.com/rancher/rancher/releases/tag/v2.5.9) Kubernetes support. [Google JIB](https://github.com/GoogleContainerTools/jib/tree/master/jib-maven-plugin) for building production-ready Docker container images.
 
-10. [Quartz](http://www.quartz-scheduler.org/) support. Distributed job scheduling, based on JDBC.
+10. OSS service, based on [Minio](https://min.io/) and SFTP integration. Asynchronous [Progressive Download](https://www.nginx.com/resources/glossary/progressive-download/) resources. Chunked resource upload. The media player will play back that content using sequential byte-range requests. Refers to [a request for partial content](https://developer.mozilla.org/en-US/docs/Web/HTTP/Range_requests) (HTTP 206). This type of request is typically used to retrieve a large asset in smaller segments. This technique is employed by HTTP Progressive Download to avoid long buffering times.
 
-11. Multi-environment support.
+11. [STOMP over WebSocket](https://www.toptal.com/java/stomp-spring-boot-websocket) (SockJS), real time messaging, based on [RabbitMQ STOMP](https://www.rabbitmq.com/stomp.html) message broker.
 
-12. [Knife4j](https://doc.xiaominfo.com/) API visualization. Enhanced Swagger API documentation.
+12. Messaging with [RabbitMQ](https://spring.io/guides/gs/messaging-rabbitmq/), also supports [delayed message](https://blog.rabbitmq.com/posts/2015/04/scheduling-messages-with-rabbitmq), provided by [RabbitMQ Delayed Message Plugin](https://github.com/rabbitmq/rabbitmq-delayed-message-exchange/)
 
-13. Log compression. [ELK](https://www.elastic.co/what-is/elk-stack) log aggregation.
+13. [Quartz](http://www.quartz-scheduler.org/) support. Distributed job scheduling, based on JDBC. Dynamic Quartz job configuration, served by served by database configuration table `quartz_job_configuration`. Reduce lots of Quartz job and trigger boilerplate codes.
 
-14. AOP based request log, configurable for turning on or off.
+14. Multi-environment support.
 
-15. Customized method argument validation.
+15. [Knife4j](https://doc.xiaominfo.com/) API visualization. Enhanced Swagger API documentation.
+
+16. [Async log output](https://examples.javacodegeeks.com/enterprise-java/logback/logback-ayncappender-example/). Log file compressed by standard GNU zip ([gzip](https://en.wikipedia.org/wiki/Gzip)) compression algorithm. [ELK](https://www.elastic.co/what-is/elk-stack) log aggregation.
+
+17. JVM log configuration for JVM garbage collection.
+
+18. AOP based request log, configurable for turning on or off.
+
+19. Customized method argument validation.
 
     - [Date time range validator](https://github.com/johnnymillergh/muscle-and-fitness-server/blob/master/spring-cloud-starter/src/main/java/com/jmsoftware/maf/springcloudstarter/validation/validator/DateTimeRangeValidator.java)
     - [Enum value validator](https://github.com/johnnymillergh/muscle-and-fitness-server/blob/master/spring-cloud-starter/src/main/java/com/jmsoftware/maf/springcloudstarter/validation/validator/EnumValueValidator.java)
 
-16. Docker container log persistence. Size and time based rolling policy.
+20. Docker container log persistence, [Size and time based rolling policy](http://logback.qos.ch/manual/appenders.html#SizeAndTimeBasedRollingPolicy). Daily rollover (at midnight 12 am) with automatic GZIP compression of the archived files.
 
-17. [Startup and deployment statistics](https://github.com/johnnymillergh/muscle-and-fitness-server/blob/master/spring-cloud-starter/src/main/java/com/jmsoftware/maf/springcloudstarter/helper/SpringBootStartupHelper.java).
+21. [Startup and deployment statistics](https://github.com/johnnymillergh/muscle-and-fitness-server/blob/master/spring-cloud-starter/src/main/java/com/jmsoftware/maf/springcloudstarter/helper/SpringBootStartupHelper.java).
 
-18. Customized startup banner.
+22. Customized startup banner.
 
 ## Usage
 
@@ -114,21 +122,48 @@ Here is the highlights of **Muscle and Fitness Server**:
 
 1. Install global dependencies (optional if installed):
 
-   ```
-   npm install -g conventional-changelog-cli
+   ```sh
+   $ npm install -g conventional-changelog-cli
    ```
 
 2. This will *not* overwrite any previous changelogs. The above generates a changelog based on commits since the last semver tag that matches the pattern of "Feature", "Fix", "Performance Improvement" or "Breaking Changes".
 
-   ```
-   conventional-changelog -p angular -i CHANGELOG.md -s
+   ```sh
+   $ conventional-changelog -p angular -i CHANGELOG.md -s
    ```
 
 3. If this is your first time using this tool and you want to generate all previous changelogs, you could do:
 
+   ```sh
+   $ conventional-changelog -p angular -i CHANGELOG.md -s -r 0
    ```
-   conventional-changelog -p angular -i CHANGELOG.md -s -r 0
+
+## 𝛌 Example
+
+1. Require the expression to be true, otherwise throws an exception (if provided).
+
+   ```java
+   import static com.jmsoftware.maf.springcloudstarter.function.BooleanCheck.requireTrue;
+   
+   requireTrue(1 != 1, anotherBoolean -> log.info("aBoolean = {}", anotherBoolean))
+       .orElseThrow(() -> new IllegalArgumentException("aBoolean is expected to be true"));
    ```
+
+2. Make Function have cache ability.
+
+   ```java
+   val cacheMap = Maps.<String, String>newHashMap();
+   cacheMap.put("key1", "1");
+   cacheMap.put("key2", "2");
+   final Function<String, String> stringProcess = input -> {
+       log.info("No cache return value found. input: {} Re-calculating…", input);
+       return StrUtil.subSuf(input, 3);
+   };
+   val result1 = cacheFunction(stringProcess, "key1", cacheMap);
+   val result2 = cacheFunction(stringProcess, "key2", cacheMap);
+   val result3 = cacheFunction(stringProcess, "key3", cacheMap);
+   ```
+
 
 ## CI (Continuous Integration)
 

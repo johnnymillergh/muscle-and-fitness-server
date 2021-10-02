@@ -10,7 +10,6 @@ import lombok.val;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
-import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -31,7 +30,6 @@ import java.time.Instant;
  **/
 @Slf4j
 @Aspect
-@Component
 public class WebRequestLogAspect {
     private static final int MAX_LENGTH_OF_JSON_STRING = 500;
     private static final String LINE_SEPARATOR = System.lineSeparator();

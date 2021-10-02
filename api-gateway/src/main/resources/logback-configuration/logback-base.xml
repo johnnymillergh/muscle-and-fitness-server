@@ -12,9 +12,9 @@
     <!-- Log Render Configuration -->
     <springProperty scope="context" name="APPLICATION" source="spring.application.name"/>
     <property name="CONSOLE_LOG_PATTERN"
-              value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID:- }){magenta} %clr(-){faint} %clr([%15.15t]){blue} %clr(%-48.48logger{48}){cyan} %clr(:){faint} %m%n%wex"/>
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} %clr(%5p) %clr(${PID:- }){magenta} - [%15.15t] %-48.48logger{48} : %msg%n%wEx"/>
     <property name="FILE_LOG_PATTERN"
-              value="%d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${PID:- } - [%t] %-48.48logger{48} : %m%n%wex"/>
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${PID:- } - [%t] %-48.48logger{48} : %msg%n%wEx"/>
     <!-- Log home is nothing related with Spring profiles or environments -->
     <property name="LOG_HOME" value="logs"/>
 
@@ -40,15 +40,26 @@
         <property name="LOGSTASH_HOST" value="maf-logstash"/>
     </springProfile>
 
-    <!-- CONSOLE Log Configuration -->
+    <!-- Async CONSOLE Log Configuration -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>${CONSOLE_LOG_PATTERN}</pattern>
             <charset>UTF-8</charset>
         </encoder>
     </appender>
+    <!-- https://examples.javacodegeeks.com/enterprise-java/logback/logback-ayncappender-example/ -->
+    <appender name="ASYNC_CONSOLE" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="CONSOLE"/>
+        <!-- default 20, means drop lower event when has 20% capacity remaining. To keep all events, set discardingThreshold to 0. -->
+        <discardingThreshold>0</discardingThreshold>
+        <!-- The maximum capacity of the blocking queue. By default, queueSize is set to 256. -->
+        <queueSize>256</queueSize>
+        <includeCallerData>false</includeCallerData>
+        <!-- default false, set to true to cause the Appender not block the application and just drop the messages -->
+        <neverBlock>true</neverBlock>
+    </appender>
 
-    <!-- FILE Log Configuration -->
+    <!-- Async FILE Log Configuration -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>ALL</level>
@@ -65,19 +76,34 @@
         <!-- in particular if post-processing tools impose size limits on the log files. -->
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- rollover daily -->
-            <fileNamePattern>${LOG_HOME}/${APPLICATION}-${ENVIRONMENT}-${HOSTNAME}.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <fileNamePattern>${LOG_HOME}/${APPLICATION}-${ENVIRONMENT}-${HOSTNAME}.%d{yyyy-MM-dd}.%i.log.gz
+            </fileNamePattern>
             <!-- each file should be at most 5MB, keep 7 days worth of history, but at most 1GB -->
             <maxFileSize>5MB</maxFileSize>
             <maxHistory>7</maxHistory>
             <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
     </appender>
+    <appender name="ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="FILE"/>
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>256</queueSize>
+        <includeCallerData>false</includeCallerData>
+        <neverBlock>true</neverBlock>
+    </appender>
 
-    <!-- LOGSTASH -->
+    <!-- Async Logstash -->
     <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
         <destination>${LOGSTASH_HOST}:4560</destination>
         <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder">
             <customFields>{"applicationName": "${APPLICATION}", "environment": "${ENVIRONMENT}"}</customFields>
         </encoder>
+    </appender>
+    <appender name="ASYNC_LOGSTASH" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="LOGSTASH"/>
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>256</queueSize>
+        <includeCallerData>false</includeCallerData>
+        <neverBlock>true</neverBlock>
     </appender>
 </included>

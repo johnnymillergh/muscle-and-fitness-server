@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,10 @@ import reactor.core.publisher.Mono;
  *
  * @author 钟俊（zhongjun）, email: zhongjun@toguide.cn, date: 12/21/2020 9:19 AM
  **/
+@RequiredArgsConstructor
 public class ResponseUtil {
+    private final ObjectMapper objectMapper;
+
     /**
      * Render json mono.
      *
@@ -28,9 +32,8 @@ public class ResponseUtil {
      * @return the mono
      */
     @SneakyThrows
-    public static Mono<Void> renderJson(@NonNull ServerWebExchange exchange, @NonNull HttpStatus httpStatus,
-                                        @Nullable String message, @Nullable Object data) {
-        val objectMapper = new ObjectMapper();
+    public Mono<Void> renderJson(@NonNull ServerWebExchange exchange, @NonNull HttpStatus httpStatus,
+                                 @Nullable String message, @Nullable Object data) {
         exchange.getResponse().setStatusCode(httpStatus);
         val response = exchange.getResponse();
         response.setStatusCode(httpStatus);
@@ -42,7 +45,7 @@ public class ResponseUtil {
             val message2 = String.format("%s. %s", httpStatus.getReasonPhrase(), message);
             val responseBody = ResponseBodyBean.ofStatus(httpStatus.value(), message2, data);
             try {
-                return bufferFactory.wrap(objectMapper.writeValueAsBytes(responseBody));
+                return bufferFactory.wrap(this.objectMapper.writeValueAsBytes(responseBody));
             } catch (JsonProcessingException e) {
                 return bufferFactory.wrap(new byte[0]);
             }

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static com.baomidou.mybatisplus.annotation.FieldFill.INSERT;
@@ -72,7 +73,7 @@ public class User {
      * Birthday
      */
     @TableField(value = COL_BIRTHDAY)
-    private LocalDateTime birthday;
+    private LocalDate birthday;
     /**
      * 26 gender options
      */

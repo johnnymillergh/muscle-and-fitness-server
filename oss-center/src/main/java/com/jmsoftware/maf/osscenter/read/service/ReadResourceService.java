@@ -25,7 +25,17 @@ public interface ReadResourceService {
     DataSize LARGE_CHUNK_SIZE = DataSize.ofMegabytes(8);
 
     /**
-     * Async stream single resource response entity.
+     * Get single resource, especially pictures, or other small size file.
+     *
+     * @param bucket the bucket
+     * @param object the object
+     * @return the response entity
+     */
+    ResponseEntity<StreamingResponseBody> asyncGetSingleResource(String bucket, String object);
+
+    /**
+     * Stream single resource, more efficiency if the resource is large file, which will be streamed by range.
+     * Responsive streaming
      *
      * @param bucket the bucket
      * @param object the object

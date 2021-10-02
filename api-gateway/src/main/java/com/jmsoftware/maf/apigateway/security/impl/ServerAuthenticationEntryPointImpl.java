@@ -1,6 +1,7 @@
 package com.jmsoftware.maf.apigateway.security.impl;
 
 import com.jmsoftware.maf.reactivespringcloudstarter.util.ResponseUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
@@ -14,11 +15,14 @@ import reactor.core.publisher.Mono;
  * @author 钟俊（zhongjun）, email: zhongjun@toguide.cn, date: 12/21/2020 9:48 AM
  **/
 @Slf4j
+@RequiredArgsConstructor
 public class ServerAuthenticationEntryPointImpl implements ServerAuthenticationEntryPoint {
+    private final ResponseUtil responseUtil;
+
     @Override
     public Mono<Void> commence(ServerWebExchange exchange, AuthenticationException e) {
         log.error("Exception occurred when authenticating! Exception message: {}. Request URL: [{}] {}", e.getMessage(),
                   exchange.getRequest().getMethod(), exchange.getRequest().getURI());
-        return ResponseUtil.renderJson(exchange, HttpStatus.NETWORK_AUTHENTICATION_REQUIRED, e.getMessage(), null);
+        return this.responseUtil.renderJson(exchange, HttpStatus.NETWORK_AUTHENTICATION_REQUIRED, e.getMessage(), null);
     }
 }
