@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.reactivespringcloudstarter.configuration;
+package com.jmsoftware.maf.springcloudstarter.property;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -11,18 +11,17 @@ import javax.validation.constraints.NotNull;
 import java.nio.charset.StandardCharsets;
 
 /**
- * <h1>JwtConfiguration</h1>
+ * <h1>JwtConfigurationProperties</h1>
  * <p>
  * Ignored request configuration.
  *
- * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
- * @date 5/2/20 11:41 PM
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 3/1/2021 10:28 AM
  **/
 @Data
 @Slf4j
 @Validated
-@ConfigurationProperties(prefix = JwtConfiguration.PREFIX)
-public class JwtConfiguration {
+@ConfigurationProperties(prefix = JwtConfigurationProperties.PREFIX)
+public class JwtConfigurationProperties {
     /**
      * The constant PREFIX.
      */
@@ -48,13 +47,12 @@ public class JwtConfiguration {
      */
     @NotNull
     private Long ttlForRememberMe = 7 * 86400000L;
-
-    public JwtConfiguration(MafProjectProperty mafProjectProperty) {
-        this.signingKey = String.format("%s:%s", mafProjectProperty.getGroupId(),
-                                        mafProjectProperty.getProjectParentArtifactId());
+    public JwtConfigurationProperties(MafProjectProperties mafProjectProperties) {
+        this.signingKey = String.format("%s:%s", mafProjectProperties.getGroupId(),
+                                        mafProjectProperties.getProjectParentArtifactId());
         log.info("Initiated JWT signing key: {}. The specified key byte array is {} bits", this.signingKey,
                  this.signingKey.getBytes(StandardCharsets.UTF_8).length * 8);
-        this.jwtRedisKeyPrefix = String.format("%s:jwt:", mafProjectProperty.getProjectParentArtifactId());
+        this.jwtRedisKeyPrefix = String.format("%s:jwt:", mafProjectProperties.getProjectParentArtifactId());
         log.warn("Initiated 'jwtRedisKeyPrefix': {}", this.jwtRedisKeyPrefix);
     }
 }

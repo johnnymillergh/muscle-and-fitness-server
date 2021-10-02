@@ -11,7 +11,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 /**
- * <h1>CustomConfiguration</h1>
+ * <h1>ExcelImportConfigurationProperties</h1>
  * <p>Custom configurations which are written in .yml files, containing a variety of fragmentary configs. Such as,
  * Druid login info, web security switch, web log and so on.</p>
  *
@@ -22,8 +22,8 @@ import javax.validation.constraints.NotNull;
 @Slf4j
 @Validated
 @RefreshScope
-@ConfigurationProperties(prefix = ExcelImportConfiguration.PREFIX)
-public class ExcelImportConfiguration {
+@ConfigurationProperties(prefix = ExcelImportConfigurationProperties.PREFIX)
+public class ExcelImportConfigurationProperties {
     public static final String PREFIX = "maf.configuration.excel";
     @Min(2)
     @NotNull

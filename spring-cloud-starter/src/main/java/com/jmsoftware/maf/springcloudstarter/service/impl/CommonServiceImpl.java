@@ -3,7 +3,7 @@ package com.jmsoftware.maf.springcloudstarter.service.impl;
 import cn.hutool.json.JSON;
 import cn.hutool.json.JSONUtil;
 import com.jmsoftware.maf.common.domain.ValidationTestPayload;
-import com.jmsoftware.maf.springcloudstarter.configuration.MafProjectProperty;
+import com.jmsoftware.maf.springcloudstarter.property.MafProjectProperties;
 import com.jmsoftware.maf.springcloudstarter.service.CommonService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,13 +23,13 @@ import javax.validation.Valid;
 @Service
 @RequiredArgsConstructor
 public class CommonServiceImpl implements CommonService {
-    private final MafProjectProperty mafProjectProperty;
+    private final MafProjectProperties mafProjectProperties;
     @Value("${greeting:Hello, World! (Embedded in Java)}")
     private String greeting;
 
     @Override
     public JSON getApplicationInfo() {
-        return JSONUtil.parseObj(this.mafProjectProperty).set("greeting", this.greeting);
+        return JSONUtil.parseObj(this.mafProjectProperties).set("greeting", this.greeting);
     }
 
     @Override

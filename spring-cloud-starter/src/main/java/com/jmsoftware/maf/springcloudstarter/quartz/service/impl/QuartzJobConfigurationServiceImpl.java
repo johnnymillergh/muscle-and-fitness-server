@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jmsoftware.maf.common.bean.PageResponseBodyBean;
-import com.jmsoftware.maf.springcloudstarter.configuration.MafProjectProperty;
+import com.jmsoftware.maf.springcloudstarter.property.MafProjectProperties;
 import com.jmsoftware.maf.springcloudstarter.quartz.entity.CreateOrModifyQuartzJobConfigurationPayload;
 import com.jmsoftware.maf.springcloudstarter.quartz.entity.GetQuartzJobConfigurationPageListItem;
 import com.jmsoftware.maf.springcloudstarter.quartz.entity.GetQuartzJobConfigurationPageListPayload;
@@ -53,7 +53,7 @@ public class QuartzJobConfigurationServiceImpl
         extends ServiceImpl<QuartzJobConfigurationMapper, QuartzJobConfiguration>
         implements QuartzJobConfigurationService {
     private final SchedulerFactoryBean schedulerFactoryBean;
-    private final MafProjectProperty mafProjectProperty;
+    private final MafProjectProperties mafProjectProperties;
 
     @PostConstruct
     public void initQuartzJob() throws SchedulerException {
@@ -64,14 +64,14 @@ public class QuartzJobConfigurationServiceImpl
             Optional.ofNullable(ScheduleUtil.createScheduleJob(
                     scheduler,
                     quartzJobConfiguration,
-                    this.mafProjectProperty.getProjectArtifactId()
+                    this.mafProjectProperties.getProjectArtifactId()
             )).ifPresent(jobDetail -> log.info("Created schedule job. JobKey: {}", jobDetail.getKey()));
         }
     }
 
     private List<QuartzJobConfiguration> getQuartzJobConfigurationForInitialization() {
         val queryWrapper = Wrappers.lambdaQuery(QuartzJobConfiguration.class);
-        queryWrapper.eq(QuartzJobConfiguration::getServiceName, this.mafProjectProperty.getProjectArtifactId())
+        queryWrapper.eq(QuartzJobConfiguration::getServiceName, this.mafProjectProperties.getProjectArtifactId())
                 .orderByAsc(QuartzJobConfiguration::getId);
         return this.list(queryWrapper);
     }
@@ -115,7 +115,7 @@ public class QuartzJobConfigurationServiceImpl
 
     @Override
     public List<QuartzJobConfigurationExcel> getListForExporting() {
-        return this.getBaseMapper().selectListForExporting(this.mafProjectProperty.getProjectArtifactId());
+        return this.getBaseMapper().selectListForExporting(this.mafProjectProperties.getProjectArtifactId());
     }
 
     @Override
@@ -125,7 +125,7 @@ public class QuartzJobConfigurationServiceImpl
     ) {
         this.validateCronExpression(payload.getCronExpression());
         val quartzJobConfiguration = payload.asQuartzJobConfiguration();
-        quartzJobConfiguration.setServiceName(this.mafProjectProperty.getProjectArtifactId());
+        quartzJobConfiguration.setServiceName(this.mafProjectProperties.getProjectArtifactId());
         requireTrue(this.save(quartzJobConfiguration), saved -> log.info("Quartz job configuration saved: {}", saved))
                 .orElseThrow(() -> new IllegalStateException("Failed to save quartz job configuration"));
         return quartzJobConfiguration.getId();
@@ -190,7 +190,7 @@ public class QuartzJobConfigurationServiceImpl
                 ScheduleUtil.getJobKey(
                         quartzJobConfiguration.getId(),
                         quartzJobConfiguration.getGroup(),
-                        this.mafProjectProperty.getProjectArtifactId()),
+                        this.mafProjectProperties.getProjectArtifactId()),
                 jobDataMap
         );
         log.warn("Triggered Quartz job successfully, {}", quartzJobConfiguration);
@@ -207,7 +207,7 @@ public class QuartzJobConfigurationServiceImpl
         ).orElseThrow(() -> new IllegalStateException(format("Failed to delete Quartz job configuration")));
         val scheduler = this.schedulerFactoryBean.getScheduler();
         val deletedJob = scheduler.deleteJob(
-                ScheduleUtil.getJobKey(id, group, this.mafProjectProperty.getProjectArtifactId())
+                ScheduleUtil.getJobKey(id, group, this.mafProjectProperties.getProjectArtifactId())
         );
         requireTrue(
                 deletedJob,

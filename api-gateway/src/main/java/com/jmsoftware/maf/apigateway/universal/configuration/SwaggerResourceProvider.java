@@ -1,7 +1,7 @@
 package com.jmsoftware.maf.apigateway.universal.configuration;
 
 import cn.hutool.core.collection.CollUtil;
-import com.jmsoftware.maf.reactivespringcloudstarter.configuration.MafProjectProperty;
+import com.jmsoftware.maf.reactivespringcloudstarter.property.MafProjectProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -42,7 +42,7 @@ import java.util.List;
 public class SwaggerResourceProvider implements SwaggerResourcesProvider {
     private static final String SWAGGER_API_URI = "/v2/api-docs";
     private static final String LINE_SEPARATOR = System.lineSeparator();
-    private final MafProjectProperty mafProjectProperty;
+    private final MafProjectProperties mafProjectProperties;
     private final RouteLocator routeLocator;
     private final SwaggerConfiguration swaggerConfiguration;
 
@@ -56,9 +56,9 @@ public class SwaggerResourceProvider implements SwaggerResourcesProvider {
     @Override
     public List<SwaggerResource> get() {
         val swaggerResourceList = new LinkedList<SwaggerResource>();
-        routeLocator.getRoutes().subscribe(route -> {
+        this.routeLocator.getRoutes().subscribe(route -> {
             val serviceName = route.getUri().toString().substring(5).toLowerCase();
-            if (!CollUtil.contains(swaggerConfiguration.getIgnoredServiceIds(), serviceName)) {
+            if (!CollUtil.contains(this.swaggerConfiguration.getIgnoredServiceIds(), serviceName)) {
                 log.warn("{} found dynamic route. Service name: {}, route: {}", this.getClass().getSimpleName(),
                          serviceName, route);
                 val swaggerResource = new SwaggerResource();
@@ -75,28 +75,28 @@ public class SwaggerResourceProvider implements SwaggerResourcesProvider {
     @Bean
     public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(apiInfo())
+                .apiInfo(this.apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage(mafProjectProperty.getBasePackage()))
+                .apis(RequestHandlerSelectors.basePackage(this.mafProjectProperties.getBasePackage()))
                 .paths(PathSelectors.any())
                 .build();
     }
 
     private ApiInfo apiInfo() {
-        val projectArtifactId = mafProjectProperty.getProjectArtifactId();
-        val version = mafProjectProperty.getVersion();
-        val developerEmail = mafProjectProperty.getDeveloperEmail();
-        val developerUrl = mafProjectProperty.getDeveloperUrl();
+        val projectArtifactId = this.mafProjectProperties.getProjectArtifactId();
+        val version = this.mafProjectProperties.getVersion();
+        val developerEmail = this.mafProjectProperties.getDeveloperEmail();
+        val developerUrl = this.mafProjectProperties.getDeveloperUrl();
         return new ApiInfoBuilder()
                 .title(String.format("API for %s@%s", projectArtifactId, version))
                 .description(String.format("%s %sArtifact ID: %s%sEnvironment: %s",
-                                           mafProjectProperty.getDescription(),
+                                           this.mafProjectProperties.getDescription(),
                                            LINE_SEPARATOR,
                                            projectArtifactId,
                                            LINE_SEPARATOR,
-                                           mafProjectProperty.getEnvironment()))
+                                           this.mafProjectProperties.getEnvironment()))
                 .contact(new Contact(String.format("%s, email: %s%sHome page: %s",
-                                                   mafProjectProperty.getDeveloperName(),
+                                                   this.mafProjectProperties.getDeveloperName(),
                                                    developerEmail,
                                                    LINE_SEPARATOR,
                                                    developerUrl),

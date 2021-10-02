@@ -1,6 +1,6 @@
 package com.jmsoftware.maf.reactivespringcloudstarter.filter;
 
-import com.jmsoftware.maf.reactivespringcloudstarter.configuration.MafConfiguration;
+import com.jmsoftware.maf.reactivespringcloudstarter.property.MafConfigurationProperties;
 import com.jmsoftware.maf.reactivespringcloudstarter.util.RequestUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,14 +22,14 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @RequiredArgsConstructor
 public class AccessLogFilter implements WebFilter, Ordered {
-    private final MafConfiguration mafConfiguration;
+    private final MafConfigurationProperties mafConfigurationProperties;
     private final AntPathMatcher antPathMatcher = new AntPathMatcher();
 
     @Override
     @SuppressWarnings("NullableProblems")
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
-        for (String ignoredUrl : this.mafConfiguration.flattenIgnoredUrls()) {
+        for (String ignoredUrl : this.mafConfigurationProperties.flattenIgnoredUrls()) {
             if (this.antPathMatcher.match(ignoredUrl, request.getURI().getPath())) {
                 return chain.filter(exchange);
             }

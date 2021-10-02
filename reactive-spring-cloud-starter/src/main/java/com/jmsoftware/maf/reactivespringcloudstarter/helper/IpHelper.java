@@ -1,6 +1,6 @@
 package com.jmsoftware.maf.reactivespringcloudstarter.helper;
 
-import com.jmsoftware.maf.reactivespringcloudstarter.configuration.MafProjectProperty;
+import com.jmsoftware.maf.reactivespringcloudstarter.property.MafProjectProperties;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ import java.util.Enumeration;
 @RequiredArgsConstructor
 public class IpHelper implements ApplicationListener<WebServerInitializedEvent> {
     private static final String DEVELOPMENT_ENVIRONMENT = "development";
-    private final MafProjectProperty mafProjectProperty;
+    private final MafProjectProperties mafProjectProperties;
     private int serverPort;
 
     @Override
@@ -50,7 +50,7 @@ public class IpHelper implements ApplicationListener<WebServerInitializedEvent> 
      * @date 2019-05-03 16:05
      */
     public String getBaseUrl() {
-        return "http://" + this.getPublicIp() + ":" + this.serverPort + this.mafProjectProperty.getContextPath();
+        return "http://" + this.getPublicIp() + ":" + this.serverPort + this.mafProjectProperties.getContextPath();
     }
 
     /**
@@ -59,7 +59,7 @@ public class IpHelper implements ApplicationListener<WebServerInitializedEvent> 
      * @return public IP
      */
     public String getPublicIp() {
-        if (this.mafProjectProperty.getEnvironment().contains(DEVELOPMENT_ENVIRONMENT)) {
+        if (this.mafProjectProperties.getEnvironment().contains(DEVELOPMENT_ENVIRONMENT)) {
             return this.getInternetIp();
         }
         try {

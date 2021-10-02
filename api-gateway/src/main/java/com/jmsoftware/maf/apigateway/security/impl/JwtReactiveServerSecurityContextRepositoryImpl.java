@@ -4,8 +4,8 @@ import cn.hutool.core.util.StrUtil;
 import com.jmsoftware.maf.apigateway.remoteapi.AuthCenterRemoteApi;
 import com.jmsoftware.maf.common.domain.authcenter.security.UserPrincipal;
 import com.jmsoftware.maf.common.exception.SecurityException;
-import com.jmsoftware.maf.reactivespringcloudstarter.configuration.JwtConfiguration;
-import com.jmsoftware.maf.reactivespringcloudstarter.configuration.MafConfiguration;
+import com.jmsoftware.maf.reactivespringcloudstarter.property.JwtConfigurationProperties;
+import com.jmsoftware.maf.reactivespringcloudstarter.property.MafConfigurationProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -30,7 +30,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @RequiredArgsConstructor
 public class JwtReactiveServerSecurityContextRepositoryImpl implements ServerSecurityContextRepository {
-    private final MafConfiguration mafConfiguration;
+    private final MafConfigurationProperties mafConfigurationProperties;
     private final ReactiveAuthenticationManager authenticationManager;
     private final AntPathMatcher antPathMatcher = new AntPathMatcher();
     private final AuthCenterRemoteApi authCenterRemoteApi;
@@ -45,13 +45,13 @@ public class JwtReactiveServerSecurityContextRepositoryImpl implements ServerSec
     public Mono<SecurityContext> load(ServerWebExchange exchange) {
         val request = exchange.getRequest();
         // Ignore allowed URL
-        for (val ignoredUrl : this.mafConfiguration.flattenIgnoredUrls()) {
+        for (val ignoredUrl : this.mafConfigurationProperties.flattenIgnoredUrls()) {
             if (this.antPathMatcher.match(ignoredUrl, request.getURI().getPath())) {
                 return Mono.empty();
             }
         }
         val authorization = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-        if (StrUtil.isBlank(authorization) || !StrUtil.startWith(authorization, JwtConfiguration.TOKEN_PREFIX)) {
+        if (StrUtil.isBlank(authorization) || !StrUtil.startWith(authorization, JwtConfigurationProperties.TOKEN_PREFIX)) {
             log.warn("Pre-authentication failure! Cause: `{}` in HTTP headers not found. Request URL: [{}] {}",
                      HttpHeaders.AUTHORIZATION, request.getMethod(), request.getURI());
             return Mono.error(new SecurityException(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED, "JWT Required"));

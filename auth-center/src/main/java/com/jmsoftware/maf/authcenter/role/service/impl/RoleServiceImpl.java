@@ -17,8 +17,8 @@ import com.jmsoftware.maf.authcenter.role.mapper.RoleMapper;
 import com.jmsoftware.maf.authcenter.role.service.RoleService;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdResponse;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdSingleResponse;
-import com.jmsoftware.maf.springcloudstarter.configuration.MafConfiguration;
-import com.jmsoftware.maf.springcloudstarter.configuration.MafProjectProperty;
+import com.jmsoftware.maf.springcloudstarter.property.MafConfigurationProperties;
+import com.jmsoftware.maf.springcloudstarter.property.MafProjectProperties;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -47,15 +47,15 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
-    private final MafProjectProperty mafProjectProperty;
-    private final MafConfiguration mafConfiguration;
+    private final MafProjectProperties mafProjectProperties;
+    private final MafConfigurationProperties mafConfigurationProperties;
     private final RedisTemplate<String, String> redisTemplate;
     private final ObjectMapper objectMapper;
 
     @Override
     @SneakyThrows({JsonProcessingException.class})
     public GetRoleListByUserIdResponse getRoleList(@NotNull Long userId) {
-        val key = String.format(this.mafProjectProperty.getProjectParentArtifactId()
+        val key = String.format(this.mafProjectProperties.getProjectParentArtifactId()
                                         + RoleRedisKey.GET_ROLE_LIST_BY_USER_ID.getKeyInfixFormat(), userId);
         val hasKey = this.redisTemplate.hasKey(key);
         if (BooleanUtil.isTrue(hasKey)) {
@@ -84,7 +84,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         val roleNameSet = roleList
                 .stream()
                 .map(Role::getName)
-                .filter(roleName -> StrUtil.equals(this.mafConfiguration.getSuperUserRole(), roleName))
+                .filter(roleName -> StrUtil.equals(this.mafConfigurationProperties.getSuperUserRole(), roleName))
                 .collect(Collectors.toSet());
         // If roleNameSet is not empty (contains "admin")
         return CollUtil.isNotEmpty(roleNameSet);

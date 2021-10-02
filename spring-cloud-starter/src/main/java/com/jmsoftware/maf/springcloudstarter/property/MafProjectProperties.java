@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.springcloudstarter.configuration;
+package com.jmsoftware.maf.springcloudstarter.property;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +10,7 @@ import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotBlank;
 
 /**
- * <h1>MafProjectProperty</h1>
+ * <h1>MafProjectProperties</h1>
  * <p>
  * M&F project property, containing the basic constants of the project.
  *
@@ -19,9 +19,9 @@ import javax.validation.constraints.NotBlank;
 @Data
 @Slf4j
 @Validated
-@SuppressWarnings("jol")
-@ConfigurationProperties(prefix = "maf.project-property")
-public class MafProjectProperty {
+@ConfigurationProperties(prefix = MafProjectProperties.PREFIX)
+public class MafProjectProperties {
+    public static final String PREFIX = "maf.project-property";
     private final BuildProperties buildProperties;
     /**
      * The Base package.

@@ -1,5 +1,6 @@
-package com.jmsoftware.maf.springcloudstarter.configuration;
+package com.jmsoftware.maf.springcloudstarter.rabbitmq;
 
+import com.jmsoftware.maf.springcloudstarter.property.MafProjectProperties;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.amqp.core.TopicExchange;
@@ -18,13 +19,13 @@ import org.springframework.context.annotation.Bean;
 public class RabbitmqConfiguration {
     public final String topicExchangeName;
 
-    public RabbitmqConfiguration(MafProjectProperty mafProjectProperty) {
-        topicExchangeName = String.format("%s-topic-exchange", mafProjectProperty.getProjectParentArtifactId());
+    public RabbitmqConfiguration(MafProjectProperties mafProjectProperties) {
+        this.topicExchangeName = String.format("%s-topic-exchange", mafProjectProperties.getProjectParentArtifactId());
     }
 
     @Bean
     TopicExchange topicExchange() {
-        val exchange = new TopicExchange(topicExchangeName);
+        val exchange = new TopicExchange(this.topicExchangeName);
         log.info("Created topic exchange: {}", exchange);
         return exchange;
     }

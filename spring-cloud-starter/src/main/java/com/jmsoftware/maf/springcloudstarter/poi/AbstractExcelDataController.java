@@ -119,7 +119,7 @@ public abstract class AbstractExcelDataController<T> {
     protected final Map<String, String> exportingFieldAliasMap = Maps.newLinkedHashMap();
 
     @Autowired
-    protected ExcelImportConfiguration excelImportConfiguration;
+    protected ExcelImportConfigurationProperties excelImportConfigurationProperties;
     @Autowired
     protected OssUploader ossUploader;
     /**

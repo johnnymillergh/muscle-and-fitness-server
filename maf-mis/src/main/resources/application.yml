@@ -152,7 +152,7 @@ logging:
   config: classpath:logback-configuration/logback-${spring.profiles.active}.xml
 
 maf:
-  project-property:
+  project-properties:
     base-package: @project.groupId@
     context-path: ${server.servlet.context-path}
     group-id: @project.groupId@
@@ -182,4 +182,4 @@ maf:
         - "/*/v2/api-docs/**"
         - "/webjars/**"
         - "/doc.html"
-    included-package-for-http-api-scan: ${maf.project-property.base-package}
+    included-package-for-http-api-scan: ${maf.project-properties.base-package}

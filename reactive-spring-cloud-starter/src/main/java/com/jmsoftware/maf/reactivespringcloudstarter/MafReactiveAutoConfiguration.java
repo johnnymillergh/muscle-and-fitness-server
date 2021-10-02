@@ -1,11 +1,15 @@
 package com.jmsoftware.maf.reactivespringcloudstarter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jmsoftware.maf.reactivespringcloudstarter.configuration.*;
+import com.jmsoftware.maf.reactivespringcloudstarter.configuration.WebClientConfiguration;
+import com.jmsoftware.maf.reactivespringcloudstarter.configuration.WebFluxConfiguration;
 import com.jmsoftware.maf.reactivespringcloudstarter.controller.CommonController;
 import com.jmsoftware.maf.reactivespringcloudstarter.filter.AccessLogFilter;
 import com.jmsoftware.maf.reactivespringcloudstarter.helper.IpHelper;
 import com.jmsoftware.maf.reactivespringcloudstarter.helper.SpringBootStartupHelper;
+import com.jmsoftware.maf.reactivespringcloudstarter.property.JwtConfigurationProperties;
+import com.jmsoftware.maf.reactivespringcloudstarter.property.MafConfigurationProperties;
+import com.jmsoftware.maf.reactivespringcloudstarter.property.MafProjectProperties;
 import com.jmsoftware.maf.reactivespringcloudstarter.redis.RedisConfiguration;
 import com.jmsoftware.maf.reactivespringcloudstarter.service.CommonService;
 import com.jmsoftware.maf.reactivespringcloudstarter.service.impl.CommonServiceImpl;
@@ -27,9 +31,9 @@ import javax.annotation.PostConstruct;
 @Slf4j
 @AutoConfigureOrder(Integer.MIN_VALUE)
 @EnableConfigurationProperties({
-        MafConfiguration.class,
-        MafProjectProperty.class,
-        JwtConfiguration.class
+        MafConfigurationProperties.class,
+        MafProjectProperties.class,
+        JwtConfigurationProperties.class
 })
 @Import({
         RedisConfiguration.class,
@@ -44,28 +48,28 @@ public class MafReactiveAutoConfiguration {
     }
 
     @Bean
-    public AccessLogFilter requestFilter(MafConfiguration mafConfiguration) {
+    public AccessLogFilter requestFilter(MafConfigurationProperties mafConfigurationProperties) {
         log.warn("Initial bean: '{}'", AccessLogFilter.class.getSimpleName());
-        return new AccessLogFilter(mafConfiguration);
+        return new AccessLogFilter(mafConfigurationProperties);
     }
 
     @Bean
-    public IpHelper ipHelper(MafProjectProperty mafProjectProperty) {
+    public IpHelper ipHelper(MafProjectProperties mafProjectProperties) {
         log.warn("Initial bean: '{}'", IpHelper.class.getSimpleName());
-        return new IpHelper(mafProjectProperty);
+        return new IpHelper(mafProjectProperties);
     }
 
     @Bean
-    public SpringBootStartupHelper springBootStartupHelper(MafProjectProperty mafProjectProperty,
+    public SpringBootStartupHelper springBootStartupHelper(MafProjectProperties mafProjectProperties,
                                                            IpHelper ipHelper, ApplicationContext applicationContext) {
         log.warn("Initial bean: '{}'", SpringBootStartupHelper.class.getSimpleName());
-        return new SpringBootStartupHelper(mafProjectProperty, ipHelper, applicationContext);
+        return new SpringBootStartupHelper(mafProjectProperties, ipHelper, applicationContext);
     }
 
     @Bean
-    public CommonService commonService(MafProjectProperty mafProjectProperty) {
+    public CommonService commonService(MafProjectProperties mafProjectProperties) {
         log.warn("Initial bean: '{}'", CommonServiceImpl.class.getSimpleName());
-        return new CommonServiceImpl(mafProjectProperty);
+        return new CommonServiceImpl(mafProjectProperties);
     }
 
     @Bean

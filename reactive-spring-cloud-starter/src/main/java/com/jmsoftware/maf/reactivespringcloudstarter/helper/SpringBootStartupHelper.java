@@ -1,7 +1,7 @@
 package com.jmsoftware.maf.reactivespringcloudstarter.helper;
 
 import cn.hutool.core.lang.Console;
-import com.jmsoftware.maf.reactivespringcloudstarter.configuration.MafProjectProperty;
+import com.jmsoftware.maf.reactivespringcloudstarter.property.MafProjectProperties;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,24 +24,24 @@ import java.util.TimeZone;
 @RequiredArgsConstructor
 public class SpringBootStartupHelper implements DisposableBean {
     private static final String LINE_SEPARATOR = System.lineSeparator();
-    private final MafProjectProperty mafProjectProperty;
+    private final MafProjectProperties mafProjectProperties;
     private final IpHelper ipHelper;
     private final ApplicationContext applicationContext;
 
     public void stop(@NonNull StopWatch stopWatch) {
         stopWatch.stop();
         Console.log("🥳 Congratulations! 🎉");
-        Console.log("🖥 {}@{} started!", this.mafProjectProperty.getProjectArtifactId(),
-                    this.mafProjectProperty.getVersion());
-        Console.log("⚙️ Environment: {}", this.mafProjectProperty.getEnvironment());
+        Console.log("🖥 {}@{} started!", this.mafProjectProperties.getProjectArtifactId(),
+                    this.mafProjectProperties.getVersion());
+        Console.log("⚙️ Environment: {}", this.mafProjectProperties.getEnvironment());
         Console.log("⏳ Deployment duration: {} seconds ({} ms)", stopWatch.getTotalTimeSeconds(),
                     stopWatch.getTotalTimeMillis());
         Console.log("⏰ App started at {} (timezone - {})", Instant.now().atZone(ZoneId.of("UTC+8")),
                     TimeZone.getDefault().getDisplayName());
         Console.error("  App running at{}  - Local:   http://localhost:{}{}/{}  - Network: http://{}:{}{}/",
-                      LINE_SEPARATOR, this.ipHelper.getServerPort(), this.mafProjectProperty.getContextPath(),
+                      LINE_SEPARATOR, this.ipHelper.getServerPort(), this.mafProjectProperties.getContextPath(),
                       LINE_SEPARATOR, this.ipHelper.getPublicIp(), this.ipHelper.getServerPort(),
-                      this.mafProjectProperty.getContextPath());
+                      this.mafProjectProperties.getContextPath());
         val defaultListableBeanFactory =
                 (DefaultListableBeanFactory) this.applicationContext.getAutowireCapableBeanFactory();
         defaultListableBeanFactory.destroyBean(this);

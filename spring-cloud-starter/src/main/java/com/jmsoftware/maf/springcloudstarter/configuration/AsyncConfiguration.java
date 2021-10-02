@@ -1,5 +1,6 @@
 package com.jmsoftware.maf.springcloudstarter.configuration;
 
+import com.jmsoftware.maf.springcloudstarter.property.MafProjectProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -28,7 +29,7 @@ import java.util.concurrent.Executor;
 @RequiredArgsConstructor
 public class AsyncConfiguration {
     private static final int QUEUE_CAPACITY = 10000;
-    private final MafProjectProperty mafProjectProperty;
+    private final MafProjectProperties mafProjectProperties;
 
     /**
      * <p>Note: In the above example the {@code ThreadPoolTaskExecutor} is not a fully managed
@@ -50,7 +51,7 @@ public class AsyncConfiguration {
         executor.setMaxPoolSize(corePoolSize * 3);
         executor.setQueueCapacity(QUEUE_CAPACITY);
         executor.setBeanName("asyncTaskExecutor");
-        executor.setThreadNamePrefix(String.format("%s-async-", this.mafProjectProperty.getProjectArtifactId()));
+        executor.setThreadNamePrefix(String.format("%s-async-", this.mafProjectProperties.getProjectArtifactId()));
         // Specify the RejectedExecutionHandler to use for the ExecutorService.
         // Default is the ExecutorService's default abort policy.
         executor.setRejectedExecutionHandler(

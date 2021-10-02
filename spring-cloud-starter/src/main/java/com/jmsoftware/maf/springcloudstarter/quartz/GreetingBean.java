@@ -1,6 +1,6 @@
 package com.jmsoftware.maf.springcloudstarter.quartz;
 
-import com.jmsoftware.maf.springcloudstarter.configuration.MafProjectProperty;
+import com.jmsoftware.maf.springcloudstarter.property.MafProjectProperties;
 import com.jmsoftware.maf.springcloudstarter.quartz.annotation.QuartzSchedulable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,11 +20,11 @@ public class GreetingBean {
     /**
      * Injected field, spring bean.
      */
-    private final MafProjectProperty mafProjectProperty;
+    private final MafProjectProperties mafProjectProperties;
 
     @QuartzSchedulable
     @SuppressWarnings("unused")
     public void hello() {
-        log.info("Greeting from Quartz job, current service is: {}", this.mafProjectProperty.getProjectArtifactId());
+        log.info("Greeting from Quartz job, current service is: {}", this.mafProjectProperties.getProjectArtifactId());
     }
 }

@@ -7,7 +7,7 @@ import com.jmsoftware.maf.authcenter.security.service.JwtService;
 import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtResponse;
 import com.jmsoftware.maf.common.domain.authcenter.security.UserPrincipal;
 import com.jmsoftware.maf.common.exception.SecurityException;
-import com.jmsoftware.maf.springcloudstarter.configuration.JwtConfiguration;
+import com.jmsoftware.maf.springcloudstarter.property.JwtConfigurationProperties;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +43,7 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 @SuppressWarnings("unused")
 public class JwtServiceImpl implements JwtService {
-    private final JwtConfiguration jwtConfiguration;
+    private final JwtConfigurationProperties jwtConfigurationProperties;
     private final RedisTemplate<Object, Object> redisTemplate;
     private SecretKey secretKey;
     private JwtParser jwtParser;
@@ -51,7 +51,7 @@ public class JwtServiceImpl implements JwtService {
     @PostConstruct
     private void init() {
         log.info("Start to init class members of {}.", this.getClass().getSimpleName());
-        this.secretKey = Keys.hmacShaKeyFor(this.jwtConfiguration.getSigningKey().getBytes(StandardCharsets.UTF_8));
+        this.secretKey = Keys.hmacShaKeyFor(this.jwtConfigurationProperties.getSigningKey().getBytes(StandardCharsets.UTF_8));
         log.warn("Secret key for JWT was generated. Algorithm: {}", this.secretKey.getAlgorithm());
         this.jwtParser = Jwts.parserBuilder().setSigningKey(this.secretKey).build();
     }
@@ -77,13 +77,13 @@ public class JwtServiceImpl implements JwtService {
         //  .claim("authorities", authorities)
         // Set expire duration of JWT.
         val ttl = Boolean.TRUE.equals(rememberMe) ?
-                this.jwtConfiguration.getTtlForRememberMe() : this.jwtConfiguration.getTtl();
+                this.jwtConfigurationProperties.getTtlForRememberMe() : this.jwtConfigurationProperties.getTtl();
         if (ttl > 0) {
             builder.setExpiration(DateUtil.offsetMillisecond(now, ttl.intValue()));
         }
         val jwt = builder.compact();
         // Store new JWT in Redis
-        String redisKeyOfJwt = String.format("%s%s", this.jwtConfiguration.getJwtRedisKeyPrefix(), subject);
+        String redisKeyOfJwt = String.format("%s%s", this.jwtConfigurationProperties.getJwtRedisKeyPrefix(), subject);
         this.redisTemplate.opsForValue().set(redisKeyOfJwt, jwt, ttl, TimeUnit.MILLISECONDS);
         log.info("Storing JWT in Redis. Key: {}, Value: {}", redisKeyOfJwt, jwt);
         return jwt;
@@ -110,7 +110,7 @@ public class JwtServiceImpl implements JwtService {
             throw new SecurityException(HttpStatus.UNAUTHORIZED, "The parameter of JWT is invalid");
         }
         val username = claims.getSubject();
-        val redisKeyOfJwt = this.jwtConfiguration.getJwtRedisKeyPrefix() + username;
+        val redisKeyOfJwt = this.jwtConfigurationProperties.getJwtRedisKeyPrefix() + username;
         // Check if JWT exists
         val expire = this.redisTemplate.opsForValue().getOperations().getExpire(redisKeyOfJwt, TimeUnit.MILLISECONDS);
         if (ObjectUtil.isNull(expire) || expire <= 0) {
@@ -131,7 +131,7 @@ public class JwtServiceImpl implements JwtService {
         val jwt = this.getJwtFromRequest(request);
         val username = this.getUsernameFromJwt(jwt);
         // Delete JWT from redis
-        String redisKeyOfJwt = String.format("%s%s", this.jwtConfiguration.getJwtRedisKeyPrefix(), username);
+        String redisKeyOfJwt = String.format("%s%s", this.jwtConfigurationProperties.getJwtRedisKeyPrefix(), username);
         val deletedKeyNumber = this.redisTemplate.opsForValue().getOperations().delete(redisKeyOfJwt);
         log.error("Invalidate JWT. Redis key of JWT = {}, deleted = {}", redisKeyOfJwt, deletedKeyNumber);
     }
@@ -151,8 +151,8 @@ public class JwtServiceImpl implements JwtService {
     @Override
     public String getJwtFromRequest(HttpServletRequest request) {
         val bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (StrUtil.isNotBlank(bearerToken) && bearerToken.startsWith(JwtConfiguration.TOKEN_PREFIX)) {
-            return bearerToken.substring(JwtConfiguration.TOKEN_PREFIX.length());
+        if (StrUtil.isNotBlank(bearerToken) && bearerToken.startsWith(JwtConfigurationProperties.TOKEN_PREFIX)) {
+            return bearerToken.substring(JwtConfigurationProperties.TOKEN_PREFIX.length());
         }
         return null;
     }
