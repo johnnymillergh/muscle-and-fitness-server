@@ -47,34 +47,36 @@ Here is the highlights of **Muscle and Fitness Server**:
 
 8. Redis 6.x support. [Master-slave replication for high availability](https://redis.io/topics/replication). Redis cluster.
 
-9. Docker, Rancher Kubernetes support. Google JIB for building Docker container images.
+9. Docker, [Rancher](https://github.com/rancher/rancher/releases/tag/v2.5.9) Kubernetes support. [Google JIB](https://github.com/GoogleContainerTools/jib/tree/master/jib-maven-plugin) for building production-ready Docker container images.
 
 10. OSS service, based on [Minio](https://min.io/) and SFTP integration. Asynchronous [Progressive Download](https://www.nginx.com/resources/glossary/progressive-download/) resources. Chunked resource upload. The media player will play back that content using sequential byte-range requests. Refers to [a request for partial content](https://developer.mozilla.org/en-US/docs/Web/HTTP/Range_requests) (HTTP 206). This type of request is typically used to retrieve a large asset in smaller segments. This technique is employed by HTTP Progressive Download to avoid long buffering times.
 
 11. [STOMP over WebSocket](https://www.toptal.com/java/stomp-spring-boot-websocket) (SockJS), real time messaging, based on [RabbitMQ STOMP](https://www.rabbitmq.com/stomp.html) message broker.
 
-12. [Quartz](http://www.quartz-scheduler.org/) support. Distributed job scheduling, based on JDBC. Dynamic Quartz job configuration, served by served by database configuration table `quartz_job_configuration`. Reduce lots of Quartz job and trigger boilerplate codes.
+12. Messaging with [RabbitMQ](https://spring.io/guides/gs/messaging-rabbitmq/), also supports [delayed message](https://blog.rabbitmq.com/posts/2015/04/scheduling-messages-with-rabbitmq), provided by [RabbitMQ Delayed Message Plugin](https://github.com/rabbitmq/rabbitmq-delayed-message-exchange/)
 
-13. Multi-environment support.
+13. [Quartz](http://www.quartz-scheduler.org/) support. Distributed job scheduling, based on JDBC. Dynamic Quartz job configuration, served by served by database configuration table `quartz_job_configuration`. Reduce lots of Quartz job and trigger boilerplate codes.
 
-14. [Knife4j](https://doc.xiaominfo.com/) API visualization. Enhanced Swagger API documentation.
+14. Multi-environment support.
 
-15. [Async log output](https://examples.javacodegeeks.com/enterprise-java/logback/logback-ayncappender-example/). Log file compressed by standard GNU zip ([gzip](https://en.wikipedia.org/wiki/Gzip)) compression algorithm. [ELK](https://www.elastic.co/what-is/elk-stack) log aggregation.
+15. [Knife4j](https://doc.xiaominfo.com/) API visualization. Enhanced Swagger API documentation.
 
-16. JVM log configuration for JVM garbage collection.
+16. [Async log output](https://examples.javacodegeeks.com/enterprise-java/logback/logback-ayncappender-example/). Log file compressed by standard GNU zip ([gzip](https://en.wikipedia.org/wiki/Gzip)) compression algorithm. [ELK](https://www.elastic.co/what-is/elk-stack) log aggregation.
 
-17. AOP based request log, configurable for turning on or off.
+17. JVM log configuration for JVM garbage collection.
 
-18. Customized method argument validation.
+18. AOP based request log, configurable for turning on or off.
+
+19. Customized method argument validation.
 
     - [Date time range validator](https://github.com/johnnymillergh/muscle-and-fitness-server/blob/master/spring-cloud-starter/src/main/java/com/jmsoftware/maf/springcloudstarter/validation/validator/DateTimeRangeValidator.java)
     - [Enum value validator](https://github.com/johnnymillergh/muscle-and-fitness-server/blob/master/spring-cloud-starter/src/main/java/com/jmsoftware/maf/springcloudstarter/validation/validator/EnumValueValidator.java)
 
-19. Docker container log persistence. Size and time based rolling policy.
+20. Docker container log persistence, [Size and time based rolling policy](http://logback.qos.ch/manual/appenders.html#SizeAndTimeBasedRollingPolicy). Daily rollover (at midnight 12 am) with automatic GZIP compression of the archived files.
 
-20. [Startup and deployment statistics](https://github.com/johnnymillergh/muscle-and-fitness-server/blob/master/spring-cloud-starter/src/main/java/com/jmsoftware/maf/springcloudstarter/helper/SpringBootStartupHelper.java).
+21. [Startup and deployment statistics](https://github.com/johnnymillergh/muscle-and-fitness-server/blob/master/spring-cloud-starter/src/main/java/com/jmsoftware/maf/springcloudstarter/helper/SpringBootStartupHelper.java).
 
-21. Customized startup banner.
+22. Customized startup banner.
 
 ## Usage
 
