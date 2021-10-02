@@ -1,3 +1,79 @@
+# [0.0.6](https://github.com/johnnymillergh/muscle-and-fitness-server/compare/0.0.5...0.0.6) (2021-10-02)
+
+
+### Bug Fixes
+
+* **$MBP:** change datasource name back to master-slave form ([aeb6b02](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/aeb6b026029e0d529b30042e7e2672d93baa0b81))
+
+
+### Features
+
+* **$Java:** embrace Java functional interface and Lambda ([d3c55c3](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/d3c55c3b088b71db33807abc3e421287049b18a2))
+* **$oss-center:** add new API for resource response ([29b3e75](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/29b3e75c9fc730817781f97dfa5536cee6e07f3c))
+* **$Quartz:** api for creating Quartz configuration ([0f4f5aa](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/0f4f5aa7691d5eb1ec25284f90f1d40564328ae2))
+* **$Quartz:** api for updating Quartz job ([19b94ec](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/19b94ec09b782e4a6f00127cd3e2f1d3400e0283))
+* **$Quartz:** delete job by scheduler ([630cc62](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/630cc627ae9c90f7c3aed400dcc6fda7aaf52869))
+* **$Quartz:** patch Quartz configuration by Java reflection ([099d109](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/099d109d580fc9e89c96ec2d3e335ce8d7b9766c))
+* **$Quartz:** provide Quartz job maintenance ([9beb7c2](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/9beb7c24aaddbe60b9a5830ddd039d02d223c485))
+* **$Quartz:** run Quartz job immediately ([bb2ae84](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/bb2ae8421166b986639ddd1c1d82c17b82e4f429))
+* **$Quartz:** support batch import ([ab23e03](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/ab23e03e0433f25c5eb5f17db9a43f8fce1e29d5))
+* **$Quartz:** support Quartz dynamic job configuration ([dd87756](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/dd87756d676e115c4cf88e02bd75064414902e44))
+* **$RabbitMQ:** support RabbitMQ delayed messaging ([51b5f2b](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/51b5f2b9c9b046ac646b0e53862c1758d6e498ff))
+* **$λ:** add functionaljava@4.8.1 dependencies and its tests ([554406c](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/554406c87b7dc896e80289e58fb61c637cdd9033))
+* **$𝛌:** support all true check function `requireAllTrue` ([394af7a](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/394af7afdb9cfa63fa260e24fe6015b4a126e85b))
+
+
+### Performance Improvements
+
+* **$auth-center:** remove Minio dependency ([8ef1a25](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/8ef1a2507e80e19485b6ec688ab46a004f4d395f))
+* **$Cache:** support Guava cache for `cacheFunction` ([7497cdb](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/7497cdbf223b83960deb7495f465f024da44e6d9))
+* **$Docker:** update software versions ([2f4fae4](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/2f4fae4a96069e5d2ec247774182a1bbed2f8f8d))
+* **$Excel:** keep field order by HashMap -> LinkedHashMap ([b7ee607](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/b7ee6071a1ecb5c4d0fb8e0fbb852af283f514ed))
+* **$JVM:** enable JVM GC log ([0b8147b](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/0b8147be50f5b372eaa96e322a063a9d29a1c89b))
+* **$Logback:** simplify CONSOLE log format ([e6bf0e6](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/e6bf0e669db4ecee3c918333d2d5117efbbeebee))
+* **$Logback:** use async appender for logging ([4b40ac2](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/4b40ac213cfcb8ee5546f10b3a854816aedf2000))
+* **$MyBatisPlus:** refine dynamic database connection pool ([0a49320](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/0a493200a5b7e7dc4efc4a0585a4fc55a58748ba))
+* **$MyBatisPlus:** update MyBatis-Plus version to 3.4.3.2 ([95af9e0](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/95af9e09ea85eefe2af1c4ca8476a8aba24f6d51))
+* **$MySQL:** upgrade MySQL version to 8.0.26; change master-slave phrase ([92f932a](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/92f932ab0ddff81076e511d1dd541ca72af6944a))
+* **$POM:** downgrade Minio due to OkHttp ([ebb26ce](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/ebb26ceb37013fc25d285392e215104558652cb7))
+* **$POM:** update dependencies ([8e0d6e4](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/8e0d6e44691e94f7ac53dc2109c41c1e7b8b27c7))
+* **$POM:** update MyBatis Plus version to 3.4.3.4 ([e0c08b7](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/e0c08b7953b32bb6699bd1427014614449ba3fa9)), closes [/github.com/baomidou/mybatis-plus/blob/3.0/CHANGELOG.md#v3434-20210922](https://github.com//github.com/baomidou/mybatis-plus/blob/3.0/CHANGELOG.md/issues/v3434-20210922)
+* **$POM:** update Spring Cloud version to 2020.0.4 ([2fd8e6f](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/2fd8e6f28542706d602ac3df7aa3ff2d7829c8fb))
+* **$POM:** upgrade dependencies ([bb20ab6](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/bb20ab6614bc6a92781f965a1d02b7532ca2cb68))
+* **$POM:** upgrade hutool@5.7.13 ([823d9ef](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/823d9ef736d2d290839da3919d13e2840de426f6))
+* **$Quartz:** customize Quartz thread pool by CPU core count ([601c4f1](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/601c4f142e5b4af6011cf935236141709d757edf))
+* **$Quartz:** package private AbstractQuartzJob.java ([dfa2e3d](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/dfa2e3d24d565e4eaf9b1bafc0a7dfd68318f169))
+* **$Quartz:** value constraints for enums ([aeaef0c](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/aeaef0cc0d42bc0cb14e2c38eeac94d89ff4cdcc))
+* **$RabbitMQ:** set concurrent RabbitMQ listener ([6654cec](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/6654cec746af3349e606110f9604394edc6e9561))
+* **$RabbitMQ:** upgrade RabbitMQ version to 3.9.5-management-alpine ([19e608c](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/19e608caecf99af708c134361bd35ce97e5d4308))
+* **$starter:** beanify ResponseUtil ([7e4e7be](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/7e4e7be1d58b72051dae3365072c40473e26bfb2))
+* **$starter:** configure Jackson ([0b33af7](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/0b33af7010856d1579f702dc66b519b480214385))
+* **$starter:** don't wrap int value ([8442f49](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/8442f49d6fc1b1026b041e7c9fc15babd79482f5))
+* **$starter:** inject ObjectMapper instead of creating one ([8bdf5ab](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/8bdf5ab45cd70485a80b6393a4d51ff92929971d))
+* **$Starter:** abstract JWT configuration ([6dc91ae](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/6dc91ae8a5424ea63dc609c402bde3c4643d3447))
+* **$Starter:** destroy SpringBootStartupHelper after it finishes work ([5e4f58f](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/5e4f58ff79044cd19030cc229c57806e2eeb12ed))
+* **$Starter:** reduce operating Minio directly ([6473942](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/64739429e5c4850d773c1d91fb1de43547dd3b40))
+* **$Starter:** support WebClient load balancer ([19dea14](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/19dea1421fc9e34121977ba1d2fbcb959eea82e9))
+* **$Thread:** enhance thread pool size ([8a35ceb](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/8a35cebc144ebeb7a20efc9199f24908b8ace262))
+
+
+### Reverts
+
+* **$GitHub:** fallback JDK setup ([2eb80fb](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/2eb80fbc12218fec327656ac69ba6e66edfa98c0))
+
+
+### BREAKING CHANGES
+
+* **$Java:** Add more functions to simplify boilerplate code; give Java function superpower 🔥
+
+[skip ci]
+* **$Quartz:** reduce lots of Quartz job and trigger boilerplate codes
+* **$Starter:** refine SpringBootStartupHelper logs
+* **$MyBatisPlus:** unregister bean after processing Druid connection pool
+size
+
+
+
 # [0.0.5](https://github.com/johnnymillergh/muscle-and-fitness-server/compare/0.0.4...0.0.5) (2021-08-26)
 
 
