@@ -21,7 +21,7 @@ import javax.validation.constraints.NotBlank;
 @Validated
 @ConfigurationProperties(prefix = MafProjectProperties.PREFIX)
 public class MafProjectProperties {
-    public static final String PREFIX = "maf.project-property";
+    public static final String PREFIX = "maf.project-properties";
     private final BuildProperties buildProperties;
     /**
      * The Base package.

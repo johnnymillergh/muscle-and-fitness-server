@@ -4,6 +4,7 @@ import cn.hutool.db.ds.DataSourceWrapper;
 import com.alibaba.druid.util.JdbcUtils;
 import com.baomidou.dynamic.datasource.DynamicRoutingDataSource;
 import com.baomidou.dynamic.datasource.plugin.MasterSlaveAutoRoutingPlugin;
+import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DynamicDataSourceCreatorAutoConfiguration;
 import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DynamicDataSourceProperties;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
 import lombok.SneakyThrows;
@@ -14,7 +15,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.quartz.QuartzDataSource;
 import org.springframework.boot.autoconfigure.quartz.QuartzTransactionManager;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -28,14 +28,8 @@ import javax.sql.DataSource;
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 6/27/2021 8:15 AM
  **/
 @Slf4j
-@ConditionalOnClass({MybatisPlusAutoConfiguration.class})
+@ConditionalOnClass({MybatisPlusAutoConfiguration.class, DynamicDataSourceCreatorAutoConfiguration.class})
 public class DataSourceConfiguration {
-    @Bean
-    public DruidDataSourceCreatorPostProcessor druidDataSourceCreatorPostProcessor(ApplicationContext applicationContext, DynamicDataSourceProperties dynamicDataSourceProperties) {
-        log.warn("Initial bean: '{}'", DruidDataSourceCreatorPostProcessor.class.getSimpleName());
-        return new DruidDataSourceCreatorPostProcessor(applicationContext, dynamicDataSourceProperties);
-    }
-
     /**
      * Primary data source. Had to configure DynamicRoutingDataSource as primary. Otherwise
      * MasterSlaveAutoRoutingPlugin will not be able to be injected datasource correctly.

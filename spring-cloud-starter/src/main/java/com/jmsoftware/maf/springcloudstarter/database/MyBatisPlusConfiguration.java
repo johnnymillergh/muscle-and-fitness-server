@@ -1,6 +1,7 @@
 package com.jmsoftware.maf.springcloudstarter.database;
 
 import com.baomidou.dynamic.datasource.plugin.MasterSlaveAutoRoutingPlugin;
+import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DynamicDataSourcePropertiesCustomizer;
 import com.baomidou.dynamic.datasource.support.DdConstants;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
@@ -83,5 +84,21 @@ public class MyBatisPlusConfiguration {
     public CommonMetaObjectHandler commonMetaObjectHandler() {
         log.warn("Initial bean: '{}'", CommonMetaObjectHandler.class.getSimpleName());
         return new CommonMetaObjectHandler();
+    }
+
+    @Bean
+    public DynamicDataSourcePropertiesCustomizer dynamicDataSourcePropertiesCustomizer() {
+        return dynamicDataSourceProperties -> {
+            val cpuCoreCount = Runtime.getRuntime().availableProcessors();
+            val minConnectionPoolSize = cpuCoreCount * 2 + 1;
+            val maxConnectionPoolSize = cpuCoreCount * 3;
+            dynamicDataSourceProperties.getDruid()
+                    .setInitialSize(minConnectionPoolSize)
+                    .setMinIdle(minConnectionPoolSize)
+                    .setMaxActive(maxConnectionPoolSize);
+            log.warn("Druid connection pool enhanced by current cpuCoreCount: {}, initial size: {}, min idle: {}" +
+                             ", max active: {}",
+                     cpuCoreCount, minConnectionPoolSize, minConnectionPoolSize, maxConnectionPoolSize);
+        };
     }
 }
