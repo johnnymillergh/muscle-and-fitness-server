@@ -67,6 +67,7 @@ import java.util.List;
         WebSecurityConfiguration.class,
         RestTemplateConfiguration.class,
         AsyncConfiguration.class,
+        SchedulingConfiguration.class,
         RabbitmqConfiguration.class,
         MinioConfiguration.class,
         JacksonConfiguration.class,
