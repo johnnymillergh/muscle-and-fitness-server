@@ -96,8 +96,6 @@ spring:
         min-idle: 0
   quartz:
     job-store-type: JDBC
-    scheduler-name: ${spring.application.name}-scheduler
-    wait-for-jobs-to-complete-on-shutdown: true
     jdbc:
       initialize-schema: NEVER
     properties:
@@ -110,10 +108,6 @@ spring:
             isClustered: true
             clusterCheckinInterval: 3000
             useProperties: false
-          threadPool:
-            threadCount: 15
-            threadPriority: 5
-            class: org.quartz.simpl.SimpleThreadPool
 
 feign:
   httpclient:
@@ -157,7 +151,7 @@ logging:
   config: classpath:logback-configuration/logback-${spring.profiles.active}.xml
 
 maf:
-  project-property:
+  project-properties:
     base-package: @project.groupId@
     context-path: ${server.servlet.context-path}
     group-id: @project.groupId@
@@ -187,10 +181,7 @@ maf:
         - "/*/v2/api-docs/**"
         - "/webjars/**"
         - "/doc.html"
-    included-package-for-http-api-scan: ${maf.project-property.base-package}
+    included-package-for-http-api-scan: ${maf.project-properties.base-package}
     jwt:
       # an hour
       ttl: 3600000
-
-minio:
-  enabled: true

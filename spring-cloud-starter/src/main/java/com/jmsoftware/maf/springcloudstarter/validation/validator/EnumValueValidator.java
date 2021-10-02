@@ -61,7 +61,7 @@ public class EnumValueValidator implements ConstraintValidator<ValidEnumValue, N
         }
         var validResult = false;
         try {
-            for (var obj : enumConstantArray) {
+            for (val obj : enumConstantArray) {
                 Object valueDeclaredInEnum = method.invoke(obj);
                 if (!(valueDeclaredInEnum instanceof Number)) {
                     log.error("The value declared in enum is not an instance of Number!");

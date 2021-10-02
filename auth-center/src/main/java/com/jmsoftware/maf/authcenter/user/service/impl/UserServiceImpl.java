@@ -22,8 +22,8 @@ import com.jmsoftware.maf.authcenter.user.service.UserService;
 import com.jmsoftware.maf.common.bean.PageResponseBodyBean;
 import com.jmsoftware.maf.common.domain.authcenter.user.*;
 import com.jmsoftware.maf.common.exception.SecurityException;
-import com.jmsoftware.maf.springcloudstarter.configuration.MafConfiguration;
-import com.jmsoftware.maf.springcloudstarter.configuration.MafProjectProperty;
+import com.jmsoftware.maf.springcloudstarter.property.MafConfigurationProperties;
+import com.jmsoftware.maf.springcloudstarter.property.MafProjectProperties;
 import com.jmsoftware.maf.springcloudstarter.util.UserUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -59,14 +59,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtService jwtService;
     private final MessageSource messageSource;
-    private final MafProjectProperty mafProjectProperty;
+    private final MafProjectProperties mafProjectProperties;
     private final RedisTemplate<String, String> redisTemplate;
     private final UserRoleService userRoleService;
-    private final MafConfiguration mafConfiguration;
+    private final MafConfigurationProperties mafConfigurationProperties;
 
     @Override
     public GetUserByLoginTokenResponse getUserByLoginToken(@NotBlank String loginToken) {
-        val key = String.format(String.format("%s%s", this.mafProjectProperty.getProjectParentArtifactId(),
+        val key = String.format(String.format("%s%s", this.mafProjectProperties.getProjectParentArtifactId(),
                                               UserRedisKey.GET_USER_BY_LOGIN_TOKEN.getKeyInfixFormat()), loginToken);
         val hasKey = this.redisTemplate.hasKey(key);
         if (BooleanUtil.isTrue(hasKey)) {
@@ -99,7 +99,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setStatus(UserStatus.ENABLED.getValue());
         this.save(user);
         log.warn("Saved user for signup, going to assign guest role to user. {}", user);
-        this.userRoleService.assignRoleByRoleName(user, this.mafConfiguration.getGuestUserRole());
+        this.userRoleService.assignRoleByRoleName(user, this.mafConfigurationProperties.getGuestUserRole());
         val response = new SignupResponse();
         response.setUserId(user.getId());
         return response;

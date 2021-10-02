@@ -15,11 +15,15 @@ import com.jmsoftware.maf.springcloudstarter.helper.HttpApiScanHelper;
 import com.jmsoftware.maf.springcloudstarter.helper.IpHelper;
 import com.jmsoftware.maf.springcloudstarter.helper.SpringBootStartupHelper;
 import com.jmsoftware.maf.springcloudstarter.minio.MinioConfiguration;
+import com.jmsoftware.maf.springcloudstarter.poi.ExcelImportConfigurationProperties;
+import com.jmsoftware.maf.springcloudstarter.property.JwtConfigurationProperties;
+import com.jmsoftware.maf.springcloudstarter.property.MafConfigurationProperties;
+import com.jmsoftware.maf.springcloudstarter.property.MafProjectProperties;
 import com.jmsoftware.maf.springcloudstarter.quartz.QuartzConfiguration;
+import com.jmsoftware.maf.springcloudstarter.rabbitmq.RabbitmqConfiguration;
 import com.jmsoftware.maf.springcloudstarter.redis.RedisConfiguration;
 import com.jmsoftware.maf.springcloudstarter.service.CommonService;
 import com.jmsoftware.maf.springcloudstarter.service.impl.CommonServiceImpl;
-import com.jmsoftware.maf.springcloudstarter.sftp.SftpConfiguration;
 import com.jmsoftware.maf.springcloudstarter.websocket.WebSocketConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.exceptions.PersistenceException;
@@ -31,8 +35,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 import org.springframework.integration.annotation.IntegrationComponentScan;
@@ -47,24 +51,23 @@ import java.util.List;
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 10/19/2020 2:51 PM
  **/
 @Slf4j
-@Configuration
 @IntegrationComponentScan
 @ConditionalOnWebApplication
 @EnableConfigurationProperties({
-        MafConfiguration.class,
-        MafProjectProperty.class,
-        JwtConfiguration.class,
-        ExcelImportConfiguration.class
+        MafConfigurationProperties.class,
+        MafProjectProperties.class,
+        JwtConfigurationProperties.class,
+        ExcelImportConfigurationProperties.class
 })
 @Import({
         WebMvcConfiguration.class,
         MyBatisPlusConfiguration.class,
         RedisConfiguration.class,
         Swagger2Configuration.class,
-        SftpConfiguration.class,
         WebSecurityConfiguration.class,
         RestTemplateConfiguration.class,
         AsyncConfiguration.class,
+        SchedulingConfiguration.class,
         RabbitmqConfiguration.class,
         MinioConfiguration.class,
         JacksonConfiguration.class,
@@ -106,9 +109,9 @@ public class MafAutoConfiguration {
     }
 
     @Bean
-    public AccessLogFilter requestFilter(MafConfiguration mafConfiguration) {
+    public AccessLogFilter requestFilter(MafConfigurationProperties mafConfigurationProperties) {
         log.warn("Initial bean: '{}'", AccessLogFilter.class.getSimpleName());
-        return new AccessLogFilter(mafConfiguration);
+        return new AccessLogFilter(mafConfigurationProperties);
     }
 
     @Bean
@@ -118,10 +121,10 @@ public class MafAutoConfiguration {
     }
 
     @Bean
-    public SpringBootStartupHelper springBootStartupHelper(MafProjectProperty mafProjectProperty,
-                                                           IpHelper ipHelper) {
+    public SpringBootStartupHelper springBootStartupHelper(MafProjectProperties mafProjectProperties,
+                                                           IpHelper ipHelper, ApplicationContext applicationContext) {
         log.warn("Initial bean: '{}'", SpringBootStartupHelper.class.getSimpleName());
-        return new SpringBootStartupHelper(mafProjectProperty, ipHelper);
+        return new SpringBootStartupHelper(mafProjectProperties, ipHelper, applicationContext);
     }
 
     @Bean
@@ -140,17 +143,17 @@ public class MafAutoConfiguration {
     }
 
     @Bean
-    public HttpApiResourceRemoteApiController httpApiResourceRemoteController(MafConfiguration mafConfiguration,
+    public HttpApiResourceRemoteApiController httpApiResourceRemoteController(MafConfigurationProperties mafConfigurationProperties,
                                                                               HttpApiScanHelper httpApiScanHelper) {
         log.warn("Initial bean: '{}'", HttpApiResourceRemoteApiController.class.getSimpleName());
-        return new HttpApiResourceRemoteApiController(mafConfiguration, httpApiScanHelper);
+        return new HttpApiResourceRemoteApiController(mafConfigurationProperties, httpApiScanHelper);
     }
 
     @Bean
     @RefreshScope
-    public CommonService commonService(MafProjectProperty mafProjectProperty) {
+    public CommonService commonService(MafProjectProperties mafProjectProperties) {
         log.warn("Initial bean: '{}'", CommonServiceImpl.class.getSimpleName());
-        return new CommonServiceImpl(mafProjectProperty);
+        return new CommonServiceImpl(mafProjectProperties);
     }
 
     @Bean

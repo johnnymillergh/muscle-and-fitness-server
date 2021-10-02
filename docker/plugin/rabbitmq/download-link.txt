@@ -1,1 +1,1 @@
-https://github.com/rabbitmq/rabbitmq-delayed-message-exchange/releases/tag/3.8.9
+https://github.com/rabbitmq/rabbitmq-delayed-message-exchange/releases/tag/3.9.0

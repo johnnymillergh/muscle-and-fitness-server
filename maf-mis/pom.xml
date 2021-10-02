@@ -10,7 +10,7 @@
     <parent>
         <groupId>com.jmsoftware.maf</groupId>
         <artifactId>muscle-and-fitness-server</artifactId>
-        <version>0.0.5</version>
+        <version>0.0.6</version>
     </parent>
 
     <!-- Build Settings -->
@@ -63,7 +63,7 @@
                     <dependency>
                         <groupId>com.alibaba.p3c</groupId>
                         <artifactId>p3c-pmd</artifactId>
-                        <version>2.1.1</version>
+                        <version>${p3c-pmd.version}</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -73,6 +73,13 @@
                 <groupId>com.google.cloud.tools</groupId>
                 <artifactId>jib-maven-plugin</artifactId>
                 <version>${jib-maven-plugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.google.cloud.tools</groupId>
+                        <artifactId>jib-spring-boot-extension-maven</artifactId>
+                        <version>${jib-spring-boot-extension-maven.version}</version>
+                    </dependency>
+                </dependencies>
                 <executions>
                     <!-- Bind `jib:dockerBuild` to a Maven lifecycle `verify`. Jib will build your image directly to a Docker daemon.
                     <execution>
@@ -93,7 +100,7 @@
                 </executions>
                 <configuration>
                     <from>
-                        <!-- https://hub.docker.com/r/adoptopenjdk/openjdk11/tags?page=1&ordering=last_updated&name=alpine-jre-11 -->
+                        <!-- Don't use alpine or slim version, https://hub.docker.com/r/adoptopenjdk/openjdk11/tags?page=1&ordering=last_updated&name=jre-11 -->
                         <image>adoptopenjdk/openjdk11:${adoptopenjdk11.tag}</image>
                     </from>
                     <to>
@@ -113,6 +120,16 @@
                         </ports>
                         <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
                     </container>
+                    <pluginExtensions>
+                        <pluginExtension>
+                            <implementation>
+                                com.google.cloud.tools.jib.maven.extension.springboot.JibSpringBootExtension
+                            </implementation>
+                            <properties>
+                                <excludeDevtools>true</excludeDevtools>
+                            </properties>
+                        </pluginExtension>
+                    </pluginExtensions>
                 </configuration>
             </plugin>
         </plugins>
@@ -176,6 +193,10 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+        </dependency>
 
         <!-- ORM Library -->
         <dependency>
@@ -197,6 +218,28 @@
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>${druid-spring-boot-starter.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.sun</groupId>
+                    <artifactId>tools</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.sun</groupId>
+                    <artifactId>jconsole</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- Apache POI - Java API To Access Microsoft Format Files -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>${poi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>${poi.version}</version>
         </dependency>
     </dependencies>
 </project>

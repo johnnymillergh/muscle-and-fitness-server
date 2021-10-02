@@ -1,6 +1,8 @@
 package com.jmsoftware.maf.springcloudstarter.database;
 
 import com.baomidou.dynamic.datasource.plugin.MasterSlaveAutoRoutingPlugin;
+import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DynamicDataSourcePropertiesCustomizer;
+import com.baomidou.dynamic.datasource.support.DdConstants;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
@@ -9,6 +11,7 @@ import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerIntercept
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.ibatis.plugin.Interceptor;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,11 +26,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  **/
 @Slf4j
 @Configuration
+@EnableTransactionManagement
 @Import({
         DataSourceConfiguration.class
 })
-@ConditionalOnClass({MybatisPlusAutoConfiguration.class})
-@EnableTransactionManagement
+@MapperScan("com.jmsoftware.maf.springcloudstarter.*.mapper")
+@ConditionalOnClass({MybatisPlusAutoConfiguration.class, MasterSlaveAutoRoutingPlugin.class})
 public class MyBatisPlusConfiguration {
     @Bean
     public PaginationInnerInterceptor paginationInnerInterceptor() {
@@ -62,6 +66,13 @@ public class MyBatisPlusConfiguration {
         return mybatisPlusInterceptor;
     }
 
+    /**
+     * Register master-slave auto routing plugin interceptor. Mybatis-Plus doesn't support non-master-slave
+     * datasource yet.
+     *
+     * @return the interceptor
+     * @see DdConstants
+     */
     @Bean
     @Order(2)
     public Interceptor masterSlaveAutoRoutingPlugin() {
@@ -70,8 +81,24 @@ public class MyBatisPlusConfiguration {
     }
 
     @Bean
-    public CommonMetaObjectHandler myBatisPlusConfiguration() {
+    public CommonMetaObjectHandler commonMetaObjectHandler() {
         log.warn("Initial bean: '{}'", CommonMetaObjectHandler.class.getSimpleName());
         return new CommonMetaObjectHandler();
+    }
+
+    @Bean
+    public DynamicDataSourcePropertiesCustomizer dynamicDataSourcePropertiesCustomizer() {
+        return dynamicDataSourceProperties -> {
+            val cpuCoreCount = Runtime.getRuntime().availableProcessors();
+            val minConnectionPoolSize = cpuCoreCount * 2 + 1;
+            val maxConnectionPoolSize = cpuCoreCount * 3;
+            dynamicDataSourceProperties.getDruid()
+                    .setInitialSize(minConnectionPoolSize)
+                    .setMinIdle(minConnectionPoolSize)
+                    .setMaxActive(maxConnectionPoolSize);
+            log.warn("Druid connection pool enhanced by current cpuCoreCount: {}, initial size: {}, min idle: {}" +
+                             ", max active: {}",
+                     cpuCoreCount, minConnectionPoolSize, minConnectionPoolSize, maxConnectionPoolSize);
+        };
     }
 }

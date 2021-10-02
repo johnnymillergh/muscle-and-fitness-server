@@ -29,6 +29,6 @@ public class RoleRemoteApiController {
     @GetMapping("/roles/{userId}")
     @ApiOperation(value = "Get role list", notes = "Get role list (Remote API)")
     public ResponseBodyBean<GetRoleListByUserIdResponse> getRoleList(@PathVariable Long userId) {
-        return ResponseBodyBean.ofSuccess(roleService.getRoleList(userId));
+        return ResponseBodyBean.ofSuccess(this.roleService.getRoleList(userId));
     }
 }

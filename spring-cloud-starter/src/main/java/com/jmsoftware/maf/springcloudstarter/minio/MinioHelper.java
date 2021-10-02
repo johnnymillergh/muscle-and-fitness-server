@@ -11,7 +11,6 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,7 +30,6 @@ import java.util.stream.Collectors;
  **/
 @Slf4j
 @Validated
-@Component
 @RequiredArgsConstructor
 @SuppressWarnings("unused")
 public class MinioHelper {

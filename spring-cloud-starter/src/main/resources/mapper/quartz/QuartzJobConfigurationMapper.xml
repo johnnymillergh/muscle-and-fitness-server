@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jmsoftware.maf.springcloudstarter.quartz.mapper.QuartzJobConfigurationMapper">
+    <resultMap id="BaseResultMap"
+               type="com.jmsoftware.maf.springcloudstarter.quartz.entity.persistence.QuartzJobConfiguration">
+        <!--@mbg.generated-->
+        <!--@Table quartz_job_configuration-->
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="group" jdbcType="VARCHAR" property="group"/>
+        <result column="service_name" jdbcType="VARCHAR" property="serviceName"/>
+        <result column="invoke_target" jdbcType="VARCHAR" property="invokeTarget"/>
+        <result column="cron_expression" jdbcType="VARCHAR" property="cronExpression"/>
+        <result column="misfire_policy" jdbcType="TINYINT" property="misfirePolicy"/>
+        <result column="concurrent" jdbcType="TINYINT" property="concurrent"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="created_by" jdbcType="BIGINT" property="createdBy"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="modified_by" jdbcType="BIGINT" property="modifiedBy"/>
+        <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
+        <result column="deleted" jdbcType="TINYINT" property="deleted"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, `name`, `group`, service_name, invoke_target, cron_expression, misfire_policy, concurrent,
+        description, `status`, created_by, created_time, modified_by, modified_time, deleted
+    </sql>
+
+    <select id="selectPageList"
+            resultType="com.jmsoftware.maf.springcloudstarter.quartz.entity.GetQuartzJobConfigurationPageListItem">
+        SELECT qjc.id              AS id,
+               qjc.name            AS name,
+               qjc.`group`         AS `group`,
+               qjc.service_name    AS serviceName,
+               qjc.invoke_target   AS invokeTarget,
+               qjc.cron_expression AS cronExpression,
+               qjc.misfire_policy  AS misfirePolicy,
+               qjc.concurrent      AS concurrent,
+               qjc.description     AS description,
+               qjc.status          AS status,
+               createdBy.username  AS createdBy,
+               qjc.created_time    AS createdTime,
+               modifiedBy.username AS modifiedBy,
+               qjc.modified_time   AS modified_time
+        FROM quartz_job_configuration qjc
+                     LEFT JOIN user createdBy ON createdBy.id = qjc.created_by
+                     LEFT JOIN user modifiedBy ON modifiedBy.id = qjc.modified_by
+        <where>
+            qjc.deleted = 0
+            <if test="@cn.hutool.core.util.StrUtil@isNotBlank(payload.serviceName)">
+                AND qjc.service_name LIKE CONCAT('%', #{payload.serviceName}, '%')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectListForExporting"
+            resultType="com.jmsoftware.maf.springcloudstarter.quartz.entity.QuartzJobConfigurationExcel">
+        SELECT qjc.id              AS id,
+               qjc.name            AS name,
+               qjc.`group`         AS `group`,
+               qjc.service_name    AS serviceName,
+               qjc.invoke_target   AS invokeTarget,
+               qjc.cron_expression AS cronExpression,
+               qjc.misfire_policy  AS misfirePolicy,
+               qjc.concurrent      AS concurrent,
+               qjc.description     AS description,
+               qjc.status          AS status,
+               createdBy.username  AS createdBy,
+               qjc.created_time    AS createdTime,
+               modifiedBy.username AS modifiedBy,
+               qjc.modified_time   AS modified_time
+        FROM quartz_job_configuration qjc
+                     LEFT JOIN user createdBy ON createdBy.id = qjc.created_by
+                     LEFT JOIN user modifiedBy ON modifiedBy.id = qjc.modified_by
+        WHERE qjc.deleted = 0
+          AND qjc.service_name = #{serviceName}
+    </select>
+</mapper>

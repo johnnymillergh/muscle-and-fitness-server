@@ -26,9 +26,6 @@ import java.time.LocalDateTime;
 @Data
 @SuppressWarnings("unused")
 public class ResponseBodyBean<T> implements Serializable {
-    /**
-     * The constant serialVersionUID.
-     */
     private static final long serialVersionUID = 4645469240048361965L;
 
     /**
@@ -44,7 +41,7 @@ public class ResponseBodyBean<T> implements Serializable {
     /**
      * Default status is 200 OK.
      */
-    private Integer status = HttpStatus.OK.value();
+    private int status = HttpStatus.OK.value();
     /**
      * The Message. Default: 200 OK.
      */
@@ -53,6 +50,9 @@ public class ResponseBodyBean<T> implements Serializable {
      * The Data.
      */
     private T data;
+
+    private ResponseBodyBean() {
+    }
 
     /**
      * <p>Respond to client with IUniversalStatus (status may be OK or other).</p>
@@ -97,7 +97,7 @@ public class ResponseBodyBean<T> implements Serializable {
      * @param data   data to be responded to client
      * @return response body for ExceptionControllerAdvice
      */
-    public static <T> ResponseBodyBean<T> ofStatus(@NonNull final HttpStatus status, final T data) {
+    public static <T> ResponseBodyBean<T> ofStatus(@NonNull final HttpStatus status, @Nullable final T data) {
         ResponseBodyBean<T> responseBodyBean = new ResponseBodyBean<>();
         responseBodyBean.setStatus(status.value());
         responseBodyBean.setMessage(status.getReasonPhrase());
@@ -117,8 +117,8 @@ public class ResponseBodyBean<T> implements Serializable {
      * @param data    data to be responded
      * @return response body for ExceptionControllerAdvice
      */
-    public static <T> ResponseBodyBean<T> ofStatus(@NonNull final Integer status, @NonNull final String message,
-                                                   final T data) {
+    public static <T> ResponseBodyBean<T> ofStatus(final int status, @NonNull final String message,
+                                                   @Nullable final T data) {
         ResponseBodyBean<T> responseBodyBean = new ResponseBodyBean<>();
         responseBodyBean.setStatus(status);
         responseBodyBean.setMessage(message);
@@ -137,8 +137,8 @@ public class ResponseBodyBean<T> implements Serializable {
      * @param data    data to be responded
      * @return response body
      */
-    public static <T> ResponseBodyBean<T> setResponse(@NonNull final Integer status, @NonNull final String message,
-                                                      final T data)
+    public static <T> ResponseBodyBean<T> setResponse(final int status, @NonNull final String message,
+                                                      @Nullable final T data)
             throws BaseException {
         if (!HttpStatus.valueOf(status).is2xxSuccessful()) {
             throw new BaseException(status, message, data);
@@ -167,7 +167,7 @@ public class ResponseBodyBean<T> implements Serializable {
      * @param data data to be responded to client.
      * @return response body
      */
-    public static <T> ResponseBodyBean<T> ofSuccess(final T data) {
+    public static <T> ResponseBodyBean<T> ofSuccess(@Nullable final T data) {
         ResponseBodyBean<T> responseBodyBean = new ResponseBodyBean<>();
         responseBodyBean.setData(data);
         return responseBodyBean;
@@ -180,7 +180,7 @@ public class ResponseBodyBean<T> implements Serializable {
      * @param message message to be responded
      * @return response body
      */
-    public static <T> ResponseBodyBean<T> ofSuccess(@NonNull final String message) {
+    public static <T> ResponseBodyBean<T> ofSuccessMessage(@NonNull final String message) {
         ResponseBodyBean<T> responseBodyBean = new ResponseBodyBean<>();
         responseBodyBean.setMessage(message);
         return responseBodyBean;
@@ -194,7 +194,7 @@ public class ResponseBodyBean<T> implements Serializable {
      * @param message message to be responded
      * @return response body
      */
-    public static <T> ResponseBodyBean<T> ofSuccess(final T data,
+    public static <T> ResponseBodyBean<T> ofSuccess(@Nullable final T data,
                                                     @NonNull final String message) {
         ResponseBodyBean<T> responseBodyBean = new ResponseBodyBean<>();
         responseBodyBean.setMessage(message);
@@ -209,7 +209,7 @@ public class ResponseBodyBean<T> implements Serializable {
      * @param message message to be responded.
      * @return response body
      */
-    public static <T> ResponseBodyBean<T> ofFailure(@NonNull final String message) throws BizException {
+    public static <T> ResponseBodyBean<T> ofFailureMessage(@NonNull final String message) throws BizException {
         throw new BizException(message);
     }
 
@@ -281,10 +281,10 @@ public class ResponseBodyBean<T> implements Serializable {
      * @return the json
      * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 12/22/2020 10:16 AM
      */
-    public static JSON of(@NonNull String message, @Nullable Object data, @NonNull Integer status) {
+    public static JSON of(@NonNull String message, @Nullable Object data, int status) {
         val responseBodyBean = ResponseBodyBean.ofStatus(status, message, data);
         val config = new JSONConfig();
-        config.setIgnoreNullValue(false).setDateFormat("yyyy-MM-dd HH:mm:ss");
+        config.setIgnoreNullValue(false).setDateFormat(UniversalDateTime.DATE_TIME_FORMAT);
         return JSONUtil.parse(responseBodyBean, config);
     }
 }

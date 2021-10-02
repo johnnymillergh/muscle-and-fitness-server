@@ -7,7 +7,7 @@
     <!-- Project Basics -->
     <groupId>com.jmsoftware.maf</groupId>
     <artifactId>muscle-and-fitness-server</artifactId>
-    <version>0.0.5</version>
+    <version>0.0.6</version>
     <name>Muscle and Fitness Server</name>
     <description>Muscle and Fitness Server (M&amp;F, maf), a Spring Cloud microservice based, back-end server for
         managing data of muscle and fitness.
@@ -35,17 +35,25 @@
 
         <!-- Version Definitions. -->
         <java.version>11</java.version>
-        <adoptopenjdk11.tag>x86_64-alpine-jre-11.0.10_9</adoptopenjdk11.tag>
-        <jib-maven-plugin.version>3.1.1</jib-maven-plugin.version>
+        <!--
+        Don't use alpine or slim version, to prevent following exception
+        java.lang.UnsatisfiedLinkError: /opt/java/openjdk/lib/libfontmanager.so: libfreetype.so.6: cannot open shared object file: No such file or directory
+        https://hub.docker.com/r/adoptopenjdk/openjdk11/tags?page=1&ordering=last_updated&name=jre-11
+        -->
+        <adoptopenjdk11.tag>jre-11.0.11_9</adoptopenjdk11.tag>
+        <jib-maven-plugin.version>3.1.4</jib-maven-plugin.version>
+        <jib-spring-boot-extension-maven.version>0.1.0</jib-spring-boot-extension-maven.version>
         <maven-pmd-plugin.version>3.14.0</maven-pmd-plugin.version>
-        <spring-cloud.version>2020.0.3</spring-cloud.version>
+        <p3c-pmd.version>2.1.1</p3c-pmd.version>
+        <spring-cloud.version>2020.0.4</spring-cloud.version>
+        <functionaljava.version>4.8.1</functionaljava.version>
         <spring-content.version>1.0.0.M5</spring-content.version>
-        <spring-boot-admin-starter-server.version>2.4.3</spring-boot-admin-starter-server.version>
-        <spring-boot-admin-starter-client.version>2.4.3</spring-boot-admin-starter-client.version>
+        <spring-boot-admin-starter-server.version>2.5.1</spring-boot-admin-starter-server.version>
+        <spring-boot-admin-starter-client.version>2.5.1</spring-boot-admin-starter-client.version>
         <druid-spring-boot-starter.version>1.2.6</druid-spring-boot-starter.version>
-        <mybatis-plus-boot-starter.version>3.4.3.1</mybatis-plus-boot-starter.version>
-        <dynamic-datasource-spring-boot-starter.version>3.4.0</dynamic-datasource-spring-boot-starter.version>
-        <hutool-all.version>5.7.7</hutool-all.version>
+        <mybatis-plus-boot-starter.version>3.4.3.4</mybatis-plus-boot-starter.version>
+        <dynamic-datasource-spring-boot-starter.version>3.4.1</dynamic-datasource-spring-boot-starter.version>
+        <hutool-all.version>5.7.13</hutool-all.version>
         <guava.version>30.1.1-jre</guava.version>
         <knife4j.version>2.0.9</knife4j.version>
         <jjwt.version>0.11.2</jjwt.version>
@@ -54,7 +62,7 @@
         <poi.version>5.0.0</poi.version>
         <logstash-logback-encoder.version>6.6</logstash-logback-encoder.version>
         <minio.version>8.2.2</minio.version>
-        <apache-tika.version>2.0.0</apache-tika.version>
+        <apache-tika.version>2.1.0</apache-tika.version>
     </properties>
 
     <!-- The modules (sometimes called subprojects) to build as a part of this project. -->
@@ -73,7 +81,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.6</version>
+        <version>2.5.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -285,11 +293,25 @@
             <version>${hutool-all.version}</version>
         </dependency>
 
-        <!-- Brings the popular ruby faker gem to Java https://github.com/DiUS/java-faker -->
         <dependency>
-            <groupId>com.github.javafaker</groupId>
-            <artifactId>javafaker</artifactId>
-            <version>${java-faker.version}</version>
+            <groupId>org.functionaljava</groupId>
+            <artifactId>functionaljava</artifactId>
+            <version>${functionaljava.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.functionaljava</groupId>
+            <artifactId>functionaljava-java8</artifactId>
+            <version>${functionaljava.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.functionaljava</groupId>
+            <artifactId>functionaljava-quickcheck</artifactId>
+            <version>${functionaljava.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.functionaljava</groupId>
+            <artifactId>functionaljava-java-core</artifactId>
+            <version>${functionaljava.version}</version>
         </dependency>
     </dependencies>
 </project>

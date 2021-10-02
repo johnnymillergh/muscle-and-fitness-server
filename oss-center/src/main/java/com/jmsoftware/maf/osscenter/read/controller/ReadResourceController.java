@@ -29,8 +29,15 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 public class ReadResourceController {
     private final ReadResourceService readResourceService;
 
+    @GetMapping("/{bucket}/{object}")
+    @ApiOperation(value = "Get single resource", notes = "Get single resource (small-size file)")
+    public ResponseEntity<StreamingResponseBody> asyncGetSingleResource(@PathVariable String bucket,
+                                                                        @PathVariable String object) {
+        return this.readResourceService.asyncGetSingleResource(bucket, object);
+    }
+
     @GetMapping("/stream/{bucket}/{object}")
-    @ApiOperation(value = "Stream single resource", notes = "Stream single resource")
+    @ApiOperation(value = "Stream single resource", notes = "Stream single resource (large-size file)")
     public ResponseEntity<StreamingResponseBody> asyncStreamSingleResource(@PathVariable String bucket,
                                                                            @PathVariable String object,
                                                                            @RequestHeader(name = HttpHeaders.RANGE,

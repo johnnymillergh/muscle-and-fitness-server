@@ -1,5 +1,7 @@
 package com.jmsoftware.maf.springcloudstarter.configuration;
 
+import com.jmsoftware.maf.springcloudstarter.property.MafConfigurationProperties;
+import com.jmsoftware.maf.springcloudstarter.property.MafProjectProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -27,8 +29,8 @@ import javax.annotation.PostConstruct;
 @EnableSwagger2WebMvc
 @RequiredArgsConstructor
 public class Swagger2Configuration {
-    private final MafConfiguration mafConfiguration;
-    private final MafProjectProperty mafProjectProperty;
+    private final MafConfigurationProperties mafConfigurationProperties;
+    private final MafProjectProperties mafProjectProperties;
 
     @PostConstruct
     private void postConstruct() {
@@ -36,18 +38,18 @@ public class Swagger2Configuration {
     }
 
     private ApiInfo apiInfo() {
-        val projectArtifactId = mafProjectProperty.getProjectArtifactId();
-        val version = mafProjectProperty.getVersion();
-        val developerEmail = mafProjectProperty.getDeveloperEmail();
-        val developerUrl = mafProjectProperty.getDeveloperUrl();
+        val projectArtifactId = this.mafProjectProperties.getProjectArtifactId();
+        val version = this.mafProjectProperties.getVersion();
+        val developerEmail = this.mafProjectProperties.getDeveloperEmail();
+        val developerUrl = this.mafProjectProperties.getDeveloperUrl();
         return new ApiInfoBuilder()
                 .title(String.format("API for %s@%s", projectArtifactId, version))
                 .description(String.format("%s Artifact ID: %s Environment: %s",
-                                           mafProjectProperty.getDescription(),
+                                           this.mafProjectProperties.getDescription(),
                                            projectArtifactId,
-                                           mafProjectProperty.getEnvironment()))
+                                           this.mafProjectProperties.getEnvironment()))
                 .contact(new Contact(String.format("%s, email: %s Home page: %s",
-                                                   mafProjectProperty.getDeveloperName(),
+                                                   this.mafProjectProperties.getDeveloperName(),
                                                    developerEmail,
                                                    developerUrl),
                                      developerUrl, developerEmail))
@@ -56,13 +58,13 @@ public class Swagger2Configuration {
     }
 
     @Bean
-    public Docket docket(MafProjectProperty mafProjectProperty) {
+    public Docket docket(MafProjectProperties mafProjectProperties) {
         log.warn("Initial bean: '{}'", Docket.class.getSimpleName());
         return new Docket(DocumentationType.SWAGGER_2)
-                .enable(mafConfiguration.getSwaggerEnabled())
-                .apiInfo(apiInfo())
+                .enable(this.mafConfigurationProperties.getSwaggerEnabled())
+                .apiInfo(this.apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage(mafProjectProperty.getBasePackage()))
+                .apis(RequestHandlerSelectors.basePackage(mafProjectProperties.getBasePackage()))
                 .paths(PathSelectors.any())
                 .build();
     }
