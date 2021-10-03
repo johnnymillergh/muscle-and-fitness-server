@@ -140,5 +140,13 @@ class FunctionalInterfaceTests {
             throw new IllegalStateException("Oops! Somehow, the code throws an exception");
         };
         Assertions.assertThrows(RuntimeException.class, () -> retryFunction(compute, 5));
+
+        final Function<Integer, Integer> compute2 = value -> 1 + value;
+        final var result = retryFunction(compute2, -1, integer -> integer.equals(0), 3);
+        Assertions.assertEquals(0, result);
+        Assertions.assertThrows(
+                IllegalStateException.class,
+                () -> retryFunction(compute2, 1, integer -> integer.equals(0), 3)
+        );
     }
 } 
