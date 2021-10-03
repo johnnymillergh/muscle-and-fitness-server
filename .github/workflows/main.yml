@@ -10,6 +10,7 @@ on:
       - 'feature/**'
     paths-ignore:
       - '**.md'
+      - '_config.yml'
 
 jobs:
   build-docker-image:
