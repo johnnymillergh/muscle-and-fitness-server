@@ -8,7 +8,7 @@ server:
 
 spring:
   profiles:
-    active: @env@
+    active: @environment@
   mvc:
     throw-exception-if-no-handler-found: true
   jackson:

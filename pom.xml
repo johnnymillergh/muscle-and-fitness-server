@@ -234,8 +234,7 @@
         <profile>
             <id>development-local</id>
             <properties>
-                <env>development-local</env>
-                <envAlias>dev_loc</envAlias>
+                <environment>development-local</environment>
             </properties>
             <activation>
                 <activeByDefault>true</activeByDefault>
@@ -245,28 +244,28 @@
         <profile>
             <id>development-docker</id>
             <properties>
-                <env>development-docker</env>
+                <environment>development-docker</environment>
             </properties>
         </profile>
 
         <profile>
             <id>test</id>
             <properties>
-                <env>test</env>
+                <environment>test</environment>
             </properties>
         </profile>
 
         <profile>
             <id>stage</id>
             <properties>
-                <env>stage</env>
+                <environment>stage</environment>
             </properties>
         </profile>
 
         <profile>
             <id>production</id>
             <properties>
-                <env>production</env>
+                <environment>production</environment>
             </properties>
         </profile>
     </profiles>
