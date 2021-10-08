@@ -1,0 +1,142 @@
+version: "3.8"
+
+services:
+  # https://github.com/bitnami/bitnami-docker-redis-cluster/issues/3#issuecomment-917537076
+  redis-node-1:
+    container_name: redis-node-1
+    image: bitnami/redis-cluster:${REDIS_CLUSTER_TAG}
+    restart: always
+    environment:
+      - 'REDIS_PORT_NUMBER=7000'
+      - 'REDIS_PASSWORD=maf@redis'
+      - 'REDIS_NODES=redis-node-1 redis-node-2 redis-node-3 redis-node-4 redis-node-5 redis-node-6'
+      - 'REDIS_CLUSTER_ANNOUNCE_PORT=7000'
+      # REDIS_CLUSTER_ANNOUNCE_IP should be your local machine IP
+      - 'REDIS_CLUSTER_ANNOUNCE_IP=192.168.1.17'
+      - 'REDIS_CLUSTER_BUS_ANNOUNCE_PORT=17000'
+      - 'REDIS_CLUSTER_DYNAMIC_IPS=no'
+    ports:
+      - "7000:7000"
+      - "17000:17000"
+    networks:
+      muscle_and_fitness_network:
+        ipv4_address: 172.19.1.1
+
+  redis-node-2:
+    container_name: redis-node-2
+    image: bitnami/redis-cluster:${REDIS_CLUSTER_TAG}
+    restart: always
+    environment:
+      - 'REDIS_PORT_NUMBER=7001'
+      - 'REDIS_PASSWORD=maf@redis'
+      - 'REDIS_NODES=redis-node-1 redis-node-2 redis-node-3 redis-node-4 redis-node-5 redis-node-6'
+      - 'REDIS_CLUSTER_ANNOUNCE_PORT=7001'
+      # REDIS_CLUSTER_ANNOUNCE_IP should be your local machine IP
+      - 'REDIS_CLUSTER_ANNOUNCE_IP=192.168.1.17'
+      - 'REDIS_CLUSTER_BUS_ANNOUNCE_PORT=17001'
+      - 'REDIS_CLUSTER_DYNAMIC_IPS=no'
+    ports:
+      - "7001:7001"
+      - "17001:17001"
+    networks:
+      muscle_and_fitness_network:
+        ipv4_address: 172.19.1.2
+
+  redis-node-3:
+    container_name: redis-node-3
+    image: bitnami/redis-cluster:${REDIS_CLUSTER_TAG}
+    restart: always
+    environment:
+      - 'REDIS_PORT_NUMBER=7002'
+      - 'REDIS_PASSWORD=maf@redis'
+      - 'REDIS_NODES=redis-node-1 redis-node-2 redis-node-3 redis-node-4 redis-node-5 redis-node-6'
+      - 'REDIS_CLUSTER_ANNOUNCE_PORT=7002'
+      # REDIS_CLUSTER_ANNOUNCE_IP should be your local machine IP
+      - 'REDIS_CLUSTER_ANNOUNCE_IP=192.168.1.17'
+      - 'REDIS_CLUSTER_BUS_ANNOUNCE_PORT=17002'
+      - 'REDIS_CLUSTER_DYNAMIC_IPS=no'
+    ports:
+      - "7002:7002"
+      - "17002:17002"
+    networks:
+      muscle_and_fitness_network:
+        ipv4_address: 172.19.1.3
+
+  redis-node-4:
+    container_name: redis-node-4
+    image: bitnami/redis-cluster:${REDIS_CLUSTER_TAG}
+    restart: always
+    environment:
+      - 'REDIS_PORT_NUMBER=7003'
+      - 'REDIS_PASSWORD=maf@redis'
+      - 'REDIS_NODES=redis-node-1 redis-node-2 redis-node-3 redis-node-4 redis-node-5 redis-node-6'
+      - 'REDIS_CLUSTER_ANNOUNCE_PORT=7003'
+      # REDIS_CLUSTER_ANNOUNCE_IP should be your local machine IP
+      - 'REDIS_CLUSTER_ANNOUNCE_IP=192.168.1.17'
+      - 'REDIS_CLUSTER_BUS_ANNOUNCE_PORT=17003'
+      - 'REDIS_CLUSTER_DYNAMIC_IPS=no'
+    ports:
+      - "7003:7003"
+      - "17003:17003"
+    networks:
+      muscle_and_fitness_network:
+        ipv4_address: 172.19.1.4
+
+  redis-node-5:
+    container_name: redis-node-5
+    image: bitnami/redis-cluster:${REDIS_CLUSTER_TAG}
+    restart: always
+    environment:
+      - 'REDIS_PORT_NUMBER=7004'
+      - 'REDIS_PASSWORD=maf@redis'
+      - 'REDIS_NODES=redis-node-1 redis-node-2 redis-node-3 redis-node-4 redis-node-5 redis-node-6'
+      - 'REDIS_CLUSTER_ANNOUNCE_PORT=7004'
+      # REDIS_CLUSTER_ANNOUNCE_IP should be your local machine IP
+      - 'REDIS_CLUSTER_ANNOUNCE_IP=192.168.1.17'
+      - 'REDIS_CLUSTER_BUS_ANNOUNCE_PORT=17004'
+      - 'REDIS_CLUSTER_DYNAMIC_IPS=no'
+    ports:
+      - "7004:7004"
+      - "17004:17004"
+    networks:
+      muscle_and_fitness_network:
+        ipv4_address: 172.19.1.5
+
+  redis-node-6:
+    container_name: redis-node-6
+    image: bitnami/redis-cluster:${REDIS_CLUSTER_TAG}
+    restart: always
+    environment:
+      - 'REDIS_PORT_NUMBER=7005'
+      - 'REDIS_PASSWORD=maf@redis'
+      - 'REDIS_NODES=redis-node-1 redis-node-2 redis-node-3 redis-node-4 redis-node-5 redis-node-6'
+      - 'REDIS_CLUSTER_ANNOUNCE_PORT=7005'
+      # REDIS_CLUSTER_ANNOUNCE_IP should be your local machine IP
+      - 'REDIS_CLUSTER_ANNOUNCE_IP=192.168.1.17'
+      - 'REDIS_CLUSTER_BUS_ANNOUNCE_PORT=17005'
+      - 'REDIS_CLUSTER_DYNAMIC_IPS=no'
+    ports:
+      - "7005:7005"
+      - "17005:17005"
+    networks:
+      muscle_and_fitness_network:
+        ipv4_address: 172.19.1.6
+
+  redis-cluster-init:
+    image: redis:6.2.5
+    container_name: redis-cluster-init
+    restart: 'no'
+    depends_on:
+      - redis-node-1
+      - redis-node-2
+      - redis-node-3
+      - redis-node-4
+      - redis-node-5
+      - redis-node-6
+    entrypoint: []
+    command:
+      - /bin/bash
+      - -c
+      - redis-cli -a maf@redis --cluster create 172.19.1.1:7000 172.19.1.2:7001 172.19.1.3:7002 172.19.1.4:7003 172.19.1.5:7004 172.19.1.6:7005 --cluster-replicas 1 --cluster-yes
+    networks:
+      muscle_and_fitness_network:
