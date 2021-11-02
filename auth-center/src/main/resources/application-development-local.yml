@@ -27,15 +27,15 @@ spring:
     username: maf_rabbitmq_su
     password: maf@rabbitmq
 
-redis:
-  master:
-    host: localhost
-    port: 6379
-    password: maf@redis
-  slaves:
-    - host: localhost
-      port: 6380
-      password: maf@redis
+#redis:
+#  master:
+#    host: localhost
+#    port: 6379
+#    password: maf@redis
+#  slaves:
+#    - host: localhost
+#      port: 6380
+#      password: maf@redis
 
 logging:
   level:
