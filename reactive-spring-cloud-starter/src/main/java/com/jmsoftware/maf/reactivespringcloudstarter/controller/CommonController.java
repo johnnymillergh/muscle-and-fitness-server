@@ -4,8 +4,6 @@ import cn.hutool.json.JSON;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.ValidationTestPayload;
 import com.jmsoftware.maf.reactivespringcloudstarter.service.CommonService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -22,18 +20,15 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/common")
-@Api(tags = {"Common Controller"})
 public class CommonController {
     private final CommonService commonService;
 
     @GetMapping("/app-info")
-    @ApiOperation(value = "/app-info", notes = "Retrieve application information")
     public ResponseBodyBean<JSON> applicationInformation() {
         return ResponseBodyBean.ofSuccess(this.commonService.getApplicationInfo(), "Succeed to retrieve app info.");
     }
 
     @PostMapping("/validation-test")
-    @ApiOperation(value = "/validation-test", notes = "Validation of request payload test")
     public ResponseBodyBean<String> validationTest(@RequestBody ValidationTestPayload payload) {
         this.commonService.validateObject(payload);
         return ResponseBodyBean.ofSuccess(payload.getName(), "validationTest()");

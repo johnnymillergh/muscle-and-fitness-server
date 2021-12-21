@@ -63,7 +63,6 @@ import java.util.List;
         WebMvcConfiguration.class,
         MyBatisPlusConfiguration.class,
         RedisConfiguration.class,
-        Swagger2Configuration.class,
         WebSecurityConfiguration.class,
         RestTemplateConfiguration.class,
         AsyncConfiguration.class,

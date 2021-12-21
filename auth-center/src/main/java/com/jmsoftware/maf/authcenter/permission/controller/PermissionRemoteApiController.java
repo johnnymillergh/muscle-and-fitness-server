@@ -4,8 +4,6 @@ import com.jmsoftware.maf.authcenter.permission.service.PermissionService;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,12 +22,10 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/permission-remote-api")
-@Api(tags = {"Permission Remote API"})
 public class PermissionRemoteApiController {
     private final PermissionService permissionService;
 
     @GetMapping("/permissions")
-    @ApiOperation(value = "Get permission list by role id list", notes = "Get permission list by role id list (remote)")
     public ResponseBodyBean<GetPermissionListByRoleIdListResponse> getPermissionListByRoleIdList(@Valid GetPermissionListByRoleIdListPayload payload) {
         return ResponseBodyBean.ofSuccess(this.permissionService.getPermissionListByRoleIdList(payload));
     }
