@@ -21,9 +21,6 @@ import org.springframework.util.StopWatch;
 @EnableDiscoveryClient
 @SpringBootApplication
 public class AuthCenterApplication {
-    private AuthCenterApplication() {
-    }
-
     public static void main(String[] args) {
         val stopWatch = new StopWatch();
         stopWatch.start();
