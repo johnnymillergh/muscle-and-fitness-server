@@ -21,6 +21,9 @@ import org.springframework.util.StopWatch;
 @EnableDiscoveryClient
 @SpringBootApplication
 public class MafMisApplication {
+    private MafMisApplication() {
+    }
+
     public static void main(String[] args) {
         val stopWatch = new StopWatch();
         stopWatch.start();
