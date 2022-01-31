@@ -41,28 +41,28 @@
         https://hub.docker.com/r/adoptopenjdk/openjdk11/tags?page=1&ordering=last_updated&name=jre-11
         -->
         <adoptopenjdk11.tag>jre-11.0.11_9</adoptopenjdk11.tag>
-        <jib-maven-plugin.version>3.1.4</jib-maven-plugin.version>
+        <jib-maven-plugin.version>3.2.0</jib-maven-plugin.version>
         <jib-spring-boot-extension-maven.version>0.1.0</jib-spring-boot-extension-maven.version>
         <maven-pmd-plugin.version>3.15.0</maven-pmd-plugin.version>
         <p3c-pmd.version>2.1.1</p3c-pmd.version>
         <spring-cloud.version>2021.0.0</spring-cloud.version>
         <functionaljava.version>4.8.1</functionaljava.version>
         <spring-content.version>1.0.0.M5</spring-content.version>
-        <spring-boot-admin-starter-server.version>2.5.5</spring-boot-admin-starter-server.version>
-        <spring-boot-admin-starter-client.version>2.5.5</spring-boot-admin-starter-client.version>
+        <spring-boot-admin-starter-server.version>2.6.2</spring-boot-admin-starter-server.version>
+        <spring-boot-admin-starter-client.version>2.6.2</spring-boot-admin-starter-client.version>
         <druid-spring-boot-starter.version>1.2.8</druid-spring-boot-starter.version>
-        <mybatis-plus-boot-starter.version>3.4.3.4</mybatis-plus-boot-starter.version>
+        <mybatis-plus-boot-starter.version>3.5.1</mybatis-plus-boot-starter.version>
         <dynamic-datasource-spring-boot-starter.version>3.5.0</dynamic-datasource-spring-boot-starter.version>
-        <hutool-all.version>5.7.17</hutool-all.version>
+        <hutool-all.version>5.7.20</hutool-all.version>
         <guava.version>31.0.1-jre</guava.version>
         <knife4j.version>3.0.3</knife4j.version>
         <jjwt.version>0.11.2</jjwt.version>
         <java-faker.version>1.0.2</java-faker.version>
         <easyexcel.version>2.2.6</easyexcel.version>
-        <poi.version>5.1.0</poi.version>
+        <poi.version>5.2.0</poi.version>
         <logstash-logback-encoder.version>7.0.1</logstash-logback-encoder.version>
         <minio.version>8.2.2</minio.version>
-        <apache-tika.version>2.1.0</apache-tika.version>
+        <apache-tika.version>2.2.1</apache-tika.version>
     </properties>
 
     <!-- The modules (sometimes called subprojects) to build as a part of this project. -->
