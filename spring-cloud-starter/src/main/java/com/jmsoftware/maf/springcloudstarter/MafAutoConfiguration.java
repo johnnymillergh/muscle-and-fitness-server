@@ -3,6 +3,7 @@ package com.jmsoftware.maf.springcloudstarter;
 import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
 import com.jmsoftware.maf.springcloudstarter.aspect.CommonExceptionControllerAdvice;
 import com.jmsoftware.maf.springcloudstarter.aspect.DatabaseExceptionControllerAdvice;
+import com.jmsoftware.maf.springcloudstarter.aspect.FeignClientLogAspect;
 import com.jmsoftware.maf.springcloudstarter.aspect.WebRequestLogAspect;
 import com.jmsoftware.maf.springcloudstarter.configuration.*;
 import com.jmsoftware.maf.springcloudstarter.controller.CommonController;
@@ -57,7 +58,8 @@ import java.util.List;
         MafConfigurationProperties.class,
         MafProjectProperties.class,
         JwtConfigurationProperties.class,
-        ExcelImportConfigurationProperties.class
+        ExcelImportConfigurationProperties.class,
+        FeignClientConfigurationProperties.class
 })
 @Import({
         WebMvcConfiguration.class,
@@ -75,6 +77,8 @@ import java.util.List;
         WebSocketConfiguration.class
 })
 public class MafAutoConfiguration {
+    private static final String INITIAL_MESSAGE = "Initial bean: '{}'";
+
     @PostConstruct
     public void postConstruct() {
         log.warn("Post construction of '{}'", this.getClass().getSimpleName());
@@ -83,46 +87,49 @@ public class MafAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public CommonExceptionControllerAdvice exceptionControllerAdvice() {
-        log.warn("Initial bean: '{}'", CommonExceptionControllerAdvice.class.getSimpleName());
+        log.warn(INITIAL_MESSAGE, CommonExceptionControllerAdvice.class.getSimpleName());
         return new CommonExceptionControllerAdvice();
     }
 
     @Bean
     @ConditionalOnClass({MyBatisSystemException.class, MybatisPlusException.class, PersistenceException.class})
     public DatabaseExceptionControllerAdvice databaseExceptionControllerAdvice() {
-        log.warn("Initial bean: '{}'", DatabaseExceptionControllerAdvice.class.getSimpleName());
+        log.warn(INITIAL_MESSAGE, DatabaseExceptionControllerAdvice.class.getSimpleName());
         return new DatabaseExceptionControllerAdvice();
     }
 
     @Bean
     @ConditionalOnProperty(value = "maf.configuration.web-request-log-enabled")
     public WebRequestLogAspect webRequestLogAspect() {
-        log.warn("Initial bean: '{}'", WebRequestLogAspect.class.getSimpleName());
+        log.warn(INITIAL_MESSAGE, WebRequestLogAspect.class.getSimpleName());
         return new WebRequestLogAspect();
     }
 
     @Bean
     public RedirectController redirectController() {
-        log.warn("Initial bean: '{}'", RedirectController.class.getSimpleName());
+        log.warn(INITIAL_MESSAGE, RedirectController.class.getSimpleName());
         return new RedirectController();
     }
 
     @Bean
     public AccessLogFilter requestFilter(MafConfigurationProperties mafConfigurationProperties) {
-        log.warn("Initial bean: '{}'", AccessLogFilter.class.getSimpleName());
+        log.warn(INITIAL_MESSAGE, AccessLogFilter.class.getSimpleName());
         return new AccessLogFilter(mafConfigurationProperties);
     }
 
     @Bean
     public IpHelper ipHelper(Environment environment) {
-        log.warn("Initial bean: '{}'", IpHelper.class.getSimpleName());
+        log.warn(INITIAL_MESSAGE, IpHelper.class.getSimpleName());
         return new IpHelper(environment);
     }
 
     @Bean
-    public SpringBootStartupHelper springBootStartupHelper(MafProjectProperties mafProjectProperties,
-                                                           IpHelper ipHelper, ApplicationContext applicationContext) {
-        log.warn("Initial bean: '{}'", SpringBootStartupHelper.class.getSimpleName());
+    public SpringBootStartupHelper springBootStartupHelper(
+            MafProjectProperties mafProjectProperties,
+            IpHelper ipHelper,
+            ApplicationContext applicationContext
+    ) {
+        log.warn(INITIAL_MESSAGE, SpringBootStartupHelper.class.getSimpleName());
         return new SpringBootStartupHelper(mafProjectProperties, ipHelper, applicationContext);
     }
 
@@ -131,33 +138,47 @@ public class MafAutoConfiguration {
     public GlobalErrorController globalErrorController(ErrorAttributes errorAttributes,
                                                        ServerProperties serverProperties,
                                                        List<ErrorViewResolver> errorViewResolvers) {
-        log.warn("Initial bean: '{}'", GlobalErrorController.class.getSimpleName());
+        log.warn(INITIAL_MESSAGE, GlobalErrorController.class.getSimpleName());
         return new GlobalErrorController(errorAttributes, serverProperties, errorViewResolvers);
     }
 
     @Bean
     public HttpApiScanHelper httpApiScanHelper(RequestMappingHandlerMapping requestMappingHandlerMapping) {
-        log.warn("Initial bean: '{}'", HttpApiScanHelper.class.getSimpleName());
+        log.warn(INITIAL_MESSAGE, HttpApiScanHelper.class.getSimpleName());
         return new HttpApiScanHelper(requestMappingHandlerMapping);
     }
 
     @Bean
-    public HttpApiResourceRemoteApiController httpApiResourceRemoteController(MafConfigurationProperties mafConfigurationProperties,
-                                                                              HttpApiScanHelper httpApiScanHelper) {
-        log.warn("Initial bean: '{}'", HttpApiResourceRemoteApiController.class.getSimpleName());
+    public HttpApiResourceRemoteApiController httpApiResourceRemoteController(
+            MafConfigurationProperties mafConfigurationProperties,
+            HttpApiScanHelper httpApiScanHelper
+    ) {
+        log.warn(INITIAL_MESSAGE, HttpApiResourceRemoteApiController.class.getSimpleName());
         return new HttpApiResourceRemoteApiController(mafConfigurationProperties, httpApiScanHelper);
     }
 
     @Bean
     @RefreshScope
     public CommonService commonService(MafProjectProperties mafProjectProperties) {
-        log.warn("Initial bean: '{}'", CommonServiceImpl.class.getSimpleName());
+        log.warn(INITIAL_MESSAGE, CommonServiceImpl.class.getSimpleName());
         return new CommonServiceImpl(mafProjectProperties);
     }
 
     @Bean
     public CommonController commonController(CommonService commonService) {
-        log.warn("Initial bean: '{}'", CommonController.class.getSimpleName());
+        log.warn(INITIAL_MESSAGE, CommonController.class.getSimpleName());
         return new CommonController(commonService);
+    }
+
+    @Bean
+    @ConditionalOnProperty(
+            prefix = "feign.client.config.default",
+            name = {"enabledAopLog"},
+            havingValue = "true",
+            matchIfMissing = true
+    )
+    public FeignClientLogAspect feignClientLogAspect() {
+        log.warn(INITIAL_MESSAGE, FeignClientLogAspect.class.getSimpleName());
+        return new FeignClientLogAspect();
     }
 }
