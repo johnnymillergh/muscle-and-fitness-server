@@ -74,7 +74,8 @@ import java.util.List;
         JacksonConfiguration.class,
         TypeConversionConfiguration.class,
         QuartzConfiguration.class,
-        WebSocketConfiguration.class
+        WebSocketConfiguration.class,
+        OpenApiConfiguration.class
 })
 public class MafAutoConfiguration {
     private static final String INITIAL_MESSAGE = "Initial bean: '{}'";
