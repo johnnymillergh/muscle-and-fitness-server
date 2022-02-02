@@ -1,3 +1,37 @@
+# [0.0.7](https://github.com/johnnymillergh/muscle-and-fitness-server/compare/0.0.6...0.0.7) (2022-02-02)
+
+
+### Build System
+
+* **$Bash:** support log to files ([8e876cf](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/8e876cf89ea403e835709afbc42cae669240d32d))
+
+
+### Features
+
+* **$OpenAPI:** integrate with OpenAPI 3 and Swagger ([f94ac9b](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/f94ac9b729708317a64b759c3474f9e82f7e8503))
+* **$OpenFeign:** create an aspect for Feign log ([0808500](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/0808500841e9c4d2f4b6bbbf53fd8e0204ea5388))
+* **$Pagination:** create functional pagination response composer ([6d4dbbb](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/6d4dbbb1add8a4181d857cf96abc1065b9478345))
+* **$𝛌:** support predicator's retryFunction ([b1c4a06](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/b1c4a06a48c7372322ae6bded20997dc565e055d))
+
+
+### Performance Improvements
+
+* **$POM:** update dependencies ([fd29a5e](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/fd29a5edce26ae51c5a4bf59a2359bae799193eb))
+* **$POM:** update dependencies ([c8f6817](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/c8f6817d259727296d39c3877126d53e782701f0))
+* **$SpringBoot:** update Spring Boot and Spring Cloud ([3ac4ad9](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/3ac4ad9cc5f53226f4b0179bf9fd0aa5c0fbd890))
+
+
+### Reverts
+
+* **$Startup:** each application should have construction method ([57d3fe3](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/57d3fe34224441ceeaa07a87d21d3198a314f5ac))
+
+
+### BREAKING CHANGES
+
+* **$Bash:** support log to files
+
+
+
 # [0.0.6](https://github.com/johnnymillergh/muscle-and-fitness-server/compare/0.0.5...0.0.6) (2021-10-02)
 
 
