@@ -10,7 +10,7 @@
     <parent>
         <groupId>com.jmsoftware.maf</groupId>
         <artifactId>muscle-and-fitness-server</artifactId>
-        <version>0.0.6</version>
+        <version>0.0.7</version>
     </parent>
 
     <!-- Scoped Dependencies Management -->
@@ -87,13 +87,6 @@
             <groupId>de.codecentric</groupId>
             <artifactId>spring-boot-admin-starter-client</artifactId>
             <version>${spring-boot-admin-starter-client.version}</version>
-        </dependency>
-
-        <!-- Swagger: JSON API documentation for Spring Cloud based applications (w/o web UI) -->
-        <dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-micro-spring-boot-starter</artifactId>
-            <version>${knife4j.version}</version>
         </dependency>
 
         <!-- The Apache Commons Object Pooling Library -->

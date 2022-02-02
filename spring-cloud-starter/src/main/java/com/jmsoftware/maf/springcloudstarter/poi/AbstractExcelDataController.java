@@ -11,7 +11,6 @@ import com.google.common.collect.Maps;
 import com.jmsoftware.maf.common.bean.ExcelImportResult;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.springcloudstarter.util.CaseConversionUtil;
-import io.swagger.annotations.ApiOperation;
 import lombok.Cleanup;
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -275,7 +274,6 @@ public abstract class AbstractExcelDataController<T> {
     }
 
     @GetMapping("/stat/excel-template")
-    @ApiOperation(value = "Download template excel file", notes = "Download template excel file")
     public ResponseEntity<StreamingResponseBody> downloadExcelTemplate() {
         val excelWriter = new ExcelWriter(true);
         excelWriter.setHeaderAlias(this.exportingFieldAliasMap);
@@ -297,7 +295,6 @@ public abstract class AbstractExcelDataController<T> {
      * @return the response body bean
      */
     @PostMapping(value = "/upload/excel")
-    @ApiOperation(value = "Upload Excel file", notes = "Upload and import excel data")
     public ResponseBodyBean<ExcelImportResult> upload(@RequestParam("file") MultipartFile multipartFile) {
         this.beforeExecute();
         this.initLocaleContext();

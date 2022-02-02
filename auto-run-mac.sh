@@ -21,6 +21,7 @@ readonly runServices=(
   api-gateway
   spring-boot-admin
   oss-center
+  auth-center
 )
 readonly skipGitPull=true
 readonly skipBuild=false
@@ -92,7 +93,7 @@ function logError() {
 }
 
 #######################################
-# Run JAR.
+# Run JAR with nohup (Background), and log to file.
 # Arguments:
 #   $1 The service name (same as directory) to run.
 #      e.q. The name of service `service-registry` is `service-registry`,
@@ -110,7 +111,7 @@ function runJar() {
   # Run Java program in background but then can't control terminal afterwards
   runJarCommand="java $javaParameter -jar $jarFileRelativePath"
   # shellcheck disable=SC2086
-  nohup $runJarCommand &
+  nohup $runJarCommand > "$1.log" &
   logInfo "[RUN] Executed COMMAND: $runJarCommand"
 }
 

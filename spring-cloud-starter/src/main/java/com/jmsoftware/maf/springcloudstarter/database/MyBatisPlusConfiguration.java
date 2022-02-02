@@ -88,14 +88,14 @@ public class MyBatisPlusConfiguration {
 
     @Bean
     public DynamicDataSourcePropertiesCustomizer dynamicDataSourcePropertiesCustomizer() {
-        return dynamicDataSourceProperties -> {
+        return properties -> {
             val cpuCoreCount = Runtime.getRuntime().availableProcessors();
             val minConnectionPoolSize = cpuCoreCount * 2 + 1;
             val maxConnectionPoolSize = cpuCoreCount * 3;
-            dynamicDataSourceProperties.getDruid()
-                    .setInitialSize(minConnectionPoolSize)
-                    .setMinIdle(minConnectionPoolSize)
-                    .setMaxActive(maxConnectionPoolSize);
+            val druidConfig = properties.getDruid();
+            druidConfig.setInitialSize(minConnectionPoolSize);
+            druidConfig.setMinIdle(minConnectionPoolSize);
+            druidConfig.setMaxActive(maxConnectionPoolSize);
             log.warn("Druid connection pool enhanced by current cpuCoreCount: {}, initial size: {}, min idle: {}" +
                              ", max active: {}",
                      cpuCoreCount, minConnectionPoolSize, minConnectionPoolSize, maxConnectionPoolSize);

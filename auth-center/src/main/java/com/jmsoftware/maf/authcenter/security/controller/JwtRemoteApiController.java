@@ -3,8 +3,6 @@ package com.jmsoftware.maf.authcenter.security.controller;
 import com.jmsoftware.maf.authcenter.security.service.JwtService;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtResponse;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
@@ -23,7 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@Api(tags = {"JWT Remote API"})
 @RequestMapping("/jwt-remote-api")
 public class JwtRemoteApiController {
     private final JwtService jwtService;
@@ -34,7 +31,6 @@ public class JwtRemoteApiController {
      * @return the response body bean
      */
     @GetMapping("/parse")
-    @ApiOperation(value = "Parse JWT", notes = "Parse JWT (Remote API)")
     public ResponseBodyBean<ParseJwtResponse> parse(HttpServletRequest request) {
         return ResponseBodyBean.ofSuccess(this.jwtService.parse(request));
     }

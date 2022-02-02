@@ -1,6 +1,5 @@
 package com.jmsoftware.maf.springcloudstarter.controller;
 
-import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
@@ -26,7 +25,6 @@ import java.util.Optional;
  **/
 @Slf4j
 @RestController
-@Api(tags = {"Global Error Controller"})
 public class GlobalErrorController extends BasicErrorController {
     public GlobalErrorController(ErrorAttributes errorAttributes, ServerProperties serverProperties,
                                  List<ErrorViewResolver> errorViewResolvers) {

@@ -7,8 +7,6 @@ import com.jmsoftware.maf.authcenter.user.service.UserService;
 import com.jmsoftware.maf.common.bean.PageResponseBodyBean;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.authcenter.user.GetUserByLoginTokenResponse;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,24 +28,20 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user-remote-api")
-@Api(tags = {"User Remote API"})
 public class UserRemoteApiController {
     private final UserService userService;
 
     @GetMapping("/users/{loginToken}")
-    @ApiOperation(value = "Get user by login token", notes = "Get user by login token (Remote)")
     public ResponseBodyBean<GetUserByLoginTokenResponse> getUserByLoginToken(@PathVariable String loginToken) {
         return ResponseBodyBean.ofSuccess(this.userService.getUserByLoginToken(loginToken));
     }
 
     @GetMapping("/users")
-    @ApiOperation(value = "Retrieve user page list", notes = "Retrieve user page list")
     public PageResponseBodyBean<User> getUserPageList(@Valid GetUserPageListPayload payload) {
         return this.userService.getUserPageList(payload);
     }
 
     @GetMapping("/users/status")
-    @ApiOperation(value = "Retrieve user status", notes = "Retrieve user status")
     public ResponseBodyBean<String> getUserStatus(@Valid GetUserStatusPayload payload) {
         return ResponseBodyBean.ofSuccess(this.userService.getUserStatus(payload), "Correct enum value");
     }

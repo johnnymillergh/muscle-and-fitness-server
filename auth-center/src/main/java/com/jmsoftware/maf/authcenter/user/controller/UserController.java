@@ -7,8 +7,6 @@ import com.jmsoftware.maf.common.domain.authcenter.user.LoginResponse;
 import com.jmsoftware.maf.common.domain.authcenter.user.SignupPayload;
 import com.jmsoftware.maf.common.domain.authcenter.user.SignupResponse;
 import com.jmsoftware.maf.common.exception.SecurityException;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,24 +27,20 @@ import javax.validation.Valid;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@Api(tags = {"User API"})
 public class UserController {
     private final UserService userService;
 
     @PostMapping("/users/signup")
-    @ApiOperation(value = "Signup", notes = "Save user for signup")
     public ResponseBodyBean<SignupResponse> signup(@Valid @RequestBody SignupPayload payload) {
         return ResponseBodyBean.ofSuccess(this.userService.saveUserForSignup(payload));
     }
 
     @PostMapping("/users/login")
-    @ApiOperation(value = "Login", notes = "Login")
     public ResponseBodyBean<LoginResponse> login(@Valid @RequestBody LoginPayload payload) throws SecurityException {
         return ResponseBodyBean.ofSuccess(this.userService.login(payload));
     }
 
     @PostMapping("/users/logout")
-    @ApiOperation(value = "Logout", notes = "Logout")
     public ResponseBodyBean<Boolean> logout(HttpServletRequest request) throws SecurityException {
         return ResponseBodyBean.ofSuccess(this.userService.logout(request));
     }

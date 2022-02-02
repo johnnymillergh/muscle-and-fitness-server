@@ -6,7 +6,7 @@ name: Java CI with Maven
 on:
   push:
     branches:
-      - 'master'
+      - 'main'
       - 'feature/**'
     paths-ignore:
       - '**.md'
