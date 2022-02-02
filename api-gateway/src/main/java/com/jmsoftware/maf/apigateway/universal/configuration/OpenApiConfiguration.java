@@ -73,7 +73,7 @@ public class OpenApiConfiguration {
                 log.warn("Found discovery client. Service name: {}", serviceName);
                 groups.add(GroupedOpenApi.builder().pathsToMatch("/" + serviceName + "/**").group(serviceName).build());
                 val swaggerUrl = new AbstractSwaggerUiConfigProperties.SwaggerUrl();
-                swaggerUrl.setUrl(serviceName + "/" + SWAGGER_API_URI);
+                swaggerUrl.setUrl(serviceName + SWAGGER_API_URI);
                 swaggerUrl.setName(serviceName);
                 this.swaggerUiConfigProperties.getUrls().add(swaggerUrl);
             }

@@ -1,6 +1,5 @@
 package com.jmsoftware.maf.springcloudstarter.configuration;
 
-import com.jmsoftware.maf.springcloudstarter.property.MafConfigurationProperties;
 import com.jmsoftware.maf.springcloudstarter.property.MafProjectProperties;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
@@ -21,7 +20,6 @@ import org.springframework.context.annotation.Bean;
 @Slf4j
 @RequiredArgsConstructor
 public class OpenApiConfiguration {
-    private final MafConfigurationProperties mafConfigurationProperties;
     private final MafProjectProperties mafProjectProperties;
 
     @Bean
