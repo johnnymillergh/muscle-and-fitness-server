@@ -10,7 +10,7 @@
     <parent>
         <groupId>com.jmsoftware.maf</groupId>
         <artifactId>muscle-and-fitness-server</artifactId>
-        <version>0.0.6</version>
+        <version>0.0.7-SNAPSHOT</version>
     </parent>
 
     <!-- Build Settings -->
@@ -106,7 +106,7 @@
                     <to>
                         <image>docker.io/ijohnnymiller/${project.parent.artifactId}.${project.artifactId}</image>
                         <tags>
-                            <tag>${project.version}</tag>
+                            <tag>${git.commit.id.abbrev}-${project.version}</tag>
                         </tags>
                     </to>
                     <container>
@@ -130,6 +130,31 @@
                             </properties>
                         </pluginExtension>
                     </pluginExtensions>
+                </configuration>
+            </plugin>
+
+            <!-- https://github.com/git-commit-id/git-commit-id-maven-plugin -->
+            <plugin>
+                <groupId>io.github.git-commit-id</groupId>
+                <artifactId>git-commit-id-maven-plugin</artifactId>
+                <version>5.0.0</version>
+                <executions>
+                    <execution>
+                        <id>get-the-git-info</id>
+                        <goals>
+                            <goal>revision</goal>
+                        </goals>
+                        <phase>initialize</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <generateGitPropertiesFile>true</generateGitPropertiesFile>
+                    <generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties</generateGitPropertiesFilename>
+                    <includeOnlyProperties>
+                        <includeOnlyProperty>^git.build.(time|version)$</includeOnlyProperty>
+                        <includeOnlyProperty>^git.commit.id.(abbrev|full)$</includeOnlyProperty>
+                    </includeOnlyProperties>
+                    <commitIdGenerationMode>full</commitIdGenerationMode>
                 </configuration>
             </plugin>
         </plugins>

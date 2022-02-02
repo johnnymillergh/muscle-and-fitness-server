@@ -1,7 +1,7 @@
 package com.jmsoftware.maf.common.bean;
 
+import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.NumberUtil;
-import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.validator.constraints.Range;
@@ -54,10 +54,10 @@ public class PaginationBase {
 
     @JsonIgnore
     public String getOrderByStatement() {
-        if (!StrUtil.isBlank(orderBy)) {
-            return String.format("%s `%s` %s", "ORDER BY", orderBy, orderRule);
+        if (!CharSequenceUtil.isBlank(this.orderBy)) {
+            return String.format("%s `%s` %s", "ORDER BY", this.orderBy, this.orderRule);
         }
-        return orderByStatement;
+        return this.orderByStatement;
     }
 
     /**
@@ -68,8 +68,8 @@ public class PaginationBase {
      * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 6/27/2021 4:37 PM
      */
     public boolean hasNextPage(@NotNull PageResponseBodyBean<?> pageResponseBodyBean) {
-        if (NumberUtil.compare(pageResponseBodyBean.getTotal(), (long) currentPage * pageSize) > 0) {
-            currentPage += 1;
+        if (NumberUtil.compare(pageResponseBodyBean.getTotal(), (long) this.currentPage * this.pageSize) > 0) {
+            this.currentPage += 1;
             return true;
         }
         return false;

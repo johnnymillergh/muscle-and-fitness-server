@@ -4,8 +4,6 @@ import com.jmsoftware.maf.authcenter.permission.entity.GetServicesInfoResponse;
 import com.jmsoftware.maf.authcenter.permission.service.PermissionService;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.exception.BizException;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@Api(tags = {"Permission API"})
 public class PermissionController {
     private final PermissionService permissionService;
 
@@ -35,7 +32,6 @@ public class PermissionController {
      * <a href='https://github.com/spring-cloud/spring-cloud-netflix/issues/990#issuecomment-214943106'>RestTemplate Excample</a>
      */
     @GetMapping("/permissions/services-info")
-    @ApiOperation(value = "Get services info", notes = "Get services info")
     public ResponseBodyBean<GetServicesInfoResponse> getServicesInfo() throws BizException {
         return ResponseBodyBean.ofSuccess(this.permissionService.getServicesInfo());
     }

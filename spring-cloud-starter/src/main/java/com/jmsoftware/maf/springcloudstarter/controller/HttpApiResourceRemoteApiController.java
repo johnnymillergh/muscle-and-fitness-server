@@ -5,8 +5,6 @@ import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.springbootstarter.HttpApiResourcesResponse;
 import com.jmsoftware.maf.springcloudstarter.helper.HttpApiScanHelper;
 import com.jmsoftware.maf.springcloudstarter.property.MafConfigurationProperties;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,13 +22,11 @@ import java.util.Optional;
  **/
 @RestController
 @RequiredArgsConstructor
-@Api(tags = {"HTTP API Resource Remote API"})
 public class HttpApiResourceRemoteApiController {
     private final MafConfigurationProperties mafConfigurationProperties;
     private final HttpApiScanHelper httpApiScanHelper;
 
     @GetMapping("/http-api-resources")
-    @ApiOperation(value = "Get HTTP API resources", notes = "Get HTTP API resources (Remote)")
     public ResponseBodyBean<HttpApiResourcesResponse> getHttpApiResource() {
         val handlerMethodMap = this.httpApiScanHelper.scan(this.mafConfigurationProperties.getIncludedPackageForHttpApiScan());
         HttpApiResourcesResponse response = new HttpApiResourcesResponse();

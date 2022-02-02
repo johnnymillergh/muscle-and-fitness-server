@@ -10,7 +10,7 @@
     <parent>
         <groupId>com.jmsoftware.maf</groupId>
         <artifactId>muscle-and-fitness-server</artifactId>
-        <version>0.0.6</version>
+        <version>0.0.7-SNAPSHOT</version>
     </parent>
 
     <!-- Scoped Dependencies Management -->
@@ -169,17 +169,16 @@
             </exclusions>
         </dependency>
 
-        <!-- Swagger: JSON API documentation for Spring Cloud based applications (w/o web UI) -->
-        <dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-micro-spring-boot-starter</artifactId>
-            <version>${knife4j.version}</version>
-        </dependency>
-
         <!-- The Apache Commons Object Pooling Library -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>${springdoc-openapi-ui.version}</version>
         </dependency>
 
         <!-- Apache POI - Java API To Access Microsoft Format Files -->

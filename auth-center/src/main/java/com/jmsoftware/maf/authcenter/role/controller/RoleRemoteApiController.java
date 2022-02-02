@@ -3,8 +3,6 @@ package com.jmsoftware.maf.authcenter.role.controller;
 import com.jmsoftware.maf.authcenter.role.service.RoleService;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdResponse;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,12 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/role-remote-api")
-@Api(tags = {"Role Remote API"})
 public class RoleRemoteApiController {
     private final RoleService roleService;
 
     @GetMapping("/roles/{userId}")
-    @ApiOperation(value = "Get role list", notes = "Get role list (Remote API)")
     public ResponseBodyBean<GetRoleListByUserIdResponse> getRoleList(@PathVariable Long userId) {
         return ResponseBodyBean.ofSuccess(this.roleService.getRoleList(userId));
     }

@@ -8,7 +8,7 @@ server:
 
 spring:
   profiles:
-    active: @env@
+    active: @environment@
   mvc:
     throw-exception-if-no-handler-found: true
   jackson:
@@ -94,9 +94,10 @@ maf:
         - "/actuator/**"
         - "/*/druid/**"
         - "/swagger-resources/**"
-        - "/v2/api-docs/**"
-        - "/*/v2/api-docs/**"
+        - "/v3/api-docs/**"
+        - "/*/v3/api-docs/**"
         - "/webjars/**"
         - "/*/webjars/**"
         - "/doc.html"
         - "/oss-center/**"
+        - "/swagger-ui.html"
