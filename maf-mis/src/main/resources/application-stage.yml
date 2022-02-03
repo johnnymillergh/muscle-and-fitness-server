@@ -36,7 +36,3 @@ redis:
     - host: maf-redis-slave-1
       port: 6379
       password: maf@redis
-
-maf:
-  configuration:
-    swagger-enabled: false

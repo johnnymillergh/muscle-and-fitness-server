@@ -36,7 +36,3 @@ redis:
     - host: localhost
       port: 6380
       password: maf@redis
-
-maf:
-  configuration:
-    swagger-enabled: true

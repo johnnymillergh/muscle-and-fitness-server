@@ -14,10 +14,6 @@ redis:
       port: 6380
       password: maf@redis
 
-maf:
-  configuration:
-    swagger-enabled: true
-
 minio:
   endpoint: http://localhost
   port: 9900

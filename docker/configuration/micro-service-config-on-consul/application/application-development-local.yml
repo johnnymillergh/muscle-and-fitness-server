@@ -1,3 +1,8 @@
+# https://docs.spring.io/spring-cloud-consul/docs/current/reference/html/index.html#spring-cloud-consul-config
+# 1. Multiple PropertySource instances are created based on the application’s name and the active profiles
+# that mimics the Spring Cloud Config order of resolving properties.
+# 2. Properties in the config/application folder are applicable to all applications using consul for configuration.
+
 spring:
   zipkin:
     base-url: http://localhost:9411
@@ -43,7 +48,3 @@ minio:
   access-key: maf_minio_root_user
   secret-key: jm@minio
   bucket-name: maf
-
-maf:
-  configuration:
-    swagger-enabled: true
