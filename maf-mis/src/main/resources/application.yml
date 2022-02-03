@@ -112,6 +112,8 @@ spring:
             useProperties: false
 
 feign:
+  circuitbreaker:
+    enabled: true
   httpclient:
     enabled: false
   okhttp:
@@ -127,7 +129,6 @@ feign:
       enabled: true
     response:
       enabled: true
-      useGzipDecoder: true
 
 management:
   endpoints:
