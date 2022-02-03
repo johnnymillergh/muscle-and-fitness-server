@@ -37,14 +37,6 @@ spring:
         prefer-ip-address: true
         ip-address: ${spring.cloud.client.ip-address}
         health-check-critical-timeout: 15s
-  mvc:
-    throw-exception-if-no-handler-found: true
-  jackson:
-    date-format: yyyy-MM-dd HH:mm:ss
-    time-zone: Asia/Hong_Kong
-  sleuth:
-    sampler:
-      probability: 1.0
   servlet:
     multipart:
       # `location` specifies the directory where uploaded files will be stored. When not specified,
@@ -57,119 +49,9 @@ spring:
       # `file-size-threshold` specifies the size threshold after which files will be written to disk.
       # The default is 0. We set it as 0 too.
       file-size-threshold: 0
-  datasource:
-    type: com.alibaba.druid.pool.DruidDataSource
-    dynamic:
-      primary: master_1
-      druid:
-        # connection pool size will be determined by DruidDataSourceCreatorPostProcessor.java
-        max-wait: 60000
-        min-evictable-idle-time-millis: 600000
-        max-evictable-idle-time-millis: 900000
-        validation-query: SELECT 1
-        test-while-idle: true
-        test-on-borrow: false
-        test-on-return: false
-        pool-prepared-statements: true
-        max-pool-prepared-statement-per-connection-size: 20
-        keep-alive: true
-    druid:
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      filters: stat,wall,log4j2
-      filter:
-        stat:
-          enabled: true
-          db-type: mysql
-          log-slow-sql: true
-          slow-sql-millis: 2000
-        slf4j:
-          enabled: true
-          statement-log-error-enabled: true
-          statement-create-after-log-enabled: false
-          statement-close-after-log-enabled: false
-          result-set-open-after-log-enabled: false
-          result-set-close-after-log-enabled: false
-      web-stat-filter:
-        enabled: true
-        url-pattern: /*
-        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
-        session-stat-enable: true
-        session-stat-max-count: 1000
-      stat-view-servlet:
-        enabled: true
-        url-pattern: /druid/*
-        reset-enable: false
-        login-username: root
-        login-password: maf_druid_password
-        allow:
-  redis:
-    database: 0
-    timeout: 10000ms
-    client-type: LETTUCE
-    lettuce:
-      pool:
-        max-active: 20
-        max-idle: 10
-        max-wait: -1ms
-        min-idle: 0
-  quartz:
-    job-store-type: JDBC
-    jdbc:
-      initialize-schema: NEVER
-    properties:
-      org:
-        quartz:
-          scheduler:
-            instanceId: AUTO
-          jobStore:
-            tablePrefix: QRTZ_
-            isClustered: true
-            clusterCheckinInterval: 3000
-            useProperties: false
-
-feign:
-  circuitbreaker:
-    enabled: true
-  httpclient:
-    enabled: false
-  okhttp:
-    enabled: true
-  client:
-    config:
-      default:
-        connectTimeout: 5000
-        readTimeout: 10000
-        loggerLevel: full
-  compression:
-    request:
-      enabled: true
-    response:
-      enabled: true
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-  endpoint:
-    health:
-      show-details: ALWAYS
-
-mybatis-plus:
-  global-config:
-    db-config:
-      logic-delete-field: deleted
-  configuration:
-    map-underscore-to-camel-case: true
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-  # mapper-locations should start with `classpath*` prefix
-  # when project is based on Maven multi-module to load XML mapper in different jar
-  mapper-locations: classpath*:/mapper/**/*Mapper.xml
 
 logging:
   config: classpath:logback-configuration/logback-${spring.profiles.active}.xml
-  level:
-    org.springframework.boot.context.config: TRACE
 
 maf:
   project-properties:
