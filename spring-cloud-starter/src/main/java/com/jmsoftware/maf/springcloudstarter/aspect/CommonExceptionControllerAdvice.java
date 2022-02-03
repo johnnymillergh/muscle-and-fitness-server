@@ -1,5 +1,6 @@
 package com.jmsoftware.maf.springcloudstarter.aspect;
 
+import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
@@ -238,7 +239,7 @@ public class CommonExceptionControllerAdvice {
      * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 12/24/2020 11:22 AM
      */
     private String removeLineSeparator(String source) {
-        if (StrUtil.isBlank(source)) {
+        if (CharSequenceUtil.isBlank(source)) {
             return "source is blank";
         }
         return source.replaceAll(System.lineSeparator(), " ");
