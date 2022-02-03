@@ -7,8 +7,36 @@ server:
     context-path:
 
 spring:
+  application:
+    name: @project.parent.artifactId@
   profiles:
     active: @environment@
+  config:
+    import: "consul:${spring.cloud.consul.host}:${spring.cloud.consul.port}"
+  cloud:
+    # https://docs.spring.io/spring-cloud-consul/docs/current/reference/html/index.html#spring-cloud-consul-config
+    consul:
+      host: "should-be-passed-by-java-opts"
+      port: 8500
+      config:
+        # `default-context` should not be modified, keeps "application" for common configuration.
+        # Properties in the config/application folder are applicable to all applications using consul for configuration.
+        profile-separator: "::"
+        format: YAML
+        data-key: "data"
+        watch:
+          enabled: true
+          delay: 1000
+        prefixes:
+          - config
+      discovery:
+        register: true
+        instance-id: ${spring.application.name}-${spring.cloud.client.hostname}-${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
+        service-name: ${spring.application.name}
+        port: ${server.port}
+        prefer-ip-address: true
+        ip-address: ${spring.cloud.client.ip-address}
+        health-check-critical-timeout: 15s
   mvc:
     throw-exception-if-no-handler-found: true
   jackson:
@@ -29,16 +57,6 @@ spring:
       # `file-size-threshold` specifies the size threshold after which files will be written to disk.
       # The default is 0. We set it as 0 too.
       file-size-threshold: 0
-  cloud:
-    consul:
-      discovery:
-        register: true
-        instance-id: ${spring.application.name}-${spring.cloud.client.hostname}-${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
-        service-name: ${spring.application.name}
-        port: ${server.port}
-        prefer-ip-address: true
-        ip-address: ${spring.cloud.client.ip-address}
-        health-check-critical-timeout: 15s
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     dynamic:
@@ -148,6 +166,8 @@ mybatis-plus:
 
 logging:
   config: classpath:logback-configuration/logback-${spring.profiles.active}.xml
+  level:
+    org.springframework.boot.context.config: TRACE
 
 maf:
   project-properties:

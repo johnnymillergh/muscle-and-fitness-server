@@ -1,42 +1,49 @@
 spring:
   zipkin:
-    base-url: http://maf-zipkin:9411
+    base-url: http://localhost:9411
   devtools:
-    add-properties: false
+    add-properties: true
   datasource:
     dynamic:
       datasource:
         master_1:
-          url: jdbc:mysql://maf-mysql-server-source:3306/muscle_and_fitness?useSSL=true&useUnicode=true
+          url: jdbc:mysql://localhost:3306/muscle_and_fitness?useSSL=true&useUnicode=true
           username: maf_mysql_rw
           password: maf@mysql
           driver-class-name: com.mysql.cj.jdbc.Driver
         slave_1:
-          url: jdbc:mysql://maf-mysql-server-replica-1:3306/muscle_and_fitness?useSSL=true&useUnicode=true
+          url: jdbc:mysql://localhost:3307/muscle_and_fitness?useSSL=true&useUnicode=true
           username: maf_mysql_r
           password: maf@mysql
           driver-class-name: com.mysql.cj.jdbc.Driver
         quartz:
-          url: jdbc:mysql://maf-mysql-server-source:3306/QUARTZ_DB?useSSL=true&useUnicode=true
+          url: jdbc:mysql://localhost:3306/QUARTZ_DB?useSSL=true&useUnicode=true
           username: maf_mysql_rw
           password: maf@mysql
           driver-class-name: com.mysql.cj.jdbc.Driver
   rabbitmq:
-    host: maf-rabbitmq
+    host: localhost
     port: 5672
     username: maf_rabbitmq_su
     password: maf@rabbitmq
 
 redis:
   master:
-    host: maf-redis-master
+    host: localhost
     port: 6379
     password: maf@redis
   slaves:
-    - host: maf-redis-slave-1
-      port: 6379
+    - host: localhost
+      port: 6380
       password: maf@redis
+
+minio:
+  endpoint: http://localhost
+  port: 9000
+  access-key: maf_minio_root_user
+  secret-key: jm@minio
+  bucket-name: maf
 
 maf:
   configuration:
-    swagger-enabled: false
+    swagger-enabled: true

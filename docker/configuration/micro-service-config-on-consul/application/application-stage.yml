@@ -37,6 +37,13 @@ redis:
       port: 6379
       password: maf@redis
 
+minio:
+  endpoint: http://maf-minio
+  port: 9000
+  access-key: maf_minio_root_user
+  secret-key: jm@minio
+  bucket-name: maf
+
 maf:
   configuration:
     swagger-enabled: false
