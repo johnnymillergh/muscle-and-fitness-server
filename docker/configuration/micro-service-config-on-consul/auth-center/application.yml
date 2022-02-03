@@ -10,3 +10,7 @@ maf:
         - "auth-center"
     excel:
       maximum-row-count: 3000
+
+logging:
+  level:
+    org.springframework.boot.context.config: TRACE

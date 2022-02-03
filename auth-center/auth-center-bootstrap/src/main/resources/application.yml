@@ -12,7 +12,7 @@ spring:
   profiles:
     active: @environment@
   config:
-    import: "consul:${spring.cloud.consul.host}:${spring.cloud.consul.port}"
+    import: consul:${spring.cloud.consul.host}:${spring.cloud.consul.port}
   cloud:
     # https://docs.spring.io/spring-cloud-consul/docs/current/reference/html/index.html#spring-cloud-consul-config
     consul:
