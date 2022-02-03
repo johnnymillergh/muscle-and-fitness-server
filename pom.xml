@@ -23,7 +23,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Project properties -->
-        <project.baseArtifactId>${project.artifactId}</project.baseArtifactId>
+        <project.baseArtifactId>muscle-and-fitness-server</project.baseArtifactId>
 
         <!-- Infrastructure Service. Port range: [8760, n]. -->
         <oss-center.port>8760</oss-center.port>
