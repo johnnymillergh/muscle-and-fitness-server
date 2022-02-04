@@ -13,7 +13,7 @@ spring:
         ignored-services:
           - "consul"
   application:
-    name: @project.parent.artifactId@
+    name: @project.artifactId@
   profiles:
     active: @environment@
   config:
