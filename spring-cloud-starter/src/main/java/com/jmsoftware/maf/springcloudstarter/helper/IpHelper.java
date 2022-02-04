@@ -45,7 +45,12 @@ public class IpHelper implements ApplicationListener<WebServerInitializedEvent> 
             return this.getInternetIp();
         }
         // An API provided by https://whatismyipaddress.com/api
-        return HttpUtil.get("https://ipv4bot.whatismyipaddress.com/").trim();
+        try {
+            return HttpUtil.get("https://ipv4bot.whatismyipaddress.com/").trim();
+        } catch (Exception e) {
+            log.warn("Failed to get public IP address, fallback to intranet IP address. Exception: {}", e.getMessage());
+            return this.getInternetIp();
+        }
     }
 
     /**

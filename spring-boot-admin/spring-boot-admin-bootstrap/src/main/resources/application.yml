@@ -1,0 +1,80 @@
+server:
+  port: @spring-boot-admin.port@
+  tomcat:
+    uri-encoding: @project.build.sourceEncoding@
+  shutdown: GRACEFUL
+  servlet:
+    context-path:
+
+spring:
+  boot:
+    admin:
+      discovery:
+        ignored-services:
+          - "consul"
+  application:
+    name: @project.parent.artifactId@
+  profiles:
+    active: @environment@
+  config:
+    import: consul:${spring.cloud.consul.host}:${spring.cloud.consul.port}
+  cloud:
+    # https://docs.spring.io/spring-cloud-consul/docs/current/reference/html/index.html#spring-cloud-consul-config
+    consul:
+      host: "should-be-passed-by-java-opts"
+      port: 8500
+      config:
+        # `default-context` should not be modified, keeps "application" for common configuration.
+        # Properties in the config/application folder are applicable to all applications using consul for configuration.
+        profile-separator: "::"
+        format: YAML
+        data-key: "data"
+        watch:
+          enabled: true
+          delay: 1000
+        prefixes:
+          - config
+      discovery:
+        register: true
+        instance-id: ${spring.application.name}-${spring.cloud.client.hostname}-${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
+        service-name: ${spring.application.name}
+        port: ${server.port}
+        prefer-ip-address: true
+        ip-address: ${spring.cloud.client.ip-address}
+        health-check-critical-timeout: 15s
+
+logging:
+  config: classpath:logback-configuration/logback-${spring.profiles.active}.xml
+
+maf:
+  project-properties:
+    base-package: @project.groupId@
+    context-path: ${server.servlet.context-path}
+    group-id: @project.groupId@
+    project-parent-artifact-id: @project.parent.artifactId@
+    project-artifact-id: @project.artifactId@
+    version: @project.version@
+    description: @project.description@
+    jdk-version: @java.version@
+    environment: ${spring.profiles.active}
+    url: @project.url@
+    inception-year: @inceptionYear@
+    organization-name: @project.organization.name@
+    organization-url: @project.organization.url@
+    issue-management-system: @project.issueManagement.system@
+    issue-management-url: @project.issueManagement.url@
+    developer-name: @developerName@
+    developer-email: @developerEmail@
+    developer-url: @developerUrl@
+  configuration:
+    ignored-url:
+      pattern:
+        - "/static/**"
+        - "/actuator/**"
+        - "/druid/**"
+        - "/swagger-resources/**"
+        - "/v2/api-docs/**"
+        - "/*/v2/api-docs/**"
+        - "/webjars/**"
+        - "/doc.html"
+    included-package-for-http-api-scan: ${maf.project-properties.base-package}

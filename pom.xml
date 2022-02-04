@@ -7,7 +7,7 @@
     <!-- Project Basics -->
     <groupId>com.jmsoftware.maf</groupId>
     <artifactId>muscle-and-fitness-server</artifactId>
-    <version>0.0.7</version>
+    <version>0.0.8-SNAPSHOT</version>
     <name>Muscle and Fitness Server</name>
     <description>Muscle and Fitness Server (M&amp;F, maf), a Spring Cloud microservice based, back-end server for
         managing data of muscle and fitness.
@@ -21,6 +21,9 @@
 
         <!-- Maven properties -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- Project properties -->
+        <project.baseArtifactId>muscle-and-fitness-server</project.baseArtifactId>
 
         <!-- Infrastructure Service. Port range: [8760, n]. -->
         <oss-center.port>8760</oss-center.port>
@@ -194,23 +197,6 @@
                     <exclude>**/application*.yml</exclude>
                     <exclude>**/application*.yaml</exclude>
                     <exclude>**/application*.properties</exclude>
-                </excludes>
-            </resource>
-            <resource>
-                <filtering>true</filtering>
-                <directory>${basedir}/src/main/resources</directory>
-                <includes>
-                    <include>**/bootstrap*.yml</include>
-                    <include>**/bootstrap*.yaml</include>
-                    <include>**/bootstrap*.properties</include>
-                </includes>
-            </resource>
-            <resource>
-                <directory>${basedir}/src/main/resources</directory>
-                <excludes>
-                    <exclude>**/bootstrap*.yml</exclude>
-                    <exclude>**/bootstrap*.yaml</exclude>
-                    <exclude>**/bootstrap*.properties</exclude>
                 </excludes>
             </resource>
         </resources>

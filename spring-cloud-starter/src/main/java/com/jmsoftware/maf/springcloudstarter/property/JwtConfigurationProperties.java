@@ -33,7 +33,7 @@ public class JwtConfigurationProperties {
     @Setter(AccessLevel.NONE)
     private String jwtRedisKeyPrefix;
     /**
-     * JWT signing key. Pattern: [project-parent-artifact-id]@[version]
+     * JWT signing key. Pattern: [groupId]:[projectParentArtifactId]@[version]
      */
     @Setter(AccessLevel.NONE)
     private String signingKey;
@@ -47,9 +47,13 @@ public class JwtConfigurationProperties {
      */
     @NotNull
     private Long ttlForRememberMe = 7 * 86400000L;
+
     public JwtConfigurationProperties(MafProjectProperties mafProjectProperties) {
-        this.signingKey = String.format("%s:%s", mafProjectProperties.getGroupId(),
-                                        mafProjectProperties.getProjectParentArtifactId());
+        this.signingKey = String.format(
+                "%s:%s@%s", mafProjectProperties.getGroupId(),
+                mafProjectProperties.getProjectParentArtifactId(),
+                mafProjectProperties.getVersion()
+        );
         log.info("Initiated JWT signing key: {}. The specified key byte array is {} bits", this.signingKey,
                  this.signingKey.getBytes(StandardCharsets.UTF_8).length * 8);
         this.jwtRedisKeyPrefix = String.format("%s:jwt:", mafProjectProperties.getProjectParentArtifactId());

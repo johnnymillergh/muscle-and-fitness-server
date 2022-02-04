@@ -17,6 +17,7 @@ import com.jmsoftware.maf.springcloudstarter.helper.IpHelper;
 import com.jmsoftware.maf.springcloudstarter.helper.SpringBootStartupHelper;
 import com.jmsoftware.maf.springcloudstarter.minio.MinioConfiguration;
 import com.jmsoftware.maf.springcloudstarter.poi.ExcelImportConfigurationProperties;
+import com.jmsoftware.maf.springcloudstarter.property.FeignClientConfigurationProperties;
 import com.jmsoftware.maf.springcloudstarter.property.JwtConfigurationProperties;
 import com.jmsoftware.maf.springcloudstarter.property.MafConfigurationProperties;
 import com.jmsoftware.maf.springcloudstarter.property.MafProjectProperties;
@@ -75,7 +76,8 @@ import java.util.List;
         TypeConversionConfiguration.class,
         QuartzConfiguration.class,
         WebSocketConfiguration.class,
-        OpenApiConfiguration.class
+        OpenApiConfiguration.class,
+        OpenFeignConfiguration.class
 })
 public class MafAutoConfiguration {
     private static final String INITIAL_MESSAGE = "Initial bean: '{}'";

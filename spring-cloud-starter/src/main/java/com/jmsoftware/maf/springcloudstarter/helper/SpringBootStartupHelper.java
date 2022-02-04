@@ -9,6 +9,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.util.StopWatch;
 
 import java.time.Instant;
+import java.time.ZoneId;
 import java.util.TimeZone;
 
 /**
@@ -41,7 +42,7 @@ public class SpringBootStartupHelper implements DisposableBean {
                 this.mafProjectProperties.getProjectArtifactId(), this.mafProjectProperties.getVersion(),
                 this.mafProjectProperties.getEnvironment(),
                 stopWatch.getTotalTimeSeconds(), stopWatch.getTotalTimeMillis(),
-                Instant.now(), TimeZone.getDefault().getDisplayName(),
+                Instant.now().atZone(ZoneId.systemDefault()), ZoneId.systemDefault(),
                 this.ipHelper.getServerPort(), this.mafProjectProperties.getContextPath(),
                 this.ipHelper.getPublicIp(), this.ipHelper.getServerPort(), this.mafProjectProperties.getContextPath()
         );

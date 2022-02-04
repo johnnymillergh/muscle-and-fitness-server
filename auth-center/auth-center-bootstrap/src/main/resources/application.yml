@@ -1,0 +1,90 @@
+server:
+  port: @auth-center.port@
+  tomcat:
+    uri-encoding: @project.build.sourceEncoding@
+  shutdown: GRACEFUL
+  servlet:
+    context-path:
+
+spring:
+  application:
+    name: @project.parent.artifactId@
+  profiles:
+    active: @environment@
+  config:
+    import: consul:${spring.cloud.consul.host}:${spring.cloud.consul.port}
+  cloud:
+    # https://docs.spring.io/spring-cloud-consul/docs/current/reference/html/index.html#spring-cloud-consul-config
+    consul:
+      host: "should-be-passed-by-java-opts"
+      port: 8500
+      config:
+        # `default-context` should not be modified, keeps "application" for common configuration.
+        # Properties in the config/application folder are applicable to all applications using consul for configuration.
+        profile-separator: "::"
+        format: YAML
+        data-key: "data"
+        watch:
+          enabled: true
+          delay: 1000
+        prefixes:
+          - config
+      discovery:
+        register: true
+        instance-id: ${spring.application.name}-${spring.cloud.client.hostname}-${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
+        service-name: ${spring.application.name}
+        port: ${server.port}
+        prefer-ip-address: true
+        ip-address: ${spring.cloud.client.ip-address}
+        health-check-critical-timeout: 15s
+  servlet:
+    multipart:
+      # `location` specifies the directory where uploaded files will be stored. When not specified,
+      # a temporary directory will be used. ATTENTION: it may differ due to OS.
+      location: @project.parent.artifactId@/${spring.application.name}/temprary-file
+      # `max-file-size` specifies the maximum size permitted for uploaded files. The default is 1MB. We set it as 64 MB.
+      max-file-size: 64MB
+      # `max-request-size` specifies the maximum size allowed for multipart/form-data requests. The default is 10MB.
+      max-request-size: 70MB
+      # `file-size-threshold` specifies the size threshold after which files will be written to disk.
+      # The default is 0. We set it as 0 too.
+      file-size-threshold: 0
+
+logging:
+  config: classpath:logback-configuration/logback-${spring.profiles.active}.xml
+
+maf:
+  project-properties:
+    base-package: @project.groupId@
+    context-path: ${server.servlet.context-path}
+    group-id: @project.groupId@
+    project-parent-artifact-id: @project.parent.artifactId@
+    project-artifact-id: @project.artifactId@
+    version: @project.version@
+    description: @project.description@
+    jdk-version: @java.version@
+    environment: ${spring.profiles.active}
+    url: @project.url@
+    inception-year: @inceptionYear@
+    organization-name: @project.organization.name@
+    organization-url: @project.organization.url@
+    issue-management-system: @project.issueManagement.system@
+    issue-management-url: @project.issueManagement.url@
+    developer-name: @developerName@
+    developer-email: @developerEmail@
+    developer-url: @developerUrl@
+  configuration:
+    ignored-url:
+      pattern:
+        - "/static/**"
+        - "/actuator/**"
+        - "/druid/**"
+        - "/swagger-resources/**"
+        - "/v2/api-docs/**"
+        - "/*/v2/api-docs/**"
+        - "/webjars/**"
+        - "/doc.html"
+    included-package-for-http-api-scan: ${maf.project-properties.base-package}
+    jwt:
+      # an hour
+      ttl: 3600000

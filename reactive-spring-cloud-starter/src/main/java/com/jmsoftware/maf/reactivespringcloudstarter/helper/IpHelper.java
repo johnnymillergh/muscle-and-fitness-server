@@ -1,19 +1,17 @@
 package com.jmsoftware.maf.reactivespringcloudstarter.helper;
 
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.http.HttpUtil;
 import com.jmsoftware.maf.reactivespringcloudstarter.property.MafProjectProperties;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
 import org.springframework.boot.web.context.WebServerInitializedEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.core.env.Environment;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.URL;
+import java.net.*;
 import java.util.Enumeration;
 
 /**
@@ -29,7 +27,8 @@ import java.util.Enumeration;
 @RequiredArgsConstructor
 public class IpHelper implements ApplicationListener<WebServerInitializedEvent> {
     private static final String DEVELOPMENT_ENVIRONMENT = "development";
-    private final MafProjectProperties mafProjectProperties;
+    @Getter(AccessLevel.NONE)
+    private final Environment environment;
     private int serverPort;
 
     @Override
@@ -38,40 +37,23 @@ public class IpHelper implements ApplicationListener<WebServerInitializedEvent> 
     }
 
     /**
-     * <p>Get base URL of backend server.</p>
-     * <p>The result will be like:</p>
-     * <ol>
-     * <li>http://[serverIp]:[serverPort]/[contextPath]</li>
-     * <li>https://[serverIp]/[contextPath]</li>
-     * </ol>
-     *
-     * @return base URL
-     * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
-     * @date 2019-05-03 16:05
-     */
-    public String getBaseUrl() {
-        return "http://" + this.getPublicIp() + ":" + this.serverPort + this.mafProjectProperties.getContextPath();
-    }
-
-    /**
      * Find public IP address.
      *
      * @return public IP
      */
     public String getPublicIp() {
-        if (this.mafProjectProperties.getEnvironment().contains(DEVELOPMENT_ENVIRONMENT)) {
+        val jointProfiles = String.join(",", this.environment.getActiveProfiles());
+        if (StrUtil.containsIgnoreCase(jointProfiles, DEVELOPMENT_ENVIRONMENT)) {
+            log.debug("Current active profiles for environment contains: {}", DEVELOPMENT_ENVIRONMENT);
             return this.getInternetIp();
         }
+        // An API provided by https://whatismyipaddress.com/api
         try {
-            // An API provided by https://whatismyipaddress.com/api
-            val url = new URL("https://ipv4bot.whatismyipaddress.com/");
-            val sc = new BufferedReader(new InputStreamReader(url.openStream()));
-            // Read system IP Address
-            return sc.readLine().trim();
+            return HttpUtil.get("https://ipv4bot.whatismyipaddress.com/").trim();
         } catch (Exception e) {
-            log.error("Cannot execute properly to get IP address from https://whatismyipaddress.com/api", e);
+            log.warn("Failed to get public IP address, fallback to intranet IP address. Exception: {}", e.getMessage());
+            return this.getInternetIp();
         }
-        return this.getInternetIp();
     }
 
     /**
@@ -79,27 +61,24 @@ public class IpHelper implements ApplicationListener<WebServerInitializedEvent> 
      *
      * @return internet IP
      */
+    @SneakyThrows({SocketException.class})
     private String getInternetIp() {
         val intranetIp = this.getIntranetIp();
-        try {
-            val networks = NetworkInterface.getNetworkInterfaces();
-            InetAddress ip;
-            Enumeration<InetAddress> addresses;
-            while (networks.hasMoreElements()) {
-                addresses = networks.nextElement().getInetAddresses();
-                while (addresses.hasMoreElements()) {
-                    ip = addresses.nextElement();
-                    if (ip instanceof Inet4Address
+        val networks = NetworkInterface.getNetworkInterfaces();
+        InetAddress ip;
+        Enumeration<InetAddress> addresses;
+        while (networks.hasMoreElements()) {
+            addresses = networks.nextElement().getInetAddresses();
+            while (addresses.hasMoreElements()) {
+                ip = addresses.nextElement();
+                if (ip instanceof Inet4Address
                         && ip.isSiteLocalAddress()
                         && !ip.getHostAddress().equals(intranetIp)) {
-                        return ip.getHostAddress();
-                    }
+                    return ip.getHostAddress();
                 }
             }
-            return intranetIp;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
+        return intranetIp;
     }
 
     /**
@@ -107,11 +86,8 @@ public class IpHelper implements ApplicationListener<WebServerInitializedEvent> 
      *
      * @return intranet IP
      */
+    @SneakyThrows({UnknownHostException.class})
     private String getIntranetIp() {
-        try {
-            return InetAddress.getLocalHost().getHostAddress();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return InetAddress.getLocalHost().getHostAddress();
     }
 }

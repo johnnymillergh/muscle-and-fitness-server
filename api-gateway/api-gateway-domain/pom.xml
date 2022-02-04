@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Sub-module Basics -->
+    <artifactId>api-gateway-domain</artifactId>
+    <name>Muscle and Fitness Server :: API Gateway - Domain</name>
+    <description>API Gateway for Muscle and Fitness microservices.</description>
+    <parent>
+        <groupId>com.jmsoftware.maf</groupId>
+        <artifactId>api-gateway</artifactId>
+        <version>0.0.8-SNAPSHOT</version>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.jmsoftware.maf</groupId>
+            <artifactId>api-gateway-infra</artifactId>
+        </dependency>
+    </dependencies>
+</project>
