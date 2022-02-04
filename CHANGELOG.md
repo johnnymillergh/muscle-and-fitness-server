@@ -1,3 +1,31 @@
+# [0.0.8](https://github.com/johnnymillergh/muscle-and-fitness-server/compare/0.0.7...0.0.8) (2022-02-04)
+
+
+### Performance Improvements
+
+* **$api-gateway:** DDD modularized microservice ([ee45dab](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/ee45dab9e3e0f236db27cccb295ecce7cd041cc4))
+* **$auth-center:** DDD modularized microservice ([f883d81](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/f883d8127a41546976402187f3ec635b18e9f2c7))
+* **$Consul:** move more common configurations to `application` config ([c207cc5](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/c207cc5aa4851589f2e708b08b77af5fd2511567))
+* **$Consul:** reduce duplicate application configuration YAML files ([a9c3237](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/a9c3237cfa7943d326ce2de2a29d3211619a3e86))
+* **$Consul:** update Consul to 1.11.2 ([92abee4](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/92abee45e79d6a2897759124cebc4ffb8946afef))
+* **$ELK:** update version to 7.17.0 ([6cfafd4](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/6cfafd47f6c7d4bb2efffde44b26b717dd862ff1))
+* **$Logback:** universal logback configuration in starter ([91c0fe5](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/91c0fe557ed3bb72f578f5c5a0a113e7d74c54af))
+* **$maf-mis:** DDD modularized microservice ([4a827f4](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/4a827f4eac11e847fa749fc2d08662f82fd1a5aa))
+* **$OpenAPI:** disable OpenAPI in `stage` and `production` ([b03377d](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/b03377d1c3d1040a4ecfdb254685ba64058bc43f))
+* **$OpenFeign:** add support for Spring Cloud CircuitBreaker Resilience4J ([9568372](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/9568372a6381f8c18fd796622cb4996e81d512a0))
+* **$oss-center:** DDD modularized microservice ([3f1b72b](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/3f1b72b3b857e03401774ad910731568152ec72f))
+* **$POM:** remove deprecated dependency `spring-cloud-starter-bootstrap` ([772cfbb](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/772cfbb558d27ecbd6ea0c096695d2168d288b07))
+* **$reactive-starter:** remove deprecated dependency `spring-cloud-starter-bootstrap` ([ba5d823](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/ba5d8237c1d4a798984d97e10e19fb56f7aa04da))
+* **$spring-boot-admin:** DDD modularized microservice ([f30a420](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/f30a42003e3f296c5c39fe398fbcd0407abc332c))
+
+
+### BREAKING CHANGES
+
+* **$reactive-starter:** `spring-cloud-starter-bootstrap` has been removed
+* **$Logback:** delete customized field `applicationName`
+
+
+
 # [0.0.7](https://github.com/johnnymillergh/muscle-and-fitness-server/compare/0.0.6...0.0.7) (2022-02-02)
 
 
