@@ -1,3 +1,12 @@
+# [0.0.8.1](https://github.com/johnnymillergh/muscle-and-fitness-server/compare/0.0.8...0.0.8.1) (2022-02-04)
+
+
+### Bug Fixes
+
+* **$ELK:** correct Elasticsearch index ([0a0df36](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/0a0df3688a44fa73b50ef04df812fd5983accdf2))
+
+
+
 # [0.0.8](https://github.com/johnnymillergh/muscle-and-fitness-server/compare/0.0.7...0.0.8) (2022-02-04)
 
 
