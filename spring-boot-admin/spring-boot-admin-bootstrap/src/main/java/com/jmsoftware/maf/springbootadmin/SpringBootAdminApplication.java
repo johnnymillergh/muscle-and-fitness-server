@@ -20,6 +20,7 @@ import org.springframework.util.StopWatch;
 @EnableAdminServer
 @EnableDiscoveryClient
 @SpringBootApplication
+@SuppressWarnings("scwjava_Createprivateconstructorforutilityclassallfieldsmethodsarestatic")
 public class SpringBootAdminApplication {
     public static void main(String[] args) {
         val stopWatch = new StopWatch();

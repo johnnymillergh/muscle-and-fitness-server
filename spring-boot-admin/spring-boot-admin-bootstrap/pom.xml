@@ -4,13 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- Sub-module Basics -->
-    <artifactId>oss-center-bootstrap</artifactId>
-    <name>Muscle and Fitness Server :: OSS Center - Bootstrap</name>
-    <description>Object Storage Service (OSS) Center for M&amp;F.</description>
+    <artifactId>spring-boot-admin-bootstrap</artifactId>
+    <name>Muscle and Fitness Server :: Spring Boot Admin - Bootstrap</name>
+    <description><![CDATA[M&F Spring Boot Admin.]]></description>
     <parent>
         <groupId>com.jmsoftware.maf</groupId>
-        <artifactId>oss-center</artifactId>
+        <artifactId>spring-boot-admin</artifactId>
         <version>0.0.8-SNAPSHOT</version>
     </parent>
 
@@ -117,7 +116,7 @@
                             <jvmFlag>-Dfile.encoding=${project.build.sourceEncoding}</jvmFlag>
                         </jvmFlags>
                         <ports>
-                            <port>${oss-center.port}</port>
+                            <port>${spring-boot-admin.port}</port>
                         </ports>
                         <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
                     </container>
@@ -150,8 +149,7 @@
                 </executions>
                 <configuration>
                     <generateGitPropertiesFile>true</generateGitPropertiesFile>
-                    <generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties
-                    </generateGitPropertiesFilename>
+                    <generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties</generateGitPropertiesFilename>
                     <includeOnlyProperties>
                         <includeOnlyProperty>^git.build.(time|version)$</includeOnlyProperty>
                         <includeOnlyProperty>^git.commit.id.(abbrev|full)$</includeOnlyProperty>
@@ -171,15 +169,4 @@
             </plugin>
         </plugins>
     </reporting>
-
-    <dependencies>
-        <dependency>
-            <groupId>com.jmsoftware.maf</groupId>
-            <artifactId>oss-center-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.jmsoftware.maf</groupId>
-            <artifactId>oss-center-message</artifactId>
-        </dependency>
-    </dependencies>
 </project>

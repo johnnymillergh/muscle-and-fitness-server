@@ -12,6 +12,5 @@
         <groupId>com.jmsoftware.maf</groupId>
         <artifactId>oss-center</artifactId>
         <version>0.0.8-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
 </project>
