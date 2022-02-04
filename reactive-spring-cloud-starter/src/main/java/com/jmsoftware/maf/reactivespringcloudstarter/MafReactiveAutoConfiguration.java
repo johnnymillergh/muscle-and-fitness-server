@@ -20,6 +20,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.env.Environment;
 
 import javax.annotation.PostConstruct;
 
@@ -41,6 +42,8 @@ import javax.annotation.PostConstruct;
         WebClientConfiguration.class
 })
 public class MafReactiveAutoConfiguration {
+    private static final String TEMPLATE = "Initial bean: '{}'";
+
     @PostConstruct
     public void postConstruct() {
         log.warn("Post construction of [{}] is done. About to inject beans. Auto configure order: {}",
@@ -49,38 +52,38 @@ public class MafReactiveAutoConfiguration {
 
     @Bean
     public AccessLogFilter requestFilter(MafConfigurationProperties mafConfigurationProperties) {
-        log.warn("Initial bean: '{}'", AccessLogFilter.class.getSimpleName());
+        log.warn(TEMPLATE, AccessLogFilter.class.getSimpleName());
         return new AccessLogFilter(mafConfigurationProperties);
     }
 
     @Bean
-    public IpHelper ipHelper(MafProjectProperties mafProjectProperties) {
-        log.warn("Initial bean: '{}'", IpHelper.class.getSimpleName());
-        return new IpHelper(mafProjectProperties);
+    public IpHelper ipHelper(Environment environment) {
+        log.warn(TEMPLATE, IpHelper.class.getSimpleName());
+        return new IpHelper(environment);
     }
 
     @Bean
     public SpringBootStartupHelper springBootStartupHelper(MafProjectProperties mafProjectProperties,
                                                            IpHelper ipHelper, ApplicationContext applicationContext) {
-        log.warn("Initial bean: '{}'", SpringBootStartupHelper.class.getSimpleName());
+        log.warn(TEMPLATE, SpringBootStartupHelper.class.getSimpleName());
         return new SpringBootStartupHelper(mafProjectProperties, ipHelper, applicationContext);
     }
 
     @Bean
     public CommonService commonService(MafProjectProperties mafProjectProperties) {
-        log.warn("Initial bean: '{}'", CommonServiceImpl.class.getSimpleName());
+        log.warn(TEMPLATE, CommonServiceImpl.class.getSimpleName());
         return new CommonServiceImpl(mafProjectProperties);
     }
 
     @Bean
     public CommonController commonController(CommonService commonService) {
-        log.warn("Initial bean: '{}'", CommonController.class.getSimpleName());
+        log.warn(TEMPLATE, CommonController.class.getSimpleName());
         return new CommonController(commonService);
     }
 
     @Bean
     public ResponseUtil responseUtil(ObjectMapper objectMapper) {
-        log.warn("Initial bean: '{}'", ResponseUtil.class.getSimpleName());
+        log.warn(TEMPLATE, ResponseUtil.class.getSimpleName());
         return new ResponseUtil(objectMapper);
     }
 }
