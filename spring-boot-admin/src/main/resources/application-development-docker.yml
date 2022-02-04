@@ -1,5 +1,0 @@
-spring:
-  devtools:
-    add-properties: true
-  zipkin:
-    base-url: http://maf-zipkin:9411

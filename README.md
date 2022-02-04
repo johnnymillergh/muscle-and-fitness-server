@@ -11,13 +11,15 @@
 
 # Muscle and Fitness Server
 
-**Muscle and Fitness Server** a Spring Cloud microservice based, back-end server for managing data of muscle and fitness.
+**Muscle and Fitness Server** a Spring Cloud microservice based, DDD structured, back-end server for managing data of muscle and fitness. 
 
 [Official Docker Image](https://hub.docker.com/u/ijohnnymiller)
 
 ## Features
 
 Here is the highlights of **Muscle and Fitness Server**:
+
+1. Each microservice is organized by [Domain Driven Design](https://en.wikipedia.org/wiki/Domain-driven_design) (DDD) structure. 
 
 1. Inherited from the most modern and newest Spring frameworks:
 
@@ -76,7 +78,11 @@ Here is the highlights of **Muscle and Fitness Server**:
 
 21. [Startup and deployment statistics](https://github.com/johnnymillergh/muscle-and-fitness-server/blob/master/spring-cloud-starter/src/main/java/com/jmsoftware/maf/springcloudstarter/helper/SpringBootStartupHelper.java).
 
-22. Customized startup banner.
+23. Customized startup banner.
+
+## Architecture
+
+![architectur](the-project-structure-of-ddd.drawio.png)
 
 ## Usage
 

@@ -10,165 +10,53 @@
     <parent>
         <groupId>com.jmsoftware.maf</groupId>
         <artifactId>muscle-and-fitness-server</artifactId>
-        <version>0.0.7</version>
+        <version>0.0.8</version>
     </parent>
+    <packaging>pom</packaging>
 
-    <!-- Build Settings -->
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>build-info</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>build-info</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-pmd-plugin</artifactId>
-                <version>${maven-pmd-plugin.version}</version>
-                <configuration>
-                    <sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
-                    <targetJdk>${java.version}</targetJdk>
-                    <printFailingErrors>true</printFailingErrors>
-                    <rulesets>
-                        <ruleset>rulesets/java/ali-comment.xml</ruleset>
-                        <ruleset>rulesets/java/ali-concurrent.xml</ruleset>
-                        <ruleset>rulesets/java/ali-constant.xml</ruleset>
-                        <ruleset>rulesets/java/ali-exception.xml</ruleset>
-                        <ruleset>rulesets/java/ali-flowcontrol.xml</ruleset>
-                        <ruleset>rulesets/java/ali-naming.xml</ruleset>
-                        <ruleset>rulesets/java/ali-oop.xml</ruleset>
-                        <ruleset>rulesets/java/ali-orm.xml</ruleset>
-                        <ruleset>rulesets/java/ali-other.xml</ruleset>
-                        <ruleset>rulesets/java/ali-set.xml</ruleset>
-                    </rulesets>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.alibaba.p3c</groupId>
-                        <artifactId>p3c-pmd</artifactId>
-                        <version>${p3c-pmd.version}</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-
-            <!-- https://github.com/GoogleContainerTools/jib/blob/master/jib-maven-plugin/README.md -->
-            <plugin>
-                <groupId>com.google.cloud.tools</groupId>
-                <artifactId>jib-maven-plugin</artifactId>
-                <version>${jib-maven-plugin.version}</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.google.cloud.tools</groupId>
-                        <artifactId>jib-spring-boot-extension-maven</artifactId>
-                        <version>${jib-spring-boot-extension-maven.version}</version>
-                    </dependency>
-                </dependencies>
-                <executions>
-                    <!-- Bind `jib:dockerBuild` to a Maven lifecycle `verify`. Jib will build your image directly to a Docker daemon.
-                    <execution>
-                        <id>buildDockerImagePhase</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>dockerBuild</goal>
-                        </goals>
-                    </execution> -->
-                    <!-- Bind `jib:build` to a Maven lifecycle `install`. Jib will build and push image to image registry. -->
-                    <execution>
-                        <id>buildAndPushDockerImagePhase</id>
-                        <phase>install</phase>
-                        <goals>
-                            <goal>build</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <from>
-                        <!-- Don't use alpine or slim version, https://hub.docker.com/r/adoptopenjdk/openjdk11/tags?page=1&ordering=last_updated&name=jre-11 -->
-                        <image>adoptopenjdk/openjdk11:${adoptopenjdk11.tag}</image>
-                    </from>
-                    <to>
-                        <image>docker.io/ijohnnymiller/${project.parent.artifactId}.${project.artifactId}</image>
-                        <tags>
-                            <tag>${git.commit.id.abbrev}-${project.version}</tag>
-                        </tags>
-                    </to>
-                    <container>
-                        <!-- The root directory on the container where the app's contents are placed. -->
-                        <appRoot>/${project.artifactId}</appRoot>
-                        <jvmFlags>
-                            <jvmFlag>-Dfile.encoding=${project.build.sourceEncoding}</jvmFlag>
-                        </jvmFlags>
-                        <ports>
-                            <port>${api-gateway.port}</port>
-                        </ports>
-                        <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
-                    </container>
-                    <pluginExtensions>
-                        <pluginExtension>
-                            <implementation>
-                                com.google.cloud.tools.jib.maven.extension.springboot.JibSpringBootExtension
-                            </implementation>
-                            <properties>
-                                <excludeDevtools>true</excludeDevtools>
-                            </properties>
-                        </pluginExtension>
-                    </pluginExtensions>
-                </configuration>
-            </plugin>
-
-            <!-- https://github.com/git-commit-id/git-commit-id-maven-plugin -->
-            <plugin>
-                <groupId>io.github.git-commit-id</groupId>
-                <artifactId>git-commit-id-maven-plugin</artifactId>
-                <version>5.0.0</version>
-                <executions>
-                    <execution>
-                        <id>get-the-git-info</id>
-                        <goals>
-                            <goal>revision</goal>
-                        </goals>
-                        <phase>initialize</phase>
-                    </execution>
-                </executions>
-                <configuration>
-                    <generateGitPropertiesFile>true</generateGitPropertiesFile>
-                    <generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties</generateGitPropertiesFilename>
-                    <includeOnlyProperties>
-                        <includeOnlyProperty>^git.build.(time|version)$</includeOnlyProperty>
-                        <includeOnlyProperty>^git.commit.id.(abbrev|full)$</includeOnlyProperty>
-                    </includeOnlyProperties>
-                    <commitIdGenerationMode>full</commitIdGenerationMode>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jxr-plugin</artifactId>
-                <version>2.3</version>
-            </plugin>
-        </plugins>
-    </reporting>
+    <!-- The modules (sometimes called subprojects) to build as a part of this project. -->
+    <modules>
+        <module>api-gateway-bootstrap</module>
+        <module>api-gateway-web</module>
+        <module>api-gateway-message</module>
+        <module>api-gateway-biz</module>
+        <module>api-gateway-domain</module>
+        <module>api-gateway-infra</module>
+    </modules>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.jmsoftware.maf</groupId>
+                <artifactId>api-gateway-bootstrap</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jmsoftware.maf</groupId>
+                <artifactId>api-gateway-web</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jmsoftware.maf</groupId>
+                <artifactId>api-gateway-message</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jmsoftware.maf</groupId>
+                <artifactId>api-gateway-biz</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jmsoftware.maf</groupId>
+                <artifactId>api-gateway-domain</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jmsoftware.maf</groupId>
+                <artifactId>api-gateway-infra</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <!-- Scoped Dependencies Management -->
     <dependencies>

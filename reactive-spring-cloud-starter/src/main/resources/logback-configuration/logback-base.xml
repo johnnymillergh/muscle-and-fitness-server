@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The complete logback manual documents the latest version of logback framework at https://logback.qos.ch/manual/ -->
+<included>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <jmxConfigurator/>
+
+    <!-- Converter Class Configuration -->
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+    <conversionRule conversionWord="wex"
+                    converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
+
+    <!-- Log Render Configuration -->
+    <springProperty scope="context" name="APPLICATION" source="spring.application.name"/>
+    <property name="CONSOLE_LOG_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} %clr(%5p) %clr(${PID:- }){magenta} - [%15.15t] %-48.48logger{48} : %msg%n%wEx"/>
+    <property name="FILE_LOG_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${PID:- } - [%t] %-48.48logger{48} : %msg%n%wEx"/>
+    <!-- Log home is nothing related with Spring profiles or environments -->
+    <property name="LOG_HOME" value="logs"/>
+
+    <!-- Log for Multi Environment Configuration -->
+    <springProfile name="development-local">
+        <property name="ENVIRONMENT" value="development-local"/>
+        <property name="LOGSTASH_HOST" value="localhost"/>
+    </springProfile>
+    <springProfile name="development-docker">
+        <property name="ENVIRONMENT" value="development-docker"/>
+        <property name="LOGSTASH_HOST" value="maf-logstash"/>
+    </springProfile>
+    <springProfile name="test">
+        <property name="ENVIRONMENT" value="test"/>
+        <property name="LOGSTASH_HOST" value="maf-logstash"/>
+    </springProfile>
+    <springProfile name="stage">
+        <property name="ENVIRONMENT" value="stage"/>
+        <property name="LOGSTASH_HOST" value="maf-logstash"/>
+    </springProfile>
+    <springProfile name="production">
+        <property name="ENVIRONMENT" value="production"/>
+        <property name="LOGSTASH_HOST" value="maf-logstash"/>
+    </springProfile>
+
+    <!-- Async CONSOLE Log Configuration -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+    <!-- https://examples.javacodegeeks.com/enterprise-java/logback/logback-ayncappender-example/ -->
+    <appender name="ASYNC_CONSOLE" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="CONSOLE"/>
+        <!-- default 20, means drop lower event when has 20% capacity remaining. To keep all events, set discardingThreshold to 0. -->
+        <discardingThreshold>0</discardingThreshold>
+        <!-- The maximum capacity of the blocking queue. By default, queueSize is set to 256. -->
+        <queueSize>256</queueSize>
+        <includeCallerData>false</includeCallerData>
+        <!-- default false, set to true to cause the Appender not block the application and just drop the messages -->
+        <neverBlock>true</neverBlock>
+    </appender>
+
+    <!-- Async FILE Log Configuration -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ALL</level>
+            <OnMatch>ACCEPT</OnMatch>
+            <OnMismatch>ACCEPT</OnMismatch>
+        </filter>
+
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+
+        <!-- Archive files essentially by date but at the same time limit the size of each log file, -->
+        <!-- in particular if post-processing tools impose size limits on the log files. -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>${LOG_HOME}/${APPLICATION}-${ENVIRONMENT}-${HOSTNAME}.%d{yyyy-MM-dd}.%i.log.gz
+            </fileNamePattern>
+            <!-- each file should be at most 5MB, keep 7 days worth of history, but at most 1GB -->
+            <maxFileSize>5MB</maxFileSize>
+            <maxHistory>7</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+    <appender name="ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="FILE"/>
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>256</queueSize>
+        <includeCallerData>false</includeCallerData>
+        <neverBlock>true</neverBlock>
+    </appender>
+
+    <!-- Async Logstash -->
+    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>${LOGSTASH_HOST}:4560</destination>
+        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder">
+            <customFields>{"environment": "${ENVIRONMENT}"}</customFields>
+        </encoder>
+    </appender>
+    <appender name="ASYNC_LOGSTASH" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="LOGSTASH"/>
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>256</queueSize>
+        <includeCallerData>false</includeCallerData>
+        <neverBlock>true</neverBlock>
+    </appender>
+</included>

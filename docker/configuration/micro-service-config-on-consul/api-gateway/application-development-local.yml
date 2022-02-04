@@ -1,0 +1,16 @@
+greeting: "Hello, World! From Consul config center!"
+
+maf:
+  configuration:
+    swagger:
+      ignored-service-ids:
+        - "consul"
+    redis-rate-limiter:
+      replenish-rate: 10
+      burst-capacity: 1
+      requested-tokens: 1
+    web-security-enabled: false
+
+logging:
+  level:
+    org.springframework.cloud.client.loadbalancer.reactive: DEBUG

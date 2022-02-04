@@ -1,7 +1,7 @@
 package com.jmsoftware.maf.springcloudstarter.aspect;
 
+import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.exception.BaseException;
 import com.jmsoftware.maf.springcloudstarter.util.RequestUtil;
@@ -76,7 +76,8 @@ public class CommonExceptionControllerAdvice {
     public ResponseBodyBean<?> handleException(HttpServletRequest request, MethodArgumentNotValidException exception) {
         this.requestLog(request);
         log.error("MethodArgumentNotValidException message: {}", exception.getMessage());
-        return ResponseBodyBean.ofStatus(HttpStatus.BAD_REQUEST.value(), this.getFieldErrorMessageFromException(exception),
+        return ResponseBodyBean.ofStatus(HttpStatus.BAD_REQUEST.value(),
+                                         this.getFieldErrorMessageFromException(exception),
                                          null);
     }
 
@@ -139,7 +140,8 @@ public class CommonExceptionControllerAdvice {
     public ResponseBodyBean<?> handleException(HttpServletRequest request, IllegalArgumentException exception) {
         this.requestLog(request);
         log.error("IllegalArgumentException message: {} ", exception.getMessage());
-        return ResponseBodyBean.ofStatus(HttpStatus.BAD_REQUEST.value(), this.removeLineSeparator(exception.getMessage()),
+        return ResponseBodyBean.ofStatus(HttpStatus.BAD_REQUEST.value(),
+                                         this.removeLineSeparator(exception.getMessage()),
                                          null);
     }
 
@@ -182,7 +184,8 @@ public class CommonExceptionControllerAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseBodyBean<?> handleError(UndeclaredThrowableException exception) {
         log.error("Undeclared throwable exception occurred! Exception message: {} ", exception.getMessage(), exception);
-        if (ObjectUtil.isNotNull(exception.getCause()) && StrUtil.isNotEmpty(exception.getCause().getMessage())) {
+        if (ObjectUtil.isNotNull(exception.getCause())
+                && CharSequenceUtil.isNotEmpty(exception.getCause().getMessage())) {
             return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR,
                                              String.format("Exception message: %s",
                                                            this.removeLineSeparator(
@@ -198,7 +201,8 @@ public class CommonExceptionControllerAdvice {
     public ResponseBodyBean<?> handleError(Throwable ex) {
         log.error("Internal server exception occurred! Exception message: {} ", ex.getMessage(), ex);
         return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR,
-                                         String.format("Exception message: %s", this.removeLineSeparator(ex.getMessage())));
+                                         String.format("Exception message: %s",
+                                                       this.removeLineSeparator(ex.getMessage())));
     }
 
     private void requestLog(HttpServletRequest request) {
@@ -238,7 +242,7 @@ public class CommonExceptionControllerAdvice {
      * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 12/24/2020 11:22 AM
      */
     private String removeLineSeparator(String source) {
-        if (StrUtil.isBlank(source)) {
+        if (CharSequenceUtil.isBlank(source)) {
             return "source is blank";
         }
         return source.replaceAll(System.lineSeparator(), " ");
