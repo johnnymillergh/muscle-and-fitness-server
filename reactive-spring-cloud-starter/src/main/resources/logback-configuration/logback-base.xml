@@ -96,7 +96,7 @@
     <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
         <destination>${LOGSTASH_HOST}:4560</destination>
         <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder">
-            <customFields>{"applicationName": "${APPLICATION}", "environment": "${ENVIRONMENT}"}</customFields>
+            <customFields>{"environment": "${ENVIRONMENT}"}</customFields>
         </encoder>
     </appender>
     <appender name="ASYNC_LOGSTASH" class="ch.qos.logback.classic.AsyncAppender">
