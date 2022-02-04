@@ -13,19 +13,27 @@ spring:
         ignored-services:
           - "consul"
   application:
-    name: @project.artifactId@
+    name: @project.parent.artifactId@
   profiles:
     active: @environment@
-  mvc:
-    throw-exception-if-no-handler-found: true
-  jackson:
-    date-format: yyyy-MM-dd HH:mm:ss
-    time-zone: Asia/Hong_Kong
-  sleuth:
-    sampler:
-      probability: 1.0
+  config:
+    import: consul:${spring.cloud.consul.host}:${spring.cloud.consul.port}
   cloud:
+    # https://docs.spring.io/spring-cloud-consul/docs/current/reference/html/index.html#spring-cloud-consul-config
     consul:
+      host: "should-be-passed-by-java-opts"
+      port: 8500
+      config:
+        # `default-context` should not be modified, keeps "application" for common configuration.
+        # Properties in the config/application folder are applicable to all applications using consul for configuration.
+        profile-separator: "::"
+        format: YAML
+        data-key: "data"
+        watch:
+          enabled: true
+          delay: 1000
+        prefixes:
+          - config
       discovery:
         register: true
         instance-id: ${spring.application.name}-${spring.cloud.client.hostname}-${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
@@ -34,15 +42,6 @@ spring:
         prefer-ip-address: true
         ip-address: ${spring.cloud.client.ip-address}
         health-check-critical-timeout: 15s
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-  endpoint:
-    health:
-      show-details: ALWAYS
 
 logging:
   config: classpath:logback-configuration/logback-${spring.profiles.active}.xml

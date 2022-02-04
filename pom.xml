@@ -199,23 +199,6 @@
                     <exclude>**/application*.properties</exclude>
                 </excludes>
             </resource>
-            <resource>
-                <filtering>true</filtering>
-                <directory>${basedir}/src/main/resources</directory>
-                <includes>
-                    <include>**/bootstrap*.yml</include>
-                    <include>**/bootstrap*.yaml</include>
-                    <include>**/bootstrap*.properties</include>
-                </includes>
-            </resource>
-            <resource>
-                <directory>${basedir}/src/main/resources</directory>
-                <excludes>
-                    <exclude>**/bootstrap*.yml</exclude>
-                    <exclude>**/bootstrap*.yaml</exclude>
-                    <exclude>**/bootstrap*.properties</exclude>
-                </excludes>
-            </resource>
         </resources>
 
         <plugins>
