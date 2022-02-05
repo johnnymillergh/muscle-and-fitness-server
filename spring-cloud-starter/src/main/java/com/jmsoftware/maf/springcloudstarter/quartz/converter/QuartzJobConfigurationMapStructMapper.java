@@ -13,7 +13,8 @@ import com.jmsoftware.maf.springcloudstarter.quartz.entity.QuartzJobConfiguratio
 import com.jmsoftware.maf.springcloudstarter.quartz.entity.persistence.QuartzJobConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
+
+import static org.mapstruct.factory.Mappers.getMapper;
 
 /**
  * Description: QuartzJobConfigurationMapStructMapper, change description here.
@@ -22,7 +23,7 @@ import org.mapstruct.factory.Mappers;
  **/
 @Mapper
 public interface QuartzJobConfigurationMapStructMapper {
-    QuartzJobConfigurationMapStructMapper INSTANCE = Mappers.getMapper(QuartzJobConfigurationMapStructMapper.class);
+    QuartzJobConfigurationMapStructMapper INSTANCE = getMapper(QuartzJobConfigurationMapStructMapper.class);
 
     /**
      * Convert from quartz job configuration.

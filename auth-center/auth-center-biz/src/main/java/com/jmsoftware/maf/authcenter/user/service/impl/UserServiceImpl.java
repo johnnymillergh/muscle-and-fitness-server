@@ -13,6 +13,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jmsoftware.maf.authcenter.security.service.JwtService;
 import com.jmsoftware.maf.authcenter.user.constant.UserRedisKey;
+import com.jmsoftware.maf.authcenter.user.converter.UserMapStructMapper;
 import com.jmsoftware.maf.authcenter.user.mapper.UserMapper;
 import com.jmsoftware.maf.authcenter.user.payload.GetUserPageListPayload;
 import com.jmsoftware.maf.authcenter.user.payload.GetUserStatusPayload;
@@ -43,13 +44,14 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.concurrent.TimeUnit;
 
+import static java.util.concurrent.TimeUnit.DAYS;
+
 /**
  * <h1>UserServiceImpl</h1>
  * <p>
  * Service implementation of UserPersistence.(UserPersistence)
  *
- * @author Johnny Miller (锺俊)
- * @date 2020-05-10 12:08:28
+ * @author Johnny Miller (锺俊), date 2020-05-10 12:08:28
  */
 @Slf4j
 @Service
@@ -80,14 +82,12 @@ public class UserServiceImpl
                 .eq(User::getEmail, loginToken)
                 .or()
                 .eq(User::getCellphone, loginToken));
-        val userPersistence = this.getBaseMapper().selectOne(wrapper);
-        if (ObjectUtil.isNull(userPersistence)) {
+        val user = this.getBaseMapper().selectOne(wrapper);
+        if (ObjectUtil.isNull(user)) {
             return null;
         }
-        val response = new GetUserByLoginTokenResponse();
-        BeanUtil.copyProperties(userPersistence, response);
-        this.redisTemplate.opsForValue().set(key, JSONUtil.toJsonStr(response), RandomUtil.randomLong(1, 7),
-                                             TimeUnit.DAYS);
+        val response = UserMapStructMapper.INSTANCE.of(user);
+        this.redisTemplate.opsForValue().set(key, JSONUtil.toJsonStr(response), RandomUtil.randomLong(1, 7), DAYS);
         return response;
     }
 
