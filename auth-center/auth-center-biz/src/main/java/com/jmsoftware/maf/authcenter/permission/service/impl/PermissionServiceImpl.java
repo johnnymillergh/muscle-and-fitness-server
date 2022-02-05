@@ -1,10 +1,10 @@
 package com.jmsoftware.maf.authcenter.permission.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jmsoftware.maf.authcenter.permission.configuration.PermissionConfiguration;
+import com.jmsoftware.maf.authcenter.permission.converter.PermissionMapStructMapper;
 import com.jmsoftware.maf.authcenter.permission.response.GetServicesInfoResponse;
 import com.jmsoftware.maf.authcenter.permission.persistence.Permission;
 import com.jmsoftware.maf.authcenter.permission.mapper.PermissionMapper;
@@ -27,6 +27,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * <h1>PermissionServiceImpl</h1>
@@ -61,13 +62,14 @@ public class PermissionServiceImpl
             response.getPermissionList().add(permission);
             return response;
         }
-        val permissionList = this.getPermissionListByRoleIdList(payload.getRoleIdList(),
-                                                                payload.getPermissionTypeList());
-        permissionList.forEach(permissionPersistence -> {
-            val permission = new GetPermissionListByRoleIdListResponse.Permission();
-            BeanUtil.copyProperties(permissionPersistence, permission);
-            response.getPermissionList().add(permission);
-        });
+        val permissionList =
+                this.getPermissionListByRoleIdList(payload.getRoleIdList(), payload.getPermissionTypeList());
+        response.setPermissionList(
+                permissionList
+                        .stream()
+                        .map(PermissionMapStructMapper.INSTANCE::of)
+                        .collect(Collectors.toList())
+        );
         return response;
     }
 

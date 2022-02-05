@@ -18,7 +18,7 @@ public class GetPermissionListByRoleIdListResponse {
     /**
      * The Permission list.
      */
-    private final List<Permission> permissionList = new LinkedList<>();
+    private List<Permission> permissionList;
 
     @Data
     public static class Permission {
