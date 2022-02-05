@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.springcloudstarter.quartz.mapper;
+package com.jmsoftware.maf.springcloudstarter.quartz.repository;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -8,15 +8,17 @@ import com.jmsoftware.maf.springcloudstarter.quartz.entity.QuartzJobConfiguratio
 import com.jmsoftware.maf.springcloudstarter.quartz.entity.persistence.QuartzJobConfiguration;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
- * Description: QuartzJobConfigurationMapper
+ * Description: QuartzJobConfigurationMapStructMapper
  *
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 9/23/2021 8:23 AM
  */
 @Mapper
+@Repository
 public interface QuartzJobConfigurationMapper extends BaseMapper<QuartzJobConfiguration> {
     /**
      * Select page list page.

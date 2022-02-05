@@ -16,23 +16,19 @@ import static com.jmsoftware.maf.springcloudstarter.quartz.constant.ScheduleCons
  */
 @Slf4j
 abstract class AbstractQuartzJob extends QuartzJobBean {
-    private static final String QUARTZ_JOB_CONFIGURATION_CLASS = QuartzJobConfiguration.class.getSimpleName();
-
     @Override
     protected final void executeInternal(JobExecutionContext context) {
         val sourceQuartzJobConfiguration = context.getMergedJobDataMap().get(QUARTZ_JOB_CONFIGURATION);
-        if (!(QUARTZ_JOB_CONFIGURATION_CLASS.equals(sourceQuartzJobConfiguration.getClass().getSimpleName()))) {
+        if (!(sourceQuartzJobConfiguration instanceof QuartzJobConfiguration)) {
             throw new IllegalArgumentException(
                     "Invalid job data! Not the instance of QuartzJobConfiguration. Runtime actual class: "
                             + sourceQuartzJobConfiguration.getClass());
         }
-        val quartzJobConfiguration = new QuartzJobConfiguration();
-        BeanUtil.copyProperties(sourceQuartzJobConfiguration, quartzJobConfiguration);
         if (log.isDebugEnabled()) {
             log.debug("Found and QuartzJobConfiguration from job data map: {}", sourceQuartzJobConfiguration);
         }
         try {
-            this.invoke(context, quartzJobConfiguration);
+            this.invoke(context, (QuartzJobConfiguration) sourceQuartzJobConfiguration);
         } catch (Exception e) {
             log.error("Exception occurred when invoking method", e);
         }

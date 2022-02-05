@@ -30,7 +30,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Import({
         DataSourceConfiguration.class
 })
-@MapperScan("com.jmsoftware.maf.springcloudstarter.*.mapper")
+@MapperScan("com.jmsoftware.maf.springcloudstarter.*.repository")
 @ConditionalOnClass({MybatisPlusAutoConfiguration.class, MasterSlaveAutoRoutingPlugin.class})
 public class MyBatisPlusConfiguration {
     @Bean

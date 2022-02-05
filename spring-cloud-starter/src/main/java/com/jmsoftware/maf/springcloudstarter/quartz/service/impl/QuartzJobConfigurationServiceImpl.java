@@ -1,6 +1,5 @@
 package com.jmsoftware.maf.springcloudstarter.quartz.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.extra.validation.ValidationUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -8,12 +7,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jmsoftware.maf.common.bean.PageResponseBodyBean;
 import com.jmsoftware.maf.springcloudstarter.property.MafProjectProperties;
+import com.jmsoftware.maf.springcloudstarter.quartz.converter.QuartzJobConfigurationMapStructMapper;
 import com.jmsoftware.maf.springcloudstarter.quartz.entity.CreateOrModifyQuartzJobConfigurationPayload;
 import com.jmsoftware.maf.springcloudstarter.quartz.entity.GetQuartzJobConfigurationPageListItem;
 import com.jmsoftware.maf.springcloudstarter.quartz.entity.GetQuartzJobConfigurationPageListPayload;
 import com.jmsoftware.maf.springcloudstarter.quartz.entity.QuartzJobConfigurationExcel;
 import com.jmsoftware.maf.springcloudstarter.quartz.entity.persistence.QuartzJobConfiguration;
-import com.jmsoftware.maf.springcloudstarter.quartz.mapper.QuartzJobConfigurationMapper;
+import com.jmsoftware.maf.springcloudstarter.quartz.repository.QuartzJobConfigurationMapper;
 import com.jmsoftware.maf.springcloudstarter.quartz.service.QuartzJobConfigurationService;
 import com.jmsoftware.maf.springcloudstarter.quartz.util.CronUtil;
 import com.jmsoftware.maf.springcloudstarter.quartz.util.ScheduleUtil;
@@ -102,11 +102,9 @@ public class QuartzJobConfigurationServiceImpl
     @SneakyThrows
     @Transactional(rollbackFor = Throwable.class)
     public void save(@NotEmpty List<@Valid QuartzJobConfigurationExcel> beanList) {
-        val quartzJobConfigurationList = beanList.stream().map(quartzJobConfigurationExcel -> {
-            val quartzJobConfiguration = new QuartzJobConfiguration();
-            BeanUtil.copyProperties(quartzJobConfigurationExcel, quartzJobConfiguration);
-            return quartzJobConfiguration;
-        }).collect(Collectors.toList());
+        val quartzJobConfigurationList = beanList.stream()
+                .map(QuartzJobConfigurationMapStructMapper.INSTANCE::of)
+                .collect(Collectors.toList());
         requireTrue(
                 this.saveBatch(quartzJobConfigurationList),
                 saved -> log.info("Saved quartzJobConfigurationList, saved: {}", saved)
