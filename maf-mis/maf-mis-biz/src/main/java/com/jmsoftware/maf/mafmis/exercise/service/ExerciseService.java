@@ -1,7 +1,11 @@
 package com.jmsoftware.maf.mafmis.exercise.service;
 
+import com.jmsoftware.maf.mafmis.exercise.payload.GetPageListPayload;
 import com.jmsoftware.maf.mafmis.exercise.persistence.Exercise;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -12,6 +16,7 @@ import java.util.List;
  * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com
  * @date 2/18/20 10:21 AM
  */
+@Validated
 public interface ExerciseService {
     /**
      * Query by id exercise po.
@@ -24,10 +29,10 @@ public interface ExerciseService {
     /**
      * Gets page list.
      *
-     * @param exercisePo the exercise po
+     * @param payload the exercise po
      * @return the page list
      */
-    List<Exercise> getPageList(Exercise exercisePo);
+    List<Exercise> getPageList(@Valid @NotNull GetPageListPayload payload);
 
     /**
      * Insert exercise po.

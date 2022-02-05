@@ -1,12 +1,10 @@
 package com.jmsoftware.maf.mafmis.exercise.controller;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
-import com.jmsoftware.maf.mafmis.exercise.persistence.Exercise;
 import com.jmsoftware.maf.mafmis.exercise.payload.GetPageListPayload;
+import com.jmsoftware.maf.mafmis.exercise.persistence.Exercise;
 import com.jmsoftware.maf.mafmis.exercise.service.ExerciseService;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,8 +33,6 @@ public class ExerciseController {
 
     @GetMapping("/get-page-list")
     public ResponseBodyBean<List<Exercise>> getPageList(@Valid GetPageListPayload payload) {
-        val exercisePo = new Exercise();
-        BeanUtil.copyProperties(payload, exercisePo);
-        return ResponseBodyBean.ofSuccess(this.exerciseService.getPageList(exercisePo));
+        return ResponseBodyBean.ofSuccess(this.exerciseService.getPageList(payload));
     }
 }

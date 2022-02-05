@@ -1,6 +1,5 @@
 package com.jmsoftware.maf.mafmis.exercise.persistence;
 
-import com.jmsoftware.maf.common.bean.PaginationBase;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -14,7 +13,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class Exercise extends PaginationBase {
+public class Exercise {
     /**
      * The ID of exercise.
      */
