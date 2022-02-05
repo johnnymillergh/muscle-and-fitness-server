@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
 /**
  * Description: OpenFeignConfiguration, change description here.
  *
- * @author 钟俊 (za-zhongjun), email: jun.zhong@zatech.com, date: 2/3/2022 3:52 PM
+ * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com, date: 2/5/2022 7:15 PM
  * @see
  * <a href='https://docs.spring.io/spring-cloud-openfeign/docs/current/reference/html/#spring-cloud-feign-circuitbreaker'>Feign Spring Cloud CircuitBreaker Support</a>
  **/

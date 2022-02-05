@@ -9,7 +9,7 @@ import static org.mapstruct.factory.Mappers.getMapper;
 /**
  * Description: PermissionMapStructMapper, change description here.
  *
- * @author 钟俊 (za-zhongjun), email: jun.zhong@zatech.com, date: 2/5/2022 5:33 PM
+ * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com, date: 2/5/2022 7:16 PM
  **/
 @Mapper
 public interface PermissionMapStructMapper {
