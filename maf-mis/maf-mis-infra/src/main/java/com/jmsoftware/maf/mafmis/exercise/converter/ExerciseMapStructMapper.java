@@ -3,6 +3,7 @@ package com.jmsoftware.maf.mafmis.exercise.converter;
 import com.jmsoftware.maf.mafmis.exercise.payload.GetPageListPayload;
 import com.jmsoftware.maf.mafmis.exercise.persistence.Exercise;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import static org.mapstruct.factory.Mappers.getMapper;
 
@@ -21,5 +22,8 @@ public interface ExerciseMapStructMapper {
      * @param payload the payload
      * @return the exercise
      */
+    @Mapping(target = "preparation", ignore = true)
+    @Mapping(target = "execution", ignore = true)
+    @Mapping(target = "exerciseGifPath", ignore = true)
     Exercise of(GetPageListPayload payload);
 }
