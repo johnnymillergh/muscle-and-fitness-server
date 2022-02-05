@@ -78,7 +78,7 @@ public class User {
      * 26 gender options
      */
     @TableField(value = COL_GENDER)
-    private Object gender;
+    private String gender;
     /**
      * User avatar full path on SFTP server
      */

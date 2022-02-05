@@ -64,7 +64,7 @@ public class Permission {
      * HTTP method of API
      */
     @TableField(value = COL_METHOD)
-    private Object method;
+    private String method;
     /**
      * Sort number
      */
