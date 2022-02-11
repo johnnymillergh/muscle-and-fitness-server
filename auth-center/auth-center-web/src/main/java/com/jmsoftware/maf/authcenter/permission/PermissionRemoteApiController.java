@@ -1,6 +1,6 @@
 package com.jmsoftware.maf.authcenter.permission;
 
-import com.jmsoftware.maf.authcenter.permission.service.PermissionService;
+import com.jmsoftware.maf.authcenter.permission.service.PermissionDomainService;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
@@ -23,10 +23,10 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @RequestMapping("/permission-remote-api")
 public class PermissionRemoteApiController {
-    private final PermissionService permissionService;
+    private final PermissionDomainService permissionDomainService;
 
     @GetMapping("/permissions")
     public ResponseBodyBean<GetPermissionListByRoleIdListResponse> getPermissionListByRoleIdList(@Valid GetPermissionListByRoleIdListPayload payload) {
-        return ResponseBodyBean.ofSuccess(this.permissionService.getPermissionListByRoleIdList(payload));
+        return ResponseBodyBean.ofSuccess(this.permissionDomainService.getPermissionListByRoleIdList(payload));
     }
 }

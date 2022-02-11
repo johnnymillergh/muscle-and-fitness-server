@@ -9,12 +9,12 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.constraints.NotBlank;
 
 /**
- * UserRoleService.
+ * UserRoleDomainService.
  *
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 6/29/2021 12:09 PM
  */
 @Validated
-public interface UserRoleService extends IService<UserRole> {
+public interface UserRoleDomainService extends IService<UserRole> {
     /**
      * Assign role by role name.
      *

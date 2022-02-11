@@ -1,6 +1,6 @@
 package com.jmsoftware.maf.authcenter.role;
 
-import com.jmsoftware.maf.authcenter.role.service.RoleService;
+import com.jmsoftware.maf.authcenter.role.service.RoleDomainService;
 import com.jmsoftware.maf.springcloudstarter.poi.AbstractExcelDataController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/roles")
 public class RoleController extends AbstractExcelDataController<RoleExcelBean> {
-    private final RoleService roleService;
+    private final RoleDomainService roleDomainService;
 
     @Override
     public void onExceptionOccurred() {
@@ -36,21 +36,21 @@ public class RoleController extends AbstractExcelDataController<RoleExcelBean> {
     @Override
     protected void executeDatabaseOperation(List<RoleExcelBean> beanList) {
         log.info("ExecuteDatabaseOperation: {}", beanList);
-        this.roleService.save(beanList);
+        this.roleDomainService.save(beanList);
     }
 
     @Override
     protected String getTemplateFileName() {
-        return RoleService.ROLE_TEMPLATE_EXCEL;
+        return RoleDomainService.ROLE_TEMPLATE_EXCEL;
     }
 
     @Override
     protected List<RoleExcelBean> getListForExporting() {
-        return this.roleService.getListForExporting();
+        return this.roleDomainService.getListForExporting();
     }
 
     @Override
     protected void validateBeforeAddToBeanList(List<RoleExcelBean> beanList, RoleExcelBean bean, int index) throws IllegalArgumentException {
-        this.roleService.validateBeforeAddToBeanList(beanList, bean, index);
+        this.roleDomainService.validateBeforeAddToBeanList(beanList, bean, index);
     }
 }

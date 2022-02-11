@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
- * <h1>RoleService</h1>
+ * <h1>RoleDomainService</h1>
  * <p>
  * Service of Role.(Role)
  *
@@ -22,7 +22,7 @@ import java.util.List;
  * @date 2020 -05-10 22:39:49
  */
 @Validated
-public interface RoleService extends IService<Role> {
+public interface RoleDomainService extends IService<Role> {
     String ROLE_TEMPLATE_EXCEL = "role-stat.xlsx";
 
     /**

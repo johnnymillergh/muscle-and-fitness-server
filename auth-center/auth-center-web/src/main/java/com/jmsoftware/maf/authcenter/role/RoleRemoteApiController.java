@@ -1,6 +1,6 @@
 package com.jmsoftware.maf.authcenter.role;
 
-import com.jmsoftware.maf.authcenter.role.service.RoleService;
+import com.jmsoftware.maf.authcenter.role.service.RoleDomainService;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdResponse;
 import lombok.RequiredArgsConstructor;
@@ -21,10 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/role-remote-api")
 public class RoleRemoteApiController {
-    private final RoleService roleService;
+    private final RoleDomainService roleDomainService;
 
     @GetMapping("/roles/{userId}")
     public ResponseBodyBean<GetRoleListByUserIdResponse> getRoleList(@PathVariable Long userId) {
-        return ResponseBodyBean.ofSuccess(this.roleService.getRoleList(userId));
+        return ResponseBodyBean.ofSuccess(this.roleDomainService.getRoleList(userId));
     }
 }

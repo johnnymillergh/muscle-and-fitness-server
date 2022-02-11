@@ -1,6 +1,6 @@
 package com.jmsoftware.maf.authcenter.user;
 
-import com.jmsoftware.maf.authcenter.user.service.UserService;
+import com.jmsoftware.maf.authcenter.user.service.UserDomainService;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.authcenter.user.LoginPayload;
 import com.jmsoftware.maf.common.domain.authcenter.user.LoginResponse;
@@ -28,20 +28,20 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 public class UserController {
-    private final UserService userService;
+    private final UserDomainService userDomainService;
 
     @PostMapping("/users/signup")
     public ResponseBodyBean<SignupResponse> signup(@Valid @RequestBody SignupPayload payload) {
-        return ResponseBodyBean.ofSuccess(this.userService.saveUserForSignup(payload));
+        return ResponseBodyBean.ofSuccess(this.userDomainService.saveUserForSignup(payload));
     }
 
     @PostMapping("/users/login")
     public ResponseBodyBean<LoginResponse> login(@Valid @RequestBody LoginPayload payload) throws SecurityException {
-        return ResponseBodyBean.ofSuccess(this.userService.login(payload));
+        return ResponseBodyBean.ofSuccess(this.userDomainService.login(payload));
     }
 
     @PostMapping("/users/logout")
     public ResponseBodyBean<Boolean> logout(HttpServletRequest request) throws SecurityException {
-        return ResponseBodyBean.ofSuccess(this.userService.logout(request));
+        return ResponseBodyBean.ofSuccess(this.userDomainService.logout(request));
     }
 }

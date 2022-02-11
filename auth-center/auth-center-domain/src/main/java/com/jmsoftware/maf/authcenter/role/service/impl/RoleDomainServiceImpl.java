@@ -12,9 +12,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jmsoftware.maf.authcenter.role.RoleExcelBean;
 import com.jmsoftware.maf.authcenter.role.constant.RoleRedisKey;
-import com.jmsoftware.maf.authcenter.role.persistence.Role;
 import com.jmsoftware.maf.authcenter.role.mapper.RoleMapper;
-import com.jmsoftware.maf.authcenter.role.service.RoleService;
+import com.jmsoftware.maf.authcenter.role.persistence.Role;
+import com.jmsoftware.maf.authcenter.role.service.RoleDomainService;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdResponse;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdSingleResponse;
 import com.jmsoftware.maf.springcloudstarter.property.MafConfigurationProperties;
@@ -36,7 +36,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
- * <h1>RoleServiceImpl</h1>
+ * <h1>RoleDomainServiceImpl</h1>
  * <p>
  * Service implementation of Role.(Role)
  *
@@ -46,9 +46,9 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class RoleServiceImpl
+public class RoleDomainServiceImpl
         extends ServiceImpl<RoleMapper, Role>
-        implements RoleService {
+        implements RoleDomainService {
     private final MafProjectProperties mafProjectProperties;
     private final MafConfigurationProperties mafConfigurationProperties;
     private final RedisTemplate<String, String> redisTemplate;

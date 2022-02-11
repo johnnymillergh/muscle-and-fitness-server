@@ -5,11 +5,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jmsoftware.maf.authcenter.permission.configuration.PermissionConfiguration;
 import com.jmsoftware.maf.authcenter.permission.converter.PermissionMapStructMapper;
-import com.jmsoftware.maf.authcenter.permission.response.GetServicesInfoResponse;
-import com.jmsoftware.maf.authcenter.permission.persistence.Permission;
 import com.jmsoftware.maf.authcenter.permission.mapper.PermissionMapper;
-import com.jmsoftware.maf.authcenter.permission.service.PermissionService;
-import com.jmsoftware.maf.authcenter.role.service.RoleService;
+import com.jmsoftware.maf.authcenter.permission.persistence.Permission;
+import com.jmsoftware.maf.authcenter.permission.response.GetServicesInfoResponse;
+import com.jmsoftware.maf.authcenter.permission.service.PermissionDomainService;
+import com.jmsoftware.maf.authcenter.role.service.RoleDomainService;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
@@ -30,7 +30,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * <h1>PermissionServiceImpl</h1>
+ * <h1>PermissionDomainServiceImpl</h1>
  * <p>
  * Service implementation of Permission.(Permission)
  *
@@ -40,17 +40,17 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PermissionServiceImpl
+public class PermissionDomainServiceImpl
         extends ServiceImpl<PermissionMapper, Permission>
-        implements PermissionService {
-    private final RoleService roleService;
+        implements PermissionDomainService {
+    private final RoleDomainService roleDomainService;
     private final DiscoveryClient discoveryClient;
     private final RestTemplate restTemplate;
     private final PermissionConfiguration permissionConfiguration;
 
     @Override
     public GetPermissionListByRoleIdListResponse getPermissionListByRoleIdList(@Valid GetPermissionListByRoleIdListPayload payload) {
-        val adminRole = this.roleService.checkAdmin(payload.getRoleIdList());
+        val adminRole = this.roleDomainService.checkAdmin(payload.getRoleIdList());
         val response = new GetPermissionListByRoleIdListResponse();
         if (adminRole) {
             log.warn("Admin role checked. The role can access any resources");

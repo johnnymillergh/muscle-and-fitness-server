@@ -3,7 +3,7 @@ package com.jmsoftware.maf.authcenter.user;
 import com.jmsoftware.maf.authcenter.user.payload.GetUserPageListPayload;
 import com.jmsoftware.maf.authcenter.user.payload.GetUserStatusPayload;
 import com.jmsoftware.maf.authcenter.user.persistence.User;
-import com.jmsoftware.maf.authcenter.user.service.UserService;
+import com.jmsoftware.maf.authcenter.user.service.UserDomainService;
 import com.jmsoftware.maf.common.bean.PageResponseBodyBean;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.authcenter.user.GetUserByLoginTokenResponse;
@@ -29,20 +29,20 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @RequestMapping("/user-remote-api")
 public class UserRemoteApiController {
-    private final UserService userService;
+    private final UserDomainService userDomainService;
 
     @GetMapping("/users/{loginToken}")
     public ResponseBodyBean<GetUserByLoginTokenResponse> getUserByLoginToken(@PathVariable String loginToken) {
-        return ResponseBodyBean.ofSuccess(this.userService.getUserByLoginToken(loginToken));
+        return ResponseBodyBean.ofSuccess(this.userDomainService.getUserByLoginToken(loginToken));
     }
 
     @GetMapping("/users")
     public PageResponseBodyBean<User> getUserPageList(@Valid GetUserPageListPayload payload) {
-        return this.userService.getUserPageList(payload);
+        return this.userDomainService.getUserPageList(payload);
     }
 
     @GetMapping("/users/status")
     public ResponseBodyBean<String> getUserStatus(@Valid GetUserStatusPayload payload) {
-        return ResponseBodyBean.ofSuccess(this.userService.getUserStatus(payload), "Correct enum value");
+        return ResponseBodyBean.ofSuccess(this.userDomainService.getUserStatus(payload), "Correct enum value");
     }
 }

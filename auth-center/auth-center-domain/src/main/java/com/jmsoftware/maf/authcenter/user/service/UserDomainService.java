@@ -15,14 +15,14 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
- * <h1>UserService</h1>
+ * <h1>UserDomainService</h1>
  * <p>
  * Service of UserPersistence.(UserPersistence)
  *
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 5/10/20 12:31 PM
  */
 @Validated
-public interface UserService extends IService<User> {
+public interface UserDomainService extends IService<User> {
     /**
      * Gets user by login token.
      *

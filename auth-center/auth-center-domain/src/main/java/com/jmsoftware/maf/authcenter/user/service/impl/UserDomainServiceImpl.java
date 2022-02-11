@@ -17,8 +17,8 @@ import com.jmsoftware.maf.authcenter.user.mapper.UserMapper;
 import com.jmsoftware.maf.authcenter.user.payload.GetUserPageListPayload;
 import com.jmsoftware.maf.authcenter.user.payload.GetUserStatusPayload;
 import com.jmsoftware.maf.authcenter.user.persistence.User;
-import com.jmsoftware.maf.authcenter.user.service.UserRoleService;
-import com.jmsoftware.maf.authcenter.user.service.UserService;
+import com.jmsoftware.maf.authcenter.user.service.UserDomainService;
+import com.jmsoftware.maf.authcenter.user.service.UserRoleDomainService;
 import com.jmsoftware.maf.common.bean.PageResponseBodyBean;
 import com.jmsoftware.maf.common.domain.authcenter.user.*;
 import com.jmsoftware.maf.common.exception.SecurityException;
@@ -45,7 +45,7 @@ import javax.validation.constraints.NotNull;
 import static java.util.concurrent.TimeUnit.DAYS;
 
 /**
- * <h1>UserServiceImpl</h1>
+ * <h1>UserDomainServiceImpl</h1>
  * <p>
  * Service implementation of UserPersistence.(UserPersistence)
  *
@@ -55,15 +55,15 @@ import static java.util.concurrent.TimeUnit.DAYS;
 @Service
 @RequiredArgsConstructor
 @CacheConfig(cacheNames = "user-service-cache")
-public class UserServiceImpl
+public class UserDomainServiceImpl
         extends ServiceImpl<UserMapper, User>
-        implements UserService {
+        implements UserDomainService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtService jwtService;
     private final MessageSource messageSource;
     private final MafProjectProperties mafProjectProperties;
     private final RedisTemplate<String, String> redisTemplate;
-    private final UserRoleService userRoleService;
+    private final UserRoleDomainService userRoleDomainService;
     private final MafConfigurationProperties mafConfigurationProperties;
 
     @Override
@@ -99,7 +99,7 @@ public class UserServiceImpl
         user.setStatus(UserStatus.ENABLED.getValue());
         this.save(user);
         log.warn("Saved user for signup, going to assign guest role to user. {}", user);
-        this.userRoleService.assignRoleByRoleName(user, this.mafConfigurationProperties.getGuestUserRole());
+        this.userRoleDomainService.assignRoleByRoleName(user, this.mafConfigurationProperties.getGuestUserRole());
         val response = new SignupResponse();
         response.setUserId(user.getId());
         return response;
