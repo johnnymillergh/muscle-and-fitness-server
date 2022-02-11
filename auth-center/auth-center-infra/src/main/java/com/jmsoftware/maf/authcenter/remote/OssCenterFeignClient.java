@@ -14,14 +14,14 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.constraints.NotNull;
 
 /**
- * Description: OssCenterRemoteApi, change description here.
+ * Description: OssCenterFeignClient, change description here.
  *
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 9/15/2021 11:10 AM
  * @see <a href='https://docs.spring.io/spring-cloud-openfeign/docs/current/reference/html/'>Spring Cloud OpenFeign</a>
  **/
 @Validated
-@FeignClient(value = OssCenterRemoteApi.SERVICE_NAME, fallback = OssCenterRemoteApi.OssCenterRemoteApiFallback.class)
-public interface OssCenterRemoteApi {
+@FeignClient(value = OssCenterFeignClient.SERVICE_NAME, fallback = OssCenterFeignClient.OssCenterFeignClientFallback.class)
+public interface OssCenterFeignClient {
     String SERVICE_NAME = "oss-center";
 
     /**
@@ -35,10 +35,10 @@ public interface OssCenterRemoteApi {
 
     @Slf4j
     @Component
-    class OssCenterRemoteApiFallback implements OssCenterRemoteApi {
+    class OssCenterFeignClientFallback implements OssCenterFeignClient {
         @Override
         public ResponseBodyBean<ObjectResponse> uploadSingleResource(@NotNull MultipartFile multipartFile) {
-            log.error("Fallback -> OssCenterRemoteApi#uploadSingleResource()");
+            log.error("Fallback -> OssCenterFeignClient#uploadSingleResource()");
             return null;
         }
     }

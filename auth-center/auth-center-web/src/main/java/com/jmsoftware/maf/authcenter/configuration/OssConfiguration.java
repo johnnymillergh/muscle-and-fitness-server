@@ -1,6 +1,6 @@
 package com.jmsoftware.maf.authcenter.configuration;
 
-import com.jmsoftware.maf.authcenter.remote.OssCenterRemoteApi;
+import com.jmsoftware.maf.authcenter.remote.OssCenterFeignService;
 import com.jmsoftware.maf.springcloudstarter.poi.OssUploader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,15 +18,15 @@ import org.springframework.mock.web.MockMultipartFile;
 @Configuration
 @RequiredArgsConstructor
 public class OssConfiguration {
-    private final OssCenterRemoteApi ossCenterRemoteApi;
+    private final OssCenterFeignService ossCenterFeignService;
 
     @Bean
     public OssUploader ossUploader() {
         return (name, inputStream) -> {
             val multipartFile = new MockMultipartFile(name, name, null, inputStream);
-            val response = this.ossCenterRemoteApi.uploadSingleResource(multipartFile);
-            log.info("Called {} to upload multipartFile. {}", OssCenterRemoteApi.SERVICE_NAME, response);
-            return String.format("%s/%s", response.getData().getBucket(), response.getData().getObject());
+            val objectResponse = this.ossCenterFeignService.uploadSingleResource(multipartFile);
+            log.info("Uploaded multipartFile. objectResponse: {}", objectResponse);
+            return String.format("%s/%s", objectResponse.getBucket(), objectResponse.getObject());
         };
     }
 }
