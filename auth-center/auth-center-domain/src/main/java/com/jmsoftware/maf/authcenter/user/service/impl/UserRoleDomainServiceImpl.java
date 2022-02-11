@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 import javax.validation.constraints.NotBlank;
 import java.util.Optional;
 
+import static com.jmsoftware.maf.springcloudstarter.function.BooleanCheck.requireTrue;
+
 /**
  * UserRoleDomainServiceImpl.
  *
@@ -33,7 +35,7 @@ public class UserRoleDomainServiceImpl
     private final RoleDomainService roleDomainService;
 
     @Override
-    @SneakyThrows({BizException.class})
+    @SneakyThrows
     public void assignRoleByRoleName(@NonNull User user, @NotBlank String roleName) {
         val queryWrapper = Wrappers.lambdaQuery(Role.class);
         queryWrapper.select(Role::getId)
@@ -43,9 +45,9 @@ public class UserRoleDomainServiceImpl
         val userRole = new UserRole();
         userRole.setUserId(user.getId());
         userRole.setRoleId(role.getId());
-        val saved = this.save(userRole);
-        if (!saved) {
-            throw new BizException(String.format("Cannot assign role (%s) to user (%s)", roleName, user.getUsername()));
-        }
+        requireTrue(this.save(userRole), null)
+                .orElseThrow(() -> new BizException(
+                        String.format("Cannot assign role (%s) to user (%s)", roleName, user.getUsername())
+                ));
     }
 }

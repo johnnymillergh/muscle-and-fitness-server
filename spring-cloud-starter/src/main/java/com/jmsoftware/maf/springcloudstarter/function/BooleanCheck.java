@@ -2,6 +2,7 @@ package com.jmsoftware.maf.springcloudstarter.function;
 
 import cn.hutool.core.util.BooleanUtil;
 import com.jmsoftware.maf.springcloudstarter.function.functionalinterface.OrElseThrowExceptionFunction;
+import org.springframework.lang.Nullable;
 
 import java.util.function.Consumer;
 
@@ -24,7 +25,7 @@ public class BooleanCheck {
      * @return the throw exception function
      * @see com.jmsoftware.maf.springcloudstarter.FunctionalInterfaceTests#testRequireTrue()
      */
-    public static OrElseThrowExceptionFunction requireTrue(boolean aBoolean, Consumer<Boolean> after) {
+    public static OrElseThrowExceptionFunction requireTrue(boolean aBoolean, @Nullable Consumer<Boolean> after) {
         if (nonNull(after)) {
             after.accept(aBoolean);
         }
