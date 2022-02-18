@@ -15,7 +15,7 @@ import java.util.Optional;
 /**
  * Description: OssCenterFeignServiceImpl, change description here.
  *
- * @author 钟俊 (za-zhongjun), email: jun.zhong@zatech.com, date: 2/5/2022 7:47 PM
+ * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com, date: 2/5/2022 7:47 PM
  **/
 @Slf4j
 @Service

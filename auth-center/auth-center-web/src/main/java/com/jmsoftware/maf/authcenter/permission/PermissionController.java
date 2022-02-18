@@ -1,7 +1,7 @@
 package com.jmsoftware.maf.authcenter.permission;
 
 import com.jmsoftware.maf.authcenter.permission.response.GetServicesInfoResponse;
-import com.jmsoftware.maf.authcenter.permission.service.PermissionDomainService;
+import com.jmsoftware.maf.authcenter.permission.service.PermissionService;
 import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.exception.BizException;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class PermissionController {
-    private final PermissionDomainService permissionDomainService;
+    private final PermissionService permissionService;
 
     /**
      * Services info response body bean.
@@ -33,6 +33,6 @@ public class PermissionController {
      */
     @GetMapping("/permissions/services-info")
     public ResponseBodyBean<GetServicesInfoResponse> getServicesInfo() throws BizException {
-        return ResponseBodyBean.ofSuccess(this.permissionDomainService.getServicesInfo());
+        return ResponseBodyBean.ofSuccess(this.permissionService.getServicesInfo());
     }
 }

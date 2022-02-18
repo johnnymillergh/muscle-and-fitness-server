@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 /**
  * Description: OssCenterFeignService, change description here.
  *
- * @author 钟俊 (za-zhongjun), email: jun.zhong@zatech.com, date: 2/5/2022 7:46 PM
+ * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com, date: 2/5/2022 7:46 PM
  **/
 @Validated
 public interface OssCenterFeignService {
