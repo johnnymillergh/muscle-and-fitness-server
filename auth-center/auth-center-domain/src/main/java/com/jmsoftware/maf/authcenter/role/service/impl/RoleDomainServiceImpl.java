@@ -17,6 +17,7 @@ import com.jmsoftware.maf.authcenter.role.persistence.Role;
 import com.jmsoftware.maf.authcenter.role.service.RoleDomainService;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdResponse;
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdSingleResponse;
+import com.jmsoftware.maf.common.exception.BizException;
 import com.jmsoftware.maf.springcloudstarter.property.MafConfigurationProperties;
 import com.jmsoftware.maf.springcloudstarter.property.MafProjectProperties;
 import lombok.NonNull;
@@ -34,6 +35,9 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+
+import static com.jmsoftware.maf.springcloudstarter.function.BooleanCheck.requireTrue;
+import static com.jmsoftware.maf.springcloudstarter.function.Slf4j.lazyDebug;
 
 /**
  * <h1>RoleDomainServiceImpl</h1>
@@ -79,24 +83,16 @@ public class RoleDomainServiceImpl
 
     @Override
     public boolean checkAdmin(@NotEmpty List<@NotNull Long> roleIdList) {
-        val wrapper = Wrappers.lambdaQuery(Role.class);
-        wrapper.select(Role::getName)
-                .in(Role::getId, roleIdList);
-        val roleList = this.list(wrapper);
-        val roleNameSet = roleList
+        // If roleNameSet is not empty (contains "admin")
+        return this.list(Wrappers.lambdaQuery(Role.class).select(Role::getName).in(Role::getId, roleIdList))
                 .stream()
                 .map(Role::getName)
-                .filter(roleName -> StrUtil.equals(this.mafConfigurationProperties.getSuperUserRole(), roleName))
-                .collect(Collectors.toSet());
-        // If roleNameSet is not empty (contains "admin")
-        return CollUtil.isNotEmpty(roleNameSet);
+                .anyMatch(roleName -> StrUtil.equals(this.mafConfigurationProperties.getSuperUserRole(), roleName));
     }
 
     @Override
     public List<RoleExcelBean> getListForExporting() {
-        val rolePage = new Page<Role>(1, 500);
-        this.page(rolePage);
-        return rolePage
+        return this.page(new Page<>(1, 500))
                 .getRecords()
                 .stream()
                 .map(RoleExcelBean::transformBy)
@@ -115,12 +111,12 @@ public class RoleDomainServiceImpl
     }
 
     @Override
+    @SneakyThrows
     @Transactional(rollbackFor = Throwable.class)
     public void save(@NotEmpty List<@Valid RoleExcelBean> beanList) {
         val roleList = beanList.stream().map(RoleExcelBean::transformTo).collect(Collectors.toList());
-        val saved = this.saveBatch(roleList);
-        if (!saved) {
-            log.error("Cannot save batch role list. {}", roleList);
-        }
+        lazyDebug(log, () -> String.format("Saving roleList: %s", roleList));
+        requireTrue(this.saveBatch(roleList), saved -> log.info("Saved role list: {}", saved))
+                .orElseThrow(() -> new BizException("Failed to save roles! Transaction rollback"));
     }
 }
