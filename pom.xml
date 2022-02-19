@@ -49,23 +49,24 @@
         <maven-pmd-plugin.version>3.15.0</maven-pmd-plugin.version>
         <p3c-pmd.version>2.1.1</p3c-pmd.version>
         <spring-cloud.version>2021.0.0</spring-cloud.version>
-        <functionaljava.version>4.8.1</functionaljava.version>
+        <functionaljava.version>5.0</functionaljava.version>
+        <functionaljava-java8.version>4.8.1</functionaljava-java8.version>
         <spring-content.version>1.0.0.M5</spring-content.version>
         <spring-boot-admin-starter-server.version>2.6.2</spring-boot-admin-starter-server.version>
         <spring-boot-admin-starter-client.version>2.6.2</spring-boot-admin-starter-client.version>
         <druid-spring-boot-starter.version>1.2.8</druid-spring-boot-starter.version>
         <mybatis-plus-boot-starter.version>3.5.1</mybatis-plus-boot-starter.version>
-        <dynamic-datasource-spring-boot-starter.version>3.5.0</dynamic-datasource-spring-boot-starter.version>
+        <dynamic-datasource-spring-boot-starter.version>3.5.1</dynamic-datasource-spring-boot-starter.version>
         <hutool-all.version>5.7.21</hutool-all.version>
         <guava.version>31.0.1-jre</guava.version>
-        <springdoc-openapi-ui.version>1.6.5</springdoc-openapi-ui.version>
+        <springdoc-openapi-ui.version>1.6.6</springdoc-openapi-ui.version>
         <jjwt.version>0.11.2</jjwt.version>
         <java-faker.version>1.0.2</java-faker.version>
         <easyexcel.version>2.2.6</easyexcel.version>
         <poi.version>5.2.0</poi.version>
         <logstash-logback-encoder.version>7.0.1</logstash-logback-encoder.version>
         <minio.version>8.2.2</minio.version>
-        <apache-tika.version>2.2.1</apache-tika.version>
+        <apache-tika.version>2.3.0</apache-tika.version>
         <mapstruct.version>1.4.2.Final</mapstruct.version>
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
     </properties>
@@ -350,7 +351,7 @@
         <dependency>
             <groupId>org.functionaljava</groupId>
             <artifactId>functionaljava-java8</artifactId>
-            <version>${functionaljava.version}</version>
+            <version>${functionaljava-java8.version}</version>
         </dependency>
         <dependency>
             <groupId>org.functionaljava</groupId>
