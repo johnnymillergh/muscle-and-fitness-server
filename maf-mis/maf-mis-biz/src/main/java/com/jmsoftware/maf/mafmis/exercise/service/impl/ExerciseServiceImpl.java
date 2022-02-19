@@ -2,7 +2,7 @@ package com.jmsoftware.maf.mafmis.exercise.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.jmsoftware.maf.common.exception.BizException;
+import com.jmsoftware.maf.common.exception.InternalServerException;
 import com.jmsoftware.maf.mafmis.exercise.converter.ExerciseMapStructMapper;
 import com.jmsoftware.maf.mafmis.exercise.mapper.ExerciseMapper;
 import com.jmsoftware.maf.mafmis.exercise.payload.GetPageListPayload;
@@ -37,7 +37,7 @@ public class ExerciseServiceImpl implements ExerciseService {
     @SneakyThrows
     public Exercise queryById(Long id) {
         if (ObjectUtil.isNull(id)) {
-            throw new BizException("Cannot execute the query! Cause: the ID is null.");
+            throw new InternalServerException("Cannot execute the query! Cause: the ID is null.");
         }
         return this.exerciseMapper.selectById(id);
     }

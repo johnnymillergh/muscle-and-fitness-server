@@ -8,7 +8,7 @@ import com.jmsoftware.maf.authcenter.user.mapper.UserRoleMapper;
 import com.jmsoftware.maf.authcenter.user.persistence.User;
 import com.jmsoftware.maf.authcenter.user.persistence.UserRole;
 import com.jmsoftware.maf.authcenter.user.service.UserRoleDomainService;
-import com.jmsoftware.maf.common.exception.BizException;
+import com.jmsoftware.maf.common.exception.InternalServerException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -41,12 +41,12 @@ public class UserRoleDomainServiceImpl
         queryWrapper.select(Role::getId)
                 .eq(Role::getName, roleName);
         val role = Optional.ofNullable(this.roleDomainService.getOne(queryWrapper))
-                .orElseThrow(() -> new BizException("Cannot find the role: " + roleName));
+                .orElseThrow(() -> new InternalServerException("Cannot find the role: " + roleName));
         val userRole = new UserRole();
         userRole.setUserId(user.getId());
         userRole.setRoleId(role.getId());
         requireTrue(this.save(userRole), null)
-                .orElseThrow(() -> new BizException(
+                .orElseThrow(() -> new InternalServerException(
                         String.format("Cannot assign role (%s) to user (%s)", roleName, user.getUsername())
                 ));
     }

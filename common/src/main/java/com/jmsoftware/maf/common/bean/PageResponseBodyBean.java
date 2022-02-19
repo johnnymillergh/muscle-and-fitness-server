@@ -6,7 +6,7 @@ import cn.hutool.json.JSONUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jmsoftware.maf.common.constant.UniversalDateTime;
 import com.jmsoftware.maf.common.exception.BaseException;
-import com.jmsoftware.maf.common.exception.BizException;
+import com.jmsoftware.maf.common.exception.InternalServerException;
 import lombok.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
@@ -233,10 +233,10 @@ public class PageResponseBodyBean<T> implements Serializable {
      * @param <T>     the response body data type
      * @param message message to be responded.
      * @return response body
-     * @throws BizException the business exception
+     * @throws InternalServerException the business exception
      */
-    public static <T> PageResponseBodyBean<T> ofFailure(@NonNull final String message) throws BizException {
-        throw new BizException(message);
+    public static <T> PageResponseBodyBean<T> ofFailure(@NonNull final String message) throws InternalServerException {
+        throw new InternalServerException(message);
     }
 
     /**
@@ -245,10 +245,10 @@ public class PageResponseBodyBean<T> implements Serializable {
      * @param <T>  the response body data type
      * @param data data to be responded
      * @return response body
-     * @throws BizException the business exception
+     * @throws InternalServerException the business exception
      */
-    public static <T> PageResponseBodyBean<T> ofFailure(final List<T> data) throws BizException {
-        throw new BizException(data);
+    public static <T> PageResponseBodyBean<T> ofFailure(final List<T> data) throws InternalServerException {
+        throw new InternalServerException(data);
     }
 
     /**
@@ -258,11 +258,11 @@ public class PageResponseBodyBean<T> implements Serializable {
      * @param data    data to be responded
      * @param message message to be responded
      * @return response body
-     * @throws BizException the business exception
+     * @throws InternalServerException the business exception
      */
     public static <T> PageResponseBodyBean<T> ofFailure(final List<T> data,
-                                                        @NonNull final String message) throws BizException {
-        throw new BizException(data, message);
+                                                        @NonNull final String message) throws InternalServerException {
+        throw new InternalServerException(data, message);
     }
 
     /**

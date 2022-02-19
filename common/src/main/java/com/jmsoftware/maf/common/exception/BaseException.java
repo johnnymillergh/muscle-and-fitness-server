@@ -9,8 +9,7 @@ import org.springframework.http.HttpStatus;
  * <p>
  * Base exception.
  *
- * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
- * @date 2019-03-23 16:23
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 2019-03-23 16:23
  **/
 @Data
 @EqualsAndHashCode(callSuper = true)

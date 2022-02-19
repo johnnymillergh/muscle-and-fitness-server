@@ -6,7 +6,7 @@ import cn.hutool.json.JSONUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jmsoftware.maf.common.constant.UniversalDateTime;
 import com.jmsoftware.maf.common.exception.BaseException;
-import com.jmsoftware.maf.common.exception.BizException;
+import com.jmsoftware.maf.common.exception.InternalServerException;
 import lombok.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
@@ -209,8 +209,8 @@ public class ResponseBodyBean<T> implements Serializable {
      * @param message message to be responded.
      * @return response body
      */
-    public static <T> ResponseBodyBean<T> ofFailureMessage(@NonNull final String message) throws BizException {
-        throw new BizException(message);
+    public static <T> ResponseBodyBean<T> ofFailureMessage(@NonNull final String message) throws InternalServerException {
+        throw new InternalServerException(message);
     }
 
     /**
@@ -220,8 +220,8 @@ public class ResponseBodyBean<T> implements Serializable {
      * @param data data to be responded
      * @return response body
      */
-    public static <T> ResponseBodyBean<T> ofFailure(final T data) throws BizException {
-        throw new BizException(data);
+    public static <T> ResponseBodyBean<T> ofFailure(final T data) throws InternalServerException {
+        throw new InternalServerException(data);
     }
 
     /**
@@ -232,8 +232,8 @@ public class ResponseBodyBean<T> implements Serializable {
      * @param message message to be responded
      * @return response body
      */
-    public static <T> ResponseBodyBean<T> ofFailure(final T data, @NonNull final String message) throws BizException {
-        throw new BizException(data, message);
+    public static <T> ResponseBodyBean<T> ofFailure(final T data, @NonNull final String message) throws InternalServerException {
+        throw new InternalServerException(data, message);
     }
 
     /**
