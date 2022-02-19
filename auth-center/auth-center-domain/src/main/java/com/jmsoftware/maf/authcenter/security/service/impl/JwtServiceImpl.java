@@ -31,6 +31,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
+import static cn.hutool.core.text.CharSequenceUtil.format;
+
 /**
  * <h1>JwtServiceImpl</h1>
  * Change description here.
@@ -51,7 +53,8 @@ public class JwtServiceImpl implements JwtService {
     @PostConstruct
     private void init() {
         log.info("Start to init class members of {}.", this.getClass().getSimpleName());
-        this.secretKey = Keys.hmacShaKeyFor(this.jwtConfigurationProperties.getSigningKey().getBytes(StandardCharsets.UTF_8));
+        this.secretKey = Keys.hmacShaKeyFor(
+                this.jwtConfigurationProperties.getSigningKey().getBytes(StandardCharsets.UTF_8));
         log.warn("Secret key for JWT was generated. Algorithm: {}", this.secretKey.getAlgorithm());
         this.jwtParser = Jwts.parserBuilder().setSigningKey(this.secretKey).build();
     }
@@ -84,7 +87,7 @@ public class JwtServiceImpl implements JwtService {
         }
         val jwt = builder.compact();
         // Store new JWT in Redis
-        String redisKeyOfJwt = String.format("%s%s", this.jwtConfigurationProperties.getJwtRedisKeyPrefix(), subject);
+        String redisKeyOfJwt = format("{}{}", this.jwtConfigurationProperties.getJwtRedisKeyPrefix(), subject);
         this.redisTemplate.opsForValue().set(redisKeyOfJwt, jwt, ttl, TimeUnit.MILLISECONDS);
         log.info("Storing JWT in Redis. Key: {}, Value: {}", redisKeyOfJwt, jwt);
         return jwt;
@@ -132,7 +135,7 @@ public class JwtServiceImpl implements JwtService {
         val jwt = this.getJwtFromRequest(request);
         val username = this.getUsernameFromJwt(jwt);
         // Delete JWT from redis
-        String redisKeyOfJwt = String.format("%s%s", this.jwtConfigurationProperties.getJwtRedisKeyPrefix(), username);
+        String redisKeyOfJwt = format("{}{}", this.jwtConfigurationProperties.getJwtRedisKeyPrefix(), username);
         val deletedKeyNumber = this.redisTemplate.opsForValue().getOperations().delete(redisKeyOfJwt);
         log.error("Invalidate JWT. Redis key of JWT = {}, deleted = {}", redisKeyOfJwt, deletedKeyNumber);
     }

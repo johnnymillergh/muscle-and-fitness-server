@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import javax.validation.constraints.NotBlank;
 import java.util.Optional;
 
+import static cn.hutool.core.text.CharSequenceUtil.format;
 import static com.jmsoftware.maf.springcloudstarter.function.BooleanCheck.requireTrue;
 
 /**
@@ -47,7 +48,7 @@ public class UserRoleDomainServiceImpl
         userRole.setRoleId(role.getId());
         requireTrue(this.save(userRole), null)
                 .orElseThrow(() -> new InternalServerException(
-                        String.format("Cannot assign role (%s) to user (%s)", roleName, user.getUsername())
+                        format("Cannot assign role ({}) to user ({})", roleName, user.getUsername())
                 ));
     }
 }

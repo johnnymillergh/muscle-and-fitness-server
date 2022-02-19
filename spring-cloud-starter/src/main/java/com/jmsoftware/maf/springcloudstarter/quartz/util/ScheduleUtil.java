@@ -15,6 +15,7 @@ import org.quartz.*;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
+import static cn.hutool.core.text.CharSequenceUtil.format;
 import static com.jmsoftware.maf.springcloudstarter.quartz.constant.ScheduleConstant.QUARTZ_JOB_CONFIGURATION;
 
 /**
@@ -27,9 +28,9 @@ public class ScheduleUtil {
     public static final String JOB_DETAIL_POSTFIX = "-job-detail";
     public static final String TRIGGER_POSTFIX = "-trigger";
     public static final BiFunction<Long, String, String> JOB_DETAIL_NAME_OPERATOR =
-            (jobId, serviceName) -> String.format("%s#%d%s", serviceName, jobId, JOB_DETAIL_POSTFIX);
+            (jobId, serviceName) -> format("{}#{}{}", serviceName, jobId, JOB_DETAIL_POSTFIX);
     public static final BiFunction<Long, String, String> TRIGGER_NAME_OPERATOR =
-            (jobId, serviceName) -> String.format("%s#%d%s", serviceName, jobId, TRIGGER_POSTFIX);
+            (jobId, serviceName) -> format("{}#{}{}", serviceName, jobId, TRIGGER_POSTFIX);
 
     private ScheduleUtil() {
     }
@@ -137,8 +138,8 @@ public class ScheduleUtil {
                 return cronScheduleBuilder.withMisfireHandlingInstructionDoNothing();
             default:
                 throw new IllegalArgumentException(
-                        String.format("The task misfire policy '%s' cannot be used in cron schedule tasks",
-                                      quartzJobConfiguration.getMisfirePolicy()));
+                        format("The task misfire policy `{}` cannot be used in cron schedule tasks",
+                               quartzJobConfiguration.getMisfirePolicy()));
         }
     }
 }

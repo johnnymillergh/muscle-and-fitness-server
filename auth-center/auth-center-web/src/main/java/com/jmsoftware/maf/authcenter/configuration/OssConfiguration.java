@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mock.web.MockMultipartFile;
 
+import static cn.hutool.core.text.CharSequenceUtil.format;
+
 /**
  * Description: OssConfiguration, change description here.
  *
@@ -26,7 +28,7 @@ public class OssConfiguration {
             val multipartFile = new MockMultipartFile(name, name, null, inputStream);
             val objectResponse = this.ossCenterFeignService.uploadSingleResource(multipartFile);
             log.info("Uploaded multipartFile. objectResponse: {}", objectResponse);
-            return String.format("%s/%s", objectResponse.getBucket(), objectResponse.getObject());
+            return format("{}/{}", objectResponse.getBucket(), objectResponse.getObject());
         };
     }
 }

@@ -13,6 +13,8 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import static cn.hutool.core.text.CharSequenceUtil.format;
+
 /**
  * Description: ResponseUtil, change description here.
  *
@@ -42,7 +44,7 @@ public class ResponseUtil {
         response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
         return response.writeWith(Mono.fromSupplier(() -> {
             val bufferFactory = response.bufferFactory();
-            val message2 = String.format("%s. %s", httpStatus.getReasonPhrase(), message);
+            val message2 = format("{}. {}", httpStatus.getReasonPhrase(), message);
             val responseBody = ResponseBodyBean.ofStatus(httpStatus.value(), message2, data);
             try {
                 return bufferFactory.wrap(this.objectMapper.writeValueAsBytes(responseBody));

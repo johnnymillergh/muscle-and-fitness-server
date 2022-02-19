@@ -12,6 +12,8 @@ import lombok.val;
 import org.springdoc.core.customizers.OpenApiCustomiser;
 import org.springframework.context.annotation.Bean;
 
+import static cn.hutool.core.text.CharSequenceUtil.format;
+
 /**
  * <h1>OpenApiConfiguration</h1>
  * <p>
@@ -34,12 +36,12 @@ public class OpenApiConfiguration {
         return new OpenAPI()
                 .info(
                         new Info()
-                                .title(String.format("API for %s@%s", projectArtifactId, version))
+                                .title(format("API for {}@{}", projectArtifactId, version))
                                 .description(
-                                        String.format("%s, artifact ID: %s, environment: %s",
-                                                      this.mafProjectProperties.getDescription(),
-                                                      projectArtifactId,
-                                                      this.mafProjectProperties.getEnvironment())
+                                        format("{}, artifact ID: {}, environment: {}",
+                                               this.mafProjectProperties.getDescription(),
+                                               projectArtifactId,
+                                               this.mafProjectProperties.getEnvironment())
                                 )
                                 .contact(
                                         new Contact()
@@ -56,11 +58,9 @@ public class OpenApiConfiguration {
     public OpenApiCustomiser openApiCustomiser() {
         return openApi -> openApi.getServers().forEach(server -> {
             if (!CharSequenceUtil.containsIgnoreCase(this.mafProjectProperties.getEnvironment(), DEV)) {
-                server.setUrl(
-                        String.format("%s/%s", server.getUrl(), this.mafProjectProperties.getProjectArtifactId()));
+                server.setUrl(format("{}/{}", server.getUrl(), this.mafProjectProperties.getProjectArtifactId()));
             }
-            server.setDescription(
-                    String.format("Modified server URL - %s", this.mafProjectProperties.getProjectArtifactId()));
+            server.setDescription(format("Modified server URL - {}", this.mafProjectProperties.getProjectArtifactId()));
             log.info("Modified server, {}", server);
         });
     }

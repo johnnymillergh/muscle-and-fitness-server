@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static cn.hutool.core.text.CharSequenceUtil.format;
+
 /**
  * <h1>ErrorController</h1>
  * <p>
@@ -32,6 +34,7 @@ public class GlobalErrorController extends BasicErrorController {
     }
 
     @Override
+    @SuppressWarnings("scwspring_Non-annotatedcontrollerpublicmethod")
     public ResponseEntity<Map<String, Object>> error(HttpServletRequest request) {
         val httpStatus = this.getStatus(request);
         val body = this.getErrorAttributes(request, ErrorAttributeOptions.defaults());
@@ -40,10 +43,10 @@ public class GlobalErrorController extends BasicErrorController {
         optionalTrace.ifPresent(trace -> {
             val message = body.get("message");
             val firstLineOfTrace = trace.toString().split("\\n")[0];
-            val joinedMessage = String.format("%s %s", message, firstLineOfTrace);
+            val joinedMessage = format("{} {}", message, firstLineOfTrace);
             body.put("message", joinedMessage);
             body.put("trace",
-                     String.format("Trace has been simplified by %s. Refer to 'message'", this.getClass().getName()));
+                     format("Trace has been simplified by {}. Refer to `message`", this.getClass().getName()));
         });
         log.error("Captured HTTP request error. Response body = {}", body);
         return new ResponseEntity<>(body, httpStatus);

@@ -17,6 +17,8 @@ import javax.validation.Valid;
 import java.time.Instant;
 import java.util.List;
 
+import static cn.hutool.core.text.CharSequenceUtil.format;
+
 /**
  * <h1>QuartzJobConfigurationController</h1>
  * <p>
@@ -76,7 +78,7 @@ public class QuartzJobConfigurationController extends AbstractExcelDataControlle
     @Override
     protected void onExceptionOccurred() {
         log.error("Exception occurred when uploading excel. Excel class: {}", QuartzJobConfigurationExcel.class);
-        this.fileName.set(String.format("quartz-job-configuration-stat-%s.xlsx", Instant.now()));
+        this.fileName.set(format("quartz-job-configuration-stat-{}.xlsx", Instant.now()));
     }
 
     @Override

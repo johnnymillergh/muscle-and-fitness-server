@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 
+import static cn.hutool.core.text.CharSequenceUtil.format;
 import static com.jmsoftware.maf.osscenter.constant.Chunk.LARGE_CHUNK_SIZE;
 import static com.jmsoftware.maf.osscenter.constant.Chunk.TINY_CHUNK_SIZE;
 
@@ -125,7 +126,7 @@ public class ReadResourceServiceImpl implements ReadResourceService {
         val rangeLength = end - start + 1;
         return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)
                 .header(HttpHeaders.ACCEPT_RANGES, ACCEPT_RANGES_VALUE)
-                .header(HttpHeaders.CONTENT_RANGE, String.format("bytes %d-%d/%d", start, end, resourceLength))
+                .header(HttpHeaders.CONTENT_RANGE, format("bytes {}-{}/{}", start, end, resourceLength))
                 .contentLength(rangeLength)
                 .contentType(MediaType.parseMediaType(statObjectResponse.contentType()))
                 .body(outputStream -> {

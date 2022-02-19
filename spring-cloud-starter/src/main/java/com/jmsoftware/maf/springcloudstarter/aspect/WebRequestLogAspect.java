@@ -16,6 +16,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import java.time.Duration;
 import java.time.Instant;
 
+import static cn.hutool.core.text.CharSequenceUtil.format;
+
 /**
  * <h1>RequestLogAspect</h1>
  * <p><strong>Description</strong>:</p>
@@ -118,7 +120,7 @@ public class WebRequestLogAspect {
             if (formattedJsonString.length() > MAX_LENGTH_OF_JSON_STRING) {
                 val substring = formattedJsonString.substring(0, MAX_LENGTH_OF_JSON_STRING - 1);
                 formattedJsonString =
-                        String.format("%s… [The length(%d) of JSON string is larger than the maximum(%d)]", substring,
+                        format("{}… [The length({}) of JSON string is larger than the maximum({})]", substring,
                                       formattedJsonString.length(), MAX_LENGTH_OF_JSON_STRING);
             }
             log.info(AROUND_TEMPLATE_FOR_JSON, LINE_SEPARATOR, formattedJsonString);

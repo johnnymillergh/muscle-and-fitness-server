@@ -10,6 +10,8 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.constraints.NotNull;
 import java.nio.charset.StandardCharsets;
 
+import static cn.hutool.core.text.CharSequenceUtil.format;
+
 /**
  * <h1>JwtConfigurationProperties</h1>
  * <p>
@@ -49,14 +51,15 @@ public class JwtConfigurationProperties {
     private Long ttlForRememberMe = 7 * 86400000L;
 
     public JwtConfigurationProperties(MafProjectProperties mafProjectProperties) {
-        this.signingKey = String.format(
-                "%s:%s@%s", mafProjectProperties.getGroupId(),
+        this.signingKey = format(
+                "{}:{}@{}",
+                mafProjectProperties.getGroupId(),
                 mafProjectProperties.getProjectParentArtifactId(),
                 mafProjectProperties.getVersion()
         );
         log.info("Initiated JWT signing key: {}. The specified key byte array is {} bits", this.signingKey,
                  this.signingKey.getBytes(StandardCharsets.UTF_8).length * 8);
-        this.jwtRedisKeyPrefix = String.format("%s:jwt:", mafProjectProperties.getProjectParentArtifactId());
-        log.warn("Initiated 'jwtRedisKeyPrefix': {}", this.jwtRedisKeyPrefix);
+        this.jwtRedisKeyPrefix = format("{}:jwt:", mafProjectProperties.getProjectParentArtifactId());
+        log.warn("Initiated `jwtRedisKeyPrefix`: {}", this.jwtRedisKeyPrefix);
     }
 }

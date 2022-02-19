@@ -21,6 +21,8 @@ import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
 
+import static cn.hutool.core.text.CharSequenceUtil.format;
+
 /**
  * <h1>GlobalExceptionHandler</h1>
  * <p>
@@ -89,6 +91,6 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
         }
         response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
         return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR,
-                                         String.format("Exception message: %s", ex.getMessage()));
+                                         format("Exception message: {}", ex.getMessage()));
     }
 }

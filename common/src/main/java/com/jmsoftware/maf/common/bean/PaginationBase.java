@@ -10,6 +10,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import static cn.hutool.core.text.CharSequenceUtil.format;
+
 /**
  * <h1>PaginationBase</h1>
  * <p>
@@ -55,7 +57,7 @@ public class PaginationBase {
     @JsonIgnore
     public String getOrderByStatement() {
         if (!CharSequenceUtil.isBlank(this.orderBy)) {
-            return String.format("%s `%s` %s", "ORDER BY", this.orderBy, this.orderRule);
+            return format("{} `{}` {}", "ORDER BY", this.orderBy, this.orderRule);
         }
         return this.orderByStatement;
     }

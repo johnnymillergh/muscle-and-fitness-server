@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import static cn.hutool.core.text.CharSequenceUtil.format;
 import static com.jmsoftware.maf.springcloudstarter.function.BooleanCheck.requireTrue;
 import static com.jmsoftware.maf.springcloudstarter.function.Slf4j.lazyDebug;
 
@@ -70,9 +71,8 @@ public class RoleDomainServiceImpl
         }
         val response = new GetRoleListByUserIdResponse();
         response.setRoleList(this.getRoleListByUserId(userId));
-        this.redisTemplate.opsForValue().set(key, this.objectMapper.writeValueAsString(response),
-                                             RandomUtil.randomLong(1, 7),
-                                             TimeUnit.DAYS);
+        this.redisTemplate.opsForValue()
+                .set(key, this.objectMapper.writeValueAsString(response), RandomUtil.randomLong(1, 7), TimeUnit.DAYS);
         return response;
     }
 
@@ -106,7 +106,7 @@ public class RoleDomainServiceImpl
             log.warn("Validation failed! beanList: {}, bean: {}, index: {}", beanList, bean, index);
             val firstErrorMessage = CollUtil.getFirst(beanValidationResult.getErrorMessages());
             throw new IllegalArgumentException(
-                    String.format("%s %s", firstErrorMessage.getPropertyName(), firstErrorMessage.getMessage()));
+                    format("{} {}", firstErrorMessage.getPropertyName(), firstErrorMessage.getMessage()));
         }
     }
 
@@ -115,7 +115,7 @@ public class RoleDomainServiceImpl
     @Transactional(rollbackFor = Throwable.class)
     public void save(@NotEmpty List<@Valid RoleExcelBean> beanList) {
         val roleList = beanList.stream().map(RoleExcelBean::transformTo).collect(Collectors.toList());
-        lazyDebug(log, () -> String.format("Saving roleList: %s", roleList));
+        lazyDebug(log, () -> format("Saving roleList: {}", roleList));
         requireTrue(this.saveBatch(roleList), saved -> log.info("Saved role list: {}", saved))
                 .orElseThrow(() -> new InternalServerException("Failed to save roles! Transaction rollback"));
     }

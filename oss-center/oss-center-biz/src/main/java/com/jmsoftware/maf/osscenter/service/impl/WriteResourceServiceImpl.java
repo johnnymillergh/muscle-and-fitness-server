@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static cn.hutool.core.text.CharSequenceUtil.format;
 import static com.jmsoftware.maf.osscenter.constant.Chunk.TINY_CHUNK_SIZE;
 
 /**
@@ -101,7 +102,7 @@ public class WriteResourceServiceImpl implements WriteResourceService {
         // bucketName is either mediaType of given 'bucket'
         val bucketName = CharSequenceUtil.isBlank(payload.getBucket()) ?
                 Objects.requireNonNull(mediaType).getType() : payload.getBucket();
-        val orderedFilename = String.format("%s.chunk%s", payload.getFilename(),
+        val orderedFilename = format("{}.chunk{}", payload.getFilename(),
                                             NumberUtil.decimalFormat("000", payload.getChunkNumber()));
         val objectResponse = new ObjectResponse();
         objectResponse.setBucket(bucketName);

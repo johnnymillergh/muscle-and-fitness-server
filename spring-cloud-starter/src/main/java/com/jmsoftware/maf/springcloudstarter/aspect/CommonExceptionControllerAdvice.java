@@ -29,6 +29,8 @@ import javax.validation.ConstraintViolationException;
 import java.lang.reflect.UndeclaredThrowableException;
 import java.util.Objects;
 
+import static cn.hutool.core.text.CharSequenceUtil.format;
+
 /**
  * <h1>ExceptionControllerAdvice</h1>
  * <p>
@@ -118,11 +120,11 @@ public class CommonExceptionControllerAdvice {
         String message;
         if (exception.hasFieldErrors()) {
             val fieldError = exception.getFieldError();
-            message = String.format("Field [%s] has error: %s", Objects.requireNonNull(fieldError).getField(),
-                                    fieldError.getDefaultMessage());
+            message = format("Field [{}] has error: {}", Objects.requireNonNull(fieldError).getField(),
+                             fieldError.getDefaultMessage());
         } else {
             val globalError = exception.getGlobalError();
-            message = String.format("Bind error: %s", Objects.requireNonNull(globalError).getDefaultMessage());
+            message = format("Bind error: {}", Objects.requireNonNull(globalError).getDefaultMessage());
         }
         return ResponseBodyBean.ofStatus(HttpStatus.BAD_REQUEST, message);
     }
@@ -187,12 +189,11 @@ public class CommonExceptionControllerAdvice {
         if (ObjectUtil.isNotNull(exception.getCause())
                 && CharSequenceUtil.isNotEmpty(exception.getCause().getMessage())) {
             return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR,
-                                             String.format("Exception message: %s",
-                                                           this.removeLineSeparator(
-                                                                   exception.getCause().getMessage())));
+                                             format("Exception message: {}",
+                                                    this.removeLineSeparator(exception.getCause().getMessage())));
         }
         return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR,
-                                         String.format("Exception message: %s",
+                                         format("Exception message: {}",
                                                        this.removeLineSeparator(exception.getMessage())));
     }
 
@@ -201,7 +202,7 @@ public class CommonExceptionControllerAdvice {
     public ResponseBodyBean<?> handleError(Throwable ex) {
         log.error("Internal server exception occurred! Exception message: {} ", ex.getMessage(), ex);
         return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR,
-                                         String.format("Exception message: %s",
+                                         format("Exception message: {}",
                                                        this.removeLineSeparator(ex.getMessage())));
     }
 
@@ -226,7 +227,7 @@ public class CommonExceptionControllerAdvice {
                                                                                     .getArguments())[0];
             val firstErrorFieldName = firstErrorField.getDefaultMessage();
             val firstErrorFieldMessage = exception.getBindingResult().getAllErrors().get(0).getDefaultMessage();
-            return String.format("%s %s", firstErrorFieldName, firstErrorFieldMessage);
+            return format("{} {}", firstErrorFieldName, firstErrorFieldMessage);
         } catch (Exception e) {
             log.error("Exception occurred when get field error message from exception. Exception message: {}",
                       e.getMessage(), e);

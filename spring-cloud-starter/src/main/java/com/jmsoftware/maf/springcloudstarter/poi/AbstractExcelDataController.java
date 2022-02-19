@@ -37,6 +37,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static cn.hutool.core.text.CharSequenceUtil.format;
+
 /**
  * <h1>AbstractExcelDataController</h1>
  * <p>Abstract controller for excel data import.</p>
@@ -331,18 +333,16 @@ public abstract class AbstractExcelDataController<T> {
                 try {
                     this.executeDatabaseOperation(this.beanList.get());
                     this.setReturnMessageList(
-                            String.format("Finished - Import data. Imported count: %d", this.beanList.get().size()));
+                            format("Finished - Import data. Imported count: {}", this.beanList.get().size()));
                 } catch (Exception e) {
                     this.exceptionOccurred.set(true);
                     log.error("Exception occurred when executing DB operation!", e);
-                    this.setErrorMessage(
-                            String.format("Exception occurred when executing DB operation! Exception message: %s",
-                                          e.getMessage()));
+                    this.setErrorMessage(format("Exception occurred when executing DB operation! Exception message: {}",
+                                                e.getMessage()));
                 }
             } else {
-                this.setReturnMessageList(
-                        String.format("Finished - Import data. Empty list. Imported count: %d",
-                                      this.beanList.get().size()));
+                this.setReturnMessageList(format("Finished - Import data. Empty list. Imported count: {}",
+                                                 this.beanList.get().size()));
             }
         } else {
             this.setReturnMessageList("[Warning] Found not valid data. Data import all failed!");
@@ -356,9 +356,8 @@ public abstract class AbstractExcelDataController<T> {
             this.setReturnMessageList("Finished - Validate and bind data");
         } catch (Exception e) {
             log.error("Exception occurred when validating and binding data!", e);
-            this.setErrorMessage(
-                    String.format("Exception occurred when validating and binding data! Exception message: %s",
-                                  e.getMessage()));
+            this.setErrorMessage(format("Exception occurred when validating and binding data! Exception message: {}",
+                                        e.getMessage()));
         }
     }
 
@@ -370,7 +369,7 @@ public abstract class AbstractExcelDataController<T> {
         } catch (IOException e) {
             log.error("Exception occurred when reading Excel file!", e);
             this.setErrorMessage(
-                    String.format("Exception occurred when reading Excel file! Exception message: %s", e.getMessage()));
+                    format("Exception occurred when reading Excel file! Exception message: {}", e.getMessage()));
         }
     }
 
@@ -460,9 +459,9 @@ public abstract class AbstractExcelDataController<T> {
         } catch (Exception e) {
             log.error("bindRowToBean method has encountered a problem!", e);
             this.exceptionOccurred.set(true);
-            val errorMessage = String.format(
-                    "Exception occurred when binding and validating the data of row number %d. " +
-                            "Exception message: %s", beanIndex + 1, e.getMessage());
+            val errorMessage = format(
+                    "Exception occurred when binding and validating the data of row number {}. " +
+                            "Exception message: {}", beanIndex + 1, e.getMessage());
             this.setErrorMessage(errorMessage);
             val errorRow = this.workbook.get().getSheetAt(sheetIndex).getRow(beanIndex + 1);
             val errorInformationCell = errorRow.createCell(this.fieldNameArray.length);

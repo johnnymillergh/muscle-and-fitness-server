@@ -33,6 +33,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.stream.Collectors;
 
+import static cn.hutool.core.text.CharSequenceUtil.format;
 import static com.jmsoftware.maf.springcloudstarter.function.Slf4j.lazyDebug;
 
 /**
@@ -94,14 +95,14 @@ public class PermissionServiceImpl implements PermissionService {
                         .parallel()
                         .map(serviceId -> {
                             val responseBodyBean = this.restTemplate.getForObject(
-                                    String.format("http://%s/http-api-resources", serviceId), ResponseBodyBean.class);
+                                    format("http://{}/http-api-resources", serviceId), ResponseBodyBean.class);
                             assert responseBodyBean != null;
                             val data = responseBodyBean.getData();
                             val httpApiResourcesResponse = mapper.convertValue(data, HttpApiResourcesResponse.class);
                             val serviceInfo = new GetServicesInfoResponse.ServiceInfo();
                             serviceInfo.setServiceId(serviceId);
                             serviceInfo.setHttpApiResources(httpApiResourcesResponse);
-                            lazyDebug(log, () -> String.format("Added serviceInfo: {}%s", serviceInfo));
+                            lazyDebug(log, () -> format("Added serviceInfo: {}", serviceInfo));
                             return serviceInfo;
                         }).collect(Collectors.toList())
         );

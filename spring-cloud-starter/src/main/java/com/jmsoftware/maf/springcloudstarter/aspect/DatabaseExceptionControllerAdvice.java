@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.http.HttpServletRequest;
 
+import static cn.hutool.core.text.CharSequenceUtil.format;
+
 /**
  * <h1>DatabaseExceptionControllerAdvice</h1>
  * <p>
@@ -44,7 +46,7 @@ public class DatabaseExceptionControllerAdvice {
         this.requestLog(request);
         log.error("MyBatisSystemException message: {}", exception.getMessage());
         return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR,
-                                         String.format("MyBatisSystemException message: %s",
+                                         format("MyBatisSystemException message: {}",
                                                        this.removeLineSeparator(exception.getMessage())));
     }
 
@@ -54,7 +56,7 @@ public class DatabaseExceptionControllerAdvice {
         this.requestLog(request);
         log.error("MybatisPlusException message: {}", exception.getMessage());
         return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR,
-                                         String.format("MybatisPlusException message: %s",
+                                         format("MybatisPlusException message: {}",
                                                        this.removeLineSeparator(exception.getMessage())));
     }
 
@@ -64,7 +66,7 @@ public class DatabaseExceptionControllerAdvice {
         this.requestLog(request);
         log.error("PersistenceException message: {}", exception.getMessage());
         return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR,
-                                         String.format("PersistenceException message: %s",
+                                         format("PersistenceException message: {}",
                                                        this.removeLineSeparator(exception.getMessage())));
     }
 
@@ -79,7 +81,7 @@ public class DatabaseExceptionControllerAdvice {
             message = exception.getCause().getMessage();
         }
         return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR,
-                                         String.format("PersistenceException message: %s",
+                                         format("PersistenceException message: {}",
                                                        this.removeLineSeparator(message)));
     }
 

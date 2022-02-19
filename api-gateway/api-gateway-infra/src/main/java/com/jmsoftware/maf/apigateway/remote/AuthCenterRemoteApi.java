@@ -23,6 +23,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+import static cn.hutool.core.text.CharSequenceUtil.format;
+
 /**
  * <h1>AuthCenterRemoteApi</h1>
  * <p>
@@ -48,7 +50,7 @@ public class AuthCenterRemoteApi {
     public Mono<GetUserByLoginTokenResponse> getUserByLoginToken(@NotBlank String loginToken) {
         return this.webClient
                 .get()
-                .uri(String.format("http://%s/user-remote-api/users/{loginToken}", SERVICE_NAME), loginToken)
+                .uri(format("http://{}/user-remote-api/users/{loginToken}", SERVICE_NAME), loginToken)
                 .retrieve()
                 .bodyToMono(ResponseBodyBean.class)
                 .map(ResponseBodyBean::getData)
@@ -64,7 +66,7 @@ public class AuthCenterRemoteApi {
     public Mono<List<GetRoleListByUserIdSingleResponse>> getRoleListByUserId(@NotNull @Min(1L) Long userId) {
         return this.webClient
                 .get()
-                .uri(String.format("http://%s/role-remote-api/roles/{userId}", SERVICE_NAME), userId)
+                .uri(format("http://{}/role-remote-api/roles/{userId}", SERVICE_NAME), userId)
                 .retrieve()
                 .bodyToMono(ResponseBodyBean.class)
                 .map(ResponseBodyBean::getData)
