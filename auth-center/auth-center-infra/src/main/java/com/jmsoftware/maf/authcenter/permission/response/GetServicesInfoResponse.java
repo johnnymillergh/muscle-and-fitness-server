@@ -1,6 +1,5 @@
 package com.jmsoftware.maf.authcenter.permission.response;
 
-import com.google.common.collect.Lists;
 import com.jmsoftware.maf.common.domain.springbootstarter.HttpApiResourcesResponse;
 import lombok.Data;
 
@@ -13,7 +12,7 @@ import java.util.List;
  **/
 @Data
 public class GetServicesInfoResponse {
-    private List<ServiceInfo> list = Lists.newLinkedList();
+    private List<ServiceInfo> list;
 
     @Data
     public static class ServiceInfo{

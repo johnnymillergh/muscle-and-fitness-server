@@ -12,7 +12,6 @@ package com.jmsoftware.maf.authcenter.permission.service;
 import com.jmsoftware.maf.authcenter.permission.response.GetServicesInfoResponse;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload;
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
-import com.jmsoftware.maf.common.exception.BizException;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
@@ -37,7 +36,6 @@ public interface PermissionService {
      * Gets services info.
      *
      * @return the services info
-     * @throws BizException the business exception
      */
-    GetServicesInfoResponse getServicesInfo() throws BizException;
+    GetServicesInfoResponse getServicesInfo();
 }

@@ -22,7 +22,6 @@ import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListB
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
 import com.jmsoftware.maf.common.domain.authcenter.permission.PermissionType;
 import com.jmsoftware.maf.common.domain.springbootstarter.HttpApiResourcesResponse;
-import com.jmsoftware.maf.common.exception.BizException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -32,8 +31,9 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.jmsoftware.maf.springcloudstarter.function.Slf4j.lazyDebug;
 
 /**
  * Description: PermissionServiceImpl, change description here.
@@ -79,28 +79,32 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    public GetServicesInfoResponse getServicesInfo() throws BizException {
+    public GetServicesInfoResponse getServicesInfo() {
         val serviceIdList = this.discoveryClient.getServices();
         log.info("Getting service info from Service ID list: {}", serviceIdList);
         val response = new GetServicesInfoResponse();
         val mapper = new ObjectMapper();
         log.info("Ignored service ID: {}", this.permissionConfiguration.getIgnoredServiceIds());
-        for (String serviceId : serviceIdList) {
-            if (CollUtil.contains(this.permissionConfiguration.getIgnoredServiceIds(), serviceId)) {
-                log.warn("Ignored service ID: {}", serviceId);
-                continue;
-            }
-            ResponseBodyBean<?> responseBodyBean = Optional.ofNullable(this.restTemplate.getForObject(
-                            String.format("http://%s/http-api-resources", serviceId), ResponseBodyBean.class))
-                    .orElseThrow(() -> new BizException("Internal service mustn't respond null"));
-            val data = Optional.of(responseBodyBean.getData())
-                    .orElseThrow(() -> new BizException("HttpApiResourcesResponse mustn't be null"));
-            val httpApiResourcesResponse = mapper.convertValue(data, HttpApiResourcesResponse.class);
-            val serviceInfo = new GetServicesInfoResponse.ServiceInfo();
-            serviceInfo.setServiceId(serviceId);
-            serviceInfo.setHttpApiResources(httpApiResourcesResponse);
-            response.getList().add(serviceInfo);
-        }
+        response.setList(
+                serviceIdList.stream()
+                        .filter(serviceId -> CollUtil.contains(
+                                this.permissionConfiguration.getIgnoredServiceIds(),
+                                serviceId
+                        ))
+                        .parallel()
+                        .map(serviceId -> {
+                            val responseBodyBean = this.restTemplate.getForObject(
+                                    String.format("http://%s/http-api-resources", serviceId), ResponseBodyBean.class);
+                            assert responseBodyBean != null;
+                            val data = responseBodyBean.getData();
+                            val httpApiResourcesResponse = mapper.convertValue(data, HttpApiResourcesResponse.class);
+                            val serviceInfo = new GetServicesInfoResponse.ServiceInfo();
+                            serviceInfo.setServiceId(serviceId);
+                            serviceInfo.setHttpApiResources(httpApiResourcesResponse);
+                            lazyDebug(log, () -> String.format("Added serviceInfo: {}%s", serviceInfo));
+                            return serviceInfo;
+                        }).collect(Collectors.toList())
+        );
         if (CollUtil.isEmpty(response.getList())) {
             log.warn("Got am empty ServiceInfo list");
         }
