@@ -52,6 +52,8 @@ spring:
 
 logging:
   config: classpath:logback-configuration/logback-${spring.profiles.active}.xml
+  level:
+    org.springframework.data.elasticsearch.client.WIRE: DEBUG
 
 maf:
   project-properties:

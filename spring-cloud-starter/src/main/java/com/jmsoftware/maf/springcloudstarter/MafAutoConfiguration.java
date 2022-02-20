@@ -11,6 +11,7 @@ import com.jmsoftware.maf.springcloudstarter.controller.GlobalErrorController;
 import com.jmsoftware.maf.springcloudstarter.controller.HttpApiResourceRemoteApiController;
 import com.jmsoftware.maf.springcloudstarter.controller.RedirectController;
 import com.jmsoftware.maf.springcloudstarter.database.MyBatisPlusConfiguration;
+import com.jmsoftware.maf.springcloudstarter.elasticsearch.ElasticsearchConfiguration;
 import com.jmsoftware.maf.springcloudstarter.filter.AccessLogFilter;
 import com.jmsoftware.maf.springcloudstarter.helper.HttpApiScanHelper;
 import com.jmsoftware.maf.springcloudstarter.helper.IpHelper;
@@ -66,6 +67,7 @@ import java.util.List;
         WebMvcConfiguration.class,
         MyBatisPlusConfiguration.class,
         RedisConfiguration.class,
+        ElasticsearchConfiguration.class,
         WebSecurityConfiguration.class,
         RestTemplateConfiguration.class,
         AsyncConfiguration.class,

@@ -92,6 +92,11 @@ spring:
         max-idle: 10
         max-wait: -1ms
         min-idle: 0
+  elasticsearch:
+    uris:
+      - http://localhost:9200
+    username: elastic
+    password: maf@elasticsearch
   quartz:
     job-store-type: JDBC
     jdbc:
