@@ -48,7 +48,7 @@
         <jib-spring-boot-extension-maven.version>0.1.0</jib-spring-boot-extension-maven.version>
         <maven-pmd-plugin.version>3.15.0</maven-pmd-plugin.version>
         <p3c-pmd.version>2.1.1</p3c-pmd.version>
-        <spring-cloud.version>2021.0.0</spring-cloud.version>
+        <spring-cloud.version>2021.0.1</spring-cloud.version>
         <functionaljava.version>5.0</functionaljava.version>
         <functionaljava-java8.version>4.8.1</functionaljava-java8.version>
         <spring-content.version>1.0.0.M5</spring-content.version>
@@ -87,7 +87,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.6.1</version>
+        <version>2.6.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
