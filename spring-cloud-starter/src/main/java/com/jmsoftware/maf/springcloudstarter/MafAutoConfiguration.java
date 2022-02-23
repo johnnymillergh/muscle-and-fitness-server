@@ -67,6 +67,7 @@ import java.util.List;
         WebMvcConfiguration.class,
         MyBatisPlusConfiguration.class,
         RedisConfiguration.class,
+        DistributedLockConfiguration.class,
         ElasticsearchConfiguration.class,
         WebSecurityConfiguration.class,
         RestTemplateConfiguration.class,
