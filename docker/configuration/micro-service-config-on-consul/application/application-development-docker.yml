@@ -83,6 +83,9 @@ spring:
     username: maf_rabbitmq_su
     password: maf@rabbitmq
   redis:
+    host: maf-redis-master
+    port: 6379
+    password: maf@redis
     database: 0
     timeout: 10000ms
     client-type: LETTUCE
@@ -111,16 +114,6 @@ spring:
             isClustered: true
             clusterCheckinInterval: 3000
             useProperties: false
-
-redis:
-  master:
-    host: maf-redis-master
-    port: 6379
-    password: maf@redis
-  slaves:
-    - host: maf-redis-slave-1
-      port: 6379
-      password: maf@redis
 
 minio:
   endpoint: http://maf-minio

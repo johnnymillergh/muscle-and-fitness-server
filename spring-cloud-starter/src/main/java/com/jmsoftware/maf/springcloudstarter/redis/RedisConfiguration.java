@@ -44,7 +44,8 @@ public class RedisConfiguration {
     private final ObjectMapper objectMapper;
 
     /**
-     * Redis connection factory lettuce connection factory.
+     * Redis connection factory lettuce connection factory. Only takes effect when the 'redis.master.host' is
+     * configured.
      *
      * @return the lettuce connection factory
      * @see
