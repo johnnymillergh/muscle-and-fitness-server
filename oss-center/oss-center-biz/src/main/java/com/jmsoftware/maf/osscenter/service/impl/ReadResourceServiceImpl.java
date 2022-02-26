@@ -43,7 +43,7 @@ public class ReadResourceServiceImpl implements ReadResourceService {
         try {
             statObjectResponse = this.minioHelper.statObject(bucket, object);
         } catch (Exception e) {
-            log.error("Exception occurred when looking for object. Exception message: {}", e.getMessage());
+            log.error("Exception occurred when looking for object!", e);
             return ResponseEntity.notFound().build();
         }
         val getObjectResponse = this.minioHelper.getObject(bucket, object);
