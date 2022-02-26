@@ -116,6 +116,12 @@
             <artifactId>spring-test</artifactId>
         </dependency>
 
+        <!-- Spring Integration -->
+        <dependency>
+            <groupId>org.springframework.integration</groupId>
+            <artifactId>spring-integration-redis</artifactId>
+        </dependency>
+
         <!-- ORM Library -->
         <dependency>
             <groupId>com.baomidou</groupId>

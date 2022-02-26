@@ -19,6 +19,7 @@ import java.util.ArrayList;
  * Description: AuthCenterApplicationTests.
  *
  * @author 钟俊 (zhongjun), email: zhongjun@toguide.cn, date: 12/21/2020 3:08 PM
+ * @see <a href='https://www.baeldung.com/spring-boot-testing'>Testing in Spring Boot</a>
  */
 @Slf4j
 @SpringBootTest
@@ -34,7 +35,7 @@ class AuthCenterApplicationTests {
         user.setUsername("ijohnnymiller");
         val authenticationToken = new UsernamePasswordAuthenticationToken(
                 UserPrincipal.create(user, new ArrayList<>(), new ArrayList<>()), 12345678);
-        String jwt = jwtService.createJwt(authenticationToken, false);
+        String jwt = this.jwtService.createJwt(authenticationToken, false);
         log.info("Generated JWT: {}", jwt);
         Assertions.assertTrue(StrUtil.isNotBlank(jwt));
     }

@@ -22,6 +22,7 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.integration.redis.util.RedisLockRegistry;
 
 /**
  * Description: RedisConfiguration, change description here.
@@ -38,9 +39,9 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 })
 @ConditionalOnClass({RedisConnectionFactory.class})
 public class RedisConfiguration {
+    private static final String REGISTRY_KEY = "redis-lock";
     private final RedisMasterSlaveReplicationProperties redisMasterSlaveReplicationProperties;
     private final ObjectMapper objectMapper;
-
 
     /**
      * Redis connection factory lettuce connection factory.
@@ -80,6 +81,8 @@ public class RedisConfiguration {
      * @param redisConnectionFactory the redis connection factory
      * @return RedisTemplate redis template
      * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 12/30/2020 1:18 PM
+     * @see
+     * <a href='https://docs.spring.io/spring-data/data-redis/docs/current/reference/html/#redis:template'>Working with Objects through RedisTemplate</a>
      */
     @Bean
     public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
@@ -106,6 +109,8 @@ public class RedisConfiguration {
      * @param connectionFactory the reactive redis connection factory
      * @return the reactive redis template
      * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 12/30/2020 1:43 PM
+     * @see
+     * <a href='https://docs.spring.io/spring-data/data-redis/docs/current/reference/html/#redis:reactive:template'>Working with Objects through ReactiveRedisTemplate</a>
      */
     @Bean
     ReactiveRedisTemplate<Object, Object> reactiveRedisTemplate(ReactiveRedisConnectionFactory connectionFactory) {
@@ -118,5 +123,30 @@ public class RedisConfiguration {
                 .hashValue(valueSerializer)
                 .build();
         return new ReactiveRedisTemplate<>(connectionFactory, serializationContext);
+    }
+
+    /**
+     * Redis distributed lock registry.
+     *
+     * @param redisConnectionFactory the redis connection factory
+     * @return the redis lock registry
+     * @see
+     * <a href='https://docs.spring.io/spring-integration/docs/current/reference/html/redis.html#redis-lock-registry'>Redis Lock Registry</a>
+     */
+    @Bean(destroyMethod = "destroy")
+    @ConditionalOnClass({RedisLockRegistry.class})
+    public RedisLockRegistry redisLockRegistry(RedisConnectionFactory redisConnectionFactory) {
+        val redisLockRegistry = new RedisLockRegistry(redisConnectionFactory, REGISTRY_KEY);
+        log.warn("RedisLockRegistry bean is created. {}", redisLockRegistry);
+        return redisLockRegistry;
+    }
+
+    @Bean
+    @ConditionalOnClass({RedisLockRegistry.class})
+    public RedisDistributedLockDemoController redisDistributedLockDemoController(
+            RedisLockRegistry redisLockRegistry
+    ) {
+        log.warn("RedisDistributedLockDemoController is created");
+        return new RedisDistributedLockDemoController(redisLockRegistry);
     }
 }

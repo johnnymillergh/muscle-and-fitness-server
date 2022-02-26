@@ -87,6 +87,9 @@ spring:
     timeout: 10000ms
     client-type: LETTUCE
     lettuce:
+      host: localhost
+      port: 6379
+      password: maf@redis
       pool:
         max-active: 20
         max-idle: 10
@@ -111,16 +114,6 @@ spring:
             isClustered: true
             clusterCheckinInterval: 3000
             useProperties: false
-
-redis:
-  master:
-    host: localhost
-    port: 6379
-    password: maf@redis
-  slaves:
-    - host: localhost
-      port: 6380
-      password: maf@redis
 
 minio:
   endpoint: http://localhost

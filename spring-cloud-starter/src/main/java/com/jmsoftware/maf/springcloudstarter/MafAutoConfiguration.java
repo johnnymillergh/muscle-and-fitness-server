@@ -31,7 +31,9 @@ import com.jmsoftware.maf.springcloudstarter.websocket.WebSocketConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.mybatis.spring.MyBatisSystemException;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.*;
+import org.springframework.boot.autoconfigure.integration.IntegrationAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolver;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -52,6 +54,8 @@ import java.util.List;
  * Description: MediaStreamingAutoConfiguration, change description here.
  *
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 10/19/2020 2:51 PM
+ * @see
+ * <a href='https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.developing-auto-configuration'>9. Creating Your Own Auto-configuration</a>
  **/
 @Slf4j
 @IntegrationComponentScan
@@ -67,7 +71,6 @@ import java.util.List;
         WebMvcConfiguration.class,
         MyBatisPlusConfiguration.class,
         RedisConfiguration.class,
-        DistributedLockConfiguration.class,
         ElasticsearchConfiguration.class,
         WebSecurityConfiguration.class,
         RestTemplateConfiguration.class,
@@ -82,6 +85,7 @@ import java.util.List;
         OpenApiConfiguration.class,
         OpenFeignConfiguration.class
 })
+@ImportAutoConfiguration(IntegrationAutoConfiguration.class)
 public class MafAutoConfiguration {
     private static final String INITIAL_MESSAGE = "Initial bean: '{}'";
 
