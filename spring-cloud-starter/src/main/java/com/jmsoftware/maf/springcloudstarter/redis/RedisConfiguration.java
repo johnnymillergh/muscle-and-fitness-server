@@ -22,7 +22,6 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-import org.springframework.integration.redis.util.RedisLockRegistry;
 
 /**
  * Description: RedisConfiguration, change description here.
@@ -35,11 +34,11 @@ import org.springframework.integration.redis.util.RedisLockRegistry;
         RedisMasterSlaveReplicationProperties.class
 })
 @Import({
-        RedisCachingConfiguration.class
+        RedisCachingConfiguration.class,
+        RedisDistributedLockConfiguration.class
 })
 @ConditionalOnClass({RedisConnectionFactory.class})
 public class RedisConfiguration {
-    private static final String REGISTRY_KEY = "redis-lock";
     private final RedisMasterSlaveReplicationProperties redisMasterSlaveReplicationProperties;
     private final ObjectMapper objectMapper;
 
@@ -124,30 +123,5 @@ public class RedisConfiguration {
                 .hashValue(valueSerializer)
                 .build();
         return new ReactiveRedisTemplate<>(connectionFactory, serializationContext);
-    }
-
-    /**
-     * Redis distributed lock registry.
-     *
-     * @param redisConnectionFactory the redis connection factory
-     * @return the redis lock registry
-     * @see
-     * <a href='https://docs.spring.io/spring-integration/docs/current/reference/html/redis.html#redis-lock-registry'>Redis Lock Registry</a>
-     */
-    @Bean(destroyMethod = "destroy")
-    @ConditionalOnClass({RedisLockRegistry.class})
-    public RedisLockRegistry redisLockRegistry(RedisConnectionFactory redisConnectionFactory) {
-        val redisLockRegistry = new RedisLockRegistry(redisConnectionFactory, REGISTRY_KEY);
-        log.warn("RedisLockRegistry bean is created. {}", redisLockRegistry);
-        return redisLockRegistry;
-    }
-
-    @Bean
-    @ConditionalOnClass({RedisLockRegistry.class})
-    public RedisDistributedLockDemoController redisDistributedLockDemoController(
-            RedisLockRegistry redisLockRegistry
-    ) {
-        log.warn("RedisDistributedLockDemoController is created");
-        return new RedisDistributedLockDemoController(redisLockRegistry);
     }
 }
