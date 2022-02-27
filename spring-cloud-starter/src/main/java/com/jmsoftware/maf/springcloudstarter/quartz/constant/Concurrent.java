@@ -1,7 +1,8 @@
 package com.jmsoftware.maf.springcloudstarter.quartz.constant;
 
-import com.jmsoftware.maf.common.bean.EnumerationBase;
+import com.jmsoftware.maf.common.enumeration.ValueDescriptionBaseEnum;
 import lombok.Getter;
+import lombok.ToString;
 
 /**
  * Description: Concurrent, change description here.
@@ -9,7 +10,8 @@ import lombok.Getter;
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 9/23/2021 2:04 PM
  **/
 @Getter
-public enum Concurrent implements EnumerationBase<Byte> {
+@ToString
+public enum Concurrent implements ValueDescriptionBaseEnum<Byte> {
     /**
      * Disallow Concurrent
      */
@@ -23,5 +25,10 @@ public enum Concurrent implements EnumerationBase<Byte> {
 
     Concurrent(Byte value) {
         this.value = value;
+    }
+
+    @Override
+    public String getDescription() {
+        return null;
     }
 }

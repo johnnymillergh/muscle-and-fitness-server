@@ -1,7 +1,8 @@
 package com.jmsoftware.maf.common.domain.authcenter.user;
 
-import com.jmsoftware.maf.common.bean.EnumerationBase;
+import com.jmsoftware.maf.common.enumeration.ValueDescriptionBaseEnum;
 import lombok.Getter;
+import lombok.ToString;
 
 /**
  * Description: UserStatus, change description here.
@@ -10,7 +11,8 @@ import lombok.Getter;
  * @date 2019-03-23 18:48
  **/
 @Getter
-public enum UserStatus2 implements EnumerationBase<Byte> {
+@ToString
+public enum UserStatus2 implements ValueDescriptionBaseEnum<Byte> {
     /**
      * Enabled user
      */
@@ -26,22 +28,5 @@ public enum UserStatus2 implements EnumerationBase<Byte> {
     UserStatus2(Byte value, String description) {
         this.value = value;
         this.description = description;
-    }
-
-    /**
-     * Get user value enum by value value
-     *
-     * @param value value value
-     * @return user value enum
-     */
-    public static UserStatus2 ofValue(Byte value) {
-        UserStatus2 result = UserStatus2.DISABLED;
-        UserStatus2[] userStatuses = UserStatus2.values();
-        for (UserStatus2 userStatus : userStatuses) {
-            if (userStatus.value.equals(value)) {
-                result = userStatus;
-            }
-        }
-        return result;
     }
 }

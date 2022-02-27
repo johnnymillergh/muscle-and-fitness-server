@@ -1,6 +1,6 @@
 package com.jmsoftware.maf.springcloudstarter.quartz.constant;
 
-import com.jmsoftware.maf.common.bean.EnumerationBase;
+import com.jmsoftware.maf.common.enumeration.ValueDescriptionBaseEnum;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.val;
@@ -19,7 +19,7 @@ import java.util.Calendar;
  **/
 @Getter
 @ToString
-public enum MisfirePolicy implements EnumerationBase<Byte> {
+public enum MisfirePolicy implements ValueDescriptionBaseEnum<Byte> {
     /**
      * Instructs the <code>{@link Scheduler}</code> that the
      * <code>Trigger</code> will never be evaluated for a misfire situation,
@@ -80,6 +80,11 @@ public enum MisfirePolicy implements EnumerationBase<Byte> {
                 return enumeration;
             }
         }
+        return null;
+    }
+
+    @Override
+    public String getDescription() {
         return null;
     }
 }

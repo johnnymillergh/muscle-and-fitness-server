@@ -21,6 +21,7 @@ import com.jmsoftware.maf.authcenter.user.service.UserDomainService;
 import com.jmsoftware.maf.authcenter.user.service.UserRoleDomainService;
 import com.jmsoftware.maf.common.bean.PageResponseBodyBean;
 import com.jmsoftware.maf.common.domain.authcenter.user.*;
+import com.jmsoftware.maf.common.enumeration.ValueDescriptionBaseEnum;
 import com.jmsoftware.maf.common.exception.SecurityException;
 import com.jmsoftware.maf.springcloudstarter.property.MafConfigurationProperties;
 import com.jmsoftware.maf.springcloudstarter.property.MafProjectProperties;
@@ -132,7 +133,7 @@ public class UserDomainServiceImpl
     @Override
     public String getUserStatus(@Valid @NotNull GetUserStatusPayload payload) {
         log.info("Current username: {}", UserUtil.getCurrentUsername());
-        return UserStatus.ofValue(payload.getStatus()).getDescription();
+        return ValueDescriptionBaseEnum.getDescriptionByValue(UserStatus.class, payload.getStatus());
     }
 
     @Override

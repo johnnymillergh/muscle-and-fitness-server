@@ -1,6 +1,6 @@
 package com.jmsoftware.maf.springcloudstarter.quartz.constant;
 
-import com.jmsoftware.maf.common.bean.EnumerationBase;
+import com.jmsoftware.maf.common.enumeration.ValueDescriptionBaseEnum;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -11,7 +11,7 @@ import lombok.ToString;
  **/
 @Getter
 @ToString
-public enum QuartzJobStatus implements EnumerationBase<Byte> {
+public enum QuartzJobStatus implements ValueDescriptionBaseEnum<Byte> {
     /**
      * Normal
      */
@@ -26,5 +26,10 @@ public enum QuartzJobStatus implements EnumerationBase<Byte> {
 
     QuartzJobStatus(Byte value) {
         this.value = value;
+    }
+
+    @Override
+    public String getDescription() {
+        return null;
     }
 }
