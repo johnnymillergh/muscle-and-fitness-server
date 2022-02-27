@@ -21,7 +21,7 @@ spring:
       config:
         # `default-context` should not be modified, keeps "application" for common configuration.
         # Properties in the config/application folder are applicable to all applications using consul for configuration.
-        profile-separator: "::"
+        profile-separator: "@"
         format: YAML
         data-key: "data"
         watch:

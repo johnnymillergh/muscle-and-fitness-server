@@ -1,0 +1,56 @@
+spring:
+  shardingsphere:
+    props:
+      sql:
+        #设置sql是否展示
+        show: true
+    datasource:
+      #数据库名称（可以与数据库中的库名不一致）
+      names: ds0,ds1
+      ds0:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://192.169.50.200:3306/ds0?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT
+        username: root
+        password: ROOT
+        # 数据库连接池的最小连接数
+        min-idle: 5
+        # 初始化连接数
+        initial-size: 5
+        # 最大连接数
+        max-total: 5
+        max-wait-millis: 200s
+      ds1:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://192.169.50.201:3306/ds1?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT
+        username: root
+        password: ROOT
+        # 数据库连接池的最小连接数
+        min-idle: 5
+        # 初始化连接数
+        initial-size: 5
+        # 最大连接数
+        max-total: 5
+        max-wait-millis: 200s
+    sharding:
+      #分库策略
+      default-database-strategy:
+        inline:
+          #根据id取模决定去那个库
+          algorithm-expression: ds$->{id % 2}
+          sharding-column: id
+      tables:
+        #逻辑表名，这里的user_info为逻辑表名，user_info_0,user_info_1,user_info_2为实际表
+        user_info:
+          actual-data-nodes: ds$->{0..1}.user_info_$->{0..2}
+          table-strategy:
+            #根据id取模决定去那个表
+            inline:
+              sharding-column: id
+              algorithm-expression: user_info_$->{id % 3}
+          key-generator:
+            #id使用雪花算法
+            column: id
+            #雪花算法
+            type: SNOWFLAKE
