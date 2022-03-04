@@ -4,13 +4,11 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.jmsoftware.maf.springcloudstarter.database.BasePersistenceEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
-
-import static com.baomidou.mybatisplus.annotation.FieldFill.INSERT;
-import static com.baomidou.mybatisplus.annotation.FieldFill.UPDATE;
 
 /**
  * Quartz Job Configuration
@@ -18,10 +16,12 @@ import static com.baomidou.mybatisplus.annotation.FieldFill.UPDATE;
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 9/23/2021 8:23 AM
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @TableName(value = QuartzJobConfiguration.TABLE_NAME)
-public class QuartzJobConfiguration implements Serializable {
+public class QuartzJobConfiguration extends BasePersistenceEntity implements Serializable {
+    private static final long serialVersionUID = -4561633114475541640L;
+
     public static final String TABLE_NAME = "quartz_job_configuration";
-    public static final String COL_ID = "id";
     public static final String COL_NAME = "name";
     public static final String COL_GROUP = "`group`";
     public static final String COL_SERVICE_NAME = "service_name";
@@ -31,12 +31,7 @@ public class QuartzJobConfiguration implements Serializable {
     public static final String COL_CONCURRENT = "concurrent";
     public static final String COL_DESCRIPTION = "description";
     public static final String COL_STATUS = "status";
-    public static final String COL_CREATED_BY = "created_by";
-    public static final String COL_CREATED_TIME = "created_time";
-    public static final String COL_MODIFIED_BY = "modified_by";
-    public static final String COL_MODIFIED_TIME = "modified_time";
-    public static final String COL_DELETED = "deleted";
-    private static final long serialVersionUID = -4561633114475541640L;
+
     /**
      * The primary key ID
      */
@@ -87,29 +82,4 @@ public class QuartzJobConfiguration implements Serializable {
      */
     @TableField(value = COL_STATUS)
     private Byte status;
-    /**
-     * Created by
-     */
-    @TableField(value = COL_CREATED_BY, fill = INSERT)
-    private Long createdBy;
-    /**
-     * Craeted time
-     */
-    @TableField(value = COL_CREATED_TIME, fill = INSERT)
-    private LocalDateTime createdTime;
-    /**
-     * Modified by
-     */
-    @TableField(value = COL_MODIFIED_BY, fill = UPDATE)
-    private Long modifiedBy;
-    /**
-     * Modified time
-     */
-    @TableField(value = COL_MODIFIED_TIME, fill = UPDATE)
-    private LocalDateTime modifiedTime;
-    /**
-     * Deleted
-     */
-    @TableField(value = COL_DELETED, fill = INSERT)
-    private Byte deleted;
 }

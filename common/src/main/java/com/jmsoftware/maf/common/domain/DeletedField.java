@@ -1,6 +1,7 @@
 package com.jmsoftware.maf.common.domain;
 
 import lombok.Getter;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -10,20 +11,21 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Getter
+@ToString
 public enum DeletedField {
     /**
      * Not deleted
      */
-    NOT_DELETED((byte) 0, "not deleted"),
+    NOT_DELETED("N", "not deleted"),
     /**
      * Deleted
      */
-    DELETED((byte) 1, "deleted");
+    DELETED("Y", "deleted");
 
     /**
      * The Value.
      */
-    private final Byte value;
+    private final String value;
     /**
      * The Description.
      */
@@ -35,7 +37,7 @@ public enum DeletedField {
      * @param value       the value
      * @param description the description
      */
-    DeletedField(Byte value, String description) {
+    DeletedField(String value, String description) {
         this.value = value;
         this.description = description;
     }

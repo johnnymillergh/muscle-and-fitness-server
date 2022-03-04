@@ -1,16 +1,12 @@
 package com.jmsoftware.maf.authcenter.user.persistence;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.jmsoftware.maf.springcloudstarter.database.BasePersistenceEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-
-import static com.baomidou.mybatisplus.annotation.FieldFill.INSERT;
-import static com.baomidou.mybatisplus.annotation.FieldFill.UPDATE;
 
 /**
  * <h1>User</h1>
@@ -20,11 +16,10 @@ import static com.baomidou.mybatisplus.annotation.FieldFill.UPDATE;
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 6/27/2021 3:22 PM
  */
 @Data
-@SuppressWarnings("jol")
+@EqualsAndHashCode(callSuper = true)
 @TableName(value = User.TABLE_NAME)
-public class User {
+public class User extends BasePersistenceEntity {
     public static final String TABLE_NAME = "user";
-    public static final String COL_ID = "id";
     public static final String COL_USERNAME = "username";
     public static final String COL_EMAIL = "email";
     public static final String COL_CELLPHONE = "cellphone";
@@ -34,16 +29,7 @@ public class User {
     public static final String COL_GENDER = "gender";
     public static final String COL_AVATAR = "avatar";
     public static final String COL_STATUS = "status";
-    public static final String COL_CREATED_BY = "created_by";
-    public static final String COL_CREATED_TIME = "created_time";
-    public static final String COL_MODIFIED_BY = "modified_by";
-    public static final String COL_MODIFIED_TIME = "modified_time";
-    public static final String COL_DELETED = "deleted";
-    /**
-     * Primary key of user
-     */
-    @TableId(value = COL_ID, type = IdType.AUTO)
-    private Long id;
+
     /**
      * Username
      */
@@ -89,29 +75,4 @@ public class User {
      */
     @TableField(value = COL_STATUS)
     private Byte status;
-    /**
-     * Created by
-     */
-    @TableField(value = COL_CREATED_BY, fill = INSERT)
-    private Long createdBy;
-    /**
-     * Created time
-     */
-    @TableField(value = COL_CREATED_TIME, fill = INSERT)
-    private LocalDateTime createdTime;
-    /**
-     * Modified by
-     */
-    @TableField(value = COL_MODIFIED_BY, fill = UPDATE)
-    private Long modifiedBy;
-    /**
-     * Modified time
-     */
-    @TableField(value = COL_MODIFIED_TIME, fill = UPDATE)
-    private LocalDateTime modifiedTime;
-    /**
-     * Delete flag.
-     */
-    @TableField(value = COL_DELETED, fill = INSERT)
-    private Byte deleted;
 }

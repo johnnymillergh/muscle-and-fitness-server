@@ -52,6 +52,7 @@ public class CommonMetaObjectHandler implements MetaObjectHandler {
      * The Java persistence object field name: deleted
      */
     public static final String DELETED_FIELD_NAME = "deleted";
+    public static final String DEFAULT_USERNAME = "system";
 
     /**
      * {@inheritDoc}
@@ -62,17 +63,17 @@ public class CommonMetaObjectHandler implements MetaObjectHandler {
         if (log.isDebugEnabled()) {
             log.debug("Starting to insert fill metaObject: {}", metaObject.getOriginalObject());
         }
-        val currentId = UserUtil.getCurrentId();
-        if (ObjectUtil.isNull(currentId)) {
+        val currentUsername = UserUtil.getCurrentUsername();
+        if (ObjectUtil.isNull(currentUsername)) {
             log.warn(
                     "Current user's ID is null, which may cause the record in database is incorrect. This will happen" +
                             " when the request is ignored by gateway. Field: {}", CREATED_BY_FIELD_NAME);
-            this.strictInsertFill(metaObject, CREATED_BY_FIELD_NAME, Long.class, 1L);
+            this.strictInsertFill(metaObject, CREATED_BY_FIELD_NAME, String.class, DEFAULT_USERNAME);
         } else {
-            this.strictInsertFill(metaObject, CREATED_BY_FIELD_NAME, Long.class, currentId);
+            this.strictInsertFill(metaObject, CREATED_BY_FIELD_NAME, String.class, currentUsername);
         }
         this.strictInsertFill(metaObject, CREATED_TIME_FIELD_NAME, LocalDateTime.class, LocalDateTime.now())
-                .strictInsertFill(metaObject, DELETED_FIELD_NAME, Byte.class, DeletedField.NOT_DELETED.getValue());
+                .strictInsertFill(metaObject, DELETED_FIELD_NAME, String.class, DeletedField.NOT_DELETED.getValue());
         if (log.isDebugEnabled()) {
             log.debug("Finished to insert fill metaObject: {}", metaObject.getOriginalObject());
         }
@@ -83,14 +84,14 @@ public class CommonMetaObjectHandler implements MetaObjectHandler {
         if (log.isDebugEnabled()) {
             log.debug("Starting to update fill metaObject: {}", metaObject.getOriginalObject());
         }
-        val currentId = UserUtil.getCurrentId();
-        if (ObjectUtil.isNull(currentId)) {
+        val currentUsername = UserUtil.getCurrentUsername();
+        if (ObjectUtil.isNull(currentUsername)) {
             log.warn(
                     "Current user's ID is null, which may cause the record in database is incorrect. This will happen" +
                             " when the request is ignored by gateway. Field: {}", MODIFIED_BY_FIELD_NAME);
-            this.strictUpdateFill(metaObject, CREATED_BY_FIELD_NAME, Long.class, 1L);
+            this.strictUpdateFill(metaObject, CREATED_BY_FIELD_NAME, String.class, DEFAULT_USERNAME);
         } else {
-            this.strictUpdateFill(metaObject, MODIFIED_BY_FIELD_NAME, Long.class, currentId);
+            this.strictUpdateFill(metaObject, MODIFIED_BY_FIELD_NAME, String.class, currentUsername);
         }
         this.strictUpdateFill(metaObject, MODIFIED_TIME_FIELD_NAME, LocalDateTime.class, LocalDateTime.now());
         if (log.isDebugEnabled()) {

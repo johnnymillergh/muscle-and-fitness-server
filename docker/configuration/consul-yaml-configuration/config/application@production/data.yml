@@ -158,6 +158,8 @@ mybatis-plus:
   global-config:
     db-config:
       logic-delete-field: deleted
+      logic-delete-value: "Y"
+      logic-not-delete-value: "N"
   configuration:
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

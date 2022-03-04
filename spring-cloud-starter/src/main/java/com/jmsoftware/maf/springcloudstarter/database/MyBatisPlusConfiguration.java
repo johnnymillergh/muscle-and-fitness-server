@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -22,7 +23,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 /**
  * Description: MyBatisPlusConfiguration, change description here.
  *
- * @author 钟俊（zhongjun）, email: zhongjun@toguide.cn, date: 1/29/2021 1:30 PM
+ * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com, date: 1/29/2021 1:30 PM
  **/
 @Slf4j
 @Configuration
@@ -33,9 +34,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @MapperScan("com.jmsoftware.maf.springcloudstarter.*.repository")
 @ConditionalOnClass({MybatisPlusAutoConfiguration.class, MasterSlaveAutoRoutingPlugin.class})
 public class MyBatisPlusConfiguration {
+    private static final String MESSAGE_TEMPLATE = "Initial bean: '{}'";
+
     @Bean
     public PaginationInnerInterceptor paginationInnerInterceptor() {
-        log.warn("Initial bean: '{}'", PaginationInnerInterceptor.class.getSimpleName());
+        log.warn(MESSAGE_TEMPLATE, PaginationInnerInterceptor.class.getSimpleName());
         val paginationInnerInterceptor = new PaginationInnerInterceptor(DbType.MYSQL);
         paginationInnerInterceptor.setMaxLimit(100L);
         return paginationInnerInterceptor;
@@ -43,26 +46,37 @@ public class MyBatisPlusConfiguration {
 
     @Bean
     public BlockAttackInnerInterceptor blockAttackInnerInterceptor() {
-        log.warn("Initial bean: '{}'", BlockAttackInnerInterceptor.class.getSimpleName());
+        log.warn(MESSAGE_TEMPLATE, BlockAttackInnerInterceptor.class.getSimpleName());
         return new BlockAttackInnerInterceptor();
+    }
+
+    @Bean
+    public OptimisticLockerInnerInterceptor optimisticLockerInnerInterceptor() {
+        log.warn(MESSAGE_TEMPLATE, OptimisticLockerInnerInterceptor.class.getSimpleName());
+        return new OptimisticLockerInnerInterceptor();
     }
 
     /**
      * Mybatis plus interceptor mybatis plus interceptor.
      *
-     * @param paginationInnerInterceptor  the pagination inner interceptor
-     * @param blockAttackInnerInterceptor the block attack inner interceptor
+     * @param paginationInnerInterceptor       the pagination inner interceptor
+     * @param blockAttackInnerInterceptor      the block attack inner interceptor
+     * @param optimisticLockerInnerInterceptor the optimistic locker inner interceptor
      * @return the mybatis plus interceptor
      * @see <a href='https://baomidou.com/guide/interceptor.html'>MybatisPlusInterceptor</a>
      */
     @Bean
     @Order(1)
-    public Interceptor mybatisPlusInterceptor(PaginationInnerInterceptor paginationInnerInterceptor,
-                                              BlockAttackInnerInterceptor blockAttackInnerInterceptor) {
-        log.warn("Initial bean: '{}'", MybatisPlusInterceptor.class.getSimpleName());
+    public Interceptor mybatisPlusInterceptor(
+            PaginationInnerInterceptor paginationInnerInterceptor,
+            BlockAttackInnerInterceptor blockAttackInnerInterceptor,
+            OptimisticLockerInnerInterceptor optimisticLockerInnerInterceptor
+    ) {
+        log.warn(MESSAGE_TEMPLATE, MybatisPlusInterceptor.class.getSimpleName());
         val mybatisPlusInterceptor = new MybatisPlusInterceptor();
         mybatisPlusInterceptor.addInnerInterceptor(paginationInnerInterceptor);
         mybatisPlusInterceptor.addInnerInterceptor(blockAttackInnerInterceptor);
+        mybatisPlusInterceptor.addInnerInterceptor(optimisticLockerInnerInterceptor);
         return mybatisPlusInterceptor;
     }
 
@@ -76,13 +90,13 @@ public class MyBatisPlusConfiguration {
     @Bean
     @Order(2)
     public Interceptor masterSlaveAutoRoutingPlugin() {
-        log.warn("Initial bean: '{}'", MasterSlaveAutoRoutingPlugin.class.getSimpleName());
+        log.warn(MESSAGE_TEMPLATE, MasterSlaveAutoRoutingPlugin.class.getSimpleName());
         return new MasterSlaveAutoRoutingPlugin();
     }
 
     @Bean
     public CommonMetaObjectHandler commonMetaObjectHandler() {
-        log.warn("Initial bean: '{}'", CommonMetaObjectHandler.class.getSimpleName());
+        log.warn(MESSAGE_TEMPLATE, CommonMetaObjectHandler.class.getSimpleName());
         return new CommonMetaObjectHandler();
     }
 
