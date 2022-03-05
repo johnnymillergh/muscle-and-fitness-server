@@ -168,22 +168,6 @@
             <version>${dynamic-datasource-spring-boot-starter.version}</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
-            <version>${druid-spring-boot-starter.version}</version>
-            <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.sun</groupId>
-                    <artifactId>tools</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.sun</groupId>
-                    <artifactId>jconsole</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
 
         <!-- The Apache Commons Object Pooling Library -->
         <dependency>

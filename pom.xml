@@ -54,7 +54,6 @@
         <spring-content.version>1.0.0.M5</spring-content.version>
         <spring-boot-admin-starter-server.version>2.6.2</spring-boot-admin-starter-server.version>
         <spring-boot-admin-starter-client.version>2.6.2</spring-boot-admin-starter-client.version>
-        <druid-spring-boot-starter.version>1.2.8</druid-spring-boot-starter.version>
         <mybatis-plus-boot-starter.version>3.5.1</mybatis-plus-boot-starter.version>
         <dynamic-datasource-spring-boot-starter.version>3.5.1</dynamic-datasource-spring-boot-starter.version>
         <sharding-sphere.version>4.1.1</sharding-sphere.version>

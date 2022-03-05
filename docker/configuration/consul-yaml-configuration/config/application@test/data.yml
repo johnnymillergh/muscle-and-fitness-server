@@ -17,50 +17,9 @@ spring:
   zipkin:
     base-url: http://maf-zipkin:9411
   datasource:
-    type: com.alibaba.druid.pool.DruidDataSource
-    druid:
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      filters: stat,wall,log4j2
-      filter:
-        stat:
-          enabled: true
-          db-type: mysql
-          log-slow-sql: true
-          slow-sql-millis: 2000
-        slf4j:
-          enabled: true
-          statement-log-error-enabled: true
-          statement-create-after-log-enabled: false
-          statement-close-after-log-enabled: false
-          result-set-open-after-log-enabled: false
-          result-set-close-after-log-enabled: false
-      web-stat-filter:
-        enabled: true
-        url-pattern: /*
-        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
-        session-stat-enable: true
-        session-stat-max-count: 1000
-      stat-view-servlet:
-        enabled: true
-        url-pattern: /druid/*
-        reset-enable: false
-        login-username: root
-        login-password: maf_druid_password
-        allow:
+    type: com.zaxxer.hikari.HikariDataSource
     dynamic:
       primary: master_1
-      druid:
-        # connection pool size will be determined by DruidDataSourceCreatorPostProcessor.java
-        max-wait: 60000
-        min-evictable-idle-time-millis: 600000
-        max-evictable-idle-time-millis: 900000
-        validation-query: SELECT 1
-        test-while-idle: true
-        test-on-borrow: false
-        test-on-return: false
-        pool-prepared-statements: true
-        max-pool-prepared-statement-per-connection-size: 20
-        keep-alive: true
       datasource:
         master_1:
           url: jdbc:mysql://maf-mysql-server-source:3306/muscle_and_fitness?useSSL=true&useUnicode=true

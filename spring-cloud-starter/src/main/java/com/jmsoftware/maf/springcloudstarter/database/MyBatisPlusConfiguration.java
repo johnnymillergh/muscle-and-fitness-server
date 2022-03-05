@@ -100,19 +100,28 @@ public class MyBatisPlusConfiguration {
         return new CommonMetaObjectHandler();
     }
 
+    /**
+     * Dynamic data source properties customizer. Set global configuration for dynamic data source.
+     *
+     * @return the dynamic data source properties customizer
+     */
     @Bean
     public DynamicDataSourcePropertiesCustomizer dynamicDataSourcePropertiesCustomizer() {
         return properties -> {
             val cpuCoreCount = Runtime.getRuntime().availableProcessors();
-            val minConnectionPoolSize = cpuCoreCount * 2 + 1;
-            val maxConnectionPoolSize = cpuCoreCount * 3;
-            val druidConfig = properties.getDruid();
-            druidConfig.setInitialSize(minConnectionPoolSize);
-            druidConfig.setMinIdle(minConnectionPoolSize);
-            druidConfig.setMaxActive(maxConnectionPoolSize);
-            log.warn("Druid connection pool enhanced by current cpuCoreCount: {}, initial size: {}, min idle: {}" +
+            val minIdle = cpuCoreCount * 2 + 1;
+            val maxPoolSize = cpuCoreCount * 3;
+            val hikari = properties.getHikari();
+            hikari.setConnectionTestQuery("SELECT 1");
+            hikari.setIdleTimeout(30000L);
+            hikari.setMaxPoolSize(maxPoolSize);
+            hikari.setMinIdle(minIdle);
+            hikari.setIsAutoCommit(true);
+            hikari.setMaxLifetime(120000L);
+            hikari.setConnectionTimeout(30000L);
+            log.warn("Hikari connection pool enhanced by current cpuCoreCount: {}, initial size: {}, min idle: {}" +
                              ", max active: {}",
-                     cpuCoreCount, minConnectionPoolSize, minConnectionPoolSize, maxConnectionPoolSize);
+                     cpuCoreCount, minIdle, minIdle, maxPoolSize);
         };
     }
 }
