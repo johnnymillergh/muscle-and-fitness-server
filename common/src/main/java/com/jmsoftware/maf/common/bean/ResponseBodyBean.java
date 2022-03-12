@@ -25,7 +25,8 @@ import java.time.LocalDateTime;
  */
 @Data
 @SuppressWarnings("unused")
-public class ResponseBodyBean<T> implements Serializable {
+@EqualsAndHashCode(callSuper = true)
+public class ResponseBodyBean<T> extends TrackableBean implements Serializable{
     private static final long serialVersionUID = 4645469240048361965L;
 
     /**

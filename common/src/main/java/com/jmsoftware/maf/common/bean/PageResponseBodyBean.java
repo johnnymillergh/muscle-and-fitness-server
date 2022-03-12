@@ -26,7 +26,8 @@ import java.util.List;
  */
 @Data
 @SuppressWarnings("unused")
-public class PageResponseBodyBean<T> implements Serializable {
+@EqualsAndHashCode(callSuper = true)
+public class PageResponseBodyBean<T> extends TrackableBean implements Serializable {
     /**
      * The constant serialVersionUID.
      */
