@@ -33,12 +33,7 @@ public class TrackableResponseControllerAdvice implements ResponseBodyAdvice<Tra
     @Override
     @SuppressWarnings("NullableProblems")
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
-        val equaled = TrackableBean.class.equals(returnType.getContainingClass());
-        if (!equaled) {
-            log.warn("TrackableResponseControllerAdvice supports failed, returnType: {}, converterType: {}", returnType,
-                     converterType);
-        }
-        return equaled;
+        return TrackableBean.class.equals(returnType.getParameterType().getSuperclass());
     }
 
     @Override

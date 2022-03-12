@@ -1,10 +1,7 @@
 package com.jmsoftware.maf.springcloudstarter;
 
 import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
-import com.jmsoftware.maf.springcloudstarter.aspect.CommonExceptionControllerAdvice;
-import com.jmsoftware.maf.springcloudstarter.aspect.DatabaseExceptionControllerAdvice;
-import com.jmsoftware.maf.springcloudstarter.aspect.FeignClientLogAspect;
-import com.jmsoftware.maf.springcloudstarter.aspect.WebRequestLogAspect;
+import com.jmsoftware.maf.springcloudstarter.aspect.*;
 import com.jmsoftware.maf.springcloudstarter.configuration.*;
 import com.jmsoftware.maf.springcloudstarter.controller.CommonController;
 import com.jmsoftware.maf.springcloudstarter.controller.GlobalErrorController;
@@ -40,6 +37,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.cloud.sleuth.Tracer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
@@ -96,7 +94,14 @@ public class MafAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public CommonExceptionControllerAdvice exceptionControllerAdvice() {
+    public TrackableResponseControllerAdvice trackableResponseControllerAdvice(Tracer tracer) {
+        log.warn(INITIAL_MESSAGE, TrackableResponseControllerAdvice.class.getSimpleName());
+        return new TrackableResponseControllerAdvice(tracer);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public CommonExceptionControllerAdvice commonExceptionControllerAdvice() {
         log.warn(INITIAL_MESSAGE, CommonExceptionControllerAdvice.class.getSimpleName());
         return new CommonExceptionControllerAdvice();
     }
