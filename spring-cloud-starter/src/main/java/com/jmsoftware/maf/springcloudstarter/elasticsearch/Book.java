@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 /**
  * Description: Book, change description here.
  *
- * @author 钟俊 (za-zhongjun), email: jun.zhong@zatech.com, date: 2/20/2022 1:40 PM
+ * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com, date: 3/23/22 8:01 AM
  */
 @Data
 @Document(indexName = "books")

@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Description: BookRepository, change description here.
  *
- * @author 钟俊 (za-zhongjun), email: jun.zhong@zatech.com, date: 2/20/2022 2:06 PM
+ * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com, date: 3/23/22 8:01 AM
  **/
 public interface BookRepository extends ElasticsearchRepository<Book, String> {
     /**

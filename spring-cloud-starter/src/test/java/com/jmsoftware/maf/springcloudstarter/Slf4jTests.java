@@ -9,7 +9,7 @@ import static com.jmsoftware.maf.springcloudstarter.function.Slf4j.lazyDebug;
 /**
  * Description: Slf4jTests, change description here.
  *
- * @author 钟俊 (za-zhongjun), email: jun.zhong@zatech.com, date: 2/19/2022 9:16 AM
+ * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com, date: 3/23/22 8:01 AM
  **/
 @Slf4j
 class Slf4jTests {

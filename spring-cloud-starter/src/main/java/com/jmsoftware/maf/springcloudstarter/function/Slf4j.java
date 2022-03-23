@@ -7,7 +7,7 @@ import java.util.function.Supplier;
 /**
  * Description: Slf4j, change description here.
  *
- * @author 钟俊 (za-zhongjun), email: jun.zhong@zatech.com, date: 2/19/2022 9:04 AM
+ * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com, date: 3/23/22 8:01 AM
  **/
 public class Slf4j {
     private Slf4j() {
