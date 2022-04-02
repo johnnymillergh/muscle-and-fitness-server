@@ -10,7 +10,6 @@ services:
     environment:
       MYSQL_ROOT_HOST: "%"
       MYSQL_ROOT_PASSWORD: ${MAF_MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MAF_MYSQL_DATABASE}
       TZ: ${MAF_TIMEZONE}
     ports:
       - "3306:3306"
@@ -35,7 +34,6 @@ services:
     environment:
       MYSQL_ROOT_HOST: "%"
       MYSQL_ROOT_PASSWORD: ${MAF_MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MAF_MYSQL_DATABASE}
       TZ: ${MAF_TIMEZONE}
     ports:
       - "3307:3306"
