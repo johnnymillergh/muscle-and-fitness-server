@@ -1,8 +1,6 @@
 package com.jmsoftware.maf.springcloudstarter.quartz.entity.persistence;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.jmsoftware.maf.springcloudstarter.database.BasePersistenceEntity;
 import lombok.Data;
@@ -32,11 +30,6 @@ public class QuartzJobConfiguration extends BasePersistenceEntity implements Ser
     public static final String COL_DESCRIPTION = "description";
     public static final String COL_STATUS = "status";
 
-    /**
-     * The primary key ID
-     */
-    @TableId(value = COL_ID, type = IdType.AUTO)
-    private Long id;
     /**
      * Name of job
      */
