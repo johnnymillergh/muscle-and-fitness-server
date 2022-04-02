@@ -24,9 +24,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Slf4j
 @Configuration
 @EnableTransactionManagement
-//@Import({
-//        DataSourceConfiguration.class
-//})
 @ConditionalOnClass({MybatisPlusAutoConfiguration.class})
 @MapperScan("com.jmsoftware.maf.springcloudstarter.*.repository")
 public class MyBatisPlusConfiguration {
