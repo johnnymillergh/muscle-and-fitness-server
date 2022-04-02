@@ -11,7 +11,7 @@
 
 # Muscle and Fitness Server
 
-**Muscle and Fitness Server** a Spring Cloud microservice based, DDD structured, back-end server for managing data of muscle and fitness. 
+**Muscle and Fitness Server** a Spring Cloud microservice based, DDD structured, back-end server for managing data of muscle and fitness.
 
 [Official Docker Image](https://hub.docker.com/u/ijohnnymiller)
 
@@ -19,7 +19,7 @@
 
 Here is the highlights of **Muscle and Fitness Server**:
 
-1. Each microservice is organized by [Domain Driven Design](https://en.wikipedia.org/wiki/Domain-driven_design) (DDD) structure. 
+1. Each microservice is organized by [Domain Driven Design](https://en.wikipedia.org/wiki/Domain-driven_design) (DDD) structure.
 
 1. Inherited from the most modern and newest Spring frameworks:
 
@@ -45,7 +45,17 @@ Here is the highlights of **Muscle and Fitness Server**:
 
 6. Secured API. [RBAC](https://en.wikipedia.org/wiki/Role-based_access_control) by API gateway and Auth Center. JWT authentication, and RBAC authorization.
 
-7. [MySQL Replication for High Availability](https://severalnines.com/resources/database-management-tutorials/mysql-replication-high-availability-tutorial). Multi data source. [Dynamic SQL read-write isolation](https://baomidou.com/guide/dynamic-datasource.html). [MyBatis-Plus](https://github.com/baomidou/mybatis-plus) is the integrated ORM library. [Druid](https://github.com/alibaba/druid) is the database connection pool. Dynamically enhance connection pool size by CPU count (logical processor count). Read more at [How to Find the Optimal Database Connection Pool Size](https://wiki.postgresql.org/wiki/Number_Of_Database_Connections#How_to_Find_the_Optimal_Database_Connection_Pool_Size), [Sizing the Connection Pool](https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-usagenotes-j2ee-concepts-connection-pooling.html#idm46216069663472).
+8. [MySQL Replication for High Availability](https://severalnines.com/resources/database-management-tutorials/mysql-replication-high-availability-tutorial). ShardingSphere as database access middleware to boost the database capacity better.
+
+   - Multi data source for main, replica and Quartz data sources
+
+   - Dynamic SQL read-write isolation provided by [ShardingSphere](https://shardingsphere.apache.org/document/current/en/user-manual/shardingsphere-jdbc/spring-boot-starter/rules/readwrite-splitting/)
+
+   - [MyBatis-Plus](https://github.com/baomidou/mybatis-plus) is the integrated ORM library.
+
+   - [光 HikariCP](https://github.com/brettwooldridge/HikariCP) is the database connection pool.
+
+   - TODO: Dynamically enhance connection pool size by CPU count (logical processor count). Read more at [How to Find the Optimal Database Connection Pool Size](https://wiki.postgresql.org/wiki/Number_Of_Database_Connections#How_to_Find_the_Optimal_Database_Connection_Pool_Size), [Sizing the Connection Pool](https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-usagenotes-j2ee-concepts-connection-pooling.html#idm46216069663472).
 
 8. Redis 6.x support. [Master-slave replication for high availability](https://redis.io/topics/replication). Redis cluster.
 
@@ -92,7 +102,7 @@ Here is the highlights of **Muscle and Fitness Server**:
    $ git clone https://github.com/johnnymillergh/muscle-and-fitness-server.git
    ```
 
-2. Build with newest Intellij IDEA.
+2. Build with newest IntelliJ IDEA.
 
 3. Click the green triangle to Run.
 
