@@ -54,21 +54,18 @@ spring:
       sql-show: true
     datasource:
       master0:
-        name: master0
         type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
         url: jdbc:mysql://localhost:3306/muscle_and_fitness?useSSL=true&useUnicode=true
         username: maf_mysql_rw
         password: maf@mysql
       slave0:
-        name: slave0
         type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
         url: jdbc:mysql://localhost:3307/muscle_and_fitness?useSSL=true&useUnicode=true
         username: maf_mysql_r
         password: maf@mysql
       quartz:
-        name: quartz
         type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
         url: jdbc:mysql://localhost:3306/QUARTZ_DB?useSSL=true&useUnicode=true
