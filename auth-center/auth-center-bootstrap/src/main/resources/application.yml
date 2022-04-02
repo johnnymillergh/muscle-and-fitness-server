@@ -84,6 +84,25 @@ spring:
         load-balancers:
           readwrite-load-balancer:
             type: ROUND_ROBIN
+      sharding:
+        key-generators:
+          snowflake:
+            type: SNOWFLAKE
+        sharding-algorithms:
+          user-sharding:
+            type: INLINE
+            props:
+              algorithm-expression: user_$->{id % 2}
+        tables:
+          user:
+            actual-data-nodes: readwrite-data-sources.user_$->{0..1}
+            table-strategy:
+              standard:
+                sharding-column: id
+                sharding-algorithm-name: user-sharding
+            keyGenerateStrategy:
+              column: id
+              keyGeneratorName: snowflake
 
 logging:
   config: classpath:logback-configuration/logback-${spring.profiles.active}.xml
