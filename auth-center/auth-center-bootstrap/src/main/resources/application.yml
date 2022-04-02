@@ -29,6 +29,7 @@ spring:
           delay: 1000
         prefixes:
           - config
+          - shardingsphere
       discovery:
         register: true
         instance-id: ${spring.application.name}-${spring.cloud.client.hostname}-${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
@@ -43,60 +44,6 @@ spring:
       max-file-size: 64MB
       max-request-size: 70MB
       file-size-threshold: 0
-  shardingsphere:
-    props:
-      sql-show: true
-    datasource:
-      master0:
-        type: com.zaxxer.hikari.HikariDataSource
-        driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://localhost:3306/muscle_and_fitness?useSSL=true&useUnicode=true
-        username: maf_mysql_rw
-        password: maf@mysql
-      slave0:
-        type: com.zaxxer.hikari.HikariDataSource
-        driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://localhost:3307/muscle_and_fitness?useSSL=true&useUnicode=true
-        username: maf_mysql_r
-        password: maf@mysql
-      quartz:
-        type: com.zaxxer.hikari.HikariDataSource
-        driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://localhost:3306/QUARTZ_DB?useSSL=true&useUnicode=true
-        username: maf_mysql_rw
-        password: maf@mysql
-      names: master0,slave0,quartz
-    rules:
-      readwrite-splitting:
-        data-sources:
-          readwrite-data-sources:
-            type: Static
-            props:
-              write-data-source-name: master0
-              read-data-source-names: slave0
-            load-balancer-name: readwrite-load-balancer
-        load-balancers:
-          readwrite-load-balancer:
-            type: ROUND_ROBIN
-      sharding:
-        key-generators:
-          snowflake:
-            type: SNOWFLAKE
-        sharding-algorithms:
-          user-sharding:
-            type: INLINE
-            props:
-              algorithm-expression: user_$->{id % 2}
-        tables:
-          user:
-            actual-data-nodes: readwrite-data-sources.user_$->{0..1}
-            table-strategy:
-              standard:
-                sharding-column: id
-                sharding-algorithm-name: user-sharding
-            keyGenerateStrategy:
-              column: id
-              keyGeneratorName: snowflake
 
 logging:
   config: classpath:logback-configuration/logback-${spring.profiles.active}.xml

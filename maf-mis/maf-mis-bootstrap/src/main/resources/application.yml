@@ -29,6 +29,7 @@ spring:
           delay: 1000
         prefixes:
           - config
+          - shardingsphere
       discovery:
         register: true
         instance-id: ${spring.application.name}-${spring.cloud.client.hostname}-${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
@@ -53,7 +54,7 @@ maf:
     context-path: ${server.servlet.context-path}
     group-id: @project.groupId@
     project-parent-artifact-id: @project.parent.artifactId@
-    project-artifact-id: @project.artifactId@
+    project-artifact-id: @project.parent.artifactId@
     version: @project.version@
     description: @project.description@
     jdk-version: @java.version@
