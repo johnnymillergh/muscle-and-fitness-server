@@ -49,6 +49,68 @@ spring:
       # `file-size-threshold` specifies the size threshold after which files will be written to disk.
       # The default is 0. We set it as 0 too.
       file-size-threshold: 0
+  shardingsphere:
+    datasource:
+      master0:
+        name: master0
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/muscle_and_fitness_00?useSSL=true&useUnicode=true
+        username: maf_mysql_rw
+        password: maf@mysql
+      master1:
+        name: master1
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/muscle_and_fitness_01?useSSL=true&useUnicode=true
+        username: maf_mysql_rw
+        password: maf@mysql
+      slave0:
+        name: slave0
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3307/muscle_and_fitness_00?useSSL=true&useUnicode=true
+        username: maf_mysql_r
+        password: maf@mysql
+      slave1:
+        name: slave1
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3307/muscle_and_fitness_01?useSSL=true&useUnicode=true
+        username: maf_mysql_r
+        password: maf@mysql
+      quartz:
+        name: quartz
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/QUARTZ_DB?useSSL=true&useUnicode=true
+        username: maf_mysql_rw
+        password: maf@mysql
+      names: master0,slave0,master1,slave1,quartz
+    sharding:
+      master-slave-rules:
+        master0:
+          slave-data-source-names: slave0
+          master-data-source-name: master0
+        master1:
+          slave-data-source-names: slave1
+          master-data-source-name: master1
+      default-database-strategy:
+        inline:
+          algorithm-expression: master$->{id % 2}
+          sharding-column: id
+      tables:
+        user:
+          table-strategy:
+            inline:
+              sharding-column: id
+              algorithm-expression: "user_$->{String.format(\"%04d\", new BigDecimal(id).abs().divideAndRemainder(2)[1].longValue())}"
+          key-generator:
+            column: id
+            type: SNOWFLAKE
+          actual-data-nodes: "master$->{0..1}.user_$->{(0..1).collect{String.format(\"%04d\", it)}}"
+    props:
+      sql-show: true
 
 logging:
   config: classpath:logback-configuration/logback-${spring.profiles.active}.xml
@@ -61,7 +123,7 @@ maf:
     context-path: ${server.servlet.context-path}
     group-id: @project.groupId@
     project-parent-artifact-id: @project.parent.artifactId@
-    project-artifact-id: @project.artifactId@
+    project-artifact-id: @project.parent.artifactId@
     version: @project.version@
     description: @project.description@
     jdk-version: @java.version@

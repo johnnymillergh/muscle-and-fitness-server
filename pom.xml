@@ -56,7 +56,7 @@
         <spring-boot-admin-starter-client.version>2.6.2</spring-boot-admin-starter-client.version>
         <mybatis-plus-boot-starter.version>3.5.1</mybatis-plus-boot-starter.version>
         <dynamic-datasource-spring-boot-starter.version>3.5.1</dynamic-datasource-spring-boot-starter.version>
-        <sharding-sphere.version>4.1.1</sharding-sphere.version>
+        <shardingsphere.version>5.1.0</shardingsphere.version>
         <hutool-all.version>5.7.21</hutool-all.version>
         <guava.version>31.0.1-jre</guava.version>
         <springdoc-openapi-ui.version>1.6.6</springdoc-openapi-ui.version>
@@ -181,6 +181,7 @@
 
     <build>
         <!-- set the name of .jar file -->
+        <!--suppress MavenModelInspection -->
         <finalName>${project.artifactId}-${git.commit.id.abbrev}-${project.version}</finalName>
         <resources>
             <resource>

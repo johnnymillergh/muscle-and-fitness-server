@@ -1,8 +1,5 @@
 package com.jmsoftware.maf.springcloudstarter.database;
 
-import com.baomidou.dynamic.datasource.plugin.MasterSlaveAutoRoutingPlugin;
-import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DynamicDataSourcePropertiesCustomizer;
-import com.baomidou.dynamic.datasource.support.DdConstants;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
@@ -16,7 +13,6 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.Order;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -28,11 +24,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Slf4j
 @Configuration
 @EnableTransactionManagement
-@Import({
-        DataSourceConfiguration.class
-})
+//@Import({
+//        DataSourceConfiguration.class
+//})
+@ConditionalOnClass({MybatisPlusAutoConfiguration.class})
 @MapperScan("com.jmsoftware.maf.springcloudstarter.*.repository")
-@ConditionalOnClass({MybatisPlusAutoConfiguration.class, MasterSlaveAutoRoutingPlugin.class})
 public class MyBatisPlusConfiguration {
     private static final String MESSAGE_TEMPLATE = "Initial bean: '{}'";
 
@@ -80,48 +76,9 @@ public class MyBatisPlusConfiguration {
         return mybatisPlusInterceptor;
     }
 
-    /**
-     * Register master-slave auto routing plugin interceptor. Mybatis-Plus doesn't support non-master-slave
-     * datasource yet.
-     *
-     * @return the interceptor
-     * @see DdConstants
-     */
-    @Bean
-    @Order(2)
-    public Interceptor masterSlaveAutoRoutingPlugin() {
-        log.warn(MESSAGE_TEMPLATE, MasterSlaveAutoRoutingPlugin.class.getSimpleName());
-        return new MasterSlaveAutoRoutingPlugin();
-    }
-
     @Bean
     public CommonMetaObjectHandler commonMetaObjectHandler() {
         log.warn(MESSAGE_TEMPLATE, CommonMetaObjectHandler.class.getSimpleName());
         return new CommonMetaObjectHandler();
-    }
-
-    /**
-     * Dynamic data source properties customizer. Set global configuration for dynamic data source.
-     *
-     * @return the dynamic data source properties customizer
-     */
-    @Bean
-    public DynamicDataSourcePropertiesCustomizer dynamicDataSourcePropertiesCustomizer() {
-        return properties -> {
-            val cpuCoreCount = Runtime.getRuntime().availableProcessors();
-            val minIdle = cpuCoreCount * 2 + 1;
-            val maxPoolSize = cpuCoreCount * 3;
-            val hikari = properties.getHikari();
-            hikari.setConnectionTestQuery("SELECT 1");
-            hikari.setIdleTimeout(30000L);
-            hikari.setMaxPoolSize(maxPoolSize);
-            hikari.setMinIdle(minIdle);
-            hikari.setIsAutoCommit(true);
-            hikari.setMaxLifetime(120000L);
-            hikari.setConnectionTimeout(30000L);
-            log.warn("Hikari connection pool enhanced by current cpuCoreCount: {}, initial size: {}, min idle: {}" +
-                             ", max active: {}",
-                     cpuCoreCount, minIdle, minIdle, maxPoolSize);
-        };
     }
 }
