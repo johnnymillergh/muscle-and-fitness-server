@@ -81,7 +81,7 @@ public class PermissionServiceImpl implements PermissionService {
         log.info("Ignored service ID: {}", this.permissionConfiguration.getIgnoredServiceIds());
         response.setList(
                 serviceIdList.stream()
-                        .filter(serviceId -> CollUtil.contains(
+                        .filter(serviceId -> !CollUtil.contains(
                                 this.permissionConfiguration.getIgnoredServiceIds(),
                                 serviceId
                         ))
