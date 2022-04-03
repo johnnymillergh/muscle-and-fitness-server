@@ -12,13 +12,13 @@ spring:
       replica-1:
         type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://maf-mysql-server-source:3306/muscle_and_fitness_0?useSSL=true&useUnicode=true
+        url: jdbc:mysql://maf-mysql-server-replica-1:3306/muscle_and_fitness_0?useSSL=true&useUnicode=true
         username: maf_mysql_r
         password: maf@mysql
       quartz:
         type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://maf-mysql-server-source:3306/muscle_and_fitness_0?useSSL=true&useUnicode=true
+        url: jdbc:mysql://maf-mysql-server-source:3306/QUARTZ_DB?useSSL=true&useUnicode=true
         username: maf_mysql_rw
         password: maf@mysql
       names: source,replica-1,quartz
