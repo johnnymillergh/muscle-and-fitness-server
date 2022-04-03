@@ -2,6 +2,7 @@ package com.jmsoftware.maf.authcenter.permission.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
 import com.jmsoftware.maf.authcenter.permission.configuration.PermissionConfiguration;
 import com.jmsoftware.maf.authcenter.permission.converter.PermissionMapStructMapper;
 import com.jmsoftware.maf.authcenter.permission.response.GetServicesInfoResponse;
@@ -48,6 +49,7 @@ public class PermissionServiceImpl implements PermissionService {
     ) {
         val adminRole = this.roleDomainService.checkAdmin(payload.getRoleIdList());
         val response = new GetPermissionListByRoleIdListResponse();
+        response.setPermissionList(Lists.newArrayList());
         if (adminRole) {
             log.warn("Admin role checked. The role can access any resources");
             val permission = new GetPermissionListByRoleIdListResponse.Permission();

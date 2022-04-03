@@ -8,9 +8,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import java.util.ArrayList;
@@ -22,12 +20,12 @@ import java.util.ArrayList;
  * @see <a href='https://www.baeldung.com/spring-boot-testing'>Testing in Spring Boot</a>
  */
 @Slf4j
-@SpringBootTest
+//@SpringBootTest
 class AuthCenterApplicationTests {
     @Autowired
     private JwtService jwtService;
 
-    @Test
+//    @Test
     @SneakyThrows
     void mockLogin() {
         GetUserByLoginTokenResponse user = new GetUserByLoginTokenResponse();

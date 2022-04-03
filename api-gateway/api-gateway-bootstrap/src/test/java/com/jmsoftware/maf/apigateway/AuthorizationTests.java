@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.AntPathMatcher;
 
 /**
@@ -13,7 +12,7 @@ import org.springframework.util.AntPathMatcher;
  * @author 钟俊（zhongjun）, email: zhongjun@toguide.cn, date: 1/13/2021 11:27 AM
  **/
 @Slf4j
-@SpringBootTest
+//@SpringBootTest
 class AuthorizationTests {
     @Test
     void antPathMatcherTests() {
