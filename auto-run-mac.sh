@@ -174,7 +174,7 @@ function executePreBuildPhase() {
 function executeBuildPhase() {
   logInfo "[BUILD] Maven is staring to build"
   if [ "$skipBuild" = false ]; then
-    mvn clean package --show-version -Dmaven.javadoc.skip=true -DskipTests=true -P $mavenActiveProfile
+    mvn clean package --show-version -Dmaven.javadoc.skip=true -P $mavenActiveProfile
     buildCommandResult=$?
     # After the command that might error, instead of || exit 1...
     if [ "$buildCommandResult" -ne 0 ]; then
