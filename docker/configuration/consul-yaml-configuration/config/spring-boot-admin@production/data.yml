@@ -1,0 +1,6 @@
+greeting: "Hello, World! From Consul config center!"
+
+maf:
+  configuration:
+    excel:
+      maximum-row-count: 3000
