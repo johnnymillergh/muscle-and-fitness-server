@@ -39,17 +39,15 @@ Here is the highlights of **Muscle and Fitness Server**:
    - For Spring MVC, [spring-cloud-starter](https://github.com/johnnymillergh/muscle-and-fitness-server/tree/master/spring-cloud-starter)
    - For Spring WebFlux, [reactive-spring-cloud-starter](https://github.com/johnnymillergh/muscle-and-fitness-server/tree/master/reactive-spring-cloud-starter)
 
-4. PMD code quality check for each every CI (during Maven verify phase), with [Alibaba-p3c](https://github.com/alibaba/p3c) rulesets.
-
 5. Advocate 𝛌 Java Functional Programming, provide developers with powerful and useful functions to make Java more sweeter.
 
 6. Secured API. [RBAC](https://en.wikipedia.org/wiki/Role-based_access_control) by API gateway and Auth Center. JWT authentication, and RBAC authorization.
 
 8. [MySQL Replication for High Availability](https://severalnines.com/resources/database-management-tutorials/mysql-replication-high-availability-tutorial). ShardingSphere as database access middleware to boost the database capacity better.
 
-   - Multi data source for main, replica and Quartz data sources
+   - Multi data source managed by ShardingSphere, including main, replica and Quartz 3 data sources.
 
-   - Dynamic SQL read-write isolation provided by [ShardingSphere](https://shardingsphere.apache.org/document/current/en/user-manual/shardingsphere-jdbc/spring-boot-starter/rules/readwrite-splitting/)
+   - [Dynamic SQL read-write isolation](https://shardingsphere.apache.org/document/current/en/features/readwrite-splitting/) and [table sharding](https://shardingsphere.apache.org/document/current/en/features/sharding/concept/table/) provided by [ShardingSphere](https://shardingsphere.apache.org/).
 
    - [MyBatis-Plus](https://github.com/baomidou/mybatis-plus) is the integrated ORM library.
 
@@ -74,6 +72,10 @@ Here is the highlights of **Muscle and Fitness Server**:
 15. [Knife4j](https://doc.xiaominfo.com/) API visualization. Enhanced Swagger API documentation.
 
 16. [Async log output](https://examples.javacodegeeks.com/enterprise-java/logback/logback-ayncappender-example/). Log file compressed by standard GNU zip ([gzip](https://en.wikipedia.org/wiki/Gzip)) compression algorithm. [ELK](https://www.elastic.co/what-is/elk-stack) log aggregation.
+
+16. PMD code quality check for each every CI (during Maven verify phase), with [Alibaba-p3c](https://github.com/alibaba/p3c) rulesets.
+
+16. [JaCoCo](https://github.com/jacoco/jacoco) for JUnit code coverage.
 
 17. JVM log configuration for JVM garbage collection.
 
@@ -119,7 +121,7 @@ Here is the highlights of **Muscle and Fitness Server**:
 2. Package:
 
    ```shell
-   $ mvn clean package --batch-mode --show-version --quiet -f pom.xml
+   $ mvn clean package -Djunit.jupiter.execution.parallel.enabled=true --batch-mode --show-version --quiet -f pom.xml
    ```
 
 3. Set Version:
@@ -183,8 +185,8 @@ Here is the highlights of **Muscle and Fitness Server**:
 
 ## CI (Continuous Integration)
 
-- [Travis CI](https://travis-ci.com/github/johnnymillergh/media-streaming) is for publishing Docker Hub images of SNAPSHOT and RELEASE.
-- [GitHub Actions](https://github.com/johnnymillergh/media-streaming/actions) is for checking dependency updates and tests.
+- [GitHub Actions](https://github.com/johnnymillergh/media-streaming/actions) is for building and publishing Docker images, also checking dependency updates and tests.
+- ~~[Travis CI](https://travis-ci.com/github/johnnymillergh/media-streaming) is for publishing Docker Hub images of SNAPSHOT and RELEASE.~~
 
 ## Maintainers
 
