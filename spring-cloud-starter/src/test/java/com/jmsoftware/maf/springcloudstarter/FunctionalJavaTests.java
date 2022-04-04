@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static fj.Show.*;
 import static fj.data.List.list;
@@ -17,6 +19,7 @@ import static fj.data.List.list;
  * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com, 9/28/21 11:00 PM
  **/
 @Slf4j
+@Execution(ExecutionMode.CONCURRENT)
 class FunctionalJavaTests {
     @Test
     void testListMap() {

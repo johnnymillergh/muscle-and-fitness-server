@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -32,6 +34,7 @@ import static fj.Show.anyShow;
  * @since <pre>Sep 28, 2021</pre>
  */
 @Slf4j
+@Execution(ExecutionMode.CONCURRENT)
 class FunctionalInterfaceTests {
     /**
      * Test require true.

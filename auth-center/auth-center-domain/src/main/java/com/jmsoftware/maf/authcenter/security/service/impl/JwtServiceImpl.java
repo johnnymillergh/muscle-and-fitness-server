@@ -51,7 +51,7 @@ public class JwtServiceImpl implements JwtService {
     private JwtParser jwtParser;
 
     @PostConstruct
-    private void init() {
+    public void init() {
         log.info("Start to init class members of {}.", this.getClass().getSimpleName());
         this.secretKey = Keys.hmacShaKeyFor(
                 this.jwtConfigurationProperties.getSigningKey().getBytes(StandardCharsets.UTF_8));

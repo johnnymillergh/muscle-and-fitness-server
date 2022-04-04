@@ -1,5 +1,6 @@
 package com.jmsoftware.maf.authcenter.permission.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.jmsoftware.maf.authcenter.permission.configuration.PermissionConfiguration;
@@ -14,25 +15,46 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.client.RestTemplate;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
+ * <h1>PermissionServiceImplTest</h1>
  * Description: PermissionServiceImplTest, change description here.
+ * <p>
+ * <h2>Mockito JUnit 5 Extension</h2>
+ * <p>There is also a Mockito extension for JUnit 5 that will make the initialization even simpler.</p>
+ * <p><strong>Pros:</strong></p>
+ * <ul>
+ * <li>No need to call <code>MockitoAnnotations.openMocks()</code></li>
+ * <li>Validates framework usage and detects incorrect stubbing</li>
+ * <li>Easy to create mocks</li>
+ * <li>Very readable</li>
+ *
+ * </ul>
+ * <p><strong>Cons:</strong></p>
+ * <ul>
+ * <li>Need an extra dependency on <code>org.mockito:mockito-junit-jupiter</code>, which has been included by Spring.
+ * So we don&#39;t have to worry about this.</li>
+ * </ul>
  *
  * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com, date: 4/3/22 10:19 PM
+ * @see <a href='https://www.arhohuttunen.com/junit-5-mockito/'>Using Mockito With JUnit 5</a>
+ * @see <a href='https://www.youtube.com/watch?v=p7_cTAF39A8/'>YouTube - Using Mockito With JUnit 5</a>
  **/
 @Slf4j
 @ExtendWith(MockitoExtension.class)
+@Execution(ExecutionMode.CONCURRENT)
 class PermissionServiceImplTest {
     @InjectMocks
     private PermissionServiceImpl permissionService;
@@ -49,12 +71,12 @@ class PermissionServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        log.info("PermissionServiceImplTest setUp");
+        log.info("{} setUp", this.getClass().getSimpleName());
     }
 
     @AfterEach
     void tearDown() {
-        log.info("PermissionServiceImplTest tearDown");
+        log.info("{} tearDown", this.getClass().getSimpleName());
     }
 
     @Test
@@ -87,5 +109,10 @@ class PermissionServiceImplTest {
         log.info("Services info: {}", servicesInfo);
         verify(this.discoveryClient).getServices();
         assertNotEquals(0, servicesInfo.getList().size());
+        assertTrue(
+                servicesInfo.getList()
+                        .stream()
+                        .anyMatch(service -> StrUtil.equalsAnyIgnoreCase(service.getServiceId(), "auth-center"))
+        );
     }
 }

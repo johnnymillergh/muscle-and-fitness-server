@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.val;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.springframework.beans.BeanUtils;
 
 import java.time.LocalDateTime;
@@ -16,6 +18,7 @@ import java.time.LocalDateTime;
  *
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 10/21/2021 8:07 PM
  **/
+@Execution(ExecutionMode.CONCURRENT)
 class BeanCopyTests {
     private static final int COUNT = 1_000_000;
 
