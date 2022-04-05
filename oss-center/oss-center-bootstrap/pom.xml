@@ -63,8 +63,11 @@
                 </executions>
                 <configuration>
                     <from>
-                        <!-- Don't use alpine or slim version, https://hub.docker.com/r/adoptopenjdk/openjdk11/tags?page=1&ordering=last_updated&name=jre-11 -->
-                        <image>adoptopenjdk/openjdk11:${adoptopenjdk11.tag}</image>
+                        <!--
+                        Don't use alpine or slim version,
+                        https://hub.docker.com/_/eclipse-temurin?tab=tags&page=1&name=11.0.14.1_1-jre
+                        -->
+                        <image>eclipse-temurin:${temurin.tag}</image>
                     </from>
                     <to>
                         <image>docker.io/ijohnnymiller/${project.baseArtifactId}.${project.parent.artifactId}</image>
