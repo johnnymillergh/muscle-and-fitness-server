@@ -21,7 +21,7 @@ Here is the highlights of **Muscle and Fitness Server**:
 
 1. Each microservice is organized by [Domain Driven Design](https://en.wikipedia.org/wiki/Domain-driven_design) (DDD) structure.
 
-1. Inherited from the most modern and newest Spring frameworks:
+1. Based on Java - ![](https://img.shields.io/badge/JDK-Temurin%2017.0.2+8-informational?style=flat&logo=java&logoColor=white&color=2bbc8a). Inherited from the most modern and newest Spring frameworks:
 
    `org.springframework.boot:spring-boot-starter-parent` - [![Spring Boot](https://maven-badges.herokuapp.com/maven-central/org.springframework.boot/spring-boot-starter-parent/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.springframework.boot/spring-boot-starter-parent/)
    `org.springframework.cloud:spring-cloud-dependencies` - [![Spring Cloud](https://maven-badges.herokuapp.com/maven-central/org.springframework.cloud/spring-cloud-dependencies/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.springframework.cloud/spring-cloud-dependencies/)
