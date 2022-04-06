@@ -130,6 +130,10 @@ public class WriteResourceServiceImpl implements WriteResourceService {
         val headers = new HashMap<String, String>(4);
         headers.put("Content-Type", mediaType.toString());
         val objectWriteResponse = this.minioHelper.composeObject(payload.getBucket(), objectName, sources, headers);
+        if (objectWriteResponse == null) {
+            log.error("objectWriteResponse is null!");
+            throw new IllegalStateException("Failed to compose object!");
+        }
         val objectResponse = new ObjectResponse();
         objectResponse.setBucket(objectWriteResponse.bucket());
         objectResponse.setObject(objectWriteResponse.object());

@@ -2,6 +2,7 @@ package com.jmsoftware.maf.common.domain.authcenter.role;
 
 import lombok.Data;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -11,7 +12,9 @@ import java.io.Serializable;
  **/
 @Data
 public class GetRoleListByUserIdSingleResponse implements Serializable {
+    @Serial
     private static final long serialVersionUID = 3758434255123050684L;
+
     private Long id;
     private String name;
 }

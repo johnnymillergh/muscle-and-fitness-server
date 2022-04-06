@@ -37,13 +37,13 @@
         <api-gateway.port>8080</api-gateway.port>
 
         <!-- Version Definitions. -->
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <!--
         Don't use alpine or slim version, to prevent following exception
         java.lang.UnsatisfiedLinkError: /opt/java/openjdk/lib/libfontmanager.so: libfreetype.so.6: cannot open shared object file: No such file or directory
-        https://hub.docker.com/_/eclipse-temurin?tab=tags&page=1&name=11.0.14.1_1-jre
+        https://hub.docker.com/_/eclipse-temurin?tab=tags&page=1&name=17.0.2_8-jre
         -->
-        <temurin.tag>11.0.14.1_1-jre</temurin.tag>
+        <temurin.tag>17.0.2_8-jre</temurin.tag>
         <jib-maven-plugin.version>3.2.0</jib-maven-plugin.version>
         <jib-spring-boot-extension-maven.version>0.1.0</jib-spring-boot-extension-maven.version>
         <maven-pmd-plugin.version>3.15.0</maven-pmd-plugin.version>

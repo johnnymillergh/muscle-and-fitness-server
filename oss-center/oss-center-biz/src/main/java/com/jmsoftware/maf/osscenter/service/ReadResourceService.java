@@ -24,7 +24,10 @@ public interface ReadResourceService {
      * @param object the object
      * @return the response entity
      */
-    ResponseEntity<StreamingResponseBody> asyncGetSingleResource(String bucket, String object);
+    ResponseEntity<StreamingResponseBody> asyncGetSingleResource(
+            @NotBlank String bucket,
+            @NotBlank String object
+    );
 
     /**
      * Stream single resource, more efficiency if the resource is large file, which will be streamed by range.
@@ -35,8 +38,11 @@ public interface ReadResourceService {
      * @param range  the range
      * @return the response entity
      */
-    ResponseEntity<StreamingResponseBody> asyncStreamSingleResource(@NotBlank String bucket, @NotBlank String object,
-                                                                    @Nullable String range);
+    ResponseEntity<StreamingResponseBody> asyncStreamSingleResource(
+            @NotBlank String bucket,
+            @NotBlank String object,
+            @Nullable String range
+    );
 
     /**
      * Async download single resource response entity.
@@ -45,7 +51,10 @@ public interface ReadResourceService {
      * @param object the object
      * @return the response entity
      */
-    ResponseEntity<StreamingResponseBody> asyncDownloadSingleResource(@NotBlank String bucket, @NotBlank String object);
+    ResponseEntity<StreamingResponseBody> asyncDownloadSingleResource(
+            @NotBlank String bucket,
+            @NotBlank String object
+    );
 
     /**
      * Gets resource information.
@@ -54,5 +63,8 @@ public interface ReadResourceService {
      * @param object the object
      * @return the resource detail
      */
-    SerializableStatObjectResponse stateObject(@NotBlank String bucket, @NotBlank String object);
+    SerializableStatObjectResponse stateObject(
+            @NotBlank String bucket,
+            @NotBlank String object
+    );
 }

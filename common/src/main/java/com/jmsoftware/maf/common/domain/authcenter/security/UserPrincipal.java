@@ -13,10 +13,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serial;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * <h1>UserPrincipal</h1>
@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserPrincipal implements UserDetails {
+    @Serial
     private static final long serialVersionUID = -53353171692896501L;
 
     /**
@@ -113,7 +114,7 @@ public class UserPrincipal implements UserDetails {
         val authorities = permissions.stream()
                 .filter(permission -> StrUtil.isNotBlank(permission.getPermissionExpression()))
                 .map(permission -> new SimpleGrantedAuthority(permission.getPermissionExpression()))
-                .collect(Collectors.toList());
+                .toList();
 
         return new UserPrincipal(user.getId(),
                                  user.getUsername(),
@@ -132,17 +133,17 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+        return this.authorities;
     }
 
     @Override
     public String getPassword() {
-        return password;
+        return this.password;
     }
 
     @Override
     public String getUsername() {
-        return username;
+        return this.username;
     }
 
     @Override

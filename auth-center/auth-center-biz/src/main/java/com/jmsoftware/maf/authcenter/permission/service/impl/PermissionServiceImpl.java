@@ -23,7 +23,6 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.stream.Collectors;
 
 import static cn.hutool.core.text.CharSequenceUtil.format;
 import static com.jmsoftware.maf.springcloudstarter.function.Slf4j.lazyDebug;
@@ -67,7 +66,7 @@ public class PermissionServiceImpl implements PermissionService {
                 permissionList
                         .stream()
                         .map(PermissionMapStructMapper.INSTANCE::of)
-                        .collect(Collectors.toList())
+                        .toList()
         );
         return response;
     }
@@ -97,7 +96,7 @@ public class PermissionServiceImpl implements PermissionService {
                             serviceInfo.setHttpApiResources(httpApiResourcesResponse);
                             lazyDebug(log, () -> format("Added serviceInfo: {}", serviceInfo));
                             return serviceInfo;
-                        }).collect(Collectors.toList())
+                        }).toList()
         );
         if (CollUtil.isEmpty(response.getList())) {
             log.warn("Got am empty ServiceInfo list");

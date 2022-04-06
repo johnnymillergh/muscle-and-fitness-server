@@ -1,6 +1,5 @@
 package com.jmsoftware.maf.apigateway.configuration;
 
-import cn.hutool.core.util.ObjectUtil;
 import com.jmsoftware.maf.apigateway.property.RedisRateLimiterConfigurationProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -76,7 +75,7 @@ public class DiscoveryRouteConfiguration {
     public KeyResolver ipKeyResolver() {
         return exchange -> {
             val remoteAddress = exchange.getRequest().getRemoteAddress();
-            if (ObjectUtil.isNotNull(remoteAddress)) {
+            if (remoteAddress != null) {
                 return Mono.just(remoteAddress.getHostName());
             }
             return Mono.just("unknown-address");

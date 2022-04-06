@@ -27,6 +27,7 @@ public class SerializableStatObjectResponse extends SerializableGenericResponse 
     private Map<String, String> userMetadata;
 
     public static SerializableStatObjectResponse build(StatObjectResponse statObjectResponse) {
+        // TODO: use MapStruct to convert
         val serializableStatObjectResponse = new SerializableStatObjectResponse();
         serializableStatObjectResponse.setHeaders(statObjectResponse.headers().toMultimap());
         serializableStatObjectResponse.setBucket(statObjectResponse.bucket());

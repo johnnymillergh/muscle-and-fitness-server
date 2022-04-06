@@ -26,7 +26,6 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * Description: RbacReactiveAuthorizationManagerImpl
@@ -80,12 +79,12 @@ public class RbacReactiveAuthorizationManagerImpl implements ReactiveAuthorizati
         // Get permission list based on the Mono<List<Long>>
         // auth-center will respond /** for role "admin"
         return roleIdListMono.flatMap(
-                roleIdList -> {
-                    val payload = new GetPermissionListByRoleIdListPayload();
-                    payload.setRoleIdList(roleIdList);
-                    payload.setPermissionTypeList(Lists.newArrayList(PermissionType.BUTTON));
-                    return this.authCenterRemoteApi.getPermissionListByRoleIdList(payload);
-                })
+                        roleIdList -> {
+                            val payload = new GetPermissionListByRoleIdListPayload();
+                            payload.setRoleIdList(roleIdList);
+                            payload.setPermissionTypeList(Lists.newArrayList(PermissionType.BUTTON));
+                            return this.authCenterRemoteApi.getPermissionListByRoleIdList(payload);
+                        })
                 .switchIfEmpty(Mono.error(new SecurityException(HttpStatus.FORBIDDEN, "Permission not found!")));
     }
 
@@ -103,9 +102,9 @@ public class RbacReactiveAuthorizationManagerImpl implements ReactiveAuthorizati
             val buttonPermissionList = permissionList.stream()
                     .filter(permission -> StrUtil.isNotBlank(permission.getUrl()))
                     .filter(permission -> StrUtil.isNotBlank(permission.getMethod()))
-                    .collect(Collectors.toList());
+                    .toList();
             val userPrincipal = mapper.getT2();
-            for (var buttonPermission : buttonPermissionList) {
+            for (val buttonPermission : buttonPermissionList) {
                 if (this.checkRestfulAccess(buttonPermission, request)) {
                     log.info("Authorization success! Resource [{}] {} is accessible for user(username: {})",
                              request.getMethod(), request.getURI(), userPrincipal.getUsername());

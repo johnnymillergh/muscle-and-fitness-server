@@ -6,6 +6,7 @@ import com.jmsoftware.maf.springcloudstarter.database.BasePersistenceEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -17,6 +18,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @TableName(value = QuartzJobConfiguration.TABLE_NAME)
 public class QuartzJobConfiguration extends BasePersistenceEntity implements Serializable {
+    @Serial
     private static final long serialVersionUID = -4561633114475541640L;
 
     public static final String TABLE_NAME = "quartz_job_configuration";

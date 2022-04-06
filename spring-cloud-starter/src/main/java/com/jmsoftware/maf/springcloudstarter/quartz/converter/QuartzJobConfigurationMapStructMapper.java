@@ -24,5 +24,6 @@ public interface QuartzJobConfigurationMapStructMapper {
      */
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "deleted", ignore = true)
+    @Mapping(target = "version", ignore = true)
     QuartzJobConfiguration of(QuartzJobConfigurationExcel quartzJobConfigurationExcel);
 }

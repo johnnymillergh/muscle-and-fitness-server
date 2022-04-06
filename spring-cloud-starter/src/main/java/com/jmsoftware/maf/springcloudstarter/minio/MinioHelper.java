@@ -1,12 +1,13 @@
 package com.jmsoftware.maf.springcloudstarter.minio;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
+import com.google.common.collect.Lists;
 import io.minio.*;
 import io.minio.http.Method;
 import io.minio.messages.Bucket;
 import io.minio.messages.DeleteObject;
 import io.minio.messages.Item;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -19,7 +20,6 @@ import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * <h1>MinioHelper</h1>
@@ -30,14 +30,12 @@ import java.util.stream.Collectors;
  **/
 @Slf4j
 @Validated
-@RequiredArgsConstructor
 @SuppressWarnings("unused")
-public class MinioHelper {
+public record MinioHelper(MinioClient minioClient) {
     /**
      * 7 days
      */
     private static final int DEFAULT_EXPIRY_TIME = 7 * 24 * 3600;
-    private final MinioClient minioClient;
 
     @SneakyThrows
     public boolean bucketExists(@NotBlank String bucket) {
@@ -56,8 +54,11 @@ public class MinioHelper {
     }
 
     @SneakyThrows
-    public ObjectWriteResponse put(@NotBlank String bucket, @NotBlank String object,
-                                   @NotNull MultipartFile multipartFile) {
+    public ObjectWriteResponse put(
+            @NotBlank String bucket,
+            @NotBlank String object,
+            @NotNull MultipartFile multipartFile
+    ) {
         return this.minioClient.putObject(
                 PutObjectArgs.builder()
                         .bucket(bucket)
@@ -77,12 +78,13 @@ public class MinioHelper {
                         .object(object)
                         .stream(inputStream, inputStream.available(), -1)
                         .contentType(contentType)
-                        .build());
+                        .build()
+        );
     }
 
     @SneakyThrows
     public List<String> listBucketNames() {
-        return this.listBuckets().stream().map(Bucket::name).collect(Collectors.toList());
+        return this.listBuckets().stream().map(Bucket::name).toList();
     }
 
     @SneakyThrows
@@ -96,6 +98,9 @@ public class MinioHelper {
             return false;
         }
         val myObjects = this.listObjects(bucket);
+        if (CollUtil.isEmpty(myObjects)) {
+            return false;
+        }
         for (val result : myObjects) {
             val item = result.get();
             // If item has files, fail to remove
@@ -110,16 +115,19 @@ public class MinioHelper {
 
     @SneakyThrows
     public List<String> listObjectNames(@NotBlank String bucket) {
-        val listObjectNames = new LinkedList<String>();
+        val objectNames = Lists.<String>newArrayList();
         if (!this.bucketExists(bucket)) {
-            return listObjectNames;
+            return objectNames;
         }
-        val myObjects = this.listObjects(bucket);
-        for (val result : myObjects) {
+        val objects = this.listObjects(bucket);
+        if (CollUtil.isEmpty(objects)) {
+            return objectNames;
+        }
+        for (val result : objects) {
             val item = result.get();
-            listObjectNames.add(item.objectName());
+            objectNames.add(item.objectName());
         }
-        return listObjectNames;
+        return objectNames;
     }
 
     @SneakyThrows
@@ -143,8 +151,12 @@ public class MinioHelper {
     }
 
     @SneakyThrows
-    public GetObjectResponse getObject(@NotBlank String bucket, @NotBlank String object, @Min(0L) long offset,
-                                       @NotNull @Min(0L) Long length) {
+    public GetObjectResponse getObject(
+            @NotBlank String bucket,
+            @NotBlank String object,
+            @Min(0L) long offset,
+            @NotNull @Min(0L) Long length
+    ) {
         if (!this.bucketExists(bucket)) {
             return null;
         }
@@ -157,7 +169,7 @@ public class MinioHelper {
     }
 
     @SneakyThrows
-    public boolean removeObjects(String bucket, String object) {
+    public boolean removeObjects(@NotBlank String bucket, @NotBlank String object) {
         if (!this.bucketExists(bucket)) {
             return false;
         }
@@ -166,10 +178,10 @@ public class MinioHelper {
     }
 
     @SneakyThrows
-    public List<String> removeObjects(String bucket, List<String> objects) {
+    public List<String> removeObjects(@NotBlank String bucket, @NotEmpty List<@NotBlank String> objects) {
         val deleteErrorNameList = new LinkedList<String>();
         if (this.bucketExists(bucket)) {
-            val deleteObjectList = objects.stream().map(DeleteObject::new).collect(Collectors.toList());
+            val deleteObjectList = objects.stream().map(DeleteObject::new).toList();
             val results = this.minioClient.removeObjects(
                     RemoveObjectsArgs.builder().bucket(bucket).objects(deleteObjectList).build());
             for (val result : results) {
@@ -194,7 +206,8 @@ public class MinioHelper {
                         .object(object)
                         .method(method)
                         .expiry(expiration)
-                        .build());
+                        .build()
+        );
     }
 
     @SneakyThrows
@@ -215,9 +228,12 @@ public class MinioHelper {
     }
 
     @SneakyThrows
-    public ObjectWriteResponse composeObject(@NotBlank String bucket, @NotBlank String object,
-                                             @NotEmpty List<ComposeSource> sources,
-                                             @Nullable Map<String, String> headers) {
+    public ObjectWriteResponse composeObject(
+            @NotBlank String bucket,
+            @NotBlank String object,
+            @NotEmpty List<ComposeSource> sources,
+            @Nullable Map<String, String> headers
+    ) {
         if (!this.bucketExists(bucket)) {
             return null;
         }

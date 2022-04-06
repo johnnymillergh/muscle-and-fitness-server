@@ -215,6 +215,7 @@ public abstract class AbstractExcelDataController<T> {
      * Before execute.
      */
     protected void beforeExecute() {
+        // left empty
     }
 
     /**
@@ -251,6 +252,7 @@ public abstract class AbstractExcelDataController<T> {
      * After execute. Delete file.
      */
     protected void afterExecute() {
+        // left empty
     }
 
     /**
@@ -273,6 +275,7 @@ public abstract class AbstractExcelDataController<T> {
      * @param excelWriter the excel writer
      */
     protected void beforeDownload(ExcelWriter excelWriter) {
+        // left empty
     }
 
     @GetMapping("/stat/excel-template")

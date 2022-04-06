@@ -115,9 +115,9 @@ public interface ValueDescriptionBaseEnum<V> {
         if (StrUtil.isEmpty(enumName)) {
             return null;
         }
-        for (Enum<? extends ValueDescriptionBaseEnum<V>> e : enumClass.getEnumConstants()) {
+        for (val e : enumClass.getEnumConstants()) {
             if (StrUtil.equalsIgnoreCase(e.name(), enumName)) {
-                return (E) e;
+                return e;
             }
         }
         return null;
@@ -165,9 +165,9 @@ public interface ValueDescriptionBaseEnum<V> {
         if (ObjectUtil.isNull(value)) {
             return null;
         }
-        for (Enum<? extends ValueDescriptionBaseEnum<V>> e : enumClass.getEnumConstants()) {
+        for (val e : enumClass.getEnumConstants()) {
             if (((ValueDescriptionBaseEnum<V>) e).getValue().equals(value)) {
-                return (E) e;
+                return e;
             }
         }
         return null;

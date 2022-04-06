@@ -2,6 +2,8 @@ package com.jmsoftware.maf.common.exception;
 
 import org.springframework.http.HttpStatus;
 
+import java.io.Serial;
+
 /**
  * <h1>InternalServerException</h1>
  * <p>
@@ -10,6 +12,7 @@ import org.springframework.http.HttpStatus;
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 2019-03-02 17:15
  **/
 public class InternalServerException extends BaseException {
+    @Serial
     private static final long serialVersionUID = 6403325238832002908L;
 
     public InternalServerException(HttpStatus httpStatus) {

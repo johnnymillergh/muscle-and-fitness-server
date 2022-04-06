@@ -36,7 +36,6 @@ import java.util.Set;
 @Slf4j
 @Aspect
 public class FeignClientLogAspect {
-    private static final String LINE_SEPARATOR = System.lineSeparator();
     private static final Set<Class<?>> REQUEST_MAPPING_SET = Collections.unmodifiableSet(CollUtil.newHashSet(
             RequestMapping.class,
             GetMapping.class,
@@ -45,18 +44,25 @@ public class FeignClientLogAspect {
             DeleteMapping.class,
             PatchMapping.class
     ));
-    private static final String BEFORE_TEMPLATE = LINE_SEPARATOR +
-            "============ FEIGN CLIENT LOG (@Before) ============" + LINE_SEPARATOR +
-            "Feign URL            : [{}] {}" + LINE_SEPARATOR +
-            "Class Method         : {}#{}" + LINE_SEPARATOR +
-            "Request Params       :" + LINE_SEPARATOR + "{}";
-    private static final String AROUND_TEMPLATE = LINE_SEPARATOR +
-            "============ FEIGN CLIENT LOG (@Around) ============" + LINE_SEPARATOR +
-            "Feign URL            : [{}] {}" + LINE_SEPARATOR +
-            "Class Method         : {}#{}" + LINE_SEPARATOR +
-            "Elapsed Time         : {} ms" + LINE_SEPARATOR +
-            "Feign Request Params :" + LINE_SEPARATOR + "{}" + LINE_SEPARATOR +
-            "Feign Response Params:" + LINE_SEPARATOR + "{}";
+    private static final String BEFORE_TEMPLATE = """
+
+            ============ FEIGN CLIENT LOG (@Before) ============
+            Feign URL            : [{}] {}
+            Class Method         : {}#{}
+            Request Params       :
+            {}
+            """;
+    private static final String AROUND_TEMPLATE ="""
+
+            ============ FEIGN CLIENT LOG (@Around) ============
+            Feign URL            : [{}] {}
+            Class Method         : {}#{}
+            Elapsed Time         : {} ms
+            Feign Request Params :
+            {}
+            Feign Response Params:
+            {}
+            """;
 
     @Pointcut("@within(org.springframework.cloud.openfeign.FeignClient)" +
             " || @annotation(org.springframework.cloud.openfeign.FeignClient)")

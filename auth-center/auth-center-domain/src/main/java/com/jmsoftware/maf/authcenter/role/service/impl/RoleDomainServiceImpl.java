@@ -96,7 +96,7 @@ public class RoleDomainServiceImpl
                 .getRecords()
                 .stream()
                 .map(RoleExcelBean::transformBy)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override

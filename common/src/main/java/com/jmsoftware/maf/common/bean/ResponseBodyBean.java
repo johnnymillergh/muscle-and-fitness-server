@@ -11,6 +11,7 @@ import lombok.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -26,7 +27,8 @@ import java.time.LocalDateTime;
 @Data
 @SuppressWarnings("unused")
 @EqualsAndHashCode(callSuper = true)
-public class ResponseBodyBean<T> extends TrackableBean implements Serializable{
+public class ResponseBodyBean<T> extends TrackableBean implements Serializable {
+    @Serial
     private static final long serialVersionUID = 4645469240048361965L;
 
     /**

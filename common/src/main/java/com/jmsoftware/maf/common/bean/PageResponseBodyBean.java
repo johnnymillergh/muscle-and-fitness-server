@@ -11,6 +11,7 @@ import lombok.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -31,6 +32,7 @@ public class PageResponseBodyBean<T> extends TrackableBean implements Serializab
     /**
      * The constant serialVersionUID.
      */
+    @Serial
     private static final long serialVersionUID = 4645461634548783641L;
 
     /**

@@ -34,7 +34,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static cn.hutool.core.text.CharSequenceUtil.format;
 import static com.jmsoftware.maf.springcloudstarter.function.BooleanCheck.requireTrue;
@@ -102,11 +101,12 @@ public class QuartzJobConfigurationServiceImpl
     @SneakyThrows
     @Transactional(rollbackFor = Throwable.class)
     public void save(@NotEmpty List<@Valid QuartzJobConfigurationExcel> beanList) {
-        val quartzJobConfigurationList = beanList.stream()
-                .map(QuartzJobConfigurationMapStructMapper.INSTANCE::of)
-                .collect(Collectors.toList());
         requireTrue(
-                this.saveBatch(quartzJobConfigurationList),
+                this.saveBatch(
+                        beanList.stream()
+                                .map(QuartzJobConfigurationMapStructMapper.INSTANCE::of)
+                                .toList()
+                ),
                 saved -> log.info("Saved quartzJobConfigurationList, saved: {}", saved)
         ).orElseThrow(() -> new IllegalStateException("Failed to save batch quartzJobConfigurationList"));
     }

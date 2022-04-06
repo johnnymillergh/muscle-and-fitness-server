@@ -34,28 +34,41 @@ import static cn.hutool.core.text.CharSequenceUtil.format;
 @Aspect
 public class WebRequestLogAspect {
     private static final int MAX_LENGTH_OF_JSON_STRING = 500;
-    private static final String LINE_SEPARATOR = System.lineSeparator();
-    private static final String BEFORE_TEMPLATE = LINE_SEPARATOR +
-            "============ WEB REQUEST LOG AOP (@Before) ============" + LINE_SEPARATOR +
-            "URL                : {}" + LINE_SEPARATOR +
-            "HTTP Method        : {}" + LINE_SEPARATOR +
-            "Client[IPv46:Port] : {}" + LINE_SEPARATOR +
-            "Username           : {}" + LINE_SEPARATOR +
-            "Class Method       : {}#{}" + LINE_SEPARATOR +
-            "Request Params     :{}{}";
-    private static final String AFTER_TEMPLATE = LINE_SEPARATOR +
-            "============ WEB REQUEST LOG AOP (@After) =============";
-    private static final String AROUND_TEMPLATE_FOR_JSON = LINE_SEPARATOR +
-            "Response           :{}{}";
-    private static final String AROUND_TEMPLATE_FOR_NON_JSON = LINE_SEPARATOR +
-            "Response (non-JSON): {}";
-    private static final String AROUND_TEMPLATE_END = LINE_SEPARATOR +
-            "Elapsed time       : {} ({} ms)" + LINE_SEPARATOR +
-            "============ WEB REQUEST LOG AOP (@Around) ============";
-    private static final String AFTER_THROWING_TEMPLATE = LINE_SEPARATOR +
-            "Signature          : {}" + LINE_SEPARATOR +
-            "Exception          : {}, message: {}" + LINE_SEPARATOR +
-            "======== WEB REQUEST LOG AOP (@AfterThrowing) =========";
+    private static final String BEFORE_TEMPLATE = """
+
+            ============ WEB REQUEST LOG AOP (@Before) ============
+            URL                : {}
+            HTTP Method        : {}
+            Client[IPv46:Port] : {}
+            Username           : {}
+            Class Method       : {}#{}
+            Request Params     :
+            {}
+            """;
+    private static final String AFTER_TEMPLATE = """
+
+            ============ WEB REQUEST LOG AOP (@After) =============
+            """;
+    private static final String AROUND_TEMPLATE_FOR_JSON = """
+
+            Response           :
+            {}
+            """;
+    private static final String AROUND_TEMPLATE_FOR_NON_JSON ="""
+
+            Response (non-JSON): {}
+            """;
+    private static final String AROUND_TEMPLATE_END = """
+
+            Elapsed time       : {} ({} ms)
+            ============ WEB REQUEST LOG AOP (@Around) ============
+            """;
+    private static final String AFTER_THROWING_TEMPLATE = """
+
+            Signature          : {}
+            Exception          : {}, message: {}
+            ======== WEB REQUEST LOG AOP (@AfterThrowing) =========
+            """;
     private final ObjectMapper mapper = new ObjectMapper();
 
     /**
@@ -90,8 +103,8 @@ public class WebRequestLogAspect {
         val request = attributes.getRequest();
         log.info(BEFORE_TEMPLATE, request.getRequestURL().toString(), request.getMethod(),
                  RequestUtil.getRequestIpAndPort(request), UserUtil.getCurrentUsername(),
-                 joinPoint.getSignature().getDeclaringTypeName(), joinPoint.getSignature().getName(), LINE_SEPARATOR,
-                 JSONUtil.toJsonPrettyStr(joinPoint.getArgs()));
+                 joinPoint.getSignature().getDeclaringTypeName(), joinPoint.getSignature().getName(),
+                 JSONUtil.toJsonStr(joinPoint.getArgs()));
     }
 
     /**
@@ -123,7 +136,7 @@ public class WebRequestLogAspect {
                         format("{}… [The length({}) of JSON string is larger than the maximum({})]", substring,
                                       formattedJsonString.length(), MAX_LENGTH_OF_JSON_STRING);
             }
-            log.info(AROUND_TEMPLATE_FOR_JSON, LINE_SEPARATOR, formattedJsonString);
+            log.info(AROUND_TEMPLATE_FOR_JSON, formattedJsonString);
         } catch (JsonProcessingException e) {
             log.info(AROUND_TEMPLATE_FOR_NON_JSON, result);
         }
