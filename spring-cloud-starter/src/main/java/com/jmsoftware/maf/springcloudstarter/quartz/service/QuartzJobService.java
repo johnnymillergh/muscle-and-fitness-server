@@ -22,8 +22,13 @@ public interface QuartzJobService {
      * @param cronExp   the cron exp
      * @param param     the param
      */
-    void addJob(@NotBlank String clazzName, @NotBlank String jobName, @NotBlank String groupName,
-                @NotBlank String cronExp, @Nullable Map<String, Object> param);
+    void addJob(
+            @NotBlank String clazzName,
+            @NotBlank String jobName,
+            @NotBlank String groupName,
+            @NotBlank String cronExp,
+            @Nullable Map<String, Object> param
+    );
 
     /**
      * Pause job.
@@ -57,8 +62,12 @@ public interface QuartzJobService {
      * @param cronExp   the cron exp
      * @param param     the param
      */
-    void updateJob(@NotBlank String jobName, @NotBlank String groupName, @NotBlank String cronExp,
-                   @Nullable Map<String, Object> param);
+    void updateJob(
+            @NotBlank String jobName,
+            @NotBlank String groupName,
+            @NotBlank String cronExp,
+            @Nullable Map<String, Object> param
+    );
 
     /**
      * Delete job.

@@ -55,7 +55,11 @@ public class QuartzJobInvocationUtil {
      * @throws SecurityException        the security exception
      * @throws IllegalArgumentException the illegal argument exception
      */
-    private static void invokeMethod(Object bean, String methodName, List<Object[]> methodParams) {
+    private static void invokeMethod(
+            Object bean,
+            String methodName,
+            List<Object[]> methodParams
+    ) {
         val method = ReflectUtil.getMethodByName(bean.getClass(), methodName);
         if (!AnnotationUtil.hasAnnotation(method, QuartzSchedulable.class)) {
             throw new IllegalStateException(

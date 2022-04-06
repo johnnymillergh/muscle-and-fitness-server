@@ -41,8 +41,11 @@ public interface QuartzJobConfigurationService extends IService<QuartzJobConfigu
      * @param bean     the bean
      * @param index    the index
      */
-    void validateBeforeAddToBeanList(List<QuartzJobConfigurationExcel> beanList, QuartzJobConfigurationExcel bean,
-                                     int index);
+    void validateBeforeAddToBeanList(
+            List<QuartzJobConfigurationExcel> beanList,
+            QuartzJobConfigurationExcel bean,
+            int index
+    );
 
     /**
      * Save.
@@ -75,7 +78,8 @@ public interface QuartzJobConfigurationService extends IService<QuartzJobConfigu
      */
     Long modify(
             @NotNull Long id,
-            @Valid @NotNull CreateOrModifyQuartzJobConfigurationPayload payload);
+            @Valid @NotNull CreateOrModifyQuartzJobConfigurationPayload payload
+    );
 
     /**
      * Patch create or modify quartz job configuration response.
@@ -88,7 +92,8 @@ public interface QuartzJobConfigurationService extends IService<QuartzJobConfigu
     Long patch(
             @NotNull Long id,
             @NotBlank String property,
-            @NotNull CreateOrModifyQuartzJobConfigurationPayload payload);
+            @NotNull CreateOrModifyQuartzJobConfigurationPayload payload
+    );
 
     /**
      * Run immediately.

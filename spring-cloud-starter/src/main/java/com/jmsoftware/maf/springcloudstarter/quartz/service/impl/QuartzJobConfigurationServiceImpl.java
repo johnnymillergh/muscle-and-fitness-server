@@ -86,8 +86,11 @@ public class QuartzJobConfigurationServiceImpl
 
     @Override
     @SneakyThrows
-    public void validateBeforeAddToBeanList(List<QuartzJobConfigurationExcel> beanList,
-                                            QuartzJobConfigurationExcel bean, int index) {
+    public void validateBeforeAddToBeanList(
+            List<QuartzJobConfigurationExcel> beanList,
+            QuartzJobConfigurationExcel bean,
+            int index
+    ) {
         val beanValidationResult = ValidationUtil.warpValidate(bean);
         requireTrue(
                 beanValidationResult.isSuccess(),

@@ -32,7 +32,10 @@ public class TrackableResponseControllerAdvice implements ResponseBodyAdvice<Tra
 
     @Override
     @SuppressWarnings("NullableProblems")
-    public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
+    public boolean supports(
+            MethodParameter returnType,
+            Class<? extends HttpMessageConverter<?>> converterType
+    ) {
         return TrackableBean.class.equals(returnType.getParameterType().getSuperclass());
     }
 
@@ -46,11 +49,11 @@ public class TrackableResponseControllerAdvice implements ResponseBodyAdvice<Tra
             ServerHttpRequest request,
             ServerHttpResponse response
     ) {
-        if (tracer.currentSpan() == null) {
+        if (this.tracer.currentSpan() == null) {
             body.setTrack("No trace");
             return body;
         }
-        val traceContext = Objects.requireNonNull(tracer.currentSpan()).context();
+        val traceContext = Objects.requireNonNull(this.tracer.currentSpan()).context();
         body.setTrack(format("{}#{}", traceContext.traceId(), traceContext.spanId()));
         return body;
     }

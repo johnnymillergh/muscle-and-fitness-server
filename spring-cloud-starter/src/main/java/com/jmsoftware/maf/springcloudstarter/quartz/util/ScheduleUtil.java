@@ -41,7 +41,9 @@ public class ScheduleUtil {
      * @param quartzJobConfiguration the sys job
      * @return the quartz job class
      */
-    private static Class<? extends Job> getQuartzJobClass(@NonNull QuartzJobConfiguration quartzJobConfiguration) {
+    private static Class<? extends Job> getQuartzJobClass(
+            @NonNull QuartzJobConfiguration quartzJobConfiguration
+    ) {
         val concurrent = Concurrent.CONCURRENT.getValue().equals(quartzJobConfiguration.getConcurrent());
         return concurrent ? QuartzJobExecution.class : QuartzDisallowConcurrentExecution.class;
     }
@@ -53,7 +55,11 @@ public class ScheduleUtil {
      * @param jobGroup the job group
      * @return the job key
      */
-    public static JobKey getJobKey(@NonNull Long jobId, @NonNull String jobGroup, @NonNull String serviceName) {
+    public static JobKey getJobKey(
+            @NonNull Long jobId,
+            @NonNull String jobGroup,
+            @NonNull String serviceName
+    ) {
         return JobKey.jobKey(JOB_DETAIL_NAME_OPERATOR.apply(jobId, serviceName), jobGroup);
     }
 
@@ -64,7 +70,11 @@ public class ScheduleUtil {
      * @param jobGroup the job group
      * @return the trigger key
      */
-    public static TriggerKey getTriggerKey(@NonNull Long jobId, @NonNull String jobGroup, @NonNull String serviceName) {
+    public static TriggerKey getTriggerKey(
+            @NonNull Long jobId,
+            @NonNull String jobGroup,
+            @NonNull String serviceName
+    ) {
         return TriggerKey.triggerKey(TRIGGER_NAME_OPERATOR.apply(jobId, serviceName), jobGroup);
     }
 
@@ -126,7 +136,9 @@ public class ScheduleUtil {
     ) {
         val misfirePolicy = Optional
                 .ofNullable(MisfirePolicy.getByValue(quartzJobConfiguration.getMisfirePolicy()))
-                .orElseThrow();
+                .orElseThrow(() -> new IllegalArgumentException(
+                        format("MisfirePolicy not exists! Value: {}", quartzJobConfiguration.getMisfirePolicy())
+                ));
         switch (misfirePolicy) {
             case MISFIRE_INSTRUCTION_SMART_POLICY:
                 return cronScheduleBuilder;

@@ -41,8 +41,10 @@ public class DatabaseExceptionControllerAdvice {
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(MyBatisSystemException.class)
-    public ResponseBodyBean<?> handleMyBatisSystemException(HttpServletRequest request,
-                                                            MyBatisSystemException exception) {
+    public ResponseBodyBean<?> handleMyBatisSystemException(
+            HttpServletRequest request,
+            MyBatisSystemException exception
+    ) {
         this.requestLog(request);
         log.error("MyBatisSystemException message: {}", exception.getMessage());
         return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR,
@@ -52,7 +54,10 @@ public class DatabaseExceptionControllerAdvice {
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(MybatisPlusException.class)
-    public ResponseBodyBean<?> handleMybatisPlusException(HttpServletRequest request, MybatisPlusException exception) {
+    public ResponseBodyBean<?> handleMybatisPlusException(
+            HttpServletRequest request,
+            MybatisPlusException exception
+    ) {
         this.requestLog(request);
         log.error("MybatisPlusException message: {}", exception.getMessage());
         return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR,
@@ -62,7 +67,10 @@ public class DatabaseExceptionControllerAdvice {
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(PersistenceException.class)
-    public ResponseBodyBean<?> handlePersistenceException(HttpServletRequest request, PersistenceException exception) {
+    public ResponseBodyBean<?> handlePersistenceException(
+            HttpServletRequest request,
+            PersistenceException exception
+    ) {
         this.requestLog(request);
         log.error("PersistenceException message: {}", exception.getMessage());
         return ResponseBodyBean.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR,
@@ -72,8 +80,10 @@ public class DatabaseExceptionControllerAdvice {
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(BadSqlGrammarException.class)
-    public ResponseBodyBean<?> handleBadSqlGrammarException(HttpServletRequest request,
-                                                            BadSqlGrammarException exception) {
+    public ResponseBodyBean<?> handleBadSqlGrammarException(
+            HttpServletRequest request,
+            BadSqlGrammarException exception
+    ) {
         this.requestLog(request);
         log.error("BadSqlGrammarException message: {}", exception.getMessage());
         var message = exception.getMessage();

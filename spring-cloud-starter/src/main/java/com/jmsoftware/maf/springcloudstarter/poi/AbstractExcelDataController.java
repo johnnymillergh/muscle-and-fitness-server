@@ -384,8 +384,7 @@ public abstract class AbstractExcelDataController<T> {
     private Class<T> getGenericClass() {
         val type = this.getClass().getGenericSuperclass();
         log.info("Got type by reflection, typeName: {}", type.getTypeName());
-        if (type instanceof ParameterizedType) {
-            val parameterizedType = (ParameterizedType) type;
+        if (type instanceof ParameterizedType parameterizedType) {
             val typeName = parameterizedType.getActualTypeArguments()[0].getTypeName();
             Class<T> aClass;
             try {

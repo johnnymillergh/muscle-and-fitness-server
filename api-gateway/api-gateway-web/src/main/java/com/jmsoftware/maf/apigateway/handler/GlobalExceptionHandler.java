@@ -55,7 +55,7 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
             val bufferFactory = response.bufferFactory();
             val responseBody = setResponseBody(response, ex);
             try {
-                return bufferFactory.wrap(objectMapper.writeValueAsBytes(responseBody));
+                return bufferFactory.wrap(this.objectMapper.writeValueAsBytes(responseBody));
             } catch (JsonProcessingException e) {
                 log.warn("Exception occurred when writing response", e);
                 return bufferFactory.wrap(e.getMessage().getBytes(StandardCharsets.UTF_8));
@@ -78,11 +78,10 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
             HttpStatus status = HttpStatus.valueOf(((SecurityException) ex).getCode());
             response.setStatusCode(status);
             return ResponseBodyBean.ofStatus(status, ex.getMessage());
-        } else if (ex instanceof WebClientResponseException) {
-            val exception = (WebClientResponseException) ex;
+        } else if (ex instanceof WebClientResponseException exception) {
             response.setStatusCode(exception.getStatusCode());
             try {
-                return objectMapper.readValue(exception.getResponseBodyAsString(), ResponseBodyBean.class);
+                return this.objectMapper.readValue(exception.getResponseBodyAsString(), ResponseBodyBean.class);
             } catch (JsonProcessingException e) {
                 log.warn("Exception occurred when writing response. Exception message: {}", e.getMessage());
                 return ResponseBodyBean.ofStatus(exception.getStatusCode(),

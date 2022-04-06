@@ -10,7 +10,6 @@ import org.springframework.util.StopWatch;
 
 import java.time.Instant;
 import java.time.ZoneId;
-import java.util.TimeZone;
 
 /**
  * Description: SpringBootStartupHelper, change description here.
@@ -22,15 +21,17 @@ import java.util.TimeZone;
 public class SpringBootStartupHelper implements DisposableBean {
     private static final String LINE_SEPARATOR = System.lineSeparator();
     @SuppressWarnings("HttpUrlsUsage")
-    private static final String TEMPLATE = LINE_SEPARATOR +
-            "🥳 Congratulations! 🎉" + LINE_SEPARATOR +
-            "🖥 {}@{} started! " + LINE_SEPARATOR +
-            "⚙️ Environment: {}" + LINE_SEPARATOR +
-            "⏳ Deployment duration: {} seconds ({} ms)" + LINE_SEPARATOR +
-            "⏰ App started at {} (timezone - {})" + LINE_SEPARATOR +
-            "  App running at" + LINE_SEPARATOR +
-            "  - Local:   http://localhost:{}{}/" + LINE_SEPARATOR +
-            "  - Network: http://{}:{}{}/";
+    private static final String TEMPLATE ="""
+
+            🥳 Congratulations! 🎉
+            🖥 {}@{} started!
+            ⚙️ Environment: {}
+            ⏳ Deployment duration: {} seconds ({} ms)
+            ⏰ App started at {} (timezone - {})
+              App running at
+              - Local:   http://localhost:{}{}/
+              - Network: http://{}:{}{}/
+            """;
     private final MafProjectProperties mafProjectProperties;
     private final IpHelper ipHelper;
     private final ApplicationContext applicationContext;
