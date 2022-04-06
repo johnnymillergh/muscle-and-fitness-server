@@ -1,13 +1,13 @@
 package com.jmsoftware.maf.springcloudstarter.minio;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.ObjectUtil;
 import com.google.common.collect.Lists;
 import io.minio.*;
 import io.minio.http.Method;
 import io.minio.messages.Bucket;
 import io.minio.messages.DeleteObject;
 import io.minio.messages.Item;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -30,12 +30,14 @@ import java.util.Map;
  **/
 @Slf4j
 @Validated
-@SuppressWarnings("unused")
-public record MinioHelper(MinioClient minioClient) {
+@RequiredArgsConstructor
+@SuppressWarnings({"unused", "ClassCanBeRecord"})
+public class MinioHelper {
     /**
      * 7 days
      */
     private static final int DEFAULT_EXPIRY_TIME = 7 * 24 * 3600;
+    private final MinioClient minioClient;
 
     @SneakyThrows
     public boolean bucketExists(@NotBlank String bucket) {
@@ -144,7 +146,7 @@ public record MinioHelper(MinioClient minioClient) {
             return null;
         }
         val statObjectResponse = this.statObject(bucket, object);
-        if (ObjectUtil.isNull(statObjectResponse) || statObjectResponse.size() == 0) {
+        if (statObjectResponse == null || statObjectResponse.size() == 0) {
             return null;
         }
         return this.minioClient.getObject(GetObjectArgs.builder().bucket(bucket).object(object).build());
@@ -161,7 +163,7 @@ public record MinioHelper(MinioClient minioClient) {
             return null;
         }
         val statObjectResponse = this.statObject(bucket, object);
-        if (ObjectUtil.isNull(statObjectResponse) || statObjectResponse.size() == 0) {
+        if (statObjectResponse == null || statObjectResponse.size() == 0) {
             return null;
         }
         return this.minioClient.getObject(
