@@ -17,6 +17,7 @@ import java.time.Duration;
 import java.time.Instant;
 
 import static cn.hutool.core.text.CharSequenceUtil.format;
+import static java.util.Objects.requireNonNull;
 
 /**
  * <h1>RequestLogAspect</h1>
@@ -99,8 +100,7 @@ public class WebRequestLogAspect {
     @Before("requestLogPointcut()")
     public void beforeHandleRequest(JoinPoint joinPoint) {
         val attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        assert attributes != null;
-        val request = attributes.getRequest();
+        val request = requireNonNull(attributes).getRequest();
         log.info(BEFORE_TEMPLATE, request.getRequestURL().toString(), request.getMethod(),
                  RequestUtil.getRequestIpAndPort(request), UserUtil.getCurrentUsername(),
                  joinPoint.getSignature().getDeclaringTypeName(), joinPoint.getSignature().getName(),

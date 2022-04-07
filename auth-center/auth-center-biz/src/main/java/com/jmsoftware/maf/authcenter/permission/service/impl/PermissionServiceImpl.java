@@ -26,6 +26,7 @@ import javax.validation.constraints.NotNull;
 
 import static cn.hutool.core.text.CharSequenceUtil.format;
 import static com.jmsoftware.maf.springcloudstarter.function.Slf4j.lazyDebug;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Description: PermissionServiceImpl, change description here.
@@ -41,6 +42,7 @@ public class PermissionServiceImpl implements PermissionService {
     private final DiscoveryClient discoveryClient;
     private final RestTemplate restTemplate;
     private final PermissionConfiguration permissionConfiguration;
+    private final ObjectMapper objectMapper;
 
     @Override
     public GetPermissionListByRoleIdListResponse getPermissionListByRoleIdList(
@@ -76,7 +78,6 @@ public class PermissionServiceImpl implements PermissionService {
         val serviceIdList = this.discoveryClient.getServices();
         log.info("Getting service info from Service ID list: {}", serviceIdList);
         val response = new GetServicesInfoResponse();
-        val mapper = new ObjectMapper();
         log.info("Ignored service ID: {}", this.permissionConfiguration.getIgnoredServiceIds());
         response.setList(
                 serviceIdList.stream()
@@ -88,9 +89,10 @@ public class PermissionServiceImpl implements PermissionService {
                         .map(serviceId -> {
                             val responseBodyBean = this.restTemplate.getForObject(
                                     format("http://{}/http-api-resources", serviceId), ResponseBodyBean.class);
-                            assert responseBodyBean != null;
-                            val data = responseBodyBean.getData();
-                            val httpApiResourcesResponse = mapper.convertValue(data, HttpApiResourcesResponse.class);
+                            val httpApiResourcesResponse = this.objectMapper.convertValue(
+                                    requireNonNull(responseBodyBean).getData(),
+                                    HttpApiResourcesResponse.class
+                            );
                             val serviceInfo = new GetServicesInfoResponse.ServiceInfo();
                             serviceInfo.setServiceId(serviceId);
                             serviceInfo.setHttpApiResources(httpApiResourcesResponse);
