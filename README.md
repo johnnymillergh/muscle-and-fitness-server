@@ -21,7 +21,7 @@ Here is the highlights of **Muscle and Fitness Server**:
 
 1. Each microservice is organized by [Domain Driven Design](https://en.wikipedia.org/wiki/Domain-driven_design) (DDD) structure.
 
-1. Based on Java - ![](https://img.shields.io/badge/JDK-Temurin%2017.0.2+8-informational?style=flat&logo=java&logoColor=white&color=2bbc8a). Inherited from the most modern and newest Spring frameworks:
+1. Based on Java - [![](https://img.shields.io/badge/OpenJDK-Temurin%2017.0.2+8-informational?style=flat&logo=java&logoColor=white&color=2bbc8a)](https://github.com/adoptium/temurin17-binaries/releases/tag/jdk-17.0.2%2B8) and Kotlin - [![](https://img.shields.io/badge/Kotlin-1.6.10-informational?style=flat&logo=kotlin&logoColor=white&color=2bbc8a)](https://github.com/JetBrains/kotlin/releases/tag/v1.6.10). Inherited from the most modern and newest Spring frameworks:
 
    `org.springframework.boot:spring-boot-starter-parent` - [![Spring Boot](https://maven-badges.herokuapp.com/maven-central/org.springframework.boot/spring-boot-starter-parent/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.springframework.boot/spring-boot-starter-parent/)
    `org.springframework.cloud:spring-cloud-dependencies` - [![Spring Cloud](https://maven-badges.herokuapp.com/maven-central/org.springframework.cloud/spring-cloud-dependencies/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.springframework.cloud/spring-cloud-dependencies/)
