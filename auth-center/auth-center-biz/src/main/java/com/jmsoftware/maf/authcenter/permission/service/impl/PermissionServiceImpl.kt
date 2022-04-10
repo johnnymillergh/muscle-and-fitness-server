@@ -37,19 +37,19 @@ import javax.validation.constraints.NotNull
  */
 @Service
 class PermissionServiceImpl(
-        private val permissionDomainService: PermissionDomainService,
-        private val roleDomainService: RoleDomainService,
-        private val discoveryClient: DiscoveryClient,
-        private val restTemplate: RestTemplate,
-        private val permissionConfiguration: PermissionConfiguration,
-        private val objectMapper: ObjectMapper,
+    private val permissionDomainService: PermissionDomainService,
+    private val roleDomainService: RoleDomainService,
+    private val discoveryClient: DiscoveryClient,
+    private val restTemplate: RestTemplate,
+    private val permissionConfiguration: PermissionConfiguration,
+    private val objectMapper: ObjectMapper,
 ) : PermissionService {
     companion object {
         private val log = LoggerFactory.getLogger(this::class.java)
     }
 
     override fun getPermissionListByRoleIdList(
-            payload: @Valid @NotNull GetPermissionListByRoleIdListPayload
+        payload: @Valid @NotNull GetPermissionListByRoleIdListPayload
     ): GetPermissionListByRoleIdListResponse {
         val adminRole = roleDomainService.checkAdmin(payload.roleIdList)
         val response = GetPermissionListByRoleIdListResponse()
@@ -65,11 +65,12 @@ class PermissionServiceImpl(
             return response
         }
         val permissionList = permissionDomainService.getPermissionListByRoleIdList(
-                payload.roleIdList, payload.permissionTypeList)
+            payload.roleIdList, payload.permissionTypeList
+        )
         response.permissionList = permissionList
-                .stream()
-                .map { permission: Permission -> PermissionMapStructMapper.INSTANCE.of(permission) }
-                .toList()
+            .stream()
+            .map { permission: Permission -> PermissionMapStructMapper.INSTANCE.of(permission) }
+            .toList()
         return response
     }
 
@@ -79,27 +80,27 @@ class PermissionServiceImpl(
         val response = GetServicesInfoResponse()
         log.info("Ignored service ID: {}", permissionConfiguration.ignoredServiceIds)
         response.list = serviceIdList.stream()
-                .filter { serviceId: String ->
-                    !CollUtil.contains(
-                            permissionConfiguration.ignoredServiceIds,
-                            serviceId
-                    )
-                }
-                .parallel()
-                .map { serviceId: String ->
-                    val responseBodyBean = restTemplate.getForObject(
-                            format("http://{}/http-api-resources", serviceId), ResponseBodyBean::class.java,
-                    )!!
-                    val httpApiResourcesResponse = objectMapper.convertValue(
-                            Objects.requireNonNull(responseBodyBean).data,
-                            HttpApiResourcesResponse::class.java
-                    )
-                    val serviceInfo = ServiceInfo()
-                    serviceInfo.serviceId = serviceId
-                    serviceInfo.httpApiResources = httpApiResourcesResponse
-                    lazyDebug(log) { format("Added serviceInfo: {}", serviceInfo) }
-                    serviceInfo
-                }.toList()
+            .filter { serviceId: String ->
+                !CollUtil.contains(
+                    permissionConfiguration.ignoredServiceIds,
+                    serviceId
+                )
+            }
+            .parallel()
+            .map { serviceId: String ->
+                val responseBodyBean = restTemplate.getForObject(
+                    format("http://{}/http-api-resources", serviceId), ResponseBodyBean::class.java,
+                )!!
+                val httpApiResourcesResponse = objectMapper.convertValue(
+                    Objects.requireNonNull(responseBodyBean).data,
+                    HttpApiResourcesResponse::class.java
+                )
+                val serviceInfo = ServiceInfo()
+                serviceInfo.serviceId = serviceId
+                serviceInfo.httpApiResources = httpApiResourcesResponse
+                lazyDebug(log) { format("Added serviceInfo: {}", serviceInfo) }
+                serviceInfo
+            }.toList()
         if (CollUtil.isEmpty(response.list)) {
             log.warn("Got am empty ServiceInfo list")
         }

@@ -97,7 +97,7 @@ internal class PermissionServiceImplTest {
     fun getPermissionListByRoleIdList() {
         `when`(roleDomainService.checkAdmin(anyList())).thenReturn(false)
         `when`(permissionDomainService.getPermissionListByRoleIdList(anyList(), anyList()))
-                .thenReturn(Lists.newArrayList())
+            .thenReturn(Lists.newArrayList())
         val payload = GetPermissionListByRoleIdListPayload()
         payload.roleIdList = Lists.newArrayList()
         payload.permissionTypeList = Lists.newArrayList()
@@ -111,21 +111,21 @@ internal class PermissionServiceImplTest {
     @Test
     fun getServicesInfo() {
         `when`(discoveryClient.services)
-                .thenReturn(listOf("auth-center", "oss-center", "maf-mis", "api-gateway", "spring-boot-admin"))
+            .thenReturn(listOf("auth-center", "oss-center", "maf-mis", "api-gateway", "spring-boot-admin"))
         `when`(permissionConfiguration.ignoredServiceIds)
-                .thenReturn(setOf("api-gateway", "spring-boot-admin"))
+            .thenReturn(setOf("api-gateway", "spring-boot-admin"))
         `when`(restTemplate.getForObject(anyString(), any<Class<Any>>()))
-                .thenReturn(ResponseBodyBean.ofSuccess(HttpApiResourcesResponse()))
+            .thenReturn(ResponseBodyBean.ofSuccess(HttpApiResourcesResponse()))
         val servicesInfo = permissionService.getServicesInfo()
         log.info("Services info: {}", servicesInfo)
         verify(discoveryClient).services
         assertNotEquals(0, servicesInfo.list.size)
         assertTrue(
-                servicesInfo.list
-                        .stream()
-                        .anyMatch { service: ServiceInfo ->
-                            StrUtil.equalsAnyIgnoreCase(service.serviceId, "auth-center")
-                        }
+            servicesInfo.list
+                .stream()
+                .anyMatch { service: ServiceInfo ->
+                    StrUtil.equalsAnyIgnoreCase(service.serviceId, "auth-center")
+                }
         )
     }
 }

@@ -21,7 +21,7 @@ interface PermissionService {
      * @return the permission list by role id list
      */
     fun getPermissionListByRoleIdList(
-            payload: @Valid @NotNull GetPermissionListByRoleIdListPayload
+        payload: @Valid @NotNull GetPermissionListByRoleIdListPayload
     ): GetPermissionListByRoleIdListResponse
 
     /**
