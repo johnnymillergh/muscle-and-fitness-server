@@ -19,8 +19,8 @@ import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListB
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse
 import com.jmsoftware.maf.common.domain.authcenter.permission.PermissionType
 import com.jmsoftware.maf.common.domain.springbootstarter.HttpApiResourcesResponse
+import com.jmsoftware.maf.common.util.logger
 import com.jmsoftware.maf.springcloudstarter.function.Slf4j.lazyDebug
-import org.slf4j.LoggerFactory
 import org.springframework.cloud.client.discovery.DiscoveryClient
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
@@ -45,7 +45,7 @@ class PermissionServiceImpl(
     private val objectMapper: ObjectMapper,
 ) : PermissionService {
     companion object {
-        private val log = LoggerFactory.getLogger(this::class.java)
+        private val log = logger()
     }
 
     override fun getPermissionListByRoleIdList(

@@ -12,6 +12,7 @@ import com.jmsoftware.maf.authcenter.role.service.RoleDomainService
 import com.jmsoftware.maf.common.bean.ResponseBodyBean
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload
 import com.jmsoftware.maf.common.domain.springbootstarter.HttpApiResourcesResponse
+import com.jmsoftware.maf.common.util.logger
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
@@ -25,7 +26,6 @@ import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.verify
 import org.mockito.junit.jupiter.MockitoExtension
-import org.slf4j.LoggerFactory
 import org.springframework.cloud.client.discovery.DiscoveryClient
 import org.springframework.web.client.RestTemplate
 
@@ -50,16 +50,15 @@ import org.springframework.web.client.RestTemplate
  *  * Need an extra dependency on `org.mockito:mockito-junit-jupiter`, which has been included by Spring.
  * So we don&#39;t have to worry about this.
  *
- *
  * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com, date: 4/3/22 10:19 PM
- * @see [Using Mockito With JUnit 5](https://www.arhohuttunen.com/junit-5-mockito/)
- * @see [YouTube - Using Mockito With JUnit 5](https://www.youtube.com/watch?v=p7_cTAF39A8/)
+ * @see <a href='https://www.arhohuttunen.com/junit-5-mockito/'>Using Mockito with JUnit 5</a>
+ * @see <a href='https://www.youtube.com/watch?v=p7_cTAF39A8/'>YouTube - Using Mockito with JUnit 5</a>
  */
 @ExtendWith(MockitoExtension::class)
 @Execution(ExecutionMode.CONCURRENT)
 internal class PermissionServiceImplTest {
     companion object {
-        private val log = LoggerFactory.getLogger(this::class.java)
+        private val log = logger()
     }
 
     @InjectMocks

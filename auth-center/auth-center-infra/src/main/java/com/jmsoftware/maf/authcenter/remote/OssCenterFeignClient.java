@@ -4,6 +4,7 @@ import com.jmsoftware.maf.common.bean.ResponseBodyBean;
 import com.jmsoftware.maf.common.domain.osscenter.write.ObjectResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
@@ -19,6 +20,7 @@ import javax.validation.constraints.NotNull;
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 9/15/2021 11:10 AM
  * @see <a href='https://docs.spring.io/spring-cloud-openfeign/docs/current/reference/html/'>Spring Cloud OpenFeign</a>
  **/
+@Primary
 @Validated
 @FeignClient(value = OssCenterFeignClient.SERVICE_NAME, fallback = OssCenterFeignClient.OssCenterFeignClientFallback.class)
 public interface OssCenterFeignClient {
