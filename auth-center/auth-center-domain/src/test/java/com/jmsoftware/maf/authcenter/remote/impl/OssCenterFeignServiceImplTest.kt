@@ -14,7 +14,6 @@ import org.junit.jupiter.api.parallel.ExecutionMode
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
-import org.mockito.Mockito.any
 import org.mockito.junit.jupiter.MockitoExtension
 import org.springframework.mock.web.MockMultipartFile
 
@@ -68,17 +67,16 @@ internal class OssCenterFeignServiceImplTest {
 
     @Test
     fun uploadSingleResource() {
-        `when`(ossCenterFeignClient.uploadSingleResource(any()))
+        val multipartFile = MockMultipartFile(
+            "name-for-unit-test.txt",
+            "original-filename.txt",
+            null,
+            null
+        )
+        `when`(ossCenterFeignClient.uploadSingleResource(multipartFile))
             .thenReturn(ResponseBodyBean.ofSuccess())
         val threwException = assertThrows(InternalServerException::class.java) {
-            ossCenterFeignService.uploadSingleResource(
-                MockMultipartFile(
-                    "name-for-unit-test.txt",
-                    "original-filename.txt",
-                    null,
-                    null
-                )
-            )
+            ossCenterFeignService.uploadSingleResource(multipartFile)
         }
         log.info("Pass: PermissionServiceImplTest#uploadSingleResource. $threwException")
     }

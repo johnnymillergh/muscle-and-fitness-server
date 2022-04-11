@@ -1,5 +1,3 @@
-@file:Suppress("unused")
-
 package com.jmsoftware.maf.authcenter.permission.service.impl
 
 import cn.hutool.core.util.StrUtil
@@ -27,6 +25,7 @@ import org.mockito.Mockito.`when`
 import org.mockito.Mockito.verify
 import org.mockito.junit.jupiter.MockitoExtension
 import org.springframework.cloud.client.discovery.DiscoveryClient
+import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.client.RestTemplate
 
 /**
@@ -54,6 +53,7 @@ import org.springframework.web.client.RestTemplate
  * @see <a href='https://www.arhohuttunen.com/junit-5-mockito/'>Using Mockito with JUnit 5</a>
  * @see <a href='https://www.youtube.com/watch?v=p7_cTAF39A8/'>YouTube - Using Mockito with JUnit 5</a>
  */
+@Suppress("unused")
 @ExtendWith(MockitoExtension::class)
 @Execution(ExecutionMode.CONCURRENT)
 internal class PermissionServiceImplTest {
@@ -113,8 +113,15 @@ internal class PermissionServiceImplTest {
             .thenReturn(listOf("auth-center", "oss-center", "maf-mis", "api-gateway", "spring-boot-admin"))
         `when`(permissionConfiguration.ignoredServiceIds)
             .thenReturn(setOf("api-gateway", "spring-boot-admin"))
+        val httpApiResourcesResponse = HttpApiResourcesResponse()
+        val element = HttpApiResourcesResponse.HttpApiResource()
+        element.method = RequestMethod.GET
+        element.urlPattern = "/api/v1/**"
+        httpApiResourcesResponse.list = listOf(element)
+        `when`(objectMapper.convertValue(any(), any<Class<Any>>()))
+            .thenReturn(httpApiResourcesResponse)
         `when`(restTemplate.getForObject(anyString(), any<Class<Any>>()))
-            .thenReturn(ResponseBodyBean.ofSuccess(HttpApiResourcesResponse()))
+            .thenReturn(ResponseBodyBean.ofSuccess(httpApiResourcesResponse))
         val servicesInfo = permissionService.getServicesInfo()
         log.info("Services info: {}", servicesInfo)
         verify(discoveryClient).services

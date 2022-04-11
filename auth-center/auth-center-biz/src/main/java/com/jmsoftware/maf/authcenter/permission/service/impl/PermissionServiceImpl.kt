@@ -98,7 +98,7 @@ class PermissionServiceImpl(
                 val serviceInfo = ServiceInfo()
                 serviceInfo.serviceId = serviceId
                 serviceInfo.httpApiResources = httpApiResourcesResponse
-                lazyDebug(log) { format("Added serviceInfo: {}", serviceInfo) }
+                lazyDebug(log) { "Added serviceInfo: $serviceInfo" }
                 serviceInfo
             }.toList()
         if (CollUtil.isEmpty(response.list)) {

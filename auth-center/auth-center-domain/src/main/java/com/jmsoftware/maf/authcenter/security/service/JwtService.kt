@@ -1,25 +1,24 @@
-package com.jmsoftware.maf.authcenter.security.service;
+package com.jmsoftware.maf.authcenter.security.service
 
-import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtResponse;
-import com.jmsoftware.maf.common.exception.SecurityException;
-import io.jsonwebtoken.Claims;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.validation.annotation.Validated;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.Collection;
-import java.util.List;
+import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtResponse
+import com.jmsoftware.maf.common.exception.SecurityException
+import io.jsonwebtoken.Claims
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.validation.annotation.Validated
+import javax.servlet.http.HttpServletRequest
+import javax.validation.constraints.NotBlank
+import javax.validation.constraints.NotNull
 
 /**
- * <h1>JwtService</h1>
- * <p>
+ * # JwtService
+ *
  * Change description here.
  *
- * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 12/29/2020 10:44 AM
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/11/22 8:47 PM
  */
 @Validated
-public interface JwtService {
+interface JwtService {
     /**
      * Create JWT string.
      *
@@ -27,7 +26,7 @@ public interface JwtService {
      * @param rememberMe     the remember me
      * @return the string
      */
-    String createJwt(Authentication authentication, Boolean rememberMe);
+    fun createJwt(authentication: @NotNull Authentication, rememberMe: @NotNull Boolean): String
 
     /**
      * Create JWT string.
@@ -39,8 +38,13 @@ public interface JwtService {
      * @param authorities the authorities
      * @return the JWT string
      */
-    String createJwt(Boolean rememberMe, Long id, String subject, List<String> roles, Collection<?
-            extends GrantedAuthority> authorities);
+    fun createJwt(
+        rememberMe: @NotNull Boolean,
+        id: @NotNull Long,
+        subject: @NotBlank String,
+        roles: List<String>,
+        authorities: Collection<GrantedAuthority>
+    ): String
 
     /**
      * Parse JWT.
@@ -49,7 +53,7 @@ public interface JwtService {
      * @return the claims
      * @throws SecurityException the security exception
      */
-    Claims parseJwt(String jwt) throws SecurityException;
+    fun parseJwt(jwt: @NotBlank String): Claims
 
     /**
      * Invalidate jwt.
@@ -57,7 +61,7 @@ public interface JwtService {
      * @param request the request
      * @throws SecurityException the security exception
      */
-    void invalidateJwt(HttpServletRequest request) throws SecurityException;
+    fun invalidateJwt(request: @NotNull HttpServletRequest)
 
     /**
      * Gets username from jwt.
@@ -66,7 +70,7 @@ public interface JwtService {
      * @return the username from jwt
      * @throws SecurityException the security exception
      */
-    String getUsernameFromJwt(String jwt) throws SecurityException;
+    fun getUsernameFromJwt(jwt: @NotBlank String): String
 
     /**
      * Gets username from request.
@@ -75,7 +79,7 @@ public interface JwtService {
      * @return the username from request
      * @throws SecurityException the security exception
      */
-    String getUsernameFromRequest(HttpServletRequest request) throws SecurityException;
+    fun getUsernameFromRequest(request: @NotNull HttpServletRequest): String
 
     /**
      * Gets jwt from request.
@@ -83,7 +87,7 @@ public interface JwtService {
      * @param request the request
      * @return the jwt from request
      */
-    String getJwtFromRequest(HttpServletRequest request);
+    fun getJwtFromRequest(request: @NotNull HttpServletRequest): String
 
     /**
      * Parse parse jwt response.
@@ -91,5 +95,5 @@ public interface JwtService {
      * @param request the request
      * @return the parse jwt response
      */
-    ParseJwtResponse parse(HttpServletRequest request);
+    fun parse(request: @NotNull HttpServletRequest): ParseJwtResponse
 }
