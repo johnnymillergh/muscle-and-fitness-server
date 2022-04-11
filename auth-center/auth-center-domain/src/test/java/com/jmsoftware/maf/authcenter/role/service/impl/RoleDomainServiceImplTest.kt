@@ -52,6 +52,7 @@ import org.springframework.data.redis.core.ValueOperations
  * @author Johnny Miller (鍾俊), e-mail: johnnysviva@outlook.com, date: 4/4/2022 8:40 AM
  * @see <a href='https://www.arhohuttunen.com/junit-5-mockito/'>Using Mockito with JUnit 5</a>
  * @see <a href='https://www.youtube.com/watch?v=p7_cTAF39A8/'>YouTube - Using Mockito with JUnit 5</a>
+ * <a href='https://github.com/baomidou/mybatis-plus/blob/master/mybatis-plus-extension/src/test/kotlin/com/baomidou/mybatisplus/test/kotlin/WrapperTest.kt'>WrapperTest.kt - MyBatis Plus</a>
  */
 @Suppress("unused")
 @ExtendWith(MockitoExtension::class)
@@ -83,6 +84,11 @@ internal class RoleDomainServiceImplTest {
     @Mock
     private lateinit var objectMapper: ObjectMapper
 
+    /**
+     * Set up
+     *
+     * @see <a href='https://github.com/baomidou/mybatis-plus/blob/master/mybatis-plus-extension/src/test/kotlin/com/baomidou/mybatisplus/test/kotlin/WrapperTest.kt'>WrapperTest.kt - MyBatis Plus</a>
+     */
     @BeforeEach
     fun setUp() {
         log.info("{} setUp", this.javaClass.simpleName)

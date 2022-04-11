@@ -43,6 +43,7 @@ interface RoleDomainService : IService<Role> {
      *
      * @param roleIdList the role id list
      * @return the boolean
+     * @see <a href='https://baomidou.com/pages/10c804/#kotlin%E4%BD%BF%E7%94%A8wrapper'>Kotlin Wrapper for MyBatis Plus</a>
      */
     fun checkAdmin(roleIdList: @NotEmpty List<Long>): Boolean
 
