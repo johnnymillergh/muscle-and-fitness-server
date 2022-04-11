@@ -33,10 +33,9 @@ class MyBatisPlusTests {
     //    @Test
     @Order(1)
     void insertAutoFillTest() {
-        val role = new Role(
-                "role-for-mybatis-plus-tests",
-                "Role for MyBatis Plus tests. Testing functions"
-        );
+        val role = new Role();
+        role.setName("role-for-mybatis-plus-tests");
+        role.setDescription("Role for MyBatis Plus tests. Testing functions");
         int inserted;
         try {
             inserted = this.roleDomainService.getBaseMapper().insert(role);

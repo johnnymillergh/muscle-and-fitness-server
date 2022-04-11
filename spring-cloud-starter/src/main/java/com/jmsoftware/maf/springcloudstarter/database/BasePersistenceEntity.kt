@@ -1,6 +1,7 @@
 package com.jmsoftware.maf.springcloudstarter.database
 
 import com.baomidou.mybatisplus.annotation.*
+import com.jmsoftware.maf.common.domain.DeletedField
 import java.time.LocalDateTime
 
 /**
@@ -42,10 +43,12 @@ open class BasePersistenceEntity(
     var version: Int? = null,
     /**
      * Deleted. 'N' - not deleted; 'Y' - deleted
+     *
+     * @see DeletedField
      */
     @TableLogic
     @TableField(value = COL_DELETED, fill = FieldFill.INSERT)
-    var deleted: String? = null
+    var deleted: String = DeletedField.NOT_DELETED.value
 ) {
     companion object {
         const val COL_ID = "id"
@@ -55,5 +58,9 @@ open class BasePersistenceEntity(
         const val COL_MODIFIED_TIME = "modified_time"
         const val COL_VERSION = "version"
         const val COL_DELETED = "deleted"
+    }
+
+    override fun toString(): String {
+        return "BasePersistenceEntity(id=$id, createdBy=$createdBy, createdTime=$createdTime, modifiedBy=$modifiedBy, modifiedTime=$modifiedTime, version=$version, deleted='$deleted')"
     }
 }

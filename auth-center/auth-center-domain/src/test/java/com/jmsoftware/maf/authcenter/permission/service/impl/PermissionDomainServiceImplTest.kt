@@ -66,10 +66,12 @@ internal class PermissionDomainServiceImplTest {
 
     @Test
     fun getPermissionListByRoleIdList() {
+        val permission = Permission()
+        permission.id = 1
         `when`(permissionMapper.selectPermissionListByRoleIdList(anyList(), anyList()))
-            .thenReturn(listOf(Permission()))
+            .thenReturn(listOf(permission))
         val permissionList = permissionDomainService.getPermissionListByRoleIdList(listOf(), listOf())
-        log.info("permissionList: {}", permissionList)
+        log.info("permissionList: $permissionList")
         verify(permissionMapper)
             .selectPermissionListByRoleIdList(anyList(), anyList())
         assertNotNull(permissionList)
