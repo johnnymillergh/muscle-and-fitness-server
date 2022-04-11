@@ -30,12 +30,13 @@ class MyBatisPlusTests {
     @Autowired
     private RoleMapper roleMapper;
 
-//    @Test
+    //    @Test
     @Order(1)
     void insertAutoFillTest() {
-        val role = new Role();
-        role.setName("role-for-mybatis-plus-tests");
-        role.setDescription("Role for MyBatis Plus tests. Testing functions");
+        val role = new Role(
+                "role-for-mybatis-plus-tests",
+                "Role for MyBatis Plus tests. Testing functions"
+        );
         int inserted;
         try {
             inserted = this.roleDomainService.getBaseMapper().insert(role);
@@ -47,12 +48,13 @@ class MyBatisPlusTests {
         Assertions.assertEquals(AFFECTED, inserted);
     }
 
-//    @Test
+    //    @Test
     @Order(2)
     void logicDeleteTest() {
         val lambdaQuery = Wrappers.lambdaQuery(Role.class);
         lambdaQuery.eq(Role::getName, "role-for-mybatis-plus-tests");
-        var optionalRolePersistence = Optional.ofNullable(this.roleDomainService.getBaseMapper().selectOne(lambdaQuery));
+        var optionalRolePersistence = Optional.ofNullable(
+                this.roleDomainService.getBaseMapper().selectOne(lambdaQuery));
         if (optionalRolePersistence.isEmpty()) {
             optionalRolePersistence = Optional.ofNullable(this.roleMapper.selectByName("role-for-mybatis-plus-tests"));
         }
