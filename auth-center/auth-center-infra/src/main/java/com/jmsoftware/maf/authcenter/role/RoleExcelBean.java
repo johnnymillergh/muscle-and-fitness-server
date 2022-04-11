@@ -47,9 +47,9 @@ public class RoleExcelBean {
      * @return the role excel import
      */
     public static Role transformTo(RoleExcelBean roleExcelBean) {
-        val role = new Role();
-        role.setName(roleExcelBean.getName());
-        role.setDescription(roleExcelBean.getDescription());
-        return role;
+        return new Role(
+                roleExcelBean.getName(),
+                roleExcelBean.getDescription()
+        );
     }
 }
