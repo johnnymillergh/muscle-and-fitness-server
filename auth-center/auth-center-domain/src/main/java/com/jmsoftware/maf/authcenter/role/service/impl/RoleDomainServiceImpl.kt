@@ -10,7 +10,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.jmsoftware.maf.authcenter.role.RoleExcelBean
-import com.jmsoftware.maf.authcenter.role.constant.RoleRedisKey
+import com.jmsoftware.maf.authcenter.role.constant.RoleRedisKey.GET_ROLE_LIST_BY_USER_ID
 import com.jmsoftware.maf.authcenter.role.mapper.RoleMapper
 import com.jmsoftware.maf.authcenter.role.persistence.Role
 import com.jmsoftware.maf.authcenter.role.service.RoleDomainService
@@ -50,8 +50,7 @@ class RoleDomainServiceImpl(
     }
 
     override fun getRoleList(userId: @NotNull Long): GetRoleListByUserIdResponse {
-        val key =
-            "${mafProjectProperties.projectParentArtifactId}${RoleRedisKey.GET_ROLE_LIST_BY_USER_ID.keyInfixFormat}$userId"
+        val key = "${mafProjectProperties.projectParentArtifactId}${GET_ROLE_LIST_BY_USER_ID.keyInfixFormat}$userId"
         val hadKey = redisTemplate.hasKey(key)
         if (hadKey) {
             return objectMapper.readValue(redisTemplate.opsForValue()[key], GetRoleListByUserIdResponse::class.java)
