@@ -15,14 +15,16 @@ class RoleExcelBean {
     /**
      * Role name
      */
+    @NotBlank
     @ExcelColumn(name = "Name")
-    private lateinit var name: @NotBlank String
+    private lateinit var name: String
 
     /**
      * Role description
      */
+    @NotBlank
     @ExcelColumn(name = "Description")
-    private lateinit var description: @NotBlank String
+    private lateinit var description: String
 
     companion object {
         /**

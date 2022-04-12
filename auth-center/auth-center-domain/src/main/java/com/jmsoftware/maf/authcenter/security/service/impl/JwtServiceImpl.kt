@@ -57,7 +57,7 @@ class JwtServiceImpl(
         log.warn("Secret key for JWT parser was generated. Algorithm: ${secretKey.algorithm}")
     }
 
-    override fun createJwt(authentication: @NotNull Authentication, rememberMe: @NotNull Boolean): String {
+    override fun createJwt(@NotNull authentication: Authentication, @NotNull rememberMe: Boolean): String {
         val userPrincipal = authentication.principal as UserPrincipal
         return this.createJwt(
             rememberMe,
@@ -69,9 +69,9 @@ class JwtServiceImpl(
     }
 
     override fun createJwt(
-        rememberMe: @NotNull Boolean,
-        id: @NotNull Long,
-        subject: @NotBlank String,
+        @NotNull rememberMe: Boolean,
+        @NotNull id: Long,
+        @NotNull subject: String,
         roles: List<String>,
         authorities: Collection<GrantedAuthority>
     ): String {
@@ -97,7 +97,7 @@ class JwtServiceImpl(
         return jwt
     }
 
-    override fun parseJwt(jwt: @NotBlank String): Claims {
+    override fun parseJwt(@NotBlank jwt: String): Claims {
         val claims: Claims = try {
             Optional.ofNullable(jwtParser.parseClaimsJws(jwt).body)
                 .orElseThrow {
@@ -133,7 +133,7 @@ class JwtServiceImpl(
         return claims
     }
 
-    override fun invalidateJwt(request: @NotNull HttpServletRequest) {
+    override fun invalidateJwt(@NotNull request: HttpServletRequest) {
         val jwt = getJwtFromRequest(request)
         val username = getUsernameFromJwt(jwt)
         // Delete JWT from redis
@@ -142,17 +142,17 @@ class JwtServiceImpl(
         log.error("Invalidate JWT. Redis key of JWT = $redisKeyOfJwt, deleted = $deletedKeyNumber")
     }
 
-    override fun getUsernameFromJwt(jwt: @NotBlank String): String {
+    override fun getUsernameFromJwt(@NotBlank jwt: String): String {
         val claims = parseJwt(jwt)
         return claims.subject
     }
 
-    override fun getUsernameFromRequest(request: @NotNull HttpServletRequest): String {
+    override fun getUsernameFromRequest(@NotNull request: HttpServletRequest): String {
         val jwt = getJwtFromRequest(request)
         return getUsernameFromJwt(jwt)
     }
 
-    override fun getJwtFromRequest(request: @NotNull HttpServletRequest): String {
+    override fun getJwtFromRequest(@NotNull request: HttpServletRequest): String {
         val bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION)
         return if (CharSequenceUtil.isNotBlank(bearerToken)
             && bearerToken.startsWith(JwtConfigurationProperties.TOKEN_PREFIX)
@@ -161,7 +161,7 @@ class JwtServiceImpl(
         } else null.toString()
     }
 
-    override fun parse(request: @NotNull HttpServletRequest): ParseJwtResponse {
+    override fun parse(@NotNull request: HttpServletRequest): ParseJwtResponse {
         val jwt = getJwtFromRequest(request)
         val claims = parseJwt(jwt)
         val parseJwtResponse = ParseJwtResponse()

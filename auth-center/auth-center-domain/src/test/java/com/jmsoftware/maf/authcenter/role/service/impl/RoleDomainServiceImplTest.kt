@@ -4,7 +4,6 @@ import cn.hutool.core.collection.CollUtil
 import com.baomidou.mybatisplus.core.MybatisConfiguration
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.google.common.collect.Lists
 import com.jmsoftware.maf.authcenter.role.RoleExcelBean
 import com.jmsoftware.maf.authcenter.role.mapper.RoleMapper
 import com.jmsoftware.maf.authcenter.role.persistence.Role
@@ -140,7 +139,7 @@ internal class RoleDomainServiceImplTest {
         val roleExcelBean = RoleExcelBean()
         val thrownException = assertThrows(IllegalArgumentException::class.java) {
             roleDomainService.validateBeforeAddToBeanList(
-                Lists.newArrayList(roleExcelBean),
+                listOf(roleExcelBean),
                 roleExcelBean,
                 0
             )
