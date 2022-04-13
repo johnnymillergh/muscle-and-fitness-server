@@ -20,44 +20,53 @@ import javax.validation.constraints.Pattern
  **/
 @Validated
 @ConfigurationProperties(prefix = MafConfigurationProperties.PREFIX)
-class MafConfigurationProperties(
+class MafConfigurationProperties {
+    companion object {
+        const val PREFIX = "maf.configuration"
+        private val log = logger()
+    }
+
     /**
      * The role name of superuser (admin) who has no restriction to access any system's resources.
      *
      * **ATTENTION**: The value of role name of superuser must be equal to the value that is persistent in database.
      **/
-    @NotBlank val superUserRole: String = "admin",
+    @NotBlank
+    val superUserRole: String = "admin"
+
     /**
      * The role name of guest user (guest)  who has restrictions to access any system&#39;s resources. Assigning
      * the guest role to new user by default.
      *
      * **ATTENTION**: The value of role of guest user must be equal to the value that is persistent in database.
      **/
-    @NotBlank val guestUserRole: String = "guest",
+    @NotBlank
+    val guestUserRole: String = "guest"
+
     /**
      * Ignore URLs, used by web access log filter and web security.
      **/
-    @Valid val ignoredUrl: IgnoredUrl? = null,
+    @Valid
+    val ignoredUrl: IgnoredUrl? = null
+
     /**
      * Web security feature switch. Default is true.
      * true - disable web security; false - enable web security.
      **/
-    val webSecurityEnabled: Boolean = true,
+    val webSecurityEnabled: Boolean = true
+
     /**
      * Web request log switch. Default is true.
      *
      * true - disable web request log; false - enable web request log.
      **/
-    val webRequestLogEnabled: Boolean = true,
+    val webRequestLogEnabled: Boolean = true
+
     /**
      * Included package for http api scan, could be base package
      **/
-    @NotBlank val includedPackageForHttpApiScan: String = ""
-) {
-    companion object {
-        const val PREFIX = "maf.configuration"
-        private val log = logger()
-    }
+    @NotBlank
+    val includedPackageForHttpApiScan: String = ""
 
     /**
      * Flatten ignored urls string [ ].
