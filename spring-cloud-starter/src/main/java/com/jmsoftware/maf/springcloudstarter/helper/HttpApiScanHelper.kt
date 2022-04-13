@@ -1,7 +1,6 @@
 package com.jmsoftware.maf.springcloudstarter.helper
 
 import com.jmsoftware.maf.common.util.logger
-import com.jmsoftware.maf.springcloudstarter.helper.HttpApiScanHelper
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
@@ -24,12 +23,14 @@ class HttpApiScanHelper(
         private val log = logger()
 
         init {
-            val splitPackage = HttpApiScanHelper::class.java.getPackage().name.split("\\.").toTypedArray()
+            val packagePaths = HttpApiScanHelper::class.java.getPackage().name.split(".")
+            // Remove the last package name
             val jointPackage = buildString {
-                for (index in 0 until splitPackage.size - 1) {
-                    append("${splitPackage[index]}.")
+                for (index in 0 until packagePaths.size - 1) {
+                    append("${packagePaths[index]}.")
                 }
             }
+            // Remove the last '.'
             EXCLUDED_PACKAGE = jointPackage.substring(0, jointPackage.length - 1)
             log.warn("EXCLUDED_PACKAGE was generated dynamically. EXCLUDED_PACKAGE = $EXCLUDED_PACKAGE")
         }
