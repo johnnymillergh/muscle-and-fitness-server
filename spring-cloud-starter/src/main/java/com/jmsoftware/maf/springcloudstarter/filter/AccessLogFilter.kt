@@ -34,7 +34,7 @@ class AccessLogFilter(
     ) {
         // Ignore URL
         for (ignoredUrl in mafConfigurationProperties.flattenIgnoredUrls()) {
-            if (antPathMatcher.match(ignoredUrl!!, request.requestURI)) {
+            if (antPathMatcher.match(ignoredUrl, request.requestURI)) {
                 filterChain.doFilter(request, response)
                 return
             }

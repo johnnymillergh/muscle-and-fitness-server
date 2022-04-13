@@ -16,7 +16,7 @@ import javax.validation.constraints.NotEmpty
 @Configuration
 @ConfigurationProperties(prefix = PermissionConfiguration.PREFIX)
 class PermissionConfiguration(
-    val ignoredServiceIds: @NotEmpty Set<String>
+    @NotEmpty var ignoredServiceIds: Set<String>
 ) {
     companion object {
         const val PREFIX = "maf.configuration.permission"

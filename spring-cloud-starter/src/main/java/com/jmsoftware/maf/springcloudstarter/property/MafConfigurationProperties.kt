@@ -1,6 +1,5 @@
 package com.jmsoftware.maf.springcloudstarter.property
 
-import cn.hutool.core.util.ObjectUtil
 import com.jmsoftware.maf.common.util.logger
 import com.jmsoftware.maf.springcloudstarter.property.MafConfigurationProperties.IgnoredUrl.Constant.Companion.URL_REGEXP
 import org.springframework.boot.context.properties.ConfigurationProperties
@@ -19,6 +18,7 @@ import javax.validation.constraints.Pattern
  * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/13/22 2:07 PM
  **/
 @Validated
+@Suppress("unused")
 @ConfigurationProperties(prefix = MafConfigurationProperties.PREFIX)
 class MafConfigurationProperties {
     companion object {
@@ -32,7 +32,7 @@ class MafConfigurationProperties {
      * **ATTENTION**: The value of role name of superuser must be equal to the value that is persistent in database.
      **/
     @NotBlank
-    val superUserRole: String = "admin"
+    var superUserRole: String = "admin"
 
     /**
      * The role name of guest user (guest)  who has restrictions to access any system&#39;s resources. Assigning
@@ -41,60 +41,56 @@ class MafConfigurationProperties {
      * **ATTENTION**: The value of role of guest user must be equal to the value that is persistent in database.
      **/
     @NotBlank
-    val guestUserRole: String = "guest"
+    var guestUserRole: String = "guest"
 
     /**
      * Ignore URLs, used by web access log filter and web security.
      **/
     @Valid
-    val ignoredUrl: IgnoredUrl? = null
+    lateinit var ignoredUrl: IgnoredUrl
 
     /**
      * Web security feature switch. Default is true.
      * true - disable web security; false - enable web security.
      **/
-    val webSecurityEnabled: Boolean = true
+    var webSecurityEnabled: Boolean = true
 
     /**
      * Web request log switch. Default is true.
      *
      * true - disable web request log; false - enable web request log.
      **/
-    val webRequestLogEnabled: Boolean = true
+    var webRequestLogEnabled: Boolean = true
 
     /**
      * Included package for http api scan, could be base package
      **/
     @NotBlank
-    val includedPackageForHttpApiScan: String = ""
+    lateinit var includedPackageForHttpApiScan: String
+
+    @PostConstruct
+    private fun postConstruct() {
+        log.warn("Initial bean: `${this.javaClass.simpleName}`")
+    }
 
     /**
      * Flatten ignored urls string [ ].
      *
      * @return the string [ ]
      **/
-    fun flattenIgnoredUrls(): Array<String?> {
-        if (ObjectUtil.isNull(ignoredUrl)) {
-            return arrayOfNulls(0)
+    fun flattenIgnoredUrls(): List<String> {
+        return mutableListOf<String>().let {
+            it.addAll(ignoredUrl.get)
+            it.addAll(ignoredUrl.post)
+            it.addAll(ignoredUrl.delete)
+            it.addAll(ignoredUrl.put)
+            it.addAll(ignoredUrl.head)
+            it.addAll(ignoredUrl.patch)
+            it.addAll(ignoredUrl.options)
+            it.addAll(ignoredUrl.trace)
+            it.addAll(ignoredUrl.pattern)
+            it
         }
-        val flattenIgnoredUrls = mutableListOf<String>()
-        ignoredUrl?.let {
-            flattenIgnoredUrls.addAll(it.get)
-            flattenIgnoredUrls.addAll(it.post)
-            flattenIgnoredUrls.addAll(it.delete)
-            flattenIgnoredUrls.addAll(it.put)
-            flattenIgnoredUrls.addAll(it.head)
-            flattenIgnoredUrls.addAll(it.patch)
-            flattenIgnoredUrls.addAll(it.options)
-            flattenIgnoredUrls.addAll(it.trace)
-            flattenIgnoredUrls.addAll(it.pattern)
-        }
-        return flattenIgnoredUrls.toTypedArray()
-    }
-
-    @PostConstruct
-    private fun postConstruct() {
-        log.warn("Initial bean: `${this.javaClass.simpleName}`")
     }
 
     /**
