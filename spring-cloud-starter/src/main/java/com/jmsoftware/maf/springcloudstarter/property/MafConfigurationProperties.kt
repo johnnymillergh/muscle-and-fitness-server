@@ -47,7 +47,7 @@ class MafConfigurationProperties {
      * Ignore URLs, used by web access log filter and web security.
      **/
     @Valid
-    lateinit var ignoredUrl: IgnoredUrl
+    var ignoredUrl: IgnoredUrl? = null
 
     /**
      * Web security feature switch. Default is true.
@@ -66,7 +66,7 @@ class MafConfigurationProperties {
      * Included package for http api scan, could be base package
      **/
     @NotBlank
-    lateinit var includedPackageForHttpApiScan: String
+    var includedPackageForHttpApiScan: String = ""
 
     @PostConstruct
     private fun postConstruct() {
@@ -80,15 +80,15 @@ class MafConfigurationProperties {
      **/
     fun flattenIgnoredUrls(): List<String> {
         return mutableListOf<String>().let {
-            it.addAll(ignoredUrl.get)
-            it.addAll(ignoredUrl.post)
-            it.addAll(ignoredUrl.delete)
-            it.addAll(ignoredUrl.put)
-            it.addAll(ignoredUrl.head)
-            it.addAll(ignoredUrl.patch)
-            it.addAll(ignoredUrl.options)
-            it.addAll(ignoredUrl.trace)
-            it.addAll(ignoredUrl.pattern)
+            it.addAll(ignoredUrl?.get!!)
+            it.addAll(ignoredUrl?.post!!)
+            it.addAll(ignoredUrl?.delete!!)
+            it.addAll(ignoredUrl?.put!!)
+            it.addAll(ignoredUrl?.head!!)
+            it.addAll(ignoredUrl?.patch!!)
+            it.addAll(ignoredUrl?.options!!)
+            it.addAll(ignoredUrl?.trace!!)
+            it.addAll(ignoredUrl?.pattern!!)
             it
         }
     }
