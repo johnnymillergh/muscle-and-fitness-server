@@ -1,0 +1,54 @@
+package com.jmsoftware.maf.springcloudstarter.helper
+
+import com.jmsoftware.maf.common.util.logger
+import com.jmsoftware.maf.springcloudstarter.property.MafProjectProperties
+import org.springframework.beans.factory.DisposableBean
+import org.springframework.context.ApplicationContext
+import org.springframework.util.StopWatch
+import java.time.Instant
+import java.time.ZoneId
+
+/**
+ * # SpringBootStartupHelper
+ *
+ * Description: SpringBootStartupHelper, change description here.
+ *
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/12/22 10:04 PM
+ */
+class SpringBootStartupHelper(
+    private val mafProjectProperties: MafProjectProperties,
+    private val ipHelper: IpHelper,
+    private val applicationContext: ApplicationContext
+) : DisposableBean {
+    companion object {
+        private const val TEMPLATE: String = """
+
+            🥳 Congratulations! 🎉
+            🖥 {}@{} started!
+            ⚙️ Environment: {}
+            ⏳ Deployment duration: {} seconds ({} ms)
+            ⏰ App started at {} (timezone - {})
+              App running at
+              - Local:   http://localhost:{}{}/
+              - Network: http://{}:{}{}/
+            """
+        private val log = logger()
+    }
+    fun stop(stopWatch: StopWatch) {
+        stopWatch.stop()
+        log.info(
+            TEMPLATE,
+            mafProjectProperties.projectArtifactId, mafProjectProperties.version,
+            mafProjectProperties.environment,
+            stopWatch.totalTimeSeconds, stopWatch.totalTimeMillis,
+            Instant.now().atZone(ZoneId.systemDefault()), ZoneId.systemDefault(),
+            ipHelper.serverPort, mafProjectProperties.contextPath,
+            ipHelper.getPublicIp(), ipHelper.serverPort, mafProjectProperties.contextPath
+        )
+        applicationContext.autowireCapableBeanFactory.destroyBean(this)
+    }
+
+    override fun destroy() {
+        log.warn("Destroyed bean: ${this.javaClass.simpleName}")
+    }
+}

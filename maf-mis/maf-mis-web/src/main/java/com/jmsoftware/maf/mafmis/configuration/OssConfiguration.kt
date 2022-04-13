@@ -1,7 +1,7 @@
-package com.jmsoftware.maf.authcenter.configuration
+package com.jmsoftware.maf.mafmis.configuration
 
-import com.jmsoftware.maf.authcenter.remote.OssCenterFeignService
 import com.jmsoftware.maf.common.util.logger
+import com.jmsoftware.maf.mafmis.remote.OssCenterFeignService
 import com.jmsoftware.maf.springcloudstarter.poi.OssUploader
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

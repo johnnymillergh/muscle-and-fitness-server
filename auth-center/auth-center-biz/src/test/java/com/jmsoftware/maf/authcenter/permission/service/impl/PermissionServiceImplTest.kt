@@ -117,7 +117,7 @@ internal class PermissionServiceImplTest {
         val element = HttpApiResourcesResponse.HttpApiResource()
         element.method = RequestMethod.GET
         element.urlPattern = "/api/v1/**"
-        httpApiResourcesResponse.list = listOf(element)
+        httpApiResourcesResponse.list.add(element)
         `when`(objectMapper.convertValue(any(), any<Class<Any>>()))
             .thenReturn(httpApiResourcesResponse)
         `when`(restTemplate.getForObject(anyString(), any<Class<Any>>()))

@@ -1,10 +1,10 @@
-package com.jmsoftware.maf.authcenter.remote.impl
+package com.jmsoftware.maf.mafmis.remote.impl
 
-import com.jmsoftware.maf.authcenter.remote.OssCenterFeignClient
-import com.jmsoftware.maf.authcenter.remote.OssCenterFeignService
 import com.jmsoftware.maf.common.domain.osscenter.write.ObjectResponse
 import com.jmsoftware.maf.common.exception.InternalServerException
 import com.jmsoftware.maf.common.util.logger
+import com.jmsoftware.maf.mafmis.remote.OssCenterFeignClient
+import com.jmsoftware.maf.mafmis.remote.OssCenterFeignService
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import java.util.*

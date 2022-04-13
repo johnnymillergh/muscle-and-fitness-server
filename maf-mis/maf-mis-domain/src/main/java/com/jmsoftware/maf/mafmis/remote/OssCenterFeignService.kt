@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.authcenter.remote
+package com.jmsoftware.maf.mafmis.remote
 
 import com.jmsoftware.maf.common.domain.osscenter.write.ObjectResponse
 import org.springframework.validation.annotation.Validated

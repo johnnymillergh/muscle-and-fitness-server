@@ -1,9 +1,9 @@
-package com.jmsoftware.maf.authcenter.remote
+package com.jmsoftware.maf.mafmis.remote
 
-import com.jmsoftware.maf.authcenter.remote.OssCenterFeignClient.OssCenterFeignClientFallback
 import com.jmsoftware.maf.common.bean.ResponseBodyBean
 import com.jmsoftware.maf.common.domain.osscenter.write.ObjectResponse
 import com.jmsoftware.maf.common.util.logger
+import com.jmsoftware.maf.mafmis.remote.OssCenterFeignClient.OssCenterFeignClientFallback
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.context.annotation.Primary
 import org.springframework.http.MediaType
@@ -19,7 +19,7 @@ import javax.validation.constraints.NotNull
  *
  * Description: OssCenterFeignClient, change description here.
  *
- * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 9/15/2021 11:10 AM
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/12/22 9:37 PM
  * @see <a href='https://docs.spring.io/spring-cloud-openfeign/docs/current/reference/html/'>Spring Cloud OpenFeign</a>
  */
 @Primary

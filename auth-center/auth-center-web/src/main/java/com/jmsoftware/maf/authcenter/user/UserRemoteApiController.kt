@@ -36,6 +36,6 @@ class UserRemoteApiController(
         userDomainService.getUserPageList(payload)
 
     @GetMapping("/users/status")
-    fun getUserStatus(payload: @Valid GetUserStatusPayload): ResponseBodyBean<String> =
+    fun getUserStatus(@Valid payload: GetUserStatusPayload): ResponseBodyBean<String> =
         ResponseBodyBean.ofSuccess(userDomainService.getUserStatus(payload), "Correct enum value")
 }
