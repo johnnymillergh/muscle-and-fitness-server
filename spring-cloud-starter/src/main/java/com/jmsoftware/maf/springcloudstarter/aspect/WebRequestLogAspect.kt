@@ -35,6 +35,52 @@ import java.time.Instant
 class WebRequestLogAspect(
     private val objectMapper: ObjectMapper
 ) {
+    companion object {
+        private val log = logger()
+        private const val MAX_LENGTH_OF_JSON_STRING = 500
+        private val BEFORE_TEMPLATE: String =
+            """
+
+            ============ WEB REQUEST LOG AOP (@Before) ============
+            URL                : {}
+            HTTP Method        : {}
+            Client[IPv46:Port] : {}
+            Username           : {}
+            Class Method       : {}#{}
+            Request Params     :
+            {}
+            """.trimIndent()
+        private val AFTER_TEMPLATE: String =
+            """
+
+            ============ WEB REQUEST LOG AOP (@After) =============
+            """.trimIndent()
+        private val AROUND_TEMPLATE_FOR_JSON: String =
+            """
+
+            Response           :
+            {}
+            """.trimIndent()
+        private val AROUND_TEMPLATE_FOR_NON_JSON: String =
+            """
+
+            Response (non-JSON): {}
+            """.trimIndent()
+        private val AROUND_TEMPLATE_END: String =
+            """
+
+            Elapsed time       : {} ({} ms)
+            ============ WEB REQUEST LOG AOP (@Around) ============
+            """.trimIndent()
+        private val AFTER_THROWING_TEMPLATE: String =
+            """
+
+            Signature          : {}
+            Exception          : {}, message: {}
+            ======== WEB REQUEST LOG AOP (@AfterThrowing) =========
+            """.trimIndent()
+    }
+
     /**
      * Define pointcut. Pointcut is a predicate or expression that matches join points. In WebRequestLogAspect, we need
      * to cut any method annotated with `@GetMapping`, `@PostMapping`, `@PutMapping`, `@DeleteMapping`,
@@ -126,51 +172,5 @@ class WebRequestLogAspect(
             e.toString(),
             e.message
         )
-    }
-
-    companion object {
-        private val log = logger()
-        private const val MAX_LENGTH_OF_JSON_STRING = 500
-        private val BEFORE_TEMPLATE: String =
-            """
-
-            ============ WEB REQUEST LOG AOP (@Before) ============
-            URL                : {}
-            HTTP Method        : {}
-            Client[IPv46:Port] : {}
-            Username           : {}
-            Class Method       : {}#{}
-            Request Params     :
-            {}
-            """.trimIndent()
-        private val AFTER_TEMPLATE: String =
-            """
-
-            ============ WEB REQUEST LOG AOP (@After) =============
-            """.trimIndent()
-        private val AROUND_TEMPLATE_FOR_JSON: String =
-            """
-
-            Response           :
-            {}
-            """.trimIndent()
-        private val AROUND_TEMPLATE_FOR_NON_JSON: String =
-            """
-
-            Response (non-JSON): {}
-            """.trimIndent()
-        private val AROUND_TEMPLATE_END: String =
-            """
-
-            Elapsed time       : {} ({} ms)
-            ============ WEB REQUEST LOG AOP (@Around) ============
-            """.trimIndent()
-        private val AFTER_THROWING_TEMPLATE: String =
-            """
-
-            Signature          : {}
-            Exception          : {}, message: {}
-            ======== WEB REQUEST LOG AOP (@AfterThrowing) =========
-            """.trimIndent()
     }
 }
