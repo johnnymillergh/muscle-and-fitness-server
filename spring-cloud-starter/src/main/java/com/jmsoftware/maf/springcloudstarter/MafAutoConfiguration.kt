@@ -1,6 +1,7 @@
 package com.jmsoftware.maf.springcloudstarter
 
 import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.jmsoftware.maf.common.util.logger
 import com.jmsoftware.maf.springcloudstarter.aspect.*
 import com.jmsoftware.maf.springcloudstarter.configuration.*
@@ -119,9 +120,9 @@ class MafAutoConfiguration {
 
     @Bean
     @ConditionalOnProperty(value = ["maf.configuration.web-request-log-enabled"])
-    fun webRequestLogAspect(): WebRequestLogAspect {
+    fun webRequestLogAspect(objectMapper: ObjectMapper): WebRequestLogAspect {
         log.warn("Initial bean: `${WebRequestLogAspect::class.java.simpleName}`")
-        return WebRequestLogAspect()
+        return WebRequestLogAspect(objectMapper)
     }
 
     @Bean

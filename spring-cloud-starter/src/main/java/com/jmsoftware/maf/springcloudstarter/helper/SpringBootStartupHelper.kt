@@ -21,7 +21,9 @@ class SpringBootStartupHelper(
     private val applicationContext: ApplicationContext
 ) : DisposableBean {
     companion object {
-        private const val TEMPLATE: String = """
+        @Suppress("HttpUrlsUsage")
+        private val TEMPLATE: String =
+            """
 
             🥳 Congratulations! 🎉
             🖥 {}@{} started!
@@ -31,7 +33,7 @@ class SpringBootStartupHelper(
               App running at
               - Local:   http://localhost:{}{}/
               - Network: http://{}:{}{}/
-            """
+            """.trimIndent()
         private val log = logger()
     }
     fun stop(stopWatch: StopWatch) {
