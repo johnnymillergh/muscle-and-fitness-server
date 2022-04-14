@@ -20,7 +20,7 @@ import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListB
 import com.jmsoftware.maf.common.domain.authcenter.permission.PermissionType
 import com.jmsoftware.maf.common.domain.springbootstarter.HttpApiResourcesResponse
 import com.jmsoftware.maf.common.util.logger
-import com.jmsoftware.maf.springcloudstarter.function.Slf4j.lazyDebug
+import com.jmsoftware.maf.springcloudstarter.function.lazyDebug
 import org.springframework.cloud.client.discovery.DiscoveryClient
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate

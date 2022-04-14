@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static cn.hutool.core.text.CharSequenceUtil.format;
-import static com.jmsoftware.maf.springcloudstarter.function.BooleanCheck.requireTrue;
+import static com.jmsoftware.maf.springcloudstarter.function.BooleanCheckKt.requireTrue;
 import static com.jmsoftware.maf.springcloudstarter.quartz.constant.ScheduleConstant.QUARTZ_JOB_CONFIGURATION;
 import static java.util.Objects.requireNonNull;
 

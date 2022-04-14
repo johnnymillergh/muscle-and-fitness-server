@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
-import static com.jmsoftware.maf.springcloudstarter.function.Slf4j.lazyDebug;
+import static com.jmsoftware.maf.springcloudstarter.function.Slf4jKt.lazyDebug;
 
 /**
  * Description: Slf4jTests, change description here.

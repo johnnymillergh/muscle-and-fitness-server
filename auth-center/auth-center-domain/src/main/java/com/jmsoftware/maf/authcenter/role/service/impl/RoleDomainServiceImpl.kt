@@ -18,8 +18,8 @@ import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdRespo
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdSingleResponse
 import com.jmsoftware.maf.common.exception.InternalServerException
 import com.jmsoftware.maf.common.util.logger
-import com.jmsoftware.maf.springcloudstarter.function.BooleanCheck.requireTrue
-import com.jmsoftware.maf.springcloudstarter.function.Slf4j.lazyDebug
+import com.jmsoftware.maf.springcloudstarter.function.lazyDebug
+import com.jmsoftware.maf.springcloudstarter.function.requireTrue
 import com.jmsoftware.maf.springcloudstarter.property.MafConfigurationProperties
 import com.jmsoftware.maf.springcloudstarter.property.MafProjectProperties
 import lombok.RequiredArgsConstructor

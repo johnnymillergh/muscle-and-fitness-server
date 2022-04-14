@@ -9,7 +9,7 @@ import com.jmsoftware.maf.authcenter.user.persistence.User
 import com.jmsoftware.maf.authcenter.user.persistence.UserRole
 import com.jmsoftware.maf.authcenter.user.service.UserRoleDomainService
 import com.jmsoftware.maf.common.exception.InternalServerException
-import com.jmsoftware.maf.springcloudstarter.function.BooleanCheck.requireTrue
+import com.jmsoftware.maf.springcloudstarter.function.requireTrue
 import org.springframework.stereotype.Service
 import java.util.*
 

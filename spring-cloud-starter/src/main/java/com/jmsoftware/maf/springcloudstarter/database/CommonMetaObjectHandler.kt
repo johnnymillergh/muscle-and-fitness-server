@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler
 import com.jmsoftware.maf.common.domain.DeletedField
 import com.jmsoftware.maf.common.util.logger
-import com.jmsoftware.maf.springcloudstarter.function.Slf4j.lazyDebug
+import com.jmsoftware.maf.springcloudstarter.function.lazyDebug
 import com.jmsoftware.maf.springcloudstarter.util.UserUtil
 import org.apache.ibatis.reflection.MetaObject
 import java.time.LocalDateTime
