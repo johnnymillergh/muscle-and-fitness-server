@@ -32,14 +32,16 @@ fun invokeMethod(quartzJobConfiguration: QuartzJobConfiguration) {
     val beanName = getBeanName(invokeTarget)
     val methodName = getMethodName(invokeTarget)
     val methodParams = getMethodParams(invokeTarget!!)
-    val bean: Any = if (!isValidClassName(beanName)) {
+    if (!isValidClassName(beanName)) {
+        lazyDebug(log) { "Getting the bean from Spring IoC container by bean name: `$beanName`" }
         SpringUtil.getBean(beanName)
     } else {
+        lazyDebug(log) { "Initialize a new object by class name: `$beanName`" }
         Class.forName(beanName).getDeclaredConstructor().newInstance()
     }.let {
         lazyDebug(log) { "Found the bean (`$beanName`) from Spring IoC container, $it" }
+        invokeMethod(it, methodName, methodParams)
     }
-    invokeMethod(bean, methodName, methodParams)
 }
 
 /**
@@ -77,12 +79,14 @@ private fun invokeMethod(
  * @param invokeTarget the invoke target
  * @return the boolean
  */
-fun isValidClassName(invokeTarget: String?): Boolean {
-    return StringUtils.countOccurrencesOf(invokeTarget!!, ".") > 1
+fun isValidClassName(invokeTarget: String): Boolean {
+    return StringUtils.countOccurrencesOf(invokeTarget, ".") > 1
 }
 
 /**
- * Gets bean name.
+ * Gets bean name. For example:
+ *  * `greetingBean.hello()`
+ *  * `com.jmsoftware.maf.springcloudstarter.quartz.GreetingBean.hello()`
  *
  * @param invokeTarget the invoke target
  * @return the bean name
