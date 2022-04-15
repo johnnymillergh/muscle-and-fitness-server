@@ -1,7 +1,7 @@
 package com.jmsoftware.maf.springcloudstarter.quartz.job
 
 import com.jmsoftware.maf.springcloudstarter.quartz.entity.persistence.QuartzJobConfiguration
-import com.jmsoftware.maf.springcloudstarter.quartz.util.QuartzJobInvocationUtil
+import com.jmsoftware.maf.springcloudstarter.quartz.util.invokeMethod
 import org.quartz.DisallowConcurrentExecution
 import org.quartz.JobExecutionContext
 
@@ -13,6 +13,6 @@ import org.quartz.JobExecutionContext
 @DisallowConcurrentExecution
 class QuartzDisallowConcurrentExecution : AbstractQuartzJob() {
     override fun invoke(context: JobExecutionContext, quartzJobConfiguration: QuartzJobConfiguration) {
-        QuartzJobInvocationUtil.invokeMethod(quartzJobConfiguration)
+        invokeMethod(quartzJobConfiguration)
     }
 }

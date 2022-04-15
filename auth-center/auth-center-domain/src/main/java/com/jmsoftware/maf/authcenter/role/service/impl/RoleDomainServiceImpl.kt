@@ -5,7 +5,6 @@ import cn.hutool.core.text.CharSequenceUtil
 import cn.hutool.core.util.RandomUtil
 import cn.hutool.core.util.StrUtil
 import cn.hutool.extra.validation.ValidationUtil
-import com.baomidou.mybatisplus.extension.kotlin.KtQueryChainWrapper
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -68,11 +67,10 @@ class RoleDomainServiceImpl(
 
     override fun checkAdmin(roleIdList: @NotEmpty List<Long>): Boolean {
         // If roleNameSet is not empty (contains "admin")
-        return this.list(
-            KtQueryChainWrapper(getBaseMapper(), Role::class.java)
-                .select(Role::name)
-                .`in`(Role::id, roleIdList)
-        )
+        return this.ktQuery()
+            .select(Role::name)
+            .`in`(Role::id, roleIdList)
+            .list()
             .stream()
             .map { item -> item.name }
             .anyMatch { roleName: String ->

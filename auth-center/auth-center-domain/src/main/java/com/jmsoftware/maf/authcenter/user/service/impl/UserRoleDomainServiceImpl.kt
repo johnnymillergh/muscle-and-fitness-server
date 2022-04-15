@@ -1,6 +1,5 @@
 package com.jmsoftware.maf.authcenter.user.service.impl
 
-import com.baomidou.mybatisplus.extension.kotlin.KtQueryChainWrapper
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl
 import com.jmsoftware.maf.authcenter.role.persistence.Role
 import com.jmsoftware.maf.authcenter.role.service.RoleDomainService
@@ -26,11 +25,9 @@ class UserRoleDomainServiceImpl(
 ) : ServiceImpl<UserRoleMapper, UserRole>(), UserRoleDomainService {
     override fun assignRoleByRoleName(user: User, roleName: String) {
         val role = Optional.ofNullable(
-            roleDomainService.getOne(
-                KtQueryChainWrapper(roleDomainService.baseMapper, Role::class.java)
-                    .select(Role::id)
-                    .eq(Role::name, roleName)
-            )
+            roleDomainService.ktQuery()
+                .select(Role::id)
+                .eq(Role::name, roleName).one()
         ).orElseThrow { InternalServerException("Cannot find the role: $roleName") }
         val userRole = UserRole()
         userRole.userId = user.id

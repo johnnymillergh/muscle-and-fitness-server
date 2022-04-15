@@ -8,7 +8,6 @@ import cn.hutool.json.JSONUtil
 import com.baomidou.mybatisplus.core.metadata.OrderItem
 import com.baomidou.mybatisplus.core.toolkit.Wrappers
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction
-import com.baomidou.mybatisplus.extension.kotlin.KtQueryChainWrapper
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl
 import com.jmsoftware.maf.authcenter.security.service.JwtService
@@ -71,9 +70,7 @@ class UserDomainServiceImpl(
         if (hasKey) {
             return JSONUtil.toBean(redisTemplate.opsForValue()[key], GetUserByLoginTokenResponse::class.java)
         }
-        val wrapper = KtQueryChainWrapper(getBaseMapper(), User::class.java)
-        wrapper.eq(User::username, loginToken)
-        val user = getBaseMapper().selectOne(wrapper)
+        val user = this.ktQuery().eq(User::username, loginToken).one()
         if (ObjectUtil.isNull(user)) {
             return null
         }

@@ -3,7 +3,6 @@ package com.jmsoftware.maf.springcloudstarter.quartz.service.impl
 import cn.hutool.core.text.CharSequenceUtil
 import cn.hutool.core.util.ReflectUtil
 import cn.hutool.extra.validation.ValidationUtil
-import com.baomidou.mybatisplus.extension.kotlin.KtQueryChainWrapper
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl
 import com.jmsoftware.maf.common.bean.PageResponseBodyBean
@@ -19,8 +18,9 @@ import com.jmsoftware.maf.springcloudstarter.quartz.entity.QuartzJobConfiguratio
 import com.jmsoftware.maf.springcloudstarter.quartz.entity.persistence.QuartzJobConfiguration
 import com.jmsoftware.maf.springcloudstarter.quartz.repository.QuartzJobConfigurationMapper
 import com.jmsoftware.maf.springcloudstarter.quartz.service.QuartzJobConfigurationService
-import com.jmsoftware.maf.springcloudstarter.quartz.util.CronUtil
-import com.jmsoftware.maf.springcloudstarter.quartz.util.ScheduleUtil
+import com.jmsoftware.maf.springcloudstarter.quartz.util.createScheduleJob
+import com.jmsoftware.maf.springcloudstarter.quartz.util.getJobKey
+import com.jmsoftware.maf.springcloudstarter.quartz.util.validateCronExp
 import org.quartz.JobDataMap
 import org.quartz.Scheduler
 import org.springframework.scheduling.quartz.SchedulerFactoryBean
@@ -55,7 +55,7 @@ class QuartzJobConfigurationServiceImpl(
         scheduler.clear()
         val jobList: List<QuartzJobConfiguration> = getQuartzJobConfigurationForInitialization()
         for (quartzJobConfiguration in jobList) {
-            ScheduleUtil.createScheduleJob(
+            createScheduleJob(
                 scheduler,
                 quartzJobConfiguration,
                 mafProjectProperties.projectArtifactId
@@ -66,11 +66,10 @@ class QuartzJobConfigurationServiceImpl(
     }
 
     private fun getQuartzJobConfigurationForInitialization(): List<QuartzJobConfiguration> {
-        return this.list(
-            KtQueryChainWrapper(baseMapper, QuartzJobConfiguration::class.java)
-                .eq(QuartzJobConfiguration::serviceName, mafProjectProperties.projectArtifactId)
-                .orderByAsc(QuartzJobConfiguration::createdTime)
-        )
+        return this.ktQuery()
+            .eq(QuartzJobConfiguration::serviceName, mafProjectProperties.projectArtifactId)
+            .orderByAsc(QuartzJobConfiguration::createdTime)
+            .list()
     }
 
     override fun getPageList(
@@ -122,7 +121,7 @@ class QuartzJobConfigurationServiceImpl(
     }
 
     private fun validateCronExpression(cronExpression: String) {
-        requireTrue(CronUtil.isValid(cronExpression)) { valid: Boolean ->
+        requireTrue(validateCronExp(cronExpression)) { valid: Boolean ->
             logger.warn("Cron validation: $valid, expression: $cronExpression")
         }.orElseThrow { IllegalArgumentException("Cron($cronExpression) invalid") }
     }
@@ -170,7 +169,7 @@ class QuartzJobConfigurationServiceImpl(
         val jobDataMap = JobDataMap()
         jobDataMap[QUARTZ_JOB_CONFIGURATION] = quartzJobConfiguration
         scheduler.triggerJob(
-            ScheduleUtil.getJobKey(
+            getJobKey(
                 quartzJobConfiguration.id!!,
                 quartzJobConfiguration.group!!,
                 mafProjectProperties.projectArtifactId
@@ -188,7 +187,7 @@ class QuartzJobConfigurationServiceImpl(
         }.orElseThrow { IllegalStateException(CharSequenceUtil.format("Failed to delete Quartz job configuration")) }
         val scheduler: Scheduler = schedulerFactoryBean.scheduler
         val deletedJob = scheduler.deleteJob(
-            ScheduleUtil.getJobKey(id, group, mafProjectProperties.projectArtifactId)
+            getJobKey(id, group, mafProjectProperties.projectArtifactId)
         )
         requireTrue(deletedJob) { deletedJob1: Boolean ->
             logger.warn("Scheduler deleted job and related triggers: $deletedJob1")
