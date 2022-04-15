@@ -48,8 +48,8 @@ class QuartzJobConfigurationController(
 
     @PutMapping("/quartz-job-configurations/{id}")
     fun modify(
-        @PathVariable id: Long?,
-        @RequestBody payload: @Valid CreateOrModifyQuartzJobConfigurationPayload
+        @PathVariable id: Long,
+        @Valid @RequestBody payload: CreateOrModifyQuartzJobConfigurationPayload
     ): ResponseBodyBean<Long> {
         return ResponseBodyBean.ofSuccess(service.modify(id, payload))
     }
@@ -74,10 +74,7 @@ class QuartzJobConfigurationController(
     }
 
     override fun onExceptionOccurred() {
-        QuartzJobConfigurationController.log.error(
-            "Exception occurred when uploading excel. Excel class: {}",
-            QuartzJobConfigurationExcel::class.java
-        )
+        log.error("Exception occurred when uploading excel. Excel class: `${QuartzJobConfigurationExcel::class.java}`")
         fileName.set(CharSequenceUtil.format("quartz-job-configuration-stat-{}.xlsx", Instant.now()))
     }
 
@@ -97,6 +94,6 @@ class QuartzJobConfigurationController(
     }
 
     override fun getListForExporting(): List<QuartzJobConfigurationExcel> {
-        return service.listForExporting
+        return service.getListForExporting()
     }
 }
