@@ -2,6 +2,7 @@ package com.jmsoftware.maf.authcenter.user.service.impl
 
 import com.baomidou.mybatisplus.core.MybatisConfiguration
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper
+import com.baomidou.mybatisplus.extension.kotlin.KtQueryChainWrapper
 import com.jmsoftware.maf.authcenter.role.mapper.RoleMapper
 import com.jmsoftware.maf.authcenter.role.persistence.Role
 import com.jmsoftware.maf.authcenter.role.service.RoleDomainService
@@ -20,7 +21,7 @@ import org.junit.jupiter.api.parallel.Execution
 import org.junit.jupiter.api.parallel.ExecutionMode
 import org.mockito.InjectMocks
 import org.mockito.Mock
-import org.mockito.Mockito.*
+import org.mockito.Mockito.`when`
 import org.mockito.Spy
 import org.mockito.junit.jupiter.MockitoExtension
 
@@ -84,12 +85,7 @@ internal class UserRoleDomainServiceImplTest {
 
     @Test
     fun assignRoleByRoleName() {
-        doReturn(userRoleMapper).`when`(userRoleDomainService).baseMapper
-        `when`(roleDomainService.baseMapper).thenReturn(roleMapper)
-        val role = Role()
-        role.name = "guest"
-        role.description = "Guest for the system"
-        `when`(roleDomainService.getOne(any())).thenReturn(role)
+        `when`(roleDomainService.ktQuery()).thenReturn(KtQueryChainWrapper(roleMapper, Role::class.java))
         val user = User()
         user.username = "johnny"
         val thrownException = assertThrows(InternalServerException::class.java) {

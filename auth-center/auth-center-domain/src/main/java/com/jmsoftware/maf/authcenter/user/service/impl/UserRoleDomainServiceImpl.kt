@@ -27,7 +27,8 @@ class UserRoleDomainServiceImpl(
         val role = Optional.ofNullable(
             roleDomainService.ktQuery()
                 .select(Role::id)
-                .eq(Role::name, roleName).one()
+                .eq(Role::name, roleName)
+                .one()
         ).orElseThrow { InternalServerException("Cannot find the role: $roleName") }
         val userRole = UserRole()
         userRole.userId = user.id
