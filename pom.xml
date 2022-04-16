@@ -58,7 +58,7 @@
         <spring-boot-admin-starter-client.version>2.6.6</spring-boot-admin-starter-client.version>
         <mybatis-plus-boot-starter.version>3.5.1</mybatis-plus-boot-starter.version>
         <dynamic-datasource-spring-boot-starter.version>3.5.1</dynamic-datasource-spring-boot-starter.version>
-        <shardingsphere.version>5.1.0</shardingsphere.version>
+        <shardingsphere.version>5.1.1</shardingsphere.version>
         <hutool-all.version>5.7.21</hutool-all.version>
         <guava.version>31.1-jre</guava.version>
         <springdoc-openapi-ui.version>1.6.7</springdoc-openapi-ui.version>
