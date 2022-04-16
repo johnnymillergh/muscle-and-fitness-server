@@ -1,26 +1,26 @@
-package com.jmsoftware.maf.mafmis;
+package com.jmsoftware.maf.mafmis
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.core.Message;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.stereotype.Component;
-
-import static com.jmsoftware.maf.springcloudstarter.rabbitmq.DelayedMessageConfiguration.DELAYED_MESSAGE_QUEUE_NAME;
+import com.jmsoftware.maf.common.util.logger
+import com.jmsoftware.maf.springcloudstarter.rabbitmq.DelayedMessageConfiguration
+import org.springframework.amqp.core.Message
+import org.springframework.amqp.rabbit.annotation.RabbitListener
+import org.springframework.stereotype.Component
 
 /**
- * <h1>DelayedMessageListener</h1>
- * <p>
+ * # DelayedMessageListener
+ *
  * Change description here.
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com, 10/2/21 1:38 PM
- **/
-@Slf4j
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/16/22 11:19 PM
+ */
 @Component
-@RequiredArgsConstructor
-public class DelayedMessageListener {
-    @RabbitListener(queues = DELAYED_MESSAGE_QUEUE_NAME)
-    public void receiveMessage(final Message message) {
-        log.info("Received message as a generic AMQP 'Message' wrapper: {}", message);
+class DelayedMessageListener {
+    companion object {
+        private val log = logger()
+    }
+
+    @RabbitListener(queues = [DelayedMessageConfiguration.DELAYED_MESSAGE_QUEUE_NAME])
+    fun receiveMessage(message: Message) {
+        log.info("Received message as a generic AMQP 'Message' wrapper: $message")
     }
 }

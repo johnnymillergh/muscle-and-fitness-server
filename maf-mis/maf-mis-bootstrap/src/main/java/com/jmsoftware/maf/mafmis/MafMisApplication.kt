@@ -1,32 +1,29 @@
-package com.jmsoftware.maf.mafmis;
+package com.jmsoftware.maf.mafmis
 
-import com.jmsoftware.maf.springcloudstarter.helper.SpringBootStartupHelper;
-import lombok.extern.slf4j.Slf4j;
-import lombok.val;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.openfeign.EnableFeignClients;
-import org.springframework.util.StopWatch;
+import com.jmsoftware.maf.springcloudstarter.helper.SpringBootStartupHelper
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.runApplication
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient
+import org.springframework.cloud.openfeign.EnableFeignClients
+import org.springframework.util.StopWatch
 
 /**
- * <h1>MafMisApplication</h1>
- * <p>
+ * # MafMisApplication
+ *
  * Change description here.
  *
- * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 6/25/2021 4:23 PM
- **/
-@Slf4j
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/16/22 11:23 PM
+ */
 @EnableFeignClients
 @EnableDiscoveryClient
 @SpringBootApplication
-@SuppressWarnings("scwjava_Createprivateconstructorforutilityclassallfieldsmethodsarestatic")
-public class MafMisApplication {
-    public static void main(String[] args) {
-        val stopWatch = new StopWatch();
-        stopWatch.start();
-        val configurableApplicationContext = SpringApplication.run(MafMisApplication.class, args);
-        val springBootStartupHelper = configurableApplicationContext.getBean(SpringBootStartupHelper.class);
-        springBootStartupHelper.stop(stopWatch);
+class MafMisApplication
+
+fun main(args: Array<String>) {
+    StopWatch().let {
+        it.start()
+        runApplication<MafMisApplication>(*args)
+            .getBean(SpringBootStartupHelper::class.java)
+            .stop(it)
     }
 }
