@@ -2,10 +2,10 @@ package com.jmsoftware.maf.authcenter.remote.impl
 
 import com.jmsoftware.maf.authcenter.remote.OssCenterFeignClient
 import com.jmsoftware.maf.common.bean.ResponseBodyBean
-import com.jmsoftware.maf.common.exception.InternalServerException
+import com.jmsoftware.maf.common.domain.osscenter.write.ObjectResponse
 import com.jmsoftware.maf.common.util.logger
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -74,10 +74,9 @@ internal class OssCenterFeignServiceImplTest {
             null
         )
         `when`(ossCenterFeignClient.uploadSingleResource(multipartFile))
-            .thenReturn(ResponseBodyBean.ofSuccess())
-        val threwException = assertThrows(InternalServerException::class.java) {
-            ossCenterFeignService.uploadSingleResource(multipartFile)
-        }
-        log.info("Pass: PermissionServiceImplTest#uploadSingleResource. $threwException")
+            .thenReturn(ResponseBodyBean.ofSuccess(ObjectResponse()))
+        val objectResponse = ossCenterFeignService.uploadSingleResource(multipartFile)
+        assertNotNull(objectResponse)
+        log.info("Pass: PermissionServiceImplTest#uploadSingleResource. $objectResponse")
     }
 }

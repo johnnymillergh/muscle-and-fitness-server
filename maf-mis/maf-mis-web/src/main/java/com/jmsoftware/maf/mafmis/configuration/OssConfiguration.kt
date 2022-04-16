@@ -28,8 +28,9 @@ class OssConfiguration(
         return OssUploader { name: String, inputStream: InputStream ->
             val multipartFile = MockMultipartFile(name, name, null, inputStream)
             val objectResponse = ossCenterFeignService.uploadSingleResource(multipartFile)
-            log.info("Uploaded multipartFile. objectResponse: $objectResponse")
-            "${objectResponse.bucket}/${objectResponse.getObject()}"
+            "${objectResponse.bucket}/${objectResponse.`object`}".apply {
+                log.info("Uploaded multipartFile. Path: $this")
+            }
         }
     }
 }

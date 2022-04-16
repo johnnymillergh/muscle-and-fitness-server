@@ -28,7 +28,7 @@ class OssCenterFeignServiceImpl(
     override fun uploadSingleResource(multipartFile: @NotNull MultipartFile): ObjectResponse {
         log.info("Uploading single resource to oss center. multipartFile: {}", multipartFile)
         return Optional.ofNullable(ossCenterFeignClient.uploadSingleResource(multipartFile))
-            .map { response -> response.data }
+            .map { response -> response.data!! }
             .orElseThrow {
                 log.error("Failed to upload single resource to oss center. multipartFile: ${multipartFile.name}")
                 InternalServerException("Failed to upload single resource to oss center")
