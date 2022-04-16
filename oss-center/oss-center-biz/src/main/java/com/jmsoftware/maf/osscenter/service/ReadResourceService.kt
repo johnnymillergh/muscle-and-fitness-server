@@ -1,22 +1,20 @@
-package com.jmsoftware.maf.osscenter.service;
+package com.jmsoftware.maf.osscenter.service
 
-import com.jmsoftware.maf.osscenter.response.SerializableStatObjectResponse;
-import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
-
-import javax.validation.constraints.NotBlank;
+import com.jmsoftware.maf.osscenter.response.SerializableStatObjectResponse
+import org.springframework.http.ResponseEntity
+import org.springframework.validation.annotation.Validated
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody
+import javax.validation.constraints.NotBlank
 
 /**
- * <h1>ReadResourceService</h1>
- * <p>
+ * # ReadResourceService
+ *
  * Change description here.
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com, 6/20/21 5:17 PM
- **/
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/16/22 11:48 PM
+ */
 @Validated
-public interface ReadResourceService {
+interface ReadResourceService {
     /**
      * Get single resource, especially pictures, or other small size file.
      *
@@ -24,10 +22,10 @@ public interface ReadResourceService {
      * @param object the object
      * @return the response entity
      */
-    ResponseEntity<StreamingResponseBody> asyncGetSingleResource(
-            @NotBlank String bucket,
-            @NotBlank String object
-    );
+    fun asyncGetSingleResource(
+        bucket: @NotBlank String,
+        `object`: @NotBlank String
+    ): ResponseEntity<StreamingResponseBody>
 
     /**
      * Stream single resource, more efficiency if the resource is large file, which will be streamed by range.
@@ -38,11 +36,11 @@ public interface ReadResourceService {
      * @param range  the range
      * @return the response entity
      */
-    ResponseEntity<StreamingResponseBody> asyncStreamSingleResource(
-            @NotBlank String bucket,
-            @NotBlank String object,
-            @Nullable String range
-    );
+    fun asyncStreamSingleResource(
+        bucket: @NotBlank String,
+        `object`: @NotBlank String,
+        range: String?
+    ): ResponseEntity<StreamingResponseBody>
 
     /**
      * Async download single resource response entity.
@@ -51,10 +49,10 @@ public interface ReadResourceService {
      * @param object the object
      * @return the response entity
      */
-    ResponseEntity<StreamingResponseBody> asyncDownloadSingleResource(
-            @NotBlank String bucket,
-            @NotBlank String object
-    );
+    fun asyncDownloadSingleResource(
+        bucket: @NotBlank String,
+        `object`: @NotBlank String
+    ): ResponseEntity<StreamingResponseBody>
 
     /**
      * Gets resource information.
@@ -63,8 +61,8 @@ public interface ReadResourceService {
      * @param object the object
      * @return the resource detail
      */
-    SerializableStatObjectResponse stateObject(
-            @NotBlank String bucket,
-            @NotBlank String object
-    );
+    fun stateObject(
+        bucket: @NotBlank String,
+        `object`: @NotBlank String
+    ): SerializableStatObjectResponse
 }

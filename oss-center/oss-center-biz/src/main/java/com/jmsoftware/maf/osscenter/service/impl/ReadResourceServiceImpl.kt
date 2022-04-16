@@ -1,183 +1,173 @@
-package com.jmsoftware.maf.osscenter.service.impl;
+package com.jmsoftware.maf.osscenter.service.impl
 
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.io.IoUtil;
-import cn.hutool.core.io.NioUtil;
-import com.jmsoftware.maf.common.exception.ResourceNotFoundException;
-import com.jmsoftware.maf.osscenter.response.SerializableStatObjectResponse;
-import com.jmsoftware.maf.osscenter.service.ReadResourceService;
-import com.jmsoftware.maf.springcloudstarter.minio.MinioHelper;
-import io.minio.StatObjectResponse;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
-import lombok.val;
-import org.springframework.http.*;
-import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
-
-import javax.validation.constraints.NotBlank;
-import java.util.List;
-
-import static cn.hutool.core.text.CharSequenceUtil.format;
-import static com.jmsoftware.maf.osscenter.constant.Chunk.LARGE_CHUNK_SIZE;
-import static com.jmsoftware.maf.osscenter.constant.Chunk.TINY_CHUNK_SIZE;
+import cn.hutool.core.collection.CollUtil
+import cn.hutool.core.io.IoUtil
+import cn.hutool.core.io.NioUtil
+import com.jmsoftware.maf.common.exception.ResourceNotFoundException
+import com.jmsoftware.maf.common.util.logger
+import com.jmsoftware.maf.osscenter.constant.Chunk
+import com.jmsoftware.maf.osscenter.constant.Chunk.LARGE_CHUNK_SIZE
+import com.jmsoftware.maf.osscenter.response.SerializableStatObjectResponse
+import com.jmsoftware.maf.osscenter.service.ReadResourceService
+import com.jmsoftware.maf.springcloudstarter.minio.MinioHelper
+import io.minio.StatObjectResponse
+import org.springframework.http.*
+import org.springframework.stereotype.Service
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody
+import java.io.OutputStream
+import javax.validation.constraints.NotBlank
 
 /**
- * <h1>ReadResourceServiceImpl</h1>
- * <p>
+ * # ReadResourceServiceImpl
+ *
  * Change description here.
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com, 6/20/21 5:18 PM
- **/
-@Slf4j
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/16/22 11:48 PM
+ */
 @Service
-@RequiredArgsConstructor
-public class ReadResourceServiceImpl implements ReadResourceService {
-    private static final String ACCEPT_RANGES_VALUE = "bytes";
-    private final MinioHelper minioHelper;
-
-    @Override
-    @SuppressWarnings("DuplicatedCode")
-    public ResponseEntity<StreamingResponseBody> asyncGetSingleResource(
-            @NotBlank String bucket,
-            @NotBlank String object
-    ) {
-        StatObjectResponse statObjectResponse;
-        try {
-            statObjectResponse = this.minioHelper.statObject(bucket, object);
-        } catch (Exception e) {
-            log.error("Exception occurred when looking for object!", e);
-            return ResponseEntity.notFound().build();
-        }
-        val objectResponse = this.minioHelper.getObject(bucket, object);
-        if (statObjectResponse == null || objectResponse == null) {
-            log.warn("Object not found! Bucket: {}, Object: {}", bucket, object);
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok()
-                .header(HttpHeaders.ACCEPT_RANGES, ACCEPT_RANGES_VALUE)
-                .contentLength(statObjectResponse.size())
-                .contentType(MediaType.parseMediaType(statObjectResponse.contentType()))
-                .body(outputStream -> {
-                    NioUtil.copyByNIO(objectResponse, outputStream, NioUtil.DEFAULT_BUFFER_SIZE, null);
-                    IoUtil.close(objectResponse);
-                });
+class ReadResourceServiceImpl(
+    private val minioHelper: MinioHelper
+) : ReadResourceService {
+    companion object {
+        private const val ACCEPT_RANGES_VALUE = "bytes"
+        private val log = logger()
     }
 
-    @Override
-    @SuppressWarnings("DuplicatedCode")
-    public ResponseEntity<StreamingResponseBody> asyncStreamSingleResource(
-            @NotBlank String bucket,
-            @NotBlank String object,
-            @Nullable String range
-    ) {
-        StatObjectResponse statObjectResponse;
-        try {
-            statObjectResponse = this.minioHelper.statObject(bucket, object);
-        } catch (Exception e) {
-            log.error("Exception occurred when looking for object. Exception message: {}", e.getMessage());
-            return ResponseEntity.notFound().build();
+    override fun asyncGetSingleResource(
+        bucket: @NotBlank String,
+        `object`: @NotBlank String
+    ): ResponseEntity<StreamingResponseBody> {
+        val statObjectResponse: StatObjectResponse? = try {
+            minioHelper.statObject(bucket, `object`)
+        } catch (e: Exception) {
+            log.error("Exception occurred when looking for object!", e)
+            return ResponseEntity.notFound().build()
+        }
+        val objectResponse = minioHelper.getObject(bucket, `object`)
+        if (statObjectResponse == null || objectResponse == null) {
+            log.warn("Object not found! Bucket: {}, Object: {}", bucket, `object`)
+            return ResponseEntity.notFound().build()
+        }
+        return ResponseEntity.ok()
+            .header(HttpHeaders.ACCEPT_RANGES, ACCEPT_RANGES_VALUE)
+            .contentLength(statObjectResponse.size())
+            .contentType(MediaType.parseMediaType(statObjectResponse.contentType()))
+            .body(StreamingResponseBody { outputStream: OutputStream? ->
+                NioUtil.copyByNIO(objectResponse, outputStream, NioUtil.DEFAULT_BUFFER_SIZE, null)
+                IoUtil.close(objectResponse)
+            })
+    }
+
+    override fun asyncStreamSingleResource(
+        bucket: @NotBlank String,
+        `object`: @NotBlank String,
+        range: String?
+    ): ResponseEntity<StreamingResponseBody> {
+        val statObjectResponse: StatObjectResponse? = try {
+            minioHelper.statObject(bucket, `object`)
+        } catch (e: Exception) {
+            log.error(
+                "Exception occurred when looking for object. Exception message: {}",
+                e.message
+            )
+            return ResponseEntity.notFound().build()
         }
         if (statObjectResponse == null) {
-            log.warn("StatObjectResponse not found! Bucket: {}, Object: {}", bucket, object);
-            return ResponseEntity.notFound().build();
+            log.warn("StatObjectResponse not found! Bucket: {}, Object: {}", bucket, `object`)
+            return ResponseEntity.notFound().build()
         }
-        val httpRanges = HttpRange.parseRanges(range);
+        val httpRanges = HttpRange.parseRanges(range)
         if (CollUtil.isEmpty(httpRanges)) {
-            val objectResponse = this.minioHelper.getObject(bucket, object, 0, TINY_CHUNK_SIZE.toBytes());
+            val objectResponse = minioHelper.getObject(bucket, `object`, 0, Chunk.TINY_CHUNK_SIZE.toBytes())
             if (objectResponse == null) {
-                log.warn("Object not found! Bucket: {}, Object: {}", bucket, object);
-                return ResponseEntity.notFound().build();
+                log.warn("Object not found! Bucket: {}, Object: {}", bucket, `object`)
+                return ResponseEntity.notFound().build()
             }
             return ResponseEntity.ok()
-                    .header(HttpHeaders.ACCEPT_RANGES, ACCEPT_RANGES_VALUE)
-                    .contentLength(statObjectResponse.size())
-                    .contentType(MediaType.parseMediaType(statObjectResponse.contentType()))
-                    .body(outputStream -> {
-                        NioUtil.copyByNIO(objectResponse, outputStream, NioUtil.DEFAULT_BUFFER_SIZE, null);
-                        IoUtil.close(objectResponse);
-                    });
-        }
-        return this.asyncGetResourceRegion(bucket, object, statObjectResponse, httpRanges);
-    }
-
-    @Override
-    @SuppressWarnings("DuplicatedCode")
-    public ResponseEntity<StreamingResponseBody> asyncDownloadSingleResource(
-            @NotBlank String bucket,
-            @NotBlank String object
-    ) {
-        StatObjectResponse statObjectResponse;
-        try {
-            statObjectResponse = this.minioHelper.statObject(bucket, object);
-        } catch (Exception e) {
-            log.error("Exception occurred when looking for object. Exception message: {}", e.getMessage());
-            return ResponseEntity.notFound().build();
-        }
-        val objectResponse = this.minioHelper.getObject(bucket, object);
-        if (statObjectResponse == null || objectResponse == null) {
-            log.warn("StatObjectResponse not found! Bucket: {}, Object: {}", bucket, object);
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok()
                 .header(HttpHeaders.ACCEPT_RANGES, ACCEPT_RANGES_VALUE)
-                .header(HttpHeaders.CONTENT_DISPOSITION,
-                        ContentDisposition.builder("attachment").filename(object).build().toString())
                 .contentLength(statObjectResponse.size())
                 .contentType(MediaType.parseMediaType(statObjectResponse.contentType()))
-                .body((outputStream -> {
-                    NioUtil.copyByNIO(objectResponse, outputStream, NioUtil.DEFAULT_LARGE_BUFFER_SIZE, null);
-                    IoUtil.close(objectResponse);
-                }));
+                .body(StreamingResponseBody { outputStream: OutputStream? ->
+                    NioUtil.copyByNIO(objectResponse, outputStream, NioUtil.DEFAULT_BUFFER_SIZE, null)
+                    IoUtil.close(objectResponse)
+                })
+        }
+        return asyncGetResourceRegion(bucket, `object`, statObjectResponse, httpRanges)
     }
 
-    @Override
-    @SneakyThrows
-    public SerializableStatObjectResponse stateObject(
-            @NotBlank String bucket,
-            @NotBlank String object
-    ) {
-        val statObjectResponse = this.minioHelper.statObject(bucket, object);
+    override fun asyncDownloadSingleResource(
+        bucket: @NotBlank String,
+        `object`: @NotBlank String
+    ): ResponseEntity<StreamingResponseBody> {
+        val statObjectResponse: StatObjectResponse? = try {
+            minioHelper.statObject(bucket, `object`)
+        } catch (e: Exception) {
+            log.error(
+                "Exception occurred when looking for object. Exception message: {}",
+                e.message
+            )
+            return ResponseEntity.notFound().build()
+        }
+        val objectResponse = minioHelper.getObject(bucket, `object`)
+        if (statObjectResponse == null || objectResponse == null) {
+            log.warn("StatObjectResponse not found! Bucket: {}, Object: {}", bucket, `object`)
+            return ResponseEntity.notFound().build()
+        }
+        return ResponseEntity.ok()
+            .header(HttpHeaders.ACCEPT_RANGES, ACCEPT_RANGES_VALUE)
+            .header(
+                HttpHeaders.CONTENT_DISPOSITION,
+                ContentDisposition.builder("attachment").filename(`object`).build().toString()
+            )
+            .contentLength(statObjectResponse.size())
+            .contentType(MediaType.parseMediaType(statObjectResponse.contentType()))
+            .body(StreamingResponseBody { outputStream: OutputStream? ->
+                NioUtil.copyByNIO(objectResponse, outputStream, NioUtil.DEFAULT_LARGE_BUFFER_SIZE, null)
+                IoUtil.close(objectResponse)
+            })
+    }
+
+    override fun stateObject(
+        bucket: @NotBlank String,
+        `object`: @NotBlank String
+    ): SerializableStatObjectResponse {
+        val statObjectResponse = minioHelper.statObject(bucket, `object`)
         if (statObjectResponse == null) {
-            log.warn("StatObjectResponse not found! Bucket: {}, Object: {}", bucket, object);
-            throw new ResourceNotFoundException("Object not found!");
+            log.warn("StatObjectResponse not found! Bucket: {}, Object: {}", bucket, `object`)
+            throw ResourceNotFoundException("Object not found!")
         }
-        return SerializableStatObjectResponse.build(statObjectResponse);
+        return SerializableStatObjectResponse.build(statObjectResponse)
     }
 
-    @SuppressWarnings("DuplicatedCode")
-    private ResponseEntity<StreamingResponseBody> asyncGetResourceRegion(
-            String bucket,
-            String object,
-            StatObjectResponse statObjectResponse,
-            List<HttpRange> httpRanges
-    ) {
-        val objectResponse =
-                this.minioHelper.getObject(
-                        bucket,
-                        object,
-                        httpRanges.get(0).getRangeStart(0),
-                        LARGE_CHUNK_SIZE.toBytes()
-                );
+    private fun asyncGetResourceRegion(
+        bucket: String,
+        `object`: String,
+        statObjectResponse: StatObjectResponse,
+        httpRanges: List<HttpRange>
+    ): ResponseEntity<StreamingResponseBody> {
+        val objectResponse = minioHelper.getObject(
+            bucket,
+            `object`,
+            httpRanges[0].getRangeStart(0),
+            LARGE_CHUNK_SIZE.toBytes()
+        )
         if (objectResponse == null) {
-            log.warn("Object not found! Bucket: {}, Object: {}", bucket, object);
-            return ResponseEntity.notFound().build();
+            log.warn("Object not found! Bucket: $bucket, Object: $`object`")
+            return ResponseEntity.notFound().build()
         }
-        val start = httpRanges.get(0).getRangeStart(0);
-        var end = start + LARGE_CHUNK_SIZE.toBytes() - 1;
-        val resourceLength = statObjectResponse.size();
-        end = Math.min(end, resourceLength - 1);
-        val rangeLength = end - start + 1;
+        val start = httpRanges[0].getRangeStart(0)
+        var end = start + LARGE_CHUNK_SIZE.toBytes() - 1
+        val resourceLength = statObjectResponse.size()
+        end = end.coerceAtMost(resourceLength - 1)
+        val rangeLength = end - start + 1
         return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)
-                .header(HttpHeaders.ACCEPT_RANGES, ACCEPT_RANGES_VALUE)
-                .header(HttpHeaders.CONTENT_RANGE, format("bytes {}-{}/{}", start, end, resourceLength))
-                .contentLength(rangeLength)
-                .contentType(MediaType.parseMediaType(statObjectResponse.contentType()))
-                .body(outputStream -> {
-                    NioUtil.copyByNIO(objectResponse, outputStream, NioUtil.DEFAULT_LARGE_BUFFER_SIZE, null);
-                    IoUtil.close(objectResponse);
-                });
+            .header(HttpHeaders.ACCEPT_RANGES, ACCEPT_RANGES_VALUE)
+            .header(HttpHeaders.CONTENT_RANGE, "bytes $start-$end/$resourceLength")
+            .contentLength(rangeLength)
+            .contentType(MediaType.parseMediaType(statObjectResponse.contentType()))
+            .body(StreamingResponseBody { outputStream: OutputStream? ->
+                NioUtil.copyByNIO(objectResponse, outputStream, NioUtil.DEFAULT_LARGE_BUFFER_SIZE, null)
+                IoUtil.close(objectResponse)
+            })
     }
 }

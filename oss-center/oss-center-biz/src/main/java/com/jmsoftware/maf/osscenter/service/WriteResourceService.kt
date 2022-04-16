@@ -1,30 +1,29 @@
-package com.jmsoftware.maf.osscenter.service;
+package com.jmsoftware.maf.osscenter.service
 
-import com.jmsoftware.maf.common.domain.osscenter.write.ObjectResponse;
-import com.jmsoftware.maf.osscenter.payload.MergeResourceChunkPayload;
-import com.jmsoftware.maf.osscenter.payload.UploadResourceChunkPayload;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import com.jmsoftware.maf.common.domain.osscenter.write.ObjectResponse
+import com.jmsoftware.maf.osscenter.payload.MergeResourceChunkPayload
+import com.jmsoftware.maf.osscenter.payload.UploadResourceChunkPayload
+import org.springframework.validation.annotation.Validated
+import org.springframework.web.multipart.MultipartFile
+import javax.validation.Valid
+import javax.validation.constraints.NotNull
 
 /**
- * <h1>WriteResourceService</h1>
- * <p>
+ * # WriteResourceService
+ *
  * Change description here.
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com, 6/20/21 2:19 PM
- **/
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/16/22 11:49 PM
+ */
 @Validated
-public interface WriteResourceService {
+interface WriteResourceService {
     /**
      * Upload single resource string.
      *
      * @param multipartFile the multipart file
      * @return the string
      */
-    ObjectResponse uploadSingleResource(@NotNull MultipartFile multipartFile);
+    fun uploadSingleResource(multipartFile: @NotNull MultipartFile): ObjectResponse
 
     /**
      * Upload resource chunk string.
@@ -33,8 +32,10 @@ public interface WriteResourceService {
      * @param payload       the payload
      * @return the string
      */
-    ObjectResponse uploadResourceChunk(@NotNull MultipartFile multipartFile,
-                                       @Valid @NotNull UploadResourceChunkPayload payload);
+    fun uploadResourceChunk(
+        multipartFile: @NotNull MultipartFile,
+        payload: @Valid @NotNull UploadResourceChunkPayload
+    ): ObjectResponse
 
     /**
      * Merge resource chunk string.
@@ -42,5 +43,5 @@ public interface WriteResourceService {
      * @param payload the payload
      * @return the string
      */
-    ObjectResponse mergeResourceChunk(@Valid @NotNull MergeResourceChunkPayload payload);
+    fun mergeResourceChunk(payload: @Valid @NotNull MergeResourceChunkPayload): ObjectResponse
 }
