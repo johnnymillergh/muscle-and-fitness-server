@@ -26,7 +26,7 @@ import com.jmsoftware.maf.common.exception.SecurityException
 import com.jmsoftware.maf.common.util.logger
 import com.jmsoftware.maf.springcloudstarter.property.MafConfigurationProperties
 import com.jmsoftware.maf.springcloudstarter.property.MafProjectProperties
-import com.jmsoftware.maf.springcloudstarter.util.UserUtil
+import com.jmsoftware.maf.springcloudstarter.util.currentUsername
 import org.springframework.cache.annotation.CacheConfig
 import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder
@@ -118,7 +118,7 @@ class UserDomainServiceImpl(
     }
 
     override fun getUserStatus(payload: @Valid @NotNull GetUserStatusPayload): String {
-        logger.info("Current username: {}", UserUtil.getCurrentUsername())
+        logger.info("Current username: {}", currentUsername())
         return ValueDescriptionBaseEnum.getDescriptionByValue(UserStatus::class.java, payload.status)
     }
 

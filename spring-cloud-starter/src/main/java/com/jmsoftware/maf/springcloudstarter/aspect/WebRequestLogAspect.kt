@@ -5,8 +5,8 @@ import cn.hutool.json.JSONUtil
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.jmsoftware.maf.common.util.logger
-import com.jmsoftware.maf.springcloudstarter.util.RequestUtil
-import com.jmsoftware.maf.springcloudstarter.util.UserUtil
+import com.jmsoftware.maf.springcloudstarter.util.currentUsername
+import com.jmsoftware.maf.springcloudstarter.util.getRequestIpAndPort
 import org.aspectj.lang.JoinPoint
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.*
@@ -113,7 +113,7 @@ class WebRequestLogAspect(
         val request = attributes.request
         log.info(
             BEFORE_TEMPLATE, request.requestURL.toString(), request.method,
-            RequestUtil.getRequestIpAndPort(request), UserUtil.getCurrentUsername(),
+            getRequestIpAndPort(request), currentUsername(),
             joinPoint.signature.declaringTypeName, joinPoint.signature.name,
             JSONUtil.toJsonStr(joinPoint.args)
         )

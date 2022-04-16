@@ -5,7 +5,7 @@ import cn.hutool.core.util.StrUtil
 import com.jmsoftware.maf.common.bean.ResponseBodyBean
 import com.jmsoftware.maf.common.exception.BaseException
 import com.jmsoftware.maf.common.util.logger
-import com.jmsoftware.maf.springcloudstarter.util.RequestUtil
+import com.jmsoftware.maf.springcloudstarter.util.getRequestIpAndPort
 import org.apache.catalina.connector.ClientAbortException
 import org.springframework.context.support.DefaultMessageSourceResolvable
 import org.springframework.core.annotation.Order
@@ -231,10 +231,7 @@ class CommonExceptionControllerAdvice {
     }
 
     private fun requestLog(request: HttpServletRequest) {
-        log.error(
-            "Exception occurred when [{}] requested access. Request URL: [{}] {}",
-            RequestUtil.getRequestIpAndPort(request), request.method, request.requestURL
-        )
+        log.error("Exception occurred when [${getRequestIpAndPort(request)}] requested access. Request URL: [${request.method}] ${request.requestURL}")
     }
 
     /**
@@ -253,7 +250,10 @@ class CommonExceptionControllerAdvice {
             )[0] as DefaultMessageSourceResolvable
             "${firstErrorField.defaultMessage} ${exception.bindingResult.allErrors[0].defaultMessage}"
         } catch (e: Exception) {
-            log.error("Exception occurred when get field error message from exception. Exception message: ${e.message}", e)
+            log.error(
+                "Exception occurred when get field error message from exception. Exception message: ${e.message}",
+                e
+            )
             HttpStatus.BAD_REQUEST.reasonPhrase
         }
     }

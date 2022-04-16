@@ -1,7 +1,6 @@
 package com.jmsoftware.maf.authcenter.user.service.impl
 
 import cn.hutool.core.collection.CollUtil
-import cn.hutool.core.util.StrUtil
 import com.baomidou.mybatisplus.core.MybatisConfiguration
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper
 import com.jmsoftware.maf.authcenter.security.service.JwtService
@@ -16,7 +15,6 @@ import com.jmsoftware.maf.common.exception.SecurityException
 import com.jmsoftware.maf.common.util.logger
 import com.jmsoftware.maf.springcloudstarter.property.MafConfigurationProperties
 import com.jmsoftware.maf.springcloudstarter.property.MafProjectProperties
-import com.jmsoftware.maf.springcloudstarter.util.UserUtil
 import org.apache.ibatis.builder.MapperBuilderAssistant
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
@@ -98,7 +96,7 @@ internal class UserDomainServiceImplTest {
     lateinit var mafConfigurationProperties: MafConfigurationProperties
 
     @Mock
-    lateinit var httpServletRequest : HttpServletRequest
+    lateinit var httpServletRequest: HttpServletRequest
 
     @BeforeEach
     fun setUp() {
@@ -150,16 +148,12 @@ internal class UserDomainServiceImplTest {
 
     @Test
     fun getUserStatus() {
-        mockStatic(UserUtil::class.java).use {
-            it.`when`<Any> { UserUtil.getCurrentUsername() }.thenReturn("ijohnnymiller")
-            val payload = GetUserStatusPayload()
-            payload.status = 1.toByte()
-            payload.status2 = 0.toByte()
-            val userStatus = userDomainService.getUserStatus(payload)
-            log.info("User status: {}", userStatus)
-            assertNotNull(userStatus)
-            assertTrue(StrUtil.isNotBlank(userStatus))
-        }
+        val payload = GetUserStatusPayload()
+        payload.status = 1.toByte()
+        payload.status2 = 0.toByte()
+        val thrownException =
+            assertThrows(IllegalStateException::class.java) { userDomainService.getUserStatus(payload) }
+        log.warn("Thrown exception: ${thrownException.message}")
     }
 
     @Test

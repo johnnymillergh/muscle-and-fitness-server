@@ -2,7 +2,7 @@ package com.jmsoftware.maf.springcloudstarter.filter
 
 import com.jmsoftware.maf.common.util.logger
 import com.jmsoftware.maf.springcloudstarter.property.MafConfigurationProperties
-import com.jmsoftware.maf.springcloudstarter.util.RequestUtil
+import com.jmsoftware.maf.springcloudstarter.util.getRequestIpAndPort
 import org.springframework.stereotype.Component
 import org.springframework.util.AntPathMatcher
 import org.springframework.web.filter.OncePerRequestFilter
@@ -39,7 +39,7 @@ class AccessLogFilter(
                 return
             }
         }
-        log.info("The requester(${RequestUtil.getRequestIpAndPort(request)}) requested resource. Request URL: [${request.method}] ${request.requestURL}")
+        log.info("The requester(${getRequestIpAndPort(request)}) requested resource. Request URL: [${request.method}] ${request.requestURL}")
         filterChain.doFilter(request, response)
     }
 }

@@ -4,7 +4,7 @@ import cn.hutool.core.exceptions.ExceptionUtil.getRootCauseMessage
 import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException
 import com.jmsoftware.maf.common.bean.ResponseBodyBean
 import com.jmsoftware.maf.common.util.logger
-import com.jmsoftware.maf.springcloudstarter.util.RequestUtil.getRequestIpAndPort
+import com.jmsoftware.maf.springcloudstarter.util.getRequestIpAndPort
 import org.apache.ibatis.exceptions.PersistenceException
 import org.mybatis.spring.MyBatisSystemException
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass

@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler
 import com.jmsoftware.maf.common.domain.DeletedField
 import com.jmsoftware.maf.common.util.logger
 import com.jmsoftware.maf.springcloudstarter.function.lazyDebug
-import com.jmsoftware.maf.springcloudstarter.util.UserUtil
+import com.jmsoftware.maf.springcloudstarter.util.currentUsername
 import org.apache.ibatis.reflection.MetaObject
 import java.time.LocalDateTime
 
@@ -65,7 +65,7 @@ class CommonMetaObjectHandler : MetaObjectHandler {
     override fun insertFill(metaObject: MetaObject) {
         // 严格填充,只针对非主键的字段,只有该表注解了fill 并且 字段名和字段属性 能匹配到才会进行填充(null 值不填充)
         lazyDebug(log) { "Starting to insert fill metaObject: ${metaObject.originalObject}" }
-        val currentUsername = UserUtil.getCurrentUsername()
+        val currentUsername = currentUsername()
         if (ObjectUtil.isNull(currentUsername)) {
             log.warn("Current user's ID is null, which may cause the record in database is incorrect. This will happen when the request is ignored by gateway. Field: $CREATED_BY_FIELD_NAME")
             this.strictInsertFill(metaObject, CREATED_BY_FIELD_NAME, String::class.java, DEFAULT_USERNAME)
@@ -79,7 +79,7 @@ class CommonMetaObjectHandler : MetaObjectHandler {
 
     override fun updateFill(metaObject: MetaObject) {
         lazyDebug(log) { "Starting to update fill metaObject: ${metaObject.originalObject}" }
-        val currentUsername = UserUtil.getCurrentUsername()
+        val currentUsername = currentUsername()
         if (ObjectUtil.isNull(currentUsername)) {
             log.warn("Current user's ID is null, which may cause the record in database is incorrect. This will happen when the request is ignored by gateway. Field: $MODIFIED_BY_FIELD_NAME")
             this.strictUpdateFill(metaObject, CREATED_BY_FIELD_NAME, String::class.java, DEFAULT_USERNAME)
