@@ -22,9 +22,6 @@ class GreetingBean(
     @QuartzSchedulable
     @Suppress("unused")
     fun hello() {
-        log.info(
-            "Greeting from Quartz job, current service is: {}",
-            mafProjectProperties!!.projectArtifactId
-        )
+        log.info("Greeting from Quartz job, current service is: ${mafProjectProperties.projectArtifactId}")
     }
 }
