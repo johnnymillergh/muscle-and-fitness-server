@@ -101,7 +101,7 @@ class UserDomainServiceImpl(
         if (!matched) {
             throw SecurityException(HttpStatus.UNAUTHORIZED)
         }
-        val jwt = jwtService.createJwt(payload.rememberMe, user.id, user.username, listOf(), listOf())
+        val jwt = jwtService.createJwt(payload.rememberMe, user.id!!, user.username!!, listOf(), listOf())
         val response = LoginResponse()
         response.greeting = messageSource.getMessage(
             "greeting",

@@ -61,10 +61,10 @@ class JwtServiceImpl(
         val userPrincipal = authentication.principal as UserPrincipal
         return this.createJwt(
             rememberMe,
-            userPrincipal.id,
-            userPrincipal.username,
-            userPrincipal.roles,
-            userPrincipal.authorities
+            userPrincipal.id!!,
+            userPrincipal.usernameProperty!!,
+            userPrincipal.roles!!,
+            userPrincipal.authoritiesProperty!!
         )
     }
 
@@ -101,7 +101,7 @@ class JwtServiceImpl(
         val claims: Claims = try {
             Optional.ofNullable(jwtParser.parseClaimsJws(jwt).body)
                 .orElseThrow {
-                    SecurityException(HttpStatus.INTERNAL_SERVER_ERROR, "The JWT Claims Set is null", null)
+                    SecurityException(HttpStatus.INTERNAL_SERVER_ERROR, "The JWT Claims Set is null")
                 }
         } catch (e: ExpiredJwtException) {
             log.error("JWT is expired. Message: ${e.message}, JWT: $jwt")

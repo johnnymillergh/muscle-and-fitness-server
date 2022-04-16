@@ -3,6 +3,7 @@ package com.jmsoftware.maf.springcloudstarter.helper
 import com.jmsoftware.maf.common.util.logger
 import com.jmsoftware.maf.springcloudstarter.property.MafProjectProperties
 import org.springframework.beans.factory.DisposableBean
+import org.springframework.boot.system.JavaVersion
 import org.springframework.context.ApplicationContext
 import org.springframework.util.StopWatch
 import java.time.Instant
@@ -25,6 +26,7 @@ class SpringBootStartupHelper(
         private val TEMPLATE: String =
             """
 
+            ☕ ️️Powered by Kotlin :: v${KotlinVersion.CURRENT}, Java :: v${JavaVersion.getJavaVersion()}
             🥳 Congratulations! 🎉
             🖥 {}@{} started!
             ⚙️ Environment: {}
