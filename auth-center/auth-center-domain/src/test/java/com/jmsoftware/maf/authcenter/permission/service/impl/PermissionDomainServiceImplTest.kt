@@ -56,12 +56,12 @@ internal class PermissionDomainServiceImplTest {
 
     @BeforeEach
     fun setUp() {
-        log.info("{} setUp", this.javaClass.simpleName)
+        log.info("${this.javaClass.simpleName} setUp")
     }
 
     @AfterEach
     fun tearDown() {
-        log.info("{} tearDown", this.javaClass.simpleName)
+        log.info("${this.javaClass.simpleName} tearDown")
     }
 
     @Test
