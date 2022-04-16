@@ -1,7 +1,6 @@
 package com.jmsoftware.maf.springcloudstarter.redis
 
 import com.jmsoftware.maf.common.util.logger
-import lombok.extern.slf4j.Slf4j
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
 import org.springframework.context.annotation.Bean
 import org.springframework.data.redis.connection.RedisConnectionFactory
@@ -14,7 +13,6 @@ import org.springframework.integration.redis.util.RedisLockRegistry
  *
  * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/15/22 9:41 PM
  */
-@Slf4j
 @ConditionalOnClass(RedisLockRegistry::class)
 class RedisDistributedLockConfiguration {
     companion object {

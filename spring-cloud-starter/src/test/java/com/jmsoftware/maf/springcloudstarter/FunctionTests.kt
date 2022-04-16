@@ -7,7 +7,6 @@ import com.google.common.collect.Maps
 import com.jmsoftware.maf.common.util.logger
 import com.jmsoftware.maf.springcloudstarter.function.*
 import fj.Show
-import lombok.extern.slf4j.Slf4j
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
@@ -19,13 +18,10 @@ import java.util.function.Function
 import java.util.function.Predicate
 
 /**
- * FunctionTests
+ * # FunctionTests
  *
- * @author @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 9/28/2021 12:46 PM
- * @version 1.0
- * @since <pre>Sep 28, 2021</pre>
+ * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 9/28/2021 12:46 PM
  */
-@Slf4j
 @Execution(ExecutionMode.CONCURRENT)
 internal class FunctionTests {
     companion object {

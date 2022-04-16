@@ -6,7 +6,6 @@ import com.jmsoftware.maf.common.domain.authcenter.user.LoginPayload
 import com.jmsoftware.maf.common.domain.authcenter.user.LoginResponse
 import com.jmsoftware.maf.common.domain.authcenter.user.SignupPayload
 import com.jmsoftware.maf.common.domain.authcenter.user.SignupResponse
-import lombok.RequiredArgsConstructor
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -23,7 +22,6 @@ import javax.validation.Valid
  */
 @Validated
 @RestController
-@RequiredArgsConstructor
 class UserController(
     private val userDomainService: UserDomainService
 ) {

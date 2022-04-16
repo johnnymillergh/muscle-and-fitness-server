@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.jmsoftware.maf.common.bean.ResponseBodyBean
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
+import org.springframework.stereotype.Component
 import org.springframework.web.server.ServerWebExchange
 import reactor.core.publisher.Mono
 
@@ -14,6 +15,7 @@ import reactor.core.publisher.Mono
  *
  * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/16/22 11:33 AM
  */
+@Component
 class ResponseUtil(
     private val objectMapper: ObjectMapper
 ) {

@@ -12,26 +12,26 @@ class GetPermissionListByRoleIdListResponse {
      * The Permission list.
      */
     var permissionList: MutableList<Permission> = mutableListOf()
+}
 
-    class Permission {
-        /**
-         * The Url.
-         */
-        var url: String? = null
+class Permission {
+    /**
+     * The Url.
+     */
+    var url: String? = null
 
-        /**
-         * The Type.
-         */
-        var type: Byte? = null
+    /**
+     * The Type.
+     */
+    var type: Byte? = null
 
-        /**
-         * The Permission expression.
-         */
-        var permissionExpression: String? = null
+    /**
+     * The Permission expression.
+     */
+    var permissionExpression: String? = null
 
-        /**
-         * The Method.
-         */
-        var method: String? = null
-    }
+    /**
+     * The Method.
+     */
+    var method: String? = null
 }

@@ -1,7 +1,7 @@
 package com.jmsoftware.maf.apigateway.security.impl
 
 import cn.hutool.core.util.StrUtil
-import com.jmsoftware.maf.apigateway.remote.AuthCenterRemoteApi
+import com.jmsoftware.maf.apigateway.remote.AuthCenterWebClientService
 import com.jmsoftware.maf.common.domain.authcenter.security.UserPrincipal
 import com.jmsoftware.maf.common.domain.authcenter.user.GetUserByLoginTokenResponse
 import com.jmsoftware.maf.common.exception.InternalServerException
@@ -22,7 +22,7 @@ import reactor.core.publisher.Mono
  * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/16/22 8:03 PM
  */
 open class JwtReactiveAuthenticationManagerImpl(
-    private val authCenterRemoteApi: AuthCenterRemoteApi
+    private val authCenterWebClientService: AuthCenterWebClientService
 ) : ReactiveAuthenticationManager {
     companion object {
         private val log = logger()
@@ -56,10 +56,10 @@ open class JwtReactiveAuthenticationManagerImpl(
                 SecurityException(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED, "Username mustn't be blank")
             )
         }
-        return authCenterRemoteApi.getUserByLoginToken(username)
+        return authCenterWebClientService.getUserByLoginToken(username)
             .switchIfEmpty(Mono.error(InternalServerException("Authentication failure! Cause: User not found")))
             .map { data: GetUserByLoginTokenResponse ->
-                log.info("Authentication success! Found {}", data)
+                log.info("Authentication success! Found $data")
                 UserPrincipal.create(data)
             }
     }

@@ -3,6 +3,7 @@ package com.jmsoftware.maf.springcloudstarter.property
 import com.jmsoftware.maf.common.util.logger
 import com.jmsoftware.maf.springcloudstarter.property.MafConfigurationProperties.IgnoredUrl.Constant.Companion.URL_REGEXP
 import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.context.annotation.Configuration
 import org.springframework.validation.annotation.Validated
 import javax.annotation.PostConstruct
 import javax.validation.Valid
@@ -18,6 +19,7 @@ import javax.validation.constraints.Pattern
  * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/13/22 2:07 PM
  **/
 @Validated
+@Configuration
 @Suppress("unused")
 @ConfigurationProperties(prefix = MafConfigurationProperties.PREFIX)
 class MafConfigurationProperties {

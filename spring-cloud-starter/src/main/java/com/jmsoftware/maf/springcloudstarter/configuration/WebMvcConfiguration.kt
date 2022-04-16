@@ -1,8 +1,6 @@
 package com.jmsoftware.maf.springcloudstarter.configuration
 
 import com.jmsoftware.maf.common.util.logger
-import lombok.RequiredArgsConstructor
-import lombok.extern.slf4j.Slf4j
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor
 import org.springframework.web.context.request.async.CallableProcessingInterceptor
 import org.springframework.web.cors.CorsConfiguration.ALL
@@ -17,8 +15,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
  *
  * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/14/22 11:02 AM
  */
-@Slf4j
-@RequiredArgsConstructor
 class WebMvcConfiguration(
     private val threadPoolTaskExecutor: ThreadPoolTaskExecutor,
     private val callableProcessingInterceptor: CallableProcessingInterceptor

@@ -1,6 +1,5 @@
 package com.jmsoftware.maf.springcloudstarter.elasticsearch
 
-import lombok.Data
 import org.springframework.data.annotation.Id
 import org.springframework.data.elasticsearch.annotations.Document
 import org.springframework.data.elasticsearch.annotations.Field
@@ -14,7 +13,6 @@ import java.time.LocalDateTime
  *
  * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/14/22 12:22 PM
  */
-@Data
 @Document(indexName = Book.INDEX_NAME)
 class Book {
     companion object {

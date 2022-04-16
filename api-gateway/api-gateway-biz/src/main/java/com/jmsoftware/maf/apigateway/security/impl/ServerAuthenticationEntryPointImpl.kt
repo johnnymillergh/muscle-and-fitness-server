@@ -1,28 +1,29 @@
-package com.jmsoftware.maf.apigateway.security.impl;
+package com.jmsoftware.maf.apigateway.security.impl
 
-import com.jmsoftware.maf.reactivespringcloudstarter.util.ResponseUtil;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.server.ServerAuthenticationEntryPoint;
-import org.springframework.web.server.ServerWebExchange;
-import reactor.core.publisher.Mono;
+import com.jmsoftware.maf.common.util.logger
+import com.jmsoftware.maf.reactivespringcloudstarter.util.ResponseUtil
+import org.springframework.http.HttpStatus
+import org.springframework.security.core.AuthenticationException
+import org.springframework.security.web.server.ServerAuthenticationEntryPoint
+import org.springframework.web.server.ServerWebExchange
+import reactor.core.publisher.Mono
 
 /**
+ * # ServerAuthenticationEntryPointImpl
+ *
  * Description: ServerAuthenticationEntryPointImpl, change description here.
  *
- * @author 钟俊（zhongjun）, email: zhongjun@toguide.cn, date: 12/21/2020 9:48 AM
- **/
-@Slf4j
-@RequiredArgsConstructor
-public class ServerAuthenticationEntryPointImpl implements ServerAuthenticationEntryPoint {
-    private final ResponseUtil responseUtil;
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/16/22 8:57 PM
+ */
+open class ServerAuthenticationEntryPointImpl(
+    private val responseUtil: ResponseUtil
+) : ServerAuthenticationEntryPoint {
+    companion object {
+        private val log = logger()
+    }
 
-    @Override
-    public Mono<Void> commence(ServerWebExchange exchange, AuthenticationException e) {
-        log.error("Exception occurred when authenticating! Exception message: {}. Request URL: [{}] {}", e.getMessage(),
-                  exchange.getRequest().getMethod(), exchange.getRequest().getURI());
-        return this.responseUtil.renderJson(exchange, HttpStatus.NETWORK_AUTHENTICATION_REQUIRED, e.getMessage(), null);
+    override fun commence(exchange: ServerWebExchange, e: AuthenticationException): Mono<Void> {
+        log.error("Exception occurred when authenticating! Exception message: ${e.message}. Request URL: [${exchange.request.method}] ${exchange.request.uri}")
+        return responseUtil.renderJson(exchange, HttpStatus.NETWORK_AUTHENTICATION_REQUIRED, e.message, null)
     }
 }

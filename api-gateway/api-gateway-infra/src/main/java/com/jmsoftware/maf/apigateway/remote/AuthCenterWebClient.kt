@@ -1,45 +1,39 @@
-package com.jmsoftware.maf.apigateway.remote;
+package com.jmsoftware.maf.apigateway.remote
 
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
-import com.jmsoftware.maf.common.bean.ResponseBodyBean;
-import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload;
-import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse;
-import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdSingleResponse;
-import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtResponse;
-import com.jmsoftware.maf.common.domain.authcenter.user.GetUserByLoginTokenResponse;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
-import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
-
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.util.List;
-
-import static cn.hutool.core.text.CharSequenceUtil.format;
+import cn.hutool.json.JSONUtil
+import com.jmsoftware.maf.common.bean.ResponseBodyBean
+import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload
+import com.jmsoftware.maf.common.domain.authcenter.permission.Permission
+import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdSingleResponse
+import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtResponse
+import com.jmsoftware.maf.common.domain.authcenter.user.GetUserByLoginTokenResponse
+import org.springframework.http.HttpHeaders
+import org.springframework.stereotype.Service
+import org.springframework.validation.annotation.Validated
+import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.web.util.UriBuilder
+import reactor.core.publisher.Mono
+import javax.validation.Valid
+import javax.validation.constraints.Min
+import javax.validation.constraints.NotBlank
+import javax.validation.constraints.NotNull
 
 /**
- * <h1>AuthCenterRemoteApi</h1>
- * <p>
+ * # AuthCenterWebClient
+ *
  * Change description here.
  *
- * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
- * @date 5/10/20 4:50 PM
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/16/22 9:36 PM
  */
-@Slf4j
 @Service
 @Validated
-@RequiredArgsConstructor
-public class AuthCenterRemoteApi {
-    private static final String SERVICE_NAME = "auth-center";
-    private final WebClient webClient;
+@Suppress("HttpUrlsUsage")
+class AuthCenterWebClient(
+    private val webClient: WebClient
+) {
+    companion object {
+        private const val SERVICE_NAME = "auth-center"
+    }
 
     /**
      * Gets user by login token.
@@ -47,14 +41,14 @@ public class AuthCenterRemoteApi {
      * @param loginToken the login token, e.q. username, email or phone number
      * @return the user by login token
      */
-    public Mono<GetUserByLoginTokenResponse> getUserByLoginToken(@NotBlank String loginToken) {
-        return this.webClient
-                .get()
-                .uri(format("http://{}/user-remote-api/users/{loginToken}", SERVICE_NAME), loginToken)
-                .retrieve()
-                .bodyToMono(ResponseBodyBean.class)
-                .map(ResponseBodyBean::getData)
-                .map(data -> JSONUtil.toBean(JSONUtil.parseObj(data), GetUserByLoginTokenResponse.class));
+    fun getUserByLoginToken(loginToken: @NotBlank String): Mono<GetUserByLoginTokenResponse> {
+        return webClient
+            .get()
+            .uri("http://$SERVICE_NAME/user-remote-api/users/{loginToken}", loginToken)
+            .retrieve()
+            .bodyToMono(ResponseBodyBean::class.java)
+            .mapNotNull(ResponseBodyBean<*>::data)
+            .map { data: Any? -> JSONUtil.toBean(JSONUtil.parseObj(data), GetUserByLoginTokenResponse::class.java) }
     }
 
     /**
@@ -63,15 +57,19 @@ public class AuthCenterRemoteApi {
      * @param userId the user id
      * @return the role list by user id
      */
-    public Mono<List<GetRoleListByUserIdSingleResponse>> getRoleListByUserId(@NotNull @Min(1L) Long userId) {
-        return this.webClient
-                .get()
-                .uri(format("http://{}/role-remote-api/roles/{userId}", SERVICE_NAME), userId)
-                .retrieve()
-                .bodyToMono(ResponseBodyBean.class)
-                .map(ResponseBodyBean::getData)
-                .map(data -> JSONUtil.toList(JSONUtil.parseObj(data).getJSONArray("roleList"),
-                                             GetRoleListByUserIdSingleResponse.class));
+    fun getRoleListByUserId(userId: @NotNull @Min(1L) Long): Mono<List<GetRoleListByUserIdSingleResponse>> {
+        return webClient
+            .get()
+            .uri("http://$SERVICE_NAME/role-remote-api/roles/{userId}", userId)
+            .retrieve()
+            .bodyToMono(ResponseBodyBean::class.java)
+            .mapNotNull(ResponseBodyBean<*>::data)
+            .map { data: Any? ->
+                JSONUtil.toList(
+                    JSONUtil.parseObj(data).getJSONArray("roleList"),
+                    GetRoleListByUserIdSingleResponse::class.java
+                )
+            }
     }
 
     /**
@@ -80,22 +78,28 @@ public class AuthCenterRemoteApi {
      * @param payload the payload
      * @return the response body bean
      */
-    public Mono<List<GetPermissionListByRoleIdListResponse.Permission>> getPermissionListByRoleIdList(
-            @Valid @NotNull GetPermissionListByRoleIdListPayload payload
-    ) {
-        return this.webClient
-                .get()
-                .uri(uriBuilder -> uriBuilder
-                        .host(SERVICE_NAME)
-                        .path("/permission-remote-api/permissions")
-                        .queryParam("roleIdList", StrUtil.join(",", payload.getRoleIdList()))
-                        .queryParam("permissionTypeList", StrUtil.join(",", payload.getPermissionTypeList()))
-                        .build())
-                .retrieve()
-                .bodyToMono(ResponseBodyBean.class)
-                .map(ResponseBodyBean::getData)
-                .map(data -> JSONUtil.toList(JSONUtil.parseObj(data).getJSONArray("permissionList"),
-                                             GetPermissionListByRoleIdListResponse.Permission.class));
+    fun getPermissionListByRoleIdList(
+        payload: @Valid @NotNull GetPermissionListByRoleIdListPayload
+    ): Mono<List<Permission>> {
+        return webClient
+            .get()
+            .uri { uriBuilder: UriBuilder ->
+                uriBuilder
+                    .host(SERVICE_NAME)
+                    .path("/permission-remote-api/permissions")
+                    .queryParam("roleIdList", payload.roleIdList.joinToString(","))
+                    .queryParam("permissionTypeList", payload.permissionTypeList.joinToString(","))
+                    .build()
+            }
+            .retrieve()
+            .bodyToMono(ResponseBodyBean::class.java)
+            .mapNotNull(ResponseBodyBean<*>::data)
+            .map { data: Any? ->
+                JSONUtil.toList(
+                    JSONUtil.parseObj(data).getJSONArray("permissionList"),
+                    Permission::class.java
+                )
+            }
     }
 
     /**
@@ -104,14 +108,14 @@ public class AuthCenterRemoteApi {
      * @param authorization the authorization
      * @return the mono
      */
-    @GetMapping("/jwt-remote-api/parse")
-    public Mono<ParseJwtResponse> parse(@NotBlank String authorization) {
-        return this.webClient
-                .get()
-                .uri("http://auth-center/jwt-remote-api/parse")
-                .headers(httpHeaders -> httpHeaders.set(HttpHeaders.AUTHORIZATION, authorization))
-                .retrieve()
-                .bodyToMono(ResponseBodyBean.class).map(ResponseBodyBean::getData)
-                .map(data -> JSONUtil.toBean(JSONUtil.parseObj(data), ParseJwtResponse.class));
+    fun parse(authorization: @NotBlank String): Mono<ParseJwtResponse> {
+        return webClient
+            .get()
+            .uri("http://auth-center/jwt-remote-api/parse")
+            .headers { httpHeaders: HttpHeaders -> httpHeaders[HttpHeaders.AUTHORIZATION] = authorization }
+            .retrieve()
+            .bodyToMono(ResponseBodyBean::class.java)
+            .mapNotNull(ResponseBodyBean<*>::data)
+            .map { data: Any? -> JSONUtil.toBean(JSONUtil.parseObj(data), ParseJwtResponse::class.java) }
     }
 }

@@ -21,7 +21,6 @@ import com.jmsoftware.maf.springcloudstarter.function.lazyDebug
 import com.jmsoftware.maf.springcloudstarter.function.requireTrue
 import com.jmsoftware.maf.springcloudstarter.property.MafConfigurationProperties
 import com.jmsoftware.maf.springcloudstarter.property.MafProjectProperties
-import lombok.RequiredArgsConstructor
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -37,7 +36,6 @@ import javax.validation.constraints.NotNull
  * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/10/22 5:25 PM
  */
 @Service
-@RequiredArgsConstructor
 class RoleDomainServiceImpl(
     private val mafProjectProperties: MafProjectProperties,
     private val mafConfigurationProperties: MafConfigurationProperties,

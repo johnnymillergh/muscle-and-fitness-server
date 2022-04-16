@@ -2,7 +2,6 @@ package com.jmsoftware.maf.common.bean
 
 import cn.hutool.core.util.NumberUtil
 import com.fasterxml.jackson.annotation.JsonIgnore
-import lombok.Data
 import org.hibernate.validator.constraints.Range
 import javax.validation.constraints.Min
 import javax.validation.constraints.NotNull
@@ -15,7 +14,6 @@ import javax.validation.constraints.Pattern
  *
  * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/16/22 11:13 AM
  */
-@Data
 open class PaginationBase {
     /**
      * The current page. Default: 1

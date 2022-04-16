@@ -1,6 +1,7 @@
 package com.jmsoftware.maf.springcloudstarter.redis
 
 import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.context.annotation.Configuration
 
 /**
  * Description: RedisMasterSlaveReplicationProperties, change description here.
@@ -10,6 +11,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
  * @see <a href='https://www.vinsguru.com/redis-master-slave-with-spring-boot/'>Redis Master Slave With Spring Boot</a>
  * @see <a href='https://docs.spring.io/spring-data/redis/docs/current/reference/html/#redis:write-to-master-read-from-replica'>Spring Data Redis - Write to Master, Read from Replica</a>
  */
+@Configuration
 @ConfigurationProperties(prefix = "redis")
 class RedisMasterSlaveReplicationProperties {
     var master: RedisInstance? = null

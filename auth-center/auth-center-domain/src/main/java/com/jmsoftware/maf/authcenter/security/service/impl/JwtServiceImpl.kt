@@ -11,7 +11,6 @@ import com.jmsoftware.maf.common.util.logger
 import com.jmsoftware.maf.springcloudstarter.property.JwtConfigurationProperties
 import io.jsonwebtoken.*
 import io.jsonwebtoken.security.Keys
-import lombok.RequiredArgsConstructor
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -35,7 +34,6 @@ import javax.validation.constraints.NotNull
  * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/11/22 9:27 PM
  */
 @Service
-@RequiredArgsConstructor
 class JwtServiceImpl(
     private val jwtConfigurationProperties: JwtConfigurationProperties,
     private val redisTemplate: RedisTemplate<Any, Any>

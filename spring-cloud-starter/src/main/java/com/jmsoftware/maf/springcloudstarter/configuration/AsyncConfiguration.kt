@@ -2,7 +2,6 @@ package com.jmsoftware.maf.springcloudstarter.configuration
 
 import com.jmsoftware.maf.common.util.logger
 import com.jmsoftware.maf.springcloudstarter.property.MafProjectProperties
-import lombok.RequiredArgsConstructor
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler
 import org.springframework.aop.interceptor.SimpleAsyncUncaughtExceptionHandler
 import org.springframework.beans.factory.annotation.Qualifier
@@ -29,7 +28,6 @@ import java.util.concurrent.ThreadPoolExecutor
  * @see TaskExecutionAutoConfiguration
  */
 @EnableAsync
-@RequiredArgsConstructor
 class AsyncConfiguration(
     private val mafProjectProperties: MafProjectProperties
 ) {

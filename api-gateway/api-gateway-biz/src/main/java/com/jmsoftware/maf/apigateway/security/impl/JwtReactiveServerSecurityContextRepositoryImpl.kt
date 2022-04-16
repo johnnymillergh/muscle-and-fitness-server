@@ -1,7 +1,7 @@
 package com.jmsoftware.maf.apigateway.security.impl
 
 import cn.hutool.core.util.StrUtil
-import com.jmsoftware.maf.apigateway.remote.AuthCenterRemoteApi
+import com.jmsoftware.maf.apigateway.remote.AuthCenterWebClientService
 import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtResponse
 import com.jmsoftware.maf.common.domain.authcenter.security.UserPrincipal.Companion.createByUsername
 import com.jmsoftware.maf.common.exception.SecurityException
@@ -30,7 +30,7 @@ import reactor.core.publisher.Mono
 open class JwtReactiveServerSecurityContextRepositoryImpl(
     private val mafConfigurationProperties: MafConfigurationProperties,
     private val authenticationManager: ReactiveAuthenticationManager,
-    private val authCenterRemoteApi: AuthCenterRemoteApi
+    private val authCenterWebClientService: AuthCenterWebClientService
 ) : ServerSecurityContextRepository {
     private val antPathMatcher = AntPathMatcher()
 
@@ -59,7 +59,7 @@ open class JwtReactiveServerSecurityContextRepositoryImpl(
             )
             return Mono.error(SecurityException(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED, "JWT Required"))
         }
-        return authCenterRemoteApi.parse(authorization)
+        return authCenterWebClientService.parse(authorization!!)
             .map { parseJwtResponse: ParseJwtResponse ->
                 log.info("parseJwtResponse: {}", parseJwtResponse)
                 val userPrincipal = createByUsername(parseJwtResponse.username)

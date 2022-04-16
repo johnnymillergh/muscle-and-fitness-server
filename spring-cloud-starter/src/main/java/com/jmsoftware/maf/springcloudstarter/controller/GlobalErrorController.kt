@@ -1,7 +1,6 @@
 package com.jmsoftware.maf.springcloudstarter.controller
 
 import com.jmsoftware.maf.common.util.logger
-import lombok.extern.slf4j.Slf4j
 import org.springframework.boot.autoconfigure.web.ServerProperties
 import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolver
@@ -12,15 +11,12 @@ import org.springframework.web.bind.annotation.RestController
 import javax.servlet.http.HttpServletRequest
 
 /**
- * <h1>ErrorController</h1>
- *
+ * # ErrorController
  *
  * Error controller.
  *
- * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
- * @date 2019-03-02 16:56
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/16/22 10:52 PM
  */
-@Slf4j
 @RestController
 class GlobalErrorController(
     errorAttributes: ErrorAttributes,

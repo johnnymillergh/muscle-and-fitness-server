@@ -3,7 +3,6 @@ package com.jmsoftware.maf.springcloudstarter.quartz.service.impl
 import cn.hutool.core.util.StrUtil
 import com.jmsoftware.maf.common.util.logger
 import com.jmsoftware.maf.springcloudstarter.quartz.service.QuartzJobService
-import lombok.SneakyThrows
 import org.quartz.*
 import org.springframework.lang.Nullable
 import org.springframework.scheduling.quartz.SchedulerFactoryBean
@@ -58,14 +57,12 @@ class QuartzJobServiceImpl(
         log.info("Added job to scheduler. jobDetailName: $jobDetailName, triggerName: $triggerName")
     }
 
-    @SneakyThrows(SchedulerException::class)
     override fun pauseJob(jobName: @NotBlank String, groupName: @NotBlank String) {
         val jobDetailName = JOB_DETAIL_NAME_OPERATOR.apply(jobName)
         schedulerFactoryBean.scheduler.pauseJob(JobKey.jobKey(jobDetailName, groupName))
         log.info("Paused job. jobDetailName: {}", jobDetailName)
     }
 
-    @SneakyThrows(SchedulerException::class)
     override fun resumeJob(jobName: @NotBlank String, groupName: @NotBlank String) {
         val jobDetailName = JOB_DETAIL_NAME_OPERATOR.apply(jobName)
         schedulerFactoryBean.scheduler.resumeJob(JobKey.jobKey(jobDetailName, groupName))
@@ -111,13 +108,11 @@ class QuartzJobServiceImpl(
         log.info("Started jobs.")
     }
 
-    @SneakyThrows(SchedulerException::class)
     override fun pauseAllJobs() {
         schedulerFactoryBean.scheduler.pauseAll()
         log.info("Paused all jobs.")
     }
 
-    @SneakyThrows(SchedulerException::class)
     override fun resumeAllJobs() {
         schedulerFactoryBean.scheduler.resumeAll()
         log.info("Resumed all jobs.")

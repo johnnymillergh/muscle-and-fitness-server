@@ -61,7 +61,7 @@
         <shardingsphere.version>5.1.1</shardingsphere.version>
         <hutool-all.version>5.7.21</hutool-all.version>
         <guava.version>31.1-jre</guava.version>
-        <springdoc-openapi-ui.version>1.6.7</springdoc-openapi-ui.version>
+        <springdoc-openapi-ui.version>1.6.6</springdoc-openapi-ui.version>
         <jjwt.version>0.11.2</jjwt.version>
         <java-faker.version>1.0.2</java-faker.version>
         <easyexcel.version>2.2.6</easyexcel.version>

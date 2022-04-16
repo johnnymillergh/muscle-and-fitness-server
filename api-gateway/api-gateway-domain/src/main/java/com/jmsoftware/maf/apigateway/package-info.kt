@@ -1,1 +1,1 @@
-package com.jmsoftware.maf.apigateway;
+package com.jmsoftware.maf.apigateway

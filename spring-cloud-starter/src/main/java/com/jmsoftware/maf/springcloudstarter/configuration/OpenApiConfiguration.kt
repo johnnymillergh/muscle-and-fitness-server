@@ -8,8 +8,6 @@ import io.swagger.v3.oas.models.info.Contact
 import io.swagger.v3.oas.models.info.Info
 import io.swagger.v3.oas.models.info.License
 import io.swagger.v3.oas.models.servers.Server
-import lombok.RequiredArgsConstructor
-import lombok.extern.slf4j.Slf4j
 import org.springdoc.core.customizers.OpenApiCustomiser
 import org.springframework.context.annotation.Bean
 import java.util.function.Consumer
@@ -21,8 +19,6 @@ import java.util.function.Consumer
  *
  * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/14/22 10:41 AM
  */
-@Slf4j
-@RequiredArgsConstructor
 class OpenApiConfiguration(
     private val mafProjectProperties: MafProjectProperties
 ) {

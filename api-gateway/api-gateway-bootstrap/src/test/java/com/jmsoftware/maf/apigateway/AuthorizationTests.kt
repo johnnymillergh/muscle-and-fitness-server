@@ -1,24 +1,30 @@
-package com.jmsoftware.maf.apigateway;
+package com.jmsoftware.maf.apigateway
 
-import lombok.extern.slf4j.Slf4j;
-import lombok.val;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.springframework.util.AntPathMatcher;
+import com.jmsoftware.maf.common.util.logger
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
+import org.springframework.util.AntPathMatcher
 
 /**
+ * # AuthorizationTests
+ *
  * Description: AuthorizationTests, change description here.
  *
- * @author 钟俊（zhongjun）, email: zhongjun@toguide.cn, date: 1/13/2021 11:27 AM
- **/
-@Slf4j
-//@SpringBootTest
-class AuthorizationTests {
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/16/22 10:15 PM
+ */
+internal class AuthorizationTests {
+    companion object {
+        private val log = logger()
+    }
+
     @Test
-    void antPathMatcherTests() {
-        val antPathMatcher = new AntPathMatcher();
-        val urlMatched = antPathMatcher.match("/**", "/spring-boot-admin/common/app-info");
-        log.info("urlMatched: {}", urlMatched);
-        Assertions.assertTrue(urlMatched);
+    fun antPathMatcherTests() {
+        val antPathMatcher = AntPathMatcher()
+        val urlMatched1 = antPathMatcher.match("/spring-boot-admin/**", "/spring-boot-admin/common/app-info")
+        log.info("urlMatched1: $urlMatched1")
+        assertTrue(urlMatched1)
+        val urlMatched2 = antPathMatcher.match("/**", "/spring-boot-admin/common/app-info")
+        log.info("urlMatched2: $urlMatched2")
+        assertTrue(urlMatched2)
     }
 }

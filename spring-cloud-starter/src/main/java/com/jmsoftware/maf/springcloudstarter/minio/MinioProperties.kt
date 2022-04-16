@@ -1,6 +1,7 @@
 package com.jmsoftware.maf.springcloudstarter.minio
 
 import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.context.annotation.Configuration
 import org.springframework.validation.annotation.Validated
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
@@ -13,6 +14,7 @@ import javax.validation.constraints.NotNull
  * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/14/22 3:43 PM
  */
 @Validated
+@Configuration
 @ConfigurationProperties(prefix = MinioProperties.PREFIX)
 class MinioProperties {
     companion object {

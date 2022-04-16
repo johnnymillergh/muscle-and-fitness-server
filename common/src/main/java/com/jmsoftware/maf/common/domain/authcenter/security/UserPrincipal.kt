@@ -2,7 +2,7 @@ package com.jmsoftware.maf.common.domain.authcenter.security
 
 import cn.hutool.core.util.StrUtil
 import com.fasterxml.jackson.annotation.JsonIgnore
-import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse
+import com.jmsoftware.maf.common.domain.authcenter.permission.Permission
 import com.jmsoftware.maf.common.domain.authcenter.user.GetUserByLoginTokenResponse
 import com.jmsoftware.maf.common.domain.authcenter.user.UserStatus
 import org.springframework.security.core.GrantedAuthority
@@ -142,11 +142,11 @@ class UserPrincipal : UserDetails {
         fun create(
             user: GetUserByLoginTokenResponse,
             roleNameList: List<String> = listOf(),
-            permissionList: List<GetPermissionListByRoleIdListResponse.Permission> = listOf()
+            permissionList: List<Permission> = listOf()
         ): UserPrincipal {
             val authorities = permissionList.stream()
-                .filter { permission: GetPermissionListByRoleIdListResponse.Permission -> StrUtil.isNotBlank(permission.permissionExpression) }
-                .map { permission: GetPermissionListByRoleIdListResponse.Permission -> SimpleGrantedAuthority(permission.permissionExpression) }
+                .filter { permission: Permission -> StrUtil.isNotBlank(permission.permissionExpression) }
+                .map { permission: Permission -> SimpleGrantedAuthority(permission.permissionExpression) }
                 .toList()
             return UserPrincipal().apply {
                 this.id = user.id

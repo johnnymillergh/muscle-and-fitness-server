@@ -1,6 +1,5 @@
 package com.jmsoftware.maf.springcloudstarter.websocket
 
-import lombok.RequiredArgsConstructor
 import org.springframework.boot.autoconfigure.amqp.RabbitProperties
 import org.springframework.messaging.simp.config.MessageBrokerRegistry
 import org.springframework.web.cors.CorsConfiguration.ALL
@@ -14,7 +13,6 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
  *
  * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/16/22 10:11 AM
  */
-@RequiredArgsConstructor
 class WebSocketMessageBrokerConfiguration(
     private val rabbitProperties: RabbitProperties
 ) : WebSocketMessageBrokerConfigurer {

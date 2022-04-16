@@ -1,7 +1,6 @@
 package com.jmsoftware.maf.authcenter.permission.converter
 
 import com.jmsoftware.maf.authcenter.permission.persistence.Permission
-import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse
 import org.mapstruct.Mapper
 import org.mapstruct.factory.Mappers.getMapper
 
@@ -22,5 +21,5 @@ interface PermissionMapStructMapper {
      * @param permission the permission
      * @return the get permission list by role id list response . permission
      */
-    fun of(permission: Permission): GetPermissionListByRoleIdListResponse.Permission
+    fun of(permission: Permission): com.jmsoftware.maf.common.domain.authcenter.permission.Permission
 }

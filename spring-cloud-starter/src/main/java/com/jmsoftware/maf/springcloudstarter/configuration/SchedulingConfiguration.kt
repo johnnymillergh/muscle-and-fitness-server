@@ -2,7 +2,6 @@ package com.jmsoftware.maf.springcloudstarter.configuration
 
 import com.jmsoftware.maf.common.util.logger
 import com.jmsoftware.maf.springcloudstarter.property.MafProjectProperties
-import lombok.RequiredArgsConstructor
 import org.springframework.boot.autoconfigure.task.TaskSchedulingAutoConfiguration
 import org.springframework.boot.task.TaskSchedulerCustomizer
 import org.springframework.context.annotation.Bean
@@ -18,7 +17,6 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
  * @see TaskSchedulingAutoConfiguration
  */
 @EnableScheduling
-@RequiredArgsConstructor
 class SchedulingConfiguration(
     private val mafProjectProperties: MafProjectProperties
 ) {

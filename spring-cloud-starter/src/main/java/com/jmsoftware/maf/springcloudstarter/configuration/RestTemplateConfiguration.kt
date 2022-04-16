@@ -1,7 +1,6 @@
 package com.jmsoftware.maf.springcloudstarter.configuration
 
 import com.jmsoftware.maf.common.util.logger
-import lombok.extern.slf4j.Slf4j
 import org.apache.http.impl.client.HttpClients
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager
 import org.springframework.cloud.client.loadbalancer.LoadBalanced
@@ -17,7 +16,6 @@ import org.springframework.web.client.RestTemplate
  *
  * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/14/22 10:46 AM
  */
-@Slf4j
 class RestTemplateConfiguration {
     companion object {
         private val log = logger()

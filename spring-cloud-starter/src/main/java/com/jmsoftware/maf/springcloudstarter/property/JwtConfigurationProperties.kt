@@ -2,6 +2,7 @@ package com.jmsoftware.maf.springcloudstarter.property
 
 import com.jmsoftware.maf.common.util.logger
 import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.context.annotation.Configuration
 import org.springframework.validation.annotation.Validated
 import java.nio.charset.StandardCharsets
 import javax.validation.constraints.NotNull
@@ -14,6 +15,7 @@ import javax.validation.constraints.NotNull
  * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/14/22 9:41 PM
  */
 @Validated
+@Configuration
 @ConfigurationProperties(prefix = JwtConfigurationProperties.PREFIX)
 class JwtConfigurationProperties(mafProjectProperties: MafProjectProperties) {
     companion object {

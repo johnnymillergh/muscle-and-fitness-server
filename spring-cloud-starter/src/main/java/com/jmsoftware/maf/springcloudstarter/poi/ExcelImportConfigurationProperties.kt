@@ -3,6 +3,7 @@ package com.jmsoftware.maf.springcloudstarter.poi
 import com.jmsoftware.maf.common.util.logger
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.cloud.context.config.annotation.RefreshScope
+import org.springframework.context.annotation.Configuration
 import org.springframework.validation.annotation.Validated
 import javax.annotation.PostConstruct
 import javax.validation.constraints.Min
@@ -18,6 +19,7 @@ import javax.validation.constraints.NotNull
  */
 @Validated
 @RefreshScope
+@Configuration
 @ConfigurationProperties(prefix = ExcelImportConfigurationProperties.PREFIX)
 class ExcelImportConfigurationProperties {
     companion object {
