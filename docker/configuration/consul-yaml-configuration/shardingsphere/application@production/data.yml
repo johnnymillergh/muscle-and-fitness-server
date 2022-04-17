@@ -1,0 +1,263 @@
+spring:
+  shardingsphere:
+    props:
+      sql-show: false
+    datasource:
+      source:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://maf-mysql-server-source:3306/muscle_and_fitness_0?useSSL=true&useUnicode=true
+        username: maf_mysql_rw
+        password: maf@mysql
+      replica-1:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://maf-mysql-server-replica-1:3306/muscle_and_fitness_0?useSSL=true&useUnicode=true
+        username: maf_mysql_r
+        password: maf@mysql
+      quartz:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://maf-mysql-server-source:3306/QUARTZ_DB?useSSL=true&useUnicode=true
+        username: maf_mysql_rw
+        password: maf@mysql
+      names: source,replica-1,quartz
+    rules:
+      readwrite-splitting:
+        data-sources:
+          readwrite-data-sources:
+            type: Static
+            props:
+              write-data-source-name: source
+              read-data-source-names: replica-1
+            load-balancer-name: readwrite-load-balancer
+        load-balancers:
+          readwrite-load-balancer:
+            type: ROUND_ROBIN
+      sharding:
+        key-generators:
+          snowflake:
+            type: SNOWFLAKE
+        sharding-algorithms:
+          body-part-sharding-algorithm:
+            type: INLINE
+            props:
+              algorithm-expression: body_part_$->{id % 2}
+          equipment-sharding-algorithm:
+            type: INLINE
+            props:
+              algorithm-expression: equipment_$->{id % 2}
+          exercise-sharding-algorithm:
+            type: INLINE
+            props:
+              algorithm-expression: exercise_$->{id % 2}
+          exercise-classification-sharding-algorithm:
+            type: INLINE
+            props:
+              algorithm-expression: exercise_classification_$->{id % 2}
+          exercise-comment-sharding-algorithm:
+            type: INLINE
+            props:
+              algorithm-expression: exercise_comment_$->{id % 2}
+          exercise-related-classification-sharding-algorithm:
+            type: INLINE
+            props:
+              algorithm-expression: exercise_related_classification_$->{id % 2}
+          exercise-related-muscle-sharding-algorithm:
+            type: INLINE
+            props:
+              algorithm-expression: exercise_related_muscle_$->{id % 2}
+          kinesiology-glossary-sharding-algorithm:
+            type: INLINE
+            props:
+              algorithm-expression: kinesiology_glossary_$->{id % 2}
+          muscle-sharding-algorithm:
+            type: INLINE
+            props:
+              algorithm-expression: muscle_$->{id % 2}
+          muscle-image-sharding-algorithm:
+            type: INLINE
+            props:
+              algorithm-expression: muscle_image_$->{id % 2}
+          permission-sharding-algorithm:
+            type: INLINE
+            props:
+              algorithm-expression: permission_$->{id % 2}
+          quartz-job-configuration-sharding-algorithm:
+            type: INLINE
+            props:
+              algorithm-expression: quartz_job_configuration_$->{id % 2}
+          related-muscle-sharding-algorithm:
+            type: INLINE
+            props:
+              algorithm-expression: related_muscle_$->{id % 2}
+          role-sharding-algorithm:
+            type: INLINE
+            props:
+              algorithm-expression: role_$->{id % 2}
+          role-permission-sharding-algorithm:
+            type: INLINE
+            props:
+              algorithm-expression: role_permission_$->{id % 2}
+          user-sharding-algorithm:
+            type: INLINE
+            props:
+              algorithm-expression: user_$->{id % 2}
+          user-role-sharding-algorithm:
+            type: INLINE
+            props:
+              algorithm-expression: user_role_$->{id % 2}
+        tables:
+          body_part:
+            actual-data-nodes: readwrite-data-sources.body_part_$->{0..1}
+            table-strategy:
+              standard:
+                sharding-column: id
+                sharding-algorithm-name: body-part-sharding-algorithm
+            keyGenerateStrategy:
+              column: id
+              keyGeneratorName: snowflake
+          equipment:
+            actual-data-nodes: readwrite-data-sources.equipment_$->{0..1}
+            table-strategy:
+              standard:
+                sharding-column: id
+                sharding-algorithm-name: equipment-sharding-algorithm
+            keyGenerateStrategy:
+              column: id
+              keyGeneratorName: snowflake
+          exercise:
+            actual-data-nodes: readwrite-data-sources.exercise_$->{0..1}
+            table-strategy:
+              standard:
+                sharding-column: id
+                sharding-algorithm-name: exercise-sharding-algorithm
+            keyGenerateStrategy:
+              column: id
+              keyGeneratorName: snowflake
+          exercise_classification:
+            actual-data-nodes: readwrite-data-sources.exercise_classification_$->{0..1}
+            table-strategy:
+              standard:
+                sharding-column: id
+                sharding-algorithm-name: exercise-classification-sharding-algorithm
+            keyGenerateStrategy:
+              column: id
+              keyGeneratorName: snowflake
+          exercise_comment:
+            actual-data-nodes: readwrite-data-sources.exercise_comment_$->{0..1}
+            table-strategy:
+              standard:
+                sharding-column: id
+                sharding-algorithm-name: exercise-comment-sharding-algorithm
+            keyGenerateStrategy:
+              column: id
+              keyGeneratorName: snowflake
+          exercise_related_classification:
+            actual-data-nodes: readwrite-data-sources.exercise_related_classification_$->{0..1}
+            table-strategy:
+              standard:
+                sharding-column: id
+                sharding-algorithm-name: exercise-related-classification-sharding-algorithm
+            keyGenerateStrategy:
+              column: id
+              keyGeneratorName: snowflake
+          exercise_related_muscle:
+            actual-data-nodes: readwrite-data-sources.exercise_related_muscle_$->{0..1}
+            table-strategy:
+              standard:
+                sharding-column: id
+                sharding-algorithm-name: exercise-related-muscle-sharding-algorithm
+            keyGenerateStrategy:
+              column: id
+              keyGeneratorName: snowflake
+          kinesiology_glossary:
+            actual-data-nodes: readwrite-data-sources.kinesiology_glossary_$->{0..1}
+            table-strategy:
+              standard:
+                sharding-column: id
+                sharding-algorithm-name: kinesiology-glossary-sharding-algorithm
+            keyGenerateStrategy:
+              column: id
+              keyGeneratorName: snowflake
+          muscle:
+            actual-data-nodes: readwrite-data-sources.muscle_$->{0..1}
+            table-strategy:
+              standard:
+                sharding-column: id
+                sharding-algorithm-name: muscle-sharding-algorithm
+            keyGenerateStrategy:
+              column: id
+              keyGeneratorName: snowflake
+          muscle_image:
+            actual-data-nodes: readwrite-data-sources.muscle_image_$->{0..1}
+            table-strategy:
+              standard:
+                sharding-column: id
+                sharding-algorithm-name: muscle-image-sharding-algorithm
+            keyGenerateStrategy:
+              column: id
+              keyGeneratorName: snowflake
+          permission:
+            actual-data-nodes: readwrite-data-sources.permission_$->{0..1}
+            table-strategy:
+              standard:
+                sharding-column: id
+                sharding-algorithm-name: permission-sharding-algorithm
+            keyGenerateStrategy:
+              column: id
+              keyGeneratorName: snowflake
+          quartz_job_configuration:
+            actual-data-nodes: readwrite-data-sources.quartz_job_configuration_$->{0..1}
+            table-strategy:
+              standard:
+                sharding-column: id
+                sharding-algorithm-name: quartz-job-configuration-sharding-algorithm
+            keyGenerateStrategy:
+              column: id
+              keyGeneratorName: snowflake
+          related_muscle:
+            actual-data-nodes: readwrite-data-sources.related_muscle_$->{0..1}
+            table-strategy:
+              standard:
+                sharding-column: id
+                sharding-algorithm-name: related-muscle-sharding-algorithm
+            keyGenerateStrategy:
+              column: id
+              keyGeneratorName: snowflake
+          role:
+            actual-data-nodes: readwrite-data-sources.role_$->{0..1}
+            table-strategy:
+              standard:
+                sharding-column: id
+                sharding-algorithm-name: role-sharding-algorithm
+            keyGenerateStrategy:
+              column: id
+              keyGeneratorName: snowflake
+          role_permission:
+            actual-data-nodes: readwrite-data-sources.role_permission_$->{0..1}
+            table-strategy:
+              standard:
+                sharding-column: id
+                sharding-algorithm-name: role-permission-sharding-algorithm
+            keyGenerateStrategy:
+              column: id
+              keyGeneratorName: snowflake
+          user:
+            actual-data-nodes: readwrite-data-sources.user_$->{0..1}
+            table-strategy:
+              standard:
+                sharding-column: id
+                sharding-algorithm-name: user-sharding-algorithm
+            keyGenerateStrategy:
+              column: id
+              keyGeneratorName: snowflake
+          user_role:
+            actual-data-nodes: readwrite-data-sources.user_role_$->{0..1}
+            table-strategy:
+              standard:
+                sharding-column: id
+                sharding-algorithm-name: user-role-sharding-algorithm
+            keyGenerateStrategy:
+              column: id
+              keyGeneratorName: snowflake

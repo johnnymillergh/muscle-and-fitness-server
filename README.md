@@ -11,7 +11,7 @@
 
 # Muscle and Fitness Server
 
-**Muscle and Fitness Server** a Spring Cloud microservice based, DDD structured, back-end server for managing data of muscle and fitness. 
+**Muscle and Fitness Server** a Spring Cloud microservice based, DDD structured, back-end server for managing data of muscle and fitness.
 
 [Official Docker Image](https://hub.docker.com/u/ijohnnymiller)
 
@@ -19,9 +19,9 @@
 
 Here is the highlights of **Muscle and Fitness Server**:
 
-1. Each microservice is organized by [Domain Driven Design](https://en.wikipedia.org/wiki/Domain-driven_design) (DDD) structure. 
+1. Each microservice is organized by [Domain Driven Design](https://en.wikipedia.org/wiki/Domain-driven_design) (DDD) structure.
 
-1. Inherited from the most modern and newest Spring frameworks:
+1. Based on Java - [![](https://img.shields.io/badge/OpenJDK-Temurin%2017.0.2+8-informational?style=flat&logo=java&logoColor=white&color=2bbc8a)](https://github.com/adoptium/temurin17-binaries/releases/tag/jdk-17.0.2%2B8) and Kotlin - [![](https://img.shields.io/badge/Kotlin-1.6.10-informational?style=flat&logo=kotlin&logoColor=white&color=2bbc8a)](https://github.com/JetBrains/kotlin/releases/tag/v1.6.10). Inherited from the most modern and newest Spring frameworks:
 
    `org.springframework.boot:spring-boot-starter-parent` - [![Spring Boot](https://maven-badges.herokuapp.com/maven-central/org.springframework.boot/spring-boot-starter-parent/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.springframework.boot/spring-boot-starter-parent/)
    `org.springframework.cloud:spring-cloud-dependencies` - [![Spring Cloud](https://maven-badges.herokuapp.com/maven-central/org.springframework.cloud/spring-cloud-dependencies/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.springframework.cloud/spring-cloud-dependencies/)
@@ -39,13 +39,21 @@ Here is the highlights of **Muscle and Fitness Server**:
    - For Spring MVC, [spring-cloud-starter](https://github.com/johnnymillergh/muscle-and-fitness-server/tree/master/spring-cloud-starter)
    - For Spring WebFlux, [reactive-spring-cloud-starter](https://github.com/johnnymillergh/muscle-and-fitness-server/tree/master/reactive-spring-cloud-starter)
 
-4. PMD code quality check for each every CI (during Maven verify phase), with [Alibaba-p3c](https://github.com/alibaba/p3c) rulesets.
-
 5. Advocate 𝛌 Java Functional Programming, provide developers with powerful and useful functions to make Java more sweeter.
 
 6. Secured API. [RBAC](https://en.wikipedia.org/wiki/Role-based_access_control) by API gateway and Auth Center. JWT authentication, and RBAC authorization.
 
-7. [MySQL Replication for High Availability](https://severalnines.com/resources/database-management-tutorials/mysql-replication-high-availability-tutorial). Multi data source. [Dynamic SQL read-write isolation](https://baomidou.com/guide/dynamic-datasource.html). [MyBatis-Plus](https://github.com/baomidou/mybatis-plus) is the integrated ORM library. [Druid](https://github.com/alibaba/druid) is the database connection pool. Dynamically enhance connection pool size by CPU count (logical processor count). Read more at [How to Find the Optimal Database Connection Pool Size](https://wiki.postgresql.org/wiki/Number_Of_Database_Connections#How_to_Find_the_Optimal_Database_Connection_Pool_Size), [Sizing the Connection Pool](https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-usagenotes-j2ee-concepts-connection-pooling.html#idm46216069663472).
+8. [MySQL Replication for High Availability](https://severalnines.com/resources/database-management-tutorials/mysql-replication-high-availability-tutorial). ShardingSphere as database access middleware to boost the database capacity better.
+
+   - Multi data source managed by ShardingSphere, including main, replica and Quartz 3 data sources.
+
+   - [Dynamic SQL read-write isolation](https://shardingsphere.apache.org/document/current/en/features/readwrite-splitting/) and [table sharding](https://shardingsphere.apache.org/document/current/en/features/sharding/concept/table/) provided by [ShardingSphere](https://shardingsphere.apache.org/).
+
+   - [MyBatis-Plus](https://github.com/baomidou/mybatis-plus) is the integrated ORM library.
+
+   - [光 HikariCP](https://github.com/brettwooldridge/HikariCP) is the database connection pool.
+
+   - TODO: Dynamically enhance connection pool size by CPU count (logical processor count). Read more at [How to Find the Optimal Database Connection Pool Size](https://wiki.postgresql.org/wiki/Number_Of_Database_Connections#How_to_Find_the_Optimal_Database_Connection_Pool_Size), [Sizing the Connection Pool](https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-usagenotes-j2ee-concepts-connection-pooling.html#idm46216069663472).
 
 8. Redis 6.x support. [Master-slave replication for high availability](https://redis.io/topics/replication). Redis cluster.
 
@@ -64,6 +72,10 @@ Here is the highlights of **Muscle and Fitness Server**:
 15. [Knife4j](https://doc.xiaominfo.com/) API visualization. Enhanced Swagger API documentation.
 
 16. [Async log output](https://examples.javacodegeeks.com/enterprise-java/logback/logback-ayncappender-example/). Log file compressed by standard GNU zip ([gzip](https://en.wikipedia.org/wiki/Gzip)) compression algorithm. [ELK](https://www.elastic.co/what-is/elk-stack) log aggregation.
+
+16. PMD code quality check for each every CI (during Maven verify phase), with [Alibaba-p3c](https://github.com/alibaba/p3c) rulesets.
+
+16. [JaCoCo](https://github.com/jacoco/jacoco) for JUnit code coverage.
 
 17. JVM log configuration for JVM garbage collection.
 
@@ -92,7 +104,7 @@ Here is the highlights of **Muscle and Fitness Server**:
    $ git clone https://github.com/johnnymillergh/muscle-and-fitness-server.git
    ```
 
-2. Build with newest Intellij IDEA.
+2. Build with newest IntelliJ IDEA.
 
 3. Click the green triangle to Run.
 
@@ -109,7 +121,7 @@ Here is the highlights of **Muscle and Fitness Server**:
 2. Package:
 
    ```shell
-   $ mvn clean package --batch-mode --show-version --quiet -f pom.xml
+   $ mvn clean package -Djunit.jupiter.execution.parallel.enabled=true --batch-mode --show-version --quiet -f pom.xml
    ```
 
 3. Set Version:
@@ -173,8 +185,8 @@ Here is the highlights of **Muscle and Fitness Server**:
 
 ## CI (Continuous Integration)
 
-- [Travis CI](https://travis-ci.com/github/johnnymillergh/media-streaming) is for publishing Docker Hub images of SNAPSHOT and RELEASE.
-- [GitHub Actions](https://github.com/johnnymillergh/media-streaming/actions) is for checking dependency updates and tests.
+- [GitHub Actions](https://github.com/johnnymillergh/media-streaming/actions) is for building and publishing Docker images, also checking dependency updates and tests.
+- ~~[Travis CI](https://travis-ci.com/github/johnnymillergh/media-streaming) is for publishing Docker Hub images of SNAPSHOT and RELEASE.~~
 
 ## Maintainers
 

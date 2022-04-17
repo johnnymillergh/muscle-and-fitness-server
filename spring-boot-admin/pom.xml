@@ -10,7 +10,7 @@
     <parent>
         <groupId>com.jmsoftware.maf</groupId>
         <artifactId>muscle-and-fitness-server</artifactId>
-        <version>0.0.8.1</version>
+        <version>0.0.9</version>
     </parent>
     <packaging>pom</packaging>
 
@@ -33,19 +33,6 @@
         <dependency>
             <groupId>com.jmsoftware.maf</groupId>
             <artifactId>spring-cloud-starter</artifactId>
-        </dependency>
-
-        <!-- Spring Dependencies -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.junit.vintage</groupId>
-                    <artifactId>junit-vintage-engine</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>

@@ -2,7 +2,7 @@ package com.jmsoftware.maf.springcloudstarter.validation.validator;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.ReflectUtil;
-import com.jmsoftware.maf.common.bean.EnumerationBase;
+import com.jmsoftware.maf.common.enumeration.ValueDescriptionBaseEnum;
 import com.jmsoftware.maf.springcloudstarter.validation.annotation.ValidEnumValue;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -33,8 +33,7 @@ public class EnumValueValidator implements ConstraintValidator<ValidEnumValue, N
     public void initialize(ValidEnumValue constraintAnnotation) {
         ConstraintValidator.super.initialize(constraintAnnotation);
         this.validEnumValue = constraintAnnotation;
-        final Method getValue = ReflectUtil.getMethodByName(EnumerationBase.class, "getValue");
-        this.methodName = getValue.getName();
+        this.methodName = ReflectUtil.getMethodByName(ValueDescriptionBaseEnum.class, "getValue").getName();
     }
 
     /**
@@ -63,10 +62,6 @@ public class EnumValueValidator implements ConstraintValidator<ValidEnumValue, N
         try {
             for (val obj : enumConstantArray) {
                 Object valueDeclaredInEnum = method.invoke(obj);
-                if (!(valueDeclaredInEnum instanceof Number)) {
-                    log.error("The value declared in enum is not an instance of Number!");
-                    throw new IllegalArgumentException("The value declared in enum is not an instance of Number!");
-                }
                 if (Objects.deepEquals(value, valueDeclaredInEnum)) {
                     validResult = true;
                     break;

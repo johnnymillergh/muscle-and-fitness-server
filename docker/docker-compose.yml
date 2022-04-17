@@ -10,7 +10,6 @@ services:
     environment:
       MYSQL_ROOT_HOST: "%"
       MYSQL_ROOT_PASSWORD: ${MAF_MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MAF_MYSQL_DATABASE}
       TZ: ${MAF_TIMEZONE}
     ports:
       - "3306:3306"
@@ -35,7 +34,6 @@ services:
     environment:
       MYSQL_ROOT_HOST: "%"
       MYSQL_ROOT_PASSWORD: ${MAF_MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MAF_MYSQL_DATABASE}
       TZ: ${MAF_TIMEZONE}
     ports:
       - "3307:3306"
@@ -96,6 +94,27 @@ services:
     networks:
       muscle_and_fitness_network:
 
+  minio:
+    container_name: ${MINIO_CONTAINER_NAME}
+    image: minio/minio:${MINIO_TAG}
+    ports:
+      - "9900:9000"
+      - "9901:9900"
+    restart: always
+    volumes:
+      - "~/docker-file-mapping/${MINIO_CONTAINER_NAME}:/data"
+    environment:
+      MINIO_ROOT_USER: ${MAF_MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MAF_MINIO_ROOT_PASSWORD}
+    command: server /data --console-address ":9900"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9000/minio/health/live" ]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    networks:
+      muscle_and_fitness_network:
+
   atmoz-sftp:
     container_name: ${ATMOZ_SFTP_CONTAINER_NAME}
     image: atmoz/sftp:${ATMOZ_SFTP_TAG}
@@ -108,26 +127,6 @@ services:
     environment:
       TZ: ${MAF_TIMEZONE}
     command: "johnny:atmoz@sftp:::upload"
-    networks:
-      muscle_and_fitness_network:
-
-  minio:
-    container_name: ${MINIO_CONTAINER_NAME}
-    image: minio/minio:${MINIO_TAG}
-    ports:
-      - "9900:9000"
-    restart: always
-    volumes:
-      - "~/docker-file-mapping/${MINIO_CONTAINER_NAME}:/data"
-    environment:
-      MINIO_ROOT_USER: ${MAF_MINIO_ROOT_USER}
-      MINIO_ROOT_PASSWORD: ${MAF_MINIO_ROOT_PASSWORD}
-    command: server /data
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:9000/minio/health/live" ]
-      interval: 30s
-      timeout: 20s
-      retries: 3
     networks:
       muscle_and_fitness_network:
 

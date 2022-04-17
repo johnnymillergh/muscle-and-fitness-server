@@ -27,7 +27,7 @@ public class CaseConversionUtil {
      * @return filtered string.
      */
     public static String filterNonAlphabetAndNonNumber(final String value) {
-        return value.replaceAll("[^0-9a-zA-Z]", "");
+        return value.replaceAll("[^\\da-zA-Z]", "");
     }
 
     /**

@@ -14,6 +14,8 @@ import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 
+import static cn.hutool.core.text.CharSequenceUtil.format;
+
 /**
  * <h1>FileUtil</h1>
  * <p>Change description here</p>
@@ -66,8 +68,8 @@ public class FileUtil {
      */
     public static String generateDateFormatStoragePath(@NonNull final String sftpSubDirectory) {
         val localDate = LocalDate.now();
-        return String.format("%s%d/%d/%d/", sftpSubDirectory, localDate.getYear(), localDate.getMonth().getValue(),
-                             localDate.getDayOfMonth());
+        return format("{}{}/{}/{}/", sftpSubDirectory, localDate.getYear(), localDate.getMonth().getValue(),
+                      localDate.getDayOfMonth());
     }
 
     /**
