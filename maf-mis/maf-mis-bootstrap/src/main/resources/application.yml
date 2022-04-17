@@ -21,7 +21,7 @@ spring:
       config:
         # `default-context` should not be modified, keeps "application" for common configuration.
         # Properties in the config/application folder are applicable to all applications using consul for configuration.
-        profile-separator: "::"
+        profile-separator: "@"
         format: YAML
         data-key: "data"
         watch:
@@ -29,6 +29,7 @@ spring:
           delay: 1000
         prefixes:
           - config
+          - shardingsphere
       discovery:
         register: true
         instance-id: ${spring.application.name}-${spring.cloud.client.hostname}-${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
@@ -39,15 +40,9 @@ spring:
         health-check-critical-timeout: 15s
   servlet:
     multipart:
-      # `location` specifies the directory where uploaded files will be stored. When not specified,
-      # a temporary directory will be used. ATTENTION: it may differ due to OS.
       location: @project.parent.artifactId@/${spring.application.name}/temprary-file
-      # `max-file-size` specifies the maximum size permitted for uploaded files. The default is 1MB. We set it as 64 MB.
       max-file-size: 64MB
-      # `max-request-size` specifies the maximum size allowed for multipart/form-data requests. The default is 10MB.
       max-request-size: 70MB
-      # `file-size-threshold` specifies the size threshold after which files will be written to disk.
-      # The default is 0. We set it as 0 too.
       file-size-threshold: 0
 
 logging:
@@ -59,7 +54,7 @@ maf:
     context-path: ${server.servlet.context-path}
     group-id: @project.groupId@
     project-parent-artifact-id: @project.parent.artifactId@
-    project-artifact-id: @project.artifactId@
+    project-artifact-id: @project.parent.artifactId@
     version: @project.version@
     description: @project.description@
     jdk-version: @java.version@

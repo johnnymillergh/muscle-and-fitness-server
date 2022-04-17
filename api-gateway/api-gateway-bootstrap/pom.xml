@@ -10,7 +10,7 @@
     <parent>
         <groupId>com.jmsoftware.maf</groupId>
         <artifactId>api-gateway</artifactId>
-        <version>0.0.8.1</version>
+        <version>0.0.9-SNAPSHOT</version>
     </parent>
 
     <!-- Build Settings -->
@@ -28,44 +28,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-pmd-plugin</artifactId>
-                <version>${maven-pmd-plugin.version}</version>
-                <configuration>
-                    <sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
-                    <targetJdk>${java.version}</targetJdk>
-                    <printFailingErrors>true</printFailingErrors>
-                    <rulesets>
-                        <ruleset>rulesets/java/ali-comment.xml</ruleset>
-                        <ruleset>rulesets/java/ali-concurrent.xml</ruleset>
-                        <ruleset>rulesets/java/ali-constant.xml</ruleset>
-                        <ruleset>rulesets/java/ali-exception.xml</ruleset>
-                        <ruleset>rulesets/java/ali-flowcontrol.xml</ruleset>
-                        <ruleset>rulesets/java/ali-naming.xml</ruleset>
-                        <ruleset>rulesets/java/ali-oop.xml</ruleset>
-                        <ruleset>rulesets/java/ali-orm.xml</ruleset>
-                        <ruleset>rulesets/java/ali-other.xml</ruleset>
-                        <ruleset>rulesets/java/ali-set.xml</ruleset>
-                    </rulesets>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.alibaba.p3c</groupId>
-                        <artifactId>p3c-pmd</artifactId>
-                        <version>${p3c-pmd.version}</version>
-                    </dependency>
-                </dependencies>
             </plugin>
 
             <!-- https://github.com/GoogleContainerTools/jib/blob/master/jib-maven-plugin/README.md -->
@@ -100,12 +62,16 @@
                 </executions>
                 <configuration>
                     <from>
-                        <!-- Don't use alpine or slim version, https://hub.docker.com/r/adoptopenjdk/openjdk11/tags?page=1&ordering=last_updated&name=jre-11 -->
-                        <image>adoptopenjdk/openjdk11:${adoptopenjdk11.tag}</image>
+                        <!--
+                        Don't use alpine or slim version,
+                        https://hub.docker.com/_/eclipse-temurin?tab=tags&page=1&name=11.0.14.1_1-jre
+                        -->
+                        <image>eclipse-temurin:${temurin.tag}</image>
                     </from>
                     <to>
                         <image>docker.io/ijohnnymiller/${project.baseArtifactId}.${project.parent.artifactId}</image>
                         <tags>
+                            <!--suppress MavenModelInspection -->
                             <tag>${git.commit.id.abbrev}-${project.version}</tag>
                         </tags>
                     </to>
@@ -130,31 +96,6 @@
                             </properties>
                         </pluginExtension>
                     </pluginExtensions>
-                </configuration>
-            </plugin>
-
-            <!-- https://github.com/git-commit-id/git-commit-id-maven-plugin -->
-            <plugin>
-                <groupId>io.github.git-commit-id</groupId>
-                <artifactId>git-commit-id-maven-plugin</artifactId>
-                <version>5.0.0</version>
-                <executions>
-                    <execution>
-                        <id>get-the-git-info</id>
-                        <goals>
-                            <goal>revision</goal>
-                        </goals>
-                        <phase>initialize</phase>
-                    </execution>
-                </executions>
-                <configuration>
-                    <generateGitPropertiesFile>true</generateGitPropertiesFile>
-                    <generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties</generateGitPropertiesFilename>
-                    <includeOnlyProperties>
-                        <includeOnlyProperty>^git.build.(time|version)$</includeOnlyProperty>
-                        <includeOnlyProperty>^git.commit.id.(abbrev|full)$</includeOnlyProperty>
-                    </includeOnlyProperties>
-                    <commitIdGenerationMode>full</commitIdGenerationMode>
                 </configuration>
             </plugin>
         </plugins>

@@ -31,7 +31,7 @@ public @interface ValidEnumValue {
 
     Class<? extends Payload>[] payload() default {};
 
-    Class<?> targetEnum() default Class.class;
+    Class<? extends Enum> targetEnum() default Enum.class;
 
     boolean ignoreNull() default false;
 }

@@ -7,7 +7,7 @@
     <!-- Project Basics -->
     <groupId>com.jmsoftware.maf</groupId>
     <artifactId>muscle-and-fitness-server</artifactId>
-    <version>0.0.8.1</version>
+    <version>0.0.9-SNAPSHOT</version>
     <name>Muscle and Fitness Server</name>
     <description>Muscle and Fitness Server (M&amp;F, maf), a Spring Cloud microservice based, back-end server for
         managing data of muscle and fitness.
@@ -36,36 +36,43 @@
         <!-- Gateway Service. Port range: [8080, 8080]. -->
         <api-gateway.port>8080</api-gateway.port>
 
+        <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
+
         <!-- Version Definitions. -->
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <!--
         Don't use alpine or slim version, to prevent following exception
         java.lang.UnsatisfiedLinkError: /opt/java/openjdk/lib/libfontmanager.so: libfreetype.so.6: cannot open shared object file: No such file or directory
-        https://hub.docker.com/r/adoptopenjdk/openjdk11/tags?page=1&ordering=last_updated&name=jre-11
+        https://hub.docker.com/_/eclipse-temurin?tab=tags&page=1&name=17.0.2_8-jre
         -->
-        <adoptopenjdk11.tag>jre-11.0.11_9</adoptopenjdk11.tag>
+        <temurin.tag>17.0.2_8-jre</temurin.tag>
         <jib-maven-plugin.version>3.2.0</jib-maven-plugin.version>
         <jib-spring-boot-extension-maven.version>0.1.0</jib-spring-boot-extension-maven.version>
         <maven-pmd-plugin.version>3.15.0</maven-pmd-plugin.version>
         <p3c-pmd.version>2.1.1</p3c-pmd.version>
-        <spring-cloud.version>2021.0.0</spring-cloud.version>
-        <functionaljava.version>4.8.1</functionaljava.version>
+        <spring-cloud.version>2021.0.1</spring-cloud.version>
+        <functionaljava.version>5.0</functionaljava.version>
+        <functionaljava-java8.version>4.8.1</functionaljava-java8.version>
         <spring-content.version>1.0.0.M5</spring-content.version>
-        <spring-boot-admin-starter-server.version>2.6.2</spring-boot-admin-starter-server.version>
-        <spring-boot-admin-starter-client.version>2.6.2</spring-boot-admin-starter-client.version>
-        <druid-spring-boot-starter.version>1.2.8</druid-spring-boot-starter.version>
+        <spring-boot-admin-starter-server.version>2.6.6</spring-boot-admin-starter-server.version>
+        <spring-boot-admin-starter-client.version>2.6.6</spring-boot-admin-starter-client.version>
         <mybatis-plus-boot-starter.version>3.5.1</mybatis-plus-boot-starter.version>
-        <dynamic-datasource-spring-boot-starter.version>3.5.0</dynamic-datasource-spring-boot-starter.version>
-        <hutool-all.version>5.7.20</hutool-all.version>
-        <guava.version>31.0.1-jre</guava.version>
-        <springdoc-openapi-ui.version>1.6.5</springdoc-openapi-ui.version>
+        <dynamic-datasource-spring-boot-starter.version>3.5.1</dynamic-datasource-spring-boot-starter.version>
+        <shardingsphere.version>5.1.1</shardingsphere.version>
+        <hutool-all.version>5.7.21</hutool-all.version>
+        <guava.version>31.1-jre</guava.version>
+        <springdoc-openapi-ui.version>1.6.6</springdoc-openapi-ui.version>
         <jjwt.version>0.11.2</jjwt.version>
         <java-faker.version>1.0.2</java-faker.version>
         <easyexcel.version>2.2.6</easyexcel.version>
-        <poi.version>5.2.0</poi.version>
-        <logstash-logback-encoder.version>7.0.1</logstash-logback-encoder.version>
-        <minio.version>8.2.2</minio.version>
-        <apache-tika.version>2.2.1</apache-tika.version>
+        <poi.version>5.2.2</poi.version>
+        <logstash-logback-encoder.version>7.1.1</logstash-logback-encoder.version>
+        <minio.version>8.3.8</minio.version>
+        <okhttp.version>4.8.1</okhttp.version>
+        <apache-tika.version>2.3.0</apache-tika.version>
+        <mapstruct.version>1.4.2.Final</mapstruct.version>
+        <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
+        <jacoco.version>0.8.8</jacoco.version>
     </properties>
 
     <!-- The modules (sometimes called subprojects) to build as a part of this project. -->
@@ -84,7 +91,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.6.1</version>
+        <version>2.6.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -178,6 +185,7 @@
 
     <build>
         <!-- set the name of .jar file -->
+        <!--suppress MavenModelInspection -->
         <finalName>${project.artifactId}-${git.commit.id.abbrev}-${project.version}</finalName>
         <resources>
             <resource>
@@ -230,13 +238,186 @@
                 </executions>
                 <configuration>
                     <generateGitPropertiesFile>true</generateGitPropertiesFile>
-                    <generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties</generateGitPropertiesFilename>
+                    <generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties
+                    </generateGitPropertiesFilename>
                     <includeOnlyProperties>
                         <includeOnlyProperty>^git.build.(time|version)$</includeOnlyProperty>
                         <includeOnlyProperty>^git.commit.id.(abbrev|full)$</includeOnlyProperty>
                     </includeOnlyProperties>
                     <commitIdGenerationMode>full</commitIdGenerationMode>
                 </configuration>
+            </plugin>
+
+            <!-- https://kotlinlang.org/docs/maven.html#compile-kotlin-and-java-sources -->
+            <plugin>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-plugin</artifactId>
+                <configuration>
+                    <compilerPlugins>
+                        <plugin>spring</plugin>
+                    </compilerPlugins>
+                    <args>
+                        <arg>-Xjsr305=strict</arg>
+                    </args>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.jetbrains.kotlin</groupId>
+                        <artifactId>kotlin-maven-noarg</artifactId>
+                        <version>${kotlin.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.jetbrains.kotlin</groupId>
+                        <artifactId>kotlin-maven-allopen</artifactId>
+                        <version>${kotlin.version}</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <sourceDir>${project.basedir}/src/main/kotlin</sourceDir>
+                                <sourceDir>${project.basedir}/src/main/java</sourceDir>
+                            </sourceDirs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>test-compile</id>
+                        <goals>
+                            <goal>test-compile</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <sourceDir>${project.basedir}/src/test/kotlin</sourceDir>
+                                <sourceDir>${project.basedir}/src/test/java</sourceDir>
+                            </sourceDirs>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <!-- https://github.com/mapstruct/mapstruct-examples/blob/master/mapstruct-lombok/pom.xml -->
+                    <!-- See https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html -->
+                    <!-- Classpath elements to supply as annotation processor path. If specified, the compiler   -->
+                    <!-- will detect annotation processors only in those classpath elements. If omitted, the     -->
+                    <!-- default classpath is used to detect annotation processors. The detection itself depends -->
+                    <!-- on the configuration of annotationProcessors.                                           -->
+                    <!--                                                                                         -->
+                    <!-- According to this documentation, the provided dependency processor is not considered!   -->
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${mapstruct.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                            <version>${lombok-mapstruct-binding.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+                <!-- https://kotlinlang.org/docs/maven.html#compile-kotlin-and-java-sources -->
+                <executions>
+                    <!-- Replacing default-compile as it is treated specially by maven -->
+                    <execution>
+                        <id>default-compile</id>
+                        <phase>none</phase>
+                    </execution>
+                    <!-- Replacing default-testCompile as it is treated specially by maven -->
+                    <execution>
+                        <id>default-testCompile</id>
+                        <phase>none</phase>
+                    </execution>
+                    <execution>
+                        <id>java-compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>java-test-compile</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>${maven-pmd-plugin.version}</version>
+                <configuration>
+                    <sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
+                    <targetJdk>${java.version}</targetJdk>
+                    <printFailingErrors>true</printFailingErrors>
+                    <rulesets>
+                        <ruleset>rulesets/java/ali-concurrent.xml</ruleset>
+                        <ruleset>rulesets/java/ali-constant.xml</ruleset>
+                        <ruleset>rulesets/java/ali-exception.xml</ruleset>
+                        <ruleset>rulesets/java/ali-flowcontrol.xml</ruleset>
+                        <ruleset>rulesets/java/ali-naming.xml</ruleset>
+                        <ruleset>rulesets/java/ali-oop.xml</ruleset>
+                        <ruleset>rulesets/java/ali-orm.xml</ruleset>
+                        <ruleset>rulesets/java/ali-other.xml</ruleset>
+                        <ruleset>rulesets/java/ali-set.xml</ruleset>
+                    </rulesets>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.alibaba.p3c</groupId>
+                        <artifactId>p3c-pmd</artifactId>
+                        <version>${p3c-pmd.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+                <executions>
+                    <execution>
+                        <id>default-prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>default-report</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
@@ -286,6 +467,20 @@
     <!-- Global Dependencies -->
     <!-- [CAUTION]: All the dependencies are in parent pom should be utilization dependency. -->
     <dependencies>
+        <!-- Kotlin -->
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-reflect</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib-jdk8</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-kotlin</artifactId>
+        </dependency>
+
         <!-- Java Enhancement -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -313,7 +508,7 @@
         <dependency>
             <groupId>org.functionaljava</groupId>
             <artifactId>functionaljava-java8</artifactId>
-            <version>${functionaljava.version}</version>
+            <version>${functionaljava-java8.version}</version>
         </dependency>
         <dependency>
             <groupId>org.functionaljava</groupId>
@@ -324,6 +519,33 @@
             <groupId>org.functionaljava</groupId>
             <artifactId>functionaljava-java-core</artifactId>
             <version>${functionaljava.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${mapstruct.version}</version>
+        </dependency>
+
+        <!-- Testing -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <!--  must be on the classpath  -->
+            <groupId>org.jacoco</groupId>
+            <artifactId>org.jacoco.agent</artifactId>
+            <classifier>runtime</classifier>
+            <version>${jacoco.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

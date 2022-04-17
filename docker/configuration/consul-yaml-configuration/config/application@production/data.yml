@@ -1,0 +1,107 @@
+# https://docs.spring.io/spring-cloud-consul/docs/current/reference/html/index.html#spring-cloud-consul-config
+# 1. Multiple PropertySource instances are created based on the application’s name and the active profiles
+# that mimics the Spring Cloud Config order of resolving properties.
+# 2. Properties in the config/application folder are applicable to all applications using consul for configuration.
+
+spring:
+  mvc:
+    throw-exception-if-no-handler-found: true
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Hong_Kong
+  sleuth:
+    sampler:
+      probability: 1.0
+  devtools:
+    add-properties: true
+  zipkin:
+    base-url: http://maf-zipkin:9411
+  rabbitmq:
+    host: maf-rabbitmq
+    port: 5672
+    username: maf_rabbitmq_su
+    password: maf@rabbitmq
+  redis:
+    host: maf-redis-master
+    port: 6379
+    password: maf@redis
+    database: 0
+    timeout: 10000ms
+    client-type: LETTUCE
+    lettuce:
+      pool:
+        max-active: 20
+        max-idle: 10
+        max-wait: -1ms
+        min-idle: 0
+  elasticsearch:
+    uris:
+      - http://maf-elasticsearch:9200
+    username: elastic
+    password: maf@elasticsearch
+  quartz:
+    job-store-type: JDBC
+    jdbc:
+      initialize-schema: NEVER
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceId: AUTO
+          jobStore:
+            tablePrefix: QRTZ_
+            isClustered: true
+            clusterCheckinInterval: 3000
+            useProperties: false
+
+minio:
+  endpoint: http://maf-minio
+  port: 9000
+  access-key: maf_minio_root_user
+  secret-key: jm@minio
+  bucket-name: maf
+
+springdoc:
+  api-docs:
+    enabled: false
+
+feign:
+  circuitbreaker:
+    enabled: true
+  httpclient:
+    enabled: false
+  okhttp:
+    enabled: true
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 10000
+        loggerLevel: full
+  compression:
+    request:
+      enabled: true
+    response:
+      enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
+
+mybatis-plus:
+  global-config:
+    db-config:
+      logic-delete-field: deleted
+      logic-delete-value: "Y"
+      logic-not-delete-value: "N"
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  # mapper-locations should start with `classpath*` prefix
+  # when project is based on Maven multi-module to load XML mapper in different jar
+  mapper-locations: classpath*:/mapper/**/*Mapper.xml

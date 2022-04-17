@@ -1,0 +1,4 @@
+maf:
+  configuration:
+    excel:
+      maximum-row-count: 3000
