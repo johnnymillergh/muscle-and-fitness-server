@@ -11,6 +11,6 @@
     <parent>
         <groupId>com.jmsoftware.maf</groupId>
         <artifactId>auth-center</artifactId>
-        <version>0.0.9</version>
+        <version>0.0.9.1-SNAPSHOT</version>
     </parent>
 </project>
