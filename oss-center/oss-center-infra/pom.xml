@@ -11,6 +11,6 @@
     <parent>
         <groupId>com.jmsoftware.maf</groupId>
         <artifactId>oss-center</artifactId>
-        <version>0.0.9-SNAPSHOT</version>
+        <version>0.0.9</version>
     </parent>
 </project>
