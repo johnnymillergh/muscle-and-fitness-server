@@ -1,3 +1,95 @@
+# [0.0.9](https://github.com/johnnymillergh/muscle-and-fitness-server/compare/0.0.8.1...0.0.9) (2022-04-17)
+
+
+### Bug Fixes
+
+* **$ELK:** correct Elasticsearch index ([fcefc44](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/fcefc446f8a534d8fc787874c547f3d0e823b26e))
+* **$Kotlin:** fix Kotlin building error `cannot find symbol` ([f7a3259](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/f7a3259519b92cb57fc712e1c93e036eca550071))
+* **$MinIO:** record -> class ([f593f94](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/f593f94c10638bb79d767b70469a0ac1d390423e))
+* **$Quartz:** correct `StackOverflowError` from inappropriate Hutool usage ([ae086dc](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/ae086dceab4e5276ec3a8a4ece096a73623b6400))
+* **$Quartz:** correct job execution to avoid NPE ([f8932b0](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/f8932b07bc79ed4846139d95e59e6c09b55d9500))
+* **$starter:** correct configuration properties ([2208e18](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/2208e18e476f860e052a459a571535ae0d3e0b40))
+* **$starter:** correct configuration properties 2 ([8820316](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/8820316982d3c1e8628c70cfd3d6bc34de069fe7))
+* **$starter:** correct configuration properties 3 ([5e2c41a](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/5e2c41aa7a004593a0af5b2635827bea001846cf))
+* **$starter:** fix `StringIndexOutOfBoundsException` issue ([c240246](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/c2402468dfca206485ebfa12256a20d78bd13ebe))
+
+
+### Build System
+
+* **$Consul:** update the name of MySQL data source ([6af11bd](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/6af11bdf18f580ad5a9b27b97c9a070fecbaf4b9))
+* **$Maven:** support parallel JUnit 5 tests ([1b0a3e8](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/1b0a3e884ae0af936df400c679bf481494843251))
+* **$MySQL:** migrate single table to sharding table ([0d7ddd6](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/0d7ddd6eda4dd5f336b027f7cc77ddade4b12a48))
+
+
+### Features
+
+* **$Enum:** abstract common methods for enum ([c8305fb](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/c8305fb67e834c9a5d013ce35d3b81890be77612))
+* **$JaCoCo:** integrate JaCoCo for code coverage report ([92d6297](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/92d629750b62b6aca987a49df3f6fb9568bc6ed8))
+* **$Kotlin:** support Kotlin 1.6.10 with Java 17 ([d363c5c](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/d363c5c86b82da8dfe985e6c24badf823c07e2b0))
+* **$POM:** import `MapStruct@1.4.2.Final` as global dependency ([6e5121a](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/6e5121ae75f9cbd6539bdb7ccb37b28fd2e5f004))
+* **$Redis:** create the demo for Redis distributed lock ([74c54b3](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/74c54b373af62a1826a108711d9d4f19fa6aa47b))
+* **$Redis:** integrate with Redis distributed lock for concurrency control ([85bf9bc](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/85bf9bc506a459cb72636aec49489586074815b6))
+* **$Redis:** switch back to Redis standalone mode ([2e0ce94](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/2e0ce9421e08f1a6dbc0f5821407951f6e479c7f))
+* **$ShardingSphere:** fully support ShardingSphere for better database capacity ([8afa4a8](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/8afa4a8cecc2cef6a60c975e8ab413aa81268ec9))
+* **$ShardingSphere:** support read-write load balancer for database ([3ef9765](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/3ef9765d2723399b23ab375dcc8700783e8277cb))
+* **$Sleuth:** record trance ID and span ID in logs ([a3f4811](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/a3f48112ca4a456899696d0a56ab92f4c9e87afd))
+* **$Slf4j:** support functional lazy debug ([4887857](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/4887857dca36326830b297b377a2b77ca797ad22))
+* **$starter:** remove the usage of BeanUtil ([3e2872e](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/3e2872e94754d8b817448f40a91cf126f9e18b46))
+* **$starter:** support dynamic autoconfiguration for Redis lock ([f03a337](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/f03a337cbff5d5b0aa953d85be02d464f83c9a99))
+* **$Zipkin:** support trackable HTTP response ([ee8dab4](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/ee8dab4883115bdcb66150fe3c2294c162929378))
+
+
+### Performance Improvements
+
+* **$auth-center:** create fallback for remote API ([c445d6f](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/c445d6fba501c4b8f73f45860cf4ae9ff4beff65))
+* **$DDD:** decouple and aggregate permission ([87845e7](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/87845e7fd0e230726144b3c0524218103efb2023))
+* **$Hikari:** set Hikari CP as default connection pool ([7fdce5a](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/7fdce5abec0ae2b1042c21c9e04996fd5a107422))
+* **$Java:** upgrade Java (Temurin) to 17.0.2+8 ([0b5a979](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/0b5a97910efb355251cbe6402446c356773a22e1))
+* **$JDK:** migrate AdoptOpenJDK to the Eclipse Adoptium Temurin™ ([fb14be5](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/fb14be52ab1b6d392736bfcdeff571d1849c1174))
+* **$MinIO:** update MinIO dependency version to 8.3.7 ([d77c2a2](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/d77c2a2d1a38a1d0feb3af5eef6c3b58caea0dcc))
+* **$MySQL:** unify database style ([67c8967](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/67c8967a0053f72190d63d79f6ce0c38f3a21852))
+* **$POM:** update dependencies to latest version ([4fe767b](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/4fe767b34a2f584f12e87edc23e01437980d64b8))
+* **$POM:** upgrade dependencies ([ea13e27](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/ea13e27dc11af0dff45e40b517e34bd5813cefc7))
+* **$POM:** upgrade dependencies ([e0fc588](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/e0fc5881d05861ed6005c6ca4c6ad6cb240185bd))
+* **$POM:** upgrade dependencies to latest release ([617e06f](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/617e06f479ffe7b6cfb7abe0d2a324d2097978f3))
+* **$POM:** upgrade ShardingSphere@5.1.1 ([25ee8be](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/25ee8be7c94d73cfd7057af838a3f6d77a7a8ae6))
+* **$POM:** upgrade Spring Boot 2.6.3 and Spring Cloud 2021.0.1 ([c1a57db](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/c1a57db0eeb9e2d8916f46ab03b24a783ecef424))
+* **$ShardingSphere:** integrate with ShardingSphere ([5ba4a42](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/5ba4a42e5fc2e101ed19f9390e3f32ddf5fd197e))
+* **$ShardingSphere:** support table sharding strategy ([aef374b](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/aef374b70fd34de613b9f69544ccea28850c1922))
+* **$starter:** integrate with spring-boot-starter-data-elasticsearch ([0f4dff5](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/0f4dff51ab2a905ec62756522bf3c404ee797224))
+* upgrade infrastructures version to latest release ([cfddf94](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/cfddf947f38ab2053ddcde3b3937cf1beea3af9e))
+
+
+### Tests
+
+* **$auth-center:** create unit tests for `auth-center-biz` ([a7519c7](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/a7519c7794f34ed7fd5fdc34eecea806c3b7cca3))
+
+
+### BREAKING CHANGES
+
+* **$Kotlin:** support Kotlin 1.6.10 with Java 17
+* **$Java:** upgrade Java (Temurin) to 17.0.2+8
+* **$JaCoCo:** integrate JaCoCo for code coverage report; refine global Maven dependencies
+* **$Maven:** support parallel JUnit 5 tests
+* **$auth-center:** use Mockito for unit test; create unit tests for `auth-center-biz`
+* **$Consul:** use source/replica terms for MySQL clusters, instead of master/slave
+
+[skip ci]
+* **$ShardingSphere:** fully support ShardingSphere for better database capacity
+* **$MySQL:** migrate single table to sharding table
+
+[skip ci]
+* **$ShardingSphere:** remove dependency `dynamic-datasource-spring-boot-starter`
+
+[skip ci]
+* **$Zipkin:** support trackable HTTP response
+* **$Hikari:** removed Alibaba Druid
+* **$Sleuth:** support trace ID and span ID in logs
+* **$Redis:** integrate with Redis distributed lock for concurrency control
+* **$starter:** ban using any packages of BeanUtil; the package name of MyBatis mappers has changed to `repository`
+
+
+
 # [0.0.8.1](https://github.com/johnnymillergh/muscle-and-fitness-server/compare/0.0.8...0.0.8.1) (2022-02-04)
 
 
