@@ -20,7 +20,7 @@ class CommonController(
 ) {
     @GetMapping("/app-info")
     fun applicationInformation(): ResponseBodyBean<JSON> {
-        return ResponseBodyBean.ofSuccess(commonService.applicationInfo, "Succeed to retrieve app info.")
+        return ResponseBodyBean.ofSuccess(commonService.getApplicationInfo(), "Succeed to retrieve app info.")
     }
 
     @PostMapping("/validation-test")

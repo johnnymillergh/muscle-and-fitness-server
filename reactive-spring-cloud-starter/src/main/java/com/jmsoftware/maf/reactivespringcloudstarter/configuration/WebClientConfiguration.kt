@@ -1,26 +1,35 @@
-package com.jmsoftware.maf.reactivespringcloudstarter.configuration;
+package com.jmsoftware.maf.reactivespringcloudstarter.configuration
 
-import io.netty.channel.ChannelOption;
-import io.netty.handler.timeout.ReadTimeoutHandler;
-import io.netty.handler.timeout.WriteTimeoutHandler;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
-import org.springframework.context.annotation.Bean;
-import org.springframework.http.client.reactive.ReactorClientHttpConnector;
-import org.springframework.http.client.reactive.ReactorResourceFactory;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.netty.resources.ConnectionProvider;
-import reactor.netty.resources.LoopResources;
+import com.jmsoftware.maf.common.util.logger
+import io.netty.channel.ChannelOption
+import io.netty.handler.timeout.ReadTimeoutHandler
+import io.netty.handler.timeout.WriteTimeoutHandler
+import lombok.RequiredArgsConstructor
+import lombok.extern.slf4j.Slf4j
+import org.springframework.cloud.client.loadbalancer.LoadBalanced
+import org.springframework.context.annotation.Bean
+import org.springframework.http.client.reactive.ReactorClientHttpConnector
+import org.springframework.http.client.reactive.ReactorResourceFactory
+import org.springframework.web.reactive.function.client.WebClient
+import reactor.netty.Connection
+import reactor.netty.http.client.HttpClient
+import reactor.netty.resources.ConnectionProvider
+import reactor.netty.resources.LoopResources
 
 /**
+ * # WebClientConfiguration
+ *
  * Description: WebClientConfiguration, change description here.
  *
- * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 9/14/2021 3:38 PM
- **/
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/17/22 7:54 AM
+ */
 @Slf4j
 @RequiredArgsConstructor
-public class WebClientConfiguration {
+class WebClientConfiguration {
+    companion object {
+        private val log = logger()
+    }
+
     /**
      * Load balanced web client builder.
      *
@@ -32,18 +41,18 @@ public class WebClientConfiguration {
      */
     @Bean
     @LoadBalanced
-    public WebClient.Builder loadBalancedWebClientBuilder() {
-        log.warn("Initial bean: '{}'", WebClient.Builder.class.getSimpleName());
-        return WebClient.builder();
+    fun loadBalancedWebClientBuilder(): WebClient.Builder {
+        log.warn("Initial bean: `${WebClient.Builder::class.java.simpleName}`")
+        return WebClient.builder()
     }
 
     @Bean
-    public ReactorResourceFactory reactorResourceFactory() {
-        ReactorResourceFactory factory = new ReactorResourceFactory();
-        factory.setUseGlobalResources(false);
-        factory.setConnectionProvider(ConnectionProvider.create("web-client-connection-provider"));
-        factory.setLoopResources(LoopResources.create("web-client-loop"));
-        return factory;
+    fun reactorResourceFactory(): ReactorResourceFactory {
+        return ReactorResourceFactory().also {
+            it.isUseGlobalResources = false
+            it.connectionProvider = ConnectionProvider.create("web-client-connection-provider")
+            it.loopResources = LoopResources.create("web-client-loop")
+        }
     }
 
     /**
@@ -55,16 +64,19 @@ public class WebClientConfiguration {
      * <a href='https://spring.getdocs.org/en-US/spring-cloud-docs/spring-cloud-commons/cloud-native-applications/spring-cloud-commons:-common-abstractions/loadbalanced-webclient.html#loadbalanced-webclient'>Spring WebFlux <code>WebClient</code> as a Load Balancer Client</a>
      */
     @Bean
-    public WebClient webClient(WebClient.Builder loadBalancedWebClientBuilder,
-                               ReactorResourceFactory reactorResourceFactory) {
+    fun webClient(
+        loadBalancedWebClientBuilder: WebClient.Builder,
+        reactorResourceFactory: ReactorResourceFactory
+    ): WebClient {
         return loadBalancedWebClientBuilder
-                .clientConnector(new ReactorClientHttpConnector(reactorResourceFactory, client -> client
-                        .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10)
-                        .option(ChannelOption.TCP_NODELAY, true)
-                        .doOnConnected(doOnConnected -> {
-                            doOnConnected.addHandlerLast(new ReadTimeoutHandler(10));
-                            doOnConnected.addHandlerLast(new WriteTimeoutHandler(10));
-                        })))
-                .build();
+            .clientConnector(ReactorClientHttpConnector(reactorResourceFactory) { client: HttpClient ->
+                client
+                    .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10)
+                    .option(ChannelOption.TCP_NODELAY, true)
+                    .doOnConnected { doOnConnected: Connection ->
+                        doOnConnected.addHandlerLast(ReadTimeoutHandler(10))
+                        doOnConnected.addHandlerLast(WriteTimeoutHandler(10))
+                    }
+            }).build()
     }
 }

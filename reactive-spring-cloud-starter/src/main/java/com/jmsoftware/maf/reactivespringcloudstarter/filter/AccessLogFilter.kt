@@ -1,53 +1,48 @@
-package com.jmsoftware.maf.reactivespringcloudstarter.filter;
+package com.jmsoftware.maf.reactivespringcloudstarter.filter
 
-import com.jmsoftware.maf.reactivespringcloudstarter.property.MafConfigurationProperties;
-import com.jmsoftware.maf.reactivespringcloudstarter.util.RequestUtil;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.Ordered;
-import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.util.AntPathMatcher;
-import org.springframework.web.server.ServerWebExchange;
-import org.springframework.web.server.WebFilter;
-import org.springframework.web.server.WebFilterChain;
-import reactor.core.publisher.Mono;
+import com.jmsoftware.maf.common.util.logger
+import com.jmsoftware.maf.reactivespringcloudstarter.property.MafConfigurationProperties
+import com.jmsoftware.maf.reactivespringcloudstarter.util.getRequesterIpAndPort
+import org.springframework.core.Ordered
+import org.springframework.util.AntPathMatcher
+import org.springframework.web.server.ServerWebExchange
+import org.springframework.web.server.WebFilter
+import org.springframework.web.server.WebFilterChain
+import reactor.core.publisher.Mono
 
 /**
- * <h1>AccessLogFilter</h1>
- * <p>
+ * # AccessLogFilter
+ *
  * Change description here.
  *
- * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 12/24/2020 10:56 AM
- **/
-@Slf4j
-@RequiredArgsConstructor
-public class AccessLogFilter implements WebFilter, Ordered {
-    private final MafConfigurationProperties mafConfigurationProperties;
-    private final AntPathMatcher antPathMatcher = new AntPathMatcher();
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/17/22 8:01 AM
+ */
+class AccessLogFilter(
+    private val mafConfigurationProperties: MafConfigurationProperties,
+) : WebFilter, Ordered {
+    companion object {
+        private val log = logger()
+    }
 
-    @Override
-    @SuppressWarnings("NullableProblems")
-    public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
-        ServerHttpRequest request = exchange.getRequest();
-        for (String ignoredUrl : this.mafConfigurationProperties.flattenIgnoredUrls()) {
-            if (this.antPathMatcher.match(ignoredUrl, request.getURI().getPath())) {
-                return chain.filter(exchange);
+    private val antPathMatcher = AntPathMatcher()
+
+    override fun filter(exchange: ServerWebExchange, chain: WebFilterChain): Mono<Void> {
+        val request = exchange.request
+        for (ignoredUrl in mafConfigurationProperties.flattenIgnoredUrls()) {
+            if (antPathMatcher.match(ignoredUrl, request.uri.path)) {
+                return chain.filter(exchange)
             }
         }
         // Only record non-ignored request log
-        log.info("{} (pre). Requester: {}, request URL: [{}] {}",
-                 this.getClass().getSimpleName(), RequestUtil.getRequesterIpAndPort(request), request.getMethod(),
-                 request.getURI());
+        log.info("${this.javaClass.simpleName} (pre). Requester: ${getRequesterIpAndPort(request)}, request URL: [${request.method}] ${request.uri}")
         return chain.filter(exchange).then(
-                Mono.fromRunnable(() -> log.info("{} (post). Requester: {}, request URL: [{}] {}",
-                                                 this.getClass().getSimpleName(),
-                                                 RequestUtil.getRequesterIpAndPort(request), request.getMethod(),
-                                                 request.getURI()))
-        );
+            Mono.fromRunnable {
+                log.info("${this.javaClass.simpleName} (post). Requester: ${getRequesterIpAndPort(request)}, request URL: [${request.method}] ${request.uri}")
+            }
+        )
     }
 
-    @Override
-    public int getOrder() {
-        return -500;
+    override fun getOrder(): Int {
+        return -500
     }
 }

@@ -1,12 +1,11 @@
 package com.jmsoftware.maf.apigateway.handler
 
-import cn.hutool.core.text.CharSequenceUtil
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.jmsoftware.maf.common.bean.ResponseBodyBean
 import com.jmsoftware.maf.common.exception.SecurityException
 import com.jmsoftware.maf.common.util.logger
-import com.jmsoftware.maf.reactivespringcloudstarter.util.RequestUtil
+import com.jmsoftware.maf.reactivespringcloudstarter.util.getRequesterIpAndPort
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler
 import org.springframework.core.annotation.Order
 import org.springframework.http.HttpStatus
@@ -37,10 +36,7 @@ class GlobalExceptionHandler(
 
     override fun handle(exchange: ServerWebExchange, ex: Throwable): Mono<Void> {
         val request = exchange.request
-        log.error(
-            "Exception occurred when [{}] requested access. Exception message: {}. Request URL: [{}] {}",
-            RequestUtil.getRequesterIpAndPort(request), ex.message, request.method, request.uri
-        )
+        log.error("Exception occurred when [${getRequesterIpAndPort(request)}] requested access. Exception message: ${ex.message}. Request URL: [${request.method}] ${request.uri}")
         val response = exchange.response
         if (response.isCommitted) {
             return Mono.error(ex)
@@ -84,7 +80,7 @@ class GlobalExceptionHandler(
                 response.statusCode = HttpStatus.INTERNAL_SERVER_ERROR
                 return ResponseBodyBean.ofStatus<Any>(
                     HttpStatus.INTERNAL_SERVER_ERROR,
-                    CharSequenceUtil.format("Exception message: {}", ex.message)
+                    "Exception message: ${ex.message}"
                 )
             }
         }

@@ -107,7 +107,7 @@ class WriteResourceServiceImpl(
         objectResponse.bucket = bucketName
         objectResponse.`object` = orderedFilename
         minioHelper.makeBucket(bucketName)
-        val objectWriteResponse = minioHelper.put(bucketName, orderedFilename, multipartFile)
+        val objectWriteResponse = minioHelper.put(bucketName!!, orderedFilename, multipartFile)
         objectResponse.etag = objectWriteResponse.etag()
         log.info("Uploaded resource chunk. $objectResponse")
         return objectResponse

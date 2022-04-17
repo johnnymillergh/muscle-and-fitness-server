@@ -1,1 +1,1 @@
-package com.jmsoftware.maf.osscenter;
+package com.jmsoftware.maf.osscenter

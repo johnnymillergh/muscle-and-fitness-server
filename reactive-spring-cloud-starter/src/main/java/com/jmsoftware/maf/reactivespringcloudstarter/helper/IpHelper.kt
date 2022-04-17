@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.springcloudstarter.helper
+package com.jmsoftware.maf.reactivespringcloudstarter.helper
 
 import cn.hutool.core.util.StrUtil
 import cn.hutool.http.HttpUtil
@@ -12,7 +12,7 @@ import java.net.NetworkInterface
 import java.util.*
 
 /**
- * # ServerConfiguration
+ * # IpHelper
  *
  * Change description here.
  *

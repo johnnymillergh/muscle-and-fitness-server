@@ -1,7 +1,6 @@
 package com.jmsoftware.maf.apigateway.configuration
 
 import cn.hutool.core.util.BooleanUtil
-import com.google.common.collect.Lists
 import com.jmsoftware.maf.apigateway.remote.AuthCenterWebClientService
 import com.jmsoftware.maf.apigateway.security.impl.*
 import com.jmsoftware.maf.common.util.logger
@@ -23,14 +22,18 @@ import org.springframework.security.web.server.authorization.ServerAccessDeniedH
 import org.springframework.security.web.server.context.ServerSecurityContextRepository
 
 /**
+ * # WebFluxSecurityConfiguration
+ *
  * Description: WebFluxSecurityConfiguration, change description here.
  *
- * @author 钟俊（zhongjun）, email: zhongjun@toguide.cn, date: 12/18/2020 3:23 PM
- * @see  [Spring Secirity Reference - Reactive Applications](https://docs.spring.io/spring-security/site/docs/5.3.6.RELEASE/reference/html5/.reactive-applications)
- *
- * @see  [Securing Spring WebFlux Reactive APIs with JWT Auth](https://www.devglan.com/spring-security/spring-security-webflux-jwt)
- *
- * @see  [SpringCloud Gateway 整合 Spring Security Webflux 的关键点（痛点解析），及示例项目](https://blog.csdn.net/tiancao222/article/details/104375924)
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/17/22 7:52 AM
+ * @see <a href='https://docs.spring.io/spring-security/reference/servlet/configuration/kotlin.html#_multiple_httpsecurity'>Kotlin Configuration</a>
+ * @see
+ * <a href='https://docs.spring.io/spring-security/site/docs/5.3.6.RELEASE/reference/html5/#reactive-applications'>Spring Secirity Reference - Reactive Applications</a>
+ * @see
+ * <a href='https://www.devglan.com/spring-security/spring-security-webflux-jwt'>Securing Spring WebFlux Reactive APIs with JWT Auth</a>
+ * @see
+ * <a href='https://blog.csdn.net/tiancao222/article/details/104375924'>SpringCloud Gateway 整合 Spring Security Webflux 的关键点（痛点解析），及示例项目</a>
  */
 @Configuration
 @EnableWebFluxSecurity
@@ -41,6 +44,7 @@ class WebFluxSecurityConfiguration(
     companion object {
         private val log = logger()
     }
+
     @Bean
     fun springWebFilterChain(
         http: ServerHttpSecurity,
@@ -57,10 +61,8 @@ class WebFluxSecurityConfiguration(
                 .csrf().disable()
                 .build()
         }
-        log.warn(
-            "Spring Security will ignore following URLs: {}",
-            Lists.newArrayList(*mafConfigurationProperties.flattenIgnoredUrls())
-        )
+        val ignoredUrls = mafConfigurationProperties.flattenIgnoredUrls().toTypedArray()
+        log.warn("Spring Security will ignore following URLs: $ignoredUrls")
         return http
             .cors().disable()
             .csrf().disable()
@@ -73,7 +75,7 @@ class WebFluxSecurityConfiguration(
             .securityContextRepository(serverSecurityContextRepository)
             .authenticationManager(reactiveAuthenticationManager)
             .authorizeExchange()
-            .pathMatchers(*mafConfigurationProperties.flattenIgnoredUrls()).permitAll()
+            .pathMatchers(*ignoredUrls).permitAll()
             .pathMatchers(HttpMethod.OPTIONS).permitAll() // Authorization
             .anyExchange().access(reactiveAuthorizationManager)
             .and()

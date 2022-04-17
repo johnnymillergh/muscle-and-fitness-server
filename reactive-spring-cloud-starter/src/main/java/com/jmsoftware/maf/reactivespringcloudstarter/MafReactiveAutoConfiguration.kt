@@ -1,89 +1,85 @@
-package com.jmsoftware.maf.reactivespringcloudstarter;
+package com.jmsoftware.maf.reactivespringcloudstarter
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jmsoftware.maf.reactivespringcloudstarter.configuration.WebClientConfiguration;
-import com.jmsoftware.maf.reactivespringcloudstarter.configuration.WebFluxConfiguration;
-import com.jmsoftware.maf.reactivespringcloudstarter.controller.CommonController;
-import com.jmsoftware.maf.reactivespringcloudstarter.filter.AccessLogFilter;
-import com.jmsoftware.maf.reactivespringcloudstarter.helper.IpHelper;
-import com.jmsoftware.maf.reactivespringcloudstarter.helper.SpringBootStartupHelper;
-import com.jmsoftware.maf.reactivespringcloudstarter.property.JwtConfigurationProperties;
-import com.jmsoftware.maf.reactivespringcloudstarter.property.MafConfigurationProperties;
-import com.jmsoftware.maf.reactivespringcloudstarter.property.MafProjectProperties;
-import com.jmsoftware.maf.reactivespringcloudstarter.redis.RedisConfiguration;
-import com.jmsoftware.maf.reactivespringcloudstarter.service.CommonService;
-import com.jmsoftware.maf.reactivespringcloudstarter.service.impl.CommonServiceImpl;
-import com.jmsoftware.maf.reactivespringcloudstarter.util.ResponseUtil;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
-import org.springframework.core.env.Environment;
-
-import javax.annotation.PostConstruct;
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.jmsoftware.maf.common.util.logger
+import com.jmsoftware.maf.reactivespringcloudstarter.configuration.WebClientConfiguration
+import com.jmsoftware.maf.reactivespringcloudstarter.configuration.WebFluxConfiguration
+import com.jmsoftware.maf.reactivespringcloudstarter.controller.CommonController
+import com.jmsoftware.maf.reactivespringcloudstarter.filter.AccessLogFilter
+import com.jmsoftware.maf.reactivespringcloudstarter.helper.IpHelper
+import com.jmsoftware.maf.reactivespringcloudstarter.helper.SpringBootStartupHelper
+import com.jmsoftware.maf.reactivespringcloudstarter.property.JwtConfigurationProperties
+import com.jmsoftware.maf.reactivespringcloudstarter.property.MafConfigurationProperties
+import com.jmsoftware.maf.reactivespringcloudstarter.property.MafProjectProperties
+import com.jmsoftware.maf.reactivespringcloudstarter.redis.RedisConfiguration
+import com.jmsoftware.maf.reactivespringcloudstarter.service.CommonService
+import com.jmsoftware.maf.reactivespringcloudstarter.service.impl.CommonServiceImpl
+import com.jmsoftware.maf.reactivespringcloudstarter.util.ResponseUtil
+import org.springframework.boot.autoconfigure.AutoConfigureOrder
+import org.springframework.boot.context.properties.EnableConfigurationProperties
+import org.springframework.context.ApplicationContext
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Import
+import org.springframework.core.env.Environment
+import javax.annotation.PostConstruct
 
 /**
- * Description: MuscleAndFitnessServerReactiveAutoConfiguration, change description here.
+ * # MafReactiveAutoConfiguration
  *
- * @author 钟俊（zhongjun）, email: zhongjun@toguide.cn, date: 12/22/2020 2:41 PM
- **/
-@Slf4j
-@AutoConfigureOrder(Integer.MIN_VALUE)
-@EnableConfigurationProperties({
-        MafConfigurationProperties.class,
-        MafProjectProperties.class,
-        JwtConfigurationProperties.class
-})
-@Import({
-        RedisConfiguration.class,
-        WebFluxConfiguration.class,
-        WebClientConfiguration.class
-})
-public class MafReactiveAutoConfiguration {
-    private static final String TEMPLATE = "Initial bean: '{}'";
+ * Description: MafReactiveAutoConfiguration, change description here.
+ *
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/17/22 8:17 AM
+ */
+@AutoConfigureOrder(Int.MIN_VALUE)
+@EnableConfigurationProperties(
+    MafConfigurationProperties::class,
+    MafProjectProperties::class,
+    JwtConfigurationProperties::class
+)
+@Import(RedisConfiguration::class, WebFluxConfiguration::class, WebClientConfiguration::class)
+class MafReactiveAutoConfiguration {
+    companion object {
+        private val log = logger()
+    }
 
     @PostConstruct
-    public void postConstruct() {
-        log.warn("Post construction of [{}] is done. About to inject beans. Auto configure order: {}",
-                 this.getClass().getSimpleName(), Integer.MIN_VALUE);
+    fun postConstruct() {
+        log.warn("Post construction of [${this.javaClass.simpleName}] is done. About to inject beans. Auto configure order: ${Int.MIN_VALUE}")
     }
 
     @Bean
-    public AccessLogFilter requestFilter(MafConfigurationProperties mafConfigurationProperties) {
-        log.warn(TEMPLATE, AccessLogFilter.class.getSimpleName());
-        return new AccessLogFilter(mafConfigurationProperties);
+    fun requestFilter(mafConfigurationProperties: MafConfigurationProperties): AccessLogFilter =
+        AccessLogFilter(mafConfigurationProperties).also {
+            log.warn("Initial bean: `${AccessLogFilter::class.java.simpleName}`")
+        }
+
+    @Bean
+    fun ipHelper(environment: Environment): IpHelper = IpHelper(environment).also {
+        log.warn("Initial bean: `${IpHelper::class.java.simpleName}`")
     }
 
     @Bean
-    public IpHelper ipHelper(Environment environment) {
-        log.warn(TEMPLATE, IpHelper.class.getSimpleName());
-        return new IpHelper(environment);
+    fun springBootStartupHelper(
+        mafProjectProperties: MafProjectProperties,
+        ipHelper: IpHelper,
+        applicationContext: ApplicationContext
+    ): SpringBootStartupHelper = SpringBootStartupHelper(mafProjectProperties, ipHelper, applicationContext).also {
+        log.warn("Initial bean: `${SpringBootStartupHelper::class.java.simpleName}`")
     }
 
     @Bean
-    public SpringBootStartupHelper springBootStartupHelper(MafProjectProperties mafProjectProperties,
-                                                           IpHelper ipHelper, ApplicationContext applicationContext) {
-        log.warn(TEMPLATE, SpringBootStartupHelper.class.getSimpleName());
-        return new SpringBootStartupHelper(mafProjectProperties, ipHelper, applicationContext);
+    fun commonService(mafProjectProperties: MafProjectProperties): CommonService =
+        CommonServiceImpl(mafProjectProperties).also {
+            log.warn("Initial bean: `${CommonService::class.java.simpleName}`")
+        }
+
+    @Bean
+    fun commonController(commonService: CommonService): CommonController = CommonController(commonService).also {
+        log.warn("Initial bean: `${CommonController::class.java.simpleName}`")
     }
 
     @Bean
-    public CommonService commonService(MafProjectProperties mafProjectProperties) {
-        log.warn(TEMPLATE, CommonServiceImpl.class.getSimpleName());
-        return new CommonServiceImpl(mafProjectProperties);
-    }
-
-    @Bean
-    public CommonController commonController(CommonService commonService) {
-        log.warn(TEMPLATE, CommonController.class.getSimpleName());
-        return new CommonController(commonService);
-    }
-
-    @Bean
-    public ResponseUtil responseUtil(ObjectMapper objectMapper) {
-        log.warn(TEMPLATE, ResponseUtil.class.getSimpleName());
-        return new ResponseUtil(objectMapper);
+    fun responseUtil(objectMapper: ObjectMapper): ResponseUtil = ResponseUtil(objectMapper).also {
+        log.warn("Initial bean: `${ResponseUtil::class.java.simpleName}`")
     }
 }

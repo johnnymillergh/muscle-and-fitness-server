@@ -1,1 +1,1 @@
-package com.jmsoftware.maf.mafmis;
+package com.jmsoftware.maf.mafmis

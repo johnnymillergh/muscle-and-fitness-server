@@ -7,12 +7,11 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient
 import org.springframework.util.StopWatch
 
 /**
- * <h1>ApiGatewayApplication</h1>
- *
+ * # ApiGatewayApplication
  *
  * Change description here.
  *
- * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 12/22/2020 3:39 PM
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/17/22 8:48 AM
  */
 @EnableDiscoveryClient
 @SpringBootApplication
