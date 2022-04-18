@@ -5,12 +5,11 @@ package com.jmsoftware.maf.springcloudstarter.function
 import java.util.function.Function
 
 /**
- * <h1>ExceptionHandling</h1>
- *
+ * # ExceptionHandling
  *
  * Change description here.
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com, 9/28/21 8:54 AM
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/18/22 9:20 PM
  * @see <a href='https://juejin.cn/post/6892298625058078727#heading-4'>Java 函数式编程最佳实践 - 赋予函数处理异常的能力</a>
  */
 private object ExceptionHandling

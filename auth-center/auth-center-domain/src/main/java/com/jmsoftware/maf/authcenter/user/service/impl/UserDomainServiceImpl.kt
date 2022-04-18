@@ -21,7 +21,6 @@ import com.jmsoftware.maf.authcenter.user.service.UserDomainService
 import com.jmsoftware.maf.authcenter.user.service.UserRoleDomainService
 import com.jmsoftware.maf.common.bean.PageResponseBodyBean
 import com.jmsoftware.maf.common.domain.authcenter.user.*
-import com.jmsoftware.maf.common.enumeration.ValueDescriptionBaseEnum
 import com.jmsoftware.maf.common.exception.SecurityException
 import com.jmsoftware.maf.common.util.logger
 import com.jmsoftware.maf.springcloudstarter.property.MafConfigurationProperties
@@ -37,9 +36,6 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.concurrent.TimeUnit
 import javax.servlet.http.HttpServletRequest
-import javax.validation.Valid
-import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotNull
 
 /**
  * # UserDomainServiceImpl
@@ -63,7 +59,7 @@ class UserDomainServiceImpl(
         private val logger = logger()
     }
 
-    override fun getUserByLoginToken(loginToken: @NotBlank String): GetUserByLoginTokenResponse? {
+    override fun getUserByLoginToken(loginToken: String): GetUserByLoginTokenResponse? {
         val key =
             "${mafProjectProperties.projectParentArtifactId}${UserRedisKey.GET_USER_BY_LOGIN_TOKEN.keyInfixFormat}$loginToken"
         val hasKey = redisTemplate.hasKey(key)
@@ -80,7 +76,7 @@ class UserDomainServiceImpl(
     }
 
     @Transactional(rollbackFor = [Throwable::class])
-    override fun saveUserForSignup(payload: @Valid SignupPayload): SignupResponse {
+    override fun saveUserForSignup(payload: SignupPayload): SignupResponse {
         val user = User()
         user.username = payload.username
         user.email = payload.email
@@ -94,7 +90,7 @@ class UserDomainServiceImpl(
         return response
     }
 
-    override fun login(payload: @Valid LoginPayload): LoginResponse {
+    override fun login(payload: LoginPayload): LoginResponse {
         val user = getUserByLoginToken(payload.loginToken) ?: throw SecurityException(HttpStatus.UNAUTHORIZED)
         logger.info("User login: $user")
         val matched = bCryptPasswordEncoder.matches(payload.password, user.password)
@@ -117,12 +113,12 @@ class UserDomainServiceImpl(
         return true
     }
 
-    override fun getUserStatus(payload: @Valid @NotNull GetUserStatusPayload): String {
+    override fun getUserStatus(payload: GetUserStatusPayload): String {
         logger.info("Current username: {}", currentUsername())
-        return ValueDescriptionBaseEnum.getDescriptionByValue(UserStatus::class.java, payload.status)
+        return payload.status.toString()
     }
 
-    override fun getUserPageList(payload: @Valid @NotNull GetUserPageListPayload): PageResponseBodyBean<User> {
+    override fun getUserPageList(payload: GetUserPageListPayload): PageResponseBodyBean<User> {
         logger.info("{}", payload)
         val page = Page<User>(
             payload.currentPage.toLong(), payload.pageSize.toLong()

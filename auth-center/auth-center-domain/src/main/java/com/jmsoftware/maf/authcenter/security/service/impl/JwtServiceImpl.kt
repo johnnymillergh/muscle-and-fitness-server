@@ -23,8 +23,6 @@ import java.util.concurrent.TimeUnit
 import javax.annotation.PostConstruct
 import javax.crypto.SecretKey
 import javax.servlet.http.HttpServletRequest
-import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotNull
 
 /**
  * # JwtServiceImpl
@@ -55,7 +53,7 @@ class JwtServiceImpl(
         log.warn("Secret key for JWT parser was generated. Algorithm: ${secretKey.algorithm}")
     }
 
-    override fun createJwt(@NotNull authentication: Authentication, @NotNull rememberMe: Boolean): String {
+    override fun createJwt(authentication: Authentication, rememberMe: Boolean): String {
         val userPrincipal = authentication.principal as UserPrincipal
         return this.createJwt(
             rememberMe,
@@ -67,9 +65,9 @@ class JwtServiceImpl(
     }
 
     override fun createJwt(
-        @NotNull rememberMe: Boolean,
-        @NotNull id: Long,
-        @NotNull subject: String,
+        rememberMe: Boolean,
+        id: Long,
+        subject: String,
         roles: List<String>,
         authorities: Collection<GrantedAuthority>
     ): String {
@@ -95,7 +93,7 @@ class JwtServiceImpl(
         return jwt
     }
 
-    override fun parseJwt(@NotBlank jwt: String): Claims {
+    override fun parseJwt(jwt: String): Claims {
         val claims: Claims = try {
             Optional.ofNullable(jwtParser.parseClaimsJws(jwt).body)
                 .orElseThrow {
@@ -131,7 +129,7 @@ class JwtServiceImpl(
         return claims
     }
 
-    override fun invalidateJwt(@NotNull request: HttpServletRequest) {
+    override fun invalidateJwt(request: HttpServletRequest) {
         val jwt = getJwtFromRequest(request)
         val username = getUsernameFromJwt(jwt)
         // Delete JWT from redis
@@ -140,17 +138,17 @@ class JwtServiceImpl(
         log.error("Invalidate JWT. Redis key of JWT = $redisKeyOfJwt, deleted = $deletedKeyNumber")
     }
 
-    override fun getUsernameFromJwt(@NotBlank jwt: String): String {
+    override fun getUsernameFromJwt(jwt: String): String {
         val claims = parseJwt(jwt)
         return claims.subject
     }
 
-    override fun getUsernameFromRequest(@NotNull request: HttpServletRequest): String {
+    override fun getUsernameFromRequest(request: HttpServletRequest): String {
         val jwt = getJwtFromRequest(request)
         return getUsernameFromJwt(jwt)
     }
 
-    override fun getJwtFromRequest(@NotNull request: HttpServletRequest): String {
+    override fun getJwtFromRequest(request: HttpServletRequest): String {
         val bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION)
         return if (CharSequenceUtil.isNotBlank(bearerToken)
             && bearerToken.startsWith(JwtConfigurationProperties.TOKEN_PREFIX)
@@ -159,7 +157,7 @@ class JwtServiceImpl(
         } else null.toString()
     }
 
-    override fun parse(@NotNull request: HttpServletRequest): ParseJwtResponse {
+    override fun parse(request: HttpServletRequest): ParseJwtResponse {
         val jwt = getJwtFromRequest(request)
         val claims = parseJwt(jwt)
         val parseJwtResponse = ParseJwtResponse()

@@ -13,12 +13,11 @@ import org.springframework.web.multipart.MultipartFile
 import javax.validation.Valid
 
 /**
- * <h1>WriteResourceController</h1>
- *
+ * # WriteResourceController
  *
  * Change description here.
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com, 6/20/21 1:57 PM
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/18/22 9:19 PM
  */
 @Validated
 @RestController

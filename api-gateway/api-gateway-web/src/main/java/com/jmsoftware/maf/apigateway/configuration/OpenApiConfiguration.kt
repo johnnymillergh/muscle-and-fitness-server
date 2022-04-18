@@ -16,12 +16,11 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 /**
- * <h1>OpenApiConfiguration</h1>
- *
+ * # OpenApiConfiguration
  *
  * Change description here.
  *
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com, 2/1/22 11:51 PM
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/18/22 9:18 PM
  */
 @Configuration
 class OpenApiConfiguration(

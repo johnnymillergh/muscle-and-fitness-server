@@ -14,12 +14,11 @@ import java.io.InputStream
 import javax.validation.constraints.*
 
 /**
- * <h1>MinioHelper</h1>
- *
+ * # MinioHelper
  *
  * Change description here.
  *
- * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 6/7/21 9:52 PM
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/18/22 9:20 PM
  */
 @Suppress("unused")
 @Validated

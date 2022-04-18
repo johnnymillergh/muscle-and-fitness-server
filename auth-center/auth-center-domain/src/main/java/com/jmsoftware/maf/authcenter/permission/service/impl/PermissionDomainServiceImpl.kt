@@ -6,7 +6,6 @@ import com.jmsoftware.maf.authcenter.permission.persistence.Permission
 import com.jmsoftware.maf.authcenter.permission.service.PermissionDomainService
 import com.jmsoftware.maf.common.domain.authcenter.permission.PermissionType
 import org.springframework.stereotype.Service
-import javax.validation.constraints.NotEmpty
 
 /**
  * # PermissionDomainServiceImpl
@@ -19,8 +18,8 @@ import javax.validation.constraints.NotEmpty
 class PermissionDomainServiceImpl
     : ServiceImpl<PermissionMapper, Permission>(), PermissionDomainService {
     override fun getPermissionListByRoleIdList(
-        roleIdList: @NotEmpty List<Long>,
-        permissionTypeList: @NotEmpty List<PermissionType>
+        roleIdList: List<Long>,
+        permissionTypeList: List<PermissionType>
     ): List<Permission> {
         return getBaseMapper().selectPermissionListByRoleIdList(roleIdList, permissionTypeList)
     }

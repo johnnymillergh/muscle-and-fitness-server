@@ -10,12 +10,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import javax.annotation.PostConstruct
 
 /**
- * <h1>WebSecurityConfiguration</h1>
- *
+ * # WebSecurityConfiguration
  *
  * Security handler configuration.
  *
- * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/16/22 10:52 PM
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/18/22 9:20 PM
  */
 @EnableWebSecurity
 class WebSecurityConfiguration : WebSecurityConfigurerAdapter() {

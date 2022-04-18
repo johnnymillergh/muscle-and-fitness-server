@@ -8,7 +8,6 @@ import com.jmsoftware.maf.mafmis.remote.OssCenterFeignService
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import java.util.*
-import javax.validation.constraints.NotNull
 
 /**
  * # OssCenterFeignServiceImpl
@@ -25,7 +24,7 @@ class OssCenterFeignServiceImpl(
         private val log = logger()
     }
 
-    override fun uploadSingleResource(multipartFile: @NotNull MultipartFile): ObjectResponse {
+    override fun uploadSingleResource(multipartFile: MultipartFile): ObjectResponse {
         log.info("Uploading single resource to oss center. multipartFile: {}", multipartFile)
         return Optional.ofNullable(ossCenterFeignClient.uploadSingleResource(multipartFile))
             .map { response -> response.data!! }

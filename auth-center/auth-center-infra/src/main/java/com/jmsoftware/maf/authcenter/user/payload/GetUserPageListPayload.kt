@@ -1,8 +1,6 @@
 package com.jmsoftware.maf.authcenter.user.payload
 
 import com.jmsoftware.maf.common.bean.PaginationBase
-import com.jmsoftware.maf.springcloudstarter.validation.annotation.DateTimeRangeGroup
-import com.jmsoftware.maf.springcloudstarter.validation.annotation.DateTimeRangeType
 import java.time.LocalDateTime
 
 /**
@@ -15,9 +13,7 @@ import java.time.LocalDateTime
 class GetUserPageListPayload : PaginationBase() {
     var username: String? = null
 
-    @DateTimeRangeGroup(type = DateTimeRangeType.START_TIME)
-    val startTime: LocalDateTime? = null
+    var startTime: LocalDateTime? = null
 
-    @DateTimeRangeGroup(type = DateTimeRangeType.END_TIME)
-    val endTime: LocalDateTime? = null
+    var endTime: LocalDateTime? = null
 }

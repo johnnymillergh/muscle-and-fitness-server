@@ -8,7 +8,6 @@ import org.springframework.lang.Nullable
 import org.springframework.scheduling.quartz.SchedulerFactoryBean
 import org.springframework.stereotype.Service
 import java.util.function.UnaryOperator
-import javax.validation.constraints.NotBlank
 
 /**
  * # QuartzJobServiceImpl
@@ -31,11 +30,11 @@ class QuartzJobServiceImpl(
     }
 
     override fun addJob(
-        clazzName: @NotBlank String,
-        jobName: @NotBlank String,
-        groupName: @NotBlank String,
-        cronExp: @NotBlank String,
-        @Nullable param: Map<String, Any>?
+        clazzName: String,
+        jobName: String,
+        groupName: String,
+        cronExp: String,
+        param: Map<String, Any>?
     ) {
         val jobDetailName = JOB_DETAIL_NAME_OPERATOR.apply(jobName)
         // Build job
@@ -57,19 +56,19 @@ class QuartzJobServiceImpl(
         log.info("Added job to scheduler. jobDetailName: $jobDetailName, triggerName: $triggerName")
     }
 
-    override fun pauseJob(jobName: @NotBlank String, groupName: @NotBlank String) {
+    override fun pauseJob(jobName: String, groupName: String) {
         val jobDetailName = JOB_DETAIL_NAME_OPERATOR.apply(jobName)
         schedulerFactoryBean.scheduler.pauseJob(JobKey.jobKey(jobDetailName, groupName))
         log.info("Paused job. jobDetailName: {}", jobDetailName)
     }
 
-    override fun resumeJob(jobName: @NotBlank String, groupName: @NotBlank String) {
+    override fun resumeJob(jobName: String, groupName: String) {
         val jobDetailName = JOB_DETAIL_NAME_OPERATOR.apply(jobName)
         schedulerFactoryBean.scheduler.resumeJob(JobKey.jobKey(jobDetailName, groupName))
         log.info("Resumed job. jobDetailName: {}", jobDetailName)
     }
 
-    override fun runImmediately(jobName: @NotBlank String, groupName: @NotBlank String) {
+    override fun runImmediately(jobName: String, groupName: String) {
         val jobDetailName = JOB_DETAIL_NAME_OPERATOR.apply(jobName)
         schedulerFactoryBean.scheduler.triggerJob(JobKey.jobKey(jobDetailName, groupName))
         log.info(
@@ -79,7 +78,7 @@ class QuartzJobServiceImpl(
     }
 
     override fun updateJob(
-        jobName: @NotBlank String, groupName: @NotBlank String, cronExp: @NotBlank String,
+        jobName: String, groupName: String, cronExp: String,
         @Nullable param: Map<String, Any>?
     ) {
         val triggerName = TRIGGER_NAME_OPERATOR.apply(jobName)
@@ -94,7 +93,7 @@ class QuartzJobServiceImpl(
         log.info("Updated job. triggerName: {}", triggerName)
     }
 
-    override fun deleteJob(jobName: @NotBlank String, groupName: @NotBlank String) {
+    override fun deleteJob(jobName: String, groupName: String) {
         val triggerName = TRIGGER_NAME_OPERATOR.apply(jobName)
         // Pause, Remove the trigger and the job, and then delete the job.
         schedulerFactoryBean.scheduler.pauseTrigger(TriggerKey.triggerKey(jobName, groupName))

@@ -15,7 +15,6 @@ import org.springframework.http.*
 import org.springframework.stereotype.Service
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody
 import java.io.OutputStream
-import javax.validation.constraints.NotBlank
 
 /**
  * # ReadResourceServiceImpl
@@ -34,8 +33,8 @@ class ReadResourceServiceImpl(
     }
 
     override fun asyncGetSingleResource(
-        bucket: @NotBlank String,
-        `object`: @NotBlank String
+        bucket: String,
+        `object`: String
     ): ResponseEntity<StreamingResponseBody> {
         val statObjectResponse: StatObjectResponse? = try {
             minioHelper.statObject(bucket, `object`)
@@ -59,8 +58,8 @@ class ReadResourceServiceImpl(
     }
 
     override fun asyncStreamSingleResource(
-        bucket: @NotBlank String,
-        `object`: @NotBlank String,
+        bucket: String,
+        `object`: String,
         range: String?
     ): ResponseEntity<StreamingResponseBody> {
         val statObjectResponse: StatObjectResponse? = try {
@@ -96,8 +95,8 @@ class ReadResourceServiceImpl(
     }
 
     override fun asyncDownloadSingleResource(
-        bucket: @NotBlank String,
-        `object`: @NotBlank String
+        bucket: String,
+        `object`: String
     ): ResponseEntity<StreamingResponseBody> {
         val statObjectResponse: StatObjectResponse? = try {
             minioHelper.statObject(bucket, `object`)
@@ -128,8 +127,8 @@ class ReadResourceServiceImpl(
     }
 
     override fun stateObject(
-        bucket: @NotBlank String,
-        `object`: @NotBlank String
+        bucket: String,
+        `object`: String
     ): SerializableStatObjectResponse {
         val statObjectResponse = minioHelper.statObject(bucket, `object`)
         if (statObjectResponse == null) {

@@ -7,7 +7,6 @@ import com.jmsoftware.maf.springcloudstarter.quartz.constant.MisfirePolicy.MISFI
 import com.jmsoftware.maf.springcloudstarter.quartz.constant.QuartzJobStatus
 import com.jmsoftware.maf.springcloudstarter.quartz.constant.QuartzJobStatus.NORMAL
 import com.jmsoftware.maf.springcloudstarter.quartz.entity.persistence.QuartzJobConfiguration
-import com.jmsoftware.maf.springcloudstarter.validation.annotation.ValidEnumValue
 import org.hibernate.validator.constraints.Length
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
@@ -24,16 +23,10 @@ class CreateOrModifyQuartzJobConfigurationPayload {
     lateinit var group: @NotBlank @Length(max = 200) String
     lateinit var invokeTarget: @NotBlank @Length(max = 500) String
     lateinit var cronExpression: @NotBlank @Length(max = 50) String
-
-    @ValidEnumValue(targetEnum = MisfirePolicy::class)
-    var misfirePolicy: @NotNull Byte = MISFIRE_INSTRUCTION_SMART_POLICY.value
-
-    @ValidEnumValue(targetEnum = Concurrent::class)
-    var concurrent: @NotNull Byte = DISALLOW_CONCURRENT.value
+    var misfirePolicy: @NotNull MisfirePolicy = MISFIRE_INSTRUCTION_SMART_POLICY
+    var concurrent: @NotNull Concurrent = DISALLOW_CONCURRENT
     lateinit var description: @NotBlank @Length(max = 1000) String
-
-    @ValidEnumValue(targetEnum = QuartzJobStatus::class)
-    var status: @NotNull Byte = NORMAL.value
+    var status: @NotNull QuartzJobStatus = NORMAL
 
     fun asQuartzJobConfiguration(): QuartzJobConfiguration {
         val result = QuartzJobConfiguration()
@@ -41,10 +34,10 @@ class CreateOrModifyQuartzJobConfigurationPayload {
         result.group = group
         result.invokeTarget = invokeTarget
         result.cronExpression = cronExpression
-        result.misfirePolicy = misfirePolicy
-        result.concurrent = concurrent
+        result.misfirePolicy = misfirePolicy.value
+        result.concurrent = concurrent.value
         result.description = description
-        result.status = status
+        result.status = status.value
         return result
     }
 }

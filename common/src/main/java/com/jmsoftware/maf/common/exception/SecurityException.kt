@@ -4,12 +4,11 @@ import org.springframework.http.HttpStatus
 import java.io.Serial
 
 /**
- * <h1>SecurityException</h1>
- *
+ * # SecurityException
  *
  * Change description here.
  *
- * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date 3/12/20 3:15 PM
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/18/22 9:18 PM
  */
 class SecurityException : BaseException {
     constructor(httpStatus: HttpStatus) : super(httpStatus)

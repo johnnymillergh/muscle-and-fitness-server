@@ -96,12 +96,11 @@ class MafConfigurationProperties {
     }
 
     /**
-     * <h1>IgnoredUrl</h1>
-     *
+     * # IgnoredUrl
      *
      * Ignored URL configuration.
      *
-     * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 2/9/2021 9:39 AM
+     * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/18/22 9:20 PM
      **/
     class IgnoredUrl {
         private interface Constant {

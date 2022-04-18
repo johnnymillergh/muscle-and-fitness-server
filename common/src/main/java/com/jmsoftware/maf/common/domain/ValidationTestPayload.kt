@@ -5,13 +5,11 @@ import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 
 /**
- * <h1>ValidationTestPayload</h1>
- *
+ * # ValidationTestPayload
  *
  * Change description here.
  *
- * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com
- * @date 2/14/20 11:34 AM
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/18/22 9:18 PM
  */
 class ValidationTestPayload {
     @NotNull

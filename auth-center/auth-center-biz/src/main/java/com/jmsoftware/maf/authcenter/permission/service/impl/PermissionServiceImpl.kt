@@ -25,8 +25,6 @@ import org.springframework.cloud.client.discovery.DiscoveryClient
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 import java.util.*
-import javax.validation.Valid
-import javax.validation.constraints.NotNull
 
 /**
  * # PermissionServiceImpl
@@ -49,7 +47,7 @@ class PermissionServiceImpl(
     }
 
     override fun getPermissionListByRoleIdList(
-        payload: @Valid @NotNull GetPermissionListByRoleIdListPayload
+        payload: GetPermissionListByRoleIdListPayload
     ): GetPermissionListByRoleIdListResponse {
         val adminRole = roleDomainService.checkAdmin(payload.roleIdList)
         val response = GetPermissionListByRoleIdListResponse()

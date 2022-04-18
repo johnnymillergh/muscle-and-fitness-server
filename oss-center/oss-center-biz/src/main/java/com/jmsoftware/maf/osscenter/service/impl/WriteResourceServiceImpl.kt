@@ -18,8 +18,6 @@ import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import java.io.InputStream
 import java.util.stream.Collectors
-import javax.validation.Valid
-import javax.validation.constraints.NotNull
 
 /**
  * # WriteResourceServiceImpl
@@ -36,7 +34,7 @@ class WriteResourceServiceImpl(
         private val log = logger()
     }
 
-    override fun uploadSingleResource(multipartFile: @NotNull MultipartFile): ObjectResponse {
+    override fun uploadSingleResource(multipartFile: MultipartFile): ObjectResponse {
         val mediaType = this.parseMediaType(multipartFile)
         minioHelper.makeBucket(mediaType.type)
         val objectWriteResponse = minioHelper.put(
@@ -88,8 +86,8 @@ class WriteResourceServiceImpl(
      * @see <a href='https://teppen.io/2018/06/23/aws_s3_etags/'>All about AWS S3 ETags</a>
      */
     override fun uploadResourceChunk(
-        multipartFile: @NotNull MultipartFile,
-        payload: @Valid @NotNull UploadResourceChunkPayload
+        multipartFile: MultipartFile,
+        payload: UploadResourceChunkPayload
     ): ObjectResponse {
         require(!CharSequenceUtil.isBlank(multipartFile.originalFilename)) { "File name required" }
         var mediaType: MediaType? = null
@@ -114,7 +112,7 @@ class WriteResourceServiceImpl(
     }
 
     @SneakyThrows
-    override fun mergeResourceChunk(payload: @Valid @NotNull MergeResourceChunkPayload): ObjectResponse {
+    override fun mergeResourceChunk(payload: MergeResourceChunkPayload): ObjectResponse {
         val objectName = validateObject(payload.objectList)
         val sources = payload.objectList
             .stream()

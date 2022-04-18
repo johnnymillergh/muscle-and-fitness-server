@@ -25,8 +25,6 @@ import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.concurrent.TimeUnit
-import javax.validation.constraints.NotEmpty
-import javax.validation.constraints.NotNull
 
 /**
  * # RoleDomainServiceImpl
@@ -46,7 +44,7 @@ class RoleDomainServiceImpl(
         private val logger = logger()
     }
 
-    override fun getRoleList(userId: @NotNull Long): GetRoleListByUserIdResponse {
+    override fun getRoleList(userId: Long): GetRoleListByUserIdResponse {
         val key = "${mafProjectProperties.projectParentArtifactId}${GET_ROLE_LIST_BY_USER_ID.keyInfixFormat}$userId"
         val hadKey = redisTemplate.hasKey(key)
         if (hadKey) {
@@ -63,7 +61,7 @@ class RoleDomainServiceImpl(
         return getBaseMapper().selectRoleListByUserId(userId)
     }
 
-    override fun checkAdmin(roleIdList: @NotEmpty List<Long>): Boolean {
+    override fun checkAdmin(roleIdList: List<Long>): Boolean {
         // If roleNameSet is not empty (contains "admin")
         return this.ktQuery()
             .select(Role::name)
@@ -96,7 +94,7 @@ class RoleDomainServiceImpl(
     }
 
     @Transactional(rollbackFor = [Throwable::class])
-    override fun save(beanList: @NotEmpty List<RoleExcelBean>) {
+    override fun save(beanList: List<RoleExcelBean>) {
         val roleList = beanList
             .stream()
             .map { roleExcelBean: RoleExcelBean -> RoleExcelBean.transformTo(roleExcelBean) }

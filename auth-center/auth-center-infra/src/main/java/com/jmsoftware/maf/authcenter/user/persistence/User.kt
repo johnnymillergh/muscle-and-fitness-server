@@ -31,49 +31,49 @@ class User : BasePersistenceEntity() {
      * Username
      */
     @TableField(value = COL_USERNAME)
-    lateinit var username: String
+    var username: String? = null
 
     /**
      * Email
      */
     @TableField(value = COL_EMAIL)
-    lateinit var email: String
+    var email: String? = null
 
     /**
      * Cellphone number
      */
     @TableField(value = COL_CELLPHONE)
-    lateinit var cellphone: String
+    var cellphone: String? = null
 
     /**
      * Password
      */
     @TableField(value = COL_PASSWORD)
-    lateinit var password: String
+    var password: String? = null
 
     /**
      * Full name
      */
     @TableField(value = COL_FULL_NAME)
-    lateinit var fullName: String
+    var fullName: String? = null
 
     /**
      * Birthday
      */
     @TableField(value = COL_BIRTHDAY)
-    lateinit var birthday: LocalDate
+    var birthday: LocalDate? = null
 
     /**
      * 26 gender options
      */
     @TableField(value = COL_GENDER)
-    lateinit var gender: String
+    var gender: String? = null
 
     /**
      * User avatar full path on SFTP server
      */
     @TableField(value = COL_AVATAR)
-    lateinit var avatar: String
+    var avatar: String? = null
 
     /**
      * Status. 1 - enabled, 2 - disabled

@@ -8,8 +8,6 @@ import com.jmsoftware.maf.springcloudstarter.property.MafProjectProperties
 import com.jmsoftware.maf.springcloudstarter.service.CommonService
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
-import javax.validation.Valid
-import javax.validation.constraints.NotNull
 
 /**
  * # CommonServiceImpl
@@ -33,7 +31,7 @@ class CommonServiceImpl(
         return JSONUtil.parseObj(mafProjectProperties).set("greeting", greeting)
     }
 
-    override fun validateObject(payload: @Valid @NotNull ValidationTestPayload) {
+    override fun validateObject(payload: ValidationTestPayload) {
         log.info("Validation passed! {}", payload)
     }
 }

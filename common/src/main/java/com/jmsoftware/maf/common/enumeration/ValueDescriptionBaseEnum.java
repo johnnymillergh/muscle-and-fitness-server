@@ -8,12 +8,12 @@ import lombok.NonNull;
 import lombok.val;
 
 /**
- * <h1>ValueDescriptionBaseEnum</h1>
- * <p>
+ * # ValueDescriptionBaseEnum
+ *
  * Change description here.
  *
  * @param <V> the type of value
- * @author Johnny Miller (鍾俊), email: johnnysviva@outlook.com, 2/27/22 11:32 AM
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/18/22 9:18 PM
  */
 @SuppressWarnings("unused")
 public interface ValueDescriptionBaseEnum<V> {

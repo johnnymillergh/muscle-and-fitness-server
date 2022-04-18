@@ -11,6 +11,7 @@ import com.jmsoftware.maf.authcenter.user.persistence.User
 import com.jmsoftware.maf.authcenter.user.service.UserRoleDomainService
 import com.jmsoftware.maf.common.domain.authcenter.user.LoginPayload
 import com.jmsoftware.maf.common.domain.authcenter.user.SignupPayload
+import com.jmsoftware.maf.common.domain.authcenter.user.UserStatus
 import com.jmsoftware.maf.common.exception.SecurityException
 import com.jmsoftware.maf.common.util.logger
 import com.jmsoftware.maf.springcloudstarter.property.MafConfigurationProperties
@@ -149,8 +150,7 @@ internal class UserDomainServiceImplTest {
     @Test
     fun getUserStatus() {
         val payload = GetUserStatusPayload()
-        payload.status = 1.toByte()
-        payload.status2 = 0.toByte()
+        payload.status = UserStatus.ENABLED
         val thrownException =
             assertThrows(IllegalStateException::class.java) { userDomainService.getUserStatus(payload) }
         log.warn("Thrown exception: ${thrownException.message}")

@@ -17,12 +17,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 import javax.servlet.http.HttpServletRequest
 
 /**
- * <h1>DatabaseExceptionControllerAdvice</h1>
- *
+ * # DatabaseExceptionControllerAdvice
  *
  * Exception advice for database exception.
  *
- * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 6/27/2021 10:41 AM
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/18/22 9:20 PM
  */
 @RestControllerAdvice
 @ConditionalOnClass(

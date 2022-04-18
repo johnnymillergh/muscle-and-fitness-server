@@ -7,9 +7,9 @@ import org.springframework.validation.annotation.Validated
 import javax.validation.constraints.NotEmpty
 
 /**
- * <h1>SwaggerConfigurationProperties</h1>
+ * # SwaggerConfigurationProperties
  *
- * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 2/7/2021 3:28 PM
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/18/22 9:17 PM
  */
 @Validated
 @RefreshScope

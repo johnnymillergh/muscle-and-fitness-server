@@ -27,7 +27,7 @@ open class PaginationBase {
      * The page size. Default: 10
      */
     @JsonIgnore
-    @NotNull(message = "The page size is required！")
+    @NotNull(message = "The page size is required!")
     @Range(min = 10L, max = 100L, message = "The rage of page size: 10 <= page size <= 100!")
     var pageSize: Int = 10
 

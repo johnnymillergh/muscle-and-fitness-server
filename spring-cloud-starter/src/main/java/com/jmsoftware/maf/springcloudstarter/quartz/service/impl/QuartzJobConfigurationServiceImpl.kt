@@ -28,10 +28,6 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
 import javax.annotation.PostConstruct
-import javax.validation.Valid
-import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotEmpty
-import javax.validation.constraints.NotNull
 
 /**
  * # QuartzJobConfigurationServiceImpl
@@ -73,7 +69,7 @@ class QuartzJobConfigurationServiceImpl(
     }
 
     override fun getPageList(
-        payload: @Valid @NotNull GetQuartzJobConfigurationPageListPayload
+        payload: GetQuartzJobConfigurationPageListPayload
     ): PageResponseBodyBean<GetQuartzJobConfigurationPageListItem> {
         val page: Page<GetQuartzJobConfigurationPageListItem> =
             Page(payload.currentPage.toLong(), payload.pageSize.toLong())
@@ -93,7 +89,7 @@ class QuartzJobConfigurationServiceImpl(
     }
 
     @Transactional(rollbackFor = [Throwable::class])
-    override fun save(beanList: @NotEmpty List<QuartzJobConfigurationExcel>) {
+    override fun save(beanList: List<QuartzJobConfigurationExcel>) {
         requireTrue(
             this.saveBatch(
                 beanList.stream()
@@ -109,7 +105,7 @@ class QuartzJobConfigurationServiceImpl(
         this.getBaseMapper().selectListForExporting(mafProjectProperties.projectArtifactId)
 
     override fun create(
-        payload: @Valid @NotNull CreateOrModifyQuartzJobConfigurationPayload
+        payload: CreateOrModifyQuartzJobConfigurationPayload
     ): Long {
         validateCronExpression(payload.cronExpression)
         val quartzJobConfiguration: QuartzJobConfiguration = payload.asQuartzJobConfiguration()
@@ -127,8 +123,8 @@ class QuartzJobConfigurationServiceImpl(
     }
 
     override fun modify(
-        id: @NotNull Long,
-        payload: @Valid @NotNull CreateOrModifyQuartzJobConfigurationPayload
+        id: Long,
+        payload: CreateOrModifyQuartzJobConfigurationPayload
     ): Long {
         validateCronExpression(payload.cronExpression)
         val quartzJobConfiguration: QuartzJobConfiguration = payload.asQuartzJobConfiguration()
@@ -140,9 +136,9 @@ class QuartzJobConfigurationServiceImpl(
     }
 
     override fun patch(
-        id: @NotNull Long,
-        property: @NotBlank String,
-        payload: @NotNull CreateOrModifyQuartzJobConfigurationPayload
+        id: Long,
+        property: String,
+        payload: CreateOrModifyQuartzJobConfigurationPayload
     ): Long {
         val value = ReflectUtil.getFieldValue(payload, property)
         Objects.requireNonNull(value, CharSequenceUtil.format("Property's value({}) must not be null", property))
@@ -162,7 +158,7 @@ class QuartzJobConfigurationServiceImpl(
         return id
     }
 
-    override fun runImmediately(id: @NotNull Long): Long {
+    override fun runImmediately(id: Long): Long {
         val quartzJobConfiguration: QuartzJobConfiguration =
             this.getById(id) ?: throw IllegalArgumentException("Quartz job(id:$id) not found!")
         val scheduler: Scheduler = schedulerFactoryBean.scheduler
@@ -181,7 +177,7 @@ class QuartzJobConfigurationServiceImpl(
     }
 
     @Transactional(rollbackFor = [Throwable::class])
-    override fun delete(id: @NotNull Long, group: @NotBlank String): Long {
+    override fun delete(id: Long, group: String): Long {
         requireTrue(this.removeById(id)) { deleted: Boolean ->
             logger.warn("Quartz job configuration deleted: $deleted")
         }.orElseThrow { IllegalStateException(CharSequenceUtil.format("Failed to delete Quartz job configuration")) }

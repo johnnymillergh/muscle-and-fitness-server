@@ -45,7 +45,7 @@ interface OssCenterFeignClient {
             private val log = logger()
         }
 
-        override fun uploadSingleResource(multipartFile: @NotNull MultipartFile): ResponseBodyBean<ObjectResponse> {
+        override fun uploadSingleResource(multipartFile: MultipartFile): ResponseBodyBean<ObjectResponse> {
             log.error("Fallback -> OssCenterFeignClient#uploadSingleResource()")
             return ResponseBodyBean.ofFailureMessage("Fell back uploading single resource")
         }

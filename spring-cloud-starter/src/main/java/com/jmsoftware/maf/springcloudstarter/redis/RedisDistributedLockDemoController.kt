@@ -12,8 +12,7 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.locks.Lock
 
 /**
- * <h1>RedisDistributedLockDemoController</h1>
- *
+ * # RedisDistributedLockDemoController
  *
  * Change description here.
  *
