@@ -32,21 +32,21 @@ class QuartzJobConfigurationController(
         private val log by LoggerDelegate()
     }
 
-    @GetMapping("/quartz-job-configurations")
+    @GetMapping("/configurations")
     fun getPageList(
         payload: @Valid GetQuartzJobConfigurationPageListPayload
     ): PageResponseBodyBean<GetQuartzJobConfigurationPageListItem> {
         return service.getPageList(payload)
     }
 
-    @PostMapping("/quartz-job-configurations")
+    @PostMapping("/configurations")
     fun create(
         @RequestBody payload: @Valid CreateOrModifyQuartzJobConfigurationPayload
     ): ResponseBodyBean<Long> {
         return ResponseBodyBean.ofSuccess(service.create(payload))
     }
 
-    @PutMapping("/quartz-job-configurations/{id}")
+    @PutMapping("/configurations/{id}")
     fun modify(
         @PathVariable id: Long,
         @Valid @RequestBody payload: CreateOrModifyQuartzJobConfigurationPayload
@@ -54,7 +54,7 @@ class QuartzJobConfigurationController(
         return ResponseBodyBean.ofSuccess(service.modify(id, payload))
     }
 
-    @PatchMapping("/quartz-job-configurations/{id}/{property}")
+    @PatchMapping("/configurations/{id}/{property}")
     fun patch(
         @PathVariable id: Long,
         @PathVariable property: String,
@@ -63,12 +63,12 @@ class QuartzJobConfigurationController(
         return ResponseBodyBean.ofSuccess(service.patch(id, property, payload))
     }
 
-    @PostMapping("/quartz-job-configurations/{id}/run-immediately")
+    @PostMapping("/configurations/{id}/run-immediately")
     fun runImmediately(@PathVariable id: Long): ResponseBodyBean<Long> {
         return ResponseBodyBean.ofSuccess(service.runImmediately(id))
     }
 
-    @DeleteMapping("/quartz-job-configurations/{id}/{group}")
+    @DeleteMapping("/configurations/{id}/{group}")
     fun delete(@PathVariable id: Long, @PathVariable group: String): ResponseBodyBean<Long> {
         return ResponseBodyBean.ofSuccess(service.delete(id, group))
     }
