@@ -35,43 +35,33 @@ class QuartzJobConfigurationController(
     @GetMapping("/configurations")
     fun getPageList(
         payload: @Valid GetQuartzJobConfigurationPageListPayload
-    ): PageResponseBodyBean<GetQuartzJobConfigurationPageListItem> {
-        return service.getPageList(payload)
-    }
+    ): PageResponseBodyBean<GetQuartzJobConfigurationPageListItem> = service.getPageList(payload)
 
     @PostMapping("/configurations")
     fun create(
         @RequestBody payload: @Valid CreateOrModifyQuartzJobConfigurationPayload
-    ): ResponseBodyBean<Long> {
-        return ResponseBodyBean.ofSuccess(service.create(payload))
-    }
+    ): ResponseBodyBean<Long> = ResponseBodyBean.ofSuccess(service.create(payload))
 
     @PutMapping("/configurations/{id}")
     fun modify(
         @PathVariable id: Long,
         @Valid @RequestBody payload: CreateOrModifyQuartzJobConfigurationPayload
-    ): ResponseBodyBean<Long> {
-        return ResponseBodyBean.ofSuccess(service.modify(id, payload))
-    }
+    ): ResponseBodyBean<Long> = ResponseBodyBean.ofSuccess(service.modify(id, payload))
 
     @PatchMapping("/configurations/{id}/{property}")
     fun patch(
         @PathVariable id: Long,
         @PathVariable property: String,
         @RequestBody payload: CreateOrModifyQuartzJobConfigurationPayload
-    ): ResponseBodyBean<Long> {
-        return ResponseBodyBean.ofSuccess(service.patch(id, property, payload))
-    }
+    ): ResponseBodyBean<Long> = ResponseBodyBean.ofSuccess(service.patch(id, property, payload))
 
     @PostMapping("/configurations/{id}/run-immediately")
-    fun runImmediately(@PathVariable id: Long): ResponseBodyBean<Long> {
-        return ResponseBodyBean.ofSuccess(service.runImmediately(id))
-    }
+    fun runImmediately(@PathVariable id: Long): ResponseBodyBean<Long> =
+        ResponseBodyBean.ofSuccess(service.runImmediately(id))
 
     @DeleteMapping("/configurations/{id}/{group}")
-    fun delete(@PathVariable id: Long, @PathVariable group: String): ResponseBodyBean<Long> {
-        return ResponseBodyBean.ofSuccess(service.delete(id, group))
-    }
+    fun delete(@PathVariable id: Long, @PathVariable group: String): ResponseBodyBean<Long> =
+        ResponseBodyBean.ofSuccess(service.delete(id, group))
 
     override fun onExceptionOccurred() {
         log.error("Exception occurred when uploading excel. Excel class: `${QuartzJobConfigurationExcel::class.java}`")
@@ -81,19 +71,11 @@ class QuartzJobConfigurationController(
     override fun validateBeforeAddToBeanList(
         beanList: List<QuartzJobConfigurationExcel>,
         bean: QuartzJobConfigurationExcel, index: Int
-    ) {
-        service.validateBeforeAddToBeanList(beanList, bean, index)
-    }
+    ) = service.validateBeforeAddToBeanList(beanList, bean, index)
 
-    override fun executeDatabaseOperation(beanList: List<QuartzJobConfigurationExcel>) {
-        service.save(beanList)
-    }
+    override fun executeDatabaseOperation(beanList: List<QuartzJobConfigurationExcel>) = service.save(beanList)
 
-    override fun getTemplateFileName(): String {
-        return QuartzJobConfigurationService.TEMPLATE_EXCEL
-    }
+    override fun getTemplateFileName(): String = QuartzJobConfigurationService.TEMPLATE_EXCEL
 
-    override fun getListForExporting(): List<QuartzJobConfigurationExcel> {
-        return service.getListForExporting()
-    }
+    override fun getListForExporting(): List<QuartzJobConfigurationExcel> = service.getListForExporting()
 }
