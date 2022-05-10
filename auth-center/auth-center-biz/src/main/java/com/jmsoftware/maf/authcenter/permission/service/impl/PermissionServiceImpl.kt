@@ -3,7 +3,6 @@
 package com.jmsoftware.maf.authcenter.permission.service.impl
 
 import cn.hutool.core.collection.CollUtil
-import cn.hutool.core.text.CharSequenceUtil.format
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.collect.Lists
 import com.jmsoftware.maf.authcenter.permission.configuration.PermissionConfiguration
@@ -88,7 +87,7 @@ class PermissionServiceImpl(
             .parallel()
             .map { serviceId: String ->
                 val responseBodyBean = restTemplate.getForObject(
-                    format("http://{}/http-api-resources", serviceId), ResponseBodyBean::class.java,
+                    "http://$serviceId/http-api-resources", ResponseBodyBean::class.java,
                 )!!
                 val httpApiResourcesResponse = objectMapper.convertValue(
                     Objects.requireNonNull(responseBodyBean).data,

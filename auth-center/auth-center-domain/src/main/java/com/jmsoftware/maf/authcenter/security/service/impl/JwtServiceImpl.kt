@@ -1,8 +1,8 @@
 package com.jmsoftware.maf.authcenter.security.service.impl
 
 import cn.hutool.core.date.DateUtil
-import cn.hutool.core.text.CharSequenceUtil
 import cn.hutool.core.util.ObjectUtil
+import cn.hutool.core.util.StrUtil
 import com.jmsoftware.maf.authcenter.security.service.JwtService
 import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtResponse
 import com.jmsoftware.maf.common.domain.authcenter.security.UserPrincipal
@@ -123,7 +123,7 @@ class JwtServiceImpl(
         // If it's noe equal, that indicates current user has signed out or logged in before.
         // Both situations reveal the JWT has expired.
         val jwtInRedis = redisTemplate.opsForValue()[redisKeyOfJwt] as String?
-        if (!CharSequenceUtil.equals(jwt, jwtInRedis)) {
+        if (jwt != jwtInRedis) {
             throw SecurityException(HttpStatus.UNAUTHORIZED, "JWT is expired (Not equaled)")
         }
         return claims
@@ -150,7 +150,7 @@ class JwtServiceImpl(
 
     override fun getJwtFromRequest(request: HttpServletRequest): String {
         val bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION)
-        return if (CharSequenceUtil.isNotBlank(bearerToken)
+        return if (StrUtil.isNotBlank(bearerToken)
             && bearerToken.startsWith(JwtConfigurationProperties.TOKEN_PREFIX)
         ) {
             bearerToken.substring(JwtConfigurationProperties.TOKEN_PREFIX.length)

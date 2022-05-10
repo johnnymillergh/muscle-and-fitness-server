@@ -1,6 +1,5 @@
 package com.jmsoftware.maf.springcloudstarter.quartz.controller
 
-import cn.hutool.core.text.CharSequenceUtil
 import com.jmsoftware.maf.common.bean.PageResponseBodyBean
 import com.jmsoftware.maf.common.bean.ResponseBodyBean
 import com.jmsoftware.maf.common.util.LoggerDelegate
@@ -65,7 +64,7 @@ class QuartzJobConfigurationController(
 
     override fun onExceptionOccurred() {
         log.error("Exception occurred when uploading excel. Excel class: `${QuartzJobConfigurationExcel::class.java}`")
-        fileName.set(CharSequenceUtil.format("quartz-job-configuration-stat-{}.xlsx", Instant.now()))
+        fileName.set("quartz-job-configuration-stat-${Instant.now()}.xlsx")
     }
 
     override fun validateBeforeAddToBeanList(

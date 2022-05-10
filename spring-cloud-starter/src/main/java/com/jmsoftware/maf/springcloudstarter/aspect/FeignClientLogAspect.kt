@@ -1,8 +1,8 @@
 package com.jmsoftware.maf.springcloudstarter.aspect
 
 import cn.hutool.core.stream.StreamUtil
-import cn.hutool.core.text.CharSequenceUtil
 import cn.hutool.core.util.ObjectUtil
+import cn.hutool.core.util.StrUtil
 import cn.hutool.json.JSONUtil
 import com.jmsoftware.maf.common.util.logger
 import org.aspectj.lang.JoinPoint
@@ -121,7 +121,7 @@ class FeignClientLogAspect {
         return Optional.ofNullable(methodSignature.method.annotations)
             .map { annotations: Array<Annotation> -> annotations[0] }
             .map { annotation: Annotation ->
-                CharSequenceUtil.removeAll(annotation.annotationClass.simpleName, "Mapping")
+                StrUtil.removeAll(annotation.annotationClass.simpleName, "Mapping")
             }
             .orElse("")
     }
@@ -155,15 +155,15 @@ class FeignClientLogAspect {
     }
 
     private fun concatDomain(feignClient: FeignClient, feignUrl: StringBuilder) {
-        if (CharSequenceUtil.isNotBlank(feignClient.value)) {
+        if (StrUtil.isNotBlank(feignClient.value)) {
             feignUrl.append(feignClient.value)
             return
         }
-        if (CharSequenceUtil.isNotBlank(feignClient.url)) {
+        if (StrUtil.isNotBlank(feignClient.url)) {
             feignUrl.append(feignClient.url)
             return
         }
-        if (CharSequenceUtil.isNotBlank(feignClient.name)) {
+        if (StrUtil.isNotBlank(feignClient.name)) {
             feignUrl.append(feignClient.name)
             return
         }

@@ -1,6 +1,5 @@
 package com.jmsoftware.maf.springcloudstarter.quartz.service.impl
 
-import cn.hutool.core.text.CharSequenceUtil
 import cn.hutool.core.util.ReflectUtil
 import cn.hutool.extra.validation.ValidationUtil
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page
@@ -141,11 +140,11 @@ class QuartzJobConfigurationServiceImpl(
         payload: CreateOrModifyQuartzJobConfigurationPayload
     ): Long {
         val value = ReflectUtil.getFieldValue(payload, property)
-        Objects.requireNonNull(value, CharSequenceUtil.format("Property's value({}) must not be null", property))
+        Objects.requireNonNull(value, "Property's value($property) must not be null")
         val validationResult = ValidationUtil.warpValidateProperty(payload, property)
         requireTrue(validationResult.isSuccess) { valid: Boolean ->
             logger.warn("Quartz job configuration patched: $valid")
-        }.orElseThrow { IllegalStateException(CharSequenceUtil.format("`$property` invalid")) }
+        }.orElseThrow { IllegalStateException("`$property` invalid") }
         val quartzJobConfiguration = QuartzJobConfiguration()
         ReflectUtil.setFieldValue(quartzJobConfiguration, property, value)
         quartzJobConfiguration.id = id
@@ -180,7 +179,7 @@ class QuartzJobConfigurationServiceImpl(
     override fun delete(id: Long, group: String): Long {
         requireTrue(this.removeById(id)) { deleted: Boolean ->
             logger.warn("Quartz job configuration deleted: $deleted")
-        }.orElseThrow { IllegalStateException(CharSequenceUtil.format("Failed to delete Quartz job configuration")) }
+        }.orElseThrow { IllegalStateException("Failed to delete Quartz job configuration. id: $id, group: $group") }
         val scheduler: Scheduler = schedulerFactoryBean.scheduler
         val deletedJob = scheduler.deleteJob(
             getJobKey(id, group, mafProjectProperties.projectArtifactId)

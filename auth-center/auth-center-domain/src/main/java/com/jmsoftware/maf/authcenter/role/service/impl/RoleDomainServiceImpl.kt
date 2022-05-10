@@ -1,7 +1,6 @@
 package com.jmsoftware.maf.authcenter.role.service.impl
 
 import cn.hutool.core.collection.CollUtil
-import cn.hutool.core.text.CharSequenceUtil
 import cn.hutool.core.util.RandomUtil
 import cn.hutool.core.util.StrUtil
 import cn.hutool.extra.validation.ValidationUtil
@@ -87,9 +86,7 @@ class RoleDomainServiceImpl(
         if (!beanValidationResult.isSuccess) {
             logger.warn("Validation failed! beanList: $beanList, bean: $bean, index: $index")
             val firstErrorMessage = CollUtil.getFirst(beanValidationResult.errorMessages)
-            throw IllegalArgumentException(
-                CharSequenceUtil.format("{} {}", firstErrorMessage.propertyName, firstErrorMessage.message)
-            )
+            throw IllegalArgumentException("$firstErrorMessage.propertyName $firstErrorMessage.message")
         }
     }
 

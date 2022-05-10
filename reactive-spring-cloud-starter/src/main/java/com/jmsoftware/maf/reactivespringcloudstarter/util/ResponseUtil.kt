@@ -1,6 +1,5 @@
 package com.jmsoftware.maf.reactivespringcloudstarter.util
 
-import cn.hutool.core.text.CharSequenceUtil
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.jmsoftware.maf.common.bean.ResponseBodyBean
@@ -42,7 +41,7 @@ class ResponseUtil(
         response.headers.contentType = MediaType.APPLICATION_JSON
         return response.writeWith(Mono.fromSupplier {
             val bufferFactory = response.bufferFactory()
-            val message2 = CharSequenceUtil.format("{}. {}", httpStatus.reasonPhrase, message)
+            val message2 = "${httpStatus.reasonPhrase}. $message"
             val responseBody: Any = ResponseBodyBean.ofStatus(httpStatus.value(), message2, data)
             try {
                 bufferFactory.wrap(objectMapper.writeValueAsBytes(responseBody))

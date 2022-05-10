@@ -1,6 +1,5 @@
 package com.jmsoftware.maf.springcloudstarter.aspect
 
-import cn.hutool.core.text.CharSequenceUtil
 import cn.hutool.core.util.StrUtil
 import com.jmsoftware.maf.common.bean.ResponseBodyBean
 import com.jmsoftware.maf.common.exception.BaseException
@@ -209,10 +208,7 @@ class CommonExceptionControllerAdvice {
         return if (exception.cause != null && exception.cause?.message != null) {
             ResponseBodyBean.ofStatus<Any>(
                 HttpStatus.INTERNAL_SERVER_ERROR,
-                CharSequenceUtil.format(
-                    "Exception message: {}",
-                    removeLineSeparator(exception.cause!!.message)
-                )
+                "Exception message: ${removeLineSeparator(exception.cause!!.message)}"
             )
         } else ResponseBodyBean.ofStatus<Any>(
             HttpStatus.INTERNAL_SERVER_ERROR,

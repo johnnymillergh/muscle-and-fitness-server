@@ -1,6 +1,5 @@
 package com.jmsoftware.maf.springcloudstarter.aspect
 
-import cn.hutool.core.text.CharSequenceUtil
 import cn.hutool.json.JSONUtil
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -144,10 +143,8 @@ class WebRequestLogAspect(
             var formattedJsonString = JSONUtil.formatJsonStr(objectMapper.writeValueAsString(result))
             if (formattedJsonString.length > MAX_LENGTH_OF_JSON_STRING) {
                 val substring = formattedJsonString.substring(0, MAX_LENGTH_OF_JSON_STRING - 1)
-                formattedJsonString = CharSequenceUtil.format(
-                    "{}… [The length({}) of JSON string is larger than the maximum({})]", substring,
-                    formattedJsonString.length, MAX_LENGTH_OF_JSON_STRING
-                )
+                formattedJsonString =
+                    "$substring… [The length(${formattedJsonString.length}) of JSON string is larger than the maximum($MAX_LENGTH_OF_JSON_STRING)]"
             }
             log.info(AROUND_TEMPLATE_FOR_JSON, formattedJsonString)
         } catch (e: JsonProcessingException) {

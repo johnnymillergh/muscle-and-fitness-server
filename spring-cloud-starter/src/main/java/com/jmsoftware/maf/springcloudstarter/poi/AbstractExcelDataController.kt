@@ -1,7 +1,6 @@
 package com.jmsoftware.maf.springcloudstarter.poi
 
 import cn.hutool.core.collection.CollUtil
-import cn.hutool.core.text.CharSequenceUtil
 import cn.hutool.core.util.StrUtil
 import cn.hutool.poi.excel.ExcelReader
 import cn.hutool.poi.excel.ExcelWriter
@@ -295,26 +294,14 @@ abstract class AbstractExcelDataController<T> {
                 setReturnMessageList("Starting - Import data…")
                 try {
                     executeDatabaseOperation(beanList.get()!!)
-                    setReturnMessageList(
-                        CharSequenceUtil.format("Finished - Import data. Imported count: {}", beanList.get()!!.size)
-                    )
+                    setReturnMessageList("Finished - Import data. Imported count: ${beanList.get()!!.size}")
                 } catch (e: Exception) {
                     exceptionOccurred.set(true)
                     log.error("Exception occurred when executing DB operation!", e)
-                    setErrorMessage(
-                        CharSequenceUtil.format(
-                            "Exception occurred when executing DB operation! Exception message: {}",
-                            e.message
-                        )
-                    )
+                    setErrorMessage("Exception occurred when executing DB operation! Exception message: ${e.message}")
                 }
             } else {
-                setReturnMessageList(
-                    CharSequenceUtil.format(
-                        "Finished - Import data. Empty list. Imported count: {}",
-                        beanList.get()!!.size
-                    )
-                )
+                setReturnMessageList("Finished - Import data. Empty list. Imported count: ${beanList.get()!!.size}")
             }
         } else {
             setReturnMessageList("[Warning] Found not valid data. Data import all failed!")
@@ -328,12 +315,7 @@ abstract class AbstractExcelDataController<T> {
             setReturnMessageList("Finished - Validate and bind data")
         } catch (e: java.lang.Exception) {
             log.error("Exception occurred when validating and binding data!", e)
-            setErrorMessage(
-                CharSequenceUtil.format(
-                    "Exception occurred when validating and binding data! Exception message: {}",
-                    e.message
-                )
-            )
+            setErrorMessage("Exception occurred when validating and binding data! Exception message: ${e.message}")
         }
     }
 
@@ -344,9 +326,7 @@ abstract class AbstractExcelDataController<T> {
             setReturnMessageList("Finished - Read Excel file")
         } catch (e: IOException) {
             log.error("Exception occurred when reading Excel file!", e)
-            setErrorMessage(
-                CharSequenceUtil.format("Exception occurred when reading Excel file! Exception message: {}", e.message)
-            )
+            setErrorMessage("Exception occurred when reading Excel file! Exception message: ${e.message}")
         }
     }
 
@@ -409,7 +389,8 @@ abstract class AbstractExcelDataController<T> {
         } catch (e: Exception) {
             log.error("bindRowToBean method has encountered a problem!", e)
             exceptionOccurred.set(true)
-            val errorMessage = "Exception occurred when binding and validating the data of row number ${beanIndex + 1}. Exception message: ${e.message}"
+            val errorMessage =
+                "Exception occurred when binding and validating the data of row number ${beanIndex + 1}. Exception message: ${e.message}"
             setErrorMessage(errorMessage)
             val errorRow = workbook.get()?.getSheetAt(sheetIndex)!!.getRow(beanIndex + 1)
             val errorInformationCell = errorRow.createCell(fieldNameArray.size)

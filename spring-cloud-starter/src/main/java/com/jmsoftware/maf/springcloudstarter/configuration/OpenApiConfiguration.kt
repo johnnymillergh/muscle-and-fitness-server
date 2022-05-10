@@ -1,6 +1,6 @@
 package com.jmsoftware.maf.springcloudstarter.configuration
 
-import cn.hutool.core.text.CharSequenceUtil
+import cn.hutool.core.util.StrUtil
 import com.jmsoftware.maf.common.util.logger
 import com.jmsoftware.maf.springcloudstarter.property.MafProjectProperties
 import io.swagger.v3.oas.models.OpenAPI
@@ -54,15 +54,14 @@ class OpenApiConfiguration(
     fun openApiCustomiser(): OpenApiCustomiser {
         return OpenApiCustomiser { openApi: OpenAPI ->
             openApi.servers.forEach(Consumer { server: Server ->
-                if (!CharSequenceUtil.containsIgnoreCase(
+                if (!StrUtil.containsIgnoreCase(
                         mafProjectProperties.environment, DEV
                     )
                 ) {
-                    server.url = CharSequenceUtil.format("{}/{}", server.url, mafProjectProperties.projectArtifactId)
+                    server.url = "${server.url}/${mafProjectProperties.projectArtifactId}"
                 }
-                server.description =
-                    CharSequenceUtil.format("Modified server URL - {}", mafProjectProperties.projectArtifactId)
-                OpenApiConfiguration.log.info("Modified server, {}", server)
+                server.description = "Modified server URL - ${mafProjectProperties.projectArtifactId}"
+                log.info("Modified server, $server")
             })
         }
     }

@@ -1,9 +1,9 @@
 package com.jmsoftware.maf.authcenter.user.service.impl
 
 import cn.hutool.core.collection.ListUtil
-import cn.hutool.core.text.CharSequenceUtil
 import cn.hutool.core.util.ObjectUtil
 import cn.hutool.core.util.RandomUtil
+import cn.hutool.core.util.StrUtil
 import cn.hutool.json.JSONUtil
 import com.baomidou.mybatisplus.core.metadata.OrderItem
 import com.baomidou.mybatisplus.core.toolkit.Wrappers
@@ -126,7 +126,7 @@ class UserDomainServiceImpl(
         val queryWrapper = Wrappers.lambdaQuery(
             User::class.java
         )
-        if (CharSequenceUtil.isNotBlank(payload.username)) {
+        if (StrUtil.isNotBlank(payload.username)) {
             queryWrapper.like(SFunction<User, Any> { obj: User -> obj.username }, payload.username)
         }
         page.orders = ListUtil.of(OrderItem.desc(payload.orderBy))

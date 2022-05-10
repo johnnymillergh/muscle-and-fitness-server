@@ -1,8 +1,8 @@
 package com.jmsoftware.maf.osscenter.service.impl
 
 import cn.hutool.core.collection.CollUtil
-import cn.hutool.core.text.CharSequenceUtil
 import cn.hutool.core.util.NumberUtil
+import cn.hutool.core.util.StrUtil
 import com.jmsoftware.maf.common.domain.osscenter.write.ObjectResponse
 import com.jmsoftware.maf.common.util.logger
 import com.jmsoftware.maf.osscenter.constant.Chunk
@@ -89,18 +89,15 @@ class WriteResourceServiceImpl(
         multipartFile: MultipartFile,
         payload: UploadResourceChunkPayload
     ): ObjectResponse {
-        require(!CharSequenceUtil.isBlank(multipartFile.originalFilename)) { "File name required" }
+        require(!StrUtil.isBlank(multipartFile.originalFilename)) { "File name required" }
         var mediaType: MediaType? = null
-        if (CharSequenceUtil.isBlank(payload.bucket)) {
+        if (StrUtil.isBlank(payload.bucket)) {
             mediaType = this.parseMediaType(multipartFile)
         }
         // bucketName is either mediaType of given 'bucket'
         val bucketName =
-            if (CharSequenceUtil.isBlank(payload.bucket)) mediaType!!.type else payload.bucket
-        val orderedFilename = CharSequenceUtil.format(
-            "{}.chunk{}", payload.filename,
-            NumberUtil.decimalFormat("000", payload.chunkNumber)
-        )
+            if (StrUtil.isBlank(payload.bucket)) mediaType!!.type else payload.bucket
+        val orderedFilename = "${payload.filename}.chunk${NumberUtil.decimalFormat("000", payload.chunkNumber)}"
         val objectResponse = ObjectResponse()
         objectResponse.bucket = bucketName
         objectResponse.`object` = orderedFilename
@@ -149,8 +146,8 @@ class WriteResourceServiceImpl(
 
     private fun validateObject(objectList: List<String>): String {
         val objectNameSet = objectList.stream().map { `object`: String? ->
-            val lastIndexOfDot = CharSequenceUtil.lastIndexOfIgnoreCase(`object`, ".")
-            CharSequenceUtil.subPre(`object`, lastIndexOfDot)
+            val lastIndexOfDot = StrUtil.lastIndexOfIgnoreCase(`object`, ".")
+            StrUtil.subPre(`object`, lastIndexOfDot)
         }.collect(Collectors.toSet())
         if (CollUtil.size(objectNameSet) != 1) {
             log.error("Object list is not valid! {}", objectNameSet)
