@@ -43,9 +43,9 @@
         <!--
         Don't use alpine or slim version, to prevent following exception
         java.lang.UnsatisfiedLinkError: /opt/java/openjdk/lib/libfontmanager.so: libfreetype.so.6: cannot open shared object file: No such file or directory
-        https://hub.docker.com/_/eclipse-temurin?tab=tags&page=1&name=17.0.2_8-jre
+        https://hub.docker.com/_/eclipse-temurin?tab=tags&page=1&name=17.0.3_7-jre
         -->
-        <temurin.tag>17.0.2_8-jre</temurin.tag>
+        <temurin.tag>17.0.3_7-jre</temurin.tag>
         <jib-maven-plugin.version>3.2.0</jib-maven-plugin.version>
         <jib-spring-boot-extension-maven.version>0.1.0</jib-spring-boot-extension-maven.version>
         <maven-pmd-plugin.version>3.15.0</maven-pmd-plugin.version>
@@ -62,12 +62,12 @@
         <hutool-all.version>5.7.22</hutool-all.version>
         <guava.version>31.1-jre</guava.version>
         <springdoc-openapi-ui.version>1.6.6</springdoc-openapi-ui.version>
-        <jjwt.version>0.11.2</jjwt.version>
+        <jjwt.version>0.11.5</jjwt.version>
         <java-faker.version>1.0.2</java-faker.version>
         <easyexcel.version>2.2.6</easyexcel.version>
         <poi.version>5.2.2</poi.version>
         <logstash-logback-encoder.version>7.1.1</logstash-logback-encoder.version>
-        <minio.version>8.3.8</minio.version>
+        <minio.version>8.3.9</minio.version>
         <okhttp.version>4.8.1</okhttp.version>
         <apache-tika.version>2.3.0</apache-tika.version>
         <mapstruct.version>1.4.2.Final</mapstruct.version>
@@ -91,7 +91,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.6.6</version>
+        <version>2.6.7</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 

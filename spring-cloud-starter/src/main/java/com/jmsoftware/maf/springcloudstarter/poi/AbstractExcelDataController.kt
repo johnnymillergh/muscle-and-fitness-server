@@ -37,12 +37,12 @@ abstract class AbstractExcelDataController<T> {
         private val log = logger()
     }
 
-    protected val beanList: ThreadLocal<List<T>?> = ThreadLocal.withInitial { null }
-    protected val workbook: ThreadLocal<Workbook?> = ThreadLocal.withInitial<Workbook?> { null }
-    protected val excelFilePath: ThreadLocal<String?> = ThreadLocal.withInitial<String?> { null }
-    protected val exceptionOccurred: ThreadLocal<Boolean> = ThreadLocal.withInitial { false }
-    protected val errorMessageList: ThreadLocal<MutableList<String>> = ThreadLocal.withInitial { mutableListOf() }
-    protected val returnMessageList: ThreadLocal<MutableList<String>> = ThreadLocal.withInitial { mutableListOf() }
+    private val beanList: ThreadLocal<List<T>?> = ThreadLocal.withInitial { null }
+    private val workbook: ThreadLocal<Workbook?> = ThreadLocal.withInitial<Workbook?> { null }
+    private val excelFilePath: ThreadLocal<String?> = ThreadLocal.withInitial<String?> { null }
+    private val exceptionOccurred: ThreadLocal<Boolean?> = ThreadLocal.withInitial { false }
+    private val errorMessageList: ThreadLocal<MutableList<String>?> = ThreadLocal.withInitial { null }
+    private val returnMessageList: ThreadLocal<MutableList<String>?> = ThreadLocal.withInitial { null }
 
     /**
      * `fileName` stores the name to upload the workbook when exception occurred
@@ -55,7 +55,7 @@ abstract class AbstractExcelDataController<T> {
      * | Excel Column Name | excelColumnName |
      * | Title Name        | titleName       |
      */
-    protected val importingFieldAliasMap: MutableMap<String, String> = Maps.newLinkedHashMap()
+    private val importingFieldAliasMap: MutableMap<String, String> = Maps.newLinkedHashMap()
 
     /**
      * | Key             | Value             |
@@ -63,7 +63,7 @@ abstract class AbstractExcelDataController<T> {
      * | excelColumnName | Excel Column Name |
      * | titleName       | Title Name        |
      */
-    protected val exportingFieldAliasMap: MutableMap<String, String> = Maps.newLinkedHashMap()
+    private val exportingFieldAliasMap: MutableMap<String, String> = Maps.newLinkedHashMap()
 
     @Resource
     protected lateinit var excelImportConfigurationProperties: ExcelImportConfigurationProperties
@@ -85,7 +85,7 @@ abstract class AbstractExcelDataController<T> {
      *  2. Register bind handler methods
      *  3. Register handler methods
      */
-    protected fun AbstractExcelDataController() {
+    init{
         initContext()
     }
 
@@ -281,7 +281,7 @@ abstract class AbstractExcelDataController<T> {
     }
 
     private fun handlePreviousException() {
-        if (exceptionOccurred.get()) {
+        if (exceptionOccurred.get() == true) {
             onExceptionOccurred()
             uploadWorkbook()
         }
@@ -413,7 +413,7 @@ abstract class AbstractExcelDataController<T> {
      * @param errorInfo the error info
      */
     protected open fun setErrorMessage(errorInfo: String) {
-        errorMessageList.get().add(errorInfo)
+        errorMessageList.get()?.add(errorInfo)
         setReturnMessageList(errorInfo)
     }
 
@@ -423,7 +423,7 @@ abstract class AbstractExcelDataController<T> {
      * @param message the message
      */
     protected open fun setReturnMessageList(message: String) {
-        returnMessageList.get().add(message)
+        returnMessageList.get()?.add(message)
     }
 
     /**

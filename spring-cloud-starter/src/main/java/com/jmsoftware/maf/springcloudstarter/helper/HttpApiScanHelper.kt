@@ -19,7 +19,7 @@ class HttpApiScanHelper(
     private val requestMappingHandlerMapping: RequestMappingHandlerMapping
 ) {
     companion object {
-        private var EXCLUDED_PACKAGE: String
+        private val EXCLUDED_PACKAGE: String
         private val log = logger()
 
         init {
