@@ -1,7 +1,7 @@
 package com.jmsoftware.maf.springcloudstarter.quartz.service.impl
 
+import cn.hutool.core.collection.CollUtil
 import cn.hutool.core.util.ReflectUtil
-import cn.hutool.extra.validation.ValidationUtil
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl
 import com.jmsoftware.maf.common.bean.PageResponseBodyBean
@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
 import javax.annotation.PostConstruct
+import javax.validation.Validator
 
 /**
  * # QuartzJobConfigurationServiceImpl
@@ -38,7 +39,8 @@ import javax.annotation.PostConstruct
 @Service
 class QuartzJobConfigurationServiceImpl(
     private val schedulerFactoryBean: SchedulerFactoryBean,
-    private val mafProjectProperties: MafProjectProperties
+    private val mafProjectProperties: MafProjectProperties,
+    private val validator: Validator
 ) : ServiceImpl<QuartzJobConfigurationMapper, QuartzJobConfiguration>(), QuartzJobConfigurationService {
     companion object {
         private val logger = logger()
@@ -81,10 +83,10 @@ class QuartzJobConfigurationServiceImpl(
         bean: QuartzJobConfigurationExcel,
         index: Int
     ) {
-        val beanValidationResult = ValidationUtil.warpValidate(bean)
-        requireTrue(beanValidationResult.isSuccess) { success: Boolean ->
-            logger.info("QuartzJobConfigurationExcel validation result: $success")
-        }.orElseThrow { IllegalStateException("Invalid data. ${beanValidationResult.errorMessages[0]}") }
+        val constraintViolations = validator.validate(bean)
+        requireTrue(CollUtil.isEmpty(constraintViolations)) { valid: Boolean ->
+            logger.info("QuartzJobConfigurationExcel validation result: $valid")
+        }.orElseThrow { IllegalStateException("Invalid data. ${constraintViolations.first().message}") }
     }
 
     @Transactional(rollbackFor = [Throwable::class])
@@ -141,10 +143,10 @@ class QuartzJobConfigurationServiceImpl(
     ): Long {
         val value = ReflectUtil.getFieldValue(payload, property)
         Objects.requireNonNull(value, "Property's value($property) must not be null")
-        val validationResult = ValidationUtil.warpValidateProperty(payload, property)
-        requireTrue(validationResult.isSuccess) { valid: Boolean ->
+        val constraintViolations = validator.validateProperty(payload, property)
+        requireTrue(CollUtil.isEmpty(constraintViolations)) { valid: Boolean ->
             logger.warn("Quartz job configuration patched: $valid")
-        }.orElseThrow { IllegalStateException("`$property` invalid") }
+        }.orElseThrow { IllegalStateException("`$property` invalid! Reason: ${constraintViolations.first().message}") }
         val quartzJobConfiguration = QuartzJobConfiguration()
         ReflectUtil.setFieldValue(quartzJobConfiguration, property, value)
         quartzJobConfiguration.id = id

@@ -3,7 +3,6 @@ package com.jmsoftware.maf.authcenter.role.service.impl
 import cn.hutool.core.collection.CollUtil
 import cn.hutool.core.util.RandomUtil
 import cn.hutool.core.util.StrUtil
-import cn.hutool.extra.validation.ValidationUtil
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -24,6 +23,7 @@ import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.concurrent.TimeUnit
+import javax.validation.Validator
 
 /**
  * # RoleDomainServiceImpl
@@ -37,7 +37,8 @@ class RoleDomainServiceImpl(
     private val mafProjectProperties: MafProjectProperties,
     private val mafConfigurationProperties: MafConfigurationProperties,
     private val redisTemplate: RedisTemplate<String, String>,
-    private val objectMapper: ObjectMapper
+    private val objectMapper: ObjectMapper,
+    private val validator: Validator
 ) : ServiceImpl<RoleMapper, Role>(), RoleDomainService {
     companion object {
         private val logger = logger()
@@ -82,11 +83,11 @@ class RoleDomainServiceImpl(
     }
 
     override fun validateBeforeAddToBeanList(beanList: List<RoleExcelBean>, bean: RoleExcelBean, index: Int) {
-        val beanValidationResult = ValidationUtil.warpValidate(bean)
-        if (!beanValidationResult.isSuccess) {
+        val constraintViolations = validator.validate(bean)
+        if (CollUtil.isNotEmpty(constraintViolations)) {
             logger.warn("Validation failed! beanList: $beanList, bean: $bean, index: $index")
-            val firstErrorMessage = CollUtil.getFirst(beanValidationResult.errorMessages)
-            throw IllegalArgumentException("$firstErrorMessage.propertyName $firstErrorMessage.message")
+            val first = constraintViolations.first()
+            throw IllegalArgumentException("${first.propertyPath} ${first.message}")
         }
     }
 

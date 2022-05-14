@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.scheduling.quartz.SchedulerFactoryBean
 import org.springframework.transaction.PlatformTransactionManager
 import java.util.*
+import javax.validation.Validator
 
 /**
  * # QuartzConfiguration
@@ -66,8 +67,8 @@ class QuartzConfiguration(
     }
 
     @Bean
-    fun quartzJobConfigurationService(schedulerFactoryBean: SchedulerFactoryBean): QuartzJobConfigurationService {
+    fun quartzJobConfigurationService(schedulerFactoryBean: SchedulerFactoryBean, validator: Validator): QuartzJobConfigurationService {
         log.warn("Initial bean: `${QuartzJobConfigurationServiceImpl::class.java.simpleName}`")
-        return QuartzJobConfigurationServiceImpl(schedulerFactoryBean, mafProjectProperties)
+        return QuartzJobConfigurationServiceImpl(schedulerFactoryBean, mafProjectProperties, validator)
     }
 }

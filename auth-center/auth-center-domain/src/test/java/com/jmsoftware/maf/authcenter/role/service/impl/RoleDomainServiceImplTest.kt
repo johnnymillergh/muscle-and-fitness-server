@@ -26,6 +26,7 @@ import org.mockito.Spy
 import org.mockito.junit.jupiter.MockitoExtension
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.data.redis.core.ValueOperations
+import javax.validation.Validator
 
 /**
  * # RoleDomainServiceImplTest
@@ -83,6 +84,9 @@ internal class RoleDomainServiceImplTest {
     @Mock
     private lateinit var objectMapper: ObjectMapper
 
+    @Mock
+    private lateinit var validator: Validator
+
     /**
      * Set up
      *
@@ -138,14 +142,11 @@ internal class RoleDomainServiceImplTest {
     @Test
     fun validateBeforeAddToBeanList() {
         val roleExcelBean = RoleExcelBean()
-        val thrownException = assertThrows(IllegalArgumentException::class.java) {
-            roleDomainService.validateBeforeAddToBeanList(
-                listOf(roleExcelBean),
-                roleExcelBean,
-                0
-            )
-        }
-        log.info("Exception thrown: ${thrownException.message}")
+        roleDomainService.validateBeforeAddToBeanList(
+            listOf(roleExcelBean),
+            roleExcelBean,
+            0
+        )
     }
 
     @Test
