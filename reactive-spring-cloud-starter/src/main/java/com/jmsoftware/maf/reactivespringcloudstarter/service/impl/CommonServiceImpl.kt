@@ -32,6 +32,6 @@ class CommonServiceImpl(
     }
 
     override fun validateObject(payload: ValidationTestPayload) {
-        log.info("Validation passed! {}", payload)
+        log.info("Validation passed! $payload")
     }
 }

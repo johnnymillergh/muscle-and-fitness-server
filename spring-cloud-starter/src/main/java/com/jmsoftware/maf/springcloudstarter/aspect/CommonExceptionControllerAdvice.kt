@@ -80,7 +80,7 @@ class CommonExceptionControllerAdvice {
     @ExceptionHandler(MethodArgumentNotValidException::class)
     fun handleException(request: HttpServletRequest, exception: MethodArgumentNotValidException): ResponseBodyBean<*> {
         requestLog(request)
-        log.error("MethodArgumentNotValidException message: {}", exception.message)
+        log.error("MethodArgumentNotValidException message: ${exception.message}")
         return ResponseBodyBean.ofStatus<Any>(
             HttpStatus.BAD_REQUEST.value(),
             getFieldErrorMessageFromException(exception),
@@ -103,7 +103,7 @@ class CommonExceptionControllerAdvice {
     @ExceptionHandler(HttpMessageNotReadableException::class)
     fun handleException(request: HttpServletRequest, exception: HttpMessageNotReadableException): ResponseBodyBean<*> {
         requestLog(request)
-        log.error("HttpMessageNotReadableException: {}", exception.message)
+        log.error("HttpMessageNotReadableException: ${exception.message}")
         return ResponseBodyBean.ofStatus<Any>(HttpStatus.BAD_REQUEST, removeLineSeparator(exception.message))
     }
 
@@ -126,7 +126,7 @@ class CommonExceptionControllerAdvice {
     @ExceptionHandler(BindException::class)
     fun handleException(request: HttpServletRequest, exception: BindException): ResponseBodyBean<*> {
         requestLog(request)
-        log.error("BindException message: {} ", exception.message)
+        log.error("BindException message: ${exception.message}")
         val message: String = if (exception.hasFieldErrors()) {
             val fieldError = exception.fieldError
             "Field [${fieldError?.field}] has error: ${fieldError?.defaultMessage}"

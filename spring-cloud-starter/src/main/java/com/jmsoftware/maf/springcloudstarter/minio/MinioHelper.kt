@@ -39,7 +39,7 @@ class MinioHelper(
 
     fun makeBucket(bucket: @NotBlank String?): Boolean {
         if (bucketExists(bucket)) {
-            MinioHelper.log.warn("The bucket named '{}' exists", bucket)
+            MinioHelper.log.warn("The bucket named `$bucket` exists")
             return false
         }
         minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucket).build())

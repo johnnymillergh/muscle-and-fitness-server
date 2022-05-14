@@ -119,6 +119,6 @@ class MafProjectProperties {
 
     @PostConstruct
     fun postConstruct() {
-        log.warn("Initial bean: '{}'", this.javaClass.simpleName)
+        log.warn("Initial bean: `${this.javaClass.simpleName}`")
     }
 }

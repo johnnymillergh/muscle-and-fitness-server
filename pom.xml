@@ -59,7 +59,7 @@
         <mybatis-plus-boot-starter.version>3.5.1</mybatis-plus-boot-starter.version>
         <dynamic-datasource-spring-boot-starter.version>3.5.1</dynamic-datasource-spring-boot-starter.version>
         <shardingsphere.version>5.1.1</shardingsphere.version>
-        <hutool-all.version>5.7.22</hutool-all.version>
+        <hutool-all.version>5.8.0</hutool-all.version>
         <guava.version>31.1-jre</guava.version>
         <springdoc-openapi-ui.version>1.6.6</springdoc-openapi-ui.version>
         <jjwt.version>0.11.5</jjwt.version>
@@ -67,9 +67,9 @@
         <easyexcel.version>2.2.6</easyexcel.version>
         <poi.version>5.2.2</poi.version>
         <logstash-logback-encoder.version>7.1.1</logstash-logback-encoder.version>
-        <minio.version>8.3.9</minio.version>
+        <minio.version>8.4.0</minio.version>
         <okhttp.version>4.8.1</okhttp.version>
-        <apache-tika.version>2.3.0</apache-tika.version>
+        <apache-tika.version>2.4.0</apache-tika.version>
         <mapstruct.version>1.4.2.Final</mapstruct.version>
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
         <jacoco.version>0.8.8</jacoco.version>

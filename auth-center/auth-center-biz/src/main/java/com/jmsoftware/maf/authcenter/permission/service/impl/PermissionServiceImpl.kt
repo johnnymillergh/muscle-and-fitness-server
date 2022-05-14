@@ -74,9 +74,9 @@ class PermissionServiceImpl(
 
     override fun getServicesInfo(): GetServicesInfoResponse {
         val serviceIdList = discoveryClient.services
-        log.info("Getting service info from Service ID list: {}", serviceIdList)
+        log.info("Getting service info from Service ID list: $serviceIdList")
         val response = GetServicesInfoResponse()
-        log.info("Ignored service ID: {}", permissionConfiguration.ignoredServiceIds)
+        log.info("Ignored service ID: ${permissionConfiguration.ignoredServiceIds}")
         response.list = serviceIdList.stream()
             .filter { serviceId: String ->
                 !CollUtil.contains(

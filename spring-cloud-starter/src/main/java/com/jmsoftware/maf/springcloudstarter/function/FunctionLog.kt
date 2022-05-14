@@ -34,15 +34,13 @@ private object FunctionLog {
  */
 fun <T, R> logFunction(function: Function<T, R>, t: T, tag: String?): R {
     log.info(
-        "[{}], parameter = {}, requestTime = {}", tag, t.toString(),
-        LocalDateTime.now().format(DateTimeFormatter.ofPattern(UniversalDateTime.DATE_TIME_FORMAT))
+        "[$tag], parameter = ${t.toString()}, requestTime = ${
+            LocalDateTime.now().format(DateTimeFormatter.ofPattern(UniversalDateTime.DATE_TIME_FORMAT))
+        }"
     )
     val start = Instant.now()
     val apply = function.apply(t)
     val end = Instant.now()
-    log.info(
-        "[{}], return = {}, elapsed time = {} ms", tag, apply.toString(),
-        Duration.between(start, end).toMillis()
-    )
+    log.info("[$tag], return = ${apply.toString()}, elapsed time = ${Duration.between(start, end).toMillis()} ms")
     return apply
 }

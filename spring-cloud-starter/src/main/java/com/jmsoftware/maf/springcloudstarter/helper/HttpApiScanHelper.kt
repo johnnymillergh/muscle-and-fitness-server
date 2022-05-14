@@ -45,25 +45,19 @@ class HttpApiScanHelper(
      */
     fun scan(@NotBlank includedPackage: String): Map<RequestMappingInfo, HandlerMethod> {
         val handlerMethods = requestMappingHandlerMapping.handlerMethods
-        log.debug("Scanned request mapping info: {}", handlerMethods)
+        log.debug("Scanned request mapping info: $handlerMethods")
         val filteredHandlerMethods = LinkedHashMap<RequestMappingInfo, HandlerMethod>()
         handlerMethods.forEach { (requestMappingInfo: RequestMappingInfo, handlerMethod: HandlerMethod) ->
             // filter the Controller APIs that are defined in `spring-cloud-starter`
             if (handlerMethod.toString().contains(includedPackage)
-                && !handlerMethod.toString().contains(EXCLUDED_PACKAGE)) {
+                && !handlerMethod.toString().contains(EXCLUDED_PACKAGE)
+            ) {
                 try {
                     val requestMethod = listOf(requestMappingInfo.methodsCondition.methods)[0]
-                    log.debug(
-                        "Request: [{}] {}, handler method: {}", requestMethod,
-                        requestMappingInfo.patternsCondition, handlerMethod
-                    )
+                    log.debug("Request: [$requestMethod] ${requestMappingInfo.patternsCondition}, handler method: $handlerMethod")
                     filteredHandlerMethods[requestMappingInfo] = handlerMethod
                 } catch (e: Exception) {
-                    log.warn(
-                        "Exception occurred when getting request method. Exception message: {}. Request mapping " +
-                                "info: {}",
-                        e.message, requestMappingInfo
-                    )
+                    log.warn("Exception occurred when getting request method. Exception message: ${e.message}. Request mapping info: ${requestMappingInfo}")
                 }
             }
         }

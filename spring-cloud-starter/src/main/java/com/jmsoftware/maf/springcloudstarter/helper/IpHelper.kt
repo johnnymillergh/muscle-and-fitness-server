@@ -40,17 +40,14 @@ class IpHelper(
     fun getPublicIp(): String {
         val jointProfiles = java.lang.String.join(",", *environment.activeProfiles)
         if (StrUtil.containsIgnoreCase(jointProfiles, DEVELOPMENT_ENVIRONMENT)) {
-            log.debug("Current active profiles for environment contains: {}", DEVELOPMENT_ENVIRONMENT)
+            log.debug("Current active profiles for environment contains: $DEVELOPMENT_ENVIRONMENT")
             return internetIp()
         }
         // An API provided by https://whatismyipaddress.com/api
         return try {
             HttpUtil.get("https://ipv4bot.whatismyipaddress.com/").trim { it <= ' ' }
         } catch (e: Exception) {
-            log.warn(
-                "Failed to get public IP address, fallback to intranet IP address. Exception: {}",
-                e.message
-            )
+            log.warn("Failed to get public IP address, fallback to intranet IP address. Exception: ${e.message}")
             internetIp()
         }
     }

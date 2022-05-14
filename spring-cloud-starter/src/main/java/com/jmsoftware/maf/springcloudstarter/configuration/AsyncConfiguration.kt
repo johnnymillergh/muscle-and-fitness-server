@@ -84,7 +84,7 @@ class AsyncConfiguration(
 
     @Bean
     fun callableProcessingInterceptor(): CallableProcessingInterceptor {
-        log.warn("Initial bean: {}", CallableProcessingInterceptor::class.java.simpleName)
+        log.warn("Initial bean: `${CallableProcessingInterceptor::class.java.simpleName}`")
         return object : TimeoutCallableProcessingInterceptor() {
             override fun <T> handleTimeout(request: NativeWebRequest, task: Callable<T>): Any {
                 log.error("Handling task timeout!")

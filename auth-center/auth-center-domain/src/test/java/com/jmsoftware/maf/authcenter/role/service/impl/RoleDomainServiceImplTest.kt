@@ -90,13 +90,14 @@ internal class RoleDomainServiceImplTest {
      */
     @BeforeEach
     fun setUp() {
-        log.info("{} setUp", this.javaClass.simpleName)
+        log.info("${this.javaClass.simpleName} setUp")
         TableInfoHelper.initTableInfo(MapperBuilderAssistant(MybatisConfiguration(), ""), Role::class.java)
     }
 
     @AfterEach
     fun tearDown() {
-        log.info("{} tearDown", this.javaClass.simpleName)
+        log.info("${this.javaClass.simpleName} tearDown")
+        TableInfoHelper.remove(Role::class.java)
     }
 
     @Test

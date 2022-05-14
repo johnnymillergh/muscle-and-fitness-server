@@ -357,7 +357,7 @@ abstract class AbstractExcelDataController<T> {
             workbook.get()?.write(it1)
             BufferedInputStream(ByteArrayInputStream(it1.toByteArray())).use { it2 ->
                 val filePath = ossUploader.upload(fileName.get()!!, it2)
-                log.info("Uploaded excel with exception message. filePath: {}", filePath)
+                log.info("Uploaded excel with exception message. filePath: $filePath")
                 excelFilePath.set(filePath)
             }
         }

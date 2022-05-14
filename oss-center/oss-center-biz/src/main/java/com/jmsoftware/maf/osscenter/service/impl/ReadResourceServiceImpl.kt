@@ -44,7 +44,7 @@ class ReadResourceServiceImpl(
         }
         val objectResponse = minioHelper.getObject(bucket, `object`)
         if (statObjectResponse == null || objectResponse == null) {
-            log.warn("Object not found! Bucket: {}, Object: {}", bucket, `object`)
+            log.warn("Object not found! Bucket: $bucket, Object: $`object`")
             return ResponseEntity.notFound().build()
         }
         return ResponseEntity.ok()
@@ -65,21 +65,18 @@ class ReadResourceServiceImpl(
         val statObjectResponse: StatObjectResponse? = try {
             minioHelper.statObject(bucket, `object`)
         } catch (e: Exception) {
-            log.error(
-                "Exception occurred when looking for object. Exception message: {}",
-                e.message
-            )
+            log.error("Exception occurred when looking for object. Exception message: ${e.message}")
             return ResponseEntity.notFound().build()
         }
         if (statObjectResponse == null) {
-            log.warn("StatObjectResponse not found! Bucket: {}, Object: {}", bucket, `object`)
+            log.warn("StatObjectResponse not found! Bucket: $bucket, Object: $`object`")
             return ResponseEntity.notFound().build()
         }
         val httpRanges = HttpRange.parseRanges(range)
         if (CollUtil.isEmpty(httpRanges)) {
             val objectResponse = minioHelper.getObject(bucket, `object`, 0, Chunk.TINY_CHUNK_SIZE.toBytes())
             if (objectResponse == null) {
-                log.warn("Object not found! Bucket: {}, Object: {}", bucket, `object`)
+                log.warn("Object not found! Bucket: $bucket, Object: $`object`")
                 return ResponseEntity.notFound().build()
             }
             return ResponseEntity.ok()
@@ -101,15 +98,12 @@ class ReadResourceServiceImpl(
         val statObjectResponse: StatObjectResponse? = try {
             minioHelper.statObject(bucket, `object`)
         } catch (e: Exception) {
-            log.error(
-                "Exception occurred when looking for object. Exception message: {}",
-                e.message
-            )
+            log.error("Exception occurred when looking for object. Exception message: ${e.message}")
             return ResponseEntity.notFound().build()
         }
         val objectResponse = minioHelper.getObject(bucket, `object`)
         if (statObjectResponse == null || objectResponse == null) {
-            log.warn("StatObjectResponse not found! Bucket: {}, Object: {}", bucket, `object`)
+            log.warn("StatObjectResponse not found! Bucket: $bucket, Object: $`object`")
             return ResponseEntity.notFound().build()
         }
         return ResponseEntity.ok()
@@ -132,7 +126,7 @@ class ReadResourceServiceImpl(
     ): SerializableStatObjectResponse {
         val statObjectResponse = minioHelper.statObject(bucket, `object`)
         if (statObjectResponse == null) {
-            log.warn("StatObjectResponse not found! Bucket: {}, Object: {}", bucket, `object`)
+            log.warn("StatObjectResponse not found! Bucket: $bucket, Object: $`object`")
             throw ResourceNotFoundException("Object not found!")
         }
         return SerializableStatObjectResponse.build(statObjectResponse)

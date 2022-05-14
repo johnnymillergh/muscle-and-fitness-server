@@ -31,7 +31,7 @@ class SchedulingConfiguration(
             taskScheduler.poolSize = TASK_SCHEDULER_POOL_SIZE
             taskScheduler.setThreadNamePrefix("${mafProjectProperties.projectArtifactId}-task-scheduler-")
             taskScheduler.setAwaitTerminationSeconds(10)
-            log.warn("Enhanced taskScheduler. poolSize = {}", taskScheduler.poolSize)
+            log.warn("Enhanced taskScheduler. poolSize = ${taskScheduler.poolSize}")
         }
     }
 }

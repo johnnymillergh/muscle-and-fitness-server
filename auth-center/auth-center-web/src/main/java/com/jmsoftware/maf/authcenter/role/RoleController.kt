@@ -27,7 +27,7 @@ class RoleController(
     }
 
     override fun executeDatabaseOperation(beanList: List<RoleExcelBean>) {
-        log.info("ExecuteDatabaseOperation: {}", beanList)
+        log.info("ExecuteDatabaseOperation: $beanList")
         roleDomainService.save(beanList)
     }
 
@@ -40,7 +40,7 @@ class RoleController(
     }
 
     override fun beforeDatabaseOperation(beanList: List<RoleExcelBean>) {
-        log.info("BeforeDatabaseOperation: {}", beanList)
+        log.info("BeforeDatabaseOperation: $beanList")
     }
 
     override fun getTemplateFileName(): String {

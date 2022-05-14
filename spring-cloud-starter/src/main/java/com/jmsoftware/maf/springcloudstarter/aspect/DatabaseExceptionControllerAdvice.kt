@@ -81,7 +81,7 @@ class DatabaseExceptionControllerAdvice {
         exception: BadSqlGrammarException
     ): ResponseBodyBean<*> {
         requestLog(request)
-        log.error("BadSqlGrammarException message: {}", exception.message)
+        log.error("BadSqlGrammarException message: ${exception.message}")
         return ResponseBodyBean.ofStatus<Any>(HttpStatus.INTERNAL_SERVER_ERROR, getRootCauseMessage(exception))
     }
 

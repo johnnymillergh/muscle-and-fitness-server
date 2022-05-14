@@ -37,7 +37,7 @@ class RedisDistributedLockDemoController(
 
     private fun lockRaceResource(key: String, autoUnlock: Boolean): Lock {
         val lock = redisLockRegistry.obtain(key)
-        log.info("Obtained the lock from the registry: {}, Key: {}", lock, key)
+        log.info("Obtained the lock from the registry: $lock, Key: $key")
         val acquiredLock = lock.tryLock(3, TimeUnit.SECONDS)
         if (acquiredLock && autoUnlock) {
             log.warn("Acquired the lock. Mocking to do busy computes. Will release the lock automatically")

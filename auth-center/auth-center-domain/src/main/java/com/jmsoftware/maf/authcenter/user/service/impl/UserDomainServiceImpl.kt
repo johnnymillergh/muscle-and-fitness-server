@@ -114,12 +114,12 @@ class UserDomainServiceImpl(
     }
 
     override fun getUserStatus(payload: GetUserStatusPayload): String {
-        logger.info("Current username: {}", currentUsername())
+        logger.info("Current username: ${currentUsername()}")
         return payload.status.toString()
     }
 
     override fun getUserPageList(payload: GetUserPageListPayload): PageResponseBodyBean<User> {
-        logger.info("{}", payload)
+        logger.info("$payload")
         val page = Page<User>(
             payload.currentPage.toLong(), payload.pageSize.toLong()
         )

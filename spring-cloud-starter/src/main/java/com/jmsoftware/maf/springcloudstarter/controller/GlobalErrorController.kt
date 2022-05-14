@@ -38,7 +38,7 @@ class GlobalErrorController(
             body["message"] = joinedMessage
             body["trace"] = "Trace has been simplified by ${this.javaClass.name}. Refer to `message`"
         }
-        log.error("Captured HTTP request error. Response body = {}", body)
+        log.error("Captured HTTP request error. Response body = $body")
         return ResponseEntity(body, httpStatus)
     }
 }

@@ -101,20 +101,21 @@ internal class UserDomainServiceImplTest {
 
     @BeforeEach
     fun setUp() {
-        log.info("{} setUp", this.javaClass.simpleName)
+        log.info("${this.javaClass.simpleName} setUp")
         TableInfoHelper.initTableInfo(MapperBuilderAssistant(MybatisConfiguration(), ""), User::class.java)
     }
 
     @AfterEach
     fun tearDown() {
-        log.info("{} tearDown", this.javaClass.simpleName)
+        log.info("${this.javaClass.simpleName} tearDown")
+        TableInfoHelper.remove(User::class.java)
     }
 
     @Test
     fun getUserByLoginToken() {
         doReturn(userMapper).`when`(userDomainService).baseMapper
         val user = userDomainService.getUserByLoginToken(USERNAME)
-        log.info("User: {}", user)
+        log.info("User: $user")
         assertNull(user)
     }
 
@@ -128,7 +129,7 @@ internal class UserDomainServiceImplTest {
         payload.email = "johnnysviva@outlook.com"
         payload.password = "password-for-unit-test"
         val signupResponse = userDomainService.saveUserForSignup(payload)
-        log.info("Signup response: {}", signupResponse)
+        log.info("Signup response: $signupResponse")
         assertNotNull(signupResponse)
     }
 
@@ -160,7 +161,7 @@ internal class UserDomainServiceImplTest {
     fun getUserPageList() {
         doReturn(userMapper).`when`(userDomainService).baseMapper
         val response = userDomainService.getUserPageList(GetUserPageListPayload())
-        log.info("User page list: {}", response)
+        log.info("User page list: $response")
         assertNotNull(response)
         assertTrue(CollUtil.isEmpty(response.list))
     }

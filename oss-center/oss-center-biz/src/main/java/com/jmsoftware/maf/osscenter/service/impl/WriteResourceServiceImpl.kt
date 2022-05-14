@@ -46,7 +46,7 @@ class WriteResourceServiceImpl(
         objectResponse.bucket = objectWriteResponse.bucket()
         objectResponse.`object` = objectWriteResponse.`object`()
         objectResponse.etag = objectWriteResponse.etag()
-        log.info("Uploaded single resource. {}", objectResponse)
+        log.info("Uploaded single resource. $objectResponse")
         return objectResponse
     }
 
@@ -138,7 +138,7 @@ class WriteResourceServiceImpl(
         objectResponse.bucket = objectWriteResponse.bucket()
         objectResponse.`object` = objectWriteResponse.`object`()
         objectResponse.etag = objectWriteResponse.etag()
-        log.info("Merged resource chunks. {}", objectResponse)
+        log.info("Merged resource chunks. $objectResponse")
         val errorObjectList = minioHelper.removeObjects(payload.bucket, payload.objectList)
         log.warn("Removed unnecessary objects. errorObjectList: $errorObjectList")
         return objectResponse
@@ -150,7 +150,7 @@ class WriteResourceServiceImpl(
             StrUtil.subPre(`object`, lastIndexOfDot)
         }.collect(Collectors.toSet())
         if (CollUtil.size(objectNameSet) != 1) {
-            log.error("Object list is not valid! {}", objectNameSet)
+            log.error("Object list is not valid! $objectNameSet")
             throw IllegalArgumentException("Object list is not valid")
         }
         return objectNameSet.iterator().next()

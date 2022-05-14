@@ -149,10 +149,7 @@ class QuartzJobConfigurationServiceImpl(
         ReflectUtil.setFieldValue(quartzJobConfiguration, property, value)
         quartzJobConfiguration.id = id
         requireTrue(this.updateById(quartzJobConfiguration)) { updated: Boolean ->
-            logger.warn(
-                "Quartz job configuration patched: {}",
-                updated
-            )
+            logger.warn("Quartz job configuration patched: $updated")
         }.orElseThrow { IllegalStateException("Failed to patch $property") }
         return id
     }
@@ -171,7 +168,7 @@ class QuartzJobConfigurationServiceImpl(
             ),
             jobDataMap
         )
-        logger.warn("Triggered Quartz job successfully, {}", quartzJobConfiguration)
+        logger.warn("Triggered Quartz job successfully, $quartzJobConfiguration")
         return id
     }
 

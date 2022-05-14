@@ -58,7 +58,7 @@ open class JwtReactiveServerSecurityContextRepositoryImpl(
         }
         return authCenterWebClientService.parse(authorization!!)
             .map { parseJwtResponse: ParseJwtResponse ->
-                log.info("parseJwtResponse: {}", parseJwtResponse)
+                log.info("parseJwtResponse: $parseJwtResponse")
                 val userPrincipal = createByUsername(parseJwtResponse.username)
                 userPrincipal.id = parseJwtResponse.id
                 val authentication = UsernamePasswordAuthenticationToken(userPrincipal, null)

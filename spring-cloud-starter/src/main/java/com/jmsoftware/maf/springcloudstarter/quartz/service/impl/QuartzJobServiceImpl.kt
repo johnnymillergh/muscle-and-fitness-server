@@ -59,22 +59,19 @@ class QuartzJobServiceImpl(
     override fun pauseJob(jobName: String, groupName: String) {
         val jobDetailName = JOB_DETAIL_NAME_OPERATOR.apply(jobName)
         schedulerFactoryBean.scheduler.pauseJob(JobKey.jobKey(jobDetailName, groupName))
-        log.info("Paused job. jobDetailName: {}", jobDetailName)
+        log.info("Paused job. jobDetailName: $jobDetailName")
     }
 
     override fun resumeJob(jobName: String, groupName: String) {
         val jobDetailName = JOB_DETAIL_NAME_OPERATOR.apply(jobName)
         schedulerFactoryBean.scheduler.resumeJob(JobKey.jobKey(jobDetailName, groupName))
-        log.info("Resumed job. jobDetailName: {}", jobDetailName)
+        log.info("Resumed job. jobDetailName: $jobDetailName")
     }
 
     override fun runImmediately(jobName: String, groupName: String) {
         val jobDetailName = JOB_DETAIL_NAME_OPERATOR.apply(jobName)
         schedulerFactoryBean.scheduler.triggerJob(JobKey.jobKey(jobDetailName, groupName))
-        log.info(
-            "Triggered the identified JobDetail (execute it now). jobDetailName: {}",
-            jobDetailName
-        )
+        log.info("Triggered the identified JobDetail (execute it now). jobDetailName: $jobDetailName")
     }
 
     override fun updateJob(
@@ -90,7 +87,7 @@ class QuartzJobServiceImpl(
         }
         trigger.jobDataMap.putAll(param ?: emptyMap())
         schedulerFactoryBean.scheduler.rescheduleJob(triggerKey, trigger)
-        log.info("Updated job. triggerName: {}", triggerName)
+        log.info("Updated job. triggerName: $triggerName")
     }
 
     override fun deleteJob(jobName: String, groupName: String) {
@@ -99,7 +96,7 @@ class QuartzJobServiceImpl(
         schedulerFactoryBean.scheduler.pauseTrigger(TriggerKey.triggerKey(jobName, groupName))
         schedulerFactoryBean.scheduler.unscheduleJob(TriggerKey.triggerKey(jobName, groupName))
         schedulerFactoryBean.scheduler.deleteJob(JobKey.jobKey(jobName, groupName))
-        log.info("Updated job. triggerName: {}", triggerName)
+        log.info("Updated job. triggerName: $triggerName")
     }
 
     override fun startAllJobs() {

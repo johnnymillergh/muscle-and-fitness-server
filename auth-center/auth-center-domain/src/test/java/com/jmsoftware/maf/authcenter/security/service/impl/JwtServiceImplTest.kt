@@ -86,7 +86,7 @@ internal class JwtServiceImplTest {
 
     @AfterEach
     fun tearDown() {
-        log.info("{} tearDown", this.javaClass.simpleName)
+        log.info("${this.javaClass.simpleName} tearDown")
     }
 
     @Test

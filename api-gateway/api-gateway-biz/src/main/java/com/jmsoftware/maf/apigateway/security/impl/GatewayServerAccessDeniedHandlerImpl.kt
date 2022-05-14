@@ -23,10 +23,7 @@ open class GatewayServerAccessDeniedHandlerImpl(
     }
 
     override fun handle(exchange: ServerWebExchange, denied: AccessDeniedException): Mono<Void> {
-        log.error(
-            "Access denied! Exception message: {}. Request URL: [{}] {}", denied.message,
-            exchange.request.method, exchange.request.uri
-        )
+        log.error("Access denied! Exception message: ${denied.message}. Request URL: [${exchange.request.method}] ${exchange.request.uri}")
         return responseUtil.renderJson(exchange, HttpStatus.FORBIDDEN, denied.message, null)
     }
 }

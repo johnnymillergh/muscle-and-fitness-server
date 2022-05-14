@@ -1,7 +1,8 @@
 package com.jmsoftware.maf.springcloudstarter.util
 
 import cn.hutool.core.util.StrUtil
-import com.jmsoftware.maf.common.constant.MafHttpHeader
+import com.jmsoftware.maf.common.constant.MafHttpHeader.X_ID
+import com.jmsoftware.maf.common.constant.MafHttpHeader.X_USERNAME
 import com.jmsoftware.maf.common.util.logger
 import com.jmsoftware.maf.springcloudstarter.util.UserUtil.log
 import org.springframework.web.context.request.RequestContextHolder
@@ -26,12 +27,9 @@ internal object UserUtil {
 fun currentUsername(): String? {
     val servletRequestAttributes = RequestContextHolder.currentRequestAttributes() as ServletRequestAttributes
     val request = servletRequestAttributes.request
-    val currentUsername = request.getHeader(MafHttpHeader.X_USERNAME.header)
+    val currentUsername = request.getHeader(X_USERNAME.header)
     if (StrUtil.isBlank(currentUsername)) {
-        log.warn(
-            "Found blank {} in the header of current request [{}] {}", MafHttpHeader.X_USERNAME,
-            request.method, request.requestURI
-        )
+        log.warn("Found blank $X_USERNAME in the header of current request [${request.method}] ${request.requestURI}")
         return null
     }
     return currentUsername
@@ -45,10 +43,10 @@ fun currentUsername(): String? {
 fun currentUserId(): Long? {
     val servletRequestAttributes = RequestContextHolder.currentRequestAttributes() as ServletRequestAttributes
     val request = servletRequestAttributes.request
-    val xid = request.getHeader(MafHttpHeader.X_ID.header)
+    val xid = request.getHeader(X_ID.header)
     if (StrUtil.isBlank(xid)) {
-        log.warn("Found blank `${MafHttpHeader.X_ID}` in the header of current request [${request.method}] ${request.requestURI}")
+        log.warn("Found blank `$X_ID` in the header of current request [${request.method}] ${request.requestURI}")
         return null
     }
-    return java.lang.Long.valueOf(xid)
+    return xid.toLong()
 }

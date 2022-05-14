@@ -91,7 +91,7 @@ class FeignClientLogAspect {
         val response: String = try {
             JSONUtil.toJsonStr(result)
         } catch (e: Exception) {
-            log.warn("Failed to convert response to JSON string. {}", e.message)
+            log.warn("Failed to convert response to JSON string. ${e.message}")
             ObjectUtil.toString(result)
         }
         log.info(

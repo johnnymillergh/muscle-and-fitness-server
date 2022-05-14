@@ -21,8 +21,8 @@ import org.junit.jupiter.api.parallel.ExecutionMode
 import org.mockito.ArgumentMatchers.*
 import org.mockito.InjectMocks
 import org.mockito.Mock
-import org.mockito.Mockito.`when`
 import org.mockito.Mockito.verify
+import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
 import org.springframework.cloud.client.discovery.DiscoveryClient
 import org.springframework.web.bind.annotation.RequestMethod
@@ -84,12 +84,12 @@ internal class PermissionServiceImplTest {
 
     @BeforeEach
     fun setUp() {
-        log.info("{} setUp", this.javaClass.simpleName)
+        log.info("${this.javaClass.simpleName} setUp")
     }
 
     @AfterEach
     fun tearDown() {
-        log.info("{} tearDown", this.javaClass.simpleName)
+        log.info("${this.javaClass.simpleName} tearDown")
     }
 
     @Test
@@ -101,7 +101,7 @@ internal class PermissionServiceImplTest {
         payload.roleIdList = Lists.newArrayList()
         payload.permissionTypeList = Lists.newArrayList()
         val response = permissionService.getPermissionListByRoleIdList(payload)
-        log.info("Permission list response: {}", response)
+        log.info("Permission list response: $response")
         verify(roleDomainService).checkAdmin(anyList())
         verify(permissionDomainService).getPermissionListByRoleIdList(anyList(), anyList())
         assertEquals(0, response.permissionList.size)
@@ -123,7 +123,7 @@ internal class PermissionServiceImplTest {
         `when`(restTemplate.getForObject(anyString(), any<Class<Any>>()))
             .thenReturn(ResponseBodyBean.ofSuccess(httpApiResourcesResponse))
         val servicesInfo = permissionService.getServicesInfo()
-        log.info("Services info: {}", servicesInfo)
+        log.info("Services info: $servicesInfo")
         verify(discoveryClient).services
         assertNotEquals(0, servicesInfo.list.size)
         assertTrue(

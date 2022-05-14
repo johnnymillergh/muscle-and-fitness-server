@@ -55,9 +55,6 @@ private fun <T : PaginationBase?, R> hasNextPage(
         paginationBase.currentPage = paginationBase.currentPage + 1
         return true
     }
-    log.warn(
-        "Reached the end of the page. totalPage: {}, currentPage: {}, pageSize: {}", totalPage,
-        paginationBase.currentPage, paginationBase.pageSize
-    )
+    log.warn("Reached the end of the page. totalPage: $totalPage, currentPage: ${paginationBase.currentPage}, pageSize: ${paginationBase.pageSize}")
     return false
 }
