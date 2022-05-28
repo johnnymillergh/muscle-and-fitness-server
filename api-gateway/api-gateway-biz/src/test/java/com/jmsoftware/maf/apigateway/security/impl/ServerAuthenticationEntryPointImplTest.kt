@@ -1,7 +1,6 @@
 package com.jmsoftware.maf.apigateway.security.impl
 
 import com.jmsoftware.maf.reactivespringcloudstarter.util.ResponseUtil
-import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.parallel.Execution
@@ -10,45 +9,43 @@ import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
-import org.springframework.http.HttpStatus
+import org.mockito.kotlin.times
+import org.mockito.kotlin.verify
+import org.springframework.http.HttpStatus.NETWORK_AUTHENTICATION_REQUIRED
 import org.springframework.mock.http.server.reactive.MockServerHttpRequest
 import org.springframework.mock.web.server.MockServerWebExchange
-import org.springframework.security.access.AccessDeniedException
+import org.springframework.security.authentication.BadCredentialsException
 import reactor.core.publisher.Mono
 
 /**
- * # GatewayServerAccessDeniedHandlerImplTest
+ * # ServerAuthenticationEntryPointImplTest
  *
  * Change description here.
  *
- * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, 5/27/22 9:45 PM
+ * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 5/28/22 2:17 PM
  **/
 @ExtendWith(MockitoExtension::class)
 @Execution(ExecutionMode.CONCURRENT)
-internal class GatewayServerAccessDeniedHandlerImplTest {
+internal class ServerAuthenticationEntryPointImplTest {
     @InjectMocks
-    private lateinit var handler: GatewayServerAccessDeniedHandlerImpl
+    private lateinit var entryPoint: ServerAuthenticationEntryPointImpl
 
     @Mock
-    @Suppress("unused")
     private lateinit var responseUtil: ResponseUtil
 
     @Test
-    fun handle() {
+    fun commence() {
         val serverWebExchange = MockServerWebExchange.builder(
             MockServerHttpRequest.get("/mock").build()
         ).build()
-        val message = "Access denied for mocking"
-        `when`(
-            responseUtil.renderJson(
-                serverWebExchange,
-                HttpStatus.FORBIDDEN,
-                message,
-                null
-            )
-        ).thenReturn(Mono.empty())
-        val voidMono = handler.handle(serverWebExchange, AccessDeniedException(message))
-        assertNotNull(voidMono)
-        voidMono.block()
+        val message = "Bad credentials"
+        `when`(responseUtil.renderJson(serverWebExchange, NETWORK_AUTHENTICATION_REQUIRED, message, null))
+            .thenReturn(Mono.empty())
+        entryPoint.commence(
+            serverWebExchange,
+            BadCredentialsException(message)
+        ).block()
+        verify(responseUtil, times(1))
+            .renderJson(serverWebExchange, NETWORK_AUTHENTICATION_REQUIRED, message, null)
     }
 }

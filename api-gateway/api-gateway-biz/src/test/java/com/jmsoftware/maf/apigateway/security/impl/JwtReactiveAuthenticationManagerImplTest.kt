@@ -33,10 +33,10 @@ internal class JwtReactiveAuthenticationManagerImplTest {
     }
 
     @InjectMocks
-    lateinit var manager: JwtReactiveAuthenticationManagerImpl
+    private lateinit var manager: JwtReactiveAuthenticationManagerImpl
 
     @Mock
-    lateinit var authCenterWebClientService: AuthCenterWebClientService
+    private lateinit var authCenterWebClientService: AuthCenterWebClientService
 
     @Test
     fun authenticate_whenUsernameIsBlank_thenAuthenticationShouldFail() {

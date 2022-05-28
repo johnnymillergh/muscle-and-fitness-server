@@ -2,7 +2,7 @@ package com.jmsoftware.maf.apigateway.security.impl
 
 import com.jmsoftware.maf.common.util.logger
 import com.jmsoftware.maf.reactivespringcloudstarter.util.ResponseUtil
-import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatus.NETWORK_AUTHENTICATION_REQUIRED
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.server.ServerAuthenticationEntryPoint
 import org.springframework.web.server.ServerWebExchange
@@ -24,6 +24,6 @@ open class ServerAuthenticationEntryPointImpl(
 
     override fun commence(exchange: ServerWebExchange, e: AuthenticationException): Mono<Void> {
         log.error("Exception occurred when authenticating! Exception message: ${e.message}. Request URL: [${exchange.request.method}] ${exchange.request.uri}")
-        return responseUtil.renderJson(exchange, HttpStatus.NETWORK_AUTHENTICATION_REQUIRED, e.message, null)
+        return responseUtil.renderJson(exchange, NETWORK_AUTHENTICATION_REQUIRED, e.message, null)
     }
 }

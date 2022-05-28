@@ -42,19 +42,19 @@ internal class JwtReactiveServerSecurityContextRepositoryImplTest {
     }
 
     @InjectMocks
-    lateinit var repository: JwtReactiveServerSecurityContextRepositoryImpl
+    private lateinit var repository: JwtReactiveServerSecurityContextRepositoryImpl
 
     @Mock
-    lateinit var mafConfigurationProperties: MafConfigurationProperties
+    private lateinit var mafConfigurationProperties: MafConfigurationProperties
 
     @Mock
-    lateinit var authenticationManager: ReactiveAuthenticationManager
+    private lateinit var authenticationManager: ReactiveAuthenticationManager
 
     @Mock
-    lateinit var authCenterWebClientService: AuthCenterWebClientService
+    private lateinit var authCenterWebClientService: AuthCenterWebClientService
 
     @Mock
-    lateinit var securityContext: SecurityContext
+    private lateinit var securityContext: SecurityContext
 
     private val serverWebExchange1 = MockServerWebExchange.builder(
         MockServerHttpRequest.get("/mock").build()
