@@ -12,7 +12,8 @@ import com.jmsoftware.maf.common.domain.authcenter.security.UserPrincipal
 import com.jmsoftware.maf.common.exception.SecurityException
 import com.jmsoftware.maf.common.util.logger
 import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatus.FORBIDDEN
+import org.springframework.http.HttpStatus.UNAUTHORIZED
 import org.springframework.http.server.reactive.ServerHttpRequest
 import org.springframework.security.authorization.AuthorizationDecision
 import org.springframework.security.authorization.ReactiveAuthorizationManager
@@ -51,7 +52,7 @@ open class RbacReactiveAuthorizationManagerImpl(
         return userPrincipalMono
             .flatMap { userPrincipal: UserPrincipal -> authCenterWebClientService.getRoleListByUserId(userPrincipal.id!!) }
             .flatMapMany { Flux.fromIterable(it) }
-            .switchIfEmpty(Flux.error(SecurityException(HttpStatus.UNAUTHORIZED, "Roles not assigned!")))
+            .switchIfEmpty(Flux.error(SecurityException("Roles not assigned!", UNAUTHORIZED)))
     }
 
     /**
@@ -82,7 +83,7 @@ open class RbacReactiveAuthorizationManagerImpl(
             payload.permissionTypeList = listOf(PermissionType.BUTTON)
             authCenterWebClientService.getPermissionListByRoleIdList(payload)
         }
-            .switchIfEmpty(Mono.error(SecurityException(HttpStatus.FORBIDDEN, "Permission not found!")))
+            .switchIfEmpty(Mono.error(SecurityException("Permission not found!", FORBIDDEN)))
     }
 
     override fun check(

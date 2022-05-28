@@ -51,16 +51,16 @@ open class JwtReactiveAuthenticationManagerImpl(
 
     private fun retrieveUser(username: String): Mono<UserDetails> {
         if (StrUtil.isBlank(username)) {
-            log.warn("Authentication failure! Cause: the username mustn't be blank")
+            log.warn("Authentication failed! Cause: the username mustn't be blank")
             return Mono.error(
-                SecurityException(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED, "Username mustn't be blank")
+                SecurityException("Username mustn't be blank", HttpStatus.NETWORK_AUTHENTICATION_REQUIRED)
             )
         }
         return authCenterWebClientService.getUserByLoginToken(username)
             .switchIfEmpty(Mono.error(InternalServerException("Authentication failure! Cause: User not found")))
-            .map { data: GetUserByLoginTokenResponse ->
-                log.info("Authentication success! Found $data")
-                UserPrincipal.create(data)
+            .map { response: GetUserByLoginTokenResponse ->
+                log.info("Succeeded to retrieve user by username: $username, response: $response")
+                UserPrincipal.create(response)
             }
     }
 
@@ -68,6 +68,10 @@ open class JwtReactiveAuthenticationManagerImpl(
         return retrieveUser(authentication.name)
             .doOnNext { toCheck: UserDetails -> preAuthenticationChecks.check(toCheck) }
             .doOnNext { toCheck: UserDetails -> postAuthenticationChecks.check(toCheck) }
-            .map { userDetails: UserDetails -> UsernamePasswordAuthenticationToken(userDetails, null) }
+            .map { userDetails: UserDetails ->
+                UsernamePasswordAuthenticationToken(userDetails, null).apply {
+                    log.info("Authentication succeeded. Username: ${userDetails.username}")
+                }
+            }
     }
 }

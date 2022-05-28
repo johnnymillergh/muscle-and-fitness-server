@@ -20,7 +20,7 @@ import java.time.LocalDateTime
  * @param <T> the response body data type
  * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/16/22 11:02 AM
  */
-class PageResponseBodyBean<T> private constructor(
+data class PageResponseBodyBean<T> constructor(
     /**
      * The Timestamp. Must be annotated by '@JsonFormat', otherwise will cause following error, cuz api-gateway does not
      * know how to convert LocalDateTime.

@@ -9,7 +9,7 @@ import com.jmsoftware.maf.common.util.logger
 import com.jmsoftware.maf.reactivespringcloudstarter.property.JwtConfigurationProperties.Companion.TOKEN_PREFIX
 import com.jmsoftware.maf.reactivespringcloudstarter.property.MafConfigurationProperties
 import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatus.NETWORK_AUTHENTICATION_REQUIRED
 import org.springframework.security.authentication.ReactiveAuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
@@ -54,7 +54,7 @@ open class JwtReactiveServerSecurityContextRepositoryImpl(
         val authorization = request.headers.getFirst(HttpHeaders.AUTHORIZATION)
         if (StrUtil.isBlank(authorization) || !StrUtil.startWith(authorization, TOKEN_PREFIX)) {
             log.warn("Pre-authentication failure! Cause: `${HttpHeaders.AUTHORIZATION}` in HTTP headers not found. Request URL: [${request.method}] ${request.uri}")
-            return Mono.error(SecurityException(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED, "JWT Required"))
+            return Mono.error(SecurityException("JWT Required", NETWORK_AUTHENTICATION_REQUIRED))
         }
         return authCenterWebClientService.parse(authorization!!)
             .map { parseJwtResponse: ParseJwtResponse ->
