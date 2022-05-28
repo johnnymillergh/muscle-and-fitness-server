@@ -10,11 +10,9 @@ import java.io.Serial
  *
  * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/18/22 9:18 PM
  */
-class ResourceNotFoundException : BaseException {
-    constructor(message: String) : super(HttpStatus.NOT_FOUND, message)
-
+class ResourceNotFoundException(message: String) : BaseException(message, HttpStatus.NOT_FOUND.value()) {
     companion object {
         @Serial
-        private val serialVersionUID = -1706570460684455863L
+        private const val serialVersionUID = -1706570460684455863L
     }
 }

@@ -8,7 +8,6 @@ import com.jmsoftware.maf.common.constant.UniversalDateTime
 import com.jmsoftware.maf.common.exception.BaseException
 import com.jmsoftware.maf.common.exception.InternalServerException
 import org.springframework.http.HttpStatus
-import org.springframework.lang.Nullable
 import java.io.Serial
 import java.io.Serializable
 import java.time.LocalDateTime
@@ -21,7 +20,7 @@ import java.time.LocalDateTime
  * @param <T> the response body data type
  * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/16/22 11:02 AM
  */
-class PageResponseBodyBean<T> private constructor()  : TrackableBean(), Serializable {
+class PageResponseBodyBean<T> private constructor(
     /**
      * The Timestamp. Must be annotated by '@JsonFormat', otherwise will cause following error, cuz api-gateway does not
      * know how to convert LocalDateTime.
@@ -29,34 +28,30 @@ class PageResponseBodyBean<T> private constructor()  : TrackableBean(), Serializ
      * Failed to deserialize java.time.LocalDateTime: (java.time.format.DateTimeParseException) Text '2021-06-27 23:08:46'
      */
     @JsonFormat(pattern = UniversalDateTime.DATE_TIME_FORMAT)
-    val timestamp: LocalDateTime = LocalDateTime.now()
-
+    val timestamp: LocalDateTime = LocalDateTime.now(),
     /**
      * Default status is 200 OK.
      */
-    var status = HttpStatus.OK.value()
-
+    val status: Int = HttpStatus.OK.value(),
     /**
      * The Message. Default: 200 OK.
      */
-    var message = HttpStatus.OK.reasonPhrase
-
+    val message: String = HttpStatus.OK.reasonPhrase,
     /**
      * The List.
      */
-    var list = emptyList<T>()
-
+    val list: List<T> = emptyList(),
     /**
      * The Total.
      */
-    var total: Long = 0
-
+    val total: Long = 0
+) : TrackableBean(), Serializable {
     companion object {
         /**
          * The constant serialVersionUID.
          */
         @Serial
-        var serialVersionUID = 4645461634548783641L
+        private const val serialVersionUID = 4645461634548783641L
 
         /**
          * Respond to client with IUniversalStatus (status may be OK or other).
@@ -70,10 +65,7 @@ class PageResponseBodyBean<T> private constructor()  : TrackableBean(), Serializ
          * @return response body for ExceptionControllerAdvice javax.servlet.http.HttpServletResponse, Exception)
          */
         fun <T> ofStatus(status: HttpStatus): PageResponseBodyBean<T> {
-            val responseBodyBean = PageResponseBodyBean<T>()
-            responseBodyBean.status = status.value()
-            responseBodyBean.message = status.reasonPhrase
-            return responseBodyBean
+            return PageResponseBodyBean(status = status.value(), message = status.reasonPhrase)
         }
 
         /**
@@ -88,10 +80,7 @@ class PageResponseBodyBean<T> private constructor()  : TrackableBean(), Serializ
             status: HttpStatus,
             message: String
         ): PageResponseBodyBean<T> {
-            val responseBodyBean = PageResponseBodyBean<T>()
-            responseBodyBean.status = status.value()
-            responseBodyBean.message = message
-            return responseBodyBean
+            return PageResponseBodyBean(status = status.value(), message = message)
         }
 
         /**
@@ -110,15 +99,15 @@ class PageResponseBodyBean<T> private constructor()  : TrackableBean(), Serializ
          */
         fun <T> ofStatus(
             status: HttpStatus,
-            data: List<T>?,
+            data: List<T>,
             total: Long
         ): PageResponseBodyBean<T> {
-            val responseBodyBean = PageResponseBodyBean<T>()
-            responseBodyBean.status = status.value()
-            responseBodyBean.message = status.reasonPhrase
-            data?.let { responseBodyBean.list = it }
-            responseBodyBean.total = total
-            return responseBodyBean
+            return PageResponseBodyBean(
+                status = status.value(),
+                message = status.reasonPhrase,
+                list = data,
+                total = total
+            )
         }
 
         /**
@@ -138,15 +127,10 @@ class PageResponseBodyBean<T> private constructor()  : TrackableBean(), Serializ
         fun <T> ofStatus(
             status: Int,
             message: String,
-            data: List<T>?,
+            data: List<T>,
             total: Long
         ): PageResponseBodyBean<T> {
-            val responseBodyBean = PageResponseBodyBean<T>()
-            responseBodyBean.status = status
-            responseBodyBean.message = message
-            data?.let { responseBodyBean.list = it }
-            responseBodyBean.total = total
-            return responseBodyBean
+            return PageResponseBodyBean(status = status, message = message, list = data, total = total)
         }
 
         /**
@@ -164,26 +148,20 @@ class PageResponseBodyBean<T> private constructor()  : TrackableBean(), Serializ
          * @return response body
          * @throws BaseException the base exception
          */
-        @Throws(BaseException::class)
         fun <T> setResponse(
             status: Int,
             message: String,
-            data: List<T>?,
-            total: Long
+            data: List<T> = emptyList(),
+            total: Long = 0
         ): PageResponseBodyBean<T> {
             if (!HttpStatus.valueOf(status).is2xxSuccessful) {
-                throw BaseException(status, message, data)
+                throw BaseException(message, status, data)
             }
-            val responseBodyBean = PageResponseBodyBean<T>()
-            responseBodyBean.status = status
-            responseBodyBean.message = message
-            data?.let { responseBodyBean.list = it }
-            responseBodyBean.total = total
-            return responseBodyBean
+            return PageResponseBodyBean(status = status, message = message, list = data, total = total)
         }
 
         /**
-         * Respond null data, and status is OK.
+         * Respond empty data, and status is OK.
          *
          * @param <T> the response body data type
          * @return response body
@@ -201,13 +179,10 @@ class PageResponseBodyBean<T> private constructor()  : TrackableBean(), Serializ
          * @return response body
          */
         fun <T> ofSuccess(
-            data: List<T>?,
+            data: List<T>,
             total: Long
         ): PageResponseBodyBean<T> {
-            val responseBodyBean = PageResponseBodyBean<T>()
-            data?.let { responseBodyBean.list = it }
-            responseBodyBean.total = total
-            return responseBodyBean
+            return PageResponseBodyBean(list = data, total = total)
         }
 
         /**
@@ -218,9 +193,7 @@ class PageResponseBodyBean<T> private constructor()  : TrackableBean(), Serializ
          * @return response body
          */
         fun <T> ofSuccess(message: String): PageResponseBodyBean<T> {
-            val responseBodyBean = PageResponseBodyBean<T>()
-            responseBodyBean.message = message
-            return responseBodyBean
+            return PageResponseBodyBean(message = message)
         }
 
         /**
@@ -233,15 +206,11 @@ class PageResponseBodyBean<T> private constructor()  : TrackableBean(), Serializ
          * @return response body
          */
         fun <T> ofSuccess(
-            data: List<T>?,
+            data: List<T>,
             message: String,
             total: Long
         ): PageResponseBodyBean<T> {
-            val responseBodyBean = PageResponseBodyBean<T>()
-            responseBodyBean.message = message
-            data?.let { responseBodyBean.list = it }
-            responseBodyBean.total = total
-            return responseBodyBean
+            return PageResponseBodyBean(message = message, list = data, total = total)
         }
 
         /**
@@ -281,7 +250,7 @@ class PageResponseBodyBean<T> private constructor()  : TrackableBean(), Serializ
             data: List<T>?,
             message: String
         ): PageResponseBodyBean<T> {
-            throw InternalServerException(data, message)
+            throw InternalServerException(message = message, data = data)
         }
 
         /**
@@ -294,9 +263,7 @@ class PageResponseBodyBean<T> private constructor()  : TrackableBean(), Serializ
         fun <T> ofError(): PageResponseBodyBean<T> {
             return setResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                HttpStatus.INTERNAL_SERVER_ERROR.reasonPhrase,
-                null,
-                0
+                HttpStatus.INTERNAL_SERVER_ERROR.reasonPhrase
             )
         }
 
@@ -309,7 +276,7 @@ class PageResponseBodyBean<T> private constructor()  : TrackableBean(), Serializ
          * @throws BaseException the base exception
          */
         fun <T> ofError(status: HttpStatus): PageResponseBodyBean<T> {
-            return setResponse(status.value(), status.reasonPhrase, null, 0)
+            return setResponse(status.value(), status.reasonPhrase)
         }
 
         /**
@@ -338,7 +305,7 @@ class PageResponseBodyBean<T> private constructor()  : TrackableBean(), Serializ
          */
         fun <T> of(
             message: String,
-            @Nullable data: List<T>?,
+            data: List<T>,
             total: Long, status: Int
         ): JSON {
             val responseBodyBean = ofStatus(status, message, data, total)

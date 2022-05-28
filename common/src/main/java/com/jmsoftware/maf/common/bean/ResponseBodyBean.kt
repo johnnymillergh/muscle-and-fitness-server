@@ -21,7 +21,7 @@ import java.time.LocalDateTime
  * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/16/22 11:23 AM
  */
 @Suppress("unused")
-class ResponseBodyBean<T> private constructor() : TrackableBean(), Serializable {
+class ResponseBodyBean<T> private constructor(
     /**
      * The Timestamp. Must be annotated by '@JsonFormat', otherwise will cause following error, cuz api-gateway does not
      * know how to convert LocalDateTime.
@@ -31,26 +31,23 @@ class ResponseBodyBean<T> private constructor() : TrackableBean(), Serializable 
      * 23:08:46'
      */
     @JsonFormat(pattern = UniversalDateTime.DATE_TIME_FORMAT)
-    val timestamp: LocalDateTime = LocalDateTime.now()
-
+    val timestamp: LocalDateTime = LocalDateTime.now(),
     /**
      * Default status is 200 OK.
      */
-    var status = HttpStatus.OK.value()
-
+    val status: Int = HttpStatus.OK.value(),
     /**
      * The Message. Default: 200 OK.
      */
-    var message = HttpStatus.OK.reasonPhrase
-
+    val message: String = HttpStatus.OK.reasonPhrase,
     /**
      * The Data.
      */
-    var data: T? = null
-
+    val data: T? = null
+) : TrackableBean(), Serializable {
     companion object {
         @Serial
-        var serialVersionUID = 4645469240048361965L
+        private const val serialVersionUID = 4645469240048361965L
 
         /**
          * Respond to client with IUniversalStatus (status may be OK or other).
@@ -65,10 +62,7 @@ class ResponseBodyBean<T> private constructor() : TrackableBean(), Serializable 
          * @return response body for ExceptionControllerAdvice javax.servlet.http.HttpServletResponse, Exception)
          */
         fun <T> ofStatus(status: HttpStatus): ResponseBodyBean<T> {
-            val responseBodyBean = ResponseBodyBean<T>()
-            responseBodyBean.status = status.value()
-            responseBodyBean.message = status.reasonPhrase
-            return responseBodyBean
+            return ResponseBodyBean(status = status.value(), message = status.reasonPhrase)
         }
 
         /**
@@ -80,10 +74,7 @@ class ResponseBodyBean<T> private constructor() : TrackableBean(), Serializable 
          * @return the response body bean
          */
         fun <T> ofStatus(status: HttpStatus, message: String): ResponseBodyBean<T> {
-            val responseBodyBean = ResponseBodyBean<T>()
-            responseBodyBean.status = status.value()
-            responseBodyBean.message = message
-            return responseBodyBean
+            return ResponseBodyBean(status = status.value(), message = message)
         }
 
         /**
@@ -99,11 +90,7 @@ class ResponseBodyBean<T> private constructor() : TrackableBean(), Serializable 
          * @return response body for ExceptionControllerAdvice
          */
         fun <T> ofStatus(status: HttpStatus, data: T?): ResponseBodyBean<T> {
-            val responseBodyBean = ResponseBodyBean<T>()
-            responseBodyBean.status = status.value()
-            responseBodyBean.message = status.reasonPhrase
-            responseBodyBean.data = data
-            return responseBodyBean
+            return ResponseBodyBean(status = status.value(), message = status.reasonPhrase, data = data)
         }
 
         /**
@@ -124,11 +111,7 @@ class ResponseBodyBean<T> private constructor() : TrackableBean(), Serializable 
             message: String,
             data: T?
         ): ResponseBodyBean<T> {
-            val responseBodyBean = ResponseBodyBean<T>()
-            responseBodyBean.status = status
-            responseBodyBean.message = message
-            responseBodyBean.data = data
-            return responseBodyBean
+            return ResponseBodyBean(status = status, message = message, data = data)
         }
 
         /**
@@ -150,13 +133,9 @@ class ResponseBodyBean<T> private constructor() : TrackableBean(), Serializable 
             data: T?
         ): ResponseBodyBean<T> {
             if (!HttpStatus.valueOf(status).is2xxSuccessful) {
-                throw BaseException(status, message, data)
+                throw BaseException(message, status, data)
             }
-            val responseBodyBean = ResponseBodyBean<T>()
-            responseBodyBean.status = status
-            responseBodyBean.message = message
-            responseBodyBean.data = data
-            return responseBodyBean
+            return ResponseBodyBean(status = status, message = message, data = data)
         }
 
         /**
@@ -177,9 +156,7 @@ class ResponseBodyBean<T> private constructor() : TrackableBean(), Serializable 
          * @return response body
          */
         fun <T> ofSuccess(data: T?): ResponseBodyBean<T> {
-            val responseBodyBean = ResponseBodyBean<T>()
-            responseBodyBean.data = data
-            return responseBodyBean
+            return ResponseBodyBean(data = data)
         }
 
         /**
@@ -190,9 +167,7 @@ class ResponseBodyBean<T> private constructor() : TrackableBean(), Serializable 
          * @return response body
          */
         fun <T> ofSuccessMessage(message: String): ResponseBodyBean<T> {
-            val responseBodyBean = ResponseBodyBean<T>()
-            responseBodyBean.message = message
-            return responseBodyBean
+            return ResponseBodyBean(message = message)
         }
 
         /**
@@ -207,10 +182,7 @@ class ResponseBodyBean<T> private constructor() : TrackableBean(), Serializable 
             data: T?,
             message: String
         ): ResponseBodyBean<T> {
-            val responseBodyBean = ResponseBodyBean<T>()
-            responseBodyBean.data = data
-            responseBodyBean.message = message
-            return responseBodyBean
+            return ResponseBodyBean(message = message, data = data)
         }
 
         /**
@@ -244,7 +216,7 @@ class ResponseBodyBean<T> private constructor() : TrackableBean(), Serializable 
          * @return response body
          */
         fun <T> ofFailure(data: T, message: String): ResponseBodyBean<T> {
-            throw InternalServerException(data, message)
+            throw InternalServerException(message = message, data = data)
         }
 
         /**

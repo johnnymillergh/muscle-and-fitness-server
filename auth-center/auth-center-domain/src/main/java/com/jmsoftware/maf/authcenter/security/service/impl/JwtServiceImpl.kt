@@ -13,7 +13,8 @@ import io.jsonwebtoken.*
 import io.jsonwebtoken.security.Keys
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR
+import org.springframework.http.HttpStatus.UNAUTHORIZED
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.stereotype.Service
@@ -97,34 +98,34 @@ class JwtServiceImpl(
         val claims: Claims = try {
             Optional.ofNullable(jwtParser.parseClaimsJws(jwt).body)
                 .orElseThrow {
-                    SecurityException(HttpStatus.INTERNAL_SERVER_ERROR, "The JWT Claims Set is null")
+                    SecurityException("The JWT Claims Set is null", INTERNAL_SERVER_ERROR)
                 }
         } catch (e: ExpiredJwtException) {
             log.error("JWT is expired. Message: ${e.message}, JWT: $jwt")
-            throw SecurityException(HttpStatus.UNAUTHORIZED, "JWT is expired (JWT itself)")
+            throw SecurityException("JWT is expired (JWT itself)", UNAUTHORIZED)
         } catch (e: UnsupportedJwtException) {
             log.error("JWT is unsupported. Message: ${e.message}, JWT: $jwt")
-            throw SecurityException(HttpStatus.UNAUTHORIZED, "JWT is unsupported")
+            throw SecurityException("JWT is unsupported", UNAUTHORIZED)
         } catch (e: MalformedJwtException) {
             log.error("JWT is invalid. Message: ${e.message}, JWT: $jwt")
-            throw SecurityException(HttpStatus.UNAUTHORIZED, "JWT is invalid")
+            throw SecurityException("JWT is invalid", UNAUTHORIZED)
         } catch (e: IllegalArgumentException) {
             log.error("The parameter of JWT is invalid. Message: ${e.message}, JWT: $jwt")
-            throw SecurityException(HttpStatus.UNAUTHORIZED, "The parameter of JWT is invalid")
+            throw SecurityException("The parameter of JWT is invalid", UNAUTHORIZED)
         }
         val username = claims.subject
         val redisKeyOfJwt = jwtConfigurationProperties.jwtRedisKeyPrefix + username
         // Check if JWT exists
         val expire = redisTemplate.opsForValue().operations.getExpire(redisKeyOfJwt, TimeUnit.MILLISECONDS)
         if (ObjectUtil.isNull(expire) || expire!! <= 0) {
-            throw SecurityException(HttpStatus.UNAUTHORIZED, "JWT is expired (Redis expiration)")
+            throw SecurityException("JWT is expired (Redis expiration)", UNAUTHORIZED)
         }
         // Check if the current JWT is equal to the one in Redis.
         // If it's noe equal, that indicates current user has signed out or logged in before.
         // Both situations reveal the JWT has expired.
         val jwtInRedis = redisTemplate.opsForValue()[redisKeyOfJwt] as String?
         if (jwt != jwtInRedis) {
-            throw SecurityException(HttpStatus.UNAUTHORIZED, "JWT is expired (Not equaled)")
+            throw SecurityException("JWT is expired (Not equaled)", UNAUTHORIZED)
         }
         return claims
     }
