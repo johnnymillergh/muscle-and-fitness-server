@@ -10,7 +10,6 @@ import com.google.common.collect.Maps
 import com.jmsoftware.maf.common.bean.ExcelImportResult
 import com.jmsoftware.maf.common.bean.ResponseBodyBean
 import com.jmsoftware.maf.common.util.logger
-import com.jmsoftware.maf.springcloudstarter.util.CaseConversionUtil
 import org.apache.poi.ss.usermodel.Workbook
 import org.springframework.http.ContentDisposition
 import org.springframework.http.HttpHeaders
@@ -23,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody
 import java.io.*
 import java.lang.reflect.ParameterizedType
+import java.util.*
 import javax.annotation.Resource
 
 /**
@@ -105,7 +105,7 @@ abstract class AbstractExcelDataController<T> {
             val excelColumn = declaredField.getAnnotation(ExcelColumn::class.java)
             var columnName = excelColumn?.name
             if (StrUtil.isBlank(columnName)) {
-                columnName = CaseConversionUtil.convertToStartCase(StrUtil.toSymbolCase(declaredField.name, ' '))
+                columnName = StrUtil.toSymbolCase(declaredField.name, ' ').uppercase(Locale.getDefault())
             }
             importingFieldAliasMap[columnName!!] = declaredField.name
             exportingFieldAliasMap[declaredField.name] = columnName
