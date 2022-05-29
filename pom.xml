@@ -40,6 +40,7 @@
 
         <!-- Version Definitions. -->
         <java.version>17</java.version>
+        <jdk.version>17.0.3</jdk.version>
         <!--
         Don't use alpine or slim version, to prevent following exception
         java.lang.UnsatisfiedLinkError: /opt/java/openjdk/lib/libfontmanager.so: libfreetype.so.6: cannot open shared object file: No such file or directory
@@ -50,6 +51,7 @@
         <jib-spring-boot-extension-maven.version>0.1.0</jib-spring-boot-extension-maven.version>
         <maven-pmd-plugin.version>3.15.0</maven-pmd-plugin.version>
         <p3c-pmd.version>2.1.1</p3c-pmd.version>
+        <maven-enforcer-plugin.version>3.0.0</maven-enforcer-plugin.version>
         <spring-cloud.version>2021.0.1</spring-cloud.version>
         <functionaljava.version>5.0</functionaljava.version>
         <functionaljava-java8.version>4.8.1</functionaljava-java8.version>
@@ -435,6 +437,37 @@
                         <goals>
                             <goal>report</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>${maven-enforcer-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>enforce-java</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireJavaVendor>
+                                    <excludes>
+                                        <exclude>Pivotal</exclude>
+                                        <exclude>Oracle JDK</exclude>
+                                        <exclude>AdoptOpenJDK</exclude>
+                                    </excludes>
+                                    <includes>
+                                        <include>Eclipse Adoptium</include>
+                                    </includes>
+                                </requireJavaVendor>
+                                <requireJavaVersion>
+                                    <version>${jdk.version}</version>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

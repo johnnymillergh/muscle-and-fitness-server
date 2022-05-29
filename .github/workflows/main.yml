@@ -23,7 +23,7 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v3.1.0
         with:
-          java-version: '17.0.2+8'
+          java-version: '17.0.3+7'
           distribution: 'temurin'
       - name: Grant Execution Permission for `mvnw`
         run: chmod +x mvnw
