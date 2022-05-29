@@ -30,6 +30,7 @@ import com.jmsoftware.maf.springcloudstarter.websocket.WebSocketConfiguration
 import org.apache.ibatis.exceptions.PersistenceException
 import org.mybatis.spring.MyBatisSystemException
 import org.springframework.boot.autoconfigure.AutoConfiguration
+import org.springframework.boot.autoconfigure.AutoConfigureOrder
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration
 import org.springframework.boot.autoconfigure.condition.*
 import org.springframework.boot.autoconfigure.integration.IntegrationAutoConfiguration
@@ -57,6 +58,7 @@ import javax.annotation.PostConstruct
  * @see <a href='https://docs.spring.io/spring-boot/docs/current/reference/html/features.html.features.developing-auto-configuration'>9. Creating Your Own Auto-configuration</a>
  */
 @AutoConfiguration
+@AutoConfigureOrder(Int.MIN_VALUE)
 @IntegrationComponentScan
 @ConditionalOnWebApplication
 @EnableConfigurationProperties(
