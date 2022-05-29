@@ -15,6 +15,7 @@ import com.jmsoftware.maf.reactivespringcloudstarter.redis.RedisConfiguration
 import com.jmsoftware.maf.reactivespringcloudstarter.service.CommonService
 import com.jmsoftware.maf.reactivespringcloudstarter.service.impl.CommonServiceImpl
 import com.jmsoftware.maf.reactivespringcloudstarter.util.ResponseUtil
+import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.AutoConfigureOrder
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.ApplicationContext
@@ -30,6 +31,7 @@ import javax.annotation.PostConstruct
  *
  * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/17/22 8:17 AM
  */
+@AutoConfiguration
 @AutoConfigureOrder(Int.MIN_VALUE)
 @EnableConfigurationProperties(
     MafConfigurationProperties::class,

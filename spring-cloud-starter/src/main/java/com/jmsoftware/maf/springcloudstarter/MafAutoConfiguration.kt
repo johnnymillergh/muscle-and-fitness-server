@@ -29,6 +29,7 @@ import com.jmsoftware.maf.springcloudstarter.service.impl.CommonServiceImpl
 import com.jmsoftware.maf.springcloudstarter.websocket.WebSocketConfiguration
 import org.apache.ibatis.exceptions.PersistenceException
 import org.mybatis.spring.MyBatisSystemException
+import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration
 import org.springframework.boot.autoconfigure.condition.*
 import org.springframework.boot.autoconfigure.integration.IntegrationAutoConfiguration
@@ -55,6 +56,7 @@ import javax.annotation.PostConstruct
  * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/12/22 9:26 PM
  * @see <a href='https://docs.spring.io/spring-boot/docs/current/reference/html/features.html.features.developing-auto-configuration'>9. Creating Your Own Auto-configuration</a>
  */
+@AutoConfiguration
 @IntegrationComponentScan
 @ConditionalOnWebApplication
 @EnableConfigurationProperties(
