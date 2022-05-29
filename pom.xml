@@ -46,7 +46,7 @@
         https://hub.docker.com/_/eclipse-temurin?tab=tags&page=1&name=17.0.3_7-jre
         -->
         <temurin.tag>17.0.3_7-jre</temurin.tag>
-        <jib-maven-plugin.version>3.2.0</jib-maven-plugin.version>
+        <jib-maven-plugin.version>3.2.1</jib-maven-plugin.version>
         <jib-spring-boot-extension-maven.version>0.1.0</jib-spring-boot-extension-maven.version>
         <maven-pmd-plugin.version>3.15.0</maven-pmd-plugin.version>
         <p3c-pmd.version>2.1.1</p3c-pmd.version>
