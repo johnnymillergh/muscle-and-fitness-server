@@ -48,7 +48,7 @@
                      LEFT JOIN user createdBy ON createdBy.id = qjc.created_by
                      LEFT JOIN user modifiedBy ON modifiedBy.id = qjc.modified_by
         <where>
-            qjc.deleted = 0
+            qjc.deleted = 'N'
             <if test="@cn.hutool.core.util.StrUtil@isNotBlank(payload.serviceName)">
                 AND qjc.service_name LIKE CONCAT('%', #{payload.serviceName}, '%')
             </if>
@@ -74,7 +74,7 @@
         FROM quartz_job_configuration qjc
                      LEFT JOIN user createdBy ON createdBy.id = qjc.created_by
                      LEFT JOIN user modifiedBy ON modifiedBy.id = qjc.modified_by
-        WHERE qjc.deleted = 0
+        WHERE qjc.deleted = 'N'
           AND qjc.service_name = #{serviceName}
     </select>
 </mapper>

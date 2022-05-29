@@ -26,7 +26,7 @@
         FROM role
                      LEFT JOIN user_role ON role.id = user_role.role_id
                      LEFT JOIN user ON user_role.user_id = user.id
-        WHERE role.deleted = 0 AND user.id = #{userId}
+        WHERE role.deleted = 'N' AND user.id = #{userId}
     </select>
 
     <select id="selectByName" resultMap="BaseResultMap">

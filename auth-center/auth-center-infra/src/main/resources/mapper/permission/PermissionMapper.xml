@@ -35,7 +35,7 @@
                      LEFT JOIN role_permission ON permission.id = role_permission.permission_id
                      LEFT JOIN role ON role.id = role_permission.role_id
         <where>
-            permission.deleted = 0
+            permission.deleted = 'N'
             <if test="@cn.hutool.core.collection.CollUtil@isNotEmpty(roleIdList)">
                 AND role.id IN
                 <foreach item="item" collection="roleIdList" open="(" separator="," close=")">
