@@ -5,6 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Configuration
 import org.springframework.validation.annotation.Validated
 import java.nio.charset.StandardCharsets
+import javax.annotation.PostConstruct
 import javax.validation.constraints.NotNull
 
 /**
@@ -17,7 +18,9 @@ import javax.validation.constraints.NotNull
 @Validated
 @Configuration
 @ConfigurationProperties(prefix = JwtConfigurationProperties.PREFIX)
-class JwtConfigurationProperties(mafProjectProperties: MafProjectProperties) {
+class JwtConfigurationProperties(
+    private val mafProjectProperties: MafProjectProperties
+) {
     companion object {
         /**
          * The constant PREFIX.
@@ -30,12 +33,12 @@ class JwtConfigurationProperties(mafProjectProperties: MafProjectProperties) {
     /**
      * Key prefix of JWT stored in Redis.
      */
-    final val jwtRedisKeyPrefix: String
+    lateinit var jwtRedisKeyPrefix: String
 
     /**
      * JWT signing key. Pattern: [groupId]:[projectParentArtifactId]@[version]
      */
-    final val signingKey: String
+    lateinit var signingKey: String
 
     /**
      * Time to live of JWT. Default: 3 * 600000 milliseconds (1800000 ms, 30 min).
@@ -47,7 +50,8 @@ class JwtConfigurationProperties(mafProjectProperties: MafProjectProperties) {
      */
     var ttlForRememberMe: @NotNull Long = 7 * 86400000L
 
-    init {
+    @PostConstruct
+    private fun init() {
         signingKey =
             "${mafProjectProperties.groupId}:${mafProjectProperties.projectParentArtifactId}@${mafProjectProperties.version}"
         log.info(
