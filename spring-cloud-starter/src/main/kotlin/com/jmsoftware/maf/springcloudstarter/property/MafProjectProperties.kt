@@ -19,13 +19,13 @@ import javax.validation.constraints.NotBlank
 @Configuration
 @Suppress("unused")
 @ConfigurationProperties(prefix = MafProjectProperties.PREFIX)
-class MafProjectProperties {
+class MafProjectProperties(
+    val buildProperties: BuildProperties
+) {
     companion object {
         const val PREFIX = "maf.project-properties"
         private val log = logger()
     }
-
-    lateinit var buildProperties: BuildProperties
 
     /**
      * The Base package.

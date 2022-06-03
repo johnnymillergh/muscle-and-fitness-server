@@ -26,24 +26,24 @@
     </sql>
 
     <select id="selectPermissionListByRoleIdList" resultMap="BaseResultMap">
-        SELECT DISTINCT permission.id,
-                        permission.url,
-                        permission.type,
-                        permission.permission_expression AS permissionExpression,
-                        permission.method
-        FROM permission
-                     LEFT JOIN role_permission ON permission.id = role_permission.permission_id
-                     LEFT JOIN role ON role.id = role_permission.role_id
+        SELECT DISTINCT p.id,
+                        p.url,
+                        p.type,
+                        p.permission_expression AS permissionExpression,
+                        p.method
+        FROM permission p
+                     LEFT JOIN role_permission rp ON p.id = rp.permission_id
+                     LEFT JOIN role r ON r.id = rp.role_id
         <where>
-            permission.deleted = 'N'
+            p.deleted = 'N'
             <if test="@cn.hutool.core.collection.CollUtil@isNotEmpty(roleIdList)">
-                AND role.id IN
+                AND r.id IN
                 <foreach item="item" collection="roleIdList" open="(" separator="," close=")">
                     #{item}
                 </foreach>
             </if>
             <if test="@cn.hutool.core.collection.CollUtil@isNotEmpty(permissionTypeList)">
-                AND permission.type IN
+                AND p.type IN
                 <foreach item="item" collection="permissionTypeList" open="(" separator="," close=")">
                     #{item.type}
                 </foreach>
