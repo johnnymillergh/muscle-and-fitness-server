@@ -50,7 +50,6 @@ class PermissionServiceImpl(
     ): GetPermissionListByRoleIdListResponse {
         val adminRole = roleDomainService.checkAdmin(payload.roleIdList)
         val response = GetPermissionListByRoleIdListResponse()
-        response.permissionList = Lists.newArrayList()
         if (adminRole) {
             log.warn("Admin role checked. The role can access any resources")
             val permission = Permission()

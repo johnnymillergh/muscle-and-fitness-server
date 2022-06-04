@@ -1,6 +1,6 @@
 package com.jmsoftware.maf.springcloudstarter.function
 
-import com.jmsoftware.maf.common.constant.UniversalDateTime
+import com.jmsoftware.maf.common.constant.ISO_8601_DATETIME_FORMAT
 import com.jmsoftware.maf.common.util.logger
 import com.jmsoftware.maf.springcloudstarter.function.FunctionLog.log
 import java.time.Duration
@@ -35,7 +35,7 @@ private object FunctionLog {
 fun <T, R> logFunction(function: Function<T, R>, t: T, tag: String?): R {
     log.info(
         "[$tag], parameter = ${t.toString()}, requestTime = ${
-            LocalDateTime.now().format(DateTimeFormatter.ofPattern(UniversalDateTime.DATE_TIME_FORMAT))
+            LocalDateTime.now().format(DateTimeFormatter.ofPattern(ISO_8601_DATETIME_FORMAT))
         }"
     )
     val start = Instant.now()

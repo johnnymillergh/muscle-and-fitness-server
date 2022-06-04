@@ -4,13 +4,13 @@ import cn.hutool.json.JSON
 import cn.hutool.json.JSONConfig
 import cn.hutool.json.JSONUtil
 import com.fasterxml.jackson.annotation.JsonFormat
-import com.jmsoftware.maf.common.constant.UniversalDateTime
+import com.jmsoftware.maf.common.constant.ISO_8601_DATETIME_TIMEZONE_FORMAT
 import com.jmsoftware.maf.common.exception.BaseException
 import com.jmsoftware.maf.common.exception.InternalServerException
 import org.springframework.http.HttpStatus
 import java.io.Serial
 import java.io.Serializable
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
 
 /**
  * # ResponseBodyBean
@@ -29,8 +29,8 @@ data class ResponseBodyBean<T> constructor(
      * Failed to deserialize java.time.LocalDateTime: (java.time.format.DateTimeParseException) Text '2021-06-27
      * 23:08:46'
      */
-    @JsonFormat(pattern = UniversalDateTime.DATE_TIME_FORMAT)
-    val timestamp: LocalDateTime = LocalDateTime.now(),
+    @JsonFormat(pattern = ISO_8601_DATETIME_TIMEZONE_FORMAT)
+    val timestamp: OffsetDateTime = OffsetDateTime.now(),
     /**
      * Default status is 200 OK.
      */
@@ -267,7 +267,7 @@ data class ResponseBodyBean<T> constructor(
         fun of(message: String, data: Any?, status: Int): JSON {
             val responseBodyBean = ofStatus(status, message, data)
             val config = JSONConfig()
-            config.setIgnoreNullValue(false).dateFormat = UniversalDateTime.DATE_TIME_FORMAT
+            config.setIgnoreNullValue(false).dateFormat = ISO_8601_DATETIME_TIMEZONE_FORMAT
             return JSONUtil.parse(responseBodyBean, config)
         }
     }

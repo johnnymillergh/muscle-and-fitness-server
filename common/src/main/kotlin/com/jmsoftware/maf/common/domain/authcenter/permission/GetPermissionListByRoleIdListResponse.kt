@@ -11,7 +11,7 @@ class GetPermissionListByRoleIdListResponse {
     /**
      * The Permission list.
      */
-    var permissionList: MutableList<Permission> = mutableListOf()
+    val permissionList: MutableList<Permission> = mutableListOf()
 }
 
 class Permission {

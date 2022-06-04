@@ -1,12 +1,16 @@
 package com.jmsoftware.maf.springcloudstarter.configuration
 
 import com.jmsoftware.maf.common.util.logger
+import org.springframework.format.FormatterRegistry
+import org.springframework.format.datetime.standard.DateTimeFormatterFactoryBean
+import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor
 import org.springframework.web.context.request.async.CallableProcessingInterceptor
 import org.springframework.web.cors.CorsConfiguration.ALL
 import org.springframework.web.servlet.config.annotation.AsyncSupportConfigurer
 import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
+
 
 /**
  * # WebMvcConfiguration
@@ -47,5 +51,12 @@ class WebMvcConfiguration(
         configurer.setDefaultTimeout(360000)
             .setTaskExecutor(threadPoolTaskExecutor)
             .registerCallableInterceptors(callableProcessingInterceptor)
+    }
+
+    override fun addFormatters(registry: FormatterRegistry) {
+        DateTimeFormatterRegistrar().apply {
+            this.setUseIsoFormat(true)
+            this.registerFormatters(registry)
+        }
     }
 }

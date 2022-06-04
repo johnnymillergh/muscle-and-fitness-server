@@ -78,7 +78,6 @@ import javax.annotation.PostConstruct
     RabbitmqConfiguration::class,
     MinioConfiguration::class,
     JacksonConfiguration::class,
-    TypeConversionConfiguration::class,
     QuartzConfiguration::class,
     WebSocketConfiguration::class,
     OpenApiConfiguration::class,
