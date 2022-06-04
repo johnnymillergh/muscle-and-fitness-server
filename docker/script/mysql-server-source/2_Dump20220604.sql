@@ -17,6 +17,10 @@
 SET @MYSQLDUMP_TEMP_LOG_BIN = @@SESSION.SQL_LOG_BIN;
 SET @@SESSION.SQL_LOG_BIN= 0;
 
+DROP DATABASE IF EXISTS muscle_and_fitness_0;
+CREATE DATABASE muscle_and_fitness_0 CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE muscle_and_fitness_0;
+
 --
 -- Table structure for table `body_part_0`
 --
