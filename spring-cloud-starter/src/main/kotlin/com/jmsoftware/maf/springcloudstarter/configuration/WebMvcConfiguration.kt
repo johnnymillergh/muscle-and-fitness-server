@@ -2,7 +2,6 @@ package com.jmsoftware.maf.springcloudstarter.configuration
 
 import com.jmsoftware.maf.common.util.logger
 import org.springframework.format.FormatterRegistry
-import org.springframework.format.datetime.standard.DateTimeFormatterFactoryBean
 import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor
 import org.springframework.web.context.request.async.CallableProcessingInterceptor

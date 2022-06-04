@@ -4,6 +4,11 @@
 # 2. Properties in the config/application folder are applicable to all applications using consul for configuration.
 
 spring:
+  boot:
+    admin:
+      client:
+        username: admin
+        password: admin
   mvc:
     throw-exception-if-no-handler-found: true
   jackson:
