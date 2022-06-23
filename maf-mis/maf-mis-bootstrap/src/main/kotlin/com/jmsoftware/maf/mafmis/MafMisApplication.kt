@@ -1,5 +1,6 @@
 package com.jmsoftware.maf.mafmis
 
+import com.jmsoftware.maf.springcloudstarter.eventbus.EnableEventBus
 import com.jmsoftware.maf.springcloudstarter.helper.SpringBootStartupHelper
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
@@ -14,6 +15,7 @@ import org.springframework.util.StopWatch
  *
  * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/16/22 11:23 PM
  */
+@EnableEventBus
 @EnableFeignClients
 @EnableDiscoveryClient
 @SpringBootApplication
