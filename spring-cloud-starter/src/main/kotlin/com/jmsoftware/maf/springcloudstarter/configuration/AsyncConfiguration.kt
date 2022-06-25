@@ -32,7 +32,7 @@ class AsyncConfiguration(
     private val mafProjectProperties: MafProjectProperties
 ) {
     companion object {
-        private const val QUEUE_CAPACITY = 10000
+        private const val QUEUE_CAPACITY = 10_000
         private val log = logger()
     }
 
@@ -54,7 +54,7 @@ class AsyncConfiguration(
         return TaskExecutorCustomizer { taskExecutor: ThreadPoolTaskExecutor ->
             taskExecutor.corePoolSize = corePoolSize
             taskExecutor.maxPoolSize = corePoolSize * 3
-            taskExecutor.setQueueCapacity(QUEUE_CAPACITY)
+            taskExecutor.queueCapacity = QUEUE_CAPACITY
             taskExecutor.setBeanName("asyncTaskExecutor")
             taskExecutor.setThreadNamePrefix("${mafProjectProperties.projectArtifactId}-async-executor-")
             // Specify the RejectedExecutionHandler to use for the ExecutorService.
