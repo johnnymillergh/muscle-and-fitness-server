@@ -57,19 +57,6 @@ class MafConfigurationProperties {
      **/
     var webSecurityEnabled: Boolean = true
 
-    /**
-     * Web request log switch. Default is true.
-     *
-     * true - disable web request log; false - enable web request log.
-     **/
-    var webRequestLogEnabled: Boolean = true
-
-    /**
-     * Included package for http api scan, could be base package
-     **/
-    @NotBlank
-    var includedPackageForHttpApiScan: String = ""
-
     @PostConstruct
     private fun postConstruct() {
         log.warn("Initial bean: `${this.javaClass.simpleName}`")

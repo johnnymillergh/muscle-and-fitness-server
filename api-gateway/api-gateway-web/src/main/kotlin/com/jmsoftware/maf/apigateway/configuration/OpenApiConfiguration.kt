@@ -36,7 +36,7 @@ class OpenApiConfiguration(
 
     @Bean
     fun openApi(): OpenAPI {
-        val projectArtifactId = mafProjectProperties.projectArtifactId
+        val projectArtifactId = mafProjectProperties.projectParentArtifactId
         val version = mafProjectProperties.version
         val developerEmail = mafProjectProperties.developerEmail
         val developerUrl = mafProjectProperties.developerUrl
@@ -62,7 +62,7 @@ class OpenApiConfiguration(
         swaggerUiConfigProperties.urls = mutableSetOf()
         mutableListOf<String>().apply {
             this.addAll(discoveryClient.services)
-            this.add(mafProjectProperties.projectArtifactId)
+            this.add(mafProjectProperties.projectArtifactId.removeSuffix("-bootstrap"))
         }.forEach { serviceName: String ->
             if (!CollUtil.contains(swaggerConfigurationProperties.ignoredServiceIds, serviceName)) {
                 log.warn("Found discovery client. Service name: $serviceName")
