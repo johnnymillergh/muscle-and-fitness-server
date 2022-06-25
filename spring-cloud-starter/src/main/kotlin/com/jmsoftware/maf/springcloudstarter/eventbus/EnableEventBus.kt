@@ -1,10 +1,9 @@
 package com.jmsoftware.maf.springcloudstarter.eventbus
 
-import org.springframework.context.annotation.*
+import org.springframework.context.annotation.Import
 import org.springframework.core.annotation.AliasFor
-import kotlin.annotation.AnnotationRetention.*
-import kotlin.annotation.AnnotationTarget.*
-
+import kotlin.annotation.AnnotationRetention.RUNTIME
+import kotlin.annotation.AnnotationTarget.CLASS
 
 /**
  * # EnableEventBus

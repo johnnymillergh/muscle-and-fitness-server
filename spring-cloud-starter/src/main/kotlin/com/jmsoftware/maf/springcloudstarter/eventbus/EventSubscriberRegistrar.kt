@@ -8,7 +8,6 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistry
 import org.springframework.context.EnvironmentAware
 import org.springframework.context.ResourceLoaderAware
 import org.springframework.context.annotation.ClassPathBeanDefinitionScanner
-import org.springframework.context.annotation.Import
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar
 import org.springframework.core.annotation.AnnotationAttributes
 import org.springframework.core.env.Environment
@@ -33,12 +32,14 @@ class EventSubscriberRegistrar : ImportBeanDefinitionRegistrar, ResourceLoaderAw
         private fun getBasePackages(
             metadata: StandardAnnotationMetadata,
             attributes: AnnotationAttributes
-        ): Set<String> {
+        ): Array<String> {
+            // keep the original order of the attributes in the user of LinkedHashSet, and remove the duplicates
             return LinkedHashSet(attributes.getStringArray("basePackages").toList()).ifEmpty {
                 // If value attribute is not set, fallback to the package of the annotated class
-                log.warn("Returning the package of the underlying class: ${metadata.introspectedClass.name}")
-                setOf(metadata.introspectedClass.getPackage().name)
-            }
+                val basePackage = metadata.introspectedClass.getPackage().name
+                log.warn("Returning the package of the underlying class: ${metadata.introspectedClass.name}, basePackage: $basePackage")
+                setOf(basePackage)
+            }.toTypedArray()
         }
     }
 
@@ -46,17 +47,20 @@ class EventSubscriberRegistrar : ImportBeanDefinitionRegistrar, ResourceLoaderAw
     private lateinit var resourceLoader: ResourceLoader
 
     override fun registerBeanDefinitions(importingClassMetadata: AnnotationMetadata, registry: BeanDefinitionRegistry) {
-        val annotationAttributes = AnnotationAttributes(
-            importingClassMetadata.getAnnotationAttributes(EnableEventBus::class.java.canonicalName)!!
-        )
-        EventSubscriberBeanDefinitionScanner(registry, environment, resourceLoader).scan(
-            *getBasePackages(
-                importingClassMetadata as StandardAnnotationMetadata,
-                annotationAttributes
-            ).toTypedArray()
-        ).apply {
-            log.warn("Number of beans registered for @${EventSubscriber::class.simpleName}: $this")
-        }
+        EventSubscriberBeanDefinitionScanner(registry, environment, resourceLoader)
+            .apply {
+                log.warn("Searching event subscribers annotated with @${EventSubscriber::class.java.simpleName}")
+            }
+            .scan(
+                *getBasePackages(
+                    importingClassMetadata as StandardAnnotationMetadata,
+                    AnnotationAttributes(
+                        importingClassMetadata.getAnnotationAttributes(EnableEventBus::class.java.canonicalName)!!
+                    )
+                )
+            ).apply {
+                log.warn("Number of beans registered for @${EventSubscriber::class.simpleName}: $this")
+            }
     }
 
     override fun setEnvironment(environment: Environment) {
@@ -79,8 +83,7 @@ private class EventSubscriberBeanDefinitionScanner(
     registry: BeanDefinitionRegistry,
     environment: Environment,
     resourceLoader: ResourceLoader
-) :
-    ClassPathBeanDefinitionScanner(registry, false, environment, resourceLoader) {
+) : ClassPathBeanDefinitionScanner(registry, false, environment, resourceLoader) {
     companion object {
         private val log = logger()
     }
