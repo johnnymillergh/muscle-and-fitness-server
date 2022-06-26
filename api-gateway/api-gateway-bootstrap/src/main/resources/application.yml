@@ -37,6 +37,7 @@ spring:
         prefer-ip-address: true
         ip-address: ${spring.cloud.client.ip-address}
         health-check-critical-timeout: 15s
+        catalog-services-watch-delay: 30_000
     gateway:
       discovery:
         locator:

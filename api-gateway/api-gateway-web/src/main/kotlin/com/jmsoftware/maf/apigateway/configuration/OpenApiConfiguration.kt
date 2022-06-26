@@ -30,6 +30,7 @@ class OpenApiConfiguration(
     private val discoveryClient: DiscoveryClient
 ) {
     companion object {
+        const val GROUPED_OPEN_API_LIST_NAME = "groupedOpenApiList"
         private const val SWAGGER_API_URI = "/v3/api-docs"
         private val log = logger()
     }
@@ -56,8 +57,12 @@ class OpenApiConfiguration(
             )
     }
 
-    @Bean
+    @Bean(GROUPED_OPEN_API_LIST_NAME)
     fun groupedOpenApiList(): List<GroupedOpenApi> {
+        return createGroupedOpenApiList()
+    }
+
+    fun createGroupedOpenApiList(): List<GroupedOpenApi> {
         val groups = mutableListOf<GroupedOpenApi>()
         swaggerUiConfigProperties.urls = mutableSetOf()
         mutableListOf<String>().apply {

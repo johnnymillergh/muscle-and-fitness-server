@@ -40,7 +40,7 @@ class RedirectConfiguration {
     fun doc(): RouterFunction<ServerResponse> {
         return RouterFunctions.route(RequestPredicates.GET("/doc")) {
             log.info("Redirect to Bootstrap Swagger API documentation.")
-            ServerResponse.temporaryRedirect(URI.create("/doc.html")).build()
+            ServerResponse.temporaryRedirect(URI.create("/doc.html#/home/en-US")).build()
         }
     }
 
