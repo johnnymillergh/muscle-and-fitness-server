@@ -63,7 +63,7 @@
         <shardingsphere.version>5.1.2</shardingsphere.version>
         <hutool-all.version>5.8.3</hutool-all.version>
         <guava.version>31.1-jre</guava.version>
-        <springdoc-openapi-ui.version>1.6.9</springdoc-openapi-ui.version>
+        <springdoc-openapi.version>1.6.9</springdoc-openapi.version>
         <knife4j-springdoc-ui.version>3.0.3</knife4j-springdoc-ui.version>
         <jjwt.version>0.11.5</jjwt.version>
         <java-faker.version>1.0.2</java-faker.version>
