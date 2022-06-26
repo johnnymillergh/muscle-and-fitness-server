@@ -17,10 +17,6 @@
 SET @MYSQLDUMP_TEMP_LOG_BIN = @@SESSION.SQL_LOG_BIN;
 SET @@SESSION.SQL_LOG_BIN= 0;
 
-DROP DATABASE IF EXISTS muscle_and_fitness_0;
-CREATE DATABASE muscle_and_fitness_0 CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE muscle_and_fitness_0;
-
 --
 -- Table structure for table `body_part_0`
 --
@@ -34,7 +30,7 @@ CREATE TABLE `body_part_0` (
   `created_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'system' COMMENT 'Created by.',
   `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
   `modified_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'system' COMMENT 'Modified by',
-  `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
+  `modified_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT 'Modified time',
   `version` int unsigned NOT NULL DEFAULT '0' COMMENT 'Optimistic locking',
   `deleted` enum('N','Y') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N' COMMENT 'Deleted. ''N'' - not deleted; ''Y'' - deleted',
   PRIMARY KEY (`id`),
@@ -65,7 +61,7 @@ CREATE TABLE `body_part_1` (
   `created_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'system' COMMENT 'Created by.',
   `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
   `modified_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'system' COMMENT 'Modified by',
-  `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
+  `modified_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT 'Modified time',
   `version` int unsigned NOT NULL DEFAULT '0' COMMENT 'Optimistic locking',
   `deleted` enum('N','Y') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N' COMMENT 'Deleted. ''N'' - not deleted; ''Y'' - deleted',
   PRIMARY KEY (`id`),
@@ -96,7 +92,7 @@ CREATE TABLE `equipment_0` (
   `created_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'system' COMMENT 'Created by',
   `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
   `modified_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'system' COMMENT 'Modified by',
-  `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
+  `modified_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT 'Modified time',
   `version` int unsigned NOT NULL DEFAULT '0' COMMENT 'Optimistic locking',
   `deleted` enum('N','Y') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N' COMMENT 'Deleted',
   PRIMARY KEY (`id`),
@@ -126,7 +122,7 @@ CREATE TABLE `equipment_1` (
   `created_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'system' COMMENT 'Created by',
   `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
   `modified_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'system' COMMENT 'Modified by',
-  `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
+  `modified_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT 'Modified time',
   `version` int unsigned NOT NULL DEFAULT '0' COMMENT 'Optimistic locking',
   `deleted` enum('N','Y') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N' COMMENT 'Deleted',
   PRIMARY KEY (`id`),
@@ -159,12 +155,12 @@ CREATE TABLE `exercise_0` (
   `created_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'system' COMMENT 'Created by',
   `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
   `modified_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'system' COMMENT 'Modified by',
-  `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
+  `modified_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT 'Modified time',
   `version` int unsigned NOT NULL DEFAULT '0' COMMENT 'Optimistic locking',
   `deleted` enum('N','Y') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N' COMMENT 'Deleted. ''N'' - not deleted; ''Y'' - deleted',
   PRIMARY KEY (`id`),
   UNIQUE KEY `exercise_name_uindex` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=1692 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Exercise.\n\nhttps://exrx.net/Lists/Directory';
+) ENGINE=InnoDB AUTO_INCREMENT=1692 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Exercise. https://exrx.net/Lists/Directory';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -193,12 +189,12 @@ CREATE TABLE `exercise_1` (
   `created_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'system' COMMENT 'Created by',
   `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
   `modified_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'system' COMMENT 'Modified by',
-  `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
+  `modified_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT 'Modified time',
   `version` int unsigned NOT NULL DEFAULT '0' COMMENT 'Optimistic locking',
   `deleted` enum('N','Y') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N' COMMENT 'Deleted. ''N'' - not deleted; ''Y'' - deleted',
   PRIMARY KEY (`id`),
   UNIQUE KEY `exercise_name_uindex` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=1688 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Exercise.\n\nhttps://exrx.net/Lists/Directory';
+) ENGINE=InnoDB AUTO_INCREMENT=1688 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Exercise. https://exrx.net/Lists/Directory';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -225,12 +221,12 @@ CREATE TABLE `exercise_classification_0` (
   `created_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'system' COMMENT 'Created by',
   `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
   `modified_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'system' COMMENT 'Modified by',
-  `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
+  `modified_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT 'Modified time',
   `version` int unsigned NOT NULL DEFAULT '0' COMMENT 'Optimistic locking',
   `deleted` enum('N','Y') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N' COMMENT 'Deleted. ''N'' - not deleted; ''Y'' - deleted',
   PRIMARY KEY (`id`),
   UNIQUE KEY `exercise_classification_name_uindex` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Exercise Classification.\n\nhttps://exrx.net/WeightTraining/Glossary';
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Exercise Classification.  https://exrx.net/WeightTraining/Glossary';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -257,12 +253,12 @@ CREATE TABLE `exercise_classification_1` (
   `created_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'system' COMMENT 'Created by',
   `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
   `modified_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'system' COMMENT 'Modified by',
-  `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
+  `modified_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT 'Modified time',
   `version` int unsigned NOT NULL DEFAULT '0' COMMENT 'Optimistic locking',
   `deleted` enum('N','Y') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N' COMMENT 'Deleted. ''N'' - not deleted; ''Y'' - deleted',
   PRIMARY KEY (`id`),
   UNIQUE KEY `exercise_classification_name_uindex` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Exercise Classification.\n\nhttps://exrx.net/WeightTraining/Glossary';
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Exercise Classification. https://exrx.net/WeightTraining/Glossary';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -289,12 +285,12 @@ CREATE TABLE `exercise_comment_0` (
   `created_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'system' COMMENT 'Created by',
   `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
   `modified_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'system' COMMENT 'Modified by',
-  `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
+  `modified_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT 'Modified time',
   `version` int unsigned NOT NULL DEFAULT '0' COMMENT 'Optimistic locking',
   `deleted` enum('N','Y') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N' COMMENT 'Deleted. ''N'' - not deleted; ''Y'' - deleted',
   PRIMARY KEY (`id`),
   UNIQUE KEY `exercise_comment_exercise_id_uindex` (`exercise_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1347 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Exercise Comment.\n\nRelationship:\nOne exercise to one comment.\n\nIf the exercise doen''t have comment,\nthen this table will still store the comment record for it,\nlike { id: 1, exercise_id: 1, comment: ''NONE'' }.';
+) ENGINE=InnoDB AUTO_INCREMENT=1347 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Exercise Comment.  Relationship: One exercise to one comment.  If the exercise doen''t have comment, then this table will still store the comment record for it, like { id: 1, exercise_id: 1, comment: ''NONE'' }.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -321,12 +317,12 @@ CREATE TABLE `exercise_comment_1` (
   `created_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'system' COMMENT 'Created by',
   `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
   `modified_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'system' COMMENT 'Modified by',
-  `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
+  `modified_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT 'Modified time',
   `version` int unsigned NOT NULL DEFAULT '0' COMMENT 'Optimistic locking',
   `deleted` enum('N','Y') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N' COMMENT 'Deleted. ''N'' - not deleted; ''Y'' - deleted',
   PRIMARY KEY (`id`),
   UNIQUE KEY `exercise_comment_exercise_id_uindex` (`exercise_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1347 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Exercise Comment.\n\nRelationship:\nOne exercise to one comment.\n\nIf the exercise doen''t have comment,\nthen this table will still store the comment record for it,\nlike { id: 1, exercise_id: 1, comment: ''NONE'' }.';
+) ENGINE=InnoDB AUTO_INCREMENT=1347 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Exercise Comment.  Relationship: One exercise to one comment.  If the exercise doen''t have comment, then this table will still store the comment record for it, like { id: 1, exercise_id: 1, comment: ''NONE'' }.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -458,12 +454,12 @@ CREATE TABLE `kinesiology_glossary_0` (
   `created_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'system' COMMENT 'Created by',
   `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
   `modified_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'system' COMMENT 'Modified by',
-  `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
+  `modified_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT 'Modified time',
   `version` int unsigned NOT NULL DEFAULT '0' COMMENT 'Optimistic locking',
   `deleted` enum('N','Y') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N' COMMENT 'Deleted. ''N'' - not deleted; ''Y'' - deleted',
   PRIMARY KEY (`id`),
   UNIQUE KEY `kinesiology_glossary_name_uindex` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Kinesiology Glossary.\n\nhttps://exrx.net/Kinesiology/Glossary';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Kinesiology Glossary. https://exrx.net/Kinesiology/Glossary';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -490,12 +486,12 @@ CREATE TABLE `kinesiology_glossary_1` (
   `created_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'system' COMMENT 'Created by',
   `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
   `modified_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'system' COMMENT 'Modified by',
-  `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
+  `modified_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT 'Modified time',
   `version` int unsigned NOT NULL DEFAULT '0' COMMENT 'Optimistic locking',
   `deleted` enum('N','Y') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N' COMMENT 'Deleted. ''N'' - not deleted; ''Y'' - deleted',
   PRIMARY KEY (`id`),
   UNIQUE KEY `kinesiology_glossary_name_uindex` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Kinesiology Glossary.\n\nhttps://exrx.net/Kinesiology/Glossary';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Kinesiology Glossary.  https://exrx.net/Kinesiology/Glossary';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -523,12 +519,12 @@ CREATE TABLE `muscle_0` (
   `created_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'system' COMMENT 'Created by',
   `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
   `modified_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'system' COMMENT 'Modified by',
-  `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
+  `modified_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT 'Modified time',
   `version` int unsigned NOT NULL DEFAULT '0' COMMENT 'Optimistic locking',
   `deleted` enum('N','Y') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N' COMMENT 'Deleted. ''N'' - not deleted; ''Y'' - deleted',
   PRIMARY KEY (`id`),
   UNIQUE KEY `muscle_name_uindex` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Muscle.\n\nhttps://exrx.net/Lists/Muscle';
+) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Muscle. https://exrx.net/Lists/Muscle';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -557,12 +553,12 @@ CREATE TABLE `muscle_1` (
   `created_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'system' COMMENT 'Created by',
   `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
   `modified_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'system' COMMENT 'Modified by',
-  `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
+  `modified_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT 'Modified time',
   `version` int unsigned NOT NULL DEFAULT '0' COMMENT 'Optimistic locking',
   `deleted` enum('N','Y') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N' COMMENT 'Deleted. ''N'' - not deleted; ''Y'' - deleted',
   PRIMARY KEY (`id`),
   UNIQUE KEY `muscle_name_uindex` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Muscle.\n\nhttps://exrx.net/Lists/Muscle';
+) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Muscle.  https://exrx.net/Lists/Muscle';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -590,12 +586,12 @@ CREATE TABLE `muscle_image_0` (
   `created_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'system' COMMENT 'Created by',
   `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
   `modified_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'system' COMMENT 'Modified by',
-  `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
+  `modified_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT 'Modified time',
   `version` int unsigned NOT NULL DEFAULT '0' COMMENT 'Optimistic locking',
   `deleted` enum('N','Y') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N' COMMENT 'Deleted. ''N'' - not deleted; ''Y'' - deleted',
   PRIMARY KEY (`id`),
   UNIQUE KEY `muscle_image_image_path_uindex` (`image_path`)
-) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Muscle Image.\n\nThe relationship:\nOne muscle to one or more muscle image.';
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Muscle Image. The relationship: One muscle to one or more muscle image.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -623,12 +619,12 @@ CREATE TABLE `muscle_image_1` (
   `created_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'system' COMMENT 'Created by',
   `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
   `modified_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'system' COMMENT 'Modified by',
-  `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
+  `modified_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT 'Modified time',
   `version` int unsigned NOT NULL DEFAULT '0' COMMENT 'Optimistic locking',
   `deleted` enum('N','Y') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N' COMMENT 'Deleted. ''N'' - not deleted; ''Y'' - deleted',
   PRIMARY KEY (`id`),
   UNIQUE KEY `muscle_image_image_path_uindex` (`image_path`)
-) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Muscle Image.\n\nThe relationship:\nOne muscle to one or more muscle image.';
+) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Muscle Image. The relationship: One muscle to one or more muscle image.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -660,7 +656,7 @@ CREATE TABLE `permission_0` (
   `created_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'system' COMMENT 'Created by',
   `created_time` datetime NOT NULL COMMENT 'Created time',
   `modified_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'system' COMMENT 'Modified by',
-  `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
+  `modified_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT 'Modified time',
   `version` int unsigned NOT NULL DEFAULT '0' COMMENT 'Optimistic locking',
   `deleted` enum('N','Y') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N' COMMENT 'Deleted. ''N'' - not deleted; ''Y'' - deleted',
   PRIMARY KEY (`id`),
@@ -696,7 +692,7 @@ CREATE TABLE `permission_1` (
   `created_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'system' COMMENT 'Created by',
   `created_time` datetime NOT NULL COMMENT 'Created time',
   `modified_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'system' COMMENT 'Modified by',
-  `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
+  `modified_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT 'Modified time',
   `version` int unsigned NOT NULL DEFAULT '0' COMMENT 'Optimistic locking',
   `deleted` enum('N','Y') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N' COMMENT 'Deleted. ''N'' - not deleted; ''Y'' - deleted',
   PRIMARY KEY (`id`),
@@ -722,23 +718,23 @@ DROP TABLE IF EXISTS `quartz_job_configuration_0`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `quartz_job_configuration_0` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'The primary key ID',
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Name of job',
-  `group` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Group of job',
-  `service_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Service name, equal to artifact-id',
-  `invoke_target` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'Invoke target',
-  `cron_expression` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Cron Expressions',
+  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Name of job',
+  `group` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Group of job',
+  `service_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Service name, equal to artifact-id',
+  `invoke_target` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Invoke target',
+  `cron_expression` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Cron Expressions',
   `misfire_policy` tinyint NOT NULL COMMENT 'Trigger''s misfire policy',
   `concurrent` tinyint unsigned NOT NULL DEFAULT '0' COMMENT 'Concurrent. true(1): is concurrent, false(0): not concurrent',
-  `description` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'Description',
+  `description` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Description',
   `status` tinyint NOT NULL COMMENT 'Status',
-  `created_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'system' COMMENT 'Created by',
+  `created_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'system' COMMENT 'Created by',
   `created_time` datetime NOT NULL COMMENT 'Craeted time',
-  `modified_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT 'system' COMMENT 'Modified by',
-  `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
+  `modified_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'system' COMMENT 'Modified by',
+  `modified_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT 'Modified time',
   `version` int unsigned NOT NULL DEFAULT '0' COMMENT 'Optimistic locking',
-  `deleted` enum('N','Y') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'N' COMMENT 'Deleted. ''N'' - not deleted; ''Y'' - deleted',
+  `deleted` enum('N','Y') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N' COMMENT 'Deleted. ''N'' - not deleted; ''Y'' - deleted',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Quartz Job Configuration';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Quartz Job Configuration';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -760,23 +756,23 @@ DROP TABLE IF EXISTS `quartz_job_configuration_1`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `quartz_job_configuration_1` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'The primary key ID',
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Name of job',
-  `group` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Group of job',
-  `service_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Service name, equal to artifact-id',
-  `invoke_target` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'Invoke target',
-  `cron_expression` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Cron Expressions',
+  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Name of job',
+  `group` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Group of job',
+  `service_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Service name, equal to artifact-id',
+  `invoke_target` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Invoke target',
+  `cron_expression` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Cron Expressions',
   `misfire_policy` tinyint NOT NULL COMMENT 'Trigger''s misfire policy',
   `concurrent` tinyint unsigned NOT NULL DEFAULT '0' COMMENT 'Concurrent. true(1): is concurrent, false(0): not concurrent',
-  `description` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'Description',
+  `description` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Description',
   `status` tinyint NOT NULL COMMENT 'Status',
-  `created_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'system' COMMENT 'Created by',
+  `created_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'system' COMMENT 'Created by',
   `created_time` datetime NOT NULL COMMENT 'Craeted time',
-  `modified_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT 'system' COMMENT 'Modified by',
-  `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
+  `modified_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'system' COMMENT 'Modified by',
+  `modified_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT 'Modified time',
   `version` int unsigned NOT NULL DEFAULT '0' COMMENT 'Optimistic locking',
-  `deleted` enum('N','Y') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'N' COMMENT 'Deleted. ''N'' - not deleted; ''Y'' - deleted',
+  `deleted` enum('N','Y') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N' COMMENT 'Deleted. ''N'' - not deleted; ''Y'' - deleted',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Quartz Job Configuration';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Quartz Job Configuration';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -853,7 +849,7 @@ CREATE TABLE `role_0` (
   `created_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'system' COMMENT 'Created by',
   `created_time` datetime NOT NULL COMMENT 'Created time',
   `modified_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'system' COMMENT 'Modified by',
-  `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
+  `modified_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT 'Modified time',
   `version` int unsigned NOT NULL DEFAULT '0' COMMENT 'Optimistic locking',
   `deleted` enum('N','Y') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N' COMMENT 'Deleted',
   PRIMARY KEY (`id`),
@@ -885,7 +881,7 @@ CREATE TABLE `role_1` (
   `created_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'system' COMMENT 'Created by',
   `created_time` datetime NOT NULL COMMENT 'Created time',
   `modified_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'system' COMMENT 'Modified by',
-  `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
+  `modified_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT 'Modified time',
   `version` int unsigned NOT NULL DEFAULT '0' COMMENT 'Optimistic locking',
   `deleted` enum('N','Y') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N' COMMENT 'Deleted',
   PRIMARY KEY (`id`),
@@ -970,7 +966,7 @@ CREATE TABLE `user_0` (
   `created_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'system' COMMENT 'Created by',
   `created_time` datetime NOT NULL COMMENT 'Created time',
   `modified_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'system' COMMENT 'Modified by',
-  `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
+  `modified_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT 'Modified time',
   `version` int unsigned NOT NULL DEFAULT '0' COMMENT 'Optimistic locking',
   `deleted` enum('N','Y') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N' COMMENT 'Deleted. ''N'' - not deleted; ''Y'' - deleted',
   PRIMARY KEY (`id`),
@@ -1012,7 +1008,7 @@ CREATE TABLE `user_1` (
   `created_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'system' COMMENT 'Created by',
   `created_time` datetime NOT NULL COMMENT 'Created time',
   `modified_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'system' COMMENT 'Modified by',
-  `modified_time` datetime DEFAULT NULL COMMENT 'Modified time',
+  `modified_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT 'Modified time',
   `version` int unsigned NOT NULL DEFAULT '0' COMMENT 'Optimistic locking',
   `deleted` enum('N','Y') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N' COMMENT 'Deleted. ''N'' - not deleted; ''Y'' - deleted',
   PRIMARY KEY (`id`),
@@ -1045,7 +1041,7 @@ CREATE TABLE `user_role_0` (
   `user_id` bigint unsigned NOT NULL COMMENT 'The primary key of user',
   `role_id` bigint unsigned NOT NULL COMMENT 'The primary key of role',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='User-role Relation. Roles that users have.';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='User-role Relation. Roles that users have.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1070,7 +1066,7 @@ CREATE TABLE `user_role_1` (
   `user_id` bigint unsigned NOT NULL COMMENT 'The primary key of user',
   `role_id` bigint unsigned NOT NULL COMMENT 'The primary key of role',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='User-role Relation. Roles that users have.';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='User-role Relation. Roles that users have.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1093,4 +1089,4 @@ SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-06-04  7:54:05
+-- Dump completed on 2022-06-26 18:16:01

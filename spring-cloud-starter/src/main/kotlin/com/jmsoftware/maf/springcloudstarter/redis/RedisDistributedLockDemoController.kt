@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import java.util.concurrent.TimeUnit
-import java.util.concurrent.locks.Lock
 
 /**
  * # RedisDistributedLockDemoController
@@ -31,14 +29,14 @@ class RedisDistributedLockDemoController(
     fun accessRaceResource(
         @PathVariable resourceKey: String,
         @PathVariable autoUnlock: Boolean
-    ): ResponseBodyBean<String> {
-        return ResponseBodyBean.ofSuccess(lockRaceResource(resourceKey, autoUnlock).toString())
+    ): ResponseBodyBean<Map<String, Any>> {
+        return ResponseBodyBean.ofSuccess(lockRaceResource(resourceKey, autoUnlock))
     }
 
-    private fun lockRaceResource(key: String, autoUnlock: Boolean): Lock {
+    private fun lockRaceResource(key: String, autoUnlock: Boolean): Map<String, Any> {
         val lock = redisLockRegistry.obtain(key)
         log.info("Obtained the lock from the registry: $lock, Key: $key")
-        val acquiredLock = lock.tryLock(3, TimeUnit.SECONDS)
+        val acquiredLock = lock.tryLock()
         if (acquiredLock && autoUnlock) {
             log.warn("Acquired the lock. Mocking to do busy computes. Will release the lock automatically")
             Thread.sleep(RandomUtil.randomInt(10000).toLong())
@@ -46,6 +44,6 @@ class RedisDistributedLockDemoController(
             log.warn("Released the lock. $lock")
         }
         log.info("Lock: $lock, Key: $key, acquiredLock: $acquiredLock")
-        return lock
+        return mapOf("acquiredLock" to acquiredLock, "lock" to lock, "lockString" to lock.toString())
     }
 }

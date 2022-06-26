@@ -40,13 +40,11 @@
                qjc.concurrent      AS concurrent,
                qjc.description     AS description,
                qjc.status          AS status,
-               createdBy.username  AS createdBy,
+               qjc.created_by      AS createdBy,
                qjc.created_time    AS createdTime,
-               modifiedBy.username AS modifiedBy,
+               qjc.modified_by     AS modifiedBy,
                qjc.modified_time   AS modified_time
         FROM quartz_job_configuration qjc
-                     LEFT JOIN user createdBy ON createdBy.id = qjc.created_by
-                     LEFT JOIN user modifiedBy ON modifiedBy.id = qjc.modified_by
         <where>
             qjc.deleted = 'N'
             <if test="@cn.hutool.core.util.StrUtil@isNotBlank(payload.serviceName)">
@@ -67,13 +65,11 @@
                qjc.concurrent      AS concurrent,
                qjc.description     AS description,
                qjc.status          AS status,
-               createdBy.username  AS createdBy,
+               qjc.created_by      AS createdBy,
                qjc.created_time    AS createdTime,
-               modifiedBy.username AS modifiedBy,
+               qjc.modified_by     AS modifiedBy,
                qjc.modified_time   AS modified_time
         FROM quartz_job_configuration qjc
-                     LEFT JOIN user createdBy ON createdBy.id = qjc.created_by
-                     LEFT JOIN user modifiedBy ON modifiedBy.id = qjc.modified_by
         WHERE qjc.deleted = 'N'
           AND qjc.service_name = #{serviceName}
     </select>

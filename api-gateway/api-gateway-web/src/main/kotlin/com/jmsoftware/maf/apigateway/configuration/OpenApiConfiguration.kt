@@ -45,7 +45,7 @@ class OpenApiConfiguration(
             .info(
                 Info()
                     .title("API for $projectArtifactId@$version")
-                    .description("$mafProjectProperties.description, artifact ID: $projectArtifactId, environment: ${mafProjectProperties.environment}")
+                    .description("${mafProjectProperties.description}, artifact ID: $projectArtifactId, environment: ${mafProjectProperties.environment}")
                     .contact(
                         Contact()
                             .name(mafProjectProperties.developerName)
