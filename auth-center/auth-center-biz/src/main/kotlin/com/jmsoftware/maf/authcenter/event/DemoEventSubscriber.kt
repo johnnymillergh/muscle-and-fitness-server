@@ -3,7 +3,8 @@ package com.jmsoftware.maf.authcenter.event
 import com.google.common.eventbus.AllowConcurrentEvents
 import com.google.common.eventbus.Subscribe
 import com.jmsoftware.maf.common.util.logger
-import com.jmsoftware.maf.springcloudstarter.eventbus.DemoEvent
+import com.jmsoftware.maf.springcloudstarter.eventbus.EventButReadyAsyncEvent
+import com.jmsoftware.maf.springcloudstarter.eventbus.EventButReadyEvent
 import com.jmsoftware.maf.springcloudstarter.eventbus.EventSubscriber
 import com.jmsoftware.maf.springcloudstarter.property.MafProjectProperties
 
@@ -23,9 +24,15 @@ class DemoEventSubscriber(
     }
 
     @Subscribe
+    @Suppress("unused")
+    fun subscribeNonAsyncEvent(event: EventButReadyEvent) {
+        log.info("${mafProjectProperties.projectArtifactId}.${this.javaClass.simpleName} got non-async subscription of: $event")
+    }
+
+    @Subscribe
     @AllowConcurrentEvents
     @Suppress("unused")
-    fun subscribe(demoEvent: DemoEvent) {
-        log.info("${mafProjectProperties.projectArtifactId}.${this.javaClass.simpleName} got subscription of: $demoEvent")
+    fun subscribeAsyncEvent(event: EventButReadyAsyncEvent) {
+        log.info("${mafProjectProperties.projectArtifactId}.${this.javaClass.simpleName} got async subscription of: $event")
     }
 }
