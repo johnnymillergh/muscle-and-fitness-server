@@ -56,8 +56,8 @@
         <functionaljava.version>5.0</functionaljava.version>
         <functionaljava-java8.version>4.8.1</functionaljava-java8.version>
         <spring-content.version>1.0.0.M5</spring-content.version>
-        <spring-boot-admin-starter-server.version>2.6.6</spring-boot-admin-starter-server.version>
-        <spring-boot-admin-starter-client.version>2.6.6</spring-boot-admin-starter-client.version>
+        <spring-boot-admin-starter-server.version>2.7.1</spring-boot-admin-starter-server.version>
+        <spring-boot-admin-starter-client.version>2.7.1</spring-boot-admin-starter-client.version>
         <mybatis-plus-boot-starter.version>3.5.2</mybatis-plus-boot-starter.version>
         <dynamic-datasource-spring-boot-starter.version>3.5.1</dynamic-datasource-spring-boot-starter.version>
         <shardingsphere.version>5.1.2</shardingsphere.version>

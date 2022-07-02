@@ -1,7 +1,6 @@
 package com.jmsoftware.maf.springcloudstarter.elasticsearch
 
 import com.jmsoftware.maf.common.util.logger
-import org.elasticsearch.client.RestHighLevelClient
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
 import org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchProperties
 import org.springframework.data.elasticsearch.config.AbstractElasticsearchConfiguration
@@ -20,7 +19,7 @@ import javax.annotation.PostConstruct
  * <a href='https://docs.spring.io/spring-data/elasticsearch/docs/current/reference/html/#elasticsearch.clients.logging'>Client Logging</a>
  */
 @EnableElasticsearchRepositories
-@ConditionalOnClass(AbstractElasticsearchConfiguration::class, RestHighLevelClient::class)
+@ConditionalOnClass(AbstractElasticsearchConfiguration::class)
 class ElasticsearchConfiguration(
     private val elasticsearchProperties: ElasticsearchProperties
 ) {

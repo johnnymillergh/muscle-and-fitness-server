@@ -2,11 +2,10 @@ package com.jmsoftware.maf.springcloudstarter.configuration
 
 import com.jmsoftware.maf.common.util.logger
 import org.springframework.context.annotation.Bean
-import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.web.SecurityFilterChain
 import javax.annotation.PostConstruct
 
 /**
@@ -17,7 +16,7 @@ import javax.annotation.PostConstruct
  * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/18/22 9:20 PM
  */
 @EnableWebSecurity
-class WebSecurityConfiguration : WebSecurityConfigurerAdapter() {
+class WebSecurityConfiguration {
     companion object {
         private val log = logger()
     }
@@ -27,14 +26,17 @@ class WebSecurityConfiguration : WebSecurityConfigurerAdapter() {
         log.warn("Initial bean: `${WebSecurityConfiguration::class.java.simpleName}`")
     }
 
-    public override fun authenticationManager(): AuthenticationManager {
-        return super.authenticationManagerBean()
-    }
-
-    override fun configure(http: HttpSecurity) {
-        // Disable Web Security.
-        http.authorizeRequests().anyRequest().permitAll().and().csrf().disable().cors().disable()
-    }
+    @Bean
+    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain =
+        http.authorizeRequests()
+            .anyRequest()
+            .permitAll()
+            .and()
+            .csrf()
+            .disable()
+            .cors()
+            .disable()
+            .build()
 
     @Bean
     fun bcryptPasswordEncoder(): BCryptPasswordEncoder {

@@ -123,8 +123,7 @@ class UserDomainServiceImpl(
                     this.like(User::username, payload.username)
                 }
             }
-        }
-            .page(page)
+        }.page(page)
         return PageResponseBodyBean.ofSuccess(page.records, page.total)
     }
 }

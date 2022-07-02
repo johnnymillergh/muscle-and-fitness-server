@@ -9,6 +9,6 @@ import com.jmsoftware.maf.common.bean.PaginationBase
  *
  * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/14/22 10:38 PM
  */
-data class GetQuartzJobConfigurationPageListPayload(
-    val serviceName: String?
-) : PaginationBase()
+class GetQuartzJobConfigurationPageListPayload : PaginationBase() {
+    val serviceName: String? = null
+}

@@ -32,7 +32,6 @@ import org.mockito.junit.jupiter.MockitoExtension
 import org.springframework.context.MessageSource
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import java.time.LocalDateTime
 import javax.servlet.http.HttpServletRequest
 
 /**
@@ -161,13 +160,7 @@ internal class UserDomainServiceImplTest {
     @Test
     fun getUserPageList() {
         doReturn(userMapper).`when`(userDomainService).baseMapper
-        val response = userDomainService.getUserPageList(
-            GetUserPageListPayload(
-                "jonathan",
-                LocalDateTime.now(),
-                LocalDateTime.now()
-            )
-        )
+        val response = userDomainService.getUserPageList(GetUserPageListPayload())
         log.info("User page list: $response")
         assertNotNull(response)
         assertTrue(CollUtil.isEmpty(response.list))
