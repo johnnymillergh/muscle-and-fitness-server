@@ -52,3 +52,6 @@ jobs:
         run: ./mvnw --threads 2C --show-version --log-file maven-check-version.log --file pom.xml versions:display-dependency-updates versions:display-parent-updates
       - name: Filter the log
         run: grep -RIi "Dependencies have newer versions:" -A 10 maven-check-version.log
+      - name: Display the full log
+        run: cat maven-check-version.log
+
