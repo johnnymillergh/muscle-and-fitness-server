@@ -46,5 +46,9 @@ jobs:
         with:
           java-version: ${{env.TERMURIN_VERSION}}
           distribution: 'temurin'
+      - name: Grant Execution Permission for `mvnw`
+        run: chmod +x mvnw
       - name: Check Dependencies Version with Versions Maven Plugin
-        run: mvn versions:display-dependency-updates versions:display-parent-updates -f pom.xml
+        run: ./mvnw --threads 2C --show-version --log-file maven-check-version.log --file pom.xml versions:display-dependency-updates versions:display-parent-updates
+      - name: Filter the log
+        run: grep -RIi "Dependencies have newer versions:" -B 10 maven-check-version.log
