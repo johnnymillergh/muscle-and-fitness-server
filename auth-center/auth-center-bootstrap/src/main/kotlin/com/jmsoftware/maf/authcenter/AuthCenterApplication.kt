@@ -23,6 +23,7 @@ class AuthCenterApplication
 
 fun main(args: Array<String>) {
     val stopWatch = StopWatch()
+
     stopWatch.start()
     runApplication<AuthCenterApplication>(*args)
         .getBean(SpringBootStartupHelper::class.java)
