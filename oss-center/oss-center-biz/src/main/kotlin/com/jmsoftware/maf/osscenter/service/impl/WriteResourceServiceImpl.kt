@@ -11,7 +11,6 @@ import com.jmsoftware.maf.osscenter.payload.UploadResourceChunkPayload
 import com.jmsoftware.maf.osscenter.service.WriteResourceService
 import com.jmsoftware.maf.springcloudstarter.minio.MinioHelper
 import io.minio.ComposeSource
-import lombok.SneakyThrows
 import org.apache.tika.Tika
 import org.apache.tika.mime.MediaType
 import org.springframework.stereotype.Service
@@ -108,7 +107,6 @@ class WriteResourceServiceImpl(
         return objectResponse
     }
 
-    @SneakyThrows
     override fun mergeResourceChunk(payload: MergeResourceChunkPayload): ObjectResponse {
         val objectName = validateObject(payload.objectList)
         val sources = payload.objectList

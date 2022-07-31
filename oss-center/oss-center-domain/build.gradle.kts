@@ -1,5 +1,6 @@
-dependencies {
-    implementation(project(":oss-center-infra"))
-}
-
 description = "Muscle and Fitness Server :: OSS Center - Domain"
+
+dependencies {
+    // MAF dependencies
+    api(project(":oss-center-infra"))
+}

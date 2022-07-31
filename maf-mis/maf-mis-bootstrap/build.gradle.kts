@@ -72,4 +72,3 @@ jib {
     container.ports = listOf(mafMisPort)
     container.creationTime = LocalDateTime.now().toString()
 }
-

@@ -34,13 +34,6 @@ dependencies {
     val shardingsphereVersion: String by project
     api("org.apache.shardingsphere:shardingsphere-jdbc-core-spring-boot-starter:$shardingsphereVersion")
 
-    // JWT, https://github.com/jwtk/jjwt
-    // Cannot Remove jjwt dependencies, cuz the login process is in here `auth-center`, and the auth process is in `api-gateway`
-    val jjwtVersion: String by project
-    api("io.jsonwebtoken:jjwt-api:$jjwtVersion")
-    api("io.jsonwebtoken:jjwt-impl:$jjwtVersion")
-    runtimeOnly("io.jsonwebtoken:jjwt-jackson:$jjwtVersion")
-
     // Apache POI - Java API To Access Microsoft Format Files
     val poiVersion: String by project
     api("org.apache.poi:poi:$poiVersion")
