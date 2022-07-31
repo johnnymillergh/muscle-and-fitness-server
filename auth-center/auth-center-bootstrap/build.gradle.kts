@@ -12,12 +12,20 @@ plugins {
     id("com.google.cloud.tools.jib")
 }
 
-springBoot {
-    buildInfo()
+val versionDetails: Closure<VersionDetails> by extra
+val gitVersionDetails = versionDetails()
+
+dependencies {
+    // MAF dependencies, and the dependencies in `bootstrap` have no need to be transitive
+    implementation(project(":auth-center-web"))
+    implementation(project(":auth-center-message"))
 }
 
 tasks.withType<BootJar> {
     this.enabled = true
+    // archiveFileName = [baseName]-[gitHash]-[version]-[classifier].[extension]
+    this.archiveFileName.set("${archiveBaseName.get()}-${gitVersionDetails.gitHash}-${archiveVersion.get()}.${archiveExtension.get()}")
+    logger.info("Building Spring Boot executable jar: ${this.archiveFileName.get()}")
 }
 
 tasks.withType<BootRun> {
@@ -39,10 +47,8 @@ tasks.withType<ProcessResources> {
     }
 }
 
-dependencies {
-    // MAF dependencies, and the dependencies in `bootstrap` have no need to be transitive
-    implementation(project(":auth-center-web"))
-    implementation(project(":auth-center-message"))
+springBoot {
+    buildInfo()
 }
 
 // https://github.com/GoogleContainerTools/jib/tree/master/jib-gradle-plugin
@@ -59,9 +65,7 @@ jib {
     val projectArtifactId: String by properties
     val authCenterArtifactId: String by properties
     to.image = "$dockerHubRepositoryPrefix$projectArtifactId.$authCenterArtifactId"
-    val versionDetails: Closure<VersionDetails> by extra
-    val details = versionDetails()
-    to.tags = setOf("${details.gitHash}-${project.version}")
+    to.tags = setOf("${gitVersionDetails.gitHash}-${project.version}")
     container.appRoot = "/$authCenterArtifactId"
     val projectBuildSourceEncoding: String by properties
     container.jvmFlags = listOf("-Dfile.encoding=$projectBuildSourceEncoding")
