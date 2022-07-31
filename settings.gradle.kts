@@ -4,11 +4,17 @@ pluginManagement {
     val kotlinVersion: String by settings
     val springBootVersion: String by settings
     val springDependencyManagementVersion: String by settings
+    val jibVersion: String by settings
+    val gradleGitVersion: String by settings
+    val gradleVersionsPluginVersion: String by settings
     plugins {
         kotlin("jvm") version kotlinVersion
         kotlin("plugin.spring") version kotlinVersion
         id("org.springframework.boot") version springBootVersion
         id("io.spring.dependency-management") version springDependencyManagementVersion
+        id("com.google.cloud.tools.jib") version jibVersion
+        id("com.palantir.git-version") version gradleGitVersion
+        id("com.github.ben-manes.versions") version gradleVersionsPluginVersion
     }
 }
 

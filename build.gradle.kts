@@ -13,6 +13,9 @@ plugins {
     id("org.springframework.boot") apply false
     // https://docs.spring.io/dependency-management-plugin/docs/current/reference/html/
     id("io.spring.dependency-management") apply false
+    id("com.google.cloud.tools.jib") apply false
+    id("com.palantir.git-version")
+    id("com.github.ben-manes.versions")
 }
 
 java.sourceCompatibility = VERSION_17
@@ -24,6 +27,13 @@ tasks.withType<Jar> {
 }
 tasks.withType<BootJar> {
     this.enabled = false
+}
+
+buildscript {
+    dependencies {
+        // https://github.com/GoogleContainerTools/jib-extensions/blob/master/first-party/jib-spring-boot-extension-gradle/README.md
+        classpath("com.google.cloud.tools:jib-spring-boot-extension-gradle:0.1.0")
+    }
 }
 
 allprojects {
@@ -56,6 +66,8 @@ subprojects {
         plugin("org.springframework.boot")
         // https://docs.spring.io/dependency-management-plugin/docs/current/reference/html/
         plugin("io.spring.dependency-management")
+        plugin("com.palantir.git-version")
+        plugin("com.github.ben-manes.versions")
     }
 
     tasks.withType<KotlinCompile> {
