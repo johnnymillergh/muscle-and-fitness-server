@@ -46,12 +46,10 @@ jobs:
         with:
           java-version: ${{env.TERMURIN_VERSION}}
           distribution: 'temurin'
-      - name: Grant Execution Permission for `mvnw`
-        run: chmod +x mvnw
-      - name: Check Dependencies Version with Versions Maven Plugin
-        run: ./mvnw --threads 2C --show-version --log-file maven-check-version.log --file pom.xml versions:display-dependency-updates versions:display-parent-updates
-      - name: Filter the log
-        run: grep -RIi "Dependencies have newer versions:" -A 10 maven-check-version.log
-      - name: Display the full log
-        run: cat maven-check-version.log
+      - name: Grant Execution Permission for `gradlew`
+        run: chmod +x gradlew
+      - name: Check Dependencies Version with Gradle `com.github.ben-manes.versions` Plugin
+        run: ./gradlew dependencyUpdates --quiet
+      - name: Display the Full Report for Dependency Updates
+        run: grep -RIi -A 1 -B 1 --include="**/dependencyUpdates/*.txt" ".*"
 
