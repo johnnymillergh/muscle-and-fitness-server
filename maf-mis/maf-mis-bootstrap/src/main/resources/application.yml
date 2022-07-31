@@ -1,18 +1,18 @@
 server:
-  port: @maf-mis.port@
+  port: ${mafMisPort}
   tomcat:
-    uri-encoding: @project.build.sourceEncoding@
+    uri-encoding: ${projectBuildSourceEncoding}
   shutdown: GRACEFUL
   servlet:
     context-path:
 
 spring:
   application:
-    name: @project.parent.artifactId@
+    name: ${mafMisArtifactId}
   profiles:
-    active: @environment@
+    active: ${environment}
   config:
-    import: consul:${spring.cloud.consul.host}:${spring.cloud.consul.port}
+    import: consul:\${spring.cloud.consul.host}:\${spring.cloud.consul.port}
   cloud:
     # https://docs.spring.io/spring-cloud-consul/docs/current/reference/html/index.html#spring-cloud-consul-config
     consul:
@@ -32,42 +32,42 @@ spring:
           - shardingsphere
       discovery:
         register: true
-        instance-id: ${spring.application.name}-${spring.cloud.client.hostname}-${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
-        service-name: ${spring.application.name}
-        port: ${server.port}
+        instance-id: \${spring.application.name}-\${spring.cloud.client.hostname}-\${vcap.application.instance_id:\${spring.application.instance_id:\${random.value}}}
+        service-name: \${spring.application.name}
+        port: \${server.port}
         prefer-ip-address: true
-        ip-address: ${spring.cloud.client.ip-address}
+        ip-address: \${spring.cloud.client.ip-address}
         health-check-critical-timeout: 15s
   servlet:
     multipart:
-      location: @project.parent.artifactId@/${spring.application.name}/temprary-file
+      location: ${projectArtifactId}/\${spring.application.name}/temporary-file
       max-file-size: 64MB
       max-request-size: 70MB
       file-size-threshold: 0
 
 logging:
-  config: classpath:logback-configuration/logback-${spring.profiles.active}.xml
+  config: classpath:logback-configuration/logback-\${spring.profiles.active}.xml
 
 maf:
   project-properties:
-    base-package: @project.groupId@
-    context-path: ${server.servlet.context-path}
-    group-id: @project.groupId@
-    project-parent-artifact-id: @project.parent.artifactId@
-    project-artifact-id: @project.parent.artifactId@
-    version: @project.version@
-    description: @project.description@
-    jdk-version: @java.version@
-    environment: ${spring.profiles.active}
-    url: @project.url@
-    inception-year: @inceptionYear@
-    organization-name: @project.organization.name@
-    organization-url: @project.organization.url@
-    issue-management-system: @project.issueManagement.system@
-    issue-management-url: @project.issueManagement.url@
-    developer-name: @developerName@
-    developer-email: @developerEmail@
-    developer-url: @developerUrl@
+    base-package: ${projectGroupId}
+    context-path: \${server.servlet.context-path}
+    group-id: ${projectGroupId}
+    project-parent-artifact-id: ${projectArtifactId}
+    project-artifact-id: ${mafMisArtifactId}
+    version: ${projectVersion}
+    description: "${description}"
+    jdk-version: ${javaVersion}
+    environment: \${spring.profiles.active}
+    url: ${projectUrl}
+    inception-year: ${inceptionYear}
+    organization-name: ${projectOrganizationName}
+    organization-url: ${projectOrganizationUrl}
+    issue-management-system: ${projectIssueManagementSystem}
+    issue-management-url: ${projectIssueManagementUrl}
+    developer-name: ${developerName}
+    developer-email: ${developerEmail}
+    developer-url: ${developerUrl}
   configuration:
     ignored-url:
       pattern:
@@ -79,4 +79,4 @@ maf:
         - "/*/v2/api-docs/**"
         - "/webjars/**"
         - "/doc.html"
-    included-package-for-http-api-scan: ${maf.project-properties.base-package}
+    included-package-for-http-api-scan: \${maf.project-properties.base-package}
