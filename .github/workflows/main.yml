@@ -1,7 +1,7 @@
 # This workflow will build a Java project with Gradle
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
 
-name: Java CI with Gradlw
+name: Java CI with Gradle
 
 on:
   push:
@@ -50,7 +50,3 @@ jobs:
         run: chmod +x gradlew
       - name: Check Dependencies Version with Gradle `com.github.ben-manes.versions` Plugin
         run: ./gradlew dependencyUpdates --quiet
-      - name: Display the Full Report for Dependency Updates
-        run: |
-          dir
-          grep -RIi -A 1 -B 1 --include="**/dependencyUpdates/*.txt" ""
