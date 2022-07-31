@@ -16,6 +16,7 @@ configurations.runtimeOnly {
 dependencies {
     // MAF dependencies
     api(project(":common"))
+    api(project(":universal-ui"))
 
     // Spring dependencies
     api("org.springframework.boot:spring-boot-starter-web")

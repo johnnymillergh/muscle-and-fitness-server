@@ -4,7 +4,6 @@ import com.jmsoftware.maf.common.util.logger
 import io.netty.channel.ChannelOption
 import io.netty.handler.timeout.ReadTimeoutHandler
 import io.netty.handler.timeout.WriteTimeoutHandler
-import lombok.RequiredArgsConstructor
 import org.springframework.cloud.client.loadbalancer.LoadBalanced
 import org.springframework.context.annotation.Bean
 import org.springframework.http.client.reactive.ReactorClientHttpConnector
@@ -22,7 +21,6 @@ import reactor.netty.resources.LoopResources
  *
  * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/17/22 7:54 AM
  */
-@RequiredArgsConstructor
 class WebClientConfiguration {
     companion object {
         private val log = logger()

@@ -117,6 +117,7 @@ subprojects {
         val functionaljavaVersion: String by project
         val functionaljava8Version: String by project
         val mapstructVersion: String by project
+        val mockitoKotlinVersion: String by project
 
         // Kotlin
         implementation(kotlin("stdlib-jdk8"))
@@ -137,6 +138,7 @@ subprojects {
 
         // Testing
         testImplementation("org.springframework.boot:spring-boot-starter-test")
+        testImplementation("org.mockito.kotlin:mockito-kotlin:$mockitoKotlinVersion")
         testImplementation("org.jacoco:org.jacoco.agent:0.8.8")
     }
 

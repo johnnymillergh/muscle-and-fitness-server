@@ -1,23 +1,47 @@
-dependencies {
-    implementation(project(":common"))
-    implementation(project(":universal-ui"))
-    implementation("org.springframework.boot:spring-boot-starter-webflux:2.7.2")
-    implementation("org.springframework.boot:spring-boot-starter-security:2.7.2")
-    implementation("org.springframework.boot:spring-boot-starter-aop:2.7.2")
-    implementation("org.springframework.boot:spring-boot-starter-validation:2.7.2")
-    implementation("org.springframework.boot:spring-boot-autoconfigure:2.7.2")
-    implementation("org.springframework.boot:spring-boot-autoconfigure-processor:2.7.2")
-    implementation("org.springframework.boot:spring-boot-configuration-processor:2.7.2")
-    implementation("org.springframework.cloud:spring-cloud-starter-consul-all:3.1.0")
-    implementation("org.springframework.cloud:spring-cloud-starter-sleuth:3.1.1")
-    implementation("org.springframework.cloud:spring-cloud-sleuth-zipkin:3.1.1")
-    implementation("de.codecentric:spring-boot-admin-starter-client:2.7.1")
-    implementation("org.apache.commons:commons-pool2:2.11.1")
-    implementation("net.logstash.logback:logstash-logback-encoder:7.2")
-    implementation("org.springdoc:springdoc-openapi-webflux-ui:1.6.9")
-    implementation("org.springdoc:springdoc-openapi-kotlin:1.6.9")
-    runtimeOnly("org.springframework.boot:spring-boot-devtools:2.7.2")
-    compileOnly("org.springframework.boot:spring-boot-starter-data-redis-reactive:2.7.2")
-}
+import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 description = "Muscle and Fitness Server :: Reactive Spring Cloud Starter"
+
+tasks.withType<BootJar> {
+    this.enabled = false
+}
+
+configurations.implementation {
+    isTransitive = true
+}
+configurations.runtimeOnly {
+    isTransitive = true
+}
+
+dependencies {
+    // MAF dependencies
+    api(project(":common"))
+    api(project(":universal-ui"))
+
+    // Spring dependencies
+    api("org.springframework.boot:spring-boot-starter-webflux")
+    api("org.springframework.boot:spring-boot-starter-security")
+    api("org.springframework.boot:spring-boot-starter-aop")
+    api("org.springframework.boot:spring-boot-starter-validation")
+    api("org.springframework.boot:spring-boot-autoconfigure")
+    api("org.springframework.boot:spring-boot-autoconfigure-processor")
+    api("org.springframework.boot:spring-boot-configuration-processor")
+    api("org.springframework.cloud:spring-cloud-starter-consul-all")
+    api("org.springframework.cloud:spring-cloud-starter-sleuth")
+    api("org.springframework.cloud:spring-cloud-sleuth-zipkin")
+    api("org.apache.commons:commons-pool2:2.11.1")
+    developmentOnly("org.springframework.boot:spring-boot-devtools") {
+        isTransitive = true
+    }
+    // Optional Spring dependencies for other features
+    compileOnly("org.springframework.boot:spring-boot-starter-data-redis-reactive")
+
+    // Spring enhancement dependencies
+    val springBootAdminStarterVersion: String by project
+    api("de.codecentric:spring-boot-admin-starter-client:$springBootAdminStarterVersion")
+    val springDocVersion: String by project
+    api("org.springdoc:springdoc-openapi-webflux-ui:$springDocVersion")
+    api("org.springdoc:springdoc-openapi-kotlin:$springDocVersion")
+    val logstashLogbackEncoderVersion: String by project
+    api("net.logstash.logback:logstash-logback-encoder:$logstashLogbackEncoderVersion")
+}
