@@ -80,7 +80,7 @@ class ResponseUtil(
         standardizeHttpServletResponse(response, httpStatus)
         val responseBodyBean = ResponseBodyBean.ofStatus(
             exception.code,
-            exception.message ?: httpStatus.reasonPhrase,
+            exception.message,
             exception.data
         )
         try {

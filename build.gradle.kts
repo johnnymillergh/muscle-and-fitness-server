@@ -1,16 +1,7 @@
 import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 import org.gradle.api.JavaVersion.VERSION_17
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
-buildscript {
-    repositories {
-        mavenLocal()
-        mavenCentral()
-    }
-    dependencies {
-        classpath("io.spring.gradle:dependency-management-plugin:1.0.12.RELEASE")
-    }
-}
+import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
     java
@@ -27,6 +18,14 @@ plugins {
 java.sourceCompatibility = VERSION_17
 java.targetCompatibility = VERSION_17
 
+// To disable build any artifacts for the rootProject
+tasks.withType<Jar> {
+    this.enabled = false
+}
+tasks.withType<BootJar> {
+    this.enabled = false
+}
+
 allprojects {
     val projectGroupId: String by project
     group = projectGroupId
@@ -41,10 +40,6 @@ allprojects {
         mavenLocal()
         mavenCentral()
     }
-
-    tasks.withType<JavaCompile> {
-        options.encoding = "UTF-8"
-    }
 }
 
 subprojects {
@@ -56,8 +51,9 @@ subprojects {
     apply {
         plugin("java")
         plugin("java-library")
-        //plugin("kotlin")
-        //plugin("org.jetbrains.kotlin.plugin.spring")
+        plugin("kotlin")
+        plugin("org.jetbrains.kotlin.plugin.spring")
+        plugin("org.springframework.boot")
         // https://docs.spring.io/dependency-management-plugin/docs/current/reference/html/
         plugin("io.spring.dependency-management")
     }
@@ -77,6 +73,12 @@ subprojects {
         options.encoding = "UTF-8"
     }
 
+    // Disable for take of building Spring Boot executable jar for most of the subprojects,
+    // Only bootstrap subproject need it to be `true`.
+    tasks.withType<BootJar> {
+        this.enabled = false
+    }
+
     // https://github.com/gradle/kotlin-dsl-samples/issues/1002
     configure<DependencyManagementExtension> {
         imports {
@@ -87,14 +89,9 @@ subprojects {
         }
     }
 
-    repositories {
-        mavenLocal()
-        mavenCentral()
-    }
-
-    val implementation by configurations
-    val annotationProcessor by configurations
-    val testImplementation by configurations
+//    val implementation by configurations
+//    val annotationProcessor by configurations
+//    val testImplementation by configurations
     dependencies {
         val guavaVersion: String by project
         val hutoolVersion: String by project
