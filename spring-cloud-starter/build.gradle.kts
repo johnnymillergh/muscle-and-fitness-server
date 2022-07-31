@@ -63,7 +63,9 @@ dependencies {
     val mybatisPlusBootStarterVersion: String by project
     compileOnly("com.baomidou:mybatis-plus-boot-starter:$mybatisPlusBootStarterVersion")
     val shardingsphereVersion: String by project
-    compileOnly("org.apache.shardingsphere:shardingsphere-jdbc-core-spring-boot-starter:$shardingsphereVersion")
+    compileOnly("org.apache.shardingsphere:shardingsphere-jdbc-core-spring-boot-starter:$shardingsphereVersion") {
+        exclude("com.squareup", "okhttp3")
+    }
 
     // POI
     val poiVersion: String by project
