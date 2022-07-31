@@ -73,16 +73,26 @@ subprojects {
     tasks.withType<KotlinCompile> {
         kotlinOptions {
             freeCompilerArgs = listOf("-Xjsr305=strict")
-            jvmTarget = "17"
+            jvmTarget = VERSION_17.majorVersion
         }
+    }
+
+    tasks.withType<JavaCompile> {
+        options.encoding = "UTF-8"
+        // Run the compiler as a separate process, https://docs.gradle.org/current/userguide/performance.html#compiler_daemon
+        options.isFork = true
     }
 
     tasks.withType<Test> {
         useJUnitPlatform()
     }
 
-    tasks.withType<JavaCompile> {
-        options.encoding = "UTF-8"
+    // https://docs.gradle.org/current/userguide/performance.html#parallel_test_execution
+    tasks.withType<Test>().configureEach {
+        // The normal approach is to use some number less than or equal to the number of CPU cores you have, such as this algorithm:
+        maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).takeIf { it > 0 } ?: 1
+        // To fork a new test VM after a certain number of tests have run
+        setForkEvery(100)
     }
 
     // Disable for take of building Spring Boot executable jar for most of the subprojects,
@@ -101,9 +111,6 @@ subprojects {
         }
     }
 
-//    val implementation by configurations
-//    val annotationProcessor by configurations
-//    val testImplementation by configurations
     dependencies {
         val guavaVersion: String by project
         val hutoolVersion: String by project
