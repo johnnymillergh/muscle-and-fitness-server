@@ -4,7 +4,6 @@ import com.palantir.gradle.gitversion.VersionDetails
 import groovy.lang.Closure
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 import org.springframework.boot.gradle.tasks.run.BootRun
-import java.time.LocalDateTime
 
 description = "Muscle and Fitness Server :: Spring Boot Admin - Bootstrap"
 
@@ -59,7 +58,7 @@ jib {
     pluginExtensions {
         pluginExtension {
             implementation = "com.google.cloud.tools.jib.gradle.extension.springboot.JibSpringBootExtension"
-            properties = mapOf("useDeprecatedExcludeDevtoolsOption" to "true")
+            properties = mapOf("excludeDevtools" to "true")
         }
     }
     val temurinTag: String by properties
@@ -74,5 +73,7 @@ jib {
     container.jvmFlags = listOf("-Dfile.encoding=$projectBuildSourceEncoding")
     val springBootAdminPort: String by properties
     container.ports = listOf(springBootAdminPort)
-    container.creationTime = LocalDateTime.now().toString()
+    // container.creationTime should be an ISO 8601 date-time (see DateTimeFormatter.ISO_DATE_TIME)
+    // or a special keyword ("EPOCH", "USE_CURRENT_TIMESTAMP"): 2022-08-01T06:53:20.970244
+    container.creationTime = "USE_CURRENT_TIMESTAMP"
 }
