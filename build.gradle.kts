@@ -20,7 +20,7 @@ plugins {
 }
 
 java.sourceCompatibility = VERSION_1_8
-java.targetCompatibility = VERSION_17
+java.targetCompatibility = VERSION_1_8
 
 // To disable build any artifacts for the rootProject
 tasks.withType<Jar> {
