@@ -1,7 +1,7 @@
-# This workflow will build a Java project with Maven
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+# This workflow will build a Java project with Gradle
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
 
-name: Java CI with Maven
+name: Java CI with Gradle
 
 on:
   push:
@@ -12,6 +12,9 @@ on:
       - '**.md'
       - '_config.yml'
 
+env:
+  TERMURIN_VERSION: '17.0.3+7'
+
 jobs:
   build-docker-image:
     runs-on: ubuntu-latest
@@ -20,28 +23,30 @@ jobs:
       DOCKER_HUB_PASSWORD: ${{secrets.DOCKER_HUB_PASSWORD}}
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Java
+      - name: Setup Java
         uses: actions/setup-java@v3.1.0
         with:
-          java-version: '17.0.2+8'
+          java-version: ${{env.TERMURIN_VERSION}}
           distribution: 'temurin'
-      - name: Grant Execution Permission for `mvnw`
-        run: chmod +x mvnw
-      - name: Build with Maven
-        run: ./mvnw clean install --show-version -Djunit.jupiter.execution.parallel.enabled=true -Dmaven.javadoc.skip=true -Djib.to.auth.username=$DOCKER_HUB_USERNAME -Djib.to.auth.password=$DOCKER_HUB_PASSWORD
+      - name: Grant Execution Permission for `gradlew`
+        run: chmod +x gradlew
+      - name: Build with Gradle
+        run: ./gradlew clean build jib -Djunit.jupiter.execution.parallel.enabled=true -Dmaven.javadoc.skip=true -Djib.to.auth.username=$DOCKER_HUB_USERNAME -Djib.to.auth.password=$DOCKER_HUB_PASSWORD
       - name: Display Built Artifacts
         run: |
           dir
-          ls -R -l -h | grep -i ".jar$"
+          ls -R -l -h | grep "\.jar$"
 
   check-version:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Java
+      - name: Setup Java
         uses: actions/setup-java@v3.1.0
         with:
-          java-version: '17.0.2+8'
+          java-version: ${{env.TERMURIN_VERSION}}
           distribution: 'temurin'
-      - name: Check Dependencies Version with Versions Maven Plugin
-        run: mvn versions:display-dependency-updates versions:display-parent-updates -f pom.xml
+      - name: Grant Execution Permission for `gradlew`
+        run: chmod +x gradlew
+      - name: Check Dependencies Version with Gradle `com.github.ben-manes.versions` Plugin
+        run: ./gradlew dependencyUpdates --quiet
