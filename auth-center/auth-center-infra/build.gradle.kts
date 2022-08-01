@@ -32,7 +32,9 @@ dependencies {
     val mybatisPlusBootStarterVersion: String by project
     api("com.baomidou:mybatis-plus-boot-starter:$mybatisPlusBootStarterVersion")
     val shardingsphereVersion: String by project
-    api("org.apache.shardingsphere:shardingsphere-jdbc-core-spring-boot-starter:$shardingsphereVersion")
+    api("org.apache.shardingsphere:shardingsphere-jdbc-core-spring-boot-starter:$shardingsphereVersion") {
+        exclude("org.codehaus.groovy", "groovy")
+    }
 
     // JWT, https://github.com/jwtk/jjwt
     // Cannot Remove jjwt dependencies, cuz the login process is in here `auth-center`, and the auth process is in `api-gateway`
@@ -47,6 +49,8 @@ dependencies {
     api("org.apache.poi:poi-ooxml:$poiVersion")
 
     // Testing
-    testImplementation("org.springframework.amqp:spring-rabbit-test")
+    testImplementation("org.springframework.amqp:spring-rabbit-test") {
+        exclude("org.codehaus.groovy", "groovy")
+    }
     testImplementation("org.mockito:mockito-inline")
 }

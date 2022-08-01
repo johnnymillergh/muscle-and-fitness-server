@@ -1,6 +1,5 @@
 import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 import org.gradle.api.JavaVersion.VERSION_17
-import org.gradle.api.JavaVersion.VERSION_1_8
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
@@ -19,8 +18,8 @@ plugins {
     id("com.github.ben-manes.versions")
 }
 
-java.sourceCompatibility = VERSION_1_8
-java.targetCompatibility = VERSION_1_8
+java.sourceCompatibility = VERSION_17
+java.targetCompatibility = VERSION_17
 
 // To disable build any artifacts for the rootProject
 tasks.withType<Jar> {
@@ -53,6 +52,7 @@ allprojects {
     }
 }
 
+
 subprojects {
     val projectGroupId: String by project
     group = projectGroupId
@@ -74,7 +74,7 @@ subprojects {
     tasks.withType<KotlinCompile> {
         kotlinOptions {
             freeCompilerArgs = listOf("-Xjsr305=strict")
-            jvmTarget = "1.8"
+            jvmTarget = VERSION_17.majorVersion
         }
     }
 
