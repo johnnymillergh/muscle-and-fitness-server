@@ -74,7 +74,7 @@ subprojects {
     tasks.withType<KotlinCompile> {
         kotlinOptions {
             freeCompilerArgs = listOf("-Xjsr305=strict")
-            jvmTarget = VERSION_17.majorVersion
+            jvmTarget = "1.8"
         }
     }
 
