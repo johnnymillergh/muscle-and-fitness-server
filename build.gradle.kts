@@ -1,3 +1,6 @@
+import enforcer.rules.RequireGradleVersion
+import enforcer.rules.RequireJavaVersion
+import enforcer.rules.RequireJavaVendor
 import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 import org.gradle.api.JavaVersion.VERSION_17
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -16,12 +19,13 @@ plugins {
     id("com.google.cloud.tools.jib") apply false
     id("com.palantir.git-version")
     id("com.github.ben-manes.versions")
+    id("org.kordamp.gradle.project-enforcer")
 }
 
 java.sourceCompatibility = VERSION_17
 java.targetCompatibility = VERSION_17
 
-// To disable build any artifacts for the rootProject
+// Disable building any artifacts for the rootProject
 tasks.withType<Jar> {
     this.enabled = false
 }
@@ -51,7 +55,6 @@ allprojects {
         mavenCentral()
     }
 }
-
 
 subprojects {
     val projectGroupId: String by project
@@ -97,7 +100,7 @@ subprojects {
     }
 
     // Disable for take of building Spring Boot executable jar for most of the subprojects,
-    // Only bootstrap subproject need it to be `true`.
+    // Only bootstrap subproject needs it to be `true`.
     tasks.withType<BootJar> {
         this.enabled = false
     }
@@ -147,6 +150,24 @@ subprojects {
         compileOnly {
             extendsFrom(configurations.annotationProcessor.get())
         }
+    }
+}
+
+enforce {
+    rule(RequireGradleVersion::class.java) {
+        this.setEnforcerLevel("ERROR")
+        val gradleVersion: String by project
+        this.setProperty("version", "[$gradleVersion]")
+    }
+    rule(RequireJavaVendor::class.java) {
+        this.setEnforcerLevel("ERROR")
+        val javaVendor: String by project
+        this.include(javaVendor)
+    }
+    rule(RequireJavaVersion::class.java) {
+        this.setEnforcerLevel("ERROR")
+        val temurinVersion: String by project
+        this.setProperty("version", "[$temurinVersion]")
     }
 }
 

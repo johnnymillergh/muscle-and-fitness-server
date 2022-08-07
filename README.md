@@ -21,7 +21,7 @@ Here is the highlights of **Muscle and Fitness Server**:
 
 1. Each microservice is organized by [Domain Driven Design](https://en.wikipedia.org/wiki/Domain-driven_design) (DDD) structure.
 
-1. Based on Java - [![](https://img.shields.io/badge/OpenJDK-Temurin%2017.0.2+8-informational?style=flat&logo=java&logoColor=white&color=2bbc8a)](https://github.com/adoptium/temurin17-binaries/releases/tag/jdk-17.0.2%2B8) and Kotlin - [![](https://img.shields.io/badge/Kotlin-1.6.10-informational?style=flat&logo=kotlin&logoColor=white&color=2bbc8a)](https://github.com/JetBrains/kotlin/releases/tag/v1.6.10). Inherited from the most modern and newest Spring frameworks:
+1. Based on Java - [![](https://img.shields.io/badge/OpenJDK-Temurin%2017.0.3+7-informational?style=flat&logo=java&logoColor=white&color=2bbc8a)](https://github.com/adoptium/temurin17-binaries/releases/tag/jdk-17.0.3%2B7) and Kotlin - [![](https://img.shields.io/badge/Kotlin-1.6.21-informational?style=flat&logo=kotlin&logoColor=white&color=2bbc8a)](https://github.com/JetBrains/kotlin/releases/tag/v1.6.21), built by Gradle multi-module management [![](https://img.shields.io/badge/Gradle-7.5.1-informational?style=flat&logo=gradle&logoColor=white&color=2bbc8a)](https://github.com/gradle/gradle/releases/tag/v7.5.1). Inherited from the most modern and newest Spring frameworks:
 
    `org.springframework.boot:spring-boot-starter-parent` - [![Spring Boot](https://maven-badges.herokuapp.com/maven-central/org.springframework.boot/spring-boot-starter-parent/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.springframework.boot/spring-boot-starter-parent/)
    `org.springframework.cloud:spring-cloud-dependencies` - [![Spring Cloud](https://maven-badges.herokuapp.com/maven-central/org.springframework.cloud/spring-cloud-dependencies/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.springframework.cloud/spring-cloud-dependencies/)
@@ -73,7 +73,7 @@ Here is the highlights of **Muscle and Fitness Server**:
 
 16. [Async log output](https://examples.javacodegeeks.com/enterprise-java/logback/logback-ayncappender-example/). Log file compressed by standard GNU zip ([gzip](https://en.wikipedia.org/wiki/Gzip)) compression algorithm. [ELK](https://www.elastic.co/what-is/elk-stack) log aggregation.
 
-16. PMD code quality check for each every CI (during Maven verify phase), with [Alibaba-p3c](https://github.com/alibaba/p3c) rulesets.
+16. ~~PMD code quality check for each every CI (during Maven verify phase), with [Alibaba-p3c](https://github.com/alibaba/p3c) rulesets.~~
 
 16. [JaCoCo](https://github.com/jacoco/jacoco) for JUnit code coverage.
 
@@ -110,7 +110,33 @@ Here is the highlights of **Muscle and Fitness Server**:
 
 ## Useful Commands
 
-### Maven
+### Gradle
+
+1. Compilation:
+
+   ```shell
+   $ gradle classes testClasses
+   ```
+
+1. Execute unit tests, see also [Difference Between Gradle Test and Check](https://www.baeldung.com/gradle-test-vs-check#test-task):
+
+   ```shell
+   $ gradle test
+   ```
+
+1. Build artifacts:
+
+   ```shell
+   $ gradle clean build
+   ```
+
+1. Build and push Docker images:
+
+   ```shell
+   $ gradle clean build jib
+   ```
+
+### ~~Maven (deprecated)~~
 
 1. Compile:
 
