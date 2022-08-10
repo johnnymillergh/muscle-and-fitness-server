@@ -11,7 +11,8 @@ plugins {
     idea
     `java-library`
     `maven-publish`
-    kotlin("jvm") apply false
+    kotlin("jvm")
+    kotlin("kapt")
     kotlin("plugin.spring") apply false
     id("org.springframework.boot") apply false
     // https://docs.spring.io/dependency-management-plugin/docs/current/reference/html/
@@ -66,6 +67,7 @@ subprojects {
         plugin("java")
         plugin("java-library")
         plugin("kotlin")
+        plugin("kotlin-kapt")
         plugin("org.jetbrains.kotlin.plugin.spring")
         plugin("org.springframework.boot")
         // https://docs.spring.io/dependency-management-plugin/docs/current/reference/html/
@@ -83,7 +85,8 @@ subprojects {
 
     tasks.withType<JavaCompile> {
         options.encoding = "UTF-8"
-        // Run the compiler as a separate process, https://docs.gradle.org/current/userguide/performance.html#compiler_daemon
+        // Run the compiler as a separate process.
+        // https://docs.gradle.org/current/userguide/performance.html#compiler_daemon
         options.isFork = true
     }
 
@@ -136,9 +139,11 @@ subprojects {
         implementation("org.functionaljava:functionaljava-quickcheck:$functionaljavaVersion")
         implementation("org.functionaljava:functionaljava-java-core:$functionaljavaVersion")
         implementation("org.mapstruct:mapstruct:$mapstructVersion")
-
-        // TODO: this dependency might not be here for global use
-        annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+        // https://github.com/bswsw/gradle-subprojects-sample/blob/develop/build.gradle.kts
+        kapt("org.mapstruct:mapstruct-processor:$mapstructVersion")
+        // kapt should be configured with the spring-boot-configuration-processor dependency.
+        // https://spring.io/guides/tutorials/spring-boot-kotlin/
+        kapt("org.springframework.boot:spring-boot-configuration-processor")
 
         // Testing
         testImplementation("org.springframework.boot:spring-boot-starter-test")
