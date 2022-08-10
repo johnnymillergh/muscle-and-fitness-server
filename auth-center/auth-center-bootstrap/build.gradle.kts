@@ -58,17 +58,17 @@ jib {
             properties = mapOf("excludeDevtools" to "true")
         }
     }
-    val temurinTag: String by properties
+    val temurinTag: String by project
     from.image = "eclipse-temurin:${temurinTag}"
-    val dockerHubRepositoryPrefix: String by properties
-    val projectArtifactId: String by properties
-    val authCenterArtifactId: String by properties
+    val dockerHubRepositoryPrefix: String by project
+    val projectArtifactId: String by project
+    val authCenterArtifactId: String by project
     to.image = "$dockerHubRepositoryPrefix$projectArtifactId.$authCenterArtifactId"
     to.tags = setOf("${gitVersionDetails.gitHash}-${project.version}")
     container.appRoot = "/$authCenterArtifactId"
-    val projectBuildSourceEncoding: String by properties
+    val projectBuildSourceEncoding: String by project
     container.jvmFlags = listOf("-Dfile.encoding=$projectBuildSourceEncoding")
-    val authCenterPort: String by properties
+    val authCenterPort: String by project
     container.ports = listOf(authCenterPort)
     // container.creationTime should be an ISO 8601 date-time (see DateTimeFormatter.ISO_DATE_TIME)
     // or a special keyword ("EPOCH", "USE_CURRENT_TIMESTAMP"): 2022-08-01T06:53:20.970244
