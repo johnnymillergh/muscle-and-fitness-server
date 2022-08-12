@@ -35,7 +35,8 @@ jobs:
       - name: Grant Execution Permission for `gradlew`
         run: chmod +x gradlew
       - name: Build with Gradle
-        run: ./gradlew clean build jib --no-daemon -Djunit.jupiter.execution.parallel.enabled=true -Dmaven.javadoc.skip=true -Djib.to.auth.username=$DOCKER_HUB_USERNAME -Djib.to.auth.password=$DOCKER_HUB_PASSWORD
+        # https://tomgregory.com/gradle-best-practices/#2_Stop_cleaning_your_project
+        run: ./gradlew build jib --no-daemon -Djunit.jupiter.execution.parallel.enabled=true -Dmaven.javadoc.skip=true -Djib.to.auth.username=$DOCKER_HUB_USERNAME -Djib.to.auth.password=$DOCKER_HUB_PASSWORD
       - name: Display Built Artifacts
         run: |
           dir
