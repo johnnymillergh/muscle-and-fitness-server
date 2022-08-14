@@ -1,3 +1,52 @@
+# [0.0.9.1](https://github.com/johnnymillergh/muscle-and-fitness-server/compare/0.0.9...0.0.9.1) (2022-08-14)
+
+
+### Bug Fixes
+
+* **$SQL:** correct SQL by `deleted = 'N'` ([a3516a9](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/a3516a9aa487521daa34c6c75dd410bc0acb2fa2))
+* **$SQL:** correct the SQL of retrieving permission list ([07d67de](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/07d67dee2dc7ddc515476936be14e149b811486c))
+* **$starter:** `@AutoConfiguration` should be used to annotate top-level auto-configuration classes ([417773a](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/417773a495f9b6e879aa4d2d79217127417c7d1a))
+* **$starter:** correct auto-configuration registration ([b83bd89](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/b83bd892eb032a6de19108daab519b6b5ffec999))
+* **$starter:** correct directory for auto-configuration registration ([99a8f28](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/99a8f28ef8a9e59de5d54ee561d08fd1c7c4e341))
+* **$starter:** correct package for auto-configuration registration ([1240fea](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/1240fead24e685bb667ddd4d0a1253008c275e5e))
+* correct all kinds of issues ([34448d6](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/34448d603361554589283ee65446b70d6469610f))
+* correct annotations for Spring Validation ([5f0c38a](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/5f0c38acf6f6428f8e796a90dce3a7a113c471ce))
+
+
+### Features
+
+* **$api-gateway:** dynamic service registration sense for OpenAPI ([72f4277](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/72f4277e65e1bedcfb9033a8b8f0a65b9b24dc04))
+* **$api-gateway:** migrate from Maven to Gradle ([e3d869e](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/e3d869ebcb7840bca527b7942c4c1b126f479522))
+* **$auth-center:** successfully migrate to Gradle 7.5 ([b4236cf](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/b4236cf9853a5a716c15e37013a10964b079e5bc))
+* **$Datetime:** support ISO 8601 datetime format ([71de1d8](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/71de1d810a5781bee433821f6ee9f4fddc9eba28))
+* **$EventBus:** support auto-configured Guava event bus ([6938193](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/693819322194611de504804fed951ba9dd0a862d))
+* **$GitHub:** use Gradle compilation for GitHub Actions ([053eb8b](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/053eb8b2c388e544579e57396c1c19be9f19a862))
+* **$Gradle:** downgrade ShardingSphere and exclude conflict dependency ([f91d8ae](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/f91d8ae1f4eba44f43e6d405508d02f213969a41))
+* **$Gradle:** integrate Google Jib with Gradle ([ba9feef](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/ba9feef17e541571fe928c96c2d8e0161475d8a3))
+* **$maf-mis:** migrate from Maven to Gradle ([cc0438a](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/cc0438aeebd850ad32e862b0942da3741216c16f))
+* **$oss-center:** migrate from Maven to Gradle ([06ca634](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/06ca6343a7c2de3922e3271859908f8b1bc3ce7e))
+* **$spring-boot-admin:** migrate from Maven to Gradle ([39e5ebc](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/39e5ebc6ec3285b18f43a48e2b6a353e682fd45e))
+* **$Swagger:** beautify Swagger UI by Knife4j-UI ([c1b823c](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/c1b823cbc7dfccc64917080af2a54783b9c91467))
+
+
+### Performance Improvements
+
+* **$EventBus:** enhance non-async and async event bus ([d3235e3](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/d3235e3f80d0e5ae6c2457125b312e666be95515))
+* **$EventBus:** support async event bus; support dynamic component scan ([fe1de45](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/fe1de45d45a505ee2bcc06849a39813cdae2878e))
+* **$Gradle:** enable cache for GitHub Action CI ([b606d21](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/b606d21341c7a6cf048543800e2b75c9ad7496a3))
+* **$Gradle:** execute unit tests in parallel mode; supports JaCoCo ([a34b7ee](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/a34b7ee4b79b3e4dae29098297bd946f3a9e4fe1))
+* **$Gradle:** improve Gradle compilation performance ([772c6c0](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/772c6c02f6d0c519ba8388449307e0cc336a3d17))
+* **$Maven:** parallel Maven building ([445af69](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/445af69a7b13866194408f07b0883200ad1014f6))
+* **$POM:** update dependencies ([42d0abb](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/42d0abb6e3365ceb437fdad466b86707cf8213ea))
+* **$POM:** update dependencies ([de3e26a](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/de3e26a53c7d1d0bd0d957407805d3f7e9cd051a))
+* **$POM:** update dependencies ([8cc6e16](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/8cc6e16766799b12fcbda82d082bb3c60e1aa4f5))
+* **$POM:** update Spring Boot version to 2.6.6 ([2058a71](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/2058a71daaa8bc0d9d9ebe9edb90b7c7a29054f4))
+* **$POM:** update Spring Boot version to 2.7.0 ([fafa257](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/fafa257e762e28bdfeb25c1b1189be4fd997e75c))
+* **$POM:** update Spring Boot version to 2.7.1 ([65f0022](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/65f0022895a51d6167e2f2b1e1638686985c8715))
+* **$POM:** upgrade dependencies ([f869645](https://github.com/johnnymillergh/muscle-and-fitness-server/commit/f869645d8ca825d8d6961f9d229d315fc89d752e))
+
+
+
 # [0.0.9](https://github.com/johnnymillergh/muscle-and-fitness-server/compare/0.0.8.1...0.0.9) (2022-04-17)
 
 
