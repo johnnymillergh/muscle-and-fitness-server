@@ -1,5 +1,12 @@
 greeting: "Hello, World! From Consul config center!"
 
+spring:
+  boot:
+    admin:
+      instance-auth:
+        default-user-name: admin
+        default-password: admin
+
 maf:
   configuration:
     excel:
