@@ -21,7 +21,7 @@ Here is the highlights of **Muscle and Fitness Server**:
 
 1. Each microservice is organized by [Domain Driven Design](https://en.wikipedia.org/wiki/Domain-driven_design) (DDD) structure.
 
-1. Based on Java - [![](https://img.shields.io/badge/OpenJDK-Temurin%2017.0.2+8-informational?style=flat&logo=java&logoColor=white&color=2bbc8a)](https://github.com/adoptium/temurin17-binaries/releases/tag/jdk-17.0.2%2B8) and Kotlin - [![](https://img.shields.io/badge/Kotlin-1.6.10-informational?style=flat&logo=kotlin&logoColor=white&color=2bbc8a)](https://github.com/JetBrains/kotlin/releases/tag/v1.6.10). Inherited from the most modern and newest Spring frameworks:
+1. Based on Java - [![](https://img.shields.io/badge/OpenJDK-Temurin%2017.0.4+8-informational?style=flat&logo=java&logoColor=white&color=2bbc8a)](https://github.com/adoptium/temurin17-binaries/releases/tag/jdk-17.0.4%2B8) and Kotlin - [![](https://img.shields.io/badge/Kotlin-1.6.21-informational?style=flat&logo=kotlin&logoColor=white&color=2bbc8a)](https://github.com/JetBrains/kotlin/releases/tag/v1.6.21), built by Gradle multi-module management [![](https://img.shields.io/badge/Gradle-7.5.1-informational?style=flat&logo=gradle&logoColor=white&color=2bbc8a)](https://github.com/gradle/gradle/releases/tag/v7.5.1). Inherited from the most modern and newest Spring frameworks:
 
    `org.springframework.boot:spring-boot-starter-parent` - [![Spring Boot](https://maven-badges.herokuapp.com/maven-central/org.springframework.boot/spring-boot-starter-parent/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.springframework.boot/spring-boot-starter-parent/)
    `org.springframework.cloud:spring-cloud-dependencies` - [![Spring Cloud](https://maven-badges.herokuapp.com/maven-central/org.springframework.cloud/spring-cloud-dependencies/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.springframework.cloud/spring-cloud-dependencies/)
@@ -73,7 +73,7 @@ Here is the highlights of **Muscle and Fitness Server**:
 
 16. [Async log output](https://examples.javacodegeeks.com/enterprise-java/logback/logback-ayncappender-example/). Log file compressed by standard GNU zip ([gzip](https://en.wikipedia.org/wiki/Gzip)) compression algorithm. [ELK](https://www.elastic.co/what-is/elk-stack) log aggregation.
 
-16. PMD code quality check for each every CI (during Maven verify phase), with [Alibaba-p3c](https://github.com/alibaba/p3c) rulesets.
+16. ~~PMD code quality check for each every CI (during Maven verify phase), with [Alibaba-p3c](https://github.com/alibaba/p3c) rulesets.~~
 
 16. [JaCoCo](https://github.com/jacoco/jacoco) for JUnit code coverage.
 
@@ -110,7 +110,33 @@ Here is the highlights of **Muscle and Fitness Server**:
 
 ## Useful Commands
 
-### Maven
+### Gradle
+
+1. Compilation:
+
+   ```shell
+   $ gradle classes testClasses
+   ```
+
+1. Execute unit tests, see also [Difference Between Gradle Test and Check](https://www.baeldung.com/gradle-test-vs-check#test-task):
+
+   ```shell
+   $ gradle test
+   ```
+
+1. Build artifacts:
+
+   ```shell
+   $ gradle clean build
+   ```
+
+1. Build and push Docker images:
+
+   ```shell
+   $ gradle clean build jib
+   ```
+
+### ~~Maven (deprecated)~~
 
 1. Compile:
 
@@ -160,6 +186,13 @@ Here is the highlights of **Muscle and Fitness Server**:
 
 1. Require the expression to be true, otherwise throws an exception (if provided).
 
+   ```kotlin
+   import com.jmsoftware.maf.springcloudstarter.function.*
+   
+   requireTrue(1 != 1) { anotherBoolean: Boolean? -> log.info("aBoolean = $anotherBoolean") }
+       .orElseThrow { IllegalArgumentException("aBoolean is expected to be true") }
+   ```
+
    ```java
    import static com.jmsoftware.maf.springcloudstarter.function.BooleanCheck.requireTrue;
    
@@ -168,6 +201,21 @@ Here is the highlights of **Muscle and Fitness Server**:
    ```
 
 2. Make Function have cache ability.
+
+   ```kotlin
+   val cacheMap = mutableMapOf("key1" to "1", "key2" to "2")
+   val stringProcess = Function { input: String ->
+       log.info("No cache return value found. input: $input Re-calculating…")
+       StrUtil.subSuf(input, 3)
+   }
+   val result1 = cacheFunction(stringProcess, "key1", cacheMap)
+   val result2 = cacheFunction(stringProcess, "key2", cacheMap)
+   val result3 = cacheFunction(stringProcess, "key3", cacheMap)
+   assertEquals("1", result1)
+   assertEquals("2", result2)
+   assertEquals("3", result3)
+   assertEquals(3, cacheMap.size)
+   ```
 
    ```java
    val cacheMap = Maps.<String, String>newHashMap();
@@ -180,6 +228,10 @@ Here is the highlights of **Muscle and Fitness Server**:
    val result1 = cacheFunction(stringProcess, "key1", cacheMap);
    val result2 = cacheFunction(stringProcess, "key2", cacheMap);
    val result3 = cacheFunction(stringProcess, "key3", cacheMap);
+   assertEquals("1", result1);
+   assertEquals("2", result2);
+   assertEquals("3", result3);
+   assertEquals(3, cacheMap.size);
    ```
 
 
