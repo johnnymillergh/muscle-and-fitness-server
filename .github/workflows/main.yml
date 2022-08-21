@@ -32,6 +32,10 @@ jobs:
           java-version: ${{env.TERMURIN_VERSION}}
           distribution: 'temurin'
           cache: 'gradle'
+      - name: Print Machine Hardware Info
+        run: |
+          cat /proc/cpuinfo
+          cat /proc/meminfo
       - name: Grant Execution Permission for `gradlew`
         run: chmod +x gradlew
       - name: Build with Gradle
