@@ -34,7 +34,9 @@ jobs:
           cache: 'gradle'
       - name: Print Machine Hardware Info
         run: |
+          echo "CPU Info"
           cat /proc/cpuinfo
+          echo "Memory Info"
           cat /proc/meminfo
       - name: Grant Execution Permission for `gradlew`
         run: chmod +x gradlew
