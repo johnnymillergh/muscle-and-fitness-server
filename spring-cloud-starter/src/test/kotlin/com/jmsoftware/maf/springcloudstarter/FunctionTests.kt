@@ -5,7 +5,6 @@ import com.google.common.cache.CacheBuilder
 import com.google.common.cache.RemovalNotification
 import com.jmsoftware.maf.common.util.logger
 import com.jmsoftware.maf.springcloudstarter.function.*
-import fj.Show
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.parallel.Execution
@@ -76,15 +75,11 @@ internal class FunctionTests {
         val result4 = cacheFunction(stringProcess, "key4", guavaCache)
         val result5 = cacheFunction(stringProcess, "key5", guavaCache)
         val result6 = cacheFunction(stringProcess, "key6", guavaCache)
-        Show.anyShow<Any>().print("Before cache invalidated: ")
-        Show.anyShow<Any>().println(guavaCache.asMap().entries)
         assertEquals("4", result4)
         assertEquals("5", result5)
         assertEquals("6", result6)
         Thread.sleep(Duration.ofSeconds(4).toMillis())
         assertNull(guavaCache.getIfPresent("key5"), "The value of Guava cache map is supposed to be null")
-        Show.anyShow<Any>().print("After cache invalidated: ")
-        Show.anyShow<Any>().println(guavaCache.asMap().entries)
     }
 
     @Test

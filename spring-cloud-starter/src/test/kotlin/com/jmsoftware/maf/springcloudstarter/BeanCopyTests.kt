@@ -20,7 +20,7 @@ import java.time.LocalDateTime
 @Execution(ExecutionMode.CONCURRENT)
 internal class BeanCopyTests {
     companion object {
-        private const val COUNT = 1000000
+        private const val COUNT = 1_000_000
         var log = logger()
     }
 

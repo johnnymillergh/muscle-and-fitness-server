@@ -163,8 +163,6 @@ subprojects {
     dependencies {
         val guavaVersion: String by project
         val hutoolVersion: String by project
-        val functionaljavaVersion: String by project
-        val functionaljava8Version: String by project
         val mapstructVersion: String by project
         val mockitoKotlinVersion: String by project
 
@@ -176,10 +174,6 @@ subprojects {
         // Tools
         implementation("com.google.guava:guava:$guavaVersion")
         implementation("cn.hutool:hutool-all:$hutoolVersion")
-        implementation("org.functionaljava:functionaljava:$functionaljavaVersion")
-        implementation("org.functionaljava:functionaljava-java8:$functionaljava8Version")
-        implementation("org.functionaljava:functionaljava-quickcheck:$functionaljavaVersion")
-        implementation("org.functionaljava:functionaljava-java-core:$functionaljavaVersion")
         implementation("org.mapstruct:mapstruct:$mapstructVersion")
         // https://github.com/bswsw/gradle-subprojects-sample/blob/develop/build.gradle.kts
         kapt("org.mapstruct:mapstruct-processor:$mapstructVersion")
