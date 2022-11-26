@@ -4,6 +4,7 @@ import com.palantir.gradle.gitversion.VersionDetails
 import groovy.lang.Closure
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 import org.springframework.boot.gradle.tasks.run.BootRun
+import java.time.ZonedDateTime
 
 description = "Muscle and Fitness Server :: API Gateway - Bootstrap"
 
@@ -72,5 +73,5 @@ jib {
     container.ports = listOf(apiGatewayPort)
     // container.creationTime should be an ISO 8601 date-time (see DateTimeFormatter.ISO_DATE_TIME)
     // or a special keyword ("EPOCH", "USE_CURRENT_TIMESTAMP"): 2022-08-01T06:53:20.970244
-    container.creationTime = "USE_CURRENT_TIMESTAMP"
+    container.creationTime.set(ZonedDateTime.now().toString())
 }
