@@ -2,5 +2,5 @@ description = "Muscle and Fitness Server :: API Gateway - Web"
 
 dependencies {
     // MAF dependencies
-    api(project(":api-gateway-biz"))
+    api(project(":api-gateway:api-gateway-biz"))
 }

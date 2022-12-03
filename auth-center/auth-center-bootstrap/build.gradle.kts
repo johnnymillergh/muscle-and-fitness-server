@@ -17,8 +17,8 @@ val gitVersionDetails = versionDetails()
 
 dependencies {
     // MAF dependencies, and the dependencies in `bootstrap` have no need to be transitive
-    implementation(project(":auth-center-web"))
-    implementation(project(":auth-center-message"))
+    implementation(project(":auth-center:auth-center-web"))
+    implementation(project(":auth-center:auth-center-message"))
 }
 
 tasks.withType<BootJar> {

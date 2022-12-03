@@ -17,8 +17,8 @@ val gitVersionDetails = versionDetails()
 
 dependencies {
     // MAF dependencies
-    implementation(project(":api-gateway-web"))
-    implementation(project(":api-gateway-message"))
+    implementation(project(":api-gateway:api-gateway-web"))
+    implementation(project(":api-gateway:api-gateway-message"))
 }
 
 tasks.withType<BootJar> {

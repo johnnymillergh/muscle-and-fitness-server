@@ -17,8 +17,8 @@ val gitVersionDetails = versionDetails()
 
 dependencies {
     // MAF dependencies
-    api(project(":oss-center-web"))
-    api(project(":oss-center-message"))
+    api(project(":oss-center:oss-center-web"))
+    api(project(":oss-center:oss-center-message"))
 }
 
 tasks.withType<BootJar> {

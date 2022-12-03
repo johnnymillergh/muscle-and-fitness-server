@@ -16,8 +16,8 @@ val versionDetails: Closure<VersionDetails> by extra
 val gitVersionDetails = versionDetails()
 
 dependencies {
-    implementation(project(":maf-mis-web"))
-    implementation(project(":maf-mis-message"))
+    implementation(project(":maf-mis:maf-mis-web"))
+    implementation(project(":maf-mis:maf-mis-message"))
 }
 
 tasks.withType<BootJar> {
