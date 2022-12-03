@@ -21,23 +21,23 @@ Here is the highlights of **Muscle and Fitness Server**:
 
 1. Each microservice is organized by [Domain Driven Design](https://en.wikipedia.org/wiki/Domain-driven_design) (DDD) structure.
 
-1. Based on Java - [![](https://img.shields.io/badge/OpenJDK-Temurin%2017.0.4+8-informational?style=flat&logo=java&logoColor=white&color=2bbc8a)](https://github.com/adoptium/temurin17-binaries/releases/tag/jdk-17.0.4%2B8) and Kotlin - [![](https://img.shields.io/badge/Kotlin-1.6.21-informational?style=flat&logo=kotlin&logoColor=white&color=2bbc8a)](https://github.com/JetBrains/kotlin/releases/tag/v1.6.21), built by Gradle multi-module management [![](https://img.shields.io/badge/Gradle-7.5.1-informational?style=flat&logo=gradle&logoColor=white&color=2bbc8a)](https://github.com/gradle/gradle/releases/tag/v7.5.1). Inherited from the most modern and newest Spring frameworks:
+1. Based on Java - [![](https://img.shields.io/badge/OpenJDK-Temurin%2017.0.5+8-informational?style=flat&logo=OpenJDK&logoColor=white&color=2bbc8a)](https://github.com/adoptium/temurin17-binaries/releases/tag/jdk-17.0.5%2B8) and Kotlin - [![](https://img.shields.io/badge/Kotlin-1.6.21-informational?style=flat&logo=kotlin&logoColor=7F52FF&color=2bbc8a)](https://github.com/JetBrains/kotlin/releases/tag/v1.6.21), built by Gradle multi-module management [![](https://img.shields.io/badge/Gradle-7.6.0-informational?style=flat&logo=gradle&logoColor=02303A&color=2bbc8a)](https://github.com/gradle/gradle/releases/tag/v7.6.0). Inherited from the most modern and newest Spring frameworks:
 
    `org.springframework.boot:spring-boot-starter-parent` - [![Spring Boot](https://maven-badges.herokuapp.com/maven-central/org.springframework.boot/spring-boot-starter-parent/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.springframework.boot/spring-boot-starter-parent/)
    `org.springframework.cloud:spring-cloud-dependencies` - [![Spring Cloud](https://maven-badges.herokuapp.com/maven-central/org.springframework.cloud/spring-cloud-dependencies/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.springframework.cloud/spring-cloud-dependencies/)
 
 2. [Spring Cloud](https://spring.io/projects/spring-cloud) Feature:
 
-   - [Consul](https://www.consul.io/) - Service registration and discovery.
-   - [Spring Cloud Gateway](https://spring.io/projects/spring-cloud-gateway) - API Gateway on top of Spring WebFlux.  Provide a simple, yet effective way to route to APIs and provide cross cutting concerns to them such as: security, monitoring/metrics, and resiliency.
-   - [Spring Cloud OpenFeign](https://spring.io/projects/spring-cloud-openfeign) - Declarative REST Client: Feign creates a dynamic implementation of an interface decorated with JAX-RS or Spring MVC annotations. Enhanced connection by Okhttp 3.
-   - [Spring Boot Admin](https://codecentric.github.io/spring-boot-admin/current/) - Admin UI for administration of spring boot applications.
-   - [Zipkin](https://zipkin.io/) - a distributed tracing system. It helps gather timing data needed to troubleshoot latency problems in service architectures.
+    - [Consul](https://www.consul.io/) - Service registration and discovery.
+    - [Spring Cloud Gateway](https://spring.io/projects/spring-cloud-gateway) - API Gateway on top of Spring WebFlux.  Provide a simple, yet effective way to route to APIs and provide cross cutting concerns to them such as: security, monitoring/metrics, and resiliency.
+    - [Spring Cloud OpenFeign](https://spring.io/projects/spring-cloud-openfeign) - Declarative REST Client: Feign creates a dynamic implementation of an interface decorated with JAX-RS or Spring MVC annotations. Enhanced connection by Okhttp 3.
+    - [Spring Boot Admin](https://codecentric.github.io/spring-boot-admin/current/) - Admin UI for administration of spring boot applications.
+    - [Zipkin](https://zipkin.io/) - a distributed tracing system. It helps gather timing data needed to troubleshoot latency problems in service architectures.
 
 3. Customized Spring Cloud Starter for traditional Spring MVC and Reactive Spring WebFlux microservice. Encapsulated a bunch of libraries and dependencies. Developer can import those dependencies by demand.
 
-   - For Spring MVC, [spring-cloud-starter](https://github.com/johnnymillergh/muscle-and-fitness-server/tree/master/spring-cloud-starter)
-   - For Spring WebFlux, [reactive-spring-cloud-starter](https://github.com/johnnymillergh/muscle-and-fitness-server/tree/master/reactive-spring-cloud-starter)
+    - For Spring MVC, [spring-cloud-starter](https://github.com/johnnymillergh/muscle-and-fitness-server/tree/master/spring-cloud-starter)
+    - For Spring WebFlux, [reactive-spring-cloud-starter](https://github.com/johnnymillergh/muscle-and-fitness-server/tree/master/reactive-spring-cloud-starter)
 
 5. Advocate 𝛌 Java Functional Programming, provide developers with powerful and useful functions to make Java more sweeter.
 
@@ -45,15 +45,15 @@ Here is the highlights of **Muscle and Fitness Server**:
 
 8. [MySQL Replication for High Availability](https://severalnines.com/resources/database-management-tutorials/mysql-replication-high-availability-tutorial). ShardingSphere as database access middleware to boost the database capacity better.
 
-   - Multi data source managed by ShardingSphere, including main, replica and Quartz 3 data sources.
+    - Multi data source managed by ShardingSphere, including main, replica and Quartz 3 data sources.
 
-   - [Dynamic SQL read-write isolation](https://shardingsphere.apache.org/document/current/en/features/readwrite-splitting/) and [table sharding](https://shardingsphere.apache.org/document/current/en/features/sharding/concept/table/) provided by [ShardingSphere](https://shardingsphere.apache.org/).
+    - [Dynamic SQL read-write isolation](https://shardingsphere.apache.org/document/current/en/features/readwrite-splitting/) and [table sharding](https://shardingsphere.apache.org/document/current/en/features/sharding/concept/table/) provided by [ShardingSphere](https://shardingsphere.apache.org/).
 
-   - [MyBatis-Plus](https://github.com/baomidou/mybatis-plus) is the integrated ORM library.
+    - [MyBatis-Plus](https://github.com/baomidou/mybatis-plus) is the integrated ORM library.
 
-   - [光 HikariCP](https://github.com/brettwooldridge/HikariCP) is the database connection pool.
+    - [光 HikariCP](https://github.com/brettwooldridge/HikariCP) is the database connection pool.
 
-   - TODO: Dynamically enhance connection pool size by CPU count (logical processor count). Read more at [How to Find the Optimal Database Connection Pool Size](https://wiki.postgresql.org/wiki/Number_Of_Database_Connections#How_to_Find_the_Optimal_Database_Connection_Pool_Size), [Sizing the Connection Pool](https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-usagenotes-j2ee-concepts-connection-pooling.html#idm46216069663472).
+    - TODO: Dynamically enhance connection pool size by CPU count (logical processor count). Read more at [How to Find the Optimal Database Connection Pool Size](https://wiki.postgresql.org/wiki/Number_Of_Database_Connections#How_to_Find_the_Optimal_Database_Connection_Pool_Size), [Sizing the Connection Pool](https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-usagenotes-j2ee-concepts-connection-pooling.html#idm46216069663472).
 
 8. Redis 6.x support. [Master-slave replication for high availability](https://redis.io/topics/replication). Redis cluster.
 
@@ -234,7 +234,6 @@ Here is the highlights of **Muscle and Fitness Server**:
    assertEquals(3, cacheMap.size);
    ```
 
-
 ## CI (Continuous Integration)
 
 - [GitHub Actions](https://github.com/johnnymillergh/media-streaming/actions) is for building and publishing Docker images, also checking dependency updates and tests.
@@ -250,11 +249,10 @@ Feel free to dive in! [Open an issue](https://github.com/johnnymillergh/spring-c
 
 ### Contributors
 
-This project exists thanks to all the people who contribute. 
+This project exists thanks to all the people who contribute.
 
 - Johnny Miller [[@johnnymillergh](https://github.com/johnnymillergh)]
 - …
-
 
 ### Sponsors
 
@@ -265,4 +263,3 @@ Support this project by becoming a sponsor. Your logo will show up here with a l
 [Apache License](https://github.com/johnnymillergh/exrx-net-crawler-server/blob/master/LICENSE) © Johnny Miller
 
 2020 - Present
-

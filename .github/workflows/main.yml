@@ -16,7 +16,7 @@ on:
       - 'main'
 
 env:
-  TERMURIN_VERSION: '17.0.4+8'
+  TERMURIN_VERSION: '17.0.5+8'
 
 jobs:
   build-docker-image:
