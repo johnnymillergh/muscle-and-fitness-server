@@ -15,6 +15,8 @@ dependencies {
     api(project(":spring-cloud-starter"))
 
     // Spring dependencies
+    val springAuthorizationServerVersion: String by project
+    api("org.springframework.security:spring-security-oauth2-authorization-server:$springAuthorizationServerVersion")
     api("org.springframework.boot:spring-boot-starter-data-redis")
     api("org.springframework.boot:spring-boot-starter-data-elasticsearch")
     api("org.springframework.boot:spring-boot-starter-amqp")

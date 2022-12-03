@@ -104,7 +104,7 @@ Here is the highlights of **Muscle and Fitness Server**:
    $ git clone https://github.com/johnnymillergh/muscle-and-fitness-server.git
    ```
 
-2. Build with newest IntelliJ IDEA.
+2. Build with the latest IntelliJ IDEA.
 
 3. Click the green triangle to Run.
 
@@ -134,6 +134,20 @@ Here is the highlights of **Muscle and Fitness Server**:
 
    ```shell
    $ gradle clean build jib
+   ```
+
+1. Run a service with command:
+
+   On Linus & macOS,
+
+   ```shell
+   $ ./gradlew :api-gateway:api-gateway-bootstrap:bootRun
+   ```
+
+   On Windows,
+
+   ```powershell
+   $ .\gradlew :api-gateway:api-gateway-bootstrap:bootRun
    ```
 
 ### ~~Maven (deprecated)~~
