@@ -20,8 +20,7 @@ dependencies {
     implementation(project(":spring-cloud-starter")){
         exclude("de.codecentric", "spring-boot-admin-starter-client")
     }
-    val springBootAdminStarterVersion: String by project
-    implementation("de.codecentric:spring-boot-admin-starter-server:$springBootAdminStarterVersion")
+    implementation(libs.spring.boot.admin.server.get())
 }
 
 tasks.withType<BootJar> {

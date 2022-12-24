@@ -1,7 +1,13 @@
+@file:Suppress(
+    // https://youtrack.jetbrains.com/issue/KTIJ-19369
+    // https://youtrack.jetbrains.com/issue/KTIJ-19369/False-positive-cant-be-called-in-this-context-by-implicit-receiver-with-plugins-in-Gradle-version-catalogs-as-a-TOML-file#focus=Comments-27-5860112.0-0
+    // to suppress error for `alias(libs.plugins.kotlin.jvm)`
+    "DSL_SCOPE_VIOLATION"
+)
+
 import enforcer.rules.RequireGradleVersion
 import enforcer.rules.RequireJavaVendor
 import enforcer.rules.RequireJavaVersion
-import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 import org.gradle.api.JavaVersion.VERSION_17
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 import org.gradle.api.tasks.testing.logging.TestLogEvent.*
@@ -14,16 +20,16 @@ plugins {
     `java-library`
     jacoco
     `maven-publish`
-    kotlin("jvm")
-    kotlin("kapt")
-    kotlin("plugin.spring") apply false
-    id("org.springframework.boot") apply false
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.kotlin.plugin.spring) apply false
+    alias(libs.plugins.spring.boot) apply false
     // https://docs.spring.io/dependency-management-plugin/docs/current/reference/html/
-    id("io.spring.dependency-management") apply false
-    id("com.google.cloud.tools.jib") apply false
-    id("com.palantir.git-version")
-    id("com.github.ben-manes.versions")
-    id("org.kordamp.gradle.project-enforcer")
+    alias(libs.plugins.spring.dependency.management) apply false
+    alias(libs.plugins.jib) apply false
+    alias(libs.plugins.git.version)
+    alias(libs.plugins.versions)
+    alias(libs.plugins.project.enforcer)
 }
 
 java.sourceCompatibility = VERSION_17
@@ -150,21 +156,9 @@ subprojects {
         this.enabled = false
     }
 
-    // https://github.com/gradle/kotlin-dsl-samples/issues/1002
-    configure<DependencyManagementExtension> {
-        imports {
-            val springBootVersion: String by project
-            mavenBom("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
-            val springCloudVersion: String by project
-            mavenBom("org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion")
-        }
-    }
-
     dependencies {
-        val guavaVersion: String by project
-        val hutoolVersion: String by project
-        val mapstructVersion: String by project
-        val mockitoKotlinVersion: String by project
+        implementation(platform(rootProject.libs.spring.boot.bom))
+        implementation(platform(rootProject.libs.spring.cloud.bom))
 
         // Kotlin
         implementation(kotlin("stdlib-jdk8"))
@@ -172,18 +166,18 @@ subprojects {
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
         // Tools
-        implementation("com.google.guava:guava:$guavaVersion")
-        implementation("cn.hutool:hutool-all:$hutoolVersion")
-        implementation("org.mapstruct:mapstruct:$mapstructVersion")
+        implementation(rootProject.libs.guava.get())
+        implementation(rootProject.libs.hutool.get())
+        implementation(rootProject.libs.mapstruct.asProvider().get())
         // https://github.com/bswsw/gradle-subprojects-sample/blob/develop/build.gradle.kts
-        kapt("org.mapstruct:mapstruct-processor:$mapstructVersion")
+        kapt(rootProject.libs.mapstruct.processor.get())
         // kapt should be configured with the spring-boot-configuration-processor dependency.
         // https://spring.io/guides/tutorials/spring-boot-kotlin/
         kapt("org.springframework.boot:spring-boot-configuration-processor")
 
         // Testing
         testImplementation("org.springframework.boot:spring-boot-starter-test")
-        testImplementation("org.mockito.kotlin:mockito-kotlin:$mockitoKotlinVersion")
+        testImplementation(rootProject.testLibs.mockito.kotlin.get())
     }
 
     configurations {
@@ -196,18 +190,15 @@ subprojects {
 enforce {
     rule(RequireGradleVersion::class.java) {
         this.setEnforcerLevel("ERROR")
-        val gradleVersion: String by project
-        this.setProperty("version", "[$gradleVersion]")
+        this.setProperty("version", "[${libs.versions.gradle.get()}]")
     }
     rule(RequireJavaVendor::class.java) {
         this.setEnforcerLevel("ERROR")
-        val javaVendor: String by project
-        this.include(javaVendor)
+        this.include(libs.versions.javaVendor.get())
     }
     rule(RequireJavaVersion::class.java) {
         this.setEnforcerLevel("ERROR")
-        val temurinVersion: String by project
-        this.setProperty("version", "[$temurinVersion]")
+        this.setProperty("version", "[${libs.versions.temurinVersion.get()}]")
     }
 }
 

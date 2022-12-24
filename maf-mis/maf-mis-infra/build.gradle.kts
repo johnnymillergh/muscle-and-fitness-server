@@ -29,17 +29,15 @@ dependencies {
     // ORM Libraries
     // runtimeOnly libraries are the opposite, they are available at runtime but not at compile-time.
     runtimeOnly("mysql:mysql-connector-java")
-    val mybatisPlusBootStarterVersion: String by project
-    api("com.baomidou:mybatis-plus-boot-starter:$mybatisPlusBootStarterVersion")
-    val shardingsphereVersion: String by project
-    api("org.apache.shardingsphere:shardingsphere-jdbc-core-spring-boot-starter:$shardingsphereVersion") {
+    api(libs.mybatis.plus.get())
+    // https://stackoverflow.com/questions/71680935/how-to-exclude-dependencies-from-gradle-version-catalog
+    api(libs.shardingsphere.get().let { "${it.module}:${it.versionConstraint.requiredVersion}" }) {
         exclude("org.codehaus.groovy", "groovy")
     }
 
     // Apache POI - Java API To Access Microsoft Format Files
-    val poiVersion: String by project
-    api("org.apache.poi:poi:$poiVersion")
-    api("org.apache.poi:poi-ooxml:$poiVersion")
+    api(libs.poi.asProvider().get())
+    api(libs.poi.ooxml.get())
 
     // Testing
     testImplementation("org.springframework.amqp:spring-rabbit-test") {

@@ -37,11 +37,8 @@ dependencies {
     compileOnly("org.springframework.boot:spring-boot-starter-data-redis-reactive")
 
     // Spring enhancement dependencies
-    val springBootAdminStarterVersion: String by project
-    api("de.codecentric:spring-boot-admin-starter-client:$springBootAdminStarterVersion")
-    val springDocVersion: String by project
-    api("org.springdoc:springdoc-openapi-webflux-ui:$springDocVersion")
-    api("org.springdoc:springdoc-openapi-kotlin:$springDocVersion")
-    val logstashLogbackEncoderVersion: String by project
-    api("net.logstash.logback:logstash-logback-encoder:$logstashLogbackEncoderVersion")
+    api(libs.spring.boot.admin.client.get())
+    api(libs.springdoc.openapi.webflux.ui.get())
+    api(libs.springdoc.openapi.kotlin.get())
+    api(libs.logstash.logback.encoder.get())
 }

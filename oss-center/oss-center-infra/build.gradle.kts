@@ -21,10 +21,8 @@ dependencies {
     // Spring integration
     api("org.springframework.integration:spring-integration-redis")
 
-    val minioVersion: String by project
-    api("io.minio:minio:$minioVersion")
-    val apacheTikaVersion: String by project
-    api("org.apache.tika:tika-core:$apacheTikaVersion")
+    api(libs.minio.get())
+    api(libs.tika.core.get())
 
     // Testing
     testImplementation("org.mockito:mockito-inline")

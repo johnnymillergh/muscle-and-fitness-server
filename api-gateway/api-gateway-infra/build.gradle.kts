@@ -18,8 +18,7 @@ dependencies {
     api("org.springframework.cloud:spring-cloud-starter-gateway")
     api("org.springframework.boot:spring-boot-starter-data-redis-reactive")
 
-    val knife4jVersion: String by project
-    api("com.github.xiaoymin:knife4j-springdoc-ui:$knife4jVersion")
+    api(libs.knife4j.get())
 
     // Testing
     testImplementation("io.projectreactor:reactor-test")

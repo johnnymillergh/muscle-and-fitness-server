@@ -48,27 +48,22 @@ dependencies {
     compileOnly("org.springframework.integration:spring-integration-sftp")
 
     // Spring enhancement dependencies
-    val springBootAdminStarterVersion: String by project
-    api("de.codecentric:spring-boot-admin-starter-client:$springBootAdminStarterVersion")
-    val springDocVersion: String by project
-    api("org.springdoc:springdoc-openapi-ui:$springDocVersion")
-    api("org.springdoc:springdoc-openapi-kotlin:$springDocVersion")
-    val logstashLogbackEncoderVersion: String by project
-    api("net.logstash.logback:logstash-logback-encoder:$logstashLogbackEncoderVersion")
+    api(libs.spring.boot.admin.client.get())
+    api(libs.springdoc.openapi.ui.get())
+    api(libs.springdoc.openapi.kotlin.get())
+    api(libs.logstash.logback.encoder.get())
 
-    val minioVersion: String by project
-    compileOnly("io.minio:minio:$minioVersion")
+    compileOnly(libs.minio.get())
 
     // ORM libraries
-    val mybatisPlusBootStarterVersion: String by project
-    compileOnly("com.baomidou:mybatis-plus-boot-starter:$mybatisPlusBootStarterVersion")
-    val shardingsphereVersion: String by project
-    compileOnly("org.apache.shardingsphere:shardingsphere-jdbc-core-spring-boot-starter:$shardingsphereVersion") {
+    runtimeOnly("mysql:mysql-connector-java")
+    api(libs.mybatis.plus.get())
+    // https://stackoverflow.com/questions/71680935/how-to-exclude-dependencies-from-gradle-version-catalog
+    api(libs.shardingsphere.get().let { "${it.module}:${it.versionConstraint.requiredVersion}" }) {
         exclude("org.codehaus.groovy", "groovy")
     }
 
     // POI
-    val poiVersion: String by project
-    compileOnly("org.apache.poi:poi:$poiVersion")
-    compileOnly("org.apache.poi:poi-ooxml:$poiVersion")
+    api(libs.poi.asProvider().get())
+    api(libs.poi.ooxml.get())
 }
