@@ -152,9 +152,13 @@ subprojects {
 
     // Disable for take of building Spring Boot executable jar for most of the subprojects,
     // Only bootstrap subproject needs it to be `true`.
-    tasks.withType<BootJar> {
-        this.enabled = false
-    }
+    tasks.withType<BootJar> { this.enabled = false }
+
+    // Execution failed for task ':spring-cloud-starter:jar'.
+    //> Entry com/jmsoftware/maf/springcloudstarter/quartz/converter/QuartzJobConfigurationMapStructMapperImpl.class is
+    // a duplicate but no duplicate handling strategy has been set. Please refer to
+    // https://docs.gradle.org/7.6/dsl/org.gradle.api.tasks.Copy.html#org.gradle.api.tasks.Copy:duplicatesStrategy for details.
+    tasks.withType<Jar> { duplicatesStrategy = DuplicatesStrategy.WARN }
 
     dependencies {
         implementation(platform(rootProject.libs.spring.boot.bom))
