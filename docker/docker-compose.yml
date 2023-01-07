@@ -230,7 +230,7 @@ services:
     restart: always
     volumes:
       # - "~/docker-file-mapping/${ELASTICSEARCH_CONTAINER_NAME}/plugins:/usr/share/elasticsearch/plugins"
-      - "~/docker-file-mapping/${ELASTICSEARCH_CONTAINER_NAME}/data:/usr/share/elasticsearch/data"
+      - "~/docker-file-mapping/${ELASTICSEARCH_CONTAINER_NAME}/data:/usr/share/elasticsearch/data:rw"
     environment:
       cluster.name: elasticsearch
       discovery.type: single-node
