@@ -4,6 +4,10 @@
 -- ------------------------------------------------------
 -- Server version	8.0.26
 
+DROP DATABASE IF EXISTS muscle_and_fitness_0;
+CREATE DATABASE muscle_and_fitness_0;
+USE muscle_and_fitness_0;
+
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
