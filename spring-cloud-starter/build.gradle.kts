@@ -56,7 +56,7 @@ dependencies {
     compileOnly(libs.minio.get())
 
     // ORM libraries
-    runtimeOnly("mysql:mysql-connector-java")
+    runtimeOnly("com.mysql:mysql-connector-j")
     api(libs.mybatis.plus.get())
     // https://stackoverflow.com/questions/71680935/how-to-exclude-dependencies-from-gradle-version-catalog
     api(libs.shardingsphere.get().let { "${it.module}:${it.versionConstraint.requiredVersion}" }) {

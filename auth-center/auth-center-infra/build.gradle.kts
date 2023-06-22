@@ -26,15 +26,6 @@ dependencies {
     // Spring integration
     api("org.springframework.integration:spring-integration-redis")
 
-    // ORM Libraries
-    // runtimeOnly libraries are the opposite, they are available at runtime but not at compile-time.
-    runtimeOnly("mysql:mysql-connector-java")
-    api(libs.mybatis.plus.get())
-    // https://stackoverflow.com/questions/71680935/how-to-exclude-dependencies-from-gradle-version-catalog
-    api(libs.shardingsphere.get().let { "${it.module}:${it.versionConstraint.requiredVersion}" }) {
-        exclude("org.codehaus.groovy", "groovy")
-    }
-
     // JWT, https://github.com/jwtk/jjwt
     // Cannot Remove jjwt dependencies, cuz the login process is in here `auth-center`, and the auth process is in `api-gateway`
     api(libs.jjwt.api.get())

@@ -18,6 +18,16 @@ val gitVersionDetails = versionDetails()
 dependencies {
     implementation(project(":maf-mis:maf-mis-web"))
     implementation(project(":maf-mis:maf-mis-message"))
+    /*
+    ! WARNING: ShardingSphere uses snakeyaml 1.3.3, yet Spring Boot only depends on 1.3.0.
+    ! WARNING: So we need to constraint the version of snakeyaml to 1.3.3
+    FIXME: Once Spring Boot upgrades snakeyaml to higher version (>= 1.3.3), we can remove this constraint
+    */
+    implementation(libs.snakeyaml.get().let { "${it.module}" }) {
+        this.version {
+            this.strictly(libs.versions.snakeyaml.get())
+        }
+    }
 }
 
 tasks.withType<BootJar> {
@@ -58,12 +68,10 @@ jib {
             properties = mapOf("excludeDevtools" to "true")
         }
     }
-    val temurinTag: String by project
-    from.image = "eclipse-temurin:${temurinTag}"
-    val dockerHubRepositoryPrefix: String by project
+    from.image = "eclipse-temurin:${libs.versions.temurinTag}"
     val projectArtifactId: String by project
     val mafMisArtifactId: String by project
-    to.image = "$dockerHubRepositoryPrefix$projectArtifactId.$mafMisArtifactId"
+    to.image = "${libs.versions.dockerHubRepositoryPrefix}$projectArtifactId.$mafMisArtifactId"
     to.tags = setOf("${gitVersionDetails.gitHash}-${project.version}")
     container.appRoot = "/$mafMisArtifactId"
     val projectBuildSourceEncoding: String by project

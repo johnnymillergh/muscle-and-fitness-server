@@ -3,6 +3,7 @@ spring:
     props:
       sql-show: true
     datasource:
+      names: source,replica-1,quartz
       source:
         type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
@@ -21,19 +22,19 @@ spring:
         url: jdbc:mysql://localhost:3306/QUARTZ_DB?useSSL=true&useUnicode=true
         username: maf_mysql_rw
         password: maf@mysql
-      names: source,replica-1,quartz
     rules:
+      # https://shardingsphere.apache.org/document/5.2.1/en/user-manual/shardingsphere-jdbc/spring-boot-starter/rules/readwrite-splitting/
       readwrite-splitting:
         data-sources:
           readwrite-data-sources:
-            type: Static
-            props:
+            static-strategy:
               write-data-source-name: source
               read-data-source-names: replica-1
             load-balancer-name: readwrite-load-balancer
         load-balancers:
           readwrite-load-balancer:
             type: ROUND_ROBIN
+      # https://shardingsphere.apache.org/document/5.2.1/en/user-manual/shardingsphere-jdbc/spring-boot-starter/rules/sharding/
       sharding:
         key-generators:
           snowflake:
