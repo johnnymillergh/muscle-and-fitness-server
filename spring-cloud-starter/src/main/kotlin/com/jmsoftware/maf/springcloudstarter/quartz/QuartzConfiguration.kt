@@ -5,6 +5,7 @@ import com.jmsoftware.maf.springcloudstarter.property.MafProjectProperties
 import com.jmsoftware.maf.springcloudstarter.quartz.controller.QuartzJobConfigurationController
 import com.jmsoftware.maf.springcloudstarter.quartz.service.QuartzJobConfigurationService
 import com.jmsoftware.maf.springcloudstarter.quartz.service.impl.QuartzJobConfigurationServiceImpl
+import jakarta.validation.Validator
 import org.quartz.Scheduler
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
 import org.springframework.boot.autoconfigure.quartz.QuartzAutoConfiguration
@@ -14,7 +15,6 @@ import org.springframework.context.annotation.Bean
 import org.springframework.scheduling.quartz.SchedulerFactoryBean
 import org.springframework.transaction.PlatformTransactionManager
 import java.util.*
-import javax.validation.Validator
 
 /**
  * # QuartzConfiguration

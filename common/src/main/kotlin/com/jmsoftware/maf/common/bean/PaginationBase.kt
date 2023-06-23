@@ -1,10 +1,10 @@
 package com.jmsoftware.maf.common.bean
 
 import cn.hutool.core.util.NumberUtil
+import jakarta.validation.constraints.Min
+import jakarta.validation.constraints.NotNull
+import jakarta.validation.constraints.Pattern
 import org.hibernate.validator.constraints.Range
-import javax.validation.constraints.Min
-import javax.validation.constraints.NotNull
-import javax.validation.constraints.Pattern
 
 /**
  * PaginationBase

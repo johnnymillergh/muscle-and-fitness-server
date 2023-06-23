@@ -9,7 +9,7 @@ import io.swagger.v3.oas.models.info.Contact
 import io.swagger.v3.oas.models.info.Info
 import io.swagger.v3.oas.models.info.License
 import io.swagger.v3.oas.models.servers.Server
-import org.springdoc.core.customizers.OpenApiCustomiser
+import org.springdoc.core.customizers.OpenApiCustomizer
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import java.util.function.Consumer
@@ -54,9 +54,8 @@ class OpenApiConfiguration(
     }
 
     @Bean
-    @Suppress("SpellCheckingInspection")
-    fun openApiCustomiser(): OpenApiCustomiser {
-        return OpenApiCustomiser { openApi: OpenAPI ->
+    fun openApiCustomizer(): OpenApiCustomizer {
+        return OpenApiCustomizer { openApi: OpenAPI ->
             openApi.servers.forEach(Consumer { server: Server ->
                 if (!StrUtil.containsIgnoreCase(
                         mafProjectProperties.environment, DEV

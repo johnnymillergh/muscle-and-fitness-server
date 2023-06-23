@@ -3,9 +3,9 @@ package com.jmsoftware.maf.authcenter.permission.service
 import com.jmsoftware.maf.authcenter.permission.response.GetServicesInfoResponse
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListResponse
+import jakarta.validation.Valid
+import jakarta.validation.constraints.NotNull
 import org.springframework.validation.annotation.Validated
-import javax.validation.Valid
-import javax.validation.constraints.NotNull
 
 /**
  * Description: PermissionServiceImpl, change description here.

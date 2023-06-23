@@ -3,8 +3,8 @@ package com.jmsoftware.maf.authcenter.permission.service
 import com.baomidou.mybatisplus.extension.service.IService
 import com.jmsoftware.maf.authcenter.permission.persistence.Permission
 import com.jmsoftware.maf.common.domain.authcenter.permission.PermissionType
+import jakarta.validation.constraints.NotEmpty
 import org.springframework.validation.annotation.Validated
-import javax.validation.constraints.NotEmpty
 
 /**
  * # PermissionDomainService

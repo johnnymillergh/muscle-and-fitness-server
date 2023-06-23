@@ -5,9 +5,9 @@ import com.jmsoftware.maf.authcenter.role.RoleExcelBean
 import com.jmsoftware.maf.authcenter.role.persistence.Role
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdResponse
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdSingleResponse
+import jakarta.validation.constraints.NotEmpty
+import jakarta.validation.constraints.NotNull
 import org.springframework.validation.annotation.Validated
-import javax.validation.constraints.NotEmpty
-import javax.validation.constraints.NotNull
 
 /**
  * # RoleDomainService

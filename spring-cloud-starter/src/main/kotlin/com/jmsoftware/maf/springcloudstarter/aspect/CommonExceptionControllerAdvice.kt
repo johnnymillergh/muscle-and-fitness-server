@@ -5,7 +5,11 @@ import com.jmsoftware.maf.common.bean.ResponseBodyBean
 import com.jmsoftware.maf.common.exception.BaseException
 import com.jmsoftware.maf.common.util.logger
 import com.jmsoftware.maf.springcloudstarter.util.getRequestIpAndPort
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
+import jakarta.validation.ConstraintViolationException
 import org.apache.catalina.connector.ClientAbortException
+import org.apache.commons.lang3.exception.ExceptionUtils
 import org.springframework.context.support.DefaultMessageSourceResolvable
 import org.springframework.core.annotation.Order
 import org.springframework.http.HttpStatus
@@ -22,9 +26,6 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.NoHandlerFoundException
 import java.lang.reflect.UndeclaredThrowableException
 import java.util.*
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
-import javax.validation.ConstraintViolationException
 
 /**
  * # CommonExceptionControllerAdvice
@@ -222,7 +223,7 @@ class CommonExceptionControllerAdvice {
         log.error("Internal server exception occurred! Exception message: ${throwable.message}", throwable)
         return ResponseBodyBean.ofStatus<Any>(
             HttpStatus.INTERNAL_SERVER_ERROR,
-            "Exception message: ${removeLineSeparator(throwable.message)}"
+            "Exception message: ${ExceptionUtils.getRootCauseMessage(throwable)}"
         )
     }
 

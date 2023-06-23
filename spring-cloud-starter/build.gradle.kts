@@ -23,15 +23,14 @@ dependencies {
     api("org.springframework.boot:spring-boot-starter-security")
     api("org.springframework.boot:spring-boot-starter-aop")
     api("org.springframework.boot:spring-boot-starter-validation")
-    api("org.springframework.boot:spring-boot-configuration-processor")
     api("org.springframework.boot:spring-boot-autoconfigure")
     api("org.springframework.boot:spring-boot-autoconfigure-processor")
     api("org.springframework.cloud:spring-cloud-starter-consul-all")
     api("org.springframework.cloud:spring-cloud-starter-openfeign")
     api("org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j")
     api("io.github.openfeign:feign-okhttp")
-    api("org.springframework.cloud:spring-cloud-starter-sleuth")
-    api("org.springframework.cloud:spring-cloud-sleuth-zipkin")
+    api("io.micrometer:micrometer-tracing")
+    api("io.micrometer:micrometer-tracing-bridge-brave")
     api("org.springframework.boot:spring-boot-starter-integration")
     api("org.apache.commons:commons-pool2")
     developmentOnly("org.springframework.boot:spring-boot-devtools") {
@@ -49,8 +48,9 @@ dependencies {
 
     // Spring enhancement dependencies
     api(libs.spring.boot.admin.client.get())
-    api(libs.springdoc.openapi.ui.get())
-    api(libs.springdoc.openapi.kotlin.get())
+    api(libs.springdoc.openapi.starter.webmvc.ui.get())
+    api(libs.springdoc.openapi.starter.common.get())
+
     api(libs.logstash.logback.encoder.get())
 
     compileOnly(libs.minio.get())

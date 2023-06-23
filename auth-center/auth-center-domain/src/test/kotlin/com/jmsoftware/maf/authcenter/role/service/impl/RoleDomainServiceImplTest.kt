@@ -11,6 +11,7 @@ import com.jmsoftware.maf.common.exception.InternalServerException
 import com.jmsoftware.maf.common.util.logger
 import com.jmsoftware.maf.springcloudstarter.property.MafConfigurationProperties
 import com.jmsoftware.maf.springcloudstarter.property.MafProjectProperties
+import jakarta.validation.Validator
 import org.apache.ibatis.builder.MapperBuilderAssistant
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
@@ -26,7 +27,6 @@ import org.mockito.Spy
 import org.mockito.junit.jupiter.MockitoExtension
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.data.redis.core.ValueOperations
-import javax.validation.Validator
 
 /**
  * # RoleDomainServiceImplTest

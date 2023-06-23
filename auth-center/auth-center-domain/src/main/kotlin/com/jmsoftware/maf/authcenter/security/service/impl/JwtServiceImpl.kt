@@ -11,6 +11,8 @@ import com.jmsoftware.maf.common.util.logger
 import com.jmsoftware.maf.springcloudstarter.property.JwtConfigurationProperties
 import io.jsonwebtoken.*
 import io.jsonwebtoken.security.Keys
+import jakarta.annotation.PostConstruct
+import jakarta.servlet.http.HttpServletRequest
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR
@@ -18,12 +20,10 @@ import org.springframework.http.HttpStatus.UNAUTHORIZED
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.stereotype.Service
-import java.nio.charset.StandardCharsets
+import java.nio.charset.StandardCharsets.UTF_8
 import java.util.*
 import java.util.concurrent.TimeUnit
-import javax.annotation.PostConstruct
 import javax.crypto.SecretKey
-import javax.servlet.http.HttpServletRequest
 
 /**
  * # JwtServiceImpl
@@ -48,7 +48,7 @@ class JwtServiceImpl(
     fun init() {
         log.info("Start to init class members of ${this.javaClass.simpleName}")
         secretKey = Keys.hmacShaKeyFor(
-            jwtConfigurationProperties.signingKey.toByteArray(StandardCharsets.UTF_8)
+            jwtConfigurationProperties.signingKey.toByteArray(UTF_8)
         )
         jwtParser = Jwts.parserBuilder().setSigningKey(secretKey).build()
         log.warn("Secret key for JWT parser was generated. Algorithm: ${secretKey.algorithm}")
@@ -114,7 +114,7 @@ class JwtServiceImpl(
             throw SecurityException("The parameter of JWT is invalid", UNAUTHORIZED)
         }
         val username = claims.subject
-        val redisKeyOfJwt = jwtConfigurationProperties.jwtRedisKeyPrefix + username
+        val redisKeyOfJwt = "${jwtConfigurationProperties.jwtRedisKeyPrefix}$username"
         // Check if JWT exists
         val expire = redisTemplate.opsForValue().operations.getExpire(redisKeyOfJwt, TimeUnit.MILLISECONDS)
         if (ObjectUtil.isNull(expire) || expire!! <= 0) {

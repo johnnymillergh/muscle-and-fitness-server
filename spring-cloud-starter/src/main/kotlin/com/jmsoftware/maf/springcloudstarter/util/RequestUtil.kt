@@ -2,7 +2,7 @@ package com.jmsoftware.maf.springcloudstarter.util
 
 import cn.hutool.core.util.StrUtil
 import com.jmsoftware.maf.springcloudstarter.util.RequestUtil.UNKNOWN
-import javax.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletRequest
 
 /**
  * # RequestUtil

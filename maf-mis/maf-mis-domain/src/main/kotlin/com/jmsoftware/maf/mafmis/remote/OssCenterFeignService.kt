@@ -1,9 +1,9 @@
 package com.jmsoftware.maf.mafmis.remote
 
 import com.jmsoftware.maf.common.domain.osscenter.write.ObjectResponse
+import jakarta.validation.constraints.NotNull
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.multipart.MultipartFile
-import javax.validation.constraints.NotNull
 
 /**
  * # OssCenterFeignService

@@ -10,7 +10,7 @@ import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
-import javax.validation.Valid
+import jakarta.validation.Valid
 
 /**
  * # WriteResourceController

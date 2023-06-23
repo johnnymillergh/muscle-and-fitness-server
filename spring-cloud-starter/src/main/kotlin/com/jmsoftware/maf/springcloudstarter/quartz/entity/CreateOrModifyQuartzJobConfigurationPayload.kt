@@ -7,9 +7,9 @@ import com.jmsoftware.maf.springcloudstarter.quartz.constant.MisfirePolicy.MISFI
 import com.jmsoftware.maf.springcloudstarter.quartz.constant.QuartzJobStatus
 import com.jmsoftware.maf.springcloudstarter.quartz.constant.QuartzJobStatus.NORMAL
 import com.jmsoftware.maf.springcloudstarter.quartz.entity.persistence.QuartzJobConfiguration
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotNull
 import org.hibernate.validator.constraints.Length
-import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotNull
 
 /**
  * # CreateOrModifyQuartzJobConfigurationPayload

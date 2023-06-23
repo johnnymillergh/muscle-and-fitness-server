@@ -4,6 +4,7 @@ import com.jmsoftware.maf.authcenter.remote.OssCenterFeignClient.OssCenterFeignC
 import com.jmsoftware.maf.common.bean.ResponseBodyBean
 import com.jmsoftware.maf.common.domain.osscenter.write.ObjectResponse
 import com.jmsoftware.maf.common.util.logger
+import jakarta.validation.constraints.NotNull
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.context.annotation.Primary
 import org.springframework.http.MediaType
@@ -12,7 +13,6 @@ import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.multipart.MultipartFile
-import javax.validation.constraints.NotNull
 
 /**
  * # OssCenterFeignClient

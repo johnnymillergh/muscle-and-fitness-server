@@ -1,5 +1,6 @@
 package com.jmsoftware.maf.springcloudstarter
 
+import brave.Tracer
 import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.jmsoftware.maf.common.util.logger
@@ -27,6 +28,7 @@ import com.jmsoftware.maf.springcloudstarter.redis.RedisConfiguration
 import com.jmsoftware.maf.springcloudstarter.service.CommonService
 import com.jmsoftware.maf.springcloudstarter.service.impl.CommonServiceImpl
 import com.jmsoftware.maf.springcloudstarter.websocket.WebSocketConfiguration
+import jakarta.annotation.PostConstruct
 import org.apache.ibatis.exceptions.PersistenceException
 import org.mybatis.spring.MyBatisSystemException
 import org.springframework.boot.autoconfigure.AutoConfiguration
@@ -39,14 +41,12 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.servlet.error.ErrorAttributes
 import org.springframework.boot.web.servlet.error.ErrorController
 import org.springframework.cloud.context.config.annotation.RefreshScope
-import org.springframework.cloud.sleuth.Tracer
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
 import org.springframework.core.env.Environment
 import org.springframework.integration.annotation.IntegrationComponentScan
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
-import javax.annotation.PostConstruct
 
 /**
  * # MafAutoConfiguration

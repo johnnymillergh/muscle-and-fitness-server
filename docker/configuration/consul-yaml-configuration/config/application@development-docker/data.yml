@@ -3,6 +3,12 @@
 # that mimics the Spring Cloud Config order of resolving properties.
 # 2. Properties in the config/application folder are applicable to all applications using consul for configuration.
 
+maf:
+  configuration:
+    jwt:
+      signing-key: "com.jmsoftware.maf:muscle-and-fitness-server"
+      jwt-redis-key-prefix: "com.jmsoftware.maf:muscle-and-fitness-server"
+
 spring:
   boot:
     admin:
@@ -58,6 +64,16 @@ spring:
             isClustered: true
             clusterCheckinInterval: 3000
             useProperties: false
+
+redis:
+  master:
+    host: maf-redis-master
+    port: 6379
+    password: maf@redis
+  slaves:
+    - host: maf-redis-slave-1
+      port: 6379
+      password: maf@redis
 
 minio:
   endpoint: http://maf-minio

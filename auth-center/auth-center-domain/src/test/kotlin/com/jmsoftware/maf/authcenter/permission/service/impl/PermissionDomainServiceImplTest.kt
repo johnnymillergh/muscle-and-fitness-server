@@ -14,6 +14,7 @@ import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.junit.jupiter.MockitoExtension
+import org.springframework.test.util.ReflectionTestUtils
 
 /**
  * # PermissionDomainServiceImplTest
@@ -70,6 +71,7 @@ internal class PermissionDomainServiceImplTest {
         permission.id = 1
         `when`(permissionMapper.selectPermissionListByRoleIdList(anyList(), anyList()))
             .thenReturn(listOf(permission))
+        ReflectionTestUtils.setField(permissionDomainService, "baseMapper", permissionMapper)
         val permissionList = permissionDomainService.getPermissionListByRoleIdList(listOf(), listOf())
         log.info("permissionList: $permissionList")
         verify(permissionMapper)

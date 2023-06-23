@@ -1,10 +1,9 @@
 package com.jmsoftware.maf.authcenter.permission.configuration
 
+import jakarta.validation.constraints.NotEmpty
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.cloud.context.config.annotation.RefreshScope
-import org.springframework.context.annotation.Configuration
 import org.springframework.validation.annotation.Validated
-import javax.validation.constraints.NotEmpty
 
 /**
  * Description: PermissionConfiguration, change description here.
@@ -13,7 +12,7 @@ import javax.validation.constraints.NotEmpty
  */
 @Validated
 @RefreshScope
-@Configuration
+//@Configuration
 @ConfigurationProperties(prefix = PermissionConfiguration.PREFIX)
 class PermissionConfiguration(
     @NotEmpty var ignoredServiceIds: Set<String>

@@ -1,10 +1,10 @@
 package com.jmsoftware.maf.osscenter.service
 
 import com.jmsoftware.maf.osscenter.response.SerializableStatObjectResponse
+import jakarta.validation.constraints.NotBlank
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody
-import javax.validation.constraints.NotBlank
 
 /**
  * # ReadResourceService

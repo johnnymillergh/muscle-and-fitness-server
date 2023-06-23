@@ -20,14 +20,14 @@ import com.jmsoftware.maf.springcloudstarter.quartz.service.QuartzJobConfigurati
 import com.jmsoftware.maf.springcloudstarter.quartz.util.createScheduleJob
 import com.jmsoftware.maf.springcloudstarter.quartz.util.getJobKey
 import com.jmsoftware.maf.springcloudstarter.quartz.util.validateCronExp
+import jakarta.annotation.PostConstruct
+import jakarta.validation.Validator
 import org.quartz.JobDataMap
 import org.quartz.Scheduler
 import org.springframework.scheduling.quartz.SchedulerFactoryBean
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
-import javax.annotation.PostConstruct
-import javax.validation.Validator
 
 /**
  * # QuartzJobConfigurationServiceImpl

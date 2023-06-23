@@ -1,8 +1,8 @@
 package com.jmsoftware.maf.common.domain.authcenter.user
 
+import jakarta.validation.constraints.Email
+import jakarta.validation.constraints.NotBlank
 import org.hibernate.validator.constraints.Length
-import javax.validation.constraints.Email
-import javax.validation.constraints.NotBlank
 
 /**
  * # SignupPayload

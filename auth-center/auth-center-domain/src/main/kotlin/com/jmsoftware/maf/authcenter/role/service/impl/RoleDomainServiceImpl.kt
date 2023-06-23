@@ -19,11 +19,11 @@ import com.jmsoftware.maf.springcloudstarter.function.lazyDebug
 import com.jmsoftware.maf.springcloudstarter.function.requireTrue
 import com.jmsoftware.maf.springcloudstarter.property.MafConfigurationProperties
 import com.jmsoftware.maf.springcloudstarter.property.MafProjectProperties
+import jakarta.validation.Validator
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.concurrent.TimeUnit
-import javax.validation.Validator
 
 /**
  * # RoleDomainServiceImpl
@@ -103,4 +103,3 @@ class RoleDomainServiceImpl(
         }.orElseThrow { InternalServerException("Failed to save roles! Transaction rollback") }
     }
 }
-

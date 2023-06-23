@@ -165,7 +165,6 @@ subprojects {
         implementation(platform(rootProject.libs.spring.cloud.bom))
 
         // Kotlin
-        implementation(kotlin("stdlib-jdk8"))
         implementation(kotlin("reflect"))
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
@@ -173,11 +172,11 @@ subprojects {
         implementation(rootProject.libs.guava.get())
         implementation(rootProject.libs.hutool.get())
         implementation(rootProject.libs.mapstruct.asProvider().get())
-        // https://github.com/bswsw/gradle-subprojects-sample/blob/develop/build.gradle.kts
+        // https://mapstruct.org/documentation/stable/reference/html/#_gradle
+        // https://github.com/mapstruct/mapstruct-examples/blob/main/mapstruct-kotlin-gradle/build.gradle.kts
         kapt(rootProject.libs.mapstruct.processor.get())
-        // kapt should be configured with the spring-boot-configuration-processor dependency.
-        // https://spring.io/guides/tutorials/spring-boot-kotlin/
-        kapt("org.springframework.boot:spring-boot-configuration-processor")
+        // https://docs.spring.io/spring-boot/docs/current/reference/html/configuration-metadata.html#appendix.configuration-metadata.annotation-processor.configuring
+        annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
         // Testing
         testImplementation("org.springframework.boot:spring-boot-starter-test")

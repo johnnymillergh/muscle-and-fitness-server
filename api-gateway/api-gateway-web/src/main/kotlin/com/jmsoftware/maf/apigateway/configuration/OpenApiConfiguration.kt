@@ -8,9 +8,9 @@ import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.info.Contact
 import io.swagger.v3.oas.models.info.Info
 import io.swagger.v3.oas.models.info.License
-import org.springdoc.core.AbstractSwaggerUiConfigProperties.SwaggerUrl
-import org.springdoc.core.GroupedOpenApi
-import org.springdoc.core.SwaggerUiConfigProperties
+import org.springdoc.core.models.GroupedOpenApi
+import org.springdoc.core.properties.AbstractSwaggerUiConfigProperties
+import org.springdoc.core.properties.SwaggerUiConfigProperties
 import org.springframework.cloud.client.discovery.DiscoveryClient
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -24,10 +24,10 @@ import org.springframework.context.annotation.Configuration
  */
 @Configuration
 class OpenApiConfiguration(
-    private val swaggerConfigurationProperties: SwaggerConfigurationProperties,
-    private val swaggerUiConfigProperties: SwaggerUiConfigProperties,
-    private val mafProjectProperties: MafProjectProperties,
-    private val discoveryClient: DiscoveryClient
+    val swaggerConfigurationProperties: SwaggerConfigurationProperties,
+    val swaggerUiConfigProperties: SwaggerUiConfigProperties,
+    val mafProjectProperties: MafProjectProperties,
+    val discoveryClient: DiscoveryClient
 ) {
     companion object {
         const val GROUPED_OPEN_API_LIST_NAME = "groupedOpenApiList"
@@ -72,7 +72,7 @@ class OpenApiConfiguration(
             if (!CollUtil.contains(swaggerConfigurationProperties.ignoredServiceIds, serviceName)) {
                 log.warn("Found discovery client. Service name: $serviceName")
                 groups.add(GroupedOpenApi.builder().pathsToMatch("/$serviceName/**").group(serviceName).build())
-                val swaggerUrl = SwaggerUrl()
+                val swaggerUrl = AbstractSwaggerUiConfigProperties.SwaggerUrl()
                 swaggerUrl.url = serviceName + SWAGGER_API_URI
                 swaggerUrl.name = serviceName
                 swaggerUiConfigProperties.urls.add(swaggerUrl)

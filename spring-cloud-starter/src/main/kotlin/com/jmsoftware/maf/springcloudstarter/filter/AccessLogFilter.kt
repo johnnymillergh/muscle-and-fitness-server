@@ -3,12 +3,12 @@ package com.jmsoftware.maf.springcloudstarter.filter
 import com.jmsoftware.maf.common.util.logger
 import com.jmsoftware.maf.springcloudstarter.property.MafConfigurationProperties
 import com.jmsoftware.maf.springcloudstarter.util.getRequestIpAndPort
+import jakarta.servlet.FilterChain
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 import org.springframework.stereotype.Component
 import org.springframework.util.AntPathMatcher
 import org.springframework.web.filter.OncePerRequestFilter
-import javax.servlet.FilterChain
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
 
 /**
  * # RequestFilter

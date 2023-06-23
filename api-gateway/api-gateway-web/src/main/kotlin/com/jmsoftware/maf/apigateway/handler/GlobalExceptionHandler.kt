@@ -59,8 +59,8 @@ class GlobalExceptionHandler(
     private fun setResponseBody(response: ServerHttpResponse, ex: Throwable): ResponseBodyBean<*> {
         when (ex) {
             is ResponseStatusException -> {
-                response.statusCode = ex.status
-                return ResponseBodyBean.ofStatus<Any>(ex.status)
+                response.statusCode = ex.statusCode
+                return ResponseBodyBean.ofStatus<Any>(ex.statusCode as HttpStatus)
             }
             is SecurityException -> {
                 val status = HttpStatus.valueOf(ex.code)
@@ -73,7 +73,7 @@ class GlobalExceptionHandler(
                     objectMapper.readValue(ex.responseBodyAsString, ResponseBodyBean::class.java)
                 } catch (e: JsonProcessingException) {
                     log.warn("Exception occurred when writing response. Exception message: ${e.message}")
-                    ResponseBodyBean.ofStatus<Any>(ex.statusCode, ex.getResponseBodyAsString(StandardCharsets.UTF_8))
+                    ResponseBodyBean.ofStatus<Any>(ex.statusCode as HttpStatus, ex.getResponseBodyAsString(StandardCharsets.UTF_8))
                 }
             }
             else -> {

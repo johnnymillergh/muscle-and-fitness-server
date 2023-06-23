@@ -1,6 +1,6 @@
 package com.jmsoftware.maf.common.domain.authcenter.permission
 
-import javax.validation.constraints.NotEmpty
+import jakarta.validation.constraints.NotEmpty
 
 /**
  * # GetPermissionListByRoleIdListPayload

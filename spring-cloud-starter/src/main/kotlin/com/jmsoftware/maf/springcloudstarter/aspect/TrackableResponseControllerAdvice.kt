@@ -1,7 +1,7 @@
 package com.jmsoftware.maf.springcloudstarter.aspect
 
+import brave.Tracer
 import com.jmsoftware.maf.common.bean.TrackableBean
-import org.springframework.cloud.sleuth.Tracer
 import org.springframework.core.MethodParameter
 import org.springframework.http.MediaType
 import org.springframework.http.converter.HttpMessageConverter
@@ -41,7 +41,7 @@ class TrackableResponseControllerAdvice(
             return body
         }
         val traceContext = tracer.currentSpan()?.context()
-        body?.track = "${traceContext?.traceId()}#${traceContext?.spanId()}"
+        body?.track = "${traceContext?.traceIdString()},${traceContext?.spanIdString()}"
         return body
     }
 }

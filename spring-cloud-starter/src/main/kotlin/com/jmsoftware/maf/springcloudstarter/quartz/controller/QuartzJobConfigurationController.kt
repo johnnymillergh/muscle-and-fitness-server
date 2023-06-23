@@ -9,10 +9,10 @@ import com.jmsoftware.maf.springcloudstarter.quartz.entity.GetQuartzJobConfigura
 import com.jmsoftware.maf.springcloudstarter.quartz.entity.GetQuartzJobConfigurationPageListPayload
 import com.jmsoftware.maf.springcloudstarter.quartz.entity.QuartzJobConfigurationExcel
 import com.jmsoftware.maf.springcloudstarter.quartz.service.QuartzJobConfigurationService
+import jakarta.validation.Valid
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import java.time.Instant
-import javax.validation.Valid
 
 /**
  * # QuartzJobConfigurationController

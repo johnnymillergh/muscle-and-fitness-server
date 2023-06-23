@@ -25,11 +25,10 @@ dependencies {
     api("org.springframework.boot:spring-boot-starter-validation")
     api("org.springframework.boot:spring-boot-autoconfigure")
     api("org.springframework.boot:spring-boot-autoconfigure-processor")
-    api("org.springframework.boot:spring-boot-configuration-processor")
     api("org.springframework.cloud:spring-cloud-starter-consul-all")
-    api("org.springframework.cloud:spring-cloud-starter-sleuth")
-    api("org.springframework.cloud:spring-cloud-sleuth-zipkin")
-    api("org.apache.commons:commons-pool2:2.11.1")
+    api("io.micrometer:micrometer-tracing")
+    api("io.micrometer:micrometer-tracing-bridge-brave")
+    api("org.apache.commons:commons-pool2")
     developmentOnly("org.springframework.boot:spring-boot-devtools") {
         isTransitive = true
     }
@@ -38,7 +37,7 @@ dependencies {
 
     // Spring enhancement dependencies
     api(libs.spring.boot.admin.client.get())
-    api(libs.springdoc.openapi.webflux.ui.get())
-    api(libs.springdoc.openapi.kotlin.get())
+    api(libs.springdoc.openapi.starter.webflux.ui.get())
+    api(libs.springdoc.openapi.starter.common.get())
     api(libs.logstash.logback.encoder.get())
 }

@@ -7,16 +7,16 @@ import com.jmsoftware.maf.common.domain.authcenter.permission.Permission
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdSingleResponse
 import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtResponse
 import com.jmsoftware.maf.common.domain.authcenter.user.GetUserByLoginTokenResponse
+import jakarta.validation.Valid
+import jakarta.validation.constraints.Min
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotNull
 import org.springframework.http.HttpHeaders
 import org.springframework.stereotype.Service
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.util.UriBuilder
 import reactor.core.publisher.Mono
-import javax.validation.Valid
-import javax.validation.constraints.Min
-import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotNull
 
 /**
  * # AuthCenterWebClient

@@ -25,4 +25,3 @@ fun main(args: Array<String>) {
             .stop(it)
     }
 }
-

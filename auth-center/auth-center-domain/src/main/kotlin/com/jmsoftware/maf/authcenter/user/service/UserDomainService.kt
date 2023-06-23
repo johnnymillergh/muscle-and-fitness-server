@@ -7,11 +7,11 @@ import com.jmsoftware.maf.authcenter.user.persistence.User
 import com.jmsoftware.maf.common.bean.PageResponseBodyBean
 import com.jmsoftware.maf.common.domain.authcenter.user.*
 import com.jmsoftware.maf.common.exception.SecurityException
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.validation.Valid
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotNull
 import org.springframework.validation.annotation.Validated
-import javax.servlet.http.HttpServletRequest
-import javax.validation.Valid
-import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotNull
 
 /**
  * # UserDomainService

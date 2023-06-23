@@ -3,10 +3,10 @@ package com.jmsoftware.maf.authcenter.security
 import com.jmsoftware.maf.authcenter.security.service.JwtService
 import com.jmsoftware.maf.common.bean.ResponseBodyBean
 import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtResponse
+import jakarta.servlet.http.HttpServletRequest
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import javax.servlet.http.HttpServletRequest
 
 /**
  * # JwtRemoteApiController

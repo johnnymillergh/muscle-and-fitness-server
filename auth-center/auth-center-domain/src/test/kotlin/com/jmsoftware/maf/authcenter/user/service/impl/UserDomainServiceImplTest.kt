@@ -32,7 +32,7 @@ import org.mockito.junit.jupiter.MockitoExtension
 import org.springframework.context.MessageSource
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import javax.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletRequest
 
 /**
  * # UserDomainServiceImplTest

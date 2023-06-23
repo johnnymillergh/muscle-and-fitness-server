@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService
 import com.jmsoftware.maf.authcenter.user.persistence.User
 import com.jmsoftware.maf.authcenter.user.persistence.UserRole
 import org.springframework.validation.annotation.Validated
-import javax.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotBlank
 
 /**
  * # UserRoleDomainService

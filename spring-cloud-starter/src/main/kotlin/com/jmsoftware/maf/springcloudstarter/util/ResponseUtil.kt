@@ -4,11 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.jmsoftware.maf.common.bean.ResponseBodyBean
 import com.jmsoftware.maf.common.exception.BaseException
 import com.jmsoftware.maf.common.util.logger
+import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpStatus
 import org.springframework.lang.Nullable
 import org.springframework.web.cors.CorsConfiguration
 import java.io.IOException
-import javax.servlet.http.HttpServletResponse
 
 /**
  * # ResponseUtil

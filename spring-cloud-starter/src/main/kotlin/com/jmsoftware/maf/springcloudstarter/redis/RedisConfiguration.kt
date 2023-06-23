@@ -50,7 +50,7 @@ class RedisConfiguration(
     @Bean
     @ConditionalOnProperty(prefix = "redis.master", name = ["host"])
     fun redisConnectionFactory(): LettuceConnectionFactory {
-        requireTrue(CollUtil.isEmpty(redisMasterSlaveReplicationProperties.slaves), null).orElseThrow {
+        requireTrue(CollUtil.isNotEmpty(redisMasterSlaveReplicationProperties.slaves), null).orElseThrow {
             IllegalStateException("Redis Master/Replica configuration is not right! To fix this issue, specify slaves configuration")
         }
         val redisStaticMasterReplicaConfiguration = RedisStaticMasterReplicaConfiguration(

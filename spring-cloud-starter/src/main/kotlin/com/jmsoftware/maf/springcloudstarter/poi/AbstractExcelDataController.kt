@@ -10,6 +10,7 @@ import com.google.common.collect.Maps
 import com.jmsoftware.maf.common.bean.ExcelImportResult
 import com.jmsoftware.maf.common.bean.ResponseBodyBean
 import com.jmsoftware.maf.common.util.logger
+import jakarta.annotation.Resource
 import org.apache.poi.ss.usermodel.Workbook
 import org.springframework.http.ContentDisposition
 import org.springframework.http.HttpHeaders
@@ -23,7 +24,6 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 import java.io.*
 import java.lang.reflect.ParameterizedType
 import java.util.*
-import javax.annotation.Resource
 
 /**
  * # AbstractExcelDataController

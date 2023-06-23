@@ -5,8 +5,8 @@ import com.jmsoftware.maf.osscenter.payload.MergeResourceChunkPayload
 import com.jmsoftware.maf.osscenter.payload.UploadResourceChunkPayload
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.multipart.MultipartFile
-import javax.validation.Valid
-import javax.validation.constraints.NotNull
+import jakarta.validation.Valid
+import jakarta.validation.constraints.NotNull
 
 /**
  * # WriteResourceService

@@ -4,9 +4,9 @@ import cn.hutool.json.JSON
 import com.jmsoftware.maf.common.bean.ResponseBodyBean
 import com.jmsoftware.maf.common.domain.ValidationTestPayload
 import com.jmsoftware.maf.reactivespringcloudstarter.service.CommonService
+import jakarta.validation.Valid
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
-import javax.validation.Valid
 
 /**
  * # CommonController

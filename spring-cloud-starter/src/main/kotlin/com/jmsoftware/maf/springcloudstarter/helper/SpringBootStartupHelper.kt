@@ -31,7 +31,7 @@ class SpringBootStartupHelper(
             🖥 {}@{} started!
             ⚙️ Environment: {}
             ⏳ Deployment duration: {} seconds ({} ms)
-            ⏰ App started at {} (timezone - {})
+            ⏰ App started at {}
               App running at
               - Local:   http://localhost:{}{}/
               - Network: http://{}:{}{}/
@@ -45,7 +45,7 @@ class SpringBootStartupHelper(
             mafProjectProperties.projectArtifactId, mafProjectProperties.version,
             mafProjectProperties.environment,
             stopWatch.totalTimeSeconds, stopWatch.totalTimeMillis,
-            Instant.now().atZone(ZoneId.systemDefault()), ZoneId.systemDefault(),
+            Instant.now().atZone(ZoneId.systemDefault()),
             ipHelper.serverPort, mafProjectProperties.contextPath,
             ipHelper.getPublicIp(), ipHelper.serverPort, mafProjectProperties.contextPath
         )

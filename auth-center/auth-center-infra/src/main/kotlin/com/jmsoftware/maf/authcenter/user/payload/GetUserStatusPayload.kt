@@ -1,7 +1,7 @@
 package com.jmsoftware.maf.authcenter.user.payload
 
 import com.jmsoftware.maf.common.domain.authcenter.user.UserStatus
-import javax.validation.constraints.NotNull
+import jakarta.validation.constraints.NotNull
 
 /**
  * # GetUserStatusPayload

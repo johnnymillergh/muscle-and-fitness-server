@@ -1,11 +1,11 @@
 package com.jmsoftware.maf.springcloudstarter.helper
 
 import com.jmsoftware.maf.common.util.logger
+import jakarta.validation.constraints.NotBlank
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
-import javax.validation.constraints.NotBlank
 
 /**
  * # HttpApiScanHelper

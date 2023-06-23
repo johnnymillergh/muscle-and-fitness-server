@@ -3,12 +3,12 @@ package com.jmsoftware.maf.authcenter.security.service
 import com.jmsoftware.maf.common.domain.authcenter.security.ParseJwtResponse
 import com.jmsoftware.maf.common.exception.SecurityException
 import io.jsonwebtoken.Claims
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotNull
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.validation.annotation.Validated
-import javax.servlet.http.HttpServletRequest
-import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotNull
 
 /**
  * # JwtService

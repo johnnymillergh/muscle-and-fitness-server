@@ -5,6 +5,7 @@ import com.jmsoftware.maf.common.exception.SecurityException
 import com.jmsoftware.maf.common.util.logger
 import com.jmsoftware.maf.springcloudstarter.property.JwtConfigurationProperties
 import io.jsonwebtoken.Claims
+import jakarta.servlet.http.HttpServletRequest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
@@ -20,7 +21,6 @@ import org.mockito.junit.jupiter.MockitoExtension
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.data.redis.core.ValueOperations
 import java.util.concurrent.atomic.AtomicReference
-import javax.servlet.http.HttpServletRequest
 
 
 /**

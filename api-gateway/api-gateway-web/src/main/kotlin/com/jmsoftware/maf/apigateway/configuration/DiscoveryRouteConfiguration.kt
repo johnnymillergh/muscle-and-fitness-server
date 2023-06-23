@@ -2,6 +2,7 @@ package com.jmsoftware.maf.apigateway.configuration
 
 import com.jmsoftware.maf.apigateway.property.RedisRateLimiterConfigurationProperties
 import com.jmsoftware.maf.common.util.logger
+import jakarta.annotation.PostConstruct
 import org.springframework.cloud.gateway.discovery.DiscoveryLocatorProperties
 import org.springframework.cloud.gateway.filter.FilterDefinition
 import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver
@@ -10,7 +11,6 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
 import org.springframework.web.server.ServerWebExchange
 import reactor.core.publisher.Mono
-import javax.annotation.PostConstruct
 
 /**
  * # DiscoveryRouteConfiguration

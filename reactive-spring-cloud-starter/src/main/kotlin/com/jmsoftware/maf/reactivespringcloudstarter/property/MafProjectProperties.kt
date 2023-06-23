@@ -1,12 +1,12 @@
 package com.jmsoftware.maf.reactivespringcloudstarter.property
 
 import com.jmsoftware.maf.common.util.logger
+import jakarta.annotation.PostConstruct
+import jakarta.validation.constraints.NotBlank
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.info.BuildProperties
 import org.springframework.context.annotation.Configuration
 import org.springframework.validation.annotation.Validated
-import javax.annotation.PostConstruct
-import javax.validation.constraints.NotBlank
 
 /**
  * # MafProjectProperties

@@ -1,6 +1,7 @@
 package com.jmsoftware.maf.apigateway.configuration
 
 import com.jmsoftware.maf.common.util.logger
+import jakarta.annotation.PostConstruct
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.reactive.function.server.RequestPredicates
@@ -8,7 +9,6 @@ import org.springframework.web.reactive.function.server.RouterFunction
 import org.springframework.web.reactive.function.server.RouterFunctions
 import org.springframework.web.reactive.function.server.ServerResponse
 import java.net.URI
-import javax.annotation.PostConstruct
 
 /**
  * # RedirectConfiguration

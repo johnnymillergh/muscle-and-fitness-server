@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException
 import com.jmsoftware.maf.common.bean.ResponseBodyBean
 import com.jmsoftware.maf.common.util.logger
 import com.jmsoftware.maf.springcloudstarter.util.getRequestIpAndPort
+import jakarta.servlet.http.HttpServletRequest
 import org.apache.ibatis.exceptions.PersistenceException
 import org.mybatis.spring.MyBatisSystemException
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
@@ -14,7 +15,6 @@ import org.springframework.jdbc.BadSqlGrammarException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
-import javax.servlet.http.HttpServletRequest
 
 /**
  * # DatabaseExceptionControllerAdvice

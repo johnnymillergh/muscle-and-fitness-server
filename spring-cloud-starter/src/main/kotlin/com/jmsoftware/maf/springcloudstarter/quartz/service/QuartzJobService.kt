@@ -1,7 +1,7 @@
 package com.jmsoftware.maf.springcloudstarter.quartz.service
 
+import jakarta.validation.constraints.NotBlank
 import org.springframework.validation.annotation.Validated
-import javax.validation.constraints.NotBlank
 
 /**
  * # QuartzJobService

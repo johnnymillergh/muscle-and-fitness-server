@@ -1,9 +1,9 @@
 package com.jmsoftware.maf.springcloudstarter.poi
 
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotNull
 import java.io.IOException
 import java.io.InputStream
-import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotNull
 
 /**
  * # OssUploader

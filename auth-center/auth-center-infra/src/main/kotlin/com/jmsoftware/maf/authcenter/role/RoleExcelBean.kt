@@ -2,7 +2,7 @@ package com.jmsoftware.maf.authcenter.role
 
 import com.jmsoftware.maf.authcenter.role.persistence.Role
 import com.jmsoftware.maf.springcloudstarter.poi.ExcelColumn
-import javax.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotBlank
 
 /**
  * # RoleExcelBean

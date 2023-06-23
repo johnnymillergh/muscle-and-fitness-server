@@ -2,13 +2,13 @@ package com.jmsoftware.maf.springcloudstarter.property
 
 import com.jmsoftware.maf.common.util.logger
 import com.jmsoftware.maf.springcloudstarter.property.MafConfigurationProperties.IgnoredUrl.Constant.Companion.URL_REGEXP
+import jakarta.annotation.PostConstruct
+import jakarta.validation.Valid
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.Pattern
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Configuration
 import org.springframework.validation.annotation.Validated
-import javax.annotation.PostConstruct
-import javax.validation.Valid
-import javax.validation.constraints.NotBlank
-import javax.validation.constraints.Pattern
 
 /**
  * # MafConfigurationProperties

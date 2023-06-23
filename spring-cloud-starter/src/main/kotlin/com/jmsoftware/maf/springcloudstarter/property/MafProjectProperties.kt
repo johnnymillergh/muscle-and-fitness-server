@@ -1,12 +1,11 @@
 package com.jmsoftware.maf.springcloudstarter.property
 
 import com.jmsoftware.maf.common.util.logger
+import jakarta.annotation.PostConstruct
+import jakarta.validation.constraints.NotBlank
 import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.boot.info.BuildProperties
 import org.springframework.context.annotation.Configuration
 import org.springframework.validation.annotation.Validated
-import javax.annotation.PostConstruct
-import javax.validation.constraints.NotBlank
 
 /**
  * # MafProjectProperties
@@ -19,9 +18,7 @@ import javax.validation.constraints.NotBlank
 @Configuration
 @Suppress("unused")
 @ConfigurationProperties(prefix = MafProjectProperties.PREFIX)
-class MafProjectProperties(
-    val buildProperties: BuildProperties
-) {
+class MafProjectProperties {
     companion object {
         const val PREFIX = "maf.project-properties"
         private val log = logger()

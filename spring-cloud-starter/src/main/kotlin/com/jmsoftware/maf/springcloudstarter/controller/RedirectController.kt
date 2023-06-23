@@ -1,10 +1,10 @@
 package com.jmsoftware.maf.springcloudstarter.controller
 
 import com.jmsoftware.maf.common.util.logger
+import jakarta.annotation.PostConstruct
+import jakarta.servlet.http.HttpServletResponse
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
-import javax.annotation.PostConstruct
-import javax.servlet.http.HttpServletResponse
 
 /**
  * # RedirectController

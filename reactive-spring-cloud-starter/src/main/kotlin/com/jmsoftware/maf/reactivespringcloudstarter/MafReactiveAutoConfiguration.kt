@@ -15,6 +15,7 @@ import com.jmsoftware.maf.reactivespringcloudstarter.redis.RedisConfiguration
 import com.jmsoftware.maf.reactivespringcloudstarter.service.CommonService
 import com.jmsoftware.maf.reactivespringcloudstarter.service.impl.CommonServiceImpl
 import com.jmsoftware.maf.reactivespringcloudstarter.util.ResponseUtil
+import jakarta.annotation.PostConstruct
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.AutoConfigureOrder
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -22,7 +23,6 @@ import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
 import org.springframework.core.env.Environment
-import javax.annotation.PostConstruct
 
 /**
  * # MafReactiveAutoConfiguration

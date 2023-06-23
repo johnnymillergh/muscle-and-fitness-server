@@ -8,10 +8,10 @@ import io.minio.http.Method
 import io.minio.messages.Bucket
 import io.minio.messages.DeleteObject
 import io.minio.messages.Item
+import jakarta.validation.constraints.*
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.multipart.MultipartFile
 import java.io.InputStream
-import javax.validation.constraints.*
 
 /**
  * # MinioHelper
