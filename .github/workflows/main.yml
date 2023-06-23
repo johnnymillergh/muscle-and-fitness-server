@@ -19,7 +19,7 @@ env:
   TEMURIN_VERSION: '17.0.7+7'
 
 jobs:
-  build-docker-image:
+  build-api-gateway:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -28,6 +28,50 @@ jobs:
         with:
           temurinVersion: ${{ env.TEMURIN_VERSION }}
           submodulePath: api-gateway
+          dockerHubUsername: ${{ secrets.DOCKER_HUB_USERNAME }}
+          dockerHubPassword: ${{ secrets.DOCKER_HUB_PASSWORD }}
+  build-auth-center:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: "Gradle Build :: auth-center"
+        uses: ./.github/actions/gradle-submodule-build
+        with:
+          temurinVersion: ${{ env.TEMURIN_VERSION }}
+          submodulePath: auth-center
+          dockerHubUsername: ${{ secrets.DOCKER_HUB_USERNAME }}
+          dockerHubPassword: ${{ secrets.DOCKER_HUB_PASSWORD }}
+  build-maf-mis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: "Gradle Build :: maf-mis"
+        uses: ./.github/actions/gradle-submodule-build
+        with:
+          temurinVersion: ${{ env.TEMURIN_VERSION }}
+          submodulePath: maf-mis
+          dockerHubUsername: ${{ secrets.DOCKER_HUB_USERNAME }}
+          dockerHubPassword: ${{ secrets.DOCKER_HUB_PASSWORD }}
+  build-oss-center:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: "Gradle Build :: oss-center"
+        uses: ./.github/actions/gradle-submodule-build
+        with:
+          temurinVersion: ${{ env.TEMURIN_VERSION }}
+          submodulePath: oss-center
+          dockerHubUsername: ${{ secrets.DOCKER_HUB_USERNAME }}
+          dockerHubPassword: ${{ secrets.DOCKER_HUB_PASSWORD }}
+  build-spring-boot-admin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: "Gradle Build :: spring-boot-admin"
+        uses: ./.github/actions/gradle-submodule-build
+        with:
+          temurinVersion: ${{ env.TEMURIN_VERSION }}
+          submodulePath: spring-boot-admin
           dockerHubUsername: ${{ secrets.DOCKER_HUB_USERNAME }}
           dockerHubPassword: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
