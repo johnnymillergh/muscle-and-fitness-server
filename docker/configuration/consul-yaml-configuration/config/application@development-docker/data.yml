@@ -6,8 +6,8 @@
 maf:
   configuration:
     jwt:
-      signing-key: "com.jmsoftware.maf:muscle-and-fitness-server"
-      jwt-redis-key-prefix: "com.jmsoftware.maf:muscle-and-fitness-server"
+      signing-key: "com.jmsoftware.maf:muscle-and-fitness-server:jwt-signing-key"
+      jwt-redis-key-prefix: "com.jmsoftware.maf:muscle-and-fitness-server:"
 
 spring:
   boot:
