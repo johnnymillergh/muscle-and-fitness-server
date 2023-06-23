@@ -19,16 +19,6 @@ dependencies {
     // MAF dependencies, and the dependencies in `bootstrap` have no need to be transitive
     implementation(project(":auth-center:auth-center-web"))
     implementation(project(":auth-center:auth-center-message"))
-    /*
-    ! WARNING: ShardingSphere uses snakeyaml 1.3.3, yet Spring Boot only depends on 1.3.0.
-    ! WARNING: So we need to constraint the version of snakeyaml to 1.3.3
-    FIXME: Once Spring Boot upgrades snakeyaml to higher version (>= 1.3.3), we can remove this constraint
-    */
-    implementation(libs.snakeyaml.get().let { "${it.module}" }) {
-        this.version {
-            this.strictly(libs.versions.snakeyaml.get())
-        }
-    }
 }
 
 tasks.withType<BootJar> {
