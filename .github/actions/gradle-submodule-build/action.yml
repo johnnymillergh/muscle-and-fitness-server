@@ -19,7 +19,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - id: Setup Java
+    - name: Setup Java
       uses: actions/setup-java@v3
       with:
         java-version: ${{ inputs.temurinVersion }}
