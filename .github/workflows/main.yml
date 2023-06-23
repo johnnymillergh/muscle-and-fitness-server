@@ -22,7 +22,7 @@ jobs:
   build-docker-image:
     runs-on: ubuntu-latest
     steps:
-      - id: Gradle Build :: api-gateway
+      - name: Gradle Build :: api-gateway
         uses: ./.github/actions/gradle-submodule-build
         with:
           temurinVersion: ${{ env.TEMURIN_VERSION }}
