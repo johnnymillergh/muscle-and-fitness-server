@@ -1,0 +1,56 @@
+name: Gradle Submodule Build
+
+description: Gradle build for submodule
+
+inputs:
+  temurinVersion:
+    description: "Temurin JDK version"
+    required: true
+  submodulePath:
+    description: "The path to the submodule"
+    required: true
+  dockerHubUsername:
+    description: "DockerHub username"
+    required: true
+  dockerHubPassword:
+    description: "DockerHub password"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v3
+    - id: Setup Java
+      uses: actions/setup-java@v3
+      with:
+        java-version: ${{ inputs.temurinVersion }}
+        distribution: 'temurin'
+        cache: 'gradle'
+    - name: Grant Execution Permission for `gradlew`
+      shell: bash
+      run: chmod +x gradlew
+    - name: Print Machine Hardware Info
+      shell: bash
+      run: |
+        echo "CPU Info"
+        cat /proc/cpuinfo
+        echo "Memory Info"
+        cat /proc/meminfo
+    - name: Build with Gradle
+      # https://tomgregory.com/gradle-best-practices/#2_Stop_cleaning_your_project
+      shell: bash
+      run: |
+        echo "Changing directory to: ${{ inputs.submodulePath }}"
+        cd ${{ inputs.submodulePath }}
+        ../gradlew build jib \
+        --no-daemon \
+        -Djunit.jupiter.execution.parallel.enabled=true \
+        -Dmaven.javadoc.skip=true \
+        -Djib.to.auth.username=${{ inputs.dockerHubUsername }} \
+        -Djib.to.auth.password=${{ inputs.dockerHubPassword }} \
+        -Djib.console=plain
+    - name: Display Built Artifacts
+      shell: bash
+      run: |
+        dir
+        ls -R -l -h | grep "\.jar$"

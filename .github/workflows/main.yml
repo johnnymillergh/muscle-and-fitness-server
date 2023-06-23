@@ -16,44 +16,19 @@ on:
       - 'main'
 
 env:
-  TERMURIN_VERSION: '17.0.7+7'
+  TEMURIN_VERSION: '17.0.7+7'
 
 jobs:
   build-docker-image:
     runs-on: ubuntu-latest
-    env:
-      DOCKER_HUB_USERNAME: ${{secrets.DOCKER_HUB_USERNAME}}
-      DOCKER_HUB_PASSWORD: ${{secrets.DOCKER_HUB_PASSWORD}}
     steps:
-      - uses: actions/checkout@v2
-      - name: Setup Java
-        uses: actions/setup-java@v3
+      - id: Gradle Build :: api-gateway
+        uses: ./.github/actions/gradle-submodule-build
         with:
-          java-version: ${{env.TERMURIN_VERSION}}
-          distribution: 'temurin'
-          cache: 'gradle'
-      - name: Print Machine Hardware Info
-        run: |
-          echo "CPU Info"
-          cat /proc/cpuinfo
-          echo "Memory Info"
-          cat /proc/meminfo
-      - name: Grant Execution Permission for `gradlew`
-        run: chmod +x gradlew
-      - name: Build with Gradle
-        # https://tomgregory.com/gradle-best-practices/#2_Stop_cleaning_your_project
-        run: |
-          ./gradlew build jib \
-          --no-daemon \
-          -Djunit.jupiter.execution.parallel.enabled=true \
-          -Dmaven.javadoc.skip=true \
-          -Djib.to.auth.username=$DOCKER_HUB_USERNAME \
-          -Djib.to.auth.password=$DOCKER_HUB_PASSWORD \
-          -Djib.console=plain
-      - name: Display Built Artifacts
-        run: |
-          dir
-          ls -R -l -h | grep "\.jar$"
+          temurinVersion: ${{ env.TEMURIN_VERSION }}
+          submodulePath: api-gateway
+          dockerHubUsername: ${{ secrets.DOCKER_HUB_USERNAME }}
+          dockerHubPassword: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
   check-version:
     runs-on: ubuntu-latest
@@ -62,7 +37,7 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
-          java-version: ${{env.TERMURIN_VERSION}}
+          java-version: ${{env.TEMURIN_VERSION}}
           distribution: 'temurin'
           cache: 'gradle'
       - name: Grant Execution Permission for `gradlew`
