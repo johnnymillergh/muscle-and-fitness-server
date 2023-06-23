@@ -12,6 +12,9 @@ configurations.implementation {
 configurations.runtimeOnly {
     isTransitive = true
 }
+configurations {
+    testImplementation.get().extendsFrom(compileOnly.get())
+}
 
 dependencies {
     // MAF dependencies
