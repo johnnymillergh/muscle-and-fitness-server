@@ -22,6 +22,7 @@ jobs:
   build-docker-image:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
       - name: "Gradle Build :: api-gateway"
         uses: ./.github/actions/gradle-submodule-build
         with:
