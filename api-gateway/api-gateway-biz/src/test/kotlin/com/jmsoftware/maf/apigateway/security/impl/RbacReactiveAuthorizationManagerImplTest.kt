@@ -6,7 +6,6 @@ import com.jmsoftware.maf.common.domain.authcenter.permission.PermissionType
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdSingleResponse
 import com.jmsoftware.maf.common.domain.authcenter.security.UserPrincipal
 import com.jmsoftware.maf.common.domain.authcenter.user.GetUserByLoginTokenResponse
-import com.jmsoftware.maf.common.util.logger
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -31,10 +30,6 @@ import reactor.core.publisher.Mono
  **/
 @ExtendWith(MockitoExtension::class)
 class RbacReactiveAuthorizationManagerImplTest {
-    companion object {
-        private val log = logger()
-    }
-
     @InjectMocks
     private lateinit var manager: RbacReactiveAuthorizationManagerImpl
 

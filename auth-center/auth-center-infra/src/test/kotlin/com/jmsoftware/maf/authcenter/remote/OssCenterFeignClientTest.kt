@@ -45,6 +45,7 @@ class OssCenterFeignClientTest {
     private lateinit var ossCenterFeignClient: OssCenterFeignClient
 
     @Mock
+    @Suppress("unused")
     private lateinit var ossCenterFeignClientFallback: OssCenterFeignClient.OssCenterFeignClientFallback
 
     @BeforeEach
