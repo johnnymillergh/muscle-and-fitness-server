@@ -16,14 +16,13 @@ import com.jmsoftware.maf.common.exception.SecurityException
 import com.jmsoftware.maf.common.util.logger
 import com.jmsoftware.maf.springcloudstarter.property.MafConfigurationProperties
 import com.jmsoftware.maf.springcloudstarter.property.MafProjectProperties
+import jakarta.servlet.http.HttpServletRequest
 import org.apache.ibatis.builder.MapperBuilderAssistant
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.junit.jupiter.api.parallel.Execution
-import org.junit.jupiter.api.parallel.ExecutionMode
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.*
@@ -32,7 +31,6 @@ import org.mockito.junit.jupiter.MockitoExtension
 import org.springframework.context.MessageSource
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import jakarta.servlet.http.HttpServletRequest
 
 /**
  * # UserDomainServiceImplTest
@@ -61,8 +59,7 @@ import jakarta.servlet.http.HttpServletRequest
  */
 @Suppress("unused")
 @ExtendWith(MockitoExtension::class)
-@Execution(ExecutionMode.CONCURRENT)
-internal class UserDomainServiceImplTest {
+class UserDomainServiceImplTest {
     companion object {
         private const val USERNAME = "ijohnnymiller"
         private val log = logger()

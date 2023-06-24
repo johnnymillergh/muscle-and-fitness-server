@@ -10,8 +10,6 @@ import com.jmsoftware.maf.common.util.logger
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.junit.jupiter.api.parallel.Execution
-import org.junit.jupiter.api.parallel.ExecutionMode
 import org.mockito.ArgumentMatchers.anyLong
 import org.mockito.InjectMocks
 import org.mockito.Mock
@@ -32,8 +30,7 @@ import reactor.core.publisher.Mono
  * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 5/28/22 2:17 PM
  **/
 @ExtendWith(MockitoExtension::class)
-@Execution(ExecutionMode.CONCURRENT)
-internal class RbacReactiveAuthorizationManagerImplTest {
+class RbacReactiveAuthorizationManagerImplTest {
     companion object {
         private val log = logger()
     }

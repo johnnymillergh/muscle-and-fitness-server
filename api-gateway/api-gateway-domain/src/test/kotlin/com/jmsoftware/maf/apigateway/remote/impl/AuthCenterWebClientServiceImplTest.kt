@@ -10,8 +10,6 @@ import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.junit.jupiter.api.parallel.Execution
-import org.junit.jupiter.api.parallel.ExecutionMode
 import org.mockito.ArgumentMatchers.anyLong
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.InjectMocks
@@ -29,8 +27,7 @@ import reactor.core.publisher.Mono
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, 6/3/22 10:26 AM
  **/
 @ExtendWith(MockitoExtension::class)
-@Execution(ExecutionMode.CONCURRENT)
-internal class AuthCenterWebClientServiceImplTest {
+class AuthCenterWebClientServiceImplTest {
     @InjectMocks
     private lateinit var authCenter: AuthCenterWebClientServiceImpl
 

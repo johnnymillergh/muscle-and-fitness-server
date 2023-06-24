@@ -8,8 +8,6 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
-import org.junit.jupiter.api.parallel.Execution
-import org.junit.jupiter.api.parallel.ExecutionMode
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.anyString
@@ -26,8 +24,7 @@ import reactor.core.publisher.Mono
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, 5/27/22 9:45 PM
  **/
 @ExtendWith(MockitoExtension::class)
-@Execution(ExecutionMode.CONCURRENT)
-internal class JwtReactiveAuthenticationManagerImplTest {
+class JwtReactiveAuthenticationManagerImplTest {
     companion object {
         private val log = logger()
     }

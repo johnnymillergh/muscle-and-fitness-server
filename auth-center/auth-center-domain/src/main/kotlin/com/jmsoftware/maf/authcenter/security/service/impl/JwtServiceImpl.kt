@@ -39,6 +39,7 @@ class JwtServiceImpl(
 ) : JwtService {
     companion object {
         private val log = logger()
+
     }
 
     private lateinit var secretKey: SecretKey

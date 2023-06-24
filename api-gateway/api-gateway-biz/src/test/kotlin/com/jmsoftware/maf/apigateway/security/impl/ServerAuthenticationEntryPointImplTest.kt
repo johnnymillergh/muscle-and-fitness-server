@@ -3,8 +3,6 @@ package com.jmsoftware.maf.apigateway.security.impl
 import com.jmsoftware.maf.reactivespringcloudstarter.util.ResponseUtil
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.junit.jupiter.api.parallel.Execution
-import org.junit.jupiter.api.parallel.ExecutionMode
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
@@ -25,8 +23,7 @@ import reactor.core.publisher.Mono
  * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 5/28/22 2:17 PM
  **/
 @ExtendWith(MockitoExtension::class)
-@Execution(ExecutionMode.CONCURRENT)
-internal class ServerAuthenticationEntryPointImplTest {
+class ServerAuthenticationEntryPointImplTest {
     @InjectMocks
     private lateinit var entryPoint: ServerAuthenticationEntryPointImpl
 

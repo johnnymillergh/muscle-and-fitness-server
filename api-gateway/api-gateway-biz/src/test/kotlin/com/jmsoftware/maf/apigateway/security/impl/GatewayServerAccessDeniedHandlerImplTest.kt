@@ -4,8 +4,6 @@ import com.jmsoftware.maf.reactivespringcloudstarter.util.ResponseUtil
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.junit.jupiter.api.parallel.Execution
-import org.junit.jupiter.api.parallel.ExecutionMode
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
@@ -24,8 +22,7 @@ import reactor.core.publisher.Mono
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, 5/27/22 9:45 PM
  **/
 @ExtendWith(MockitoExtension::class)
-@Execution(ExecutionMode.CONCURRENT)
-internal class GatewayServerAccessDeniedHandlerImplTest {
+class GatewayServerAccessDeniedHandlerImplTest {
     @InjectMocks
     private lateinit var handler: GatewayServerAccessDeniedHandlerImpl
 

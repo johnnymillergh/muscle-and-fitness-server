@@ -12,7 +12,7 @@ import org.springframework.util.AntPathMatcher
  *
  * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/16/22 10:15 PM
  */
-internal class AuthorizationTests {
+class AuthorizationTests {
     companion object {
         private val log = logger()
     }

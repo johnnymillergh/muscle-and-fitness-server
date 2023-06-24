@@ -20,9 +20,9 @@
     https://dzone.com/articles/tracing-in-microservices-with-spring-cloud-sleuth#:~:text=Spring%20Cloud%20Sleuth%20adds%20two,forming%20a%20tree%2Dlike%20structure.
     -->
     <property name="CONSOLE_LOG_PATTERN"
-              value="%d{yyyy-MM-dd HH:mm:ss.SSS} %clr(%5p) %clr([${APPLICATION},%X{traceId},%X{spanId}]){yellow} %clr(${PID:- }){magenta} - [%15.15t] %-48.48logger{48} : %msg%n%wEx"/>
+              value="%date{ISO8601} %clr(%5p) %clr([${APPLICATION},%X{traceId},%X{spanId}]){yellow} %clr(${PID:- }){magenta} - [%15.15thread] %-48.48logger{48} : %msg%n%wEx"/>
     <property name="FILE_LOG_PATTERN"
-              value="%d{yyyy-MM-dd HH:mm:ss.SSS} %5p [${APPLICATION},%X{traceId},%X{spanId}] ${PID:- } - [%t] %-48.48logger{48} : %msg%n%wEx"/>
+              value="%date{ISO8601} %5p [${APPLICATION},%X{traceId},%X{spanId}] ${PID:- } - [%thread] %logger : %msg%n%wEx"/>
     <!-- Log home is nothing related with Spring profiles or environments -->
     <property name="LOG_HOME" value="logs"/>
 

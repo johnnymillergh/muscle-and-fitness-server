@@ -3,10 +3,8 @@ package com.jmsoftware.maf.springcloudstarter
 import cn.hutool.core.bean.BeanUtil
 import cn.hutool.core.date.StopWatch
 import com.jmsoftware.maf.common.util.logger
-import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.parallel.Execution
-import org.junit.jupiter.api.parallel.ExecutionMode
 import org.springframework.beans.BeanUtils
 import java.time.LocalDateTime
 
@@ -17,39 +15,40 @@ import java.time.LocalDateTime
  *
  * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/16/22 10:22 AM
  */
-@Execution(ExecutionMode.CONCURRENT)
-internal class BeanCopyTests {
+class BeanCopyTests {
     companion object {
-        private const val COUNT = 1_000_000
+        private const val COUNT = 100
         var log = logger()
     }
 
     @Test
-    fun hutoolBeanCopyTests() {
+    fun testHutoolBeanCopy() {
+        val stopWatch = StopWatch("Hutool Bean Copy Test")
         val beanOne = buildBeanOne()
-        val stopwatch = StopWatch()
-        stopwatch.start()
-        for (i in 0 until COUNT) {
+        for (i in 1..COUNT) {
             val beanTwo = BeanTwo()
+            stopWatch.start("Loop #$i")
             BeanUtil.copyProperties(beanOne, beanTwo)
+            stopWatch.stop()
+            assertNotNull(beanTwo)
         }
-        stopwatch.stop()
-        log.info("Hutool BeanUtil took ${stopwatch.totalTimeSeconds}s (${stopwatch.totalTimeMillis}ms)")
-        Assertions.assertNotNull(beanOne)
+        assertNotNull(beanOne)
+        log.info(stopWatch.prettyPrint())
     }
 
     @Test
-    fun springBeanCopyTests() {
+    fun testSpringBeanCopy() {
         val beanOne = buildBeanOne()
-        val stopwatch = StopWatch()
-        stopwatch.start()
-        for (i in 0 until COUNT) {
+        val stopWatch = StopWatch("Spring Bean Copy Test")
+        for (i in 1..COUNT) {
+            stopWatch.start("Loop #$i")
             val beanTwo = BeanTwo()
             BeanUtils.copyProperties(beanOne, beanTwo)
+            stopWatch.stop()
+            assertNotNull(beanTwo)
         }
-        stopwatch.stop()
-        log.info("Spring BeanUtil took ${stopwatch.totalTimeSeconds}s (${stopwatch.totalTimeMillis}ms)")
-        Assertions.assertNotNull(beanOne)
+        assertNotNull(beanOne)
+        log.info(stopWatch.prettyPrint())
     }
 
     private fun buildBeanOne(): BeanOne {
@@ -66,20 +65,20 @@ internal class BeanCopyTests {
 
     private class BeanOne {
         var id: Long = 0L
-        lateinit var  name: String
-        lateinit var  description: String
-        var  createdBy: Long = 0L
-        lateinit var  createdTime: LocalDateTime
-        var  modifiedBy: Long = 0L
-        lateinit var  modifiedTime: LocalDateTime
+        lateinit var name: String
+        lateinit var description: String
+        var createdBy: Long = 0L
+        lateinit var createdTime: LocalDateTime
+        var modifiedBy: Long = 0L
+        lateinit var modifiedTime: LocalDateTime
     }
 
     @Suppress("unused")
     private class BeanTwo {
         var id: Long = 0L
-        lateinit var  name: String
-        lateinit var  description: String
-        lateinit var  createdTime: LocalDateTime
-        lateinit var  modifiedTime: LocalDateTime
+        lateinit var name: String
+        lateinit var description: String
+        lateinit var createdTime: LocalDateTime
+        lateinit var modifiedTime: LocalDateTime
     }
 }

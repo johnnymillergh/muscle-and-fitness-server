@@ -26,7 +26,7 @@ import kotlin.text.Charsets.UTF_8
         "maf.configuration.jwt.jwt-redis-key-prefix=com.jmsoftware.maf:muscle-and-fitness-server:",
     ]
 )
-internal class JwtConfigurationPropertiesTest {
+class JwtConfigurationPropertiesTest {
     companion object {
         private var log = logger()
     }
