@@ -2,7 +2,7 @@
 
 [versions]
 # https://github.com/gradle/gradle/releases/tag/v7.6
-gradle = "7.6"
+gradle = "8.1.1"
 javaVendor = "Eclipse Adoptium"
 # https://github.com/adoptium/temurin17-binaries/releases/tag/jdk-17.0.5%2B8
 temurinVersion = "17.0.7"
@@ -16,8 +16,8 @@ knife4j = "3.0.3"
 logstash = "7.2"
 minio = "8.4.6"
 tika = "2.6.0"
-guava = "31.1-jre"
-hutool = "5.8.10"
+guava = "32.0.1-jre"
+hutool = "5.8.20"
 mapstruct = "1.5.5.Final"
 mybatis-plus = "3.5.3.1"
 # ShardingSphere uses snakeyaml 1.3.3, yet Spring Boot only depends on 1.3.0
