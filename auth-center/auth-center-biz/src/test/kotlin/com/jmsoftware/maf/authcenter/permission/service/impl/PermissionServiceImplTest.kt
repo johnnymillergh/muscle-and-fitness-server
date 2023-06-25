@@ -1,27 +1,27 @@
 package com.jmsoftware.maf.authcenter.permission.service.impl
 
-import cn.hutool.core.util.StrUtil
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.google.common.collect.Lists
 import com.jmsoftware.maf.authcenter.permission.configuration.PermissionConfiguration
-import com.jmsoftware.maf.authcenter.permission.response.GetServicesInfoResponse.ServiceInfo
+import com.jmsoftware.maf.authcenter.permission.persistence.Permission
+import com.jmsoftware.maf.authcenter.permission.response.ServiceInfo
 import com.jmsoftware.maf.authcenter.permission.service.PermissionDomainService
 import com.jmsoftware.maf.authcenter.role.service.RoleDomainService
 import com.jmsoftware.maf.common.bean.ResponseBodyBean
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload
+import com.jmsoftware.maf.common.domain.authcenter.permission.PermissionType.BUTTON
 import com.jmsoftware.maf.common.domain.springbootstarter.HttpApiResourcesResponse
-import com.jmsoftware.maf.common.util.logger
-import org.junit.jupiter.api.AfterEach
+import com.jmsoftware.maf.common.util.Slf4j
+import com.jmsoftware.maf.common.util.Slf4j.Companion.log
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.ArgumentMatchers.*
+import org.mockito.ArgumentMatchers.anyList
+import org.mockito.ArgumentMatchers.anyString
 import org.mockito.InjectMocks
 import org.mockito.Mock
-import org.mockito.Mockito.verify
-import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
+import org.mockito.kotlin.*
 import org.springframework.cloud.client.discovery.DiscoveryClient
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.client.RestTemplate
@@ -51,13 +51,10 @@ import org.springframework.web.client.RestTemplate
  * @see <a href='https://www.arhohuttunen.com/junit-5-mockito/'>Using Mockito with JUnit 5</a>
  * @see <a href='https://www.youtube.com/watch?v=p7_cTAF39A8/'>YouTube - Using Mockito with JUnit 5</a>
  */
+@Slf4j
 @Suppress("unused")
 @ExtendWith(MockitoExtension::class)
 class PermissionServiceImplTest {
-    companion object {
-        private val log = logger()
-    }
-
     @InjectMocks
     lateinit var permissionService: PermissionServiceImpl
 
@@ -79,56 +76,83 @@ class PermissionServiceImplTest {
     @Mock
     lateinit var objectMapper: ObjectMapper
 
-    @BeforeEach
-    fun setUp() {
-        log.info("${this.javaClass.simpleName} setUp")
-    }
-
-    @AfterEach
-    fun tearDown() {
-        log.info("${this.javaClass.simpleName} tearDown")
-    }
-
     @Test
-    fun getPermissionListByRoleIdList() {
-        `when`(roleDomainService.checkAdmin(anyList())).thenReturn(false)
-        `when`(permissionDomainService.getPermissionListByRoleIdList(anyList(), anyList()))
-            .thenReturn(Lists.newArrayList())
+    fun getPermissionListByRoleIdList_whenItsNonAdmin_thenReturnConfiguredPermission() {
+        whenever(roleDomainService.checkAdmin(anyList())).thenReturn(false)
+        val permission = Permission().apply {
+            this.url = "/fake/permissions"
+            this.method = "GET"
+            this.type = BUTTON.type
+            this.permissionExpression = "FakePermissionExpression"
+        }
+        whenever(permissionDomainService.getPermissionListByRoleIdList(anyList(), anyList()))
+            .thenReturn(listOf(permission))
         val payload = GetPermissionListByRoleIdListPayload()
-        payload.roleIdList = Lists.newArrayList()
-        payload.permissionTypeList = Lists.newArrayList()
-        val response = permissionService.getPermissionListByRoleIdList(payload)
-        log.info("Permission list response: $response")
+        payload.roleIdList = listOf(1L)
+        payload.permissionTypeList = listOf(BUTTON)
+        val response = assertDoesNotThrow { permissionService.getPermissionListByRoleIdList(payload) }
+        assertNotNull(response)
+        assertEquals(1, response.permissionList.size)
+        val firstPermission = response.permissionList.first()
+        assertNotNull(firstPermission)
+        assertEquals(permission.url, firstPermission.url)
+        assertEquals(permission.method, firstPermission.method)
+        assertEquals(permission.type, firstPermission.type)
+        assertEquals(permission.permissionExpression, firstPermission.permissionExpression)
         verify(roleDomainService).checkAdmin(anyList())
         verify(permissionDomainService).getPermissionListByRoleIdList(anyList(), anyList())
-        assertEquals(0, response.permissionList.size)
     }
 
     @Test
-    fun getServicesInfo() {
-        `when`(discoveryClient.services)
+    fun getPermissionListByRoleIdList_whenItsAdmin_thenReturnAllPermissions() {
+        whenever(roleDomainService.checkAdmin(anyList())).thenReturn(true)
+        val payload = GetPermissionListByRoleIdListPayload()
+        payload.roleIdList = listOf(1L)
+        payload.permissionTypeList = listOf(BUTTON)
+        val response = assertDoesNotThrow { permissionService.getPermissionListByRoleIdList(payload) }
+        assertNotNull(response)
+        assertEquals(1, response.permissionList.size)
+        val firstPermission = response.permissionList.first()
+        assertEquals("/**", firstPermission.url)
+        assertEquals(BUTTON.type, firstPermission.type)
+        assertEquals("admin-permission", firstPermission.permissionExpression)
+        assertEquals("*", firstPermission.method)
+        verify(roleDomainService).checkAdmin(anyList())
+        verify(permissionDomainService, never()).getPermissionListByRoleIdList(anyList(), anyList())
+    }
+
+    @Test
+    fun getServicesInfo_when5ServicesInTotal_andIgnore2Service_thenReturn3ServiceInfo() {
+        whenever(discoveryClient.services)
             .thenReturn(listOf("auth-center", "oss-center", "maf-mis", "api-gateway", "spring-boot-admin"))
-        `when`(permissionConfiguration.ignoredServiceIds)
-            .thenReturn(setOf("api-gateway", "spring-boot-admin"))
+        whenever(permissionConfiguration.ignoredServiceIds).thenReturn(setOf("api-gateway", "spring-boot-admin"))
         val httpApiResourcesResponse = HttpApiResourcesResponse()
         val element = HttpApiResourcesResponse.HttpApiResource()
         element.method = RequestMethod.GET
         element.urlPattern = "/api/v1/**"
         httpApiResourcesResponse.list.add(element)
-        `when`(objectMapper.convertValue(any(), any<Class<Any>>()))
-            .thenReturn(httpApiResourcesResponse)
-        `when`(restTemplate.getForObject(anyString(), any<Class<Any>>()))
+        whenever(objectMapper.convertValue(any(), any<Class<Any>>())).thenReturn(httpApiResourcesResponse)
+        whenever(restTemplate.getForObject(anyString(), any<Class<Any>>()))
             .thenReturn(ResponseBodyBean.ofSuccess(httpApiResourcesResponse))
-        val servicesInfo = permissionService.getServicesInfo()
-        log.info("Services info: $servicesInfo")
+        val response = assertDoesNotThrow { permissionService.getServicesInfo() }
+        log.info("Services info: $response")
+        assertEquals(3, response.list.size)
+        val serviceIds = response.list.map(ServiceInfo::serviceId).toSet()
+        assertTrue(serviceIds.containsAll(setOf("auth-center", "maf-mis", "oss-center")))
         verify(discoveryClient).services
-        assertNotEquals(0, servicesInfo.list.size)
-        assertTrue(
-            servicesInfo.list
-                .stream()
-                .anyMatch { service: ServiceInfo ->
-                    StrUtil.equalsAnyIgnoreCase(service.serviceId, "auth-center")
-                }
-        )
+        verify(restTemplate, times(3)).getForObject(anyString(), any<Class<Any>>())
+    }
+
+    @Test
+    fun getServicesInfo_when5ServicesInTotal_andIgnore2Service_thenReturn3ServiceInfo1() {
+        whenever(discoveryClient.services).thenReturn(listOf("api-gateway", "spring-boot-admin"))
+        whenever(permissionConfiguration.ignoredServiceIds).thenReturn(setOf("api-gateway", "spring-boot-admin"))
+        val response = assertDoesNotThrow { permissionService.getServicesInfo() }
+        log.info("Services info: $response")
+        assertEquals(0, response.list.size)
+        val serviceIds = response.list.map(ServiceInfo::serviceId).toSet()
+        assertFalse(serviceIds.containsAll(setOf("api-gateway", "spring-boot-admin")))
+        verify(discoveryClient).services
+        verify(restTemplate, never()).getForObject(anyString(), any<Class<Any>>())
     }
 }

@@ -22,4 +22,12 @@ interface PermissionMapStructMapper {
      * @return the get permission list by role id list response . permission
      */
     fun of(permission: Permission): com.jmsoftware.maf.common.domain.authcenter.permission.Permission
+
+    /**
+     * List of [Permission] -> list of [com.jmsoftware.maf.common.domain.authcenter.permission.Permission]
+     *
+     * @param permissionList the permission list
+     * @return the list of [com.jmsoftware.maf.common.domain.authcenter.permission.Permission]
+     */
+    fun ofList(permissionList: List<Permission>): List<com.jmsoftware.maf.common.domain.authcenter.permission.Permission>
 }

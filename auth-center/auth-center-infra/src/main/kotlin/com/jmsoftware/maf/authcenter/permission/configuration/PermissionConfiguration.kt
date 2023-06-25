@@ -15,7 +15,7 @@ import org.springframework.validation.annotation.Validated
 //@Configuration
 @ConfigurationProperties(prefix = PermissionConfiguration.PREFIX)
 class PermissionConfiguration(
-    @NotEmpty var ignoredServiceIds: Set<String>
+    @NotEmpty val ignoredServiceIds: Set<String>
 ) {
     companion object {
         const val PREFIX = "maf.configuration.permission"
