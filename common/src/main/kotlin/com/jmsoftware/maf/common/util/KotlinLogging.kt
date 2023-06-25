@@ -39,9 +39,9 @@ class LoggerDelegate : ReadOnlyProperty<Any?, Logger> {
     }
 }
 
-@Suppress("UnusedReceiverParameter")
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
+@Suppress("UnusedReceiverParameter")
 annotation class Slf4j {
     companion object {
         inline val <reified T> T.log: Logger get() = LoggerFactory.getLogger(T::class.java)

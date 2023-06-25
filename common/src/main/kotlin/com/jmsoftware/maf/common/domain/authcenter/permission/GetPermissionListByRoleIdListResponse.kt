@@ -7,12 +7,12 @@ package com.jmsoftware.maf.common.domain.authcenter.permission
  *
  * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/16/22 6:43 PM
  */
-class GetPermissionListByRoleIdListResponse {
+data class GetPermissionListByRoleIdListResponse(
     /**
      * The Permission list.
      */
-    val permissionList: MutableList<Permission> = mutableListOf()
-}
+    val permissionList: List<Permission>
+)
 
 class Permission {
     /**

@@ -15,7 +15,6 @@ import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdRespo
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdSingleResponse
 import com.jmsoftware.maf.common.exception.InternalServerException
 import com.jmsoftware.maf.common.util.logger
-import com.jmsoftware.maf.springcloudstarter.function.lazyDebug
 import com.jmsoftware.maf.springcloudstarter.function.requireTrue
 import com.jmsoftware.maf.springcloudstarter.property.MafConfigurationProperties
 import com.jmsoftware.maf.springcloudstarter.property.MafProjectProperties
@@ -97,7 +96,7 @@ class RoleDomainServiceImpl(
             .stream()
             .map { roleExcelBean: RoleExcelBean -> RoleExcelBean.transformTo(roleExcelBean) }
             .toList()
-        lazyDebug(logger) { "Saving roleList: $roleList" }
+        logger.atDebug().log { "Saving roleList: $roleList" }
         requireTrue(this.saveBatch(roleList)) { saved: Boolean ->
             logger.info("Saved role list: $saved")
         }.orElseThrow { InternalServerException("Failed to save roles! Transaction rollback") }

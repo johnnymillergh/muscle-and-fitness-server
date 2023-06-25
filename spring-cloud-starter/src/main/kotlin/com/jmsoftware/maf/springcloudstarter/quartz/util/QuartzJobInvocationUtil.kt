@@ -5,7 +5,6 @@ import cn.hutool.core.util.ReflectUtil
 import cn.hutool.core.util.StrUtil
 import cn.hutool.extra.spring.SpringUtil
 import com.jmsoftware.maf.common.util.logger
-import com.jmsoftware.maf.springcloudstarter.function.lazyDebug
 import com.jmsoftware.maf.springcloudstarter.function.requireTrue
 import com.jmsoftware.maf.springcloudstarter.quartz.annotation.QuartzSchedulable
 import com.jmsoftware.maf.springcloudstarter.quartz.entity.persistence.QuartzJobConfiguration
@@ -33,13 +32,13 @@ fun invokeMethod(quartzJobConfiguration: QuartzJobConfiguration) {
     val methodName = getMethodName(invokeTarget)
     val methodParams = getMethodParams(invokeTarget!!)
     if (!isValidClassName(beanName)) {
-        lazyDebug(log) { "Getting the bean from Spring IoC container by bean name: `$beanName`" }
+        log.atDebug().log { "Getting the bean from Spring IoC container by bean name: `$beanName`" }
         SpringUtil.getBean(beanName)
     } else {
-        lazyDebug(log) { "Initialize a new object by class name: `$beanName`" }
+        log.atDebug().log { "Initialize a new object by class name: `$beanName`" }
         Class.forName(beanName).getDeclaredConstructor().newInstance()
     }.let {
-        lazyDebug(log) { "Found the bean (`$beanName`) from Spring IoC container, $it" }
+        log.atDebug().log { "Found the bean (`$beanName`) from Spring IoC container, $it" }
         invokeMethod(it, methodName, methodParams)
     }
 }
@@ -59,16 +58,16 @@ private fun invokeMethod(
     methodParams: List<Array<Any>>
 ) {
     val method = ReflectUtil.getMethodByName(bean.javaClass, methodName)
-    lazyDebug(log) { "Got method by reflection: $method, params: $methodParams" }
+    log.atDebug().log { "Got method by reflection: $method, params: $methodParams" }
     val quartzSchedulable = method.getAnnotation(QuartzSchedulable::class.java)
     requireTrue(quartzSchedulable != null) { annotated: Boolean ->
-        lazyDebug(log) { "The method is annotated by `@QuartzSchedulable`: $annotated" }
+        log.atDebug().log { "The method is annotated by `@QuartzSchedulable`: $annotated" }
     }.orElseThrow { IllegalAccessError("The method is NOT quartz-schedulable. Unable to invoke the method: $method") }
     if (CollUtil.isNotEmpty(methodParams)) {
-        lazyDebug(log) { "Invoking method: $method, with params: $methodParams" }
+        log.atDebug().log { "Invoking method: $method, with params: $methodParams" }
         ReflectUtil.invoke<Any>(bean, methodName, *methodParams.toTypedArray())
     } else {
-        lazyDebug(log) { "Invoking method: $method, WITHOUT params" }
+        log.atDebug().log { "Invoking method: $method, WITHOUT params" }
         ReflectUtil.invoke<Any>(bean, methodName)
     }
 }

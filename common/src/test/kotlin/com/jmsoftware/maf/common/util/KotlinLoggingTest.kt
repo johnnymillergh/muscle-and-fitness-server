@@ -1,8 +1,9 @@
 package com.jmsoftware.maf.common.util
 
 import com.jmsoftware.maf.common.util.Slf4j.Companion.log
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.junit.jupiter.MockitoExtension
 import org.springframework.util.StopWatch
@@ -48,5 +49,24 @@ class KotlinLoggingTest {
             log.info(stopWatchForSlf4j.prettyPrint())
         }
         assertEquals(logRef.hashCode(), log.hashCode())
+    }
+
+    @Test
+    fun fluentLogging() {
+        assertDoesNotThrow {
+            log.atDebug().log { "Hello World! From fluent-logging for Level.DEBUG level." }
+            log.atInfo().log { "Hello World! From fluent-logging for Level.INFO level." }
+        }
+    }
+
+    @Test
+    fun testSlf4jAnnotation_whenAnnotatingInternalObject() {
+        val result = assertDoesNotThrow { function1(1) }
+        assertEquals(1, result)
+    }
+
+    @Test
+    fun testSlf4jAnnotation_whenNotAnnotatingInternalObject() {
+        assertDoesNotThrow { function2() }
     }
 }
