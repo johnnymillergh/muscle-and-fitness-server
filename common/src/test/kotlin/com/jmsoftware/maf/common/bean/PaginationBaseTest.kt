@@ -37,6 +37,7 @@ class PaginationBaseTest {
             orderRule = "INVALID ORDER RULE"
         }
         assertNull(pagination.orderBy)
+        assertTrue(pagination.orderByStatement().isBlank())
         val constraintViolations = validator.validate(pagination)
         assertTrue(constraintViolations.isNotEmpty())
         val invalidFields = setOf(
