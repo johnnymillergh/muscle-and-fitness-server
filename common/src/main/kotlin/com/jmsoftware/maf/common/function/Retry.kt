@@ -1,6 +1,6 @@
 @file:Suppress("unused")
 
-package com.jmsoftware.maf.springcloudstarter.function
+package com.jmsoftware.maf.common.function
 
 import java.util.function.BiFunction
 import java.util.function.Function
@@ -21,7 +21,6 @@ private object Retry
  *
  * @param runnable  the runnable
  * @param retryTime the retry time
- * @see com.jmsoftware.maf.springcloudstarter.FunctionalInterfaceTests.tesRetryFunction
  */
 fun retryFunction(runnable: ThrowExceptionRunnable, retryTime: Int) {
     var retryTime1 = retryTime
@@ -73,8 +72,7 @@ fun <T, R> retryFunction(function: ThrowExceptionFunction<T, R>, t: T, retryTime
  * @param retryTime  the retry time
  * @return the r
  * @throws IllegalStateException the illegal state exception
- * @see com.jmsoftware.maf.springcloudstarter.FunctionalInterfaceTests.tesRetryFunction
-</R></T> */
+ */
 @Throws(IllegalStateException::class)
 fun <T, R> retryFunction(
     function: Function<T, R>, t: T, predicator: Predicate<R>, retryTime: Int

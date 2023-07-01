@@ -1,6 +1,6 @@
 @file:Suppress("unused")
 
-package com.jmsoftware.maf.springcloudstarter.function
+package com.jmsoftware.maf.common.function
 
 /**
  * # ExceptionReturnDefault
@@ -21,8 +21,7 @@ private object ExceptionReturnDefault
  * @param t        the t
  * @param r        the r
  * @return the r
- * @see com.jmsoftware.maf.springcloudstarter.FunctionalInterfaceTests.testComputeOrGetDefault
-</R></T> */
+ */
 fun <T, R> computeOrGetDefault(function: ThrowExceptionFunction<T, R>, t: T, r: R): R {
     return try {
         function.apply(t)

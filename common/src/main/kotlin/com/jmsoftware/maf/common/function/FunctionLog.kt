@@ -1,8 +1,8 @@
-package com.jmsoftware.maf.springcloudstarter.function
+package com.jmsoftware.maf.common.function
 
 import com.jmsoftware.maf.common.constant.ISO_8601_DATETIME_FORMAT
+import com.jmsoftware.maf.common.function.FunctionLog.log
 import com.jmsoftware.maf.common.util.logger
-import com.jmsoftware.maf.springcloudstarter.function.FunctionLog.log
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDateTime
@@ -30,7 +30,6 @@ private object FunctionLog {
  * @param t        the t
  * @param tag      the tag
  * @return the r
- * @see com.jmsoftware.maf.springcloudstarter.FunctionalInterfaceTests.testLogFunction
  */
 fun <T, R> logFunction(function: Function<T, R>, t: T, tag: String?): R {
     log.info(

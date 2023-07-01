@@ -14,8 +14,8 @@ import com.jmsoftware.maf.authcenter.role.service.RoleDomainService
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdResponse
 import com.jmsoftware.maf.common.domain.authcenter.role.GetRoleListByUserIdSingleResponse
 import com.jmsoftware.maf.common.exception.InternalServerException
+import com.jmsoftware.maf.common.function.requireTrue
 import com.jmsoftware.maf.common.util.logger
-import com.jmsoftware.maf.springcloudstarter.function.requireTrue
 import com.jmsoftware.maf.springcloudstarter.property.MafConfigurationProperties
 import com.jmsoftware.maf.springcloudstarter.property.MafProjectProperties
 import jakarta.validation.Validator

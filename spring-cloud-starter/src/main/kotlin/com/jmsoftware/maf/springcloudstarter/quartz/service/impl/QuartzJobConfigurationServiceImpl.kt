@@ -5,8 +5,8 @@ import cn.hutool.core.util.ReflectUtil
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl
 import com.jmsoftware.maf.common.bean.PageResponseBodyBean
+import com.jmsoftware.maf.common.function.requireTrue
 import com.jmsoftware.maf.common.util.logger
-import com.jmsoftware.maf.springcloudstarter.function.requireTrue
 import com.jmsoftware.maf.springcloudstarter.property.MafProjectProperties
 import com.jmsoftware.maf.springcloudstarter.quartz.constant.QUARTZ_JOB_CONFIGURATION
 import com.jmsoftware.maf.springcloudstarter.quartz.converter.QuartzJobConfigurationMapStructMapper

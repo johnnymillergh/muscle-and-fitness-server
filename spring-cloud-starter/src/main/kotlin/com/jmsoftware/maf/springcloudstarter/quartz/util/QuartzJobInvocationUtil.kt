@@ -4,8 +4,8 @@ import cn.hutool.core.collection.CollUtil
 import cn.hutool.core.util.ReflectUtil
 import cn.hutool.core.util.StrUtil
 import cn.hutool.extra.spring.SpringUtil
+import com.jmsoftware.maf.common.function.requireTrue
 import com.jmsoftware.maf.common.util.logger
-import com.jmsoftware.maf.springcloudstarter.function.requireTrue
 import com.jmsoftware.maf.springcloudstarter.quartz.annotation.QuartzSchedulable
 import com.jmsoftware.maf.springcloudstarter.quartz.entity.persistence.QuartzJobConfiguration
 import com.jmsoftware.maf.springcloudstarter.quartz.util.QuartzJobInvocationUtil.log

@@ -1,10 +1,12 @@
-package com.jmsoftware.maf.springcloudstarter
+package com.jmsoftware.maf.common.function
 
 import cn.hutool.core.util.StrUtil
 import com.google.common.cache.CacheBuilder
 import com.google.common.cache.RemovalNotification
-import com.jmsoftware.maf.common.util.logger
-import com.jmsoftware.maf.springcloudstarter.function.*
+import com.jmsoftware.maf.common.bean.PageResponseBodyBean
+import com.jmsoftware.maf.common.bean.PaginationBase
+import com.jmsoftware.maf.common.util.Slf4j
+import com.jmsoftware.maf.common.util.Slf4j.Companion.log
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.time.Duration
@@ -17,11 +19,8 @@ import java.util.function.Predicate
  *
  * @author Johnny Miller (锺俊), email: johnnysviva@outlook.com, date: 9/28/2021 12:46 PM
  */
+@Slf4j
 class FunctionTests {
-    companion object {
-        private val log = logger()
-    }
-
     /**
      * Test require true.
      */
@@ -127,5 +126,24 @@ class FunctionTests {
         assertThrows(
             IllegalStateException::class.java
         ) { retryFunction(compute2, 1, Predicate { integer: Int -> integer == 0 }, 3) }
+    }
+
+    @Test
+    fun testPaginationResponseComposer_whenPageSizeIs10_andTotalIs100() {
+        val paginationBase = PaginationBase().apply {
+            currentPage = 1
+            pageSize = 10
+        }
+        val total = 100L
+        val function = Function { base: PaginationBase ->
+            log.info("Getting page results for pagination: $base")
+            PageResponseBodyBean.ofSuccess(
+                (1..10).toList(),
+                total
+            )
+        }
+        val result = composePages(paginationBase = paginationBase, callback = function)
+        assertEquals(10, paginationBase.currentPage)
+        assertEquals(total.toInt(), result.size)
     }
 }

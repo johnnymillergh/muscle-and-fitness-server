@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.springcloudstarter.function
+package com.jmsoftware.maf.common.function
 
 import cn.hutool.core.util.BooleanUtil
 import java.util.function.Consumer
@@ -10,7 +10,6 @@ import java.util.function.Supplier
  * @param aBoolean the aBoolean
  * @param after    the after
  * @return the throw exception function
- * @see com.jmsoftware.maf.springcloudstarter.FunctionalInterfaceTests.testRequireTrue
  */
 fun requireTrue(aBoolean: Boolean, after: Consumer<Boolean>?): OrElseThrowExceptionFunction {
     after?.accept(aBoolean)
@@ -26,7 +25,6 @@ fun requireTrue(aBoolean: Boolean, after: Consumer<Boolean>?): OrElseThrowExcept
  *
  * @param booleans the booleans
  * @return the or else throw exception function
- * @see com.jmsoftware.maf.springcloudstarter.FunctionalInterfaceTests.testRequireTrue
  */
 fun requireAllTrue(vararg booleans: Boolean): OrElseThrowExceptionFunction {
     return OrElseThrowExceptionFunction { exceptionSupplier: Supplier<Throwable> ->

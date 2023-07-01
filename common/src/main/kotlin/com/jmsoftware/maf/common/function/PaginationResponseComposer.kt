@@ -1,11 +1,10 @@
-package com.jmsoftware.maf.springcloudstarter.function
+package com.jmsoftware.maf.common.function
 
-import cn.hutool.core.collection.CollUtil
 import cn.hutool.core.util.PageUtil
 import com.jmsoftware.maf.common.bean.PageResponseBodyBean
 import com.jmsoftware.maf.common.bean.PaginationBase
+import com.jmsoftware.maf.common.function.PaginationResponseComposer.log
 import com.jmsoftware.maf.common.util.logger
-import com.jmsoftware.maf.springcloudstarter.function.PaginationResponseComposer.log
 import java.util.function.Function
 
 /**
@@ -25,16 +24,16 @@ private object PaginationResponseComposer {
  * @param callback Function<T, PageResponseBodyBean<R>>
  * @return List<R>
  */
-@Suppress("unused")
 fun <T : PaginationBase, R> composePages(
     paginationBase: T,
     callback: Function<T, PageResponseBodyBean<R>>
 ): List<R> {
-    val result = CollUtil.newArrayList<R>()
+    val result = mutableListOf<R>()
     while (true) {
         val page = callback.apply(paginationBase)
-        if (CollUtil.isEmpty(page.list)) {
-            CollUtil.addAll(result, page.list)
+        if (page.list.isNotEmpty()) {
+            result.addAll(page.list)
+            log.atDebug().log("Added list to result. Size of result: {}, size of page: {}", result.size, page.list.size)
         }
         if (!paginationBase.hasNextPage(page)) {
             val totalPage = PageUtil.totalPage(Math.toIntExact(page.total), paginationBase.pageSize)
@@ -42,10 +41,9 @@ fun <T : PaginationBase, R> composePages(
             break
         }
     }
-    return result
+    return result.toList()
 }
 
-@Suppress("unused")
 private fun <T : PaginationBase?, R> hasNextPage(
     paginationBase: T,
     pageResponse: PageResponseBodyBean<R>

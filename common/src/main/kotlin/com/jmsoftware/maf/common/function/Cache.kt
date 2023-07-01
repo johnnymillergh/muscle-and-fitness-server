@@ -1,6 +1,6 @@
 @file:Suppress("unused")
 
-package com.jmsoftware.maf.springcloudstarter.function
+package com.jmsoftware.maf.common.function
 
 import com.google.common.cache.Cache
 import java.util.function.Function
@@ -24,7 +24,6 @@ private object Cache
  * @param t        the t
  * @param cache    the cache
  * @return the r
- * @see com.jmsoftware.maf.springcloudstarter.FunctionalInterfaceTests.testCacheFunction
  */
 fun <T, R> cacheFunction(function: Function<T, R>, t: T, cache: MutableMap<T, R>): R {
     val r = cache[t]
@@ -45,8 +44,7 @@ fun <T, R> cacheFunction(function: Function<T, R>, t: T, cache: MutableMap<T, R>
  * @param t        the t
  * @param cache    the cache
  * @return the r
- * @see com.jmsoftware.maf.springcloudstarter.FunctionalInterfaceTests.testCacheFunction
-</R></T> */
+ */
 fun <T : Any, R : Any> cacheFunction(function: Function<T, R>, t: T, cache: Cache<T, R>): R {
     val r = cache.getIfPresent(t)
     if (r != null) {

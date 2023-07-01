@@ -1,6 +1,6 @@
 @file:Suppress("unused")
 
-package com.jmsoftware.maf.springcloudstarter.function
+package com.jmsoftware.maf.common.function
 
 import java.util.function.Function
 
@@ -23,8 +23,7 @@ private object ExceptionHandling
  * @param t            the t
  * @param handlingFunc the handling func
  * @return the r
- * @see com.jmsoftware.maf.springcloudstarter.FunctionalInterfaceTests.testComputeAndHandleException
-</R></T> */
+ */
 fun <T, R> computeAndHandleException(
     function: ThrowExceptionFunction<T, R>,
     t: T,

@@ -1,4 +1,4 @@
-package com.jmsoftware.maf.springcloudstarter.function
+package com.jmsoftware.maf.common.function
 
 import java.util.function.Supplier
 

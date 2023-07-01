@@ -2,8 +2,8 @@ package com.jmsoftware.maf.springcloudstarter.redis
 
 import cn.hutool.core.collection.CollUtil
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.jmsoftware.maf.common.function.requireTrue
 import com.jmsoftware.maf.common.util.logger
-import com.jmsoftware.maf.springcloudstarter.function.requireTrue
 import io.lettuce.core.ReadFrom
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
@@ -86,15 +86,11 @@ class RedisConfiguration(
     @Bean
     fun redisTemplate(redisConnectionFactory: RedisConnectionFactory): RedisTemplate<Any, Any> {
         return RedisTemplate<Any, Any>().apply {
-            setConnectionFactory(redisConnectionFactory)
+            connectionFactory = redisConnectionFactory
             keySerializer = RedisSerializer.string()
-            valueSerializer = Jackson2JsonRedisSerializer(Any::class.java).apply {
-                setObjectMapper(objectMapper)
-            }
+            valueSerializer = Jackson2JsonRedisSerializer(objectMapper, Any::class.java)
             hashKeySerializer = RedisSerializer.string()
-            hashValueSerializer = Jackson2JsonRedisSerializer(Any::class.java).apply {
-                setObjectMapper(objectMapper)
-            }
+            hashValueSerializer = Jackson2JsonRedisSerializer(objectMapper, Any::class.java)
             afterPropertiesSet()
             log.warn("Initial bean: `${RedisTemplate::class.java.simpleName}`")
         }
