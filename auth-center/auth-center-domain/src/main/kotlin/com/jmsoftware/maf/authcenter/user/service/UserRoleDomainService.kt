@@ -3,8 +3,8 @@ package com.jmsoftware.maf.authcenter.user.service
 import com.baomidou.mybatisplus.extension.service.IService
 import com.jmsoftware.maf.authcenter.user.persistence.User
 import com.jmsoftware.maf.authcenter.user.persistence.UserRole
-import org.springframework.validation.annotation.Validated
 import jakarta.validation.constraints.NotBlank
+import org.springframework.validation.annotation.Validated
 
 /**
  * # UserRoleDomainService
@@ -19,5 +19,5 @@ interface UserRoleDomainService : IService<UserRole> {
      * @param user     the user
      * @param roleName the role name
      */
-    fun assignRoleByRoleName(user: User, roleName: @NotBlank String)
+    fun assignRoleByRoleName(user: User, @NotBlank roleName: String)
 }

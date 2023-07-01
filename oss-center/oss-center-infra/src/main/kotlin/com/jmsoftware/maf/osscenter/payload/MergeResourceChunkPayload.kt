@@ -11,6 +11,8 @@ import jakarta.validation.constraints.NotEmpty
  * @author Johnny Miller (锺俊), e-mail: johnnysviva@outlook.com, date: 4/17/22 8:34 AM
  */
 class MergeResourceChunkPayload {
-    lateinit var bucket: @NotBlank String
-    lateinit var objectList: @NotEmpty List<String>
+    @NotBlank
+    lateinit var bucket: String
+    @NotEmpty
+    lateinit var objectList: List<String>
 }

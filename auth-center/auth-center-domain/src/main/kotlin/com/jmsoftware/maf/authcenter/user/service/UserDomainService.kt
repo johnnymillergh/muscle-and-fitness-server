@@ -28,7 +28,7 @@ interface UserDomainService : IService<User> {
      * @param loginToken the login token
      * @return the user by login token
      */
-    fun getUserByLoginToken(loginToken: @NotBlank String): GetUserByLoginTokenResponse?
+    fun getUserByLoginToken(@NotBlank loginToken: String): GetUserByLoginTokenResponse?
 
     /**
      * Save user for registering save user for registering response.
@@ -36,7 +36,7 @@ interface UserDomainService : IService<User> {
      * @param payload the payload
      * @return the save user for registering response
      */
-    fun saveUserForSignup(payload: @Valid SignupPayload): SignupResponse
+    fun saveUserForSignup(@Valid payload: SignupPayload): SignupResponse
 
     /**
      * Login login response.
@@ -45,7 +45,7 @@ interface UserDomainService : IService<User> {
      * @return the login response
      * @throws SecurityException the security exception
      */
-    fun login(payload: @Valid LoginPayload): LoginResponse
+    fun login(@Valid payload: LoginPayload): LoginResponse
 
     /**
      * Logout boolean.
@@ -62,7 +62,7 @@ interface UserDomainService : IService<User> {
      * @param payload the payload
      * @return the user status
      */
-    fun getUserStatus(payload: @Valid @NotNull GetUserStatusPayload): String
+    fun getUserStatus(@Valid @NotNull payload: GetUserStatusPayload): String
 
     /**
      * Gets user page list.
@@ -70,5 +70,5 @@ interface UserDomainService : IService<User> {
      * @param payload the payload
      * @return the user page list
      */
-    fun getUserPageList(payload: @Valid @NotNull GetUserPageListPayload): PageResponseBodyBean<User>
+    fun getUserPageList(@Valid @NotNull payload: GetUserPageListPayload): PageResponseBodyBean<User>
 }

@@ -26,15 +26,18 @@ class RedisRateLimiterConfigurationProperties {
     /**
      * The Replenish rate.
      */
-    lateinit var replenishRate: @NotBlank String
+    @NotBlank
+    lateinit var replenishRate:  String
 
     /**
      * The Burst capacity.
      */
-    lateinit var burstCapacity: @NotBlank String
+    @NotBlank
+    lateinit var burstCapacity: String
 
     /**
      * The Requested tokens.
      */
-    lateinit var requestedTokens: @NotBlank String
+    @NotBlank
+    lateinit var requestedTokens: String
 }

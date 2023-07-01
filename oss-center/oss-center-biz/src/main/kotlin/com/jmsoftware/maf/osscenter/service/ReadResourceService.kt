@@ -23,8 +23,8 @@ interface ReadResourceService {
      * @return the response entity
      */
     fun asyncGetSingleResource(
-        bucket: @NotBlank String,
-        `object`: @NotBlank String
+        @NotBlank bucket: String,
+        @NotBlank `object`: String
     ): ResponseEntity<StreamingResponseBody>
 
     /**
@@ -37,8 +37,8 @@ interface ReadResourceService {
      * @return the response entity
      */
     fun asyncStreamSingleResource(
-        bucket: @NotBlank String,
-        `object`: @NotBlank String,
+        @NotBlank bucket: String,
+        @NotBlank `object`: String,
         range: String?
     ): ResponseEntity<StreamingResponseBody>
 
@@ -50,8 +50,8 @@ interface ReadResourceService {
      * @return the response entity
      */
     fun asyncDownloadSingleResource(
-        bucket: @NotBlank String,
-        `object`: @NotBlank String
+        @NotBlank bucket: String,
+        @NotBlank `object`: String
     ): ResponseEntity<StreamingResponseBody>
 
     /**
@@ -62,7 +62,7 @@ interface ReadResourceService {
      * @return the resource detail
      */
     fun stateObject(
-        bucket: @NotBlank String,
-        `object`: @NotBlank String
+        @NotBlank bucket: String,
+        @NotBlank `object`: String
     ): SerializableStatObjectResponse
 }

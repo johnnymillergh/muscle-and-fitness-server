@@ -41,7 +41,7 @@ class AuthCenterWebClient(
      * @param loginToken the login token, e.q. username, email or phone number
      * @return the user by login token
      */
-    fun getUserByLoginToken(loginToken: @NotBlank String): Mono<GetUserByLoginTokenResponse> {
+    fun getUserByLoginToken(@NotBlank loginToken: String): Mono<GetUserByLoginTokenResponse> {
         return webClient
             .get()
             .uri("http://$SERVICE_NAME/user-remote-api/users/{loginToken}", loginToken)
@@ -57,7 +57,7 @@ class AuthCenterWebClient(
      * @param userId the user id
      * @return the role list by user id
      */
-    fun getRoleListByUserId(userId: @NotNull @Min(1L) Long): Mono<List<GetRoleListByUserIdSingleResponse>> {
+    fun getRoleListByUserId(@NotNull @Min(1L) userId: Long): Mono<List<GetRoleListByUserIdSingleResponse>> {
         return webClient
             .get()
             .uri("http://$SERVICE_NAME/role-remote-api/roles/{userId}", userId)
@@ -79,7 +79,7 @@ class AuthCenterWebClient(
      * @return the response body bean
      */
     fun getPermissionListByRoleIdList(
-        payload: @Valid @NotNull GetPermissionListByRoleIdListPayload
+        @Valid @NotNull payload: GetPermissionListByRoleIdListPayload
     ): Mono<List<Permission>> {
         return webClient
             .get()
@@ -108,7 +108,7 @@ class AuthCenterWebClient(
      * @param authorization the authorization
      * @return the mono
      */
-    fun parse(authorization: @NotBlank String): Mono<ParseJwtResponse> {
+    fun parse(@NotBlank authorization: String): Mono<ParseJwtResponse> {
         return webClient
             .get()
             .uri("http://auth-center/jwt-remote-api/parse")

@@ -27,7 +27,7 @@ interface AuthCenterWebClientService {
      * @param loginToken
      * @return
      */
-    fun getUserByLoginToken(loginToken: @NotBlank String): Mono<GetUserByLoginTokenResponse>
+    fun getUserByLoginToken(@NotBlank loginToken: String): Mono<GetUserByLoginTokenResponse>
 
     /**
      * Get role list by user id
@@ -35,7 +35,7 @@ interface AuthCenterWebClientService {
      * @param userId
      * @return role list
      */
-    fun getRoleListByUserId(userId: @NotNull @Min(1L) Long): Mono<List<GetRoleListByUserIdSingleResponse>>
+    fun getRoleListByUserId(@NotNull @Min(1L) userId: Long): Mono<List<GetRoleListByUserIdSingleResponse>>
 
     /**
      * Get permission list by role id list
@@ -44,7 +44,7 @@ interface AuthCenterWebClientService {
      * @return permission list
      */
     fun getPermissionListByRoleIdList(
-        payload: @Valid @NotNull GetPermissionListByRoleIdListPayload
+        @Valid @NotNull payload: GetPermissionListByRoleIdListPayload
     ): Mono<List<Permission>>
 
     /**
@@ -53,5 +53,5 @@ interface AuthCenterWebClientService {
      * @param authorization
      * @return jwt
      */
-    fun parse(authorization: @NotBlank String): Mono<ParseJwtResponse>
+    fun parse(@NotBlank authorization: String): Mono<ParseJwtResponse>
 }

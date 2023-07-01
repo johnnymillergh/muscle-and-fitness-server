@@ -15,6 +15,10 @@ import org.hibernate.validator.constraints.Range
  */
 class UploadResourceChunkPayload {
     var bucket: String? = null
-    var chunkNumber: @NotNull @Range(max = Chunk.MAX_CHUNK_NUMBER.toLong()) Int? = null
-    var filename: @NotBlank @Pattern(regexp = "^[^<>:;,?\"*|/]+$") String? = null
+    @NotNull
+    @Range(max = Chunk.MAX_CHUNK_NUMBER.toLong())
+    var chunkNumber: Int? = null
+    @NotBlank
+    @Pattern(regexp = "^[^<>:;,?\"*|/]+$")
+    var filename:  String? = null
 }
