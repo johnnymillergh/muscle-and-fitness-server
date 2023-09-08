@@ -10,6 +10,8 @@ import com.jmsoftware.maf.common.bean.ResponseBodyBean
 import com.jmsoftware.maf.common.domain.authcenter.permission.GetPermissionListByRoleIdListPayload
 import com.jmsoftware.maf.common.domain.authcenter.permission.PermissionType.BUTTON
 import com.jmsoftware.maf.common.domain.springbootstarter.HttpApiResourcesResponse
+import com.jmsoftware.maf.common.test.jsonStringify
+import com.jmsoftware.maf.common.test.parseJson
 import com.jmsoftware.maf.common.util.Slf4j
 import com.jmsoftware.maf.common.util.Slf4j.Companion.log
 import org.junit.jupiter.api.Assertions.*
@@ -52,7 +54,6 @@ import org.springframework.web.client.RestTemplate
  * @see <a href='https://www.youtube.com/watch?v=p7_cTAF39A8/'>YouTube - Using Mockito with JUnit 5</a>
  */
 @Slf4j
-@Suppress("unused")
 @ExtendWith(MockitoExtension::class)
 class PermissionServiceImplTest {
     @InjectMocks
@@ -79,17 +80,15 @@ class PermissionServiceImplTest {
     @Test
     fun getPermissionListByRoleIdList_whenItsNonAdmin_thenReturnConfiguredPermission() {
         whenever(roleDomainService.checkAdmin(anyList())).thenReturn(false)
-        val permission = Permission().apply {
-            this.url = "/fake/permissions"
-            this.method = "GET"
-            this.type = BUTTON.type
-            this.permissionExpression = "FakePermissionExpression"
-        }
+        val permission = parseJson<Permission>(PermissionServiceImplTest::class, "permission/permission.json")
+        log.info("Permission: ${jsonStringify(permission)}")
         whenever(permissionDomainService.getPermissionListByRoleIdList(anyList(), anyList()))
             .thenReturn(listOf(permission))
-        val payload = GetPermissionListByRoleIdListPayload()
-        payload.roleIdList = listOf(1L)
-        payload.permissionTypeList = listOf(BUTTON)
+        val payload = parseJson<GetPermissionListByRoleIdListPayload>(
+            this,
+            "permission/get-permission-list-by-role-id-list-payload.json"
+        )
+        log.info("payload: ${jsonStringify(payload)}")
         val response = assertDoesNotThrow { permissionService.getPermissionListByRoleIdList(payload) }
         assertNotNull(response)
         assertEquals(1, response.permissionList.size)

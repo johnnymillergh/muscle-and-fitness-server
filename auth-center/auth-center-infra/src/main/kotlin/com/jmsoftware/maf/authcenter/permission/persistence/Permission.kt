@@ -34,31 +34,31 @@ class Permission : BasePersistenceEntity() {
      * Permission description
      */
     @TableField(value = COL_DESCRIPTION)
-    lateinit var description: String
+    var description: String? = null
 
     /**
      * Permission type. 1 - page; 2 - button
      */
     @TableField(value = COL_TYPE)
-    var type: Byte = 0
+    var type: Byte? = null
 
     /**
      * Permission expression
      */
     @TableField(value = COL_PERMISSION_EXPRESSION)
-    lateinit var permissionExpression: String
+    var permissionExpression: String? = null
 
     /**
      * HTTP method of API
      */
     @TableField(value = COL_METHOD)
-    lateinit var method: String
+    var method: String? = null
 
     /**
      * Sort number
      */
     @TableField(value = COL_SORT)
-    var sort: Int = 0
+    var sort: Int? = null
 
     /**
      * Primary key of parent

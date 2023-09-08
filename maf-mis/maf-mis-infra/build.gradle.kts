@@ -34,5 +34,4 @@ dependencies {
     testImplementation("org.springframework.amqp:spring-rabbit-test") {
         exclude("org.codehaus.groovy", "groovy")
     }
-    testImplementation("org.mockito:mockito-inline")
 }

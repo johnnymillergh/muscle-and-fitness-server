@@ -1,0 +1,7 @@
+{
+    "deleted": "N",
+    "url": "/fake/permissions",
+    "type": 2,
+    "permissionExpression": "FakePermissionExpression",
+    "method": "GET"
+}

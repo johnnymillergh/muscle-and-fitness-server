@@ -23,7 +23,4 @@ dependencies {
 
     api(libs.minio.get())
     api(libs.tika.core.get())
-
-    // Testing
-    testImplementation("org.mockito:mockito-inline")
 }
