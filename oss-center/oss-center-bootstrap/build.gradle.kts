@@ -60,10 +60,9 @@ jib {
         }
     }
     from.image = "${libs.versions.jreImage.get()}:${libs.versions.jreTag.get()}"
-    val dockerHubRepositoryPrefix: String by project
     val projectArtifactId: String by project
     val ossCenterArtifactId: String by project
-    to.image = "$dockerHubRepositoryPrefix$projectArtifactId.$ossCenterArtifactId"
+    to.image = "${libs.versions.dockerHubRepositoryPrefix.get()}$projectArtifactId.$ossCenterArtifactId"
     to.tags = setOf("${gitVersionDetails.gitHash}-${project.version}")
     container.appRoot = "/$ossCenterArtifactId"
     val projectBuildSourceEncoding: String by project

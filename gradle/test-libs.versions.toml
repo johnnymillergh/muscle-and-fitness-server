@@ -1,5 +1,5 @@
 [versions]
-mockito-kotlin = "5.0.0"
+mockito-kotlin = "5.1.0"
 
 [libraries]
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockito-kotlin" }

@@ -63,7 +63,7 @@ jib {
     val dockerHubRepositoryPrefix: String by project
     val projectArtifactId: String by project
     val apiGatewayArtifactId: String by project
-    to.image = "$dockerHubRepositoryPrefix$projectArtifactId.$apiGatewayArtifactId"
+    to.image = "${libs.versions.dockerHubRepositoryPrefix.get()}$projectArtifactId.$apiGatewayArtifactId"
     to.tags = setOf("${gitVersionDetails.gitHash}-${project.version}")
     container.appRoot = "/$apiGatewayArtifactId"
     val projectBuildSourceEncoding: String by project

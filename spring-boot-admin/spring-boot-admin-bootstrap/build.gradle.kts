@@ -65,7 +65,7 @@ jib {
     val dockerHubRepositoryPrefix: String by project
     val projectArtifactId: String by project
     val springBootAdminArtifactId: String by project
-    to.image = "$dockerHubRepositoryPrefix$projectArtifactId.$springBootAdminArtifactId"
+    to.image = "${libs.versions.dockerHubRepositoryPrefix.get()}$projectArtifactId.$springBootAdminArtifactId"
     to.tags = setOf("${gitVersionDetails.gitHash}-${project.version}")
     container.appRoot = "/$springBootAdminArtifactId"
     val projectBuildSourceEncoding: String by project
