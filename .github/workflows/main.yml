@@ -26,7 +26,7 @@ jobs:
       - name: "Gradle Build :: api-gateway"
         uses: ./.github/actions/gradle-submodule-build
         with:
-          temurinVersion: ${{ env.JAVA_VERSION }}
+          javaVersion: ${{ env.JAVA_VERSION }}
           submodulePath: api-gateway
           dockerHubUsername: ${{ secrets.DOCKER_HUB_USERNAME }}
           dockerHubPassword: ${{ secrets.DOCKER_HUB_PASSWORD }}
@@ -37,7 +37,7 @@ jobs:
       - name: "Gradle Build :: auth-center"
         uses: ./.github/actions/gradle-submodule-build
         with:
-          temurinVersion: ${{ env.JAVA_VERSION }}
+          javaVersion: ${{ env.JAVA_VERSION }}
           submodulePath: auth-center
           dockerHubUsername: ${{ secrets.DOCKER_HUB_USERNAME }}
           dockerHubPassword: ${{ secrets.DOCKER_HUB_PASSWORD }}
@@ -48,7 +48,7 @@ jobs:
       - name: "Gradle Build :: maf-mis"
         uses: ./.github/actions/gradle-submodule-build
         with:
-          temurinVersion: ${{ env.JAVA_VERSION }}
+          javaVersion: ${{ env.JAVA_VERSION }}
           submodulePath: maf-mis
           dockerHubUsername: ${{ secrets.DOCKER_HUB_USERNAME }}
           dockerHubPassword: ${{ secrets.DOCKER_HUB_PASSWORD }}
@@ -59,7 +59,7 @@ jobs:
       - name: "Gradle Build :: oss-center"
         uses: ./.github/actions/gradle-submodule-build
         with:
-          temurinVersion: ${{ env.JAVA_VERSION }}
+          javaVersion: ${{ env.JAVA_VERSION }}
           submodulePath: oss-center
           dockerHubUsername: ${{ secrets.DOCKER_HUB_USERNAME }}
           dockerHubPassword: ${{ secrets.DOCKER_HUB_PASSWORD }}
@@ -70,7 +70,7 @@ jobs:
       - name: "Gradle Build :: spring-boot-admin"
         uses: ./.github/actions/gradle-submodule-build
         with:
-          temurinVersion: ${{ env.JAVA_VERSION }}
+          javaVersion: ${{ env.JAVA_VERSION }}
           submodulePath: spring-boot-admin
           dockerHubUsername: ${{ secrets.DOCKER_HUB_USERNAME }}
           dockerHubPassword: ${{ secrets.DOCKER_HUB_PASSWORD }}
