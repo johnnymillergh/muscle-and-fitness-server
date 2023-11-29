@@ -58,7 +58,7 @@ jib {
             properties = mapOf("excludeDevtools" to "true")
         }
     }
-    from.image = "eclipse-temurin:${libs.versions.temurinTag.get()}"
+    from.image = "${libs.versions.jreImage.get()}:${libs.versions.jreTag.get()}"
     val projectArtifactId: String by project
     val mafMisArtifactId: String by project
     to.image = "${libs.versions.dockerHubRepositoryPrefix.get()}$projectArtifactId.$mafMisArtifactId"

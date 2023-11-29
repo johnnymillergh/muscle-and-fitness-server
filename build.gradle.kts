@@ -8,7 +8,6 @@
 import enforcer.rules.RequireGradleVersion
 import enforcer.rules.RequireJavaVendor
 import enforcer.rules.RequireJavaVersion
-import org.gradle.api.JavaVersion.VERSION_17
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 import org.gradle.api.tasks.testing.logging.TestLogEvent.*
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -32,8 +31,9 @@ plugins {
     alias(libs.plugins.project.enforcer)
 }
 
-java.sourceCompatibility = VERSION_17
-java.targetCompatibility = VERSION_17
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+}
 
 // Disable building any artifacts for the rootProject
 tasks.withType<Jar> {
@@ -88,8 +88,8 @@ subprojects {
 
     tasks.withType<KotlinCompile> {
         kotlinOptions {
-            freeCompilerArgs = listOf("-Xjsr305=strict")
-            jvmTarget = VERSION_17.majorVersion
+            freeCompilerArgs += "-Xjsr305=strict"
+            jvmTarget = "21"
         }
     }
 
@@ -201,7 +201,7 @@ enforce {
     }
     rule(RequireJavaVersion::class.java) {
         this.setEnforcerLevel("ERROR")
-        this.setProperty("version", "[${libs.versions.temurinVersion.get()}]")
+        this.setProperty("version", "[${libs.versions.javaVersion.get()},)")
     }
 }
 

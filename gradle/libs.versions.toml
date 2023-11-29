@@ -2,12 +2,14 @@
 
 [versions]
 # https://github.com/gradle/gradle/releases/tag/v7.6
-gradle = "8.1.1"
-javaVendor = "Eclipse Adoptium"
+gradle = "8.4"
+javaVendor = "BellSoft"
 # https://github.com/adoptium/temurin17-binaries/releases/tag/jdk-17.0.5%2B8
-temurinVersion = "17.0.7"
-# Don't use alpine or slim version, https://hub.docker.com/_/eclipse-temurin/tags?page=1&name=17.0.7_7-jre
-temurinTag = "17.0.7_7-jre"
+javaVersion = "21"
+# Don't use alpine or slim version, https://hub.docker.com/r/bellsoft/liberica-runtime-container/tags?page=1&name=jre-21
+# docker pull bellsoft/liberica-runtime-container:jre-21-cds-musl
+jreImage = "bellsoft/liberica-runtime-container"
+jreTag = "jre-21-cds-musl"
 dockerHubRepositoryPrefix = "docker.io/ijohnnymiller/"
 sas = "0.4.0"
 spring-boot-admin = "3.0.4"
@@ -26,10 +28,10 @@ shardingsphere = "5.2.1"
 snakeyaml = "1.33"
 jjwt = "0.11.5"
 poi = "5.2.3"
-kotlin = "1.8.21"
-spring-boot = "3.1.3"
+kotlin = "1.9.21"
+spring-boot = "3.2.0"
 spring-cloud = "2022.0.4"
-spring-dependency-management = "1.1.0"
+spring-dependency-management = "1.1.4"
 jib = "3.3.2"
 git-version = "0.15.0"
 versions = "0.42.0"

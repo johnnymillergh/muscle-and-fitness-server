@@ -3,8 +3,8 @@ name: Gradle Submodule Build
 description: Gradle build for submodule
 
 inputs:
-  temurinVersion:
-    description: "Temurin JDK version"
+  javaVersion:
+    description: "Java version"
     required: true
   submodulePath:
     description: "The path to the submodule"
@@ -22,9 +22,9 @@ runs:
     - name: Setup Java
       uses: actions/setup-java@v3
       with:
-        java-version: ${{ inputs.temurinVersion }}
-        distribution: 'temurin'
-        cache: 'gradle'
+        java-version: ${{ inputs.javaVersion }}
+        distribution: "liberica"
+        cache: "gradle"
     - name: Grant Execution Permission for `gradlew`
       shell: bash
       run: chmod +x gradlew

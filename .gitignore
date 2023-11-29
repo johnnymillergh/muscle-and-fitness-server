@@ -9,6 +9,7 @@ HELP.md
 nohup.out
 *.log
 *.gz
+.fastRequest/
 
 ### STS ###
 .apt_generated
@@ -61,4 +62,3 @@ gradle-app.setting
 
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
-

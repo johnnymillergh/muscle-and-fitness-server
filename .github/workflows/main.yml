@@ -6,17 +6,17 @@ name: Java CI with Gradle
 on:
   push:
     branches:
-      - 'main'
-      - 'feature/**'
+      - "main"
+      - "feature/**"
     paths-ignore:
-      - '**.md'
-      - '_config.yml'
+      - "**.md"
+      - "_config.yml"
   pull_request:
     branches:
-      - 'main'
+      - "main"
 
 env:
-  TEMURIN_VERSION: '17.0.7+7'
+  JAVA_VERSION: "21"
 
 jobs:
   build-api-gateway:
@@ -26,7 +26,7 @@ jobs:
       - name: "Gradle Build :: api-gateway"
         uses: ./.github/actions/gradle-submodule-build
         with:
-          temurinVersion: ${{ env.TEMURIN_VERSION }}
+          temurinVersion: ${{ env.JAVA_VERSION }}
           submodulePath: api-gateway
           dockerHubUsername: ${{ secrets.DOCKER_HUB_USERNAME }}
           dockerHubPassword: ${{ secrets.DOCKER_HUB_PASSWORD }}
@@ -37,7 +37,7 @@ jobs:
       - name: "Gradle Build :: auth-center"
         uses: ./.github/actions/gradle-submodule-build
         with:
-          temurinVersion: ${{ env.TEMURIN_VERSION }}
+          temurinVersion: ${{ env.JAVA_VERSION }}
           submodulePath: auth-center
           dockerHubUsername: ${{ secrets.DOCKER_HUB_USERNAME }}
           dockerHubPassword: ${{ secrets.DOCKER_HUB_PASSWORD }}
@@ -48,7 +48,7 @@ jobs:
       - name: "Gradle Build :: maf-mis"
         uses: ./.github/actions/gradle-submodule-build
         with:
-          temurinVersion: ${{ env.TEMURIN_VERSION }}
+          temurinVersion: ${{ env.JAVA_VERSION }}
           submodulePath: maf-mis
           dockerHubUsername: ${{ secrets.DOCKER_HUB_USERNAME }}
           dockerHubPassword: ${{ secrets.DOCKER_HUB_PASSWORD }}
@@ -59,7 +59,7 @@ jobs:
       - name: "Gradle Build :: oss-center"
         uses: ./.github/actions/gradle-submodule-build
         with:
-          temurinVersion: ${{ env.TEMURIN_VERSION }}
+          temurinVersion: ${{ env.JAVA_VERSION }}
           submodulePath: oss-center
           dockerHubUsername: ${{ secrets.DOCKER_HUB_USERNAME }}
           dockerHubPassword: ${{ secrets.DOCKER_HUB_PASSWORD }}
@@ -70,7 +70,7 @@ jobs:
       - name: "Gradle Build :: spring-boot-admin"
         uses: ./.github/actions/gradle-submodule-build
         with:
-          temurinVersion: ${{ env.TEMURIN_VERSION }}
+          temurinVersion: ${{ env.JAVA_VERSION }}
           submodulePath: spring-boot-admin
           dockerHubUsername: ${{ secrets.DOCKER_HUB_USERNAME }}
           dockerHubPassword: ${{ secrets.DOCKER_HUB_PASSWORD }}
@@ -82,9 +82,9 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
-          java-version: ${{env.TEMURIN_VERSION}}
-          distribution: 'temurin'
-          cache: 'gradle'
+          java-version: ${{env.JAVA_VERSION}}
+          distribution: "liberica"
+          cache: "gradle"
       - name: Grant Execution Permission for `gradlew`
         run: chmod +x gradlew
       - name: Check Dependencies Version with Gradle `com.github.ben-manes.versions` Plugin
